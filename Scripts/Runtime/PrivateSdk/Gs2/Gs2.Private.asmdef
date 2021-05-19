@@ -1,0 +1,18 @@
+﻿{
+    "name": "Gs2.Private",
+    "references": [
+        "Gs2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "gs2_Google.Protobuf.dll",
+        "gs2_LitJSON.dll",
+        "gs2_websocket-sharp.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
