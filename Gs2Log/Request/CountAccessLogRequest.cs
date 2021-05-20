@@ -45,50 +45,98 @@ namespace Gs2.Gs2Log.Request
         }
 
 
-        /** マイクロサービスの種類を集計軸に使用するか */
+        /** マイクロサービスの種類 */
 		[UnityEngine.SerializeField]
-        public bool? service;
+        public string service;
 
         /**
-         * マイクロサービスの種類を集計軸に使用するかを設定
+         * マイクロサービスの種類を設定
          *
-         * @param service マイクロサービスの種類を集計軸に使用するか
+         * @param service マイクロサービスの種類
          * @return this
          */
-        public CountAccessLogRequest WithService(bool? service) {
+        public CountAccessLogRequest WithService(string service) {
             this.service = service;
             return this;
         }
 
 
-        /** マイクロサービスのメソッドを集計軸に使用するか */
+        /** マイクロサービスのメソッド */
 		[UnityEngine.SerializeField]
-        public bool? method;
+        public string method;
 
         /**
-         * マイクロサービスのメソッドを集計軸に使用するかを設定
+         * マイクロサービスのメソッドを設定
          *
-         * @param method マイクロサービスのメソッドを集計軸に使用するか
+         * @param method マイクロサービスのメソッド
          * @return this
          */
-        public CountAccessLogRequest WithMethod(bool? method) {
+        public CountAccessLogRequest WithMethod(string method) {
             this.method = method;
             return this;
         }
 
 
-        /** ユーザIDを集計軸に使用するか */
+        /** ユーザーID */
 		[UnityEngine.SerializeField]
-        public bool? userId;
+        public string userId;
 
         /**
-         * ユーザIDを集計軸に使用するかを設定
+         * ユーザーIDを設定
          *
-         * @param userId ユーザIDを集計軸に使用するか
+         * @param userId ユーザーID
          * @return this
          */
-        public CountAccessLogRequest WithUserId(bool? userId) {
+        public CountAccessLogRequest WithUserId(string userId) {
             this.userId = userId;
+            return this;
+        }
+
+
+        /** 検索範囲開始日時 */
+		[UnityEngine.SerializeField]
+        public long? begin;
+
+        /**
+         * 検索範囲開始日時を設定
+         *
+         * @param begin 検索範囲開始日時
+         * @return this
+         */
+        public CountAccessLogRequest WithBegin(long? begin) {
+            this.begin = begin;
+            return this;
+        }
+
+
+        /** 検索範囲終了日時 */
+		[UnityEngine.SerializeField]
+        public long? end;
+
+        /**
+         * 検索範囲終了日時を設定
+         *
+         * @param end 検索範囲終了日時
+         * @return this
+         */
+        public CountAccessLogRequest WithEnd(long? end) {
+            this.end = end;
+            return this;
+        }
+
+
+        /** 7日より長い期間のログを検索対象とするか */
+		[UnityEngine.SerializeField]
+        public bool? longTerm;
+
+        /**
+         * 7日より長い期間のログを検索対象とするかを設定
+         *
+         * @param longTerm 7日より長い期間のログを検索対象とするか
+         * @return this
+         */
+        public CountAccessLogRequest WithLongTerm(bool? longTerm) {
+            this.longTerm = longTerm;
             return this;
         }
 
@@ -146,9 +194,12 @@ namespace Gs2.Gs2Log.Request
         {
             return new CountAccessLogRequest {
                 namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                service = data.Keys.Contains("service") && data["service"] != null ? (bool?)bool.Parse(data["service"].ToString()) : null,
-                method = data.Keys.Contains("method") && data["method"] != null ? (bool?)bool.Parse(data["method"].ToString()) : null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? (bool?)bool.Parse(data["userId"].ToString()) : null,
+                service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
+                method = data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString(): null,
+                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
+                begin = data.Keys.Contains("begin") && data["begin"] != null ? (long?)long.Parse(data["begin"].ToString()) : null,
+                end = data.Keys.Contains("end") && data["end"] != null ? (long?)long.Parse(data["end"].ToString()) : null,
+                longTerm = data.Keys.Contains("longTerm") && data["longTerm"] != null ? (bool?)bool.Parse(data["longTerm"].ToString()) : null,
                 pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
                 limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
                 duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
@@ -162,6 +213,9 @@ namespace Gs2.Gs2Log.Request
             data["service"] = service;
             data["method"] = method;
             data["userId"] = userId;
+            data["begin"] = begin;
+            data["end"] = end;
+            data["longTerm"] = longTerm;
             data["pageToken"] = pageToken;
             data["limit"] = limit;
             data["duplicationAvoider"] = duplicationAvoider;

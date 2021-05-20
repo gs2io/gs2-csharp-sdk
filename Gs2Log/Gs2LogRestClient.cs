@@ -553,6 +553,15 @@ namespace Gs2.Gs2Log
                 if (_request.userId != null) {
                     queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
                 }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
                 }
@@ -622,13 +631,22 @@ namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
                 }
                 if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", _request.service));
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
                 }
                 if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", _request.method));
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
                 }
                 if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.userId));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
                 }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
@@ -710,6 +728,15 @@ namespace Gs2.Gs2Log
                 if (_request.action != null) {
                     queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
                 }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
                 }
@@ -779,16 +806,25 @@ namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
                 }
                 if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", _request.service));
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
                 }
                 if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", _request.method));
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
                 }
                 if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.userId));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
                 }
                 if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", _request.action));
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
                 }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
@@ -870,6 +906,15 @@ namespace Gs2.Gs2Log
                 if (_request.action != null) {
                     queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
                 }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
                 }
@@ -939,16 +984,25 @@ namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
                 }
                 if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", _request.service));
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
                 }
                 if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", _request.method));
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
                 }
                 if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.userId));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
                 }
                 if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", _request.action));
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
                 }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
@@ -1030,6 +1084,15 @@ namespace Gs2.Gs2Log
                 if (_request.action != null) {
                     queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
                 }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
                 }
@@ -1099,16 +1162,25 @@ namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
                 }
                 if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", _request.service));
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
                 }
                 if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", _request.method));
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
                 }
                 if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.userId));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
                 }
                 if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", _request.action));
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                }
+                if (_request.begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                }
+                if (_request.end != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                }
+                if (_request.longTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
                 }
                 if (_request.pageToken != null) {
                     queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));

@@ -93,6 +93,54 @@ namespace Gs2.Gs2Log.Request
         }
 
 
+        /** 検索範囲開始日時 */
+		[UnityEngine.SerializeField]
+        public long? begin;
+
+        /**
+         * 検索範囲開始日時を設定
+         *
+         * @param begin 検索範囲開始日時
+         * @return this
+         */
+        public QueryAccessLogRequest WithBegin(long? begin) {
+            this.begin = begin;
+            return this;
+        }
+
+
+        /** 検索範囲終了日時 */
+		[UnityEngine.SerializeField]
+        public long? end;
+
+        /**
+         * 検索範囲終了日時を設定
+         *
+         * @param end 検索範囲終了日時
+         * @return this
+         */
+        public QueryAccessLogRequest WithEnd(long? end) {
+            this.end = end;
+            return this;
+        }
+
+
+        /** 7日より長い期間のログを検索対象とするか */
+		[UnityEngine.SerializeField]
+        public bool? longTerm;
+
+        /**
+         * 7日より長い期間のログを検索対象とするかを設定
+         *
+         * @param longTerm 7日より長い期間のログを検索対象とするか
+         * @return this
+         */
+        public QueryAccessLogRequest WithLongTerm(bool? longTerm) {
+            this.longTerm = longTerm;
+            return this;
+        }
+
+
         /** データの取得を開始する位置を指定するトークン */
 		[UnityEngine.SerializeField]
         public string pageToken;
@@ -149,6 +197,9 @@ namespace Gs2.Gs2Log.Request
                 service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
                 method = data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString(): null,
                 userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
+                begin = data.Keys.Contains("begin") && data["begin"] != null ? (long?)long.Parse(data["begin"].ToString()) : null,
+                end = data.Keys.Contains("end") && data["end"] != null ? (long?)long.Parse(data["end"].ToString()) : null,
+                longTerm = data.Keys.Contains("longTerm") && data["longTerm"] != null ? (bool?)bool.Parse(data["longTerm"].ToString()) : null,
                 pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
                 limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
                 duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
@@ -162,6 +213,9 @@ namespace Gs2.Gs2Log.Request
             data["service"] = service;
             data["method"] = method;
             data["userId"] = userId;
+            data["begin"] = begin;
+            data["end"] = end;
+            data["longTerm"] = longTerm;
             data["pageToken"] = pageToken;
             data["limit"] = limit;
             data["duplicationAvoider"] = duplicationAvoider;
