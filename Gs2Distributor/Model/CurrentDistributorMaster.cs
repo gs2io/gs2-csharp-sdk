@@ -27,17 +27,17 @@ namespace Gs2.Gs2Distributor.Model
 	public class CurrentDistributorMaster : IComparable
 	{
 
-        /** ネームスペース名 */
-        public string namespaceName { set; get; }
+        /** 現在有効な配信設定 */
+        public string namespaceId { set; get; }
 
         /**
-         * ネームスペース名を設定
+         * 現在有効な配信設定を設定
          *
-         * @param namespaceName ネームスペース名
+         * @param namespaceId 現在有効な配信設定
          * @return this
          */
-        public CurrentDistributorMaster WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+        public CurrentDistributorMaster WithNamespaceId(string namespaceId) {
+            this.namespaceId = namespaceId;
             return this;
         }
 
@@ -58,10 +58,10 @@ namespace Gs2.Gs2Distributor.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceName != null)
+            if(this.namespaceId != null)
             {
-                writer.WritePropertyName("namespaceName");
-                writer.Write(this.namespaceName);
+                writer.WritePropertyName("namespaceId");
+                writer.Write(this.namespaceId);
             }
             if(this.settings != null)
             {
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Distributor.Model
         public static CurrentDistributorMaster FromDict(JsonData data)
         {
             return new CurrentDistributorMaster()
-                .WithNamespaceName(data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString() : null)
+                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
                 .WithSettings(data.Keys.Contains("settings") && data["settings"] != null ? data["settings"].ToString() : null);
         }
 
@@ -119,13 +119,13 @@ namespace Gs2.Gs2Distributor.Model
         {
             var other = obj as CurrentDistributorMaster;
             var diff = 0;
-            if (namespaceName == null && namespaceName == other.namespaceName)
+            if (namespaceId == null && namespaceId == other.namespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceName.CompareTo(other.namespaceName);
+                diff += namespaceId.CompareTo(other.namespaceId);
             }
             if (settings == null && settings == other.settings)
             {
@@ -141,7 +141,7 @@ namespace Gs2.Gs2Distributor.Model
         public JsonData ToDict()
         {
             var data = new JsonData();
-            data["namespaceName"] = namespaceName;
+            data["namespaceId"] = namespaceId;
             data["settings"] = settings;
             return data;
         }

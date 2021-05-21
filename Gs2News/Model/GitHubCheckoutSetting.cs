@@ -28,16 +28,16 @@ namespace Gs2.Gs2News.Model
 	{
 
         /** リソースの取得に使用するGitHub のAPIキー のGRN */
-        public string gitHubApiKeyId { set; get; }
+        public string apiKeyId { set; get; }
 
         /**
          * リソースの取得に使用するGitHub のAPIキー のGRNを設定
          *
-         * @param gitHubApiKeyId リソースの取得に使用するGitHub のAPIキー のGRN
+         * @param apiKeyId リソースの取得に使用するGitHub のAPIキー のGRN
          * @return this
          */
-        public GitHubCheckoutSetting WithGitHubApiKeyId(string gitHubApiKeyId) {
-            this.gitHubApiKeyId = gitHubApiKeyId;
+        public GitHubCheckoutSetting WithApiKeyId(string apiKeyId) {
+            this.apiKeyId = apiKeyId;
             return this;
         }
 
@@ -128,10 +128,10 @@ namespace Gs2.Gs2News.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.gitHubApiKeyId != null)
+            if(this.apiKeyId != null)
             {
-                writer.WritePropertyName("gitHubApiKeyId");
-                writer.Write(this.gitHubApiKeyId);
+                writer.WritePropertyName("apiKeyId");
+                writer.Write(this.apiKeyId);
             }
             if(this.repositoryName != null)
             {
@@ -170,7 +170,7 @@ namespace Gs2.Gs2News.Model
         public static GitHubCheckoutSetting FromDict(JsonData data)
         {
             return new GitHubCheckoutSetting()
-                .WithGitHubApiKeyId(data.Keys.Contains("gitHubApiKeyId") && data["gitHubApiKeyId"] != null ? data["gitHubApiKeyId"].ToString() : null)
+                .WithApiKeyId(data.Keys.Contains("apiKeyId") && data["apiKeyId"] != null ? data["apiKeyId"].ToString() : null)
                 .WithRepositoryName(data.Keys.Contains("repositoryName") && data["repositoryName"] != null ? data["repositoryName"].ToString() : null)
                 .WithSourcePath(data.Keys.Contains("sourcePath") && data["sourcePath"] != null ? data["sourcePath"].ToString() : null)
                 .WithReferenceType(data.Keys.Contains("referenceType") && data["referenceType"] != null ? data["referenceType"].ToString() : null)
@@ -183,13 +183,13 @@ namespace Gs2.Gs2News.Model
         {
             var other = obj as GitHubCheckoutSetting;
             var diff = 0;
-            if (gitHubApiKeyId == null && gitHubApiKeyId == other.gitHubApiKeyId)
+            if (apiKeyId == null && apiKeyId == other.apiKeyId)
             {
                 // null and null
             }
             else
             {
-                diff += gitHubApiKeyId.CompareTo(other.gitHubApiKeyId);
+                diff += apiKeyId.CompareTo(other.apiKeyId);
             }
             if (repositoryName == null && repositoryName == other.repositoryName)
             {
@@ -245,7 +245,7 @@ namespace Gs2.Gs2News.Model
         public JsonData ToDict()
         {
             var data = new JsonData();
-            data["gitHubApiKeyId"] = gitHubApiKeyId;
+            data["apiKeyId"] = apiKeyId;
             data["repositoryName"] = repositoryName;
             data["sourcePath"] = sourcePath;
             data["referenceType"] = referenceType;

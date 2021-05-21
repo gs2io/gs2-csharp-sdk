@@ -98,16 +98,16 @@ namespace Gs2.Gs2Stamina.Model
         }
 
         /** スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRN */
-        public string overflowTriggerNamespaceId { set; get; }
+        public string overflowTriggerQueueId { set; get; }
 
         /**
          * スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRNを設定
          *
-         * @param overflowTriggerNamespaceId スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRN
+         * @param overflowTriggerQueueId スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRN
          * @return this
          */
-        public Namespace WithOverflowTriggerNamespaceId(string overflowTriggerNamespaceId) {
-            this.overflowTriggerNamespaceId = overflowTriggerNamespaceId;
+        public Namespace WithOverflowTriggerQueueId(string overflowTriggerQueueId) {
+            this.overflowTriggerQueueId = overflowTriggerQueueId;
             return this;
         }
 
@@ -181,10 +181,10 @@ namespace Gs2.Gs2Stamina.Model
                 writer.WritePropertyName("overflowTriggerScriptId");
                 writer.Write(this.overflowTriggerScriptId);
             }
-            if(this.overflowTriggerNamespaceId != null)
+            if(this.overflowTriggerQueueId != null)
             {
-                writer.WritePropertyName("overflowTriggerNamespaceId");
-                writer.Write(this.overflowTriggerNamespaceId);
+                writer.WritePropertyName("overflowTriggerQueueId");
+                writer.Write(this.overflowTriggerQueueId);
             }
             if(this.logSetting != null)
             {
@@ -249,7 +249,7 @@ namespace Gs2.Gs2Stamina.Model
                 .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
                 .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
                 .WithOverflowTriggerScriptId(data.Keys.Contains("overflowTriggerScriptId") && data["overflowTriggerScriptId"] != null ? data["overflowTriggerScriptId"].ToString() : null)
-                .WithOverflowTriggerNamespaceId(data.Keys.Contains("overflowTriggerNamespaceId") && data["overflowTriggerNamespaceId"] != null ? data["overflowTriggerNamespaceId"].ToString() : null)
+                .WithOverflowTriggerQueueId(data.Keys.Contains("overflowTriggerQueueId") && data["overflowTriggerQueueId"] != null ? data["overflowTriggerQueueId"].ToString() : null)
                 .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Stamina.Model.LogSetting.FromDict(data["logSetting"]) : null)
                 .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
                 .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
@@ -299,13 +299,13 @@ namespace Gs2.Gs2Stamina.Model
             {
                 diff += overflowTriggerScriptId.CompareTo(other.overflowTriggerScriptId);
             }
-            if (overflowTriggerNamespaceId == null && overflowTriggerNamespaceId == other.overflowTriggerNamespaceId)
+            if (overflowTriggerQueueId == null && overflowTriggerQueueId == other.overflowTriggerQueueId)
             {
                 // null and null
             }
             else
             {
-                diff += overflowTriggerNamespaceId.CompareTo(other.overflowTriggerNamespaceId);
+                diff += overflowTriggerQueueId.CompareTo(other.overflowTriggerQueueId);
             }
             if (logSetting == null && logSetting == other.logSetting)
             {
@@ -342,7 +342,7 @@ namespace Gs2.Gs2Stamina.Model
             data["name"] = name;
             data["description"] = description;
             data["overflowTriggerScriptId"] = overflowTriggerScriptId;
-            data["overflowTriggerNamespaceId"] = overflowTriggerNamespaceId;
+            data["overflowTriggerQueueId"] = overflowTriggerQueueId;
             data["logSetting"] = logSetting.ToDict();
             data["createdAt"] = createdAt;
             data["updatedAt"] = updatedAt;
