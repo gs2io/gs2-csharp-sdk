@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,38 +25,97 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class GetFormWithSignatureByUserIdResult
+	[System.Serializable]
+	public class GetFormWithSignatureByUserIdResult : IResult
 	{
-        /** フォーム */
-        public Form item { set; get; }
+        public Gs2.Gs2Formation.Model.Form Item { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Mold { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
 
-        /** 署名対象の値 */
-        public string body { set; get; }
+        public GetFormWithSignatureByUserIdResult WithItem(Gs2.Gs2Formation.Model.Form item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** 署名 */
-        public string signature { set; get; }
+        public GetFormWithSignatureByUserIdResult WithBody(string body) {
+            this.Body = body;
+            return this;
+        }
 
-        /** 保存したフォーム */
-        public Mold mold { set; get; }
+        public GetFormWithSignatureByUserIdResult WithSignature(string signature) {
+            this.Signature = signature;
+            return this;
+        }
 
-        /** フォームの保存領域 */
-        public MoldModel moldModel { set; get; }
+        public GetFormWithSignatureByUserIdResult WithMold(Gs2.Gs2Formation.Model.Mold mold) {
+            this.Mold = mold;
+            return this;
+        }
 
-        /** フォームモデル */
-        public FormModel formModel { set; get; }
+        public GetFormWithSignatureByUserIdResult WithMoldModel(Gs2.Gs2Formation.Model.MoldModel moldModel) {
+            this.MoldModel = moldModel;
+            return this;
+        }
 
+        public GetFormWithSignatureByUserIdResult WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
+            this.FormModel = formModel;
+            return this;
+        }
 
     	[Preserve]
-        public static GetFormWithSignatureByUserIdResult FromDict(JsonData data)
+        public static GetFormWithSignatureByUserIdResult FromJson(JsonData data)
         {
-            return new GetFormWithSignatureByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.Form.FromDict(data["item"]) : null,
-                body = data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null,
-                signature = data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null,
-                mold = data.Keys.Contains("mold") && data["mold"] != null ? Gs2.Gs2Formation.Model.Mold.FromDict(data["mold"]) : null,
-                moldModel = data.Keys.Contains("moldModel") && data["moldModel"] != null ? Gs2.Gs2Formation.Model.MoldModel.FromDict(data["moldModel"]) : null,
-                formModel = data.Keys.Contains("formModel") && data["formModel"] != null ? Gs2.Gs2Formation.Model.FormModel.FromDict(data["formModel"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetFormWithSignatureByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Form.FromJson(data["item"]))
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithMold(!data.Keys.Contains("mold") || data["mold"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["mold"]))
+                .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]))
+                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["body"] = Body,
+                ["signature"] = Signature,
+                ["mold"] = Mold?.ToJson(),
+                ["moldModel"] = MoldModel?.ToJson(),
+                ["formModel"] = FormModel?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Body != null) {
+                writer.WritePropertyName("body");
+                writer.Write(Body.ToString());
+            }
+            if (Signature != null) {
+                writer.WritePropertyName("signature");
+                writer.Write(Signature.ToString());
+            }
+            if (Mold != null) {
+                Mold.WriteJson(writer);
+            }
+            if (MoldModel != null) {
+                MoldModel.WriteJson(writer);
+            }
+            if (FormModel != null) {
+                FormModel.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

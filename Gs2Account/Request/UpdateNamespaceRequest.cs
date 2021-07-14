@@ -28,162 +28,117 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public bool? ChangePasswordIfTakeOver { set; get; }
+        public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; }
+        public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; }
+        public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
+        public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; }
+        public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 説明文 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** アカウント引き継ぎ時にパスワードを変更するか */
-		[UnityEngine.SerializeField]
-        public bool? changePasswordIfTakeOver;
-
-        /**
-         * アカウント引き継ぎ時にパスワードを変更するかを設定
-         *
-         * @param changePasswordIfTakeOver アカウント引き継ぎ時にパスワードを変更するか
-         * @return this
-         */
         public UpdateNamespaceRequest WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
-            this.changePasswordIfTakeOver = changePasswordIfTakeOver;
+            this.ChangePasswordIfTakeOver = changePasswordIfTakeOver;
             return this;
         }
 
-
-        /** アカウント新規作成したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Account.Model.ScriptSetting createAccountScript;
-
-        /**
-         * アカウント新規作成したときに実行するスクリプトを設定
-         *
-         * @param createAccountScript アカウント新規作成したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithCreateAccountScript(global::Gs2.Gs2Account.Model.ScriptSetting createAccountScript) {
-            this.createAccountScript = createAccountScript;
+        public UpdateNamespaceRequest WithCreateAccountScript(Gs2.Gs2Account.Model.ScriptSetting createAccountScript) {
+            this.CreateAccountScript = createAccountScript;
             return this;
         }
 
-
-        /** 認証したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Account.Model.ScriptSetting authenticationScript;
-
-        /**
-         * 認証したときに実行するスクリプトを設定
-         *
-         * @param authenticationScript 認証したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithAuthenticationScript(global::Gs2.Gs2Account.Model.ScriptSetting authenticationScript) {
-            this.authenticationScript = authenticationScript;
+        public UpdateNamespaceRequest WithAuthenticationScript(Gs2.Gs2Account.Model.ScriptSetting authenticationScript) {
+            this.AuthenticationScript = authenticationScript;
             return this;
         }
 
-
-        /** 引き継ぎ情報登録したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Account.Model.ScriptSetting createTakeOverScript;
-
-        /**
-         * 引き継ぎ情報登録したときに実行するスクリプトを設定
-         *
-         * @param createTakeOverScript 引き継ぎ情報登録したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithCreateTakeOverScript(global::Gs2.Gs2Account.Model.ScriptSetting createTakeOverScript) {
-            this.createTakeOverScript = createTakeOverScript;
+        public UpdateNamespaceRequest WithCreateTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting createTakeOverScript) {
+            this.CreateTakeOverScript = createTakeOverScript;
             return this;
         }
 
-
-        /** 引き継ぎ実行したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Account.Model.ScriptSetting doTakeOverScript;
-
-        /**
-         * 引き継ぎ実行したときに実行するスクリプトを設定
-         *
-         * @param doTakeOverScript 引き継ぎ実行したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithDoTakeOverScript(global::Gs2.Gs2Account.Model.ScriptSetting doTakeOverScript) {
-            this.doTakeOverScript = doTakeOverScript;
+        public UpdateNamespaceRequest WithDoTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting doTakeOverScript) {
+            this.DoTakeOverScript = doTakeOverScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Account.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Account.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                changePasswordIfTakeOver = data.Keys.Contains("changePasswordIfTakeOver") && data["changePasswordIfTakeOver"] != null ? (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()) : null,
-                createAccountScript = data.Keys.Contains("createAccountScript") && data["createAccountScript"] != null ? global::Gs2.Gs2Account.Model.ScriptSetting.FromDict(data["createAccountScript"]) : null,
-                authenticationScript = data.Keys.Contains("authenticationScript") && data["authenticationScript"] != null ? global::Gs2.Gs2Account.Model.ScriptSetting.FromDict(data["authenticationScript"]) : null,
-                createTakeOverScript = data.Keys.Contains("createTakeOverScript") && data["createTakeOverScript"] != null ? global::Gs2.Gs2Account.Model.ScriptSetting.FromDict(data["createTakeOverScript"]) : null,
-                doTakeOverScript = data.Keys.Contains("doTakeOverScript") && data["doTakeOverScript"] != null ? global::Gs2.Gs2Account.Model.ScriptSetting.FromDict(data["doTakeOverScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Account.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
+                .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
+                .WithAuthenticationScript(!data.Keys.Contains("authenticationScript") || data["authenticationScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["authenticationScript"]))
+                .WithCreateTakeOverScript(!data.Keys.Contains("createTakeOverScript") || data["createTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createTakeOverScript"]))
+                .WithDoTakeOverScript(!data.Keys.Contains("doTakeOverScript") || data["doTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["doTakeOverScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Account.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["changePasswordIfTakeOver"] = ChangePasswordIfTakeOver,
+                ["createAccountScript"] = CreateAccountScript?.ToJson(),
+                ["authenticationScript"] = AuthenticationScript?.ToJson(),
+                ["createTakeOverScript"] = CreateTakeOverScript?.ToJson(),
+                ["doTakeOverScript"] = DoTakeOverScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["changePasswordIfTakeOver"] = changePasswordIfTakeOver;
-            data["createAccountScript"] = createAccountScript.ToDict();
-            data["authenticationScript"] = authenticationScript.ToDict();
-            data["createTakeOverScript"] = createTakeOverScript.ToDict();
-            data["doTakeOverScript"] = doTakeOverScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (ChangePasswordIfTakeOver != null) {
+                writer.WritePropertyName("changePasswordIfTakeOver");
+                writer.Write(bool.Parse(ChangePasswordIfTakeOver.ToString()));
+            }
+            if (CreateAccountScript != null) {
+                CreateAccountScript.WriteJson(writer);
+            }
+            if (AuthenticationScript != null) {
+                AuthenticationScript.WriteJson(writer);
+            }
+            if (CreateTakeOverScript != null) {
+                CreateTakeOverScript.WriteJson(writer);
+            }
+            if (DoTakeOverScript != null) {
+                DoTakeOverScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

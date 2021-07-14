@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Friend.Result
 {
 	[Preserve]
-	public class GetFollowByUserIdResult
+	[System.Serializable]
+	public class GetFollowByUserIdResult : IResult
 	{
-        /** フォローしているユーザー */
-        public FollowUser item { set; get; }
+        public Gs2.Gs2Friend.Model.FollowUser Item { set; get; }
 
+        public GetFollowByUserIdResult WithItem(Gs2.Gs2Friend.Model.FollowUser item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetFollowByUserIdResult FromDict(JsonData data)
+        public static GetFollowByUserIdResult FromJson(JsonData data)
         {
-            return new GetFollowByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Friend.Model.FollowUser.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetFollowByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Friend.Model.FollowUser.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

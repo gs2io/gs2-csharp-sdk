@@ -28,306 +28,218 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class UpdateEventMasterRequest : Gs2Request<UpdateEventMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string EventName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ScheduleType { set; get; }
+        public long? AbsoluteBegin { set; get; }
+        public long? AbsoluteEnd { set; get; }
+        public string RepeatType { set; get; }
+        public int? RepeatBeginDayOfMonth { set; get; }
+        public int? RepeatEndDayOfMonth { set; get; }
+        public string RepeatBeginDayOfWeek { set; get; }
+        public string RepeatEndDayOfWeek { set; get; }
+        public int? RepeatBeginHour { set; get; }
+        public int? RepeatEndHour { set; get; }
+        public string RelativeTriggerName { set; get; }
+        public int? RelativeDuration { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateEventMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** イベントの種類名 */
-		[UnityEngine.SerializeField]
-        public string eventName;
-
-        /**
-         * イベントの種類名を設定
-         *
-         * @param eventName イベントの種類名
-         * @return this
-         */
         public UpdateEventMasterRequest WithEventName(string eventName) {
-            this.eventName = eventName;
+            this.EventName = eventName;
             return this;
         }
 
-
-        /** イベントマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * イベントマスターの説明を設定
-         *
-         * @param description イベントマスターの説明
-         * @return this
-         */
         public UpdateEventMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** イベントの種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * イベントの種類のメタデータを設定
-         *
-         * @param metadata イベントの種類のメタデータ
-         * @return this
-         */
         public UpdateEventMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** イベント期間の種類 */
-		[UnityEngine.SerializeField]
-        public string scheduleType;
-
-        /**
-         * イベント期間の種類を設定
-         *
-         * @param scheduleType イベント期間の種類
-         * @return this
-         */
         public UpdateEventMasterRequest WithScheduleType(string scheduleType) {
-            this.scheduleType = scheduleType;
+            this.ScheduleType = scheduleType;
             return this;
         }
 
-
-        /** イベントの開始日時 */
-		[UnityEngine.SerializeField]
-        public long? absoluteBegin;
-
-        /**
-         * イベントの開始日時を設定
-         *
-         * @param absoluteBegin イベントの開始日時
-         * @return this
-         */
         public UpdateEventMasterRequest WithAbsoluteBegin(long? absoluteBegin) {
-            this.absoluteBegin = absoluteBegin;
+            this.AbsoluteBegin = absoluteBegin;
             return this;
         }
 
-
-        /** イベントの終了日時 */
-		[UnityEngine.SerializeField]
-        public long? absoluteEnd;
-
-        /**
-         * イベントの終了日時を設定
-         *
-         * @param absoluteEnd イベントの終了日時
-         * @return this
-         */
         public UpdateEventMasterRequest WithAbsoluteEnd(long? absoluteEnd) {
-            this.absoluteEnd = absoluteEnd;
+            this.AbsoluteEnd = absoluteEnd;
             return this;
         }
 
-
-        /** 繰り返しの種類 */
-		[UnityEngine.SerializeField]
-        public string repeatType;
-
-        /**
-         * 繰り返しの種類を設定
-         *
-         * @param repeatType 繰り返しの種類
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatType(string repeatType) {
-            this.repeatType = repeatType;
+            this.RepeatType = repeatType;
             return this;
         }
 
-
-        /** イベントの繰り返し開始日 */
-		[UnityEngine.SerializeField]
-        public int? repeatBeginDayOfMonth;
-
-        /**
-         * イベントの繰り返し開始日を設定
-         *
-         * @param repeatBeginDayOfMonth イベントの繰り返し開始日
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
-            this.repeatBeginDayOfMonth = repeatBeginDayOfMonth;
+            this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
 
-
-        /** イベントの繰り返し終了日 */
-		[UnityEngine.SerializeField]
-        public int? repeatEndDayOfMonth;
-
-        /**
-         * イベントの繰り返し終了日を設定
-         *
-         * @param repeatEndDayOfMonth イベントの繰り返し終了日
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
-            this.repeatEndDayOfMonth = repeatEndDayOfMonth;
+            this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
 
-
-        /** イベントの繰り返し開始曜日 */
-		[UnityEngine.SerializeField]
-        public string repeatBeginDayOfWeek;
-
-        /**
-         * イベントの繰り返し開始曜日を設定
-         *
-         * @param repeatBeginDayOfWeek イベントの繰り返し開始曜日
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
-            this.repeatBeginDayOfWeek = repeatBeginDayOfWeek;
+            this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
 
-
-        /** イベントの繰り返し終了曜日 */
-		[UnityEngine.SerializeField]
-        public string repeatEndDayOfWeek;
-
-        /**
-         * イベントの繰り返し終了曜日を設定
-         *
-         * @param repeatEndDayOfWeek イベントの繰り返し終了曜日
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
-            this.repeatEndDayOfWeek = repeatEndDayOfWeek;
+            this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
 
-
-        /** イベントの繰り返し開始時間 */
-		[UnityEngine.SerializeField]
-        public int? repeatBeginHour;
-
-        /**
-         * イベントの繰り返し開始時間を設定
-         *
-         * @param repeatBeginHour イベントの繰り返し開始時間
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatBeginHour(int? repeatBeginHour) {
-            this.repeatBeginHour = repeatBeginHour;
+            this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
 
-
-        /** イベントの繰り返し終了時間 */
-		[UnityEngine.SerializeField]
-        public int? repeatEndHour;
-
-        /**
-         * イベントの繰り返し終了時間を設定
-         *
-         * @param repeatEndHour イベントの繰り返し終了時間
-         * @return this
-         */
         public UpdateEventMasterRequest WithRepeatEndHour(int? repeatEndHour) {
-            this.repeatEndHour = repeatEndHour;
+            this.RepeatEndHour = repeatEndHour;
             return this;
         }
 
-
-        /** イベントの開始トリガー名 */
-		[UnityEngine.SerializeField]
-        public string relativeTriggerName;
-
-        /**
-         * イベントの開始トリガー名を設定
-         *
-         * @param relativeTriggerName イベントの開始トリガー名
-         * @return this
-         */
         public UpdateEventMasterRequest WithRelativeTriggerName(string relativeTriggerName) {
-            this.relativeTriggerName = relativeTriggerName;
+            this.RelativeTriggerName = relativeTriggerName;
             return this;
         }
 
-
-        /** イベントの開催期間(秒) */
-		[UnityEngine.SerializeField]
-        public int? relativeDuration;
-
-        /**
-         * イベントの開催期間(秒)を設定
-         *
-         * @param relativeDuration イベントの開催期間(秒)
-         * @return this
-         */
         public UpdateEventMasterRequest WithRelativeDuration(int? relativeDuration) {
-            this.relativeDuration = relativeDuration;
+            this.RelativeDuration = relativeDuration;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateEventMasterRequest FromDict(JsonData data)
+        public static UpdateEventMasterRequest FromJson(JsonData data)
         {
-            return new UpdateEventMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                eventName = data.Keys.Contains("eventName") && data["eventName"] != null ? data["eventName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                scheduleType = data.Keys.Contains("scheduleType") && data["scheduleType"] != null ? data["scheduleType"].ToString(): null,
-                absoluteBegin = data.Keys.Contains("absoluteBegin") && data["absoluteBegin"] != null ? (long?)long.Parse(data["absoluteBegin"].ToString()) : null,
-                absoluteEnd = data.Keys.Contains("absoluteEnd") && data["absoluteEnd"] != null ? (long?)long.Parse(data["absoluteEnd"].ToString()) : null,
-                repeatType = data.Keys.Contains("repeatType") && data["repeatType"] != null ? data["repeatType"].ToString(): null,
-                repeatBeginDayOfMonth = data.Keys.Contains("repeatBeginDayOfMonth") && data["repeatBeginDayOfMonth"] != null ? (int?)int.Parse(data["repeatBeginDayOfMonth"].ToString()) : null,
-                repeatEndDayOfMonth = data.Keys.Contains("repeatEndDayOfMonth") && data["repeatEndDayOfMonth"] != null ? (int?)int.Parse(data["repeatEndDayOfMonth"].ToString()) : null,
-                repeatBeginDayOfWeek = data.Keys.Contains("repeatBeginDayOfWeek") && data["repeatBeginDayOfWeek"] != null ? data["repeatBeginDayOfWeek"].ToString(): null,
-                repeatEndDayOfWeek = data.Keys.Contains("repeatEndDayOfWeek") && data["repeatEndDayOfWeek"] != null ? data["repeatEndDayOfWeek"].ToString(): null,
-                repeatBeginHour = data.Keys.Contains("repeatBeginHour") && data["repeatBeginHour"] != null ? (int?)int.Parse(data["repeatBeginHour"].ToString()) : null,
-                repeatEndHour = data.Keys.Contains("repeatEndHour") && data["repeatEndHour"] != null ? (int?)int.Parse(data["repeatEndHour"].ToString()) : null,
-                relativeTriggerName = data.Keys.Contains("relativeTriggerName") && data["relativeTriggerName"] != null ? data["relativeTriggerName"].ToString(): null,
-                relativeDuration = data.Keys.Contains("relativeDuration") && data["relativeDuration"] != null ? (int?)int.Parse(data["relativeDuration"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateEventMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithScheduleType(!data.Keys.Contains("scheduleType") || data["scheduleType"] == null ? null : data["scheduleType"].ToString())
+                .WithAbsoluteBegin(!data.Keys.Contains("absoluteBegin") || data["absoluteBegin"] == null ? null : (long?)long.Parse(data["absoluteBegin"].ToString()))
+                .WithAbsoluteEnd(!data.Keys.Contains("absoluteEnd") || data["absoluteEnd"] == null ? null : (long?)long.Parse(data["absoluteEnd"].ToString()))
+                .WithRepeatType(!data.Keys.Contains("repeatType") || data["repeatType"] == null ? null : data["repeatType"].ToString())
+                .WithRepeatBeginDayOfMonth(!data.Keys.Contains("repeatBeginDayOfMonth") || data["repeatBeginDayOfMonth"] == null ? null : (int?)int.Parse(data["repeatBeginDayOfMonth"].ToString()))
+                .WithRepeatEndDayOfMonth(!data.Keys.Contains("repeatEndDayOfMonth") || data["repeatEndDayOfMonth"] == null ? null : (int?)int.Parse(data["repeatEndDayOfMonth"].ToString()))
+                .WithRepeatBeginDayOfWeek(!data.Keys.Contains("repeatBeginDayOfWeek") || data["repeatBeginDayOfWeek"] == null ? null : data["repeatBeginDayOfWeek"].ToString())
+                .WithRepeatEndDayOfWeek(!data.Keys.Contains("repeatEndDayOfWeek") || data["repeatEndDayOfWeek"] == null ? null : data["repeatEndDayOfWeek"].ToString())
+                .WithRepeatBeginHour(!data.Keys.Contains("repeatBeginHour") || data["repeatBeginHour"] == null ? null : (int?)int.Parse(data["repeatBeginHour"].ToString()))
+                .WithRepeatEndHour(!data.Keys.Contains("repeatEndHour") || data["repeatEndHour"] == null ? null : (int?)int.Parse(data["repeatEndHour"].ToString()))
+                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString())
+                .WithRelativeDuration(!data.Keys.Contains("relativeDuration") || data["relativeDuration"] == null ? null : (int?)int.Parse(data["relativeDuration"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["eventName"] = EventName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["scheduleType"] = ScheduleType,
+                ["absoluteBegin"] = AbsoluteBegin,
+                ["absoluteEnd"] = AbsoluteEnd,
+                ["repeatType"] = RepeatType,
+                ["repeatBeginDayOfMonth"] = RepeatBeginDayOfMonth,
+                ["repeatEndDayOfMonth"] = RepeatEndDayOfMonth,
+                ["repeatBeginDayOfWeek"] = RepeatBeginDayOfWeek,
+                ["repeatEndDayOfWeek"] = RepeatEndDayOfWeek,
+                ["repeatBeginHour"] = RepeatBeginHour,
+                ["repeatEndHour"] = RepeatEndHour,
+                ["relativeTriggerName"] = RelativeTriggerName,
+                ["relativeDuration"] = RelativeDuration,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["eventName"] = eventName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["scheduleType"] = scheduleType;
-            data["absoluteBegin"] = absoluteBegin;
-            data["absoluteEnd"] = absoluteEnd;
-            data["repeatType"] = repeatType;
-            data["repeatBeginDayOfMonth"] = repeatBeginDayOfMonth;
-            data["repeatEndDayOfMonth"] = repeatEndDayOfMonth;
-            data["repeatBeginDayOfWeek"] = repeatBeginDayOfWeek;
-            data["repeatEndDayOfWeek"] = repeatEndDayOfWeek;
-            data["repeatBeginHour"] = repeatBeginHour;
-            data["repeatEndHour"] = repeatEndHour;
-            data["relativeTriggerName"] = relativeTriggerName;
-            data["relativeDuration"] = relativeDuration;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (EventName != null) {
+                writer.WritePropertyName("eventName");
+                writer.Write(EventName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (ScheduleType != null) {
+                writer.WritePropertyName("scheduleType");
+                writer.Write(ScheduleType.ToString());
+            }
+            if (AbsoluteBegin != null) {
+                writer.WritePropertyName("absoluteBegin");
+                writer.Write(long.Parse(AbsoluteBegin.ToString()));
+            }
+            if (AbsoluteEnd != null) {
+                writer.WritePropertyName("absoluteEnd");
+                writer.Write(long.Parse(AbsoluteEnd.ToString()));
+            }
+            if (RepeatType != null) {
+                writer.WritePropertyName("repeatType");
+                writer.Write(RepeatType.ToString());
+            }
+            if (RepeatBeginDayOfMonth != null) {
+                writer.WritePropertyName("repeatBeginDayOfMonth");
+                writer.Write(int.Parse(RepeatBeginDayOfMonth.ToString()));
+            }
+            if (RepeatEndDayOfMonth != null) {
+                writer.WritePropertyName("repeatEndDayOfMonth");
+                writer.Write(int.Parse(RepeatEndDayOfMonth.ToString()));
+            }
+            if (RepeatBeginDayOfWeek != null) {
+                writer.WritePropertyName("repeatBeginDayOfWeek");
+                writer.Write(RepeatBeginDayOfWeek.ToString());
+            }
+            if (RepeatEndDayOfWeek != null) {
+                writer.WritePropertyName("repeatEndDayOfWeek");
+                writer.Write(RepeatEndDayOfWeek.ToString());
+            }
+            if (RepeatBeginHour != null) {
+                writer.WritePropertyName("repeatBeginHour");
+                writer.Write(int.Parse(RepeatBeginHour.ToString()));
+            }
+            if (RepeatEndHour != null) {
+                writer.WritePropertyName("repeatEndHour");
+                writer.Write(int.Parse(RepeatEndHour.ToString()));
+            }
+            if (RelativeTriggerName != null) {
+                writer.WritePropertyName("relativeTriggerName");
+                writer.Write(RelativeTriggerName.ToString());
+            }
+            if (RelativeDuration != null) {
+                writer.WritePropertyName("relativeDuration");
+                writer.Write(int.Parse(RelativeDuration.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

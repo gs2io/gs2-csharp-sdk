@@ -28,54 +28,50 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DeleteShowcaseMasterRequest : Gs2Request<DeleteShowcaseMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ShowcaseName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteShowcaseMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 陳列棚名 */
-		[UnityEngine.SerializeField]
-        public string showcaseName;
-
-        /**
-         * 陳列棚名を設定
-         *
-         * @param showcaseName 陳列棚名
-         * @return this
-         */
         public DeleteShowcaseMasterRequest WithShowcaseName(string showcaseName) {
-            this.showcaseName = showcaseName;
+            this.ShowcaseName = showcaseName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteShowcaseMasterRequest FromDict(JsonData data)
+        public static DeleteShowcaseMasterRequest FromJson(JsonData data)
         {
-            return new DeleteShowcaseMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                showcaseName = data.Keys.Contains("showcaseName") && data["showcaseName"] != null ? data["showcaseName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteShowcaseMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["showcaseName"] = ShowcaseName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["showcaseName"] = showcaseName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ShowcaseName != null) {
+                writer.WritePropertyName("showcaseName");
+                writer.Write(ShowcaseName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Dictionary.Result
 {
 	[Preserve]
-	public class GetEntryByUserIdResult
+	[System.Serializable]
+	public class GetEntryByUserIdResult : IResult
 	{
-        /** エントリー */
-        public Entry item { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; }
 
+        public GetEntryByUserIdResult WithItem(Gs2.Gs2Dictionary.Model.Entry item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetEntryByUserIdResult FromDict(JsonData data)
+        public static GetEntryByUserIdResult FromJson(JsonData data)
         {
-            return new GetEntryByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Dictionary.Model.Entry.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetEntryByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Dictionary.Model.Entry.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

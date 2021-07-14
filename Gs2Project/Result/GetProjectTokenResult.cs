@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class GetProjectTokenResult
+	[System.Serializable]
+	public class GetProjectTokenResult : IResult
 	{
-        /** サインインしたプロジェクト */
-        public Project item { set; get; }
+        public Gs2.Gs2Project.Model.Project Item { set; get; }
+        public string OwnerId { set; get; }
+        public string ProjectToken { set; get; }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
+        public GetProjectTokenResult WithItem(Gs2.Gs2Project.Model.Project item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** プロジェクトトークン */
-        public string projectToken { set; get; }
+        public GetProjectTokenResult WithOwnerId(string ownerId) {
+            this.OwnerId = ownerId;
+            return this;
+        }
 
+        public GetProjectTokenResult WithProjectToken(string projectToken) {
+            this.ProjectToken = projectToken;
+            return this;
+        }
 
     	[Preserve]
-        public static GetProjectTokenResult FromDict(JsonData data)
+        public static GetProjectTokenResult FromJson(JsonData data)
         {
-            return new GetProjectTokenResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Project.Model.Project.FromDict(data["item"]) : null,
-                ownerId = data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null,
-                projectToken = data.Keys.Contains("projectToken") && data["projectToken"] != null ? data["projectToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetProjectTokenResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.Project.FromJson(data["item"]))
+                .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
+                .WithProjectToken(!data.Keys.Contains("projectToken") || data["projectToken"] == null ? null : data["projectToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["ownerId"] = OwnerId,
+                ["projectToken"] = ProjectToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (OwnerId != null) {
+                writer.WritePropertyName("ownerId");
+                writer.Write(OwnerId.ToString());
+            }
+            if (ProjectToken != null) {
+                writer.WritePropertyName("projectToken");
+                writer.Write(ProjectToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

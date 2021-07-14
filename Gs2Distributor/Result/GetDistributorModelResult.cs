@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class GetDistributorModelResult
+	[System.Serializable]
+	public class GetDistributorModelResult : IResult
 	{
-        /** 配信設定 */
-        public DistributorModel item { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributorModel Item { set; get; }
 
+        public GetDistributorModelResult WithItem(Gs2.Gs2Distributor.Model.DistributorModel item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetDistributorModelResult FromDict(JsonData data)
+        public static GetDistributorModelResult FromJson(JsonData data)
         {
-            return new GetDistributorModelResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Distributor.Model.DistributorModel.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetDistributorModelResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Distributor.Model.DistributorModel.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

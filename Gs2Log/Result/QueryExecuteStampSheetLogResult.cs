@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Log.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,88 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Log.Result
 {
 	[Preserve]
-	public class QueryExecuteStampSheetLogResult
+	[System.Serializable]
+	public class QueryExecuteStampSheetLogResult : IResult
 	{
-        /** スタンプシート実行ログのリスト */
-        public List<ExecuteStampSheetLog> items { set; get; }
+        public Gs2.Gs2Log.Model.ExecuteStampSheetLog[] Items { set; get; }
+        public string NextPageToken { set; get; }
+        public long? TotalCount { set; get; }
+        public long? ScanSize { set; get; }
 
-        /** リストの続きを取得するためのページトークン */
-        public string nextPageToken { set; get; }
+        public QueryExecuteStampSheetLogResult WithItems(Gs2.Gs2Log.Model.ExecuteStampSheetLog[] items) {
+            this.Items = items;
+            return this;
+        }
 
-        /** クエリ結果の総件数 */
-        public long? totalCount { set; get; }
+        public QueryExecuteStampSheetLogResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
+            return this;
+        }
 
-        /** 検索時にスキャンした総容量 */
-        public long? scanSize { set; get; }
+        public QueryExecuteStampSheetLogResult WithTotalCount(long? totalCount) {
+            this.TotalCount = totalCount;
+            return this;
+        }
 
+        public QueryExecuteStampSheetLogResult WithScanSize(long? scanSize) {
+            this.ScanSize = scanSize;
+            return this;
+        }
 
     	[Preserve]
-        public static QueryExecuteStampSheetLogResult FromDict(JsonData data)
+        public static QueryExecuteStampSheetLogResult FromJson(JsonData data)
         {
-            return new QueryExecuteStampSheetLogResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Log.Model.ExecuteStampSheetLog.FromDict(value);
-                    }
-                ).ToList() : null,
-                nextPageToken = data.Keys.Contains("nextPageToken") && data["nextPageToken"] != null ? data["nextPageToken"].ToString() : null,
-                totalCount = data.Keys.Contains("totalCount") && data["totalCount"] != null ? (long?)long.Parse(data["totalCount"].ToString()) : null,
-                scanSize = data.Keys.Contains("scanSize") && data["scanSize"] != null ? (long?)long.Parse(data["scanSize"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new QueryExecuteStampSheetLogResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Log.Model.ExecuteStampSheetLog[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Log.Model.ExecuteStampSheetLog.FromJson(v);
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
+                .WithTotalCount(!data.Keys.Contains("totalCount") || data["totalCount"] == null ? null : (long?)long.Parse(data["totalCount"].ToString()))
+                .WithScanSize(!data.Keys.Contains("scanSize") || data["scanSize"] == null ? null : (long?)long.Parse(data["scanSize"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["nextPageToken"] = NextPageToken,
+                ["totalCount"] = TotalCount,
+                ["scanSize"] = ScanSize,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
+            if (TotalCount != null) {
+                writer.WritePropertyName("totalCount");
+                writer.Write(long.Parse(TotalCount.ToString()));
+            }
+            if (ScanSize != null) {
+                writer.WritePropertyName("scanSize");
+                writer.Write(long.Parse(ScanSize.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

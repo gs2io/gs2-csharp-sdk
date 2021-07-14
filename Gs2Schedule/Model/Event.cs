@@ -23,516 +23,337 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Schedule.Model
 {
+
 	[Preserve]
 	public class Event : IComparable
 	{
+        public string EventId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ScheduleType { set; get; }
+        public string RepeatType { set; get; }
+        public long? AbsoluteBegin { set; get; }
+        public long? AbsoluteEnd { set; get; }
+        public int? RepeatBeginDayOfMonth { set; get; }
+        public int? RepeatEndDayOfMonth { set; get; }
+        public string RepeatBeginDayOfWeek { set; get; }
+        public string RepeatEndDayOfWeek { set; get; }
+        public int? RepeatBeginHour { set; get; }
+        public int? RepeatEndHour { set; get; }
+        public string RelativeTriggerName { set; get; }
+        public int? RelativeDuration { set; get; }
 
-        /** イベントマスター */
-        public string eventId { set; get; }
-
-        /**
-         * イベントマスターを設定
-         *
-         * @param eventId イベントマスター
-         * @return this
-         */
         public Event WithEventId(string eventId) {
-            this.eventId = eventId;
+            this.EventId = eventId;
             return this;
         }
 
-        /** イベントの種類名 */
-        public string name { set; get; }
-
-        /**
-         * イベントの種類名を設定
-         *
-         * @param name イベントの種類名
-         * @return this
-         */
         public Event WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** イベントの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * イベントの種類のメタデータを設定
-         *
-         * @param metadata イベントの種類のメタデータ
-         * @return this
-         */
         public Event WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** イベント期間の種類 */
-        public string scheduleType { set; get; }
-
-        /**
-         * イベント期間の種類を設定
-         *
-         * @param scheduleType イベント期間の種類
-         * @return this
-         */
         public Event WithScheduleType(string scheduleType) {
-            this.scheduleType = scheduleType;
+            this.ScheduleType = scheduleType;
             return this;
         }
 
-        /** 繰り返しの種類 */
-        public string repeatType { set; get; }
-
-        /**
-         * 繰り返しの種類を設定
-         *
-         * @param repeatType 繰り返しの種類
-         * @return this
-         */
         public Event WithRepeatType(string repeatType) {
-            this.repeatType = repeatType;
+            this.RepeatType = repeatType;
             return this;
         }
 
-        /** イベントの開始日時 */
-        public long? absoluteBegin { set; get; }
-
-        /**
-         * イベントの開始日時を設定
-         *
-         * @param absoluteBegin イベントの開始日時
-         * @return this
-         */
         public Event WithAbsoluteBegin(long? absoluteBegin) {
-            this.absoluteBegin = absoluteBegin;
+            this.AbsoluteBegin = absoluteBegin;
             return this;
         }
 
-        /** イベントの終了日時 */
-        public long? absoluteEnd { set; get; }
-
-        /**
-         * イベントの終了日時を設定
-         *
-         * @param absoluteEnd イベントの終了日時
-         * @return this
-         */
         public Event WithAbsoluteEnd(long? absoluteEnd) {
-            this.absoluteEnd = absoluteEnd;
+            this.AbsoluteEnd = absoluteEnd;
             return this;
         }
 
-        /** イベントの繰り返し開始日 */
-        public int? repeatBeginDayOfMonth { set; get; }
-
-        /**
-         * イベントの繰り返し開始日を設定
-         *
-         * @param repeatBeginDayOfMonth イベントの繰り返し開始日
-         * @return this
-         */
         public Event WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
-            this.repeatBeginDayOfMonth = repeatBeginDayOfMonth;
+            this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
 
-        /** イベントの繰り返し終了日 */
-        public int? repeatEndDayOfMonth { set; get; }
-
-        /**
-         * イベントの繰り返し終了日を設定
-         *
-         * @param repeatEndDayOfMonth イベントの繰り返し終了日
-         * @return this
-         */
         public Event WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
-            this.repeatEndDayOfMonth = repeatEndDayOfMonth;
+            this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
 
-        /** イベントの繰り返し開始曜日 */
-        public string repeatBeginDayOfWeek { set; get; }
-
-        /**
-         * イベントの繰り返し開始曜日を設定
-         *
-         * @param repeatBeginDayOfWeek イベントの繰り返し開始曜日
-         * @return this
-         */
         public Event WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
-            this.repeatBeginDayOfWeek = repeatBeginDayOfWeek;
+            this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
 
-        /** イベントの繰り返し終了曜日 */
-        public string repeatEndDayOfWeek { set; get; }
-
-        /**
-         * イベントの繰り返し終了曜日を設定
-         *
-         * @param repeatEndDayOfWeek イベントの繰り返し終了曜日
-         * @return this
-         */
         public Event WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
-            this.repeatEndDayOfWeek = repeatEndDayOfWeek;
+            this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
 
-        /** イベントの繰り返し開始時間 */
-        public int? repeatBeginHour { set; get; }
-
-        /**
-         * イベントの繰り返し開始時間を設定
-         *
-         * @param repeatBeginHour イベントの繰り返し開始時間
-         * @return this
-         */
         public Event WithRepeatBeginHour(int? repeatBeginHour) {
-            this.repeatBeginHour = repeatBeginHour;
+            this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
 
-        /** イベントの繰り返し終了時間 */
-        public int? repeatEndHour { set; get; }
-
-        /**
-         * イベントの繰り返し終了時間を設定
-         *
-         * @param repeatEndHour イベントの繰り返し終了時間
-         * @return this
-         */
         public Event WithRepeatEndHour(int? repeatEndHour) {
-            this.repeatEndHour = repeatEndHour;
+            this.RepeatEndHour = repeatEndHour;
             return this;
         }
 
-        /** イベントの開始トリガー */
-        public string relativeTriggerName { set; get; }
-
-        /**
-         * イベントの開始トリガーを設定
-         *
-         * @param relativeTriggerName イベントの開始トリガー
-         * @return this
-         */
         public Event WithRelativeTriggerName(string relativeTriggerName) {
-            this.relativeTriggerName = relativeTriggerName;
+            this.RelativeTriggerName = relativeTriggerName;
             return this;
         }
 
-        /** イベントの開催期間(秒) */
-        public int? relativeDuration { set; get; }
-
-        /**
-         * イベントの開催期間(秒)を設定
-         *
-         * @param relativeDuration イベントの開催期間(秒)
-         * @return this
-         */
         public Event WithRelativeDuration(int? relativeDuration) {
-            this.relativeDuration = relativeDuration;
+            this.RelativeDuration = relativeDuration;
             return this;
+        }
+
+    	[Preserve]
+        public static Event FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Event()
+                .WithEventId(!data.Keys.Contains("eventId") || data["eventId"] == null ? null : data["eventId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithScheduleType(!data.Keys.Contains("scheduleType") || data["scheduleType"] == null ? null : data["scheduleType"].ToString())
+                .WithRepeatType(!data.Keys.Contains("repeatType") || data["repeatType"] == null ? null : data["repeatType"].ToString())
+                .WithAbsoluteBegin(!data.Keys.Contains("absoluteBegin") || data["absoluteBegin"] == null ? null : (long?)long.Parse(data["absoluteBegin"].ToString()))
+                .WithAbsoluteEnd(!data.Keys.Contains("absoluteEnd") || data["absoluteEnd"] == null ? null : (long?)long.Parse(data["absoluteEnd"].ToString()))
+                .WithRepeatBeginDayOfMonth(!data.Keys.Contains("repeatBeginDayOfMonth") || data["repeatBeginDayOfMonth"] == null ? null : (int?)int.Parse(data["repeatBeginDayOfMonth"].ToString()))
+                .WithRepeatEndDayOfMonth(!data.Keys.Contains("repeatEndDayOfMonth") || data["repeatEndDayOfMonth"] == null ? null : (int?)int.Parse(data["repeatEndDayOfMonth"].ToString()))
+                .WithRepeatBeginDayOfWeek(!data.Keys.Contains("repeatBeginDayOfWeek") || data["repeatBeginDayOfWeek"] == null ? null : data["repeatBeginDayOfWeek"].ToString())
+                .WithRepeatEndDayOfWeek(!data.Keys.Contains("repeatEndDayOfWeek") || data["repeatEndDayOfWeek"] == null ? null : data["repeatEndDayOfWeek"].ToString())
+                .WithRepeatBeginHour(!data.Keys.Contains("repeatBeginHour") || data["repeatBeginHour"] == null ? null : (int?)int.Parse(data["repeatBeginHour"].ToString()))
+                .WithRepeatEndHour(!data.Keys.Contains("repeatEndHour") || data["repeatEndHour"] == null ? null : (int?)int.Parse(data["repeatEndHour"].ToString()))
+                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString())
+                .WithRelativeDuration(!data.Keys.Contains("relativeDuration") || data["relativeDuration"] == null ? null : (int?)int.Parse(data["relativeDuration"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["eventId"] = EventId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["scheduleType"] = ScheduleType,
+                ["repeatType"] = RepeatType,
+                ["absoluteBegin"] = AbsoluteBegin,
+                ["absoluteEnd"] = AbsoluteEnd,
+                ["repeatBeginDayOfMonth"] = RepeatBeginDayOfMonth,
+                ["repeatEndDayOfMonth"] = RepeatEndDayOfMonth,
+                ["repeatBeginDayOfWeek"] = RepeatBeginDayOfWeek,
+                ["repeatEndDayOfWeek"] = RepeatEndDayOfWeek,
+                ["repeatBeginHour"] = RepeatBeginHour,
+                ["repeatEndHour"] = RepeatEndHour,
+                ["relativeTriggerName"] = RelativeTriggerName,
+                ["relativeDuration"] = RelativeDuration,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.eventId != null)
-            {
+            if (EventId != null) {
                 writer.WritePropertyName("eventId");
-                writer.Write(this.eventId);
+                writer.Write(EventId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.scheduleType != null)
-            {
+            if (ScheduleType != null) {
                 writer.WritePropertyName("scheduleType");
-                writer.Write(this.scheduleType);
+                writer.Write(ScheduleType.ToString());
             }
-            if(this.repeatType != null)
-            {
+            if (RepeatType != null) {
                 writer.WritePropertyName("repeatType");
-                writer.Write(this.repeatType);
+                writer.Write(RepeatType.ToString());
             }
-            if(this.absoluteBegin.HasValue)
-            {
+            if (AbsoluteBegin != null) {
                 writer.WritePropertyName("absoluteBegin");
-                writer.Write(this.absoluteBegin.Value);
+                writer.Write(long.Parse(AbsoluteBegin.ToString()));
             }
-            if(this.absoluteEnd.HasValue)
-            {
+            if (AbsoluteEnd != null) {
                 writer.WritePropertyName("absoluteEnd");
-                writer.Write(this.absoluteEnd.Value);
+                writer.Write(long.Parse(AbsoluteEnd.ToString()));
             }
-            if(this.repeatBeginDayOfMonth.HasValue)
-            {
+            if (RepeatBeginDayOfMonth != null) {
                 writer.WritePropertyName("repeatBeginDayOfMonth");
-                writer.Write(this.repeatBeginDayOfMonth.Value);
+                writer.Write(int.Parse(RepeatBeginDayOfMonth.ToString()));
             }
-            if(this.repeatEndDayOfMonth.HasValue)
-            {
+            if (RepeatEndDayOfMonth != null) {
                 writer.WritePropertyName("repeatEndDayOfMonth");
-                writer.Write(this.repeatEndDayOfMonth.Value);
+                writer.Write(int.Parse(RepeatEndDayOfMonth.ToString()));
             }
-            if(this.repeatBeginDayOfWeek != null)
-            {
+            if (RepeatBeginDayOfWeek != null) {
                 writer.WritePropertyName("repeatBeginDayOfWeek");
-                writer.Write(this.repeatBeginDayOfWeek);
+                writer.Write(RepeatBeginDayOfWeek.ToString());
             }
-            if(this.repeatEndDayOfWeek != null)
-            {
+            if (RepeatEndDayOfWeek != null) {
                 writer.WritePropertyName("repeatEndDayOfWeek");
-                writer.Write(this.repeatEndDayOfWeek);
+                writer.Write(RepeatEndDayOfWeek.ToString());
             }
-            if(this.repeatBeginHour.HasValue)
-            {
+            if (RepeatBeginHour != null) {
                 writer.WritePropertyName("repeatBeginHour");
-                writer.Write(this.repeatBeginHour.Value);
+                writer.Write(int.Parse(RepeatBeginHour.ToString()));
             }
-            if(this.repeatEndHour.HasValue)
-            {
+            if (RepeatEndHour != null) {
                 writer.WritePropertyName("repeatEndHour");
-                writer.Write(this.repeatEndHour.Value);
+                writer.Write(int.Parse(RepeatEndHour.ToString()));
             }
-            if(this.relativeTriggerName != null)
-            {
+            if (RelativeTriggerName != null) {
                 writer.WritePropertyName("relativeTriggerName");
-                writer.Write(this.relativeTriggerName);
+                writer.Write(RelativeTriggerName.ToString());
             }
-            if(this.relativeDuration.HasValue)
-            {
+            if (RelativeDuration != null) {
                 writer.WritePropertyName("relativeDuration");
-                writer.Write(this.relativeDuration.Value);
+                writer.Write(int.Parse(RelativeDuration.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetEventNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):event:(?<eventName>.*)");
-        if (!match.Groups["eventName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["eventName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):event:(?<eventName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):event:(?<eventName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):event:(?<eventName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Event FromDict(JsonData data)
-        {
-            return new Event()
-                .WithEventId(data.Keys.Contains("eventId") && data["eventId"] != null ? data["eventId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithScheduleType(data.Keys.Contains("scheduleType") && data["scheduleType"] != null ? data["scheduleType"].ToString() : null)
-                .WithRepeatType(data.Keys.Contains("repeatType") && data["repeatType"] != null ? data["repeatType"].ToString() : null)
-                .WithAbsoluteBegin(data.Keys.Contains("absoluteBegin") && data["absoluteBegin"] != null ? (long?)long.Parse(data["absoluteBegin"].ToString()) : null)
-                .WithAbsoluteEnd(data.Keys.Contains("absoluteEnd") && data["absoluteEnd"] != null ? (long?)long.Parse(data["absoluteEnd"].ToString()) : null)
-                .WithRepeatBeginDayOfMonth(data.Keys.Contains("repeatBeginDayOfMonth") && data["repeatBeginDayOfMonth"] != null ? (int?)int.Parse(data["repeatBeginDayOfMonth"].ToString()) : null)
-                .WithRepeatEndDayOfMonth(data.Keys.Contains("repeatEndDayOfMonth") && data["repeatEndDayOfMonth"] != null ? (int?)int.Parse(data["repeatEndDayOfMonth"].ToString()) : null)
-                .WithRepeatBeginDayOfWeek(data.Keys.Contains("repeatBeginDayOfWeek") && data["repeatBeginDayOfWeek"] != null ? data["repeatBeginDayOfWeek"].ToString() : null)
-                .WithRepeatEndDayOfWeek(data.Keys.Contains("repeatEndDayOfWeek") && data["repeatEndDayOfWeek"] != null ? data["repeatEndDayOfWeek"].ToString() : null)
-                .WithRepeatBeginHour(data.Keys.Contains("repeatBeginHour") && data["repeatBeginHour"] != null ? (int?)int.Parse(data["repeatBeginHour"].ToString()) : null)
-                .WithRepeatEndHour(data.Keys.Contains("repeatEndHour") && data["repeatEndHour"] != null ? (int?)int.Parse(data["repeatEndHour"].ToString()) : null)
-                .WithRelativeTriggerName(data.Keys.Contains("relativeTriggerName") && data["relativeTriggerName"] != null ? data["relativeTriggerName"].ToString() : null)
-                .WithRelativeDuration(data.Keys.Contains("relativeDuration") && data["relativeDuration"] != null ? (int?)int.Parse(data["relativeDuration"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Event;
             var diff = 0;
-            if (eventId == null && eventId == other.eventId)
+            if (EventId == null && EventId == other.EventId)
             {
                 // null and null
             }
             else
             {
-                diff += eventId.CompareTo(other.eventId);
+                diff += EventId.CompareTo(other.EventId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (scheduleType == null && scheduleType == other.scheduleType)
+            if (ScheduleType == null && ScheduleType == other.ScheduleType)
             {
                 // null and null
             }
             else
             {
-                diff += scheduleType.CompareTo(other.scheduleType);
+                diff += ScheduleType.CompareTo(other.ScheduleType);
             }
-            if (repeatType == null && repeatType == other.repeatType)
+            if (RepeatType == null && RepeatType == other.RepeatType)
             {
                 // null and null
             }
             else
             {
-                diff += repeatType.CompareTo(other.repeatType);
+                diff += RepeatType.CompareTo(other.RepeatType);
             }
-            if (absoluteBegin == null && absoluteBegin == other.absoluteBegin)
+            if (AbsoluteBegin == null && AbsoluteBegin == other.AbsoluteBegin)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(absoluteBegin - other.absoluteBegin);
+                diff += (int)(AbsoluteBegin - other.AbsoluteBegin);
             }
-            if (absoluteEnd == null && absoluteEnd == other.absoluteEnd)
+            if (AbsoluteEnd == null && AbsoluteEnd == other.AbsoluteEnd)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(absoluteEnd - other.absoluteEnd);
+                diff += (int)(AbsoluteEnd - other.AbsoluteEnd);
             }
-            if (repeatBeginDayOfMonth == null && repeatBeginDayOfMonth == other.repeatBeginDayOfMonth)
+            if (RepeatBeginDayOfMonth == null && RepeatBeginDayOfMonth == other.RepeatBeginDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(repeatBeginDayOfMonth - other.repeatBeginDayOfMonth);
+                diff += (int)(RepeatBeginDayOfMonth - other.RepeatBeginDayOfMonth);
             }
-            if (repeatEndDayOfMonth == null && repeatEndDayOfMonth == other.repeatEndDayOfMonth)
+            if (RepeatEndDayOfMonth == null && RepeatEndDayOfMonth == other.RepeatEndDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(repeatEndDayOfMonth - other.repeatEndDayOfMonth);
+                diff += (int)(RepeatEndDayOfMonth - other.RepeatEndDayOfMonth);
             }
-            if (repeatBeginDayOfWeek == null && repeatBeginDayOfWeek == other.repeatBeginDayOfWeek)
+            if (RepeatBeginDayOfWeek == null && RepeatBeginDayOfWeek == other.RepeatBeginDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += repeatBeginDayOfWeek.CompareTo(other.repeatBeginDayOfWeek);
+                diff += RepeatBeginDayOfWeek.CompareTo(other.RepeatBeginDayOfWeek);
             }
-            if (repeatEndDayOfWeek == null && repeatEndDayOfWeek == other.repeatEndDayOfWeek)
+            if (RepeatEndDayOfWeek == null && RepeatEndDayOfWeek == other.RepeatEndDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += repeatEndDayOfWeek.CompareTo(other.repeatEndDayOfWeek);
+                diff += RepeatEndDayOfWeek.CompareTo(other.RepeatEndDayOfWeek);
             }
-            if (repeatBeginHour == null && repeatBeginHour == other.repeatBeginHour)
+            if (RepeatBeginHour == null && RepeatBeginHour == other.RepeatBeginHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(repeatBeginHour - other.repeatBeginHour);
+                diff += (int)(RepeatBeginHour - other.RepeatBeginHour);
             }
-            if (repeatEndHour == null && repeatEndHour == other.repeatEndHour)
+            if (RepeatEndHour == null && RepeatEndHour == other.RepeatEndHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(repeatEndHour - other.repeatEndHour);
+                diff += (int)(RepeatEndHour - other.RepeatEndHour);
             }
-            if (relativeTriggerName == null && relativeTriggerName == other.relativeTriggerName)
+            if (RelativeTriggerName == null && RelativeTriggerName == other.RelativeTriggerName)
             {
                 // null and null
             }
             else
             {
-                diff += relativeTriggerName.CompareTo(other.relativeTriggerName);
+                diff += RelativeTriggerName.CompareTo(other.RelativeTriggerName);
             }
-            if (relativeDuration == null && relativeDuration == other.relativeDuration)
+            if (RelativeDuration == null && RelativeDuration == other.RelativeDuration)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(relativeDuration - other.relativeDuration);
+                diff += (int)(RelativeDuration - other.RelativeDuration);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["eventId"] = eventId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["scheduleType"] = scheduleType;
-            data["repeatType"] = repeatType;
-            data["absoluteBegin"] = absoluteBegin;
-            data["absoluteEnd"] = absoluteEnd;
-            data["repeatBeginDayOfMonth"] = repeatBeginDayOfMonth;
-            data["repeatEndDayOfMonth"] = repeatEndDayOfMonth;
-            data["repeatBeginDayOfWeek"] = repeatBeginDayOfWeek;
-            data["repeatEndDayOfWeek"] = repeatEndDayOfWeek;
-            data["repeatBeginHour"] = repeatBeginHour;
-            data["repeatEndHour"] = repeatEndHour;
-            data["relativeTriggerName"] = relativeTriggerName;
-            data["relativeDuration"] = relativeDuration;
-            return data;
-        }
-	}
+    }
 }

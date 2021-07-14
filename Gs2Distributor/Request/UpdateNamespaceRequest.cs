@@ -28,90 +28,73 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public string AssumeUserId { set; get; }
+        public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** リソース溢れ処理に使用する ユーザ のGRN */
-		[UnityEngine.SerializeField]
-        public string assumeUserId;
-
-        /**
-         * リソース溢れ処理に使用する ユーザ のGRNを設定
-         *
-         * @param assumeUserId リソース溢れ処理に使用する ユーザ のGRN
-         * @return this
-         */
         public UpdateNamespaceRequest WithAssumeUserId(string assumeUserId) {
-            this.assumeUserId = assumeUserId;
+            this.AssumeUserId = assumeUserId;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Distributor.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Distributor.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Distributor.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                assumeUserId = data.Keys.Contains("assumeUserId") && data["assumeUserId"] != null ? data["assumeUserId"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Distributor.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Distributor.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["assumeUserId"] = AssumeUserId,
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["assumeUserId"] = assumeUserId;
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (AssumeUserId != null) {
+                writer.WritePropertyName("assumeUserId");
+                writer.Write(AssumeUserId.ToString());
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

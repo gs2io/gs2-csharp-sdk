@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,84 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inventory.Result
 {
 	[Preserve]
-	public class DeleteReferenceOfItemSetByStampSheetResult
+	[System.Serializable]
+	public class DeleteReferenceOfItemSetByStampSheetResult : IResult
 	{
-        /** この所持品の参照元リスト */
-        public List<string> item { set; get; }
+        public string[] Item { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
 
-        /** 参照元削除後の有効期限ごとのアイテム所持数量 */
-        public ItemSet itemSet { set; get; }
+        public DeleteReferenceOfItemSetByStampSheetResult WithItem(string[] item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** アイテムモデル */
-        public ItemModel itemModel { set; get; }
+        public DeleteReferenceOfItemSetByStampSheetResult WithItemSet(Gs2.Gs2Inventory.Model.ItemSet itemSet) {
+            this.ItemSet = itemSet;
+            return this;
+        }
 
-        /** インベントリ */
-        public Inventory inventory { set; get; }
+        public DeleteReferenceOfItemSetByStampSheetResult WithItemModel(Gs2.Gs2Inventory.Model.ItemModel itemModel) {
+            this.ItemModel = itemModel;
+            return this;
+        }
 
+        public DeleteReferenceOfItemSetByStampSheetResult WithInventory(Gs2.Gs2Inventory.Model.Inventory inventory) {
+            this.Inventory = inventory;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteReferenceOfItemSetByStampSheetResult FromDict(JsonData data)
+        public static DeleteReferenceOfItemSetByStampSheetResult FromJson(JsonData data)
         {
-            return new DeleteReferenceOfItemSetByStampSheetResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? data["item"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                itemSet = data.Keys.Contains("itemSet") && data["itemSet"] != null ? Gs2.Gs2Inventory.Model.ItemSet.FromDict(data["itemSet"]) : null,
-                itemModel = data.Keys.Contains("itemModel") && data["itemModel"] != null ? Gs2.Gs2Inventory.Model.ItemModel.FromDict(data["itemModel"]) : null,
-                inventory = data.Keys.Contains("inventory") && data["inventory"] != null ? Gs2.Gs2Inventory.Model.Inventory.FromDict(data["inventory"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteReferenceOfItemSetByStampSheetResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? new string[]{} : data["item"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithItemSet(!data.Keys.Contains("itemSet") || data["itemSet"] == null ? null : Gs2.Gs2Inventory.Model.ItemSet.FromJson(data["itemSet"]))
+                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
+                .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = new JsonData(Item == null ? new JsonData[]{} :
+                        Item.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["itemSet"] = ItemSet?.ToJson(),
+                ["itemModel"] = ItemModel?.ToJson(),
+                ["inventory"] = Inventory?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var ite in Item)
+            {
+                if (ite != null) {
+                    writer.Write(ite.ToString());
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ItemSet != null) {
+                ItemSet.WriteJson(writer);
+            }
+            if (ItemModel != null) {
+                ItemModel.WriteJson(writer);
+            }
+            if (Inventory != null) {
+                Inventory.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

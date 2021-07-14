@@ -28,126 +28,94 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class UpdateDataObjectRequest : Gs2Request<UpdateDataObjectRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DataObjectName { set; get; }
+        public string AccessToken { set; get; }
+        public string Scope { set; get; }
+        public string[] AllowUserIds { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateDataObjectRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データの名前 */
-		[UnityEngine.SerializeField]
-        public string dataObjectName;
-
-        /**
-         * データの名前を設定
-         *
-         * @param dataObjectName データの名前
-         * @return this
-         */
         public UpdateDataObjectRequest WithDataObjectName(string dataObjectName) {
-            this.dataObjectName = dataObjectName;
+            this.DataObjectName = dataObjectName;
             return this;
         }
 
-
-        /** ファイルのアクセス権 */
-		[UnityEngine.SerializeField]
-        public string scope;
-
-        /**
-         * ファイルのアクセス権を設定
-         *
-         * @param scope ファイルのアクセス権
-         * @return this
-         */
-        public UpdateDataObjectRequest WithScope(string scope) {
-            this.scope = scope;
-            return this;
-        }
-
-
-        /** 公開するユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> allowUserIds;
-
-        /**
-         * 公開するユーザIDリストを設定
-         *
-         * @param allowUserIds 公開するユーザIDリスト
-         * @return this
-         */
-        public UpdateDataObjectRequest WithAllowUserIds(List<string> allowUserIds) {
-            this.allowUserIds = allowUserIds;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public UpdateDataObjectRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public UpdateDataObjectRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public UpdateDataObjectRequest WithScope(string scope) {
+            this.Scope = scope;
+            return this;
+        }
+
+        public UpdateDataObjectRequest WithAllowUserIds(string[] allowUserIds) {
+            this.AllowUserIds = allowUserIds;
             return this;
         }
 
     	[Preserve]
-        public static UpdateDataObjectRequest FromDict(JsonData data)
+        public static UpdateDataObjectRequest FromJson(JsonData data)
         {
-            return new UpdateDataObjectRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                dataObjectName = data.Keys.Contains("dataObjectName") && data["dataObjectName"] != null ? data["dataObjectName"].ToString(): null,
-                scope = data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString(): null,
-                allowUserIds = data.Keys.Contains("allowUserIds") && data["allowUserIds"] != null ? data["allowUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateDataObjectRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["dataObjectName"] = DataObjectName,
+                ["accessToken"] = AccessToken,
+                ["scope"] = Scope,
+                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                        AllowUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["dataObjectName"] = dataObjectName;
-            data["scope"] = scope;
-            data["allowUserIds"] = new JsonData(allowUserIds);
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DataObjectName != null) {
+                writer.WritePropertyName("dataObjectName");
+                writer.Write(DataObjectName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Scope != null) {
+                writer.WritePropertyName("scope");
+                writer.Write(Scope.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var allowUserId in AllowUserIds)
+            {
+                writer.Write(allowUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

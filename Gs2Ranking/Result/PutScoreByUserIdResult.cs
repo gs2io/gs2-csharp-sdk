@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Ranking.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Ranking.Result
 {
 	[Preserve]
-	public class PutScoreByUserIdResult
+	[System.Serializable]
+	public class PutScoreByUserIdResult : IResult
 	{
-        /** 登録したスコア */
-        public Score item { set; get; }
+        public Gs2.Gs2Ranking.Model.Score Item { set; get; }
 
+        public PutScoreByUserIdResult WithItem(Gs2.Gs2Ranking.Model.Score item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static PutScoreByUserIdResult FromDict(JsonData data)
+        public static PutScoreByUserIdResult FromJson(JsonData data)
         {
-            return new PutScoreByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Ranking.Model.Score.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new PutScoreByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Ranking.Model.Score.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

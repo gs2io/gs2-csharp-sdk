@@ -28,108 +28,83 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
+        public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** キャパシティを更新するときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Formation.Model.ScriptSetting updateMoldScript;
-
-        /**
-         * キャパシティを更新するときに実行するスクリプトを設定
-         *
-         * @param updateMoldScript キャパシティを更新するときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithUpdateMoldScript(global::Gs2.Gs2Formation.Model.ScriptSetting updateMoldScript) {
-            this.updateMoldScript = updateMoldScript;
+        public CreateNamespaceRequest WithUpdateMoldScript(Gs2.Gs2Formation.Model.ScriptSetting updateMoldScript) {
+            this.UpdateMoldScript = updateMoldScript;
             return this;
         }
 
-
-        /** フォームを更新するときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Formation.Model.ScriptSetting updateFormScript;
-
-        /**
-         * フォームを更新するときに実行するスクリプトを設定
-         *
-         * @param updateFormScript フォームを更新するときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithUpdateFormScript(global::Gs2.Gs2Formation.Model.ScriptSetting updateFormScript) {
-            this.updateFormScript = updateFormScript;
+        public CreateNamespaceRequest WithUpdateFormScript(Gs2.Gs2Formation.Model.ScriptSetting updateFormScript) {
+            this.UpdateFormScript = updateFormScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Formation.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Formation.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Formation.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                updateMoldScript = data.Keys.Contains("updateMoldScript") && data["updateMoldScript"] != null ? global::Gs2.Gs2Formation.Model.ScriptSetting.FromDict(data["updateMoldScript"]) : null,
-                updateFormScript = data.Keys.Contains("updateFormScript") && data["updateFormScript"] != null ? global::Gs2.Gs2Formation.Model.ScriptSetting.FromDict(data["updateFormScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Formation.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithUpdateMoldScript(!data.Keys.Contains("updateMoldScript") || data["updateMoldScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateMoldScript"]))
+                .WithUpdateFormScript(!data.Keys.Contains("updateFormScript") || data["updateFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateFormScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Formation.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["updateMoldScript"] = UpdateMoldScript?.ToJson(),
+                ["updateFormScript"] = UpdateFormScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["updateMoldScript"] = updateMoldScript.ToDict();
-            data["updateFormScript"] = updateFormScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (UpdateMoldScript != null) {
+                UpdateMoldScript.WriteJson(writer);
+            }
+            if (UpdateFormScript != null) {
+                UpdateFormScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

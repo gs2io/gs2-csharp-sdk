@@ -28,86 +28,62 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class FollowRequest : Gs2Request<FollowRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string TargetUserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public FollowRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォローされるユーザID */
-		[UnityEngine.SerializeField]
-        public string targetUserId;
-
-        /**
-         * フォローされるユーザIDを設定
-         *
-         * @param targetUserId フォローされるユーザID
-         * @return this
-         */
-        public FollowRequest WithTargetUserId(string targetUserId) {
-            this.targetUserId = targetUserId;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public FollowRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public FollowRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public FollowRequest WithTargetUserId(string targetUserId) {
+            this.TargetUserId = targetUserId;
             return this;
         }
 
     	[Preserve]
-        public static FollowRequest FromDict(JsonData data)
+        public static FollowRequest FromJson(JsonData data)
         {
-            return new FollowRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                targetUserId = data.Keys.Contains("targetUserId") && data["targetUserId"] != null ? data["targetUserId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new FollowRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["targetUserId"] = TargetUserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["targetUserId"] = targetUserId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (TargetUserId != null) {
+                writer.WritePropertyName("targetUserId");
+                writer.Write(TargetUserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

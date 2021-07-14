@@ -28,148 +28,108 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class SendMessageByUserIdRequest : Gs2Request<SendMessageByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public long? ExpiresAt { set; get; }
+        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SendMessageByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SendMessageByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** メッセージの内容に相当するメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メッセージの内容に相当するメタデータを設定
-         *
-         * @param metadata メッセージの内容に相当するメタデータ
-         * @return this
-         */
         public SendMessageByUserIdRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 開封時に実行する入手アクション */
-		[UnityEngine.SerializeField]
-        public List<AcquireAction> readAcquireActions;
-
-        /**
-         * 開封時に実行する入手アクションを設定
-         *
-         * @param readAcquireActions 開封時に実行する入手アクション
-         * @return this
-         */
-        public SendMessageByUserIdRequest WithReadAcquireActions(List<AcquireAction> readAcquireActions) {
-            this.readAcquireActions = readAcquireActions;
+        public SendMessageByUserIdRequest WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+            this.ReadAcquireActions = readAcquireActions;
             return this;
         }
 
-
-        /** メッセージの有効期限 */
-		[UnityEngine.SerializeField]
-        public long? expiresAt;
-
-        /**
-         * メッセージの有効期限を設定
-         *
-         * @param expiresAt メッセージの有効期限
-         * @return this
-         */
         public SendMessageByUserIdRequest WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
 
-
-        /** メッセージの有効期限までの差分 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inbox.Model.TimeSpan expiresTimeSpan;
-
-        /**
-         * メッセージの有効期限までの差分を設定
-         *
-         * @param expiresTimeSpan メッセージの有効期限までの差分
-         * @return this
-         */
-        public SendMessageByUserIdRequest WithExpiresTimeSpan(global::Gs2.Gs2Inbox.Model.TimeSpan expiresTimeSpan) {
-            this.expiresTimeSpan = expiresTimeSpan;
+        public SendMessageByUserIdRequest WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
+            this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SendMessageByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SendMessageByUserIdRequest FromDict(JsonData data)
+        public static SendMessageByUserIdRequest FromJson(JsonData data)
         {
-            return new SendMessageByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                readAcquireActions = data.Keys.Contains("readAcquireActions") && data["readAcquireActions"] != null ? data["readAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                expiresAt = data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null,
-                expiresTimeSpan = data.Keys.Contains("expiresTimeSpan") && data["expiresTimeSpan"] != null ? global::Gs2.Gs2Inbox.Model.TimeSpan.FromDict(data["expiresTimeSpan"]) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SendMessageByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["metadata"] = Metadata,
+                ["readAcquireActions"] = new JsonData(ReadAcquireActions == null ? new JsonData[]{} :
+                        ReadAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["expiresAt"] = ExpiresAt,
+                ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["metadata"] = metadata;
-            data["readAcquireActions"] = new JsonData(readAcquireActions.Select(item => item.ToDict()));
-            data["expiresAt"] = expiresAt;
-            data["expiresTimeSpan"] = expiresTimeSpan.ToDict();
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var readAcquireAction in ReadAcquireActions)
+            {
+                if (readAcquireAction != null) {
+                    readAcquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ExpiresAt != null) {
+                writer.WritePropertyName("expiresAt");
+                writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            if (ExpiresTimeSpan != null) {
+                ExpiresTimeSpan.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

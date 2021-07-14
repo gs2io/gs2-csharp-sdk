@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public QuotaLimitExceededException(List<RequestError> errors) : base(errors: errors)
+		public QuotaLimitExceededException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

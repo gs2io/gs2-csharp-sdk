@@ -28,54 +28,50 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class InvokeScriptRequest : Gs2Request<InvokeScriptRequest>
 	{
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
 
-        /** スクリプト */
-		[UnityEngine.SerializeField]
-        public string scriptId;
-
-        /**
-         * スクリプトを設定
-         *
-         * @param scriptId スクリプト
-         * @return this
-         */
         public InvokeScriptRequest WithScriptId(string scriptId) {
-            this.scriptId = scriptId;
+            this.ScriptId = scriptId;
             return this;
         }
 
-
-        /** None */
-		[UnityEngine.SerializeField]
-        public string args;
-
-        /**
-         * Noneを設定
-         *
-         * @param args None
-         * @return this
-         */
         public InvokeScriptRequest WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
         }
-
 
     	[Preserve]
-        public static InvokeScriptRequest FromDict(JsonData data)
+        public static InvokeScriptRequest FromJson(JsonData data)
         {
-            return new InvokeScriptRequest {
-                scriptId = data.Keys.Contains("scriptId") && data["scriptId"] != null ? data["scriptId"].ToString(): null,
-                args = data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new InvokeScriptRequest()
+                .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["scriptId"] = ScriptId,
+                ["args"] = Args,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["scriptId"] = scriptId;
-            data["args"] = args;
-            return data;
+            writer.WriteObjectStart();
+            if (ScriptId != null) {
+                writer.WritePropertyName("scriptId");
+                writer.Write(ScriptId.ToString());
+            }
+            if (Args != null) {
+                writer.WritePropertyName("args");
+                writer.Write(Args.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

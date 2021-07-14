@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Enhance.Model
 {
+
 	[Preserve]
 	public class Material : IComparable
 	{
+        public string MaterialItemSetId { set; get; }
+        public int? Count { set; get; }
 
-        /** 強化対象の GS2-Inventory アイテムセットGRN */
-        public string materialItemSetId { set; get; }
-
-        /**
-         * 強化対象の GS2-Inventory アイテムセットGRNを設定
-         *
-         * @param materialItemSetId 強化対象の GS2-Inventory アイテムセットGRN
-         * @return this
-         */
         public Material WithMaterialItemSetId(string materialItemSetId) {
-            this.materialItemSetId = materialItemSetId;
+            this.MaterialItemSetId = materialItemSetId;
             return this;
         }
 
-        /** 消費数量 */
-        public int? count { set; get; }
-
-        /**
-         * 消費数量を設定
-         *
-         * @param count 消費数量
-         * @return this
-         */
         public Material WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
+        }
+
+    	[Preserve]
+        public static Material FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Material()
+                .WithMaterialItemSetId(!data.Keys.Contains("materialItemSetId") || data["materialItemSetId"] == null ? null : data["materialItemSetId"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["materialItemSetId"] = MaterialItemSetId,
+                ["count"] = Count,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.materialItemSetId != null)
-            {
+            if (MaterialItemSetId != null) {
                 writer.WritePropertyName("materialItemSetId");
-                writer.Write(this.materialItemSetId);
+                writer.Write(MaterialItemSetId.ToString());
             }
-            if(this.count.HasValue)
-            {
+            if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(this.count.Value);
+                writer.Write(int.Parse(Count.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Material FromDict(JsonData data)
-        {
-            return new Material()
-                .WithMaterialItemSetId(data.Keys.Contains("materialItemSetId") && data["materialItemSetId"] != null ? data["materialItemSetId"].ToString() : null)
-                .WithCount(data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Material;
             var diff = 0;
-            if (materialItemSetId == null && materialItemSetId == other.materialItemSetId)
+            if (MaterialItemSetId == null && MaterialItemSetId == other.MaterialItemSetId)
             {
                 // null and null
             }
             else
             {
-                diff += materialItemSetId.CompareTo(other.materialItemSetId);
+                diff += MaterialItemSetId.CompareTo(other.MaterialItemSetId);
             }
-            if (count == null && count == other.count)
+            if (Count == null && Count == other.Count)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(count - other.count);
+                diff += (int)(Count - other.Count);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["materialItemSetId"] = materialItemSetId;
-            data["count"] = count;
-            return data;
-        }
-	}
+    }
 }

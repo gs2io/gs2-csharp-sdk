@@ -28,86 +28,62 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class DeleteDataObjectRequest : Gs2Request<DeleteDataObjectRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string DataObjectName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteDataObjectRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データの名前 */
-		[UnityEngine.SerializeField]
-        public string dataObjectName;
-
-        /**
-         * データの名前を設定
-         *
-         * @param dataObjectName データの名前
-         * @return this
-         */
-        public DeleteDataObjectRequest WithDataObjectName(string dataObjectName) {
-            this.dataObjectName = dataObjectName;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DeleteDataObjectRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public DeleteDataObjectRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public DeleteDataObjectRequest WithDataObjectName(string dataObjectName) {
+            this.DataObjectName = dataObjectName;
             return this;
         }
 
     	[Preserve]
-        public static DeleteDataObjectRequest FromDict(JsonData data)
+        public static DeleteDataObjectRequest FromJson(JsonData data)
         {
-            return new DeleteDataObjectRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                dataObjectName = data.Keys.Contains("dataObjectName") && data["dataObjectName"] != null ? data["dataObjectName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteDataObjectRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["dataObjectName"] = DataObjectName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["dataObjectName"] = dataObjectName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (DataObjectName != null) {
+                writer.WritePropertyName("dataObjectName");
+                writer.Write(DataObjectName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

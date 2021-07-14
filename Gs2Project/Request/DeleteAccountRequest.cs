@@ -30,16 +30,24 @@ namespace Gs2.Gs2Project.Request
 	{
 
     	[Preserve]
-        public static DeleteAccountRequest FromDict(JsonData data)
+        public static DeleteAccountRequest FromJson(JsonData data)
         {
-            return new DeleteAccountRequest {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteAccountRequest();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            return data;
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,284 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class RatingModelMaster : IComparable
 	{
+        public string RatingModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public int? Volatility { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** レーティングモデルマスター */
-        public string ratingModelId { set; get; }
-
-        /**
-         * レーティングモデルマスターを設定
-         *
-         * @param ratingModelId レーティングモデルマスター
-         * @return this
-         */
         public RatingModelMaster WithRatingModelId(string ratingModelId) {
-            this.ratingModelId = ratingModelId;
+            this.RatingModelId = ratingModelId;
             return this;
         }
 
-        /** レーティングの種類名 */
-        public string name { set; get; }
-
-        /**
-         * レーティングの種類名を設定
-         *
-         * @param name レーティングの種類名
-         * @return this
-         */
         public RatingModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** レーティングの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * レーティングの種類のメタデータを設定
-         *
-         * @param metadata レーティングの種類のメタデータ
-         * @return this
-         */
         public RatingModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** レーティングモデルマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * レーティングモデルマスターの説明を設定
-         *
-         * @param description レーティングモデルマスターの説明
-         * @return this
-         */
         public RatingModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** レート値の変動の大きさ */
-        public int? volatility { set; get; }
-
-        /**
-         * レート値の変動の大きさを設定
-         *
-         * @param volatility レート値の変動の大きさ
-         * @return this
-         */
         public RatingModelMaster WithVolatility(int? volatility) {
-            this.volatility = volatility;
+            this.Volatility = volatility;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public RatingModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public RatingModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static RatingModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new RatingModelMaster()
+                .WithRatingModelId(!data.Keys.Contains("ratingModelId") || data["ratingModelId"] == null ? null : data["ratingModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["ratingModelId"] = RatingModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["volatility"] = Volatility,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ratingModelId != null)
-            {
+            if (RatingModelId != null) {
                 writer.WritePropertyName("ratingModelId");
-                writer.Write(this.ratingModelId);
+                writer.Write(RatingModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.volatility.HasValue)
-            {
+            if (Volatility != null) {
                 writer.WritePropertyName("volatility");
-                writer.Write(this.volatility.Value);
+                writer.Write(int.Parse(Volatility.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRatingNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["ratingName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ratingName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static RatingModelMaster FromDict(JsonData data)
-        {
-            return new RatingModelMaster()
-                .WithRatingModelId(data.Keys.Contains("ratingModelId") && data["ratingModelId"] != null ? data["ratingModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithVolatility(data.Keys.Contains("volatility") && data["volatility"] != null ? (int?)int.Parse(data["volatility"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as RatingModelMaster;
             var diff = 0;
-            if (ratingModelId == null && ratingModelId == other.ratingModelId)
+            if (RatingModelId == null && RatingModelId == other.RatingModelId)
             {
                 // null and null
             }
             else
             {
-                diff += ratingModelId.CompareTo(other.ratingModelId);
+                diff += RatingModelId.CompareTo(other.RatingModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (volatility == null && volatility == other.volatility)
+            if (Volatility == null && Volatility == other.Volatility)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(volatility - other.volatility);
+                diff += (int)(Volatility - other.Volatility);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ratingModelId"] = ratingModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["volatility"] = volatility;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

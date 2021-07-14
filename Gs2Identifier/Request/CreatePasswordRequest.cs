@@ -28,54 +28,50 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class CreatePasswordRequest : Gs2Request<CreatePasswordRequest>
 	{
+        public string UserName { set; get; }
+        public string Password { set; get; }
 
-        /** ユーザー名 */
-		[UnityEngine.SerializeField]
-        public string userName;
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public CreatePasswordRequest WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public CreatePasswordRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
 
     	[Preserve]
-        public static CreatePasswordRequest FromDict(JsonData data)
+        public static CreatePasswordRequest FromJson(JsonData data)
         {
-            return new CreatePasswordRequest {
-                userName = data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreatePasswordRequest()
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userName"] = UserName,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["userName"] = userName;
-            data["password"] = password;
-            return data;
+            writer.WriteObjectStart();
+            if (UserName != null) {
+                writer.WritePropertyName("userName");
+                writer.Write(UserName.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

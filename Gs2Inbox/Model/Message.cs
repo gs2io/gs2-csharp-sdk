@@ -23,367 +23,235 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inbox.Model
 {
+
 	[Preserve]
 	public class Message : IComparable
 	{
+        public string MessageId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string Metadata { set; get; }
+        public bool? IsRead { set; get; }
+        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public long? ReceivedAt { set; get; }
+        public long? ReadAt { set; get; }
+        public long? ExpiresAt { set; get; }
 
-        /** メッセージ */
-        public string messageId { set; get; }
-
-        /**
-         * メッセージを設定
-         *
-         * @param messageId メッセージ
-         * @return this
-         */
         public Message WithMessageId(string messageId) {
-            this.messageId = messageId;
+            this.MessageId = messageId;
             return this;
         }
 
-        /** メッセージID */
-        public string name { set; get; }
-
-        /**
-         * メッセージIDを設定
-         *
-         * @param name メッセージID
-         * @return this
-         */
         public Message WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Message WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** メッセージの内容に相当するメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メッセージの内容に相当するメタデータを設定
-         *
-         * @param metadata メッセージの内容に相当するメタデータ
-         * @return this
-         */
         public Message WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 既読状態 */
-        public bool? isRead { set; get; }
-
-        /**
-         * 既読状態を設定
-         *
-         * @param isRead 既読状態
-         * @return this
-         */
         public Message WithIsRead(bool? isRead) {
-            this.isRead = isRead;
+            this.IsRead = isRead;
             return this;
         }
 
-        /** 開封時に実行する入手アクション */
-        public List<AcquireAction> readAcquireActions { set; get; }
-
-        /**
-         * 開封時に実行する入手アクションを設定
-         *
-         * @param readAcquireActions 開封時に実行する入手アクション
-         * @return this
-         */
-        public Message WithReadAcquireActions(List<AcquireAction> readAcquireActions) {
-            this.readAcquireActions = readAcquireActions;
+        public Message WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+            this.ReadAcquireActions = readAcquireActions;
             return this;
         }
 
-        /** 作成日時 */
-        public long? receivedAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param receivedAt 作成日時
-         * @return this
-         */
         public Message WithReceivedAt(long? receivedAt) {
-            this.receivedAt = receivedAt;
+            this.ReceivedAt = receivedAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? readAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param readAt 最終更新日時
-         * @return this
-         */
         public Message WithReadAt(long? readAt) {
-            this.readAt = readAt;
+            this.ReadAt = readAt;
             return this;
         }
 
-        /** メッセージの有効期限 */
-        public long? expiresAt { set; get; }
-
-        /**
-         * メッセージの有効期限を設定
-         *
-         * @param expiresAt メッセージの有効期限
-         * @return this
-         */
         public Message WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Message FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Message()
+                .WithMessageId(!data.Keys.Contains("messageId") || data["messageId"] == null ? null : data["messageId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithIsRead(!data.Keys.Contains("isRead") || data["isRead"] == null ? null : (bool?)bool.Parse(data["isRead"].ToString()))
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithReceivedAt(!data.Keys.Contains("receivedAt") || data["receivedAt"] == null ? null : (long?)long.Parse(data["receivedAt"].ToString()))
+                .WithReadAt(!data.Keys.Contains("readAt") || data["readAt"] == null ? null : (long?)long.Parse(data["readAt"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["messageId"] = MessageId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["metadata"] = Metadata,
+                ["isRead"] = IsRead,
+                ["readAcquireActions"] = new JsonData(ReadAcquireActions == null ? new JsonData[]{} :
+                        ReadAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["receivedAt"] = ReceivedAt,
+                ["readAt"] = ReadAt,
+                ["expiresAt"] = ExpiresAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.messageId != null)
-            {
+            if (MessageId != null) {
                 writer.WritePropertyName("messageId");
-                writer.Write(this.messageId);
+                writer.Write(MessageId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.isRead.HasValue)
-            {
+            if (IsRead != null) {
                 writer.WritePropertyName("isRead");
-                writer.Write(this.isRead.Value);
+                writer.Write(bool.Parse(IsRead.ToString()));
             }
-            if(this.readAcquireActions != null)
-            {
+            if (ReadAcquireActions != null) {
                 writer.WritePropertyName("readAcquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.readAcquireActions)
+                foreach (var readAcquireAction in ReadAcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (readAcquireAction != null) {
+                        readAcquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.receivedAt.HasValue)
-            {
+            if (ReceivedAt != null) {
                 writer.WritePropertyName("receivedAt");
-                writer.Write(this.receivedAt.Value);
+                writer.Write(long.Parse(ReceivedAt.ToString()));
             }
-            if(this.readAt.HasValue)
-            {
+            if (ReadAt != null) {
                 writer.WritePropertyName("readAt");
-                writer.Write(this.readAt.Value);
+                writer.Write(long.Parse(ReadAt.ToString()));
             }
-            if(this.expiresAt.HasValue)
-            {
+            if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
-                writer.Write(this.expiresAt.Value);
+                writer.Write(long.Parse(ExpiresAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMessageNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):message:(?<messageName>.*)");
-        if (!match.Groups["messageName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["messageName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):message:(?<messageName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):message:(?<messageName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):message:(?<messageName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):message:(?<messageName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Message FromDict(JsonData data)
-        {
-            return new Message()
-                .WithMessageId(data.Keys.Contains("messageId") && data["messageId"] != null ? data["messageId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithIsRead(data.Keys.Contains("isRead") && data["isRead"] != null ? (bool?)bool.Parse(data["isRead"].ToString()) : null)
-                .WithReadAcquireActions(data.Keys.Contains("readAcquireActions") && data["readAcquireActions"] != null ? data["readAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Inbox.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithReceivedAt(data.Keys.Contains("receivedAt") && data["receivedAt"] != null ? (long?)long.Parse(data["receivedAt"].ToString()) : null)
-                .WithReadAt(data.Keys.Contains("readAt") && data["readAt"] != null ? (long?)long.Parse(data["readAt"].ToString()) : null)
-                .WithExpiresAt(data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Message;
             var diff = 0;
-            if (messageId == null && messageId == other.messageId)
+            if (MessageId == null && MessageId == other.MessageId)
             {
                 // null and null
             }
             else
             {
-                diff += messageId.CompareTo(other.messageId);
+                diff += MessageId.CompareTo(other.MessageId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (isRead == null && isRead == other.isRead)
+            if (IsRead == null && IsRead == other.IsRead)
             {
                 // null and null
             }
             else
             {
-                diff += isRead == other.isRead ? 0 : 1;
+                diff += IsRead == other.IsRead ? 0 : 1;
             }
-            if (readAcquireActions == null && readAcquireActions == other.readAcquireActions)
+            if (ReadAcquireActions == null && ReadAcquireActions == other.ReadAcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += readAcquireActions.Count - other.readAcquireActions.Count;
-                for (var i = 0; i < readAcquireActions.Count; i++)
+                diff += ReadAcquireActions.Length - other.ReadAcquireActions.Length;
+                for (var i = 0; i < ReadAcquireActions.Length; i++)
                 {
-                    diff += readAcquireActions[i].CompareTo(other.readAcquireActions[i]);
+                    diff += ReadAcquireActions[i].CompareTo(other.ReadAcquireActions[i]);
                 }
             }
-            if (receivedAt == null && receivedAt == other.receivedAt)
+            if (ReceivedAt == null && ReceivedAt == other.ReceivedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(receivedAt - other.receivedAt);
+                diff += (int)(ReceivedAt - other.ReceivedAt);
             }
-            if (readAt == null && readAt == other.readAt)
+            if (ReadAt == null && ReadAt == other.ReadAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(readAt - other.readAt);
+                diff += (int)(ReadAt - other.ReadAt);
             }
-            if (expiresAt == null && expiresAt == other.expiresAt)
+            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(expiresAt - other.expiresAt);
+                diff += (int)(ExpiresAt - other.ExpiresAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["messageId"] = messageId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["metadata"] = metadata;
-            data["isRead"] = isRead;
-            data["readAcquireActions"] = new JsonData(readAcquireActions.Select(item => item.ToDict()));
-            data["receivedAt"] = receivedAt;
-            data["readAt"] = readAt;
-            data["expiresAt"] = expiresAt;
-            return data;
-        }
-	}
+    }
 }

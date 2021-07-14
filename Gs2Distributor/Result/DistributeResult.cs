@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class DistributeResult
+	[System.Serializable]
+	public class DistributeResult : IResult
 	{
-        /** 処理した DistributeResource */
-        public DistributeResource distributeResource { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
+        public string InboxNamespaceId { set; get; }
+        public string Result { set; get; }
 
-        /** 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRN */
-        public string inboxNamespaceId { set; get; }
+        public DistributeResult WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
+            this.DistributeResource = distributeResource;
+            return this;
+        }
 
-        /** レスポンス内容 */
-        public string result { set; get; }
+        public DistributeResult WithInboxNamespaceId(string inboxNamespaceId) {
+            this.InboxNamespaceId = inboxNamespaceId;
+            return this;
+        }
 
+        public DistributeResult WithResult(string result) {
+            this.Result = result;
+            return this;
+        }
 
     	[Preserve]
-        public static DistributeResult FromDict(JsonData data)
+        public static DistributeResult FromJson(JsonData data)
         {
-            return new DistributeResult {
-                distributeResource = data.Keys.Contains("distributeResource") && data["distributeResource"] != null ? Gs2.Gs2Distributor.Model.DistributeResource.FromDict(data["distributeResource"]) : null,
-                inboxNamespaceId = data.Keys.Contains("inboxNamespaceId") && data["inboxNamespaceId"] != null ? data["inboxNamespaceId"].ToString() : null,
-                result = data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DistributeResult()
+                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]))
+                .WithInboxNamespaceId(!data.Keys.Contains("inboxNamespaceId") || data["inboxNamespaceId"] == null ? null : data["inboxNamespaceId"].ToString())
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["distributeResource"] = DistributeResource?.ToJson(),
+                ["inboxNamespaceId"] = InboxNamespaceId,
+                ["result"] = Result,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (DistributeResource != null) {
+                DistributeResource.WriteJson(writer);
+            }
+            if (InboxNamespaceId != null) {
+                writer.WritePropertyName("inboxNamespaceId");
+                writer.Write(InboxNamespaceId.ToString());
+            }
+            if (Result != null) {
+                writer.WritePropertyName("result");
+                writer.Write(Result.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

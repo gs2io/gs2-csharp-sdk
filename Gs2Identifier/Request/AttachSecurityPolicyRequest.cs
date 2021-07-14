@@ -28,54 +28,50 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class AttachSecurityPolicyRequest : Gs2Request<AttachSecurityPolicyRequest>
 	{
+        public string UserName { set; get; }
+        public string SecurityPolicyId { set; get; }
 
-        /** ユーザー名 */
-		[UnityEngine.SerializeField]
-        public string userName;
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public AttachSecurityPolicyRequest WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-
-        /** 割り当てるセキュリティポリシーのGRN */
-		[UnityEngine.SerializeField]
-        public string securityPolicyId;
-
-        /**
-         * 割り当てるセキュリティポリシーのGRNを設定
-         *
-         * @param securityPolicyId 割り当てるセキュリティポリシーのGRN
-         * @return this
-         */
         public AttachSecurityPolicyRequest WithSecurityPolicyId(string securityPolicyId) {
-            this.securityPolicyId = securityPolicyId;
+            this.SecurityPolicyId = securityPolicyId;
             return this;
         }
-
 
     	[Preserve]
-        public static AttachSecurityPolicyRequest FromDict(JsonData data)
+        public static AttachSecurityPolicyRequest FromJson(JsonData data)
         {
-            return new AttachSecurityPolicyRequest {
-                userName = data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString(): null,
-                securityPolicyId = data.Keys.Contains("securityPolicyId") && data["securityPolicyId"] != null ? data["securityPolicyId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new AttachSecurityPolicyRequest()
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithSecurityPolicyId(!data.Keys.Contains("securityPolicyId") || data["securityPolicyId"] == null ? null : data["securityPolicyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userName"] = UserName,
+                ["securityPolicyId"] = SecurityPolicyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["userName"] = userName;
-            data["securityPolicyId"] = securityPolicyId;
-            return data;
+            writer.WriteObjectStart();
+            if (UserName != null) {
+                writer.WritePropertyName("userName");
+                writer.Write(UserName.ToString());
+            }
+            if (SecurityPolicyId != null) {
+                writer.WritePropertyName("securityPolicyId");
+                writer.Write(SecurityPolicyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

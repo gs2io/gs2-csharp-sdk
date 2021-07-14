@@ -28,202 +28,157 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateMissionTaskModelMasterRequest : Gs2Request<UpdateMissionTaskModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MissionGroupName { set; get; }
+        public string MissionTaskName { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string CounterName { set; get; }
+        public long? TargetValue { set; get; }
+        public Gs2.Gs2Mission.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public string PremiseMissionTaskName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ミッショングループ名 */
-		[UnityEngine.SerializeField]
-        public string missionGroupName;
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-
-        /** タスク名 */
-		[UnityEngine.SerializeField]
-        public string missionTaskName;
-
-        /**
-         * タスク名を設定
-         *
-         * @param missionTaskName タスク名
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithMissionTaskName(string missionTaskName) {
-            this.missionTaskName = missionTaskName;
+            this.MissionTaskName = missionTaskName;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** ミッションタスクの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ミッションタスクの説明を設定
-         *
-         * @param description ミッションタスクの説明
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** カウンター名 */
-		[UnityEngine.SerializeField]
-        public string counterName;
-
-        /**
-         * カウンター名を設定
-         *
-         * @param counterName カウンター名
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithCounterName(string counterName) {
-            this.counterName = counterName;
+            this.CounterName = counterName;
             return this;
         }
 
-
-        /** 目標値 */
-		[UnityEngine.SerializeField]
-        public long? targetValue;
-
-        /**
-         * 目標値を設定
-         *
-         * @param targetValue 目標値
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithTargetValue(long? targetValue) {
-            this.targetValue = targetValue;
+            this.TargetValue = targetValue;
             return this;
         }
 
-
-        /** ミッション達成時の報酬 */
-		[UnityEngine.SerializeField]
-        public List<AcquireAction> completeAcquireActions;
-
-        /**
-         * ミッション達成時の報酬を設定
-         *
-         * @param completeAcquireActions ミッション達成時の報酬
-         * @return this
-         */
-        public UpdateMissionTaskModelMasterRequest WithCompleteAcquireActions(List<AcquireAction> completeAcquireActions) {
-            this.completeAcquireActions = completeAcquireActions;
+        public UpdateMissionTaskModelMasterRequest WithCompleteAcquireActions(Gs2.Gs2Mission.Model.AcquireAction[] completeAcquireActions) {
+            this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
 
-
-        /** 達成報酬の受け取り可能な期間を指定するイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string challengePeriodEventId;
-
-        /**
-         * 達成報酬の受け取り可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId 達成報酬の受け取り可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
 
-
-        /** このタスクに挑戦するために達成しておく必要のあるタスクの名前 */
-		[UnityEngine.SerializeField]
-        public string premiseMissionTaskName;
-
-        /**
-         * このタスクに挑戦するために達成しておく必要のあるタスクの名前を設定
-         *
-         * @param premiseMissionTaskName このタスクに挑戦するために達成しておく必要のあるタスクの名前
-         * @return this
-         */
         public UpdateMissionTaskModelMasterRequest WithPremiseMissionTaskName(string premiseMissionTaskName) {
-            this.premiseMissionTaskName = premiseMissionTaskName;
+            this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateMissionTaskModelMasterRequest FromDict(JsonData data)
+        public static UpdateMissionTaskModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateMissionTaskModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                missionGroupName = data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString(): null,
-                missionTaskName = data.Keys.Contains("missionTaskName") && data["missionTaskName"] != null ? data["missionTaskName"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                counterName = data.Keys.Contains("counterName") && data["counterName"] != null ? data["counterName"].ToString(): null,
-                targetValue = data.Keys.Contains("targetValue") && data["targetValue"] != null ? (long?)long.Parse(data["targetValue"].ToString()) : null,
-                completeAcquireActions = data.Keys.Contains("completeAcquireActions") && data["completeAcquireActions"] != null ? data["completeAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                challengePeriodEventId = data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString(): null,
-                premiseMissionTaskName = data.Keys.Contains("premiseMissionTaskName") && data["premiseMissionTaskName"] != null ? data["premiseMissionTaskName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateMissionTaskModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithMissionTaskName(!data.Keys.Contains("missionTaskName") || data["missionTaskName"] == null ? null : data["missionTaskName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)long.Parse(data["targetValue"].ToString()))
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Gs2Mission.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
+                .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["missionGroupName"] = MissionGroupName,
+                ["missionTaskName"] = MissionTaskName,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["counterName"] = CounterName,
+                ["targetValue"] = TargetValue,
+                ["completeAcquireActions"] = new JsonData(CompleteAcquireActions == null ? new JsonData[]{} :
+                        CompleteAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
+                ["premiseMissionTaskName"] = PremiseMissionTaskName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["missionGroupName"] = missionGroupName;
-            data["missionTaskName"] = missionTaskName;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["counterName"] = counterName;
-            data["targetValue"] = targetValue;
-            data["completeAcquireActions"] = new JsonData(completeAcquireActions.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            data["premiseMissionTaskName"] = premiseMissionTaskName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MissionGroupName != null) {
+                writer.WritePropertyName("missionGroupName");
+                writer.Write(MissionGroupName.ToString());
+            }
+            if (MissionTaskName != null) {
+                writer.WritePropertyName("missionTaskName");
+                writer.Write(MissionTaskName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            if (TargetValue != null) {
+                writer.WritePropertyName("targetValue");
+                writer.Write(long.Parse(TargetValue.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var completeAcquireAction in CompleteAcquireActions)
+            {
+                if (completeAcquireAction != null) {
+                    completeAcquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
+            }
+            if (PremiseMissionTaskName != null) {
+                writer.WritePropertyName("premiseMissionTaskName");
+                writer.Write(PremiseMissionTaskName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

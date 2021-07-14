@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Quest.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Quest.Result
 {
 	[Preserve]
-	public class DeleteProgressByStampTaskResult
+	[System.Serializable]
+	public class DeleteProgressByStampTaskResult : IResult
 	{
-        /** クエスト挑戦 */
-        public Progress item { set; get; }
+        public Gs2.Gs2Quest.Model.Progress Item { set; get; }
+        public string NewContextStack { set; get; }
 
-        /** スタンプタスクの実行結果を記録したコンテキスト */
-        public string newContextStack { set; get; }
+        public DeleteProgressByStampTaskResult WithItem(Gs2.Gs2Quest.Model.Progress item) {
+            this.Item = item;
+            return this;
+        }
 
+        public DeleteProgressByStampTaskResult WithNewContextStack(string newContextStack) {
+            this.NewContextStack = newContextStack;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteProgressByStampTaskResult FromDict(JsonData data)
+        public static DeleteProgressByStampTaskResult FromJson(JsonData data)
         {
-            return new DeleteProgressByStampTaskResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Quest.Model.Progress.FromDict(data["item"]) : null,
-                newContextStack = data.Keys.Contains("newContextStack") && data["newContextStack"] != null ? data["newContextStack"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteProgressByStampTaskResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Quest.Model.Progress.FromJson(data["item"]))
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["newContextStack"] = NewContextStack,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (NewContextStack != null) {
+                writer.WritePropertyName("newContextStack");
+                writer.Write(NewContextStack.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class GetDistributorModelRequest : Gs2Request<GetDistributorModelRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DistributorName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetDistributorModelRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 配信設定名 */
-		[UnityEngine.SerializeField]
-        public string distributorName;
-
-        /**
-         * 配信設定名を設定
-         *
-         * @param distributorName 配信設定名
-         * @return this
-         */
         public GetDistributorModelRequest WithDistributorName(string distributorName) {
-            this.distributorName = distributorName;
+            this.DistributorName = distributorName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetDistributorModelRequest FromDict(JsonData data)
+        public static GetDistributorModelRequest FromJson(JsonData data)
         {
-            return new GetDistributorModelRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                distributorName = data.Keys.Contains("distributorName") && data["distributorName"] != null ? data["distributorName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetDistributorModelRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDistributorName(!data.Keys.Contains("distributorName") || data["distributorName"] == null ? null : data["distributorName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["distributorName"] = DistributorName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["distributorName"] = distributorName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DistributorName != null) {
+                writer.WritePropertyName("distributorName");
+                writer.Write(DistributorName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

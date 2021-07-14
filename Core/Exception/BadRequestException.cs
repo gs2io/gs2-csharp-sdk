@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public BadRequestException(List<RequestError> errors) : base(errors: errors)
+		public BadRequestException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

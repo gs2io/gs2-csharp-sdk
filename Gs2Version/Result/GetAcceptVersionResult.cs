@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Version.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Version.Result
 {
 	[Preserve]
-	public class GetAcceptVersionResult
+	[System.Serializable]
+	public class GetAcceptVersionResult : IResult
 	{
-        /** 承認したバージョン */
-        public AcceptVersion item { set; get; }
+        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; }
 
+        public GetAcceptVersionResult WithItem(Gs2.Gs2Version.Model.AcceptVersion item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetAcceptVersionResult FromDict(JsonData data)
+        public static GetAcceptVersionResult FromJson(JsonData data)
         {
-            return new GetAcceptVersionResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Version.Model.AcceptVersion.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetAcceptVersionResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Version.Model.AcceptVersion.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,86 +28,62 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class GetBoxRequest : Gs2Request<GetBoxRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string PrizeTableName { set; get; }
+        public string AccessToken { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetBoxRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 排出確率テーブル名 */
-		[UnityEngine.SerializeField]
-        public string prizeTableName;
-
-        /**
-         * 排出確率テーブル名を設定
-         *
-         * @param prizeTableName 排出確率テーブル名
-         * @return this
-         */
         public GetBoxRequest WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetBoxRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetBoxRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
             return this;
         }
 
     	[Preserve]
-        public static GetBoxRequest FromDict(JsonData data)
+        public static GetBoxRequest FromJson(JsonData data)
         {
-            return new GetBoxRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                prizeTableName = data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetBoxRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["prizeTableName"] = PrizeTableName,
+                ["accessToken"] = AccessToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["prizeTableName"] = prizeTableName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (PrizeTableName != null) {
+                writer.WritePropertyName("prizeTableName");
+                writer.Write(PrizeTableName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,76 +28,73 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class PutResultRequest : Gs2Request<PutResultRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
+        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PutResultRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** レーティング名 */
-		[UnityEngine.SerializeField]
-        public string ratingName;
-
-        /**
-         * レーティング名を設定
-         *
-         * @param ratingName レーティング名
-         * @return this
-         */
         public PutResultRequest WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-
-        /** 対戦結果 */
-		[UnityEngine.SerializeField]
-        public List<GameResult> gameResults;
-
-        /**
-         * 対戦結果を設定
-         *
-         * @param gameResults 対戦結果
-         * @return this
-         */
-        public PutResultRequest WithGameResults(List<GameResult> gameResults) {
-            this.gameResults = gameResults;
+        public PutResultRequest WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
+            this.GameResults = gameResults;
             return this;
         }
-
 
     	[Preserve]
-        public static PutResultRequest FromDict(JsonData data)
+        public static PutResultRequest FromJson(JsonData data)
         {
-            return new PutResultRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ratingName = data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString(): null,
-                gameResults = data.Keys.Contains("gameResults") && data["gameResults"] != null ? data["gameResults"].Cast<JsonData>().Select(value =>
-                    {
-                        return GameResult.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new PutResultRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.GameResult.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ratingName"] = RatingName,
+                ["gameResults"] = new JsonData(GameResults == null ? new JsonData[]{} :
+                        GameResults.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ratingName"] = ratingName;
-            data["gameResults"] = new JsonData(gameResults.Select(item => item.ToDict()));
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RatingName != null) {
+                writer.WritePropertyName("ratingName");
+                writer.Write(RatingName.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var gameResult in GameResults)
+            {
+                if (gameResult != null) {
+                    gameResult.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

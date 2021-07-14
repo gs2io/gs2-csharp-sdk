@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Chat.Model
 {
+
 	[Preserve]
 	public class NotificationType : IComparable
 	{
+        public int? Category { set; get; }
+        public bool? EnableTransferMobilePushNotification { set; get; }
 
-        /** 新着メッセージ通知を受け取るカテゴリ */
-        public int? category { set; get; }
-
-        /**
-         * 新着メッセージ通知を受け取るカテゴリを設定
-         *
-         * @param category 新着メッセージ通知を受け取るカテゴリ
-         * @return this
-         */
         public NotificationType WithCategory(int? category) {
-            this.category = category;
+            this.Category = category;
             return this;
         }
 
-        /** オフラインだった時にモバイルプッシュ通知に転送するか */
-        public bool? enableTransferMobilePushNotification { set; get; }
-
-        /**
-         * オフラインだった時にモバイルプッシュ通知に転送するかを設定
-         *
-         * @param enableTransferMobilePushNotification オフラインだった時にモバイルプッシュ通知に転送するか
-         * @return this
-         */
         public NotificationType WithEnableTransferMobilePushNotification(bool? enableTransferMobilePushNotification) {
-            this.enableTransferMobilePushNotification = enableTransferMobilePushNotification;
+            this.EnableTransferMobilePushNotification = enableTransferMobilePushNotification;
             return this;
+        }
+
+    	[Preserve]
+        public static NotificationType FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new NotificationType()
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)int.Parse(data["category"].ToString()))
+                .WithEnableTransferMobilePushNotification(!data.Keys.Contains("enableTransferMobilePushNotification") || data["enableTransferMobilePushNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobilePushNotification"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["category"] = Category,
+                ["enableTransferMobilePushNotification"] = EnableTransferMobilePushNotification,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.category.HasValue)
-            {
+            if (Category != null) {
                 writer.WritePropertyName("category");
-                writer.Write(this.category.Value);
+                writer.Write(int.Parse(Category.ToString()));
             }
-            if(this.enableTransferMobilePushNotification.HasValue)
-            {
+            if (EnableTransferMobilePushNotification != null) {
                 writer.WritePropertyName("enableTransferMobilePushNotification");
-                writer.Write(this.enableTransferMobilePushNotification.Value);
+                writer.Write(bool.Parse(EnableTransferMobilePushNotification.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static NotificationType FromDict(JsonData data)
-        {
-            return new NotificationType()
-                .WithCategory(data.Keys.Contains("category") && data["category"] != null ? (int?)int.Parse(data["category"].ToString()) : null)
-                .WithEnableTransferMobilePushNotification(data.Keys.Contains("enableTransferMobilePushNotification") && data["enableTransferMobilePushNotification"] != null ? (bool?)bool.Parse(data["enableTransferMobilePushNotification"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as NotificationType;
             var diff = 0;
-            if (category == null && category == other.category)
+            if (Category == null && Category == other.Category)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(category - other.category);
+                diff += (int)(Category - other.Category);
             }
-            if (enableTransferMobilePushNotification == null && enableTransferMobilePushNotification == other.enableTransferMobilePushNotification)
+            if (EnableTransferMobilePushNotification == null && EnableTransferMobilePushNotification == other.EnableTransferMobilePushNotification)
             {
                 // null and null
             }
             else
             {
-                diff += enableTransferMobilePushNotification == other.enableTransferMobilePushNotification ? 0 : 1;
+                diff += EnableTransferMobilePushNotification == other.EnableTransferMobilePushNotification ? 0 : 1;
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["category"] = category;
-            data["enableTransferMobilePushNotification"] = enableTransferMobilePushNotification;
-            return data;
-        }
-	}
+    }
 }

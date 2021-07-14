@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Enhance.Model
 {
+
 	[Preserve]
 	public class Config : IComparable
 	{
+        public string Key { set; get; }
+        public string Value { set; get; }
 
-        /** 名前 */
-        public string key { set; get; }
-
-        /**
-         * 名前を設定
-         *
-         * @param key 名前
-         * @return this
-         */
         public Config WithKey(string key) {
-            this.key = key;
+            this.Key = key;
             return this;
         }
 
-        /** 値 */
-        public string value { set; get; }
-
-        /**
-         * 値を設定
-         *
-         * @param value 値
-         * @return this
-         */
         public Config WithValue(string value) {
-            this.value = value;
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static Config FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Config()
+                .WithKey(!data.Keys.Contains("key") || data["key"] == null ? null : data["key"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : data["value"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["key"] = Key,
+                ["value"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.key != null)
-            {
+            if (Key != null) {
                 writer.WritePropertyName("key");
-                writer.Write(this.key);
+                writer.Write(Key.ToString());
             }
-            if(this.value != null)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value);
+                writer.Write(Value.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Config FromDict(JsonData data)
-        {
-            return new Config()
-                .WithKey(data.Keys.Contains("key") && data["key"] != null ? data["key"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? data["value"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Config;
             var diff = 0;
-            if (key == null && key == other.key)
+            if (Key == null && Key == other.Key)
             {
                 // null and null
             }
             else
             {
-                diff += key.CompareTo(other.key);
+                diff += Key.CompareTo(other.Key);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += value.CompareTo(other.value);
+                diff += Value.CompareTo(other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["key"] = key;
-            data["value"] = value;
-            return data;
-        }
-	}
+    }
 }

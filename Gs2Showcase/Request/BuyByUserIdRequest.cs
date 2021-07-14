@@ -28,130 +28,97 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class BuyByUserIdRequest : Gs2Request<BuyByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ShowcaseName { set; get; }
+        public string DisplayItemId { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public BuyByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string showcaseName;
-
-        /**
-         * 商品名を設定
-         *
-         * @param showcaseName 商品名
-         * @return this
-         */
         public BuyByUserIdRequest WithShowcaseName(string showcaseName) {
-            this.showcaseName = showcaseName;
+            this.ShowcaseName = showcaseName;
             return this;
         }
 
-
-        /** 陳列商品ID */
-		[UnityEngine.SerializeField]
-        public string displayItemId;
-
-        /**
-         * 陳列商品IDを設定
-         *
-         * @param displayItemId 陳列商品ID
-         * @return this
-         */
         public BuyByUserIdRequest WithDisplayItemId(string displayItemId) {
-            this.displayItemId = displayItemId;
+            this.DisplayItemId = displayItemId;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public BuyByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * 設定値を設定
-         *
-         * @param config 設定値
-         * @return this
-         */
-        public BuyByUserIdRequest WithConfig(List<Config> config) {
-            this.config = config;
+        public BuyByUserIdRequest WithConfig(Gs2.Gs2Showcase.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public BuyByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static BuyByUserIdRequest FromDict(JsonData data)
+        public static BuyByUserIdRequest FromJson(JsonData data)
         {
-            return new BuyByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                showcaseName = data.Keys.Contains("showcaseName") && data["showcaseName"] != null ? data["showcaseName"].ToString(): null,
-                displayItemId = data.Keys.Contains("displayItemId") && data["displayItemId"] != null ? data["displayItemId"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new BuyByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
+                .WithDisplayItemId(!data.Keys.Contains("displayItemId") || data["displayItemId"] == null ? null : data["displayItemId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Showcase.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["showcaseName"] = ShowcaseName,
+                ["displayItemId"] = DisplayItemId,
+                ["userId"] = UserId,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["showcaseName"] = showcaseName;
-            data["displayItemId"] = displayItemId;
-            data["userId"] = userId;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ShowcaseName != null) {
+                writer.WritePropertyName("showcaseName");
+                writer.Write(ShowcaseName.ToString());
+            }
+            if (DisplayItemId != null) {
+                writer.WritePropertyName("displayItemId");
+                writer.Write(DisplayItemId.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

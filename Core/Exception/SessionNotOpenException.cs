@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public SessionNotOpenException(List<RequestError> errors) : base(errors: errors)
+		public SessionNotOpenException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

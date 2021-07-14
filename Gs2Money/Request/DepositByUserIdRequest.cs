@@ -28,126 +28,86 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DepositByUserIdRequest : Gs2Request<DepositByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public int? Slot { set; get; }
+        public float? Price { set; get; }
+        public int? Count { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public DepositByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DepositByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? slot;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param slot スロット番号
-         * @return this
-         */
         public DepositByUserIdRequest WithSlot(int? slot) {
-            this.slot = slot;
+            this.Slot = slot;
             return this;
         }
 
-
-        /** 購入価格 */
-		[UnityEngine.SerializeField]
-        public float? price;
-
-        /**
-         * 購入価格を設定
-         *
-         * @param price 購入価格
-         * @return this
-         */
         public DepositByUserIdRequest WithPrice(float? price) {
-            this.price = price;
+            this.Price = price;
             return this;
         }
 
-
-        /** 付与する課金通貨の数量 */
-		[UnityEngine.SerializeField]
-        public int? count;
-
-        /**
-         * 付与する課金通貨の数量を設定
-         *
-         * @param count 付与する課金通貨の数量
-         * @return this
-         */
         public DepositByUserIdRequest WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DepositByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DepositByUserIdRequest FromDict(JsonData data)
+        public static DepositByUserIdRequest FromJson(JsonData data)
         {
-            return new DepositByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                slot = data.Keys.Contains("slot") && data["slot"] != null ? (int?)int.Parse(data["slot"].ToString()) : null,
-                price = data.Keys.Contains("price") && data["price"] != null ? (float?)float.Parse(data["price"].ToString()) : null,
-                count = data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DepositByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["slot"] = Slot,
+                ["price"] = Price,
+                ["count"] = Count,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["slot"] = slot;
-            data["price"] = price;
-            data["count"] = count;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Slot != null) {
+                writer.WritePropertyName("slot");
+                writer.Write(int.Parse(Slot.ToString()));
+            }
+            if (Price != null) {
+                writer.WritePropertyName("price");
+                writer.Write(float.Parse(Price.ToString()));
+            }
+            if (Count != null) {
+                writer.WritePropertyName("count");
+                writer.Write(int.Parse(Count.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

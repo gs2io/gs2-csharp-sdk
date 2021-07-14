@@ -23,297 +23,194 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Experience.Model
 {
+
 	[Preserve]
 	public class ThresholdMaster : IComparable
 	{
+        public string ThresholdId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long[] Values { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ランクアップ閾値マスター */
-        public string thresholdId { set; get; }
-
-        /**
-         * ランクアップ閾値マスターを設定
-         *
-         * @param thresholdId ランクアップ閾値マスター
-         * @return this
-         */
         public ThresholdMaster WithThresholdId(string thresholdId) {
-            this.thresholdId = thresholdId;
+            this.ThresholdId = thresholdId;
             return this;
         }
 
-        /** ランクアップ閾値名 */
-        public string name { set; get; }
-
-        /**
-         * ランクアップ閾値名を設定
-         *
-         * @param name ランクアップ閾値名
-         * @return this
-         */
         public ThresholdMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ランクアップ閾値マスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * ランクアップ閾値マスターの説明を設定
-         *
-         * @param description ランクアップ閾値マスターの説明
-         * @return this
-         */
         public ThresholdMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** ランクアップ閾値のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * ランクアップ閾値のメタデータを設定
-         *
-         * @param metadata ランクアップ閾値のメタデータ
-         * @return this
-         */
         public ThresholdMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** ランクアップ経験値閾値リスト */
-        public List<long?> values { set; get; }
-
-        /**
-         * ランクアップ経験値閾値リストを設定
-         *
-         * @param values ランクアップ経験値閾値リスト
-         * @return this
-         */
-        public ThresholdMaster WithValues(List<long?> values) {
-            this.values = values;
+        public ThresholdMaster WithValues(long[] values) {
+            this.Values = values;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public ThresholdMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public ThresholdMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static ThresholdMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ThresholdMaster()
+                .WithThresholdId(!data.Keys.Contains("thresholdId") || data["thresholdId"] == null ? null : data["thresholdId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return long.Parse(v.ToString());
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["thresholdId"] = ThresholdId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((long?)long.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.thresholdId != null)
-            {
+            if (ThresholdId != null) {
                 writer.WritePropertyName("thresholdId");
-                writer.Write(this.thresholdId);
+                writer.Write(ThresholdId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.values != null)
-            {
+            if (Values != null) {
                 writer.WritePropertyName("values");
                 writer.WriteArrayStart();
-                foreach(var item in this.values)
+                foreach (var value in Values)
                 {
-                    writer.Write(item.Value);
+                    if (value != null) {
+                        writer.Write(long.Parse(value.ToString()));
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetThresholdNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):threshold:(?<thresholdName>.*)");
-        if (!match.Groups["thresholdName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["thresholdName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):threshold:(?<thresholdName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):threshold:(?<thresholdName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):threshold:(?<thresholdName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static ThresholdMaster FromDict(JsonData data)
-        {
-            return new ThresholdMaster()
-                .WithThresholdId(data.Keys.Contains("thresholdId") && data["thresholdId"] != null ? data["thresholdId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithValues(data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (long?)long.Parse(value.ToString());
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ThresholdMaster;
             var diff = 0;
-            if (thresholdId == null && thresholdId == other.thresholdId)
+            if (ThresholdId == null && ThresholdId == other.ThresholdId)
             {
                 // null and null
             }
             else
             {
-                diff += thresholdId.CompareTo(other.thresholdId);
+                diff += ThresholdId.CompareTo(other.ThresholdId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (values == null && values == other.values)
+            if (Values == null && Values == other.Values)
             {
                 // null and null
             }
             else
             {
-                diff += values.Count - other.values.Count;
-                for (var i = 0; i < values.Count; i++)
+                diff += Values.Length - other.Values.Length;
+                for (var i = 0; i < Values.Length; i++)
                 {
-                    diff += (int)(values[i] - other.values[i]);
+                    diff += (int)(Values[i] - other.Values[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["thresholdId"] = thresholdId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["values"] = new JsonData(values);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

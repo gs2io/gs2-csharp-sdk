@@ -28,54 +28,50 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DeleteLotteryModelMasterRequest : Gs2Request<DeleteLotteryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LotteryName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 抽選モデルの種類名 */
-		[UnityEngine.SerializeField]
-        public string lotteryName;
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param lotteryName 抽選モデルの種類名
-         * @return this
-         */
         public DeleteLotteryModelMasterRequest WithLotteryName(string lotteryName) {
-            this.lotteryName = lotteryName;
+            this.LotteryName = lotteryName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteLotteryModelMasterRequest FromDict(JsonData data)
+        public static DeleteLotteryModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteLotteryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                lotteryName = data.Keys.Contains("lotteryName") && data["lotteryName"] != null ? data["lotteryName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteLotteryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLotteryName(!data.Keys.Contains("lotteryName") || data["lotteryName"] == null ? null : data["lotteryName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["lotteryName"] = LotteryName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["lotteryName"] = lotteryName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LotteryName != null) {
+                writer.WritePropertyName("lotteryName");
+                writer.Write(LotteryName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

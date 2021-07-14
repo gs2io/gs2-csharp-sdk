@@ -23,280 +23,175 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class Vote : IComparable
 	{
+        public string VoteId { set; get; }
+        public string RatingName { set; get; }
+        public string GatheringName { set; get; }
+        public Gs2.Gs2Matchmaking.Model.WrittenBallot[] WrittenBallots { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 投票状況 */
-        public string voteId { set; get; }
-
-        /**
-         * 投票状況を設定
-         *
-         * @param voteId 投票状況
-         * @return this
-         */
         public Vote WithVoteId(string voteId) {
-            this.voteId = voteId;
+            this.VoteId = voteId;
             return this;
         }
 
-        /** レーティング名 */
-        public string ratingName { set; get; }
-
-        /**
-         * レーティング名を設定
-         *
-         * @param ratingName レーティング名
-         * @return this
-         */
         public Vote WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-        /** 投票対象のギャザリング名 */
-        public string gatheringName { set; get; }
-
-        /**
-         * 投票対象のギャザリング名を設定
-         *
-         * @param gatheringName 投票対象のギャザリング名
-         * @return this
-         */
         public Vote WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
 
-        /** 投票用紙のリスト */
-        public List<WrittenBallot> writtenBallots { set; get; }
-
-        /**
-         * 投票用紙のリストを設定
-         *
-         * @param writtenBallots 投票用紙のリスト
-         * @return this
-         */
-        public Vote WithWrittenBallots(List<WrittenBallot> writtenBallots) {
-            this.writtenBallots = writtenBallots;
+        public Vote WithWrittenBallots(Gs2.Gs2Matchmaking.Model.WrittenBallot[] writtenBallots) {
+            this.WrittenBallots = writtenBallots;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Vote WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Vote WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Vote FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Vote()
+                .WithVoteId(!data.Keys.Contains("voteId") || data["voteId"] == null ? null : data["voteId"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithWrittenBallots(!data.Keys.Contains("writtenBallots") || data["writtenBallots"] == null ? new Gs2.Gs2Matchmaking.Model.WrittenBallot[]{} : data["writtenBallots"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.WrittenBallot.FromJson(v);
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["voteId"] = VoteId,
+                ["ratingName"] = RatingName,
+                ["gatheringName"] = GatheringName,
+                ["writtenBallots"] = new JsonData(WrittenBallots == null ? new JsonData[]{} :
+                        WrittenBallots.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.voteId != null)
-            {
+            if (VoteId != null) {
                 writer.WritePropertyName("voteId");
-                writer.Write(this.voteId);
+                writer.Write(VoteId.ToString());
             }
-            if(this.ratingName != null)
-            {
+            if (RatingName != null) {
                 writer.WritePropertyName("ratingName");
-                writer.Write(this.ratingName);
+                writer.Write(RatingName.ToString());
             }
-            if(this.gatheringName != null)
-            {
+            if (GatheringName != null) {
                 writer.WritePropertyName("gatheringName");
-                writer.Write(this.gatheringName);
+                writer.Write(GatheringName.ToString());
             }
-            if(this.writtenBallots != null)
-            {
+            if (WrittenBallots != null) {
                 writer.WritePropertyName("writtenBallots");
                 writer.WriteArrayStart();
-                foreach(var item in this.writtenBallots)
+                foreach (var writtenBallot in WrittenBallots)
                 {
-                    item.WriteJson(writer);
+                    if (writtenBallot != null) {
+                        writtenBallot.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetGatheringNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):vote:(?<ratingName>.*):(?<gatheringName>.*)");
-        if (!match.Groups["gatheringName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["gatheringName"].Value;
-    }
-
-    public static string GetRatingNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):vote:(?<ratingName>.*):(?<gatheringName>.*)");
-        if (!match.Groups["ratingName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ratingName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):vote:(?<ratingName>.*):(?<gatheringName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):vote:(?<ratingName>.*):(?<gatheringName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):vote:(?<ratingName>.*):(?<gatheringName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Vote FromDict(JsonData data)
-        {
-            return new Vote()
-                .WithVoteId(data.Keys.Contains("voteId") && data["voteId"] != null ? data["voteId"].ToString() : null)
-                .WithRatingName(data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString() : null)
-                .WithGatheringName(data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString() : null)
-                .WithWrittenBallots(data.Keys.Contains("writtenBallots") && data["writtenBallots"] != null ? data["writtenBallots"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.WrittenBallot.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Vote;
             var diff = 0;
-            if (voteId == null && voteId == other.voteId)
+            if (VoteId == null && VoteId == other.VoteId)
             {
                 // null and null
             }
             else
             {
-                diff += voteId.CompareTo(other.voteId);
+                diff += VoteId.CompareTo(other.VoteId);
             }
-            if (ratingName == null && ratingName == other.ratingName)
+            if (RatingName == null && RatingName == other.RatingName)
             {
                 // null and null
             }
             else
             {
-                diff += ratingName.CompareTo(other.ratingName);
+                diff += RatingName.CompareTo(other.RatingName);
             }
-            if (gatheringName == null && gatheringName == other.gatheringName)
+            if (GatheringName == null && GatheringName == other.GatheringName)
             {
                 // null and null
             }
             else
             {
-                diff += gatheringName.CompareTo(other.gatheringName);
+                diff += GatheringName.CompareTo(other.GatheringName);
             }
-            if (writtenBallots == null && writtenBallots == other.writtenBallots)
+            if (WrittenBallots == null && WrittenBallots == other.WrittenBallots)
             {
                 // null and null
             }
             else
             {
-                diff += writtenBallots.Count - other.writtenBallots.Count;
-                for (var i = 0; i < writtenBallots.Count; i++)
+                diff += WrittenBallots.Length - other.WrittenBallots.Length;
+                for (var i = 0; i < WrittenBallots.Length; i++)
                 {
-                    diff += writtenBallots[i].CompareTo(other.writtenBallots[i]);
+                    diff += WrittenBallots[i].CompareTo(other.WrittenBallots[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["voteId"] = voteId;
-            data["ratingName"] = ratingName;
-            data["gatheringName"] = gatheringName;
-            data["writtenBallots"] = new JsonData(writtenBallots.Select(item => item.ToDict()));
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

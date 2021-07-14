@@ -23,178 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class SignTargetVersion : IComparable
 	{
+        public string Region { set; get; }
+        public string NamespaceName { set; get; }
+        public string VersionName { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
 
-        /** None */
-        public string region { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param region None
-         * @return this
-         */
         public SignTargetVersion WithRegion(string region) {
-            this.region = region;
+            this.Region = region;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public SignTargetVersion WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string namespaceName { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SignTargetVersion WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-        /** バージョンの種類名 */
-        public string versionName { set; get; }
-
-        /**
-         * バージョンの種類名を設定
-         *
-         * @param versionName バージョンの種類名
-         * @return this
-         */
         public SignTargetVersion WithVersionName(string versionName) {
-            this.versionName = versionName;
+            this.VersionName = versionName;
             return this;
         }
 
-        /** バージョン */
-        public Gs2.Gs2Version.Model.Version_ version { set; get; }
-
-        /**
-         * バージョンを設定
-         *
-         * @param version バージョン
-         * @return this
-         */
         public SignTargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
-            this.version = version;
+            this.Version = version;
             return this;
+        }
+
+    	[Preserve]
+        public static SignTargetVersion FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SignTargetVersion()
+                .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["region"] = Region,
+                ["namespaceName"] = NamespaceName,
+                ["versionName"] = VersionName,
+                ["version"] = Version?.ToJson(),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.region != null)
-            {
+            if (Region != null) {
                 writer.WritePropertyName("region");
-                writer.Write(this.region);
+                writer.Write(Region.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.namespaceName != null)
-            {
+            if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
-                writer.Write(this.namespaceName);
+                writer.Write(NamespaceName.ToString());
             }
-            if(this.versionName != null)
-            {
+            if (VersionName != null) {
                 writer.WritePropertyName("versionName");
-                writer.Write(this.versionName);
+                writer.Write(VersionName.ToString());
             }
-            if(this.version != null)
-            {
+            if (Version != null) {
                 writer.WritePropertyName("version");
-                this.version.WriteJson(writer);
+                Version.WriteJson(writer);
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static SignTargetVersion FromDict(JsonData data)
-        {
-            return new SignTargetVersion()
-                .WithRegion(data.Keys.Contains("region") && data["region"] != null ? data["region"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithNamespaceName(data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString() : null)
-                .WithVersionName(data.Keys.Contains("versionName") && data["versionName"] != null ? data["versionName"].ToString() : null)
-                .WithVersion(data.Keys.Contains("version") && data["version"] != null ? Gs2.Gs2Version.Model.Version_.FromDict(data["version"]) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SignTargetVersion;
             var diff = 0;
-            if (region == null && region == other.region)
+            if (Region == null && Region == other.Region)
             {
                 // null and null
             }
             else
             {
-                diff += region.CompareTo(other.region);
+                diff += Region.CompareTo(other.Region);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (NamespaceName == null && NamespaceName == other.NamespaceName)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += NamespaceName.CompareTo(other.NamespaceName);
             }
-            if (namespaceName == null && namespaceName == other.namespaceName)
+            if (VersionName == null && VersionName == other.VersionName)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceName.CompareTo(other.namespaceName);
+                diff += VersionName.CompareTo(other.VersionName);
             }
-            if (versionName == null && versionName == other.versionName)
+            if (Version == null && Version == other.Version)
             {
                 // null and null
             }
             else
             {
-                diff += versionName.CompareTo(other.versionName);
-            }
-            if (version == null && version == other.version)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += version.CompareTo(other.version);
+                diff += Version.CompareTo(other.Version);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["region"] = region;
-            data["ownerId"] = ownerId;
-            data["namespaceName"] = namespaceName;
-            data["versionName"] = versionName;
-            data["version"] = version.ToDict();
-            return data;
-        }
-	}
+    }
 }

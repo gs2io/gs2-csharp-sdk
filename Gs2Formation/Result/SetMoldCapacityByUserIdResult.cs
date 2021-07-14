@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,51 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class SetMoldCapacityByUserIdResult
+	[System.Serializable]
+	public class SetMoldCapacityByUserIdResult : IResult
 	{
-        /** キャパシティを更新した保存したフォーム */
-        public Mold item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
 
-        /** フォームの保存領域 */
-        public MoldModel moldModel { set; get; }
+        public SetMoldCapacityByUserIdResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
+            this.Item = item;
+            return this;
+        }
 
+        public SetMoldCapacityByUserIdResult WithMoldModel(Gs2.Gs2Formation.Model.MoldModel moldModel) {
+            this.MoldModel = moldModel;
+            return this;
+        }
 
     	[Preserve]
-        public static SetMoldCapacityByUserIdResult FromDict(JsonData data)
+        public static SetMoldCapacityByUserIdResult FromJson(JsonData data)
         {
-            return new SetMoldCapacityByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.Mold.FromDict(data["item"]) : null,
-                moldModel = data.Keys.Contains("moldModel") && data["moldModel"] != null ? Gs2.Gs2Formation.Model.MoldModel.FromDict(data["moldModel"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new SetMoldCapacityByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["item"]))
+                .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["moldModel"] = MoldModel?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (MoldModel != null) {
+                MoldModel.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

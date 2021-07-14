@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,51 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Friend.Result
 {
 	[Preserve]
-	public class DescribeBlackListResult
+	[System.Serializable]
+	public class DescribeBlackListResult : IResult
 	{
-        /** ブラックリストに登録されたユーザIDリスト */
-        public List<string> items { set; get; }
+        public string[] Items { set; get; }
 
+        public DescribeBlackListResult WithItems(string[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeBlackListResult FromDict(JsonData data)
+        public static DescribeBlackListResult FromJson(JsonData data)
         {
-            return new DescribeBlackListResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeBlackListResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new string[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    writer.Write(item.ToString());
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

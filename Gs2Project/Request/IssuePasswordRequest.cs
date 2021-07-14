@@ -28,36 +28,38 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class IssuePasswordRequest : Gs2Request<IssuePasswordRequest>
 	{
+        public string IssuePasswordToken { set; get; }
 
-        /** パスワードを再発行するために必要なトークン */
-		[UnityEngine.SerializeField]
-        public string issuePasswordToken;
-
-        /**
-         * パスワードを再発行するために必要なトークンを設定
-         *
-         * @param issuePasswordToken パスワードを再発行するために必要なトークン
-         * @return this
-         */
         public IssuePasswordRequest WithIssuePasswordToken(string issuePasswordToken) {
-            this.issuePasswordToken = issuePasswordToken;
+            this.IssuePasswordToken = issuePasswordToken;
             return this;
         }
 
-
     	[Preserve]
-        public static IssuePasswordRequest FromDict(JsonData data)
+        public static IssuePasswordRequest FromJson(JsonData data)
         {
-            return new IssuePasswordRequest {
-                issuePasswordToken = data.Keys.Contains("issuePasswordToken") && data["issuePasswordToken"] != null ? data["issuePasswordToken"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new IssuePasswordRequest()
+                .WithIssuePasswordToken(!data.Keys.Contains("issuePasswordToken") || data["issuePasswordToken"] == null ? null : data["issuePasswordToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["issuePasswordToken"] = IssuePasswordToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["issuePasswordToken"] = issuePasswordToken;
-            return data;
+            writer.WriteObjectStart();
+            if (IssuePasswordToken != null) {
+                writer.WritePropertyName("issuePasswordToken");
+                writer.Write(IssuePasswordToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

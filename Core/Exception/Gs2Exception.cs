@@ -25,21 +25,21 @@ namespace Gs2.Core.Exception
 		protected Gs2Exception(string message) : base(message)
 		{
 			try {
-				errors = JsonMapper.ToObject<List<RequestError>> (message);
+				errors = JsonMapper.ToObject<RequestError[]> (message);
 			} catch (System.Exception) {
-				errors = new List<RequestError>();
+				errors = new RequestError[]{};
 			}
 		}
 		
-		protected Gs2Exception(List<RequestError> errors) : base(errors.ToString())
+		protected Gs2Exception(RequestError[] errors) : base(errors.ToString())
 		{
 			this.errors = errors;
 		}
 
 		// ReSharper disable once InconsistentNaming
-		public List<RequestError> errors;
+		public RequestError[] errors;
 
-		public List<RequestError> Errors
+		public RequestError[] Errors
 		{
 			get { return errors; }
 			set { errors = value; }

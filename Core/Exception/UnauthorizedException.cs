@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public UnauthorizedException(List<RequestError> errors) : base(errors: errors)
+		public UnauthorizedException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

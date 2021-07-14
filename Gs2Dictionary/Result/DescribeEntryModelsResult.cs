@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Dictionary.Result
 {
 	[Preserve]
-	public class DescribeEntryModelsResult
+	[System.Serializable]
+	public class DescribeEntryModelsResult : IResult
 	{
-        /** エントリーモデルのリスト */
-        public List<EntryModel> items { set; get; }
+        public Gs2.Gs2Dictionary.Model.EntryModel[] Items { set; get; }
 
+        public DescribeEntryModelsResult WithItems(Gs2.Gs2Dictionary.Model.EntryModel[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeEntryModelsResult FromDict(JsonData data)
+        public static DescribeEntryModelsResult FromJson(JsonData data)
         {
-            return new DescribeEntryModelsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Dictionary.Model.EntryModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeEntryModelsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Dictionary.Model.EntryModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Dictionary.Model.EntryModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

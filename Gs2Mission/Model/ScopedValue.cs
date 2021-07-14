@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class ScopedValue : IComparable
 	{
+        public string ResetType { set; get; }
+        public long? Value { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** リセットタイミング */
-        public string resetType { set; get; }
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public ScopedValue WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-        /** カウント */
-        public long? value { set; get; }
-
-        /**
-         * カウントを設定
-         *
-         * @param value カウント
-         * @return this
-         */
         public ScopedValue WithValue(long? value) {
-            this.value = value;
+            this.Value = value;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public ScopedValue WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static ScopedValue FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ScopedValue()
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["resetType"] = ResetType,
+                ["value"] = Value,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.resetType != null)
-            {
+            if (ResetType != null) {
                 writer.WritePropertyName("resetType");
-                writer.Write(this.resetType);
+                writer.Write(ResetType.ToString());
             }
-            if(this.value.HasValue)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value.Value);
+                writer.Write(long.Parse(Value.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static ScopedValue FromDict(JsonData data)
-        {
-            return new ScopedValue()
-                .WithResetType(data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? (long?)long.Parse(data["value"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ScopedValue;
             var diff = 0;
-            if (resetType == null && resetType == other.resetType)
+            if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
             }
             else
             {
-                diff += resetType.CompareTo(other.resetType);
+                diff += ResetType.CompareTo(other.ResetType);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(value - other.value);
+                diff += (int)(Value - other.Value);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["resetType"] = resetType;
-            data["value"] = value;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

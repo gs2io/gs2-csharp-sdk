@@ -28,130 +28,106 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateMaxStaminaTableMasterRequest : Gs2Request<UpdateMaxStaminaTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MaxStaminaTableName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ExperienceModelId { set; get; }
+        public int[] Values { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateMaxStaminaTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 最大スタミナ値テーブル名 */
-		[UnityEngine.SerializeField]
-        public string maxStaminaTableName;
-
-        /**
-         * 最大スタミナ値テーブル名を設定
-         *
-         * @param maxStaminaTableName 最大スタミナ値テーブル名
-         * @return this
-         */
         public UpdateMaxStaminaTableMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
-            this.maxStaminaTableName = maxStaminaTableName;
+            this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
 
-
-        /** スタミナの最大値テーブルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * スタミナの最大値テーブルマスターの説明を設定
-         *
-         * @param description スタミナの最大値テーブルマスターの説明
-         * @return this
-         */
         public UpdateMaxStaminaTableMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 最大スタミナ値テーブルのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 最大スタミナ値テーブルのメタデータを設定
-         *
-         * @param metadata 最大スタミナ値テーブルのメタデータ
-         * @return this
-         */
         public UpdateMaxStaminaTableMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 経験値の種類マスター のGRN */
-		[UnityEngine.SerializeField]
-        public string experienceModelId;
-
-        /**
-         * 経験値の種類マスター のGRNを設定
-         *
-         * @param experienceModelId 経験値の種類マスター のGRN
-         * @return this
-         */
         public UpdateMaxStaminaTableMasterRequest WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-
-        /** ランク毎のスタミナの最大値テーブル */
-		[UnityEngine.SerializeField]
-        public List<int?> values;
-
-        /**
-         * ランク毎のスタミナの最大値テーブルを設定
-         *
-         * @param values ランク毎のスタミナの最大値テーブル
-         * @return this
-         */
-        public UpdateMaxStaminaTableMasterRequest WithValues(List<int?> values) {
-            this.values = values;
+        public UpdateMaxStaminaTableMasterRequest WithValues(int[] values) {
+            this.Values = values;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateMaxStaminaTableMasterRequest FromDict(JsonData data)
+        public static UpdateMaxStaminaTableMasterRequest FromJson(JsonData data)
         {
-            return new UpdateMaxStaminaTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                maxStaminaTableName = data.Keys.Contains("maxStaminaTableName") && data["maxStaminaTableName"] != null ? data["maxStaminaTableName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                experienceModelId = data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString(): null,
-                values = data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (int?)int.Parse(value.ToString());
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateMaxStaminaTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMaxStaminaTableName(!data.Keys.Contains("maxStaminaTableName") || data["maxStaminaTableName"] == null ? null : data["maxStaminaTableName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new int[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return int.Parse(v.ToString());
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["maxStaminaTableName"] = MaxStaminaTableName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["experienceModelId"] = ExperienceModelId,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((int?)int.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["maxStaminaTableName"] = maxStaminaTableName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["experienceModelId"] = experienceModelId;
-            data["values"] = new JsonData(values);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MaxStaminaTableName != null) {
+                writer.WritePropertyName("maxStaminaTableName");
+                writer.Write(MaxStaminaTableName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (ExperienceModelId != null) {
+                writer.WritePropertyName("experienceModelId");
+                writer.Write(ExperienceModelId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var value in Values)
+            {
+                writer.Write(int.Parse(value.ToString()));
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

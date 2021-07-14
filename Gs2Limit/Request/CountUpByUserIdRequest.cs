@@ -28,144 +28,98 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CountUpByUserIdRequest : Gs2Request<CountUpByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LimitName { set; get; }
+        public string CounterName { set; get; }
+        public string UserId { set; get; }
+        public int? CountUpValue { set; get; }
+        public int? MaxValue { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CountUpByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 回数制限の種類の名前 */
-		[UnityEngine.SerializeField]
-        public string limitName;
-
-        /**
-         * 回数制限の種類の名前を設定
-         *
-         * @param limitName 回数制限の種類の名前
-         * @return this
-         */
         public CountUpByUserIdRequest WithLimitName(string limitName) {
-            this.limitName = limitName;
+            this.LimitName = limitName;
             return this;
         }
 
-
-        /** カウンターの名前 */
-		[UnityEngine.SerializeField]
-        public string counterName;
-
-        /**
-         * カウンターの名前を設定
-         *
-         * @param counterName カウンターの名前
-         * @return this
-         */
         public CountUpByUserIdRequest WithCounterName(string counterName) {
-            this.counterName = counterName;
+            this.CounterName = counterName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public CountUpByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** カウントアップする量 */
-		[UnityEngine.SerializeField]
-        public int? countUpValue;
-
-        /**
-         * カウントアップする量を設定
-         *
-         * @param countUpValue カウントアップする量
-         * @return this
-         */
         public CountUpByUserIdRequest WithCountUpValue(int? countUpValue) {
-            this.countUpValue = countUpValue;
+            this.CountUpValue = countUpValue;
             return this;
         }
 
-
-        /** カウントアップを許容する最大値 を入力してください */
-		[UnityEngine.SerializeField]
-        public int? maxValue;
-
-        /**
-         * カウントアップを許容する最大値 を入力してくださいを設定
-         *
-         * @param maxValue カウントアップを許容する最大値 を入力してください
-         * @return this
-         */
         public CountUpByUserIdRequest WithMaxValue(int? maxValue) {
-            this.maxValue = maxValue;
+            this.MaxValue = maxValue;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CountUpByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static CountUpByUserIdRequest FromDict(JsonData data)
+        public static CountUpByUserIdRequest FromJson(JsonData data)
         {
-            return new CountUpByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                limitName = data.Keys.Contains("limitName") && data["limitName"] != null ? data["limitName"].ToString(): null,
-                counterName = data.Keys.Contains("counterName") && data["counterName"] != null ? data["counterName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                countUpValue = data.Keys.Contains("countUpValue") && data["countUpValue"] != null ? (int?)int.Parse(data["countUpValue"].ToString()) : null,
-                maxValue = data.Keys.Contains("maxValue") && data["maxValue"] != null ? (int?)int.Parse(data["maxValue"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CountUpByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : (int?)int.Parse(data["countUpValue"].ToString()))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["limitName"] = LimitName,
+                ["counterName"] = CounterName,
+                ["userId"] = UserId,
+                ["countUpValue"] = CountUpValue,
+                ["maxValue"] = MaxValue,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["limitName"] = limitName;
-            data["counterName"] = counterName;
-            data["userId"] = userId;
-            data["countUpValue"] = countUpValue;
-            data["maxValue"] = maxValue;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LimitName != null) {
+                writer.WritePropertyName("limitName");
+                writer.Write(LimitName.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (CountUpValue != null) {
+                writer.WritePropertyName("countUpValue");
+                writer.Write(int.Parse(CountUpValue.ToString()));
+            }
+            if (MaxValue != null) {
+                writer.WritePropertyName("maxValue");
+                writer.Write(int.Parse(MaxValue.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

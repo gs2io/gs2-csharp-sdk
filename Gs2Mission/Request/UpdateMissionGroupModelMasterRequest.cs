@@ -28,180 +28,134 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateMissionGroupModelMasterRequest : Gs2Request<UpdateMissionGroupModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MissionGroupName { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
+        public string CompleteNotificationNamespaceId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ミッショングループ名 */
-		[UnityEngine.SerializeField]
-        public string missionGroupName;
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** ミッショングループの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ミッショングループの説明を設定
-         *
-         * @param description ミッショングループの説明
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** リセットタイミング */
-		[UnityEngine.SerializeField]
-        public string resetType;
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-
-        /** リセットをする日にち */
-		[UnityEngine.SerializeField]
-        public int? resetDayOfMonth;
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-
-        /** リセットする曜日 */
-		[UnityEngine.SerializeField]
-        public string resetDayOfWeek;
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-
-        /** リセット時刻 */
-		[UnityEngine.SerializeField]
-        public int? resetHour;
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
         }
 
-
-        /** ミッションを達成したときの通知先ネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string completeNotificationNamespaceId;
-
-        /**
-         * ミッションを達成したときの通知先ネームスペース のGRNを設定
-         *
-         * @param completeNotificationNamespaceId ミッションを達成したときの通知先ネームスペース のGRN
-         * @return this
-         */
         public UpdateMissionGroupModelMasterRequest WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
-            this.completeNotificationNamespaceId = completeNotificationNamespaceId;
+            this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateMissionGroupModelMasterRequest FromDict(JsonData data)
+        public static UpdateMissionGroupModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateMissionGroupModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                missionGroupName = data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                resetType = data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString(): null,
-                resetDayOfMonth = data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null,
-                resetDayOfWeek = data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString(): null,
-                resetHour = data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null,
-                completeNotificationNamespaceId = data.Keys.Contains("completeNotificationNamespaceId") && data["completeNotificationNamespaceId"] != null ? data["completeNotificationNamespaceId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateMissionGroupModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()))
+                .WithCompleteNotificationNamespaceId(!data.Keys.Contains("completeNotificationNamespaceId") || data["completeNotificationNamespaceId"] == null ? null : data["completeNotificationNamespaceId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["missionGroupName"] = MissionGroupName,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
+                ["completeNotificationNamespaceId"] = CompleteNotificationNamespaceId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["missionGroupName"] = missionGroupName;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            data["completeNotificationNamespaceId"] = completeNotificationNamespaceId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MissionGroupName != null) {
+                writer.WritePropertyName("missionGroupName");
+                writer.Write(MissionGroupName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (ResetType != null) {
+                writer.WritePropertyName("resetType");
+                writer.Write(ResetType.ToString());
+            }
+            if (ResetDayOfMonth != null) {
+                writer.WritePropertyName("resetDayOfMonth");
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
+            }
+            if (ResetDayOfWeek != null) {
+                writer.WritePropertyName("resetDayOfWeek");
+                writer.Write(ResetDayOfWeek.ToString());
+            }
+            if (ResetHour != null) {
+                writer.WritePropertyName("resetHour");
+                writer.Write(int.Parse(ResetHour.ToString()));
+            }
+            if (CompleteNotificationNamespaceId != null) {
+                writer.WritePropertyName("completeNotificationNamespaceId");
+                writer.Write(CompleteNotificationNamespaceId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

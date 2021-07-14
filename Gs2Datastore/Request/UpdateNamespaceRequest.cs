@@ -28,90 +28,72 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Datastore.Model.LogSetting LogSetting { set; get; }
+        public Gs2.Gs2Datastore.Model.ScriptSetting DoneUploadScript { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Datastore.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Datastore.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Datastore.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
 
-
-        /** アップロード完了報告時に実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Datastore.Model.ScriptSetting doneUploadScript;
-
-        /**
-         * アップロード完了報告時に実行するスクリプトを設定
-         *
-         * @param doneUploadScript アップロード完了報告時に実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithDoneUploadScript(global::Gs2.Gs2Datastore.Model.ScriptSetting doneUploadScript) {
-            this.doneUploadScript = doneUploadScript;
+        public UpdateNamespaceRequest WithDoneUploadScript(Gs2.Gs2Datastore.Model.ScriptSetting doneUploadScript) {
+            this.DoneUploadScript = doneUploadScript;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Datastore.Model.LogSetting.FromDict(data["logSetting"]) : null,
-                doneUploadScript = data.Keys.Contains("doneUploadScript") && data["doneUploadScript"] != null ? global::Gs2.Gs2Datastore.Model.ScriptSetting.FromDict(data["doneUploadScript"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Datastore.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithDoneUploadScript(!data.Keys.Contains("doneUploadScript") || data["doneUploadScript"] == null ? null : Gs2.Gs2Datastore.Model.ScriptSetting.FromJson(data["doneUploadScript"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["doneUploadScript"] = DoneUploadScript?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["logSetting"] = logSetting.ToDict();
-            data["doneUploadScript"] = doneUploadScript.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            if (DoneUploadScript != null) {
+                DoneUploadScript.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

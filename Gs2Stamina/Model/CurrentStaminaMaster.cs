@@ -23,127 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Stamina.Model
 {
+
 	[Preserve]
 	public class CurrentStaminaMaster : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Settings { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public CurrentStaminaMaster WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** マスターデータ */
-        public string settings { set; get; }
-
-        /**
-         * マスターデータを設定
-         *
-         * @param settings マスターデータ
-         * @return this
-         */
         public CurrentStaminaMaster WithSettings(string settings) {
-            this.settings = settings;
+            this.Settings = settings;
             return this;
+        }
+
+    	[Preserve]
+        public static CurrentStaminaMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CurrentStaminaMaster()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithSettings(!data.Keys.Contains("settings") || data["settings"] == null ? null : data["settings"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["settings"] = Settings,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.settings != null)
-            {
+            if (Settings != null) {
                 writer.WritePropertyName("settings");
-                writer.Write(this.settings);
+                writer.Write(Settings.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static CurrentStaminaMaster FromDict(JsonData data)
-        {
-            return new CurrentStaminaMaster()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithSettings(data.Keys.Contains("settings") && data["settings"] != null ? data["settings"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CurrentStaminaMaster;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (settings == null && settings == other.settings)
+            if (Settings == null && Settings == other.Settings)
             {
                 // null and null
             }
             else
             {
-                diff += settings.CompareTo(other.settings);
+                diff += Settings.CompareTo(other.Settings);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["settings"] = settings;
-            return data;
-        }
-	}
+    }
 }

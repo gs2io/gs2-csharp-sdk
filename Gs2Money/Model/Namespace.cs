@@ -23,562 +23,357 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Money.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Priority { set; get; }
+        public bool? ShareFree { set; get; }
+        public string Currency { set; get; }
+        public string AppleKey { set; get; }
+        public string GoogleKey { set; get; }
+        public bool? EnableFakeReceipt { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
+        public double? Balance { set; get; }
+        public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペースの名前 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param name ネームスペースの名前
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 消費優先度 */
-        public string priority { set; get; }
-
-        /**
-         * 消費優先度を設定
-         *
-         * @param priority 消費優先度
-         * @return this
-         */
         public Namespace WithPriority(string priority) {
-            this.priority = priority;
+            this.Priority = priority;
             return this;
         }
 
-        /** 無償課金通貨を異なるスロットで共有するか */
-        public bool? shareFree { set; get; }
-
-        /**
-         * 無償課金通貨を異なるスロットで共有するかを設定
-         *
-         * @param shareFree 無償課金通貨を異なるスロットで共有するか
-         * @return this
-         */
         public Namespace WithShareFree(bool? shareFree) {
-            this.shareFree = shareFree;
+            this.ShareFree = shareFree;
             return this;
         }
 
-        /** 通貨の種類 */
-        public string currency { set; get; }
-
-        /**
-         * 通貨の種類を設定
-         *
-         * @param currency 通貨の種類
-         * @return this
-         */
         public Namespace WithCurrency(string currency) {
-            this.currency = currency;
+            this.Currency = currency;
             return this;
         }
 
-        /** Apple AppStore のバンドルID */
-        public string appleKey { set; get; }
-
-        /**
-         * Apple AppStore のバンドルIDを設定
-         *
-         * @param appleKey Apple AppStore のバンドルID
-         * @return this
-         */
         public Namespace WithAppleKey(string appleKey) {
-            this.appleKey = appleKey;
+            this.AppleKey = appleKey;
             return this;
         }
 
-        /** Google PlayStore の秘密鍵 */
-        public string googleKey { set; get; }
-
-        /**
-         * Google PlayStore の秘密鍵を設定
-         *
-         * @param googleKey Google PlayStore の秘密鍵
-         * @return this
-         */
         public Namespace WithGoogleKey(string googleKey) {
-            this.googleKey = googleKey;
+            this.GoogleKey = googleKey;
             return this;
         }
 
-        /** UnityEditorが出力する偽のレシートで決済できるようにするか */
-        public bool? enableFakeReceipt { set; get; }
-
-        /**
-         * UnityEditorが出力する偽のレシートで決済できるようにするかを設定
-         *
-         * @param enableFakeReceipt UnityEditorが出力する偽のレシートで決済できるようにするか
-         * @return this
-         */
         public Namespace WithEnableFakeReceipt(bool? enableFakeReceipt) {
-            this.enableFakeReceipt = enableFakeReceipt;
+            this.EnableFakeReceipt = enableFakeReceipt;
             return this;
         }
 
-        /** ウォレット新規作成したときに実行するスクリプト */
-        public Gs2.Gs2Money.Model.ScriptSetting createWalletScript { set; get; }
-
-        /**
-         * ウォレット新規作成したときに実行するスクリプトを設定
-         *
-         * @param createWalletScript ウォレット新規作成したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithCreateWalletScript(Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
-            this.createWalletScript = createWalletScript;
+            this.CreateWalletScript = createWalletScript;
             return this;
         }
 
-        /** ウォレット残高加算したときに実行するスクリプト */
-        public Gs2.Gs2Money.Model.ScriptSetting depositScript { set; get; }
-
-        /**
-         * ウォレット残高加算したときに実行するスクリプトを設定
-         *
-         * @param depositScript ウォレット残高加算したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithDepositScript(Gs2.Gs2Money.Model.ScriptSetting depositScript) {
-            this.depositScript = depositScript;
+            this.DepositScript = depositScript;
             return this;
         }
 
-        /** ウォレット残高消費したときに実行するスクリプト */
-        public Gs2.Gs2Money.Model.ScriptSetting withdrawScript { set; get; }
-
-        /**
-         * ウォレット残高消費したときに実行するスクリプトを設定
-         *
-         * @param withdrawScript ウォレット残高消費したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithWithdrawScript(Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
-            this.withdrawScript = withdrawScript;
+            this.WithdrawScript = withdrawScript;
             return this;
         }
 
-        /** 未使用残高 */
-        public double? balance { set; get; }
-
-        /**
-         * 未使用残高を設定
-         *
-         * @param balance 未使用残高
-         * @return this
-         */
         public Namespace WithBalance(double? balance) {
-            this.balance = balance;
+            this.Balance = balance;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Money.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Money.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPriority(!data.Keys.Contains("priority") || data["priority"] == null ? null : data["priority"].ToString())
+                .WithShareFree(!data.Keys.Contains("shareFree") || data["shareFree"] == null ? null : (bool?)bool.Parse(data["shareFree"].ToString()))
+                .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
+                .WithAppleKey(!data.Keys.Contains("appleKey") || data["appleKey"] == null ? null : data["appleKey"].ToString())
+                .WithGoogleKey(!data.Keys.Contains("googleKey") || data["googleKey"] == null ? null : data["googleKey"].ToString())
+                .WithEnableFakeReceipt(!data.Keys.Contains("enableFakeReceipt") || data["enableFakeReceipt"] == null ? null : (bool?)bool.Parse(data["enableFakeReceipt"].ToString()))
+                .WithCreateWalletScript(!data.Keys.Contains("createWalletScript") || data["createWalletScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["createWalletScript"]))
+                .WithDepositScript(!data.Keys.Contains("depositScript") || data["depositScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["depositScript"]))
+                .WithWithdrawScript(!data.Keys.Contains("withdrawScript") || data["withdrawScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["withdrawScript"]))
+                .WithBalance(!data.Keys.Contains("balance") || data["balance"] == null ? null : (double?)double.Parse(data["balance"].ToString()))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["priority"] = Priority,
+                ["shareFree"] = ShareFree,
+                ["currency"] = Currency,
+                ["appleKey"] = AppleKey,
+                ["googleKey"] = GoogleKey,
+                ["enableFakeReceipt"] = EnableFakeReceipt,
+                ["createWalletScript"] = CreateWalletScript?.ToJson(),
+                ["depositScript"] = DepositScript?.ToJson(),
+                ["withdrawScript"] = WithdrawScript?.ToJson(),
+                ["balance"] = Balance,
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.priority != null)
-            {
+            if (Priority != null) {
                 writer.WritePropertyName("priority");
-                writer.Write(this.priority);
+                writer.Write(Priority.ToString());
             }
-            if(this.shareFree.HasValue)
-            {
+            if (ShareFree != null) {
                 writer.WritePropertyName("shareFree");
-                writer.Write(this.shareFree.Value);
+                writer.Write(bool.Parse(ShareFree.ToString()));
             }
-            if(this.currency != null)
-            {
+            if (Currency != null) {
                 writer.WritePropertyName("currency");
-                writer.Write(this.currency);
+                writer.Write(Currency.ToString());
             }
-            if(this.appleKey != null)
-            {
+            if (AppleKey != null) {
                 writer.WritePropertyName("appleKey");
-                writer.Write(this.appleKey);
+                writer.Write(AppleKey.ToString());
             }
-            if(this.googleKey != null)
-            {
+            if (GoogleKey != null) {
                 writer.WritePropertyName("googleKey");
-                writer.Write(this.googleKey);
+                writer.Write(GoogleKey.ToString());
             }
-            if(this.enableFakeReceipt.HasValue)
-            {
+            if (EnableFakeReceipt != null) {
                 writer.WritePropertyName("enableFakeReceipt");
-                writer.Write(this.enableFakeReceipt.Value);
+                writer.Write(bool.Parse(EnableFakeReceipt.ToString()));
             }
-            if(this.createWalletScript != null)
-            {
+            if (CreateWalletScript != null) {
                 writer.WritePropertyName("createWalletScript");
-                this.createWalletScript.WriteJson(writer);
+                CreateWalletScript.WriteJson(writer);
             }
-            if(this.depositScript != null)
-            {
+            if (DepositScript != null) {
                 writer.WritePropertyName("depositScript");
-                this.depositScript.WriteJson(writer);
+                DepositScript.WriteJson(writer);
             }
-            if(this.withdrawScript != null)
-            {
+            if (WithdrawScript != null) {
                 writer.WritePropertyName("withdrawScript");
-                this.withdrawScript.WriteJson(writer);
+                WithdrawScript.WriteJson(writer);
             }
-            if(this.balance.HasValue)
-            {
+            if (Balance != null) {
                 writer.WritePropertyName("balance");
-                writer.Write(this.balance.Value);
+                writer.Write(double.Parse(Balance.ToString()));
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithPriority(data.Keys.Contains("priority") && data["priority"] != null ? data["priority"].ToString() : null)
-                .WithShareFree(data.Keys.Contains("shareFree") && data["shareFree"] != null ? (bool?)bool.Parse(data["shareFree"].ToString()) : null)
-                .WithCurrency(data.Keys.Contains("currency") && data["currency"] != null ? data["currency"].ToString() : null)
-                .WithAppleKey(data.Keys.Contains("appleKey") && data["appleKey"] != null ? data["appleKey"].ToString() : null)
-                .WithGoogleKey(data.Keys.Contains("googleKey") && data["googleKey"] != null ? data["googleKey"].ToString() : null)
-                .WithEnableFakeReceipt(data.Keys.Contains("enableFakeReceipt") && data["enableFakeReceipt"] != null ? (bool?)bool.Parse(data["enableFakeReceipt"].ToString()) : null)
-                .WithCreateWalletScript(data.Keys.Contains("createWalletScript") && data["createWalletScript"] != null ? Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["createWalletScript"]) : null)
-                .WithDepositScript(data.Keys.Contains("depositScript") && data["depositScript"] != null ? Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["depositScript"]) : null)
-                .WithWithdrawScript(data.Keys.Contains("withdrawScript") && data["withdrawScript"] != null ? Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["withdrawScript"]) : null)
-                .WithBalance(data.Keys.Contains("balance") && data["balance"] != null ? (double?)double.Parse(data["balance"].ToString()) : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Money.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (Priority == null && Priority == other.Priority)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Priority.CompareTo(other.Priority);
             }
-            if (priority == null && priority == other.priority)
+            if (ShareFree == null && ShareFree == other.ShareFree)
             {
                 // null and null
             }
             else
             {
-                diff += priority.CompareTo(other.priority);
+                diff += ShareFree == other.ShareFree ? 0 : 1;
             }
-            if (shareFree == null && shareFree == other.shareFree)
+            if (Currency == null && Currency == other.Currency)
             {
                 // null and null
             }
             else
             {
-                diff += shareFree == other.shareFree ? 0 : 1;
+                diff += Currency.CompareTo(other.Currency);
             }
-            if (currency == null && currency == other.currency)
+            if (AppleKey == null && AppleKey == other.AppleKey)
             {
                 // null and null
             }
             else
             {
-                diff += currency.CompareTo(other.currency);
+                diff += AppleKey.CompareTo(other.AppleKey);
             }
-            if (appleKey == null && appleKey == other.appleKey)
+            if (GoogleKey == null && GoogleKey == other.GoogleKey)
             {
                 // null and null
             }
             else
             {
-                diff += appleKey.CompareTo(other.appleKey);
+                diff += GoogleKey.CompareTo(other.GoogleKey);
             }
-            if (googleKey == null && googleKey == other.googleKey)
+            if (EnableFakeReceipt == null && EnableFakeReceipt == other.EnableFakeReceipt)
             {
                 // null and null
             }
             else
             {
-                diff += googleKey.CompareTo(other.googleKey);
+                diff += EnableFakeReceipt == other.EnableFakeReceipt ? 0 : 1;
             }
-            if (enableFakeReceipt == null && enableFakeReceipt == other.enableFakeReceipt)
+            if (CreateWalletScript == null && CreateWalletScript == other.CreateWalletScript)
             {
                 // null and null
             }
             else
             {
-                diff += enableFakeReceipt == other.enableFakeReceipt ? 0 : 1;
+                diff += CreateWalletScript.CompareTo(other.CreateWalletScript);
             }
-            if (createWalletScript == null && createWalletScript == other.createWalletScript)
+            if (DepositScript == null && DepositScript == other.DepositScript)
             {
                 // null and null
             }
             else
             {
-                diff += createWalletScript.CompareTo(other.createWalletScript);
+                diff += DepositScript.CompareTo(other.DepositScript);
             }
-            if (depositScript == null && depositScript == other.depositScript)
+            if (WithdrawScript == null && WithdrawScript == other.WithdrawScript)
             {
                 // null and null
             }
             else
             {
-                diff += depositScript.CompareTo(other.depositScript);
+                diff += WithdrawScript.CompareTo(other.WithdrawScript);
             }
-            if (withdrawScript == null && withdrawScript == other.withdrawScript)
+            if (Balance == null && Balance == other.Balance)
             {
                 // null and null
             }
             else
             {
-                diff += withdrawScript.CompareTo(other.withdrawScript);
+                diff += (int)(Balance - other.Balance);
             }
-            if (balance == null && balance == other.balance)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(balance - other.balance);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["priority"] = priority;
-            data["shareFree"] = shareFree;
-            data["currency"] = currency;
-            data["appleKey"] = appleKey;
-            data["googleKey"] = googleKey;
-            data["enableFakeReceipt"] = enableFakeReceipt;
-            data["createWalletScript"] = createWalletScript.ToDict();
-            data["depositScript"] = depositScript.ToDict();
-            data["withdrawScript"] = withdrawScript.ToDict();
-            data["balance"] = balance;
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

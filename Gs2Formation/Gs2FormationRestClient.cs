@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Formation
+using Gs2.Util.LitJson;namespace Gs2.Gs2Formation
 {
 	public class Gs2FormationRestClient : AbstractGs2Client
 	{
@@ -73,23 +71,23 @@ namespace Gs2.Gs2Formation
                     + "/";
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -97,9 +95,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -139,35 +134,35 @@ namespace Gs2.Gs2Formation
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.updateMoldScript != null)
+                if (_request.UpdateMoldScript != null)
                 {
                     jsonWriter.WritePropertyName("updateMoldScript");
-                    _request.updateMoldScript.WriteJson(jsonWriter);
+                    _request.UpdateMoldScript.WriteJson(jsonWriter);
                 }
-                if (_request.updateFormScript != null)
+                if (_request.UpdateFormScript != null)
                 {
                     jsonWriter.WritePropertyName("updateFormScript");
-                    _request.updateFormScript.WriteJson(jsonWriter);
+                    _request.UpdateFormScript.WriteJson(jsonWriter);
                 }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -178,9 +173,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -188,9 +183,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -225,20 +217,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/status";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -246,9 +238,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -283,20 +272,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -304,9 +293,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -341,37 +327,37 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.updateMoldScript != null)
+                if (_request.UpdateMoldScript != null)
                 {
                     jsonWriter.WritePropertyName("updateMoldScript");
-                    _request.updateMoldScript.WriteJson(jsonWriter);
+                    _request.UpdateMoldScript.WriteJson(jsonWriter);
                 }
-                if (_request.updateFormScript != null)
+                if (_request.UpdateFormScript != null)
                 {
                     jsonWriter.WritePropertyName("updateFormScript");
-                    _request.updateFormScript.WriteJson(jsonWriter);
+                    _request.UpdateFormScript.WriteJson(jsonWriter);
                 }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -382,9 +368,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -392,9 +378,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -429,20 +412,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -450,9 +433,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ネームスペースを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -487,26 +467,26 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/form";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -514,9 +494,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームマスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -551,33 +528,33 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/form";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.slots != null)
+                if (_request.Slots != null)
                 {
                     jsonWriter.WritePropertyName("slots");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.slots)
+                    foreach(var item in _request.Slots)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -587,10 +564,10 @@ namespace Gs2.Gs2Formation
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -601,9 +578,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -611,9 +588,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームマスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -648,21 +622,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/form/{formModelName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.formModelName) ? _request.formModelName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.FormModelName) ? _request.FormModelName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -670,9 +644,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームマスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -707,29 +678,29 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/form/{formModelName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.formModelName) ? _request.formModelName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.FormModelName) ? _request.FormModelName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.slots != null)
+                if (_request.Slots != null)
                 {
                     jsonWriter.WritePropertyName("slots");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.slots)
+                    foreach(var item in _request.Slots)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -739,10 +710,10 @@ namespace Gs2.Gs2Formation
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -753,9 +724,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -763,9 +734,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームマスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -800,21 +768,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/form/{formModelName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.formModelName) ? _request.formModelName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(_request.FormModelName) ? _request.FormModelName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -822,9 +790,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームマスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -859,20 +824,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/model/mold";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -880,9 +845,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域の一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -917,21 +879,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/model/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -939,9 +901,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -976,26 +935,26 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/mold";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1003,9 +962,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域マスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1040,47 +996,47 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/mold";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.formModelName != null)
+                if (_request.FormModelName != null)
                 {
                     jsonWriter.WritePropertyName("formModelName");
-                    jsonWriter.Write(_request.formModelName.ToString());
+                    jsonWriter.Write(_request.FormModelName.ToString());
                 }
-                if (_request.initialMaxCapacity != null)
+                if (_request.InitialMaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("initialMaxCapacity");
-                    jsonWriter.Write(_request.initialMaxCapacity.ToString());
+                    jsonWriter.Write(_request.InitialMaxCapacity.ToString());
                 }
-                if (_request.maxCapacity != null)
+                if (_request.MaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("maxCapacity");
-                    jsonWriter.Write(_request.maxCapacity.ToString());
+                    jsonWriter.Write(_request.MaxCapacity.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1091,9 +1047,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1101,9 +1057,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域マスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1138,21 +1091,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1160,9 +1113,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域マスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1197,43 +1147,43 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.formModelName != null)
+                if (_request.FormModelName != null)
                 {
                     jsonWriter.WritePropertyName("formModelName");
-                    jsonWriter.Write(_request.formModelName.ToString());
+                    jsonWriter.Write(_request.FormModelName.ToString());
                 }
-                if (_request.initialMaxCapacity != null)
+                if (_request.InitialMaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("initialMaxCapacity");
-                    jsonWriter.Write(_request.initialMaxCapacity.ToString());
+                    jsonWriter.Write(_request.InitialMaxCapacity.ToString());
                 }
-                if (_request.maxCapacity != null)
+                if (_request.MaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("maxCapacity");
-                    jsonWriter.Write(_request.maxCapacity.ToString());
+                    jsonWriter.Write(_request.MaxCapacity.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1244,9 +1194,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1254,9 +1204,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域マスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1291,21 +1238,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1313,9 +1260,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの保存領域マスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1350,20 +1294,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/export";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1371,9 +1315,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  現在有効なフォーム設定のマスターデータをエクスポートします<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1408,20 +1349,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1429,9 +1370,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  現在有効なフォーム設定を取得します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1466,22 +1404,22 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.settings != null)
+                if (_request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
-                    jsonWriter.Write(_request.settings.ToString());
+                    jsonWriter.Write(_request.Settings.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1492,9 +1430,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1502,9 +1440,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  現在有効なフォーム設定を更新します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1539,22 +1474,22 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/from_git_hub";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.checkoutSetting != null)
+                if (_request.CheckoutSetting != null)
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
-                    _request.checkoutSetting.WriteJson(jsonWriter);
+                    _request.CheckoutSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1565,9 +1500,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1575,9 +1510,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  現在有効なフォーム設定を更新します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1612,34 +1544,30 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1647,9 +1575,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  保存したフォームの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1684,31 +1609,27 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1716,9 +1637,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して保存したフォームの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1753,29 +1671,25 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1783,9 +1697,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  保存したフォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1820,26 +1731,22 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1847,9 +1754,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して保存したフォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1884,24 +1788,24 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.capacity != null)
+                if (_request.Capacity != null)
                 {
                     jsonWriter.WritePropertyName("capacity");
-                    jsonWriter.Write(_request.capacity.ToString());
+                    jsonWriter.Write(_request.Capacity.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1912,13 +1816,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1926,9 +1826,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して保存したフォームのキャパシティを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1963,24 +1860,24 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.capacity != null)
+                if (_request.Capacity != null)
                 {
                     jsonWriter.WritePropertyName("capacity");
-                    jsonWriter.Write(_request.capacity.ToString());
+                    jsonWriter.Write(_request.Capacity.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1991,13 +1888,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2005,9 +1898,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して保存したフォームのキャパシティを追加<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2042,29 +1932,25 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2072,9 +1958,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  保存したフォームを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2109,26 +1992,22 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2136,9 +2015,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して保存したフォームを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2178,20 +2054,20 @@ namespace Gs2.Gs2Formation
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2202,13 +2078,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2216,9 +2088,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  スタンプシートでキャパシティサイズを加算<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2258,20 +2127,20 @@ namespace Gs2.Gs2Formation
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2282,13 +2151,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2296,9 +2161,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  スタンプシートでキャパシティサイズを設定<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2333,35 +2195,31 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}/form";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2369,9 +2227,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2406,32 +2261,28 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2439,9 +2290,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定してフォームの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2476,30 +2324,26 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2507,9 +2351,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2544,27 +2385,23 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2572,9 +2409,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定してフォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2609,33 +2443,29 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}/form/{index}/signature";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.keyId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "keyId", UnityWebRequest.EscapeURL(_request.keyId)));
+                if (_request.KeyId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "keyId", UnityWebRequest.EscapeURL(_request.KeyId)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2643,9 +2473,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  署名付きフォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2680,30 +2507,26 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form/{index}/signature";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.keyId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "keyId", UnityWebRequest.EscapeURL(_request.keyId)));
+                if (_request.KeyId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "keyId", UnityWebRequest.EscapeURL(_request.KeyId)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2711,9 +2534,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定して署名付きフォームを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2748,21 +2568,21 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.slots != null)
+                if (_request.Slots != null)
                 {
                     jsonWriter.WritePropertyName("slots");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.slots)
+                    foreach(var item in _request.Slots)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -2772,10 +2592,10 @@ namespace Gs2.Gs2Formation
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2786,13 +2606,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2800,9 +2616,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定してフォームを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2837,20 +2650,20 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.slots != null)
+                if (_request.Slots != null)
                 {
                     jsonWriter.WritePropertyName("slots");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.slots)
+                    foreach(var item in _request.Slots)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -2860,15 +2673,15 @@ namespace Gs2.Gs2Formation
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2879,17 +2692,13 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2897,9 +2706,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  署名付きスロットを使ってフォームを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2934,36 +2740,36 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form/{index}/stamp/delegate";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.acquireAction != null)
+                if (_request.AcquireAction != null)
                 {
                     jsonWriter.WritePropertyName("acquireAction");
-                    _request.acquireAction.WriteJson(jsonWriter);
+                    _request.AcquireAction.WriteJson(jsonWriter);
                 }
-                if (_request.queueNamespaceId != null)
+                if (_request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(_request.queueNamespaceId.ToString());
+                    jsonWriter.Write(_request.QueueNamespaceId.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.config != null)
+                if (_request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.config)
+                    foreach(var item in _request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -2973,10 +2779,10 @@ namespace Gs2.Gs2Formation
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2987,13 +2793,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3001,9 +2803,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  署名付きスロットを使ってフォームを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3038,30 +2837,26 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3069,9 +2864,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  フォームを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3106,27 +2898,23 @@ namespace Gs2.Gs2Formation
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/mold/{moldName}/form/{index}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
-                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.moldName) ? _request.moldName.ToString() : "null");
-                url = url.Replace("{index}",_request.index != null ? _request.index.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(_request.MoldName) ? _request.MoldName.ToString() : "null");
+                url = url.Replace("{index}",_request.Index != null ? _request.Index.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3134,9 +2922,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  ユーザIDを指定してフォームを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3176,20 +2961,20 @@ namespace Gs2.Gs2Formation
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3200,13 +2985,9 @@ namespace Gs2.Gs2Formation
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3214,9 +2995,6 @@ namespace Gs2.Gs2Formation
         }
 
 		/// <summary>
-		///  スタンプシートでアイテムをインベントリに追加<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>

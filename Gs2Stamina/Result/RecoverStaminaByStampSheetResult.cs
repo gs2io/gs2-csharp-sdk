@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Stamina.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,63 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Stamina.Result
 {
 	[Preserve]
-	public class RecoverStaminaByStampSheetResult
+	[System.Serializable]
+	public class RecoverStaminaByStampSheetResult : IResult
 	{
-        /** スタミナ */
-        public Stamina item { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
+        public long? OverflowValue { set; get; }
 
-        /** スタミナモデル */
-        public StaminaModel staminaModel { set; get; }
+        public RecoverStaminaByStampSheetResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** スタミナ値の上限を超えて受け取れずに GS2-Inbox に転送したスタミナ値 */
-        public long? overflowValue { set; get; }
+        public RecoverStaminaByStampSheetResult WithStaminaModel(Gs2.Gs2Stamina.Model.StaminaModel staminaModel) {
+            this.StaminaModel = staminaModel;
+            return this;
+        }
 
+        public RecoverStaminaByStampSheetResult WithOverflowValue(long? overflowValue) {
+            this.OverflowValue = overflowValue;
+            return this;
+        }
 
     	[Preserve]
-        public static RecoverStaminaByStampSheetResult FromDict(JsonData data)
+        public static RecoverStaminaByStampSheetResult FromJson(JsonData data)
         {
-            return new RecoverStaminaByStampSheetResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Stamina.Model.Stamina.FromDict(data["item"]) : null,
-                staminaModel = data.Keys.Contains("staminaModel") && data["staminaModel"] != null ? Gs2.Gs2Stamina.Model.StaminaModel.FromDict(data["staminaModel"]) : null,
-                overflowValue = data.Keys.Contains("overflowValue") && data["overflowValue"] != null ? (long?)long.Parse(data["overflowValue"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new RecoverStaminaByStampSheetResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
+                .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]))
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (long?)long.Parse(data["overflowValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["staminaModel"] = StaminaModel?.ToJson(),
+                ["overflowValue"] = OverflowValue,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (StaminaModel != null) {
+                StaminaModel.WriteJson(writer);
+            }
+            if (OverflowValue != null) {
+                writer.WritePropertyName("overflowValue");
+                writer.Write(long.Parse(OverflowValue.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

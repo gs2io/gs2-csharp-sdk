@@ -28,54 +28,50 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class GetRoomRequest : Gs2Request<GetRoomRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetRoomRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public GetRoomRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetRoomRequest FromDict(JsonData data)
+        public static GetRoomRequest FromJson(JsonData data)
         {
-            return new GetRoomRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetRoomRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,400 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class MissionGroupModelMaster : IComparable
 	{
+        public string MissionGroupId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
+        public string CompleteNotificationNamespaceId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ミッショングループマスター */
-        public string missionGroupId { set; get; }
-
-        /**
-         * ミッショングループマスターを設定
-         *
-         * @param missionGroupId ミッショングループマスター
-         * @return this
-         */
         public MissionGroupModelMaster WithMissionGroupId(string missionGroupId) {
-            this.missionGroupId = missionGroupId;
+            this.MissionGroupId = missionGroupId;
             return this;
         }
 
-        /** ミッショングループ名 */
-        public string name { set; get; }
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param name ミッショングループ名
-         * @return this
-         */
         public MissionGroupModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public MissionGroupModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** ミッショングループの説明 */
-        public string description { set; get; }
-
-        /**
-         * ミッショングループの説明を設定
-         *
-         * @param description ミッショングループの説明
-         * @return this
-         */
         public MissionGroupModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** リセットタイミング */
-        public string resetType { set; get; }
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public MissionGroupModelMaster WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-        /** リセットをする日にち */
-        public int? resetDayOfMonth { set; get; }
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public MissionGroupModelMaster WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-        /** リセットする曜日 */
-        public string resetDayOfWeek { set; get; }
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public MissionGroupModelMaster WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-        /** リセット時刻 */
-        public int? resetHour { set; get; }
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public MissionGroupModelMaster WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
         }
 
-        /** ミッションを達成したときの通知先ネームスペース のGRN */
-        public string completeNotificationNamespaceId { set; get; }
-
-        /**
-         * ミッションを達成したときの通知先ネームスペース のGRNを設定
-         *
-         * @param completeNotificationNamespaceId ミッションを達成したときの通知先ネームスペース のGRN
-         * @return this
-         */
         public MissionGroupModelMaster WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
-            this.completeNotificationNamespaceId = completeNotificationNamespaceId;
+            this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public MissionGroupModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public MissionGroupModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static MissionGroupModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new MissionGroupModelMaster()
+                .WithMissionGroupId(!data.Keys.Contains("missionGroupId") || data["missionGroupId"] == null ? null : data["missionGroupId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()))
+                .WithCompleteNotificationNamespaceId(!data.Keys.Contains("completeNotificationNamespaceId") || data["completeNotificationNamespaceId"] == null ? null : data["completeNotificationNamespaceId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["missionGroupId"] = MissionGroupId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
+                ["completeNotificationNamespaceId"] = CompleteNotificationNamespaceId,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.missionGroupId != null)
-            {
+            if (MissionGroupId != null) {
                 writer.WritePropertyName("missionGroupId");
-                writer.Write(this.missionGroupId);
+                writer.Write(MissionGroupId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.resetType != null)
-            {
+            if (ResetType != null) {
                 writer.WritePropertyName("resetType");
-                writer.Write(this.resetType);
+                writer.Write(ResetType.ToString());
             }
-            if(this.resetDayOfMonth.HasValue)
-            {
+            if (ResetDayOfMonth != null) {
                 writer.WritePropertyName("resetDayOfMonth");
-                writer.Write(this.resetDayOfMonth.Value);
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
             }
-            if(this.resetDayOfWeek != null)
-            {
+            if (ResetDayOfWeek != null) {
                 writer.WritePropertyName("resetDayOfWeek");
-                writer.Write(this.resetDayOfWeek);
+                writer.Write(ResetDayOfWeek.ToString());
             }
-            if(this.resetHour.HasValue)
-            {
+            if (ResetHour != null) {
                 writer.WritePropertyName("resetHour");
-                writer.Write(this.resetHour.Value);
+                writer.Write(int.Parse(ResetHour.ToString()));
             }
-            if(this.completeNotificationNamespaceId != null)
-            {
+            if (CompleteNotificationNamespaceId != null) {
                 writer.WritePropertyName("completeNotificationNamespaceId");
-                writer.Write(this.completeNotificationNamespaceId);
+                writer.Write(CompleteNotificationNamespaceId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMissionGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["missionGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["missionGroupName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static MissionGroupModelMaster FromDict(JsonData data)
-        {
-            return new MissionGroupModelMaster()
-                .WithMissionGroupId(data.Keys.Contains("missionGroupId") && data["missionGroupId"] != null ? data["missionGroupId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithResetType(data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString() : null)
-                .WithResetDayOfMonth(data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null)
-                .WithResetDayOfWeek(data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString() : null)
-                .WithResetHour(data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null)
-                .WithCompleteNotificationNamespaceId(data.Keys.Contains("completeNotificationNamespaceId") && data["completeNotificationNamespaceId"] != null ? data["completeNotificationNamespaceId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as MissionGroupModelMaster;
             var diff = 0;
-            if (missionGroupId == null && missionGroupId == other.missionGroupId)
+            if (MissionGroupId == null && MissionGroupId == other.MissionGroupId)
             {
                 // null and null
             }
             else
             {
-                diff += missionGroupId.CompareTo(other.missionGroupId);
+                diff += MissionGroupId.CompareTo(other.MissionGroupId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (resetType == null && resetType == other.resetType)
+            if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
             }
             else
             {
-                diff += resetType.CompareTo(other.resetType);
+                diff += ResetType.CompareTo(other.ResetType);
             }
-            if (resetDayOfMonth == null && resetDayOfMonth == other.resetDayOfMonth)
+            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetDayOfMonth - other.resetDayOfMonth);
+                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
             }
-            if (resetDayOfWeek == null && resetDayOfWeek == other.resetDayOfWeek)
+            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += resetDayOfWeek.CompareTo(other.resetDayOfWeek);
+                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
             }
-            if (resetHour == null && resetHour == other.resetHour)
+            if (ResetHour == null && ResetHour == other.ResetHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetHour - other.resetHour);
+                diff += (int)(ResetHour - other.ResetHour);
             }
-            if (completeNotificationNamespaceId == null && completeNotificationNamespaceId == other.completeNotificationNamespaceId)
+            if (CompleteNotificationNamespaceId == null && CompleteNotificationNamespaceId == other.CompleteNotificationNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += completeNotificationNamespaceId.CompareTo(other.completeNotificationNamespaceId);
+                diff += CompleteNotificationNamespaceId.CompareTo(other.CompleteNotificationNamespaceId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["missionGroupId"] = missionGroupId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            data["completeNotificationNamespaceId"] = completeNotificationNamespaceId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

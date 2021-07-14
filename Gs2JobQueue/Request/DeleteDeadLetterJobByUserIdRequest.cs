@@ -28,90 +28,62 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class DeleteDeadLetterJobByUserIdRequest : Gs2Request<DeleteDeadLetterJobByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string DeadLetterJobName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteDeadLetterJobByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DeleteDeadLetterJobByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** ジョブの名前 */
-		[UnityEngine.SerializeField]
-        public string deadLetterJobName;
-
-        /**
-         * ジョブの名前を設定
-         *
-         * @param deadLetterJobName ジョブの名前
-         * @return this
-         */
         public DeleteDeadLetterJobByUserIdRequest WithDeadLetterJobName(string deadLetterJobName) {
-            this.deadLetterJobName = deadLetterJobName;
+            this.DeadLetterJobName = deadLetterJobName;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DeleteDeadLetterJobByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DeleteDeadLetterJobByUserIdRequest FromDict(JsonData data)
+        public static DeleteDeadLetterJobByUserIdRequest FromJson(JsonData data)
         {
-            return new DeleteDeadLetterJobByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                deadLetterJobName = data.Keys.Contains("deadLetterJobName") && data["deadLetterJobName"] != null ? data["deadLetterJobName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteDeadLetterJobByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithDeadLetterJobName(!data.Keys.Contains("deadLetterJobName") || data["deadLetterJobName"] == null ? null : data["deadLetterJobName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["deadLetterJobName"] = DeadLetterJobName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["deadLetterJobName"] = deadLetterJobName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (DeadLetterJobName != null) {
+                writer.WritePropertyName("deadLetterJobName");
+                writer.Write(DeadLetterJobName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,90 +28,62 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DeleteTakeOverByUserIdentifierRequest : Gs2Request<DeleteTakeOverByUserIdentifierRequest>
 	{
+        public string NamespaceName { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteTakeOverByUserIdentifierRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? type;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param type スロット番号
-         * @return this
-         */
         public DeleteTakeOverByUserIdentifierRequest WithType(int? type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-
-        /** 引き継ぎ用ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userIdentifier;
-
-        /**
-         * 引き継ぎ用ユーザーIDを設定
-         *
-         * @param userIdentifier 引き継ぎ用ユーザーID
-         * @return this
-         */
         public DeleteTakeOverByUserIdentifierRequest WithUserIdentifier(string userIdentifier) {
-            this.userIdentifier = userIdentifier;
+            this.UserIdentifier = userIdentifier;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DeleteTakeOverByUserIdentifierRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DeleteTakeOverByUserIdentifierRequest FromDict(JsonData data)
+        public static DeleteTakeOverByUserIdentifierRequest FromJson(JsonData data)
         {
-            return new DeleteTakeOverByUserIdentifierRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                type = data.Keys.Contains("type") && data["type"] != null ? (int?)int.Parse(data["type"].ToString()) : null,
-                userIdentifier = data.Keys.Contains("userIdentifier") && data["userIdentifier"] != null ? data["userIdentifier"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteTakeOverByUserIdentifierRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()))
+                .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["type"] = Type,
+                ["userIdentifier"] = UserIdentifier,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["type"] = type;
-            data["userIdentifier"] = userIdentifier;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(int.Parse(Type.ToString()));
+            }
+            if (UserIdentifier != null) {
+                writer.WritePropertyName("userIdentifier");
+                writer.Write(UserIdentifier.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

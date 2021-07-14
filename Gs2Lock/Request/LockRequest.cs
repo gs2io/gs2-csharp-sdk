@@ -28,122 +28,86 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class LockRequest : Gs2Request<LockRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string PropertyId { set; get; }
+        public string AccessToken { set; get; }
+        public string TransactionId { set; get; }
+        public long? Ttl { set; get; }
 
-        /** カテゴリー名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリー名を設定
-         *
-         * @param namespaceName カテゴリー名
-         * @return this
-         */
         public LockRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** プロパティID */
-		[UnityEngine.SerializeField]
-        public string propertyId;
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
         public LockRequest WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
+            this.PropertyId = propertyId;
             return this;
         }
 
-
-        /** ロックを取得するトランザクションID */
-		[UnityEngine.SerializeField]
-        public string transactionId;
-
-        /**
-         * ロックを取得するトランザクションIDを設定
-         *
-         * @param transactionId ロックを取得するトランザクションID
-         * @return this
-         */
-        public LockRequest WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
-            return this;
-        }
-
-
-        /** ロックを取得する期限（秒） */
-		[UnityEngine.SerializeField]
-        public long? ttl;
-
-        /**
-         * ロックを取得する期限（秒）を設定
-         *
-         * @param ttl ロックを取得する期限（秒）
-         * @return this
-         */
-        public LockRequest WithTtl(long? ttl) {
-            this.ttl = ttl;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public LockRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public LockRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public LockRequest WithTransactionId(string transactionId) {
+            this.TransactionId = transactionId;
+            return this;
+        }
+
+        public LockRequest WithTtl(long? ttl) {
+            this.Ttl = ttl;
             return this;
         }
 
     	[Preserve]
-        public static LockRequest FromDict(JsonData data)
+        public static LockRequest FromJson(JsonData data)
         {
-            return new LockRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                propertyId = data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString(): null,
-                transactionId = data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString(): null,
-                ttl = data.Keys.Contains("ttl") && data["ttl"] != null ? (long?)long.Parse(data["ttl"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new LockRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)long.Parse(data["ttl"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["propertyId"] = PropertyId,
+                ["accessToken"] = AccessToken,
+                ["transactionId"] = TransactionId,
+                ["ttl"] = Ttl,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["propertyId"] = propertyId;
-            data["transactionId"] = transactionId;
-            data["ttl"] = ttl;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (TransactionId != null) {
+                writer.WritePropertyName("transactionId");
+                writer.Write(TransactionId.ToString());
+            }
+            if (Ttl != null) {
+                writer.WritePropertyName("ttl");
+                writer.Write(long.Parse(Ttl.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

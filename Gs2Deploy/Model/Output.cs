@@ -23,197 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Deploy.Model
 {
+
 	[Preserve]
 	public class Output : IComparable
 	{
+        public string OutputId { set; get; }
+        public string Name { set; get; }
+        public string Value { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** アウトプット */
-        public string outputId { set; get; }
-
-        /**
-         * アウトプットを設定
-         *
-         * @param outputId アウトプット
-         * @return this
-         */
         public Output WithOutputId(string outputId) {
-            this.outputId = outputId;
+            this.OutputId = outputId;
             return this;
         }
 
-        /** アウトプット名 */
-        public string name { set; get; }
-
-        /**
-         * アウトプット名を設定
-         *
-         * @param name アウトプット名
-         * @return this
-         */
         public Output WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 値 */
-        public string value { set; get; }
-
-        /**
-         * 値を設定
-         *
-         * @param value 値
-         * @return this
-         */
         public Output WithValue(string value) {
-            this.value = value;
+            this.Value = value;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Output WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Output FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Output()
+                .WithOutputId(!data.Keys.Contains("outputId") || data["outputId"] == null ? null : data["outputId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : data["value"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["outputId"] = OutputId,
+                ["name"] = Name,
+                ["value"] = Value,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.outputId != null)
-            {
+            if (OutputId != null) {
                 writer.WritePropertyName("outputId");
-                writer.Write(this.outputId);
+                writer.Write(OutputId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.value != null)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value);
+                writer.Write(Value.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetOutputNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):output:(?<outputName>.*)");
-        if (!match.Groups["outputName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["outputName"].Value;
-    }
-
-    public static string GetStackNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):output:(?<outputName>.*)");
-        if (!match.Groups["stackName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["stackName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):output:(?<outputName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):output:(?<outputName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Output FromDict(JsonData data)
-        {
-            return new Output()
-                .WithOutputId(data.Keys.Contains("outputId") && data["outputId"] != null ? data["outputId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? data["value"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Output;
             var diff = 0;
-            if (outputId == null && outputId == other.outputId)
+            if (OutputId == null && OutputId == other.OutputId)
             {
                 // null and null
             }
             else
             {
-                diff += outputId.CompareTo(other.outputId);
+                diff += OutputId.CompareTo(other.OutputId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += value.CompareTo(other.value);
+                diff += Value.CompareTo(other.Value);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["outputId"] = outputId;
-            data["name"] = name;
-            data["value"] = value;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

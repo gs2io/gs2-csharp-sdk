@@ -23,62 +23,57 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Identifier.Model
 {
+
 	[Preserve]
 	public class ProjectToken : IComparable
 	{
+        public string Token { set; get; }
 
-        /** プロジェクトトークン */
-        public string token { set; get; }
-
-        /**
-         * プロジェクトトークンを設定
-         *
-         * @param token プロジェクトトークン
-         * @return this
-         */
         public ProjectToken WithToken(string token) {
-            this.token = token;
+            this.Token = token;
             return this;
+        }
+
+    	[Preserve]
+        public static ProjectToken FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ProjectToken()
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["token"] = Token,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.token != null)
-            {
+            if (Token != null) {
                 writer.WritePropertyName("token");
-                writer.Write(this.token);
+                writer.Write(Token.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static ProjectToken FromDict(JsonData data)
-        {
-            return new ProjectToken()
-                .WithToken(data.Keys.Contains("token") && data["token"] != null ? data["token"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ProjectToken;
             var diff = 0;
-            if (token == null && token == other.token)
+            if (Token == null && Token == other.Token)
             {
                 // null and null
             }
             else
             {
-                diff += token.CompareTo(other.token);
+                diff += Token.CompareTo(other.Token);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["token"] = token;
-            return data;
-        }
-	}
+    }
 }

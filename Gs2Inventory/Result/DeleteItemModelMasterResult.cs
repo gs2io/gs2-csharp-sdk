@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inventory.Result
 {
 	[Preserve]
-	public class DeleteItemModelMasterResult
+	[System.Serializable]
+	public class DeleteItemModelMasterResult : IResult
 	{
-        /** 削除したアイテムモデルマスター */
-        public ItemModelMaster item { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModelMaster Item { set; get; }
 
+        public DeleteItemModelMasterResult WithItem(Gs2.Gs2Inventory.Model.ItemModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteItemModelMasterResult FromDict(JsonData data)
+        public static DeleteItemModelMasterResult FromJson(JsonData data)
         {
-            return new DeleteItemModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Inventory.Model.ItemModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteItemModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.ItemModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

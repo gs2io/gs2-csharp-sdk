@@ -23,104 +23,95 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class AcquireActionConfig : IComparable
 	{
+        public string Name { set; get; }
+        public Gs2.Gs2Formation.Model.Config[] Config { set; get; }
 
-        /** スロット名 */
-        public string name { set; get; }
-
-        /**
-         * スロット名を設定
-         *
-         * @param name スロット名
-         * @return this
-         */
         public AcquireActionConfig WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** スタンプシートに使用するコンフィグ */
-        public List<Config> config { set; get; }
-
-        /**
-         * スタンプシートに使用するコンフィグを設定
-         *
-         * @param config スタンプシートに使用するコンフィグ
-         * @return this
-         */
-        public AcquireActionConfig WithConfig(List<Config> config) {
-            this.config = config;
+        public AcquireActionConfig WithConfig(Gs2.Gs2Formation.Model.Config[] config) {
+            this.Config = config;
             return this;
+        }
+
+    	[Preserve]
+        public static AcquireActionConfig FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AcquireActionConfig()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Formation.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.config != null)
-            {
+            if (Config != null) {
                 writer.WritePropertyName("config");
                 writer.WriteArrayStart();
-                foreach(var item in this.config)
+                foreach (var confi in Config)
                 {
-                    item.WriteJson(writer);
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static AcquireActionConfig FromDict(JsonData data)
-        {
-            return new AcquireActionConfig()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithConfig(data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Formation.Model.Config.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as AcquireActionConfig;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (config == null && config == other.config)
+            if (Config == null && Config == other.Config)
             {
                 // null and null
             }
             else
             {
-                diff += config.Count - other.config.Count;
-                for (var i = 0; i < config.Count; i++)
+                diff += Config.Length - other.Config.Length;
+                for (var i = 0; i < Config.Length; i++)
                 {
-                    diff += config[i].CompareTo(other.config[i]);
+                    diff += Config[i].CompareTo(other.Config[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class CreateUserRequest : Gs2Request<CreateUserRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
 
-        /** ユーザー名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param name ユーザー名
-         * @return this
-         */
         public CreateUserRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ユーザの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ユーザの説明を設定
-         *
-         * @param description ユーザの説明
-         * @return this
-         */
         public CreateUserRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateUserRequest FromDict(JsonData data)
+        public static CreateUserRequest FromJson(JsonData data)
         {
-            return new CreateUserRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateUserRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

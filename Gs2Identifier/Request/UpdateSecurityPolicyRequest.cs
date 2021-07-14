@@ -28,72 +28,62 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class UpdateSecurityPolicyRequest : Gs2Request<UpdateSecurityPolicyRequest>
 	{
+        public string SecurityPolicyName { set; get; }
+        public string Description { set; get; }
+        public string Policy { set; get; }
 
-        /** セキュリティポリシー名 */
-		[UnityEngine.SerializeField]
-        public string securityPolicyName;
-
-        /**
-         * セキュリティポリシー名を設定
-         *
-         * @param securityPolicyName セキュリティポリシー名
-         * @return this
-         */
         public UpdateSecurityPolicyRequest WithSecurityPolicyName(string securityPolicyName) {
-            this.securityPolicyName = securityPolicyName;
+            this.SecurityPolicyName = securityPolicyName;
             return this;
         }
 
-
-        /** セキュリティポリシーの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * セキュリティポリシーの説明を設定
-         *
-         * @param description セキュリティポリシーの説明
-         * @return this
-         */
         public UpdateSecurityPolicyRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ポリシードキュメント */
-		[UnityEngine.SerializeField]
-        public string policy;
-
-        /**
-         * ポリシードキュメントを設定
-         *
-         * @param policy ポリシードキュメント
-         * @return this
-         */
         public UpdateSecurityPolicyRequest WithPolicy(string policy) {
-            this.policy = policy;
+            this.Policy = policy;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateSecurityPolicyRequest FromDict(JsonData data)
+        public static UpdateSecurityPolicyRequest FromJson(JsonData data)
         {
-            return new UpdateSecurityPolicyRequest {
-                securityPolicyName = data.Keys.Contains("securityPolicyName") && data["securityPolicyName"] != null ? data["securityPolicyName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                policy = data.Keys.Contains("policy") && data["policy"] != null ? data["policy"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateSecurityPolicyRequest()
+                .WithSecurityPolicyName(!data.Keys.Contains("securityPolicyName") || data["securityPolicyName"] == null ? null : data["securityPolicyName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPolicy(!data.Keys.Contains("policy") || data["policy"] == null ? null : data["policy"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["securityPolicyName"] = SecurityPolicyName,
+                ["description"] = Description,
+                ["policy"] = Policy,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["securityPolicyName"] = securityPolicyName;
-            data["description"] = description;
-            data["policy"] = policy;
-            return data;
+            writer.WriteObjectStart();
+            if (SecurityPolicyName != null) {
+                writer.WritePropertyName("securityPolicyName");
+                writer.Write(SecurityPolicyName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Policy != null) {
+                writer.WritePropertyName("policy");
+                writer.Write(Policy.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

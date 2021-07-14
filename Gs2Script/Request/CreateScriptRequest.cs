@@ -28,90 +28,74 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class CreateScriptRequest : Gs2Request<CreateScriptRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Script { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateScriptRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スクリプト名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * スクリプト名を設定
-         *
-         * @param name スクリプト名
-         * @return this
-         */
         public CreateScriptRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** 説明文 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public CreateScriptRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** Luaスクリプト */
-		[UnityEngine.SerializeField]
-        public string script;
-
-        /**
-         * Luaスクリプトを設定
-         *
-         * @param script Luaスクリプト
-         * @return this
-         */
         public CreateScriptRequest WithScript(string script) {
-            this.script = script;
+            this.Script = script;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateScriptRequest FromDict(JsonData data)
+        public static CreateScriptRequest FromJson(JsonData data)
         {
-            return new CreateScriptRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                script = data.Keys.Contains("script") && data["script"] != null ? data["script"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateScriptRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["script"] = Script,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["script"] = script;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Script != null) {
+                writer.WritePropertyName("script");
+                writer.Write(Script.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

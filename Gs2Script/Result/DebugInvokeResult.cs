@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Script.Model;
 using Gs2.Util.LitJson;
@@ -24,38 +25,99 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Script.Result
 {
 	[Preserve]
-	public class DebugInvokeResult
+	[System.Serializable]
+	public class DebugInvokeResult : IResult
 	{
-        /** ステータスコード */
-        public int? code { set; get; }
+        public int? Code { set; get; }
+        public string Result { set; get; }
+        public int? ExecuteTime { set; get; }
+        public int? Charged { set; get; }
+        public string[] Output { set; get; }
 
-        /** 戻り値 */
-        public string result { set; get; }
+        public DebugInvokeResult WithCode(int? code) {
+            this.Code = code;
+            return this;
+        }
 
-        /** スクリプトの実行時間(ミリ秒) */
-        public int? executeTime { set; get; }
+        public DebugInvokeResult WithResult(string result) {
+            this.Result = result;
+            return this;
+        }
 
-        /** 費用の計算対象となった時間(秒) */
-        public int? charged { set; get; }
+        public DebugInvokeResult WithExecuteTime(int? executeTime) {
+            this.ExecuteTime = executeTime;
+            return this;
+        }
 
-        /** 標準出力の内容のリスト */
-        public List<string> output { set; get; }
+        public DebugInvokeResult WithCharged(int? charged) {
+            this.Charged = charged;
+            return this;
+        }
 
+        public DebugInvokeResult WithOutput(string[] output) {
+            this.Output = output;
+            return this;
+        }
 
     	[Preserve]
-        public static DebugInvokeResult FromDict(JsonData data)
+        public static DebugInvokeResult FromJson(JsonData data)
         {
-            return new DebugInvokeResult {
-                code = data.Keys.Contains("code") && data["code"] != null ? (int?)int.Parse(data["code"].ToString()) : null,
-                result = data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null,
-                executeTime = data.Keys.Contains("executeTime") && data["executeTime"] != null ? (int?)int.Parse(data["executeTime"].ToString()) : null,
-                charged = data.Keys.Contains("charged") && data["charged"] != null ? (int?)int.Parse(data["charged"].ToString()) : null,
-                output = data.Keys.Contains("output") && data["output"] != null ? data["output"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DebugInvokeResult()
+                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)int.Parse(data["code"].ToString()))
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
+                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)int.Parse(data["executeTime"].ToString()))
+                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)int.Parse(data["charged"].ToString()))
+                .WithOutput(!data.Keys.Contains("output") || data["output"] == null ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["code"] = Code,
+                ["result"] = Result,
+                ["executeTime"] = ExecuteTime,
+                ["charged"] = Charged,
+                ["output"] = new JsonData(Output == null ? new JsonData[]{} :
+                        Output.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Code != null) {
+                writer.WritePropertyName("code");
+                writer.Write(int.Parse(Code.ToString()));
+            }
+            if (Result != null) {
+                writer.WritePropertyName("result");
+                writer.Write(Result.ToString());
+            }
+            if (ExecuteTime != null) {
+                writer.WritePropertyName("executeTime");
+                writer.Write(int.Parse(ExecuteTime.ToString()));
+            }
+            if (Charged != null) {
+                writer.WritePropertyName("charged");
+                writer.Write(int.Parse(Charged.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var outpu in Output)
+            {
+                if (outpu != null) {
+                    writer.Write(outpu.ToString());
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

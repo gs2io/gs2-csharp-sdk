@@ -28,122 +28,86 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class UpdateProfileRequest : Gs2Request<UpdateProfileRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string PublicProfile { set; get; }
+        public string FollowerProfile { set; get; }
+        public string FriendProfile { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateProfileRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 公開されるプロフィール */
-		[UnityEngine.SerializeField]
-        public string publicProfile;
-
-        /**
-         * 公開されるプロフィールを設定
-         *
-         * @param publicProfile 公開されるプロフィール
-         * @return this
-         */
-        public UpdateProfileRequest WithPublicProfile(string publicProfile) {
-            this.publicProfile = publicProfile;
-            return this;
-        }
-
-
-        /** フォロワー向けに公開されるプロフィール */
-		[UnityEngine.SerializeField]
-        public string followerProfile;
-
-        /**
-         * フォロワー向けに公開されるプロフィールを設定
-         *
-         * @param followerProfile フォロワー向けに公開されるプロフィール
-         * @return this
-         */
-        public UpdateProfileRequest WithFollowerProfile(string followerProfile) {
-            this.followerProfile = followerProfile;
-            return this;
-        }
-
-
-        /** フレンド向けに公開されるプロフィール */
-		[UnityEngine.SerializeField]
-        public string friendProfile;
-
-        /**
-         * フレンド向けに公開されるプロフィールを設定
-         *
-         * @param friendProfile フレンド向けに公開されるプロフィール
-         * @return this
-         */
-        public UpdateProfileRequest WithFriendProfile(string friendProfile) {
-            this.friendProfile = friendProfile;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public UpdateProfileRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public UpdateProfileRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public UpdateProfileRequest WithPublicProfile(string publicProfile) {
+            this.PublicProfile = publicProfile;
+            return this;
+        }
+
+        public UpdateProfileRequest WithFollowerProfile(string followerProfile) {
+            this.FollowerProfile = followerProfile;
+            return this;
+        }
+
+        public UpdateProfileRequest WithFriendProfile(string friendProfile) {
+            this.FriendProfile = friendProfile;
             return this;
         }
 
     	[Preserve]
-        public static UpdateProfileRequest FromDict(JsonData data)
+        public static UpdateProfileRequest FromJson(JsonData data)
         {
-            return new UpdateProfileRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                publicProfile = data.Keys.Contains("publicProfile") && data["publicProfile"] != null ? data["publicProfile"].ToString(): null,
-                followerProfile = data.Keys.Contains("followerProfile") && data["followerProfile"] != null ? data["followerProfile"].ToString(): null,
-                friendProfile = data.Keys.Contains("friendProfile") && data["friendProfile"] != null ? data["friendProfile"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateProfileRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString())
+                .WithFollowerProfile(!data.Keys.Contains("followerProfile") || data["followerProfile"] == null ? null : data["followerProfile"].ToString())
+                .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["publicProfile"] = PublicProfile,
+                ["followerProfile"] = FollowerProfile,
+                ["friendProfile"] = FriendProfile,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["publicProfile"] = publicProfile;
-            data["followerProfile"] = followerProfile;
-            data["friendProfile"] = friendProfile;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (PublicProfile != null) {
+                writer.WritePropertyName("publicProfile");
+                writer.Write(PublicProfile.ToString());
+            }
+            if (FollowerProfile != null) {
+                writer.WritePropertyName("followerProfile");
+                writer.Write(FollowerProfile.ToString());
+            }
+            if (FriendProfile != null) {
+                writer.WritePropertyName("friendProfile");
+                writer.Write(FriendProfile.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

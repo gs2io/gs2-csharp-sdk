@@ -28,36 +28,38 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class GetNamespaceRequest : Gs2Request<GetNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public GetNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
     	[Preserve]
-        public static GetNamespaceRequest FromDict(JsonData data)
+        public static GetNamespaceRequest FromJson(JsonData data)
         {
-            return new GetNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

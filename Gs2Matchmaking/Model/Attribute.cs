@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
-	public class Attribute_ : IComparable
+	public class Attribute : IComparable
 	{
+        public string Name { set; get; }
+        public int? Value { set; get; }
 
-        /** 属性名 */
-        public string name { set; get; }
-
-        /**
-         * 属性名を設定
-         *
-         * @param name 属性名
-         * @return this
-         */
-        public Attribute_ WithName(string name) {
-            this.name = name;
+        public Attribute WithName(string name) {
+            this.Name = name;
             return this;
         }
 
-        /** 属性値 */
-        public int? value { set; get; }
-
-        /**
-         * 属性値を設定
-         *
-         * @param value 属性値
-         * @return this
-         */
-        public Attribute_ WithValue(int? value) {
-            this.value = value;
+        public Attribute WithValue(int? value) {
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static Attribute FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Attribute()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["value"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.value.HasValue)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value.Value);
+                writer.Write(int.Parse(Value.ToString()));
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static Attribute_ FromDict(JsonData data)
-        {
-            return new Attribute_()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? (int?)int.Parse(data["value"].ToString()) : null);
-        }
-
         public int CompareTo(object obj)
         {
-            var other = obj as Attribute_;
+            var other = obj as Attribute;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(value - other.value);
+                diff += (int)(Value - other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["value"] = value;
-            return data;
-        }
-	}
+    }
 }

@@ -28,72 +28,62 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetQuestModelMasterRequest : Gs2Request<GetQuestModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string QuestGroupName { set; get; }
+        public string QuestName { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public GetQuestModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** クエストグループモデル名 */
-		[UnityEngine.SerializeField]
-        public string questGroupName;
-
-        /**
-         * クエストグループモデル名を設定
-         *
-         * @param questGroupName クエストグループモデル名
-         * @return this
-         */
         public GetQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
-            this.questGroupName = questGroupName;
+            this.QuestGroupName = questGroupName;
             return this;
         }
 
-
-        /** クエスト名 */
-		[UnityEngine.SerializeField]
-        public string questName;
-
-        /**
-         * クエスト名を設定
-         *
-         * @param questName クエスト名
-         * @return this
-         */
         public GetQuestModelMasterRequest WithQuestName(string questName) {
-            this.questName = questName;
+            this.QuestName = questName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetQuestModelMasterRequest FromDict(JsonData data)
+        public static GetQuestModelMasterRequest FromJson(JsonData data)
         {
-            return new GetQuestModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                questGroupName = data.Keys.Contains("questGroupName") && data["questGroupName"] != null ? data["questGroupName"].ToString(): null,
-                questName = data.Keys.Contains("questName") && data["questName"] != null ? data["questName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetQuestModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithQuestName(!data.Keys.Contains("questName") || data["questName"] == null ? null : data["questName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["questGroupName"] = QuestGroupName,
+                ["questName"] = QuestName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["questGroupName"] = questGroupName;
-            data["questName"] = questName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (QuestGroupName != null) {
+                writer.WritePropertyName("questGroupName");
+                writer.Write(QuestGroupName.ToString());
+            }
+            if (QuestName != null) {
+                writer.WritePropertyName("questName");
+                writer.Write(QuestName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

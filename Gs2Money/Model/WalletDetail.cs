@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Money.Model
 {
+
 	[Preserve]
 	public class WalletDetail : IComparable
 	{
+        public float? Price { set; get; }
+        public int? Count { set; get; }
 
-        /** 単価 */
-        public float? price { set; get; }
-
-        /**
-         * 単価を設定
-         *
-         * @param price 単価
-         * @return this
-         */
         public WalletDetail WithPrice(float? price) {
-            this.price = price;
+            this.Price = price;
             return this;
         }
 
-        /** 所持量 */
-        public int? count { set; get; }
-
-        /**
-         * 所持量を設定
-         *
-         * @param count 所持量
-         * @return this
-         */
         public WalletDetail WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
+        }
+
+    	[Preserve]
+        public static WalletDetail FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new WalletDetail()
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["price"] = Price,
+                ["count"] = Count,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.price.HasValue)
-            {
+            if (Price != null) {
                 writer.WritePropertyName("price");
-                writer.Write(this.price.Value);
+                writer.Write(float.Parse(Price.ToString()));
             }
-            if(this.count.HasValue)
-            {
+            if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(this.count.Value);
+                writer.Write(int.Parse(Count.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static WalletDetail FromDict(JsonData data)
-        {
-            return new WalletDetail()
-                .WithPrice(data.Keys.Contains("price") && data["price"] != null ? (float?)float.Parse(data["price"].ToString()) : null)
-                .WithCount(data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as WalletDetail;
             var diff = 0;
-            if (price == null && price == other.price)
+            if (Price == null && Price == other.Price)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(price - other.price);
+                diff += (int)(Price - other.Price);
             }
-            if (count == null && count == other.count)
+            if (Count == null && Count == other.Count)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(count - other.count);
+                diff += (int)(Count - other.Count);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["price"] = price;
-            data["count"] = count;
-            return data;
-        }
-	}
+    }
 }

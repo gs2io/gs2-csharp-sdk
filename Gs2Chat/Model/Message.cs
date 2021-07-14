@@ -23,296 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Chat.Model
 {
+
 	[Preserve]
 	public class Message : IComparable
 	{
+        public string MessageId { set; get; }
+        public string RoomName { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public int? Category { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** メッセージ */
-        public string messageId { set; get; }
-
-        /**
-         * メッセージを設定
-         *
-         * @param messageId メッセージ
-         * @return this
-         */
         public Message WithMessageId(string messageId) {
-            this.messageId = messageId;
+            this.MessageId = messageId;
             return this;
         }
 
-        /** ルーム名 */
-        public string roomName { set; get; }
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public Message WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-        /** メッセージ名 */
-        public string name { set; get; }
-
-        /**
-         * メッセージ名を設定
-         *
-         * @param name メッセージ名
-         * @return this
-         */
         public Message WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 発言したユーザID */
-        public string userId { set; get; }
-
-        /**
-         * 発言したユーザIDを設定
-         *
-         * @param userId 発言したユーザID
-         * @return this
-         */
         public Message WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** メッセージの種類を分類したい時の種類番号 */
-        public int? category { set; get; }
-
-        /**
-         * メッセージの種類を分類したい時の種類番号を設定
-         *
-         * @param category メッセージの種類を分類したい時の種類番号
-         * @return this
-         */
         public Message WithCategory(int? category) {
-            this.category = category;
+            this.Category = category;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Message WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Message WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Message FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Message()
+                .WithMessageId(!data.Keys.Contains("messageId") || data["messageId"] == null ? null : data["messageId"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)int.Parse(data["category"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["messageId"] = MessageId,
+                ["roomName"] = RoomName,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["category"] = Category,
+                ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.messageId != null)
-            {
+            if (MessageId != null) {
                 writer.WritePropertyName("messageId");
-                writer.Write(this.messageId);
+                writer.Write(MessageId.ToString());
             }
-            if(this.roomName != null)
-            {
+            if (RoomName != null) {
                 writer.WritePropertyName("roomName");
-                writer.Write(this.roomName);
+                writer.Write(RoomName.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.category.HasValue)
-            {
+            if (Category != null) {
                 writer.WritePropertyName("category");
-                writer.Write(this.category.Value);
+                writer.Write(int.Parse(Category.ToString()));
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMessageNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*):message:(?<messageName>.*)");
-        if (!match.Groups["messageName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["messageName"].Value;
-    }
-
-    public static string GetRoomNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*):message:(?<messageName>.*)");
-        if (!match.Groups["roomName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["roomName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*):message:(?<messageName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*):message:(?<messageName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*):message:(?<messageName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Message FromDict(JsonData data)
-        {
-            return new Message()
-                .WithMessageId(data.Keys.Contains("messageId") && data["messageId"] != null ? data["messageId"].ToString() : null)
-                .WithRoomName(data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCategory(data.Keys.Contains("category") && data["category"] != null ? (int?)int.Parse(data["category"].ToString()) : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Message;
             var diff = 0;
-            if (messageId == null && messageId == other.messageId)
+            if (MessageId == null && MessageId == other.MessageId)
             {
                 // null and null
             }
             else
             {
-                diff += messageId.CompareTo(other.messageId);
+                diff += MessageId.CompareTo(other.MessageId);
             }
-            if (roomName == null && roomName == other.roomName)
+            if (RoomName == null && RoomName == other.RoomName)
             {
                 // null and null
             }
             else
             {
-                diff += roomName.CompareTo(other.roomName);
+                diff += RoomName.CompareTo(other.RoomName);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (category == null && category == other.category)
+            if (Category == null && Category == other.Category)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(category - other.category);
+                diff += (int)(Category - other.Category);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["messageId"] = messageId;
-            data["roomName"] = roomName;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["category"] = category;
-            data["metadata"] = metadata;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

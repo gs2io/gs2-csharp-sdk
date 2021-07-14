@@ -28,108 +28,85 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class UpdateGatheringRequest : Gs2Request<UpdateGatheringRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string GatheringName { set; get; }
+        public string AccessToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateGatheringRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ギャザリング名 */
-		[UnityEngine.SerializeField]
-        public string gatheringName;
-
-        /**
-         * ギャザリング名を設定
-         *
-         * @param gatheringName ギャザリング名
-         * @return this
-         */
         public UpdateGatheringRequest WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
 
-
-        /** 募集条件 */
-		[UnityEngine.SerializeField]
-        public List<AttributeRange> attributeRanges;
-
-        /**
-         * 募集条件を設定
-         *
-         * @param attributeRanges 募集条件
-         * @return this
-         */
-        public UpdateGatheringRequest WithAttributeRanges(List<AttributeRange> attributeRanges) {
-            this.attributeRanges = attributeRanges;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public UpdateGatheringRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public UpdateGatheringRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public UpdateGatheringRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
+            this.AttributeRanges = attributeRanges;
             return this;
         }
 
     	[Preserve]
-        public static UpdateGatheringRequest FromDict(JsonData data)
+        public static UpdateGatheringRequest FromJson(JsonData data)
         {
-            return new UpdateGatheringRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                gatheringName = data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString(): null,
-                attributeRanges = data.Keys.Contains("attributeRanges") && data["attributeRanges"] != null ? data["attributeRanges"].Cast<JsonData>().Select(value =>
-                    {
-                        return AttributeRange.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateGatheringRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithAttributeRanges(!data.Keys.Contains("attributeRanges") || data["attributeRanges"] == null ? new Gs2.Gs2Matchmaking.Model.AttributeRange[]{} : data["attributeRanges"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.AttributeRange.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["gatheringName"] = GatheringName,
+                ["accessToken"] = AccessToken,
+                ["attributeRanges"] = new JsonData(AttributeRanges == null ? new JsonData[]{} :
+                        AttributeRanges.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["gatheringName"] = gatheringName;
-            data["attributeRanges"] = new JsonData(attributeRanges.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (GatheringName != null) {
+                writer.WritePropertyName("gatheringName");
+                writer.Write(GatheringName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var attributeRange in AttributeRanges)
+            {
+                if (attributeRange != null) {
+                    attributeRange.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

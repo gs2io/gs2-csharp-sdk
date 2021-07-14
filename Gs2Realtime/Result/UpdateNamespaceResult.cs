@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Realtime.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Realtime.Result
 {
 	[Preserve]
-	public class UpdateNamespaceResult
+	[System.Serializable]
+	public class UpdateNamespaceResult : IResult
 	{
-        /** 更新したネームスペース */
-        public Namespace item { set; get; }
+        public Gs2.Gs2Realtime.Model.Namespace Item { set; get; }
 
+        public UpdateNamespaceResult WithItem(Gs2.Gs2Realtime.Model.Namespace item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateNamespaceResult FromDict(JsonData data)
+        public static UpdateNamespaceResult FromJson(JsonData data)
         {
-            return new UpdateNamespaceResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Realtime.Model.Namespace.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Realtime.Model.Namespace.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

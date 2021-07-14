@@ -28,86 +28,62 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class GetReceiveRequestRequest : Gs2Request<GetReceiveRequestRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string FromUserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetReceiveRequestRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string fromUserId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param fromUserId ユーザーID
-         * @return this
-         */
-        public GetReceiveRequestRequest WithFromUserId(string fromUserId) {
-            this.fromUserId = fromUserId;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetReceiveRequestRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetReceiveRequestRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public GetReceiveRequestRequest WithFromUserId(string fromUserId) {
+            this.FromUserId = fromUserId;
             return this;
         }
 
     	[Preserve]
-        public static GetReceiveRequestRequest FromDict(JsonData data)
+        public static GetReceiveRequestRequest FromJson(JsonData data)
         {
-            return new GetReceiveRequestRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                fromUserId = data.Keys.Contains("fromUserId") && data["fromUserId"] != null ? data["fromUserId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetReceiveRequestRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["fromUserId"] = FromUserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["fromUserId"] = fromUserId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (FromUserId != null) {
+                writer.WritePropertyName("fromUserId");
+                writer.Write(FromUserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

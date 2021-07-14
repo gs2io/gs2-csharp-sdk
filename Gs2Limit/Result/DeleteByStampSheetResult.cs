@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Limit.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Limit.Result
 {
 	[Preserve]
-	public class DeleteByStampSheetResult
+	[System.Serializable]
+	public class DeleteByStampSheetResult : IResult
 	{
-        /** カウンター */
-        public Counter item { set; get; }
+        public Gs2.Gs2Limit.Model.Counter Item { set; get; }
 
+        public DeleteByStampSheetResult WithItem(Gs2.Gs2Limit.Model.Counter item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteByStampSheetResult FromDict(JsonData data)
+        public static DeleteByStampSheetResult FromJson(JsonData data)
         {
-            return new DeleteByStampSheetResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Limit.Model.Counter.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteByStampSheetResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Limit.Model.Counter.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class CounterScopeModel : IComparable
 	{
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
 
-        /** リセットタイミング */
-        public string resetType { set; get; }
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public CounterScopeModel WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-        /** リセットをする日にち */
-        public int? resetDayOfMonth { set; get; }
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public CounterScopeModel WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-        /** リセットする曜日 */
-        public string resetDayOfWeek { set; get; }
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public CounterScopeModel WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-        /** リセット時刻 */
-        public int? resetHour { set; get; }
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public CounterScopeModel WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
+        }
+
+    	[Preserve]
+        public static CounterScopeModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CounterScopeModel()
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.resetType != null)
-            {
+            if (ResetType != null) {
                 writer.WritePropertyName("resetType");
-                writer.Write(this.resetType);
+                writer.Write(ResetType.ToString());
             }
-            if(this.resetDayOfMonth.HasValue)
-            {
+            if (ResetDayOfMonth != null) {
                 writer.WritePropertyName("resetDayOfMonth");
-                writer.Write(this.resetDayOfMonth.Value);
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
             }
-            if(this.resetDayOfWeek != null)
-            {
+            if (ResetDayOfWeek != null) {
                 writer.WritePropertyName("resetDayOfWeek");
-                writer.Write(this.resetDayOfWeek);
+                writer.Write(ResetDayOfWeek.ToString());
             }
-            if(this.resetHour.HasValue)
-            {
+            if (ResetHour != null) {
                 writer.WritePropertyName("resetHour");
-                writer.Write(this.resetHour.Value);
+                writer.Write(int.Parse(ResetHour.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static CounterScopeModel FromDict(JsonData data)
-        {
-            return new CounterScopeModel()
-                .WithResetType(data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString() : null)
-                .WithResetDayOfMonth(data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null)
-                .WithResetDayOfWeek(data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString() : null)
-                .WithResetHour(data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CounterScopeModel;
             var diff = 0;
-            if (resetType == null && resetType == other.resetType)
+            if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
             }
             else
             {
-                diff += resetType.CompareTo(other.resetType);
+                diff += ResetType.CompareTo(other.ResetType);
             }
-            if (resetDayOfMonth == null && resetDayOfMonth == other.resetDayOfMonth)
+            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetDayOfMonth - other.resetDayOfMonth);
+                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
             }
-            if (resetDayOfWeek == null && resetDayOfWeek == other.resetDayOfWeek)
+            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += resetDayOfWeek.CompareTo(other.resetDayOfWeek);
+                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
             }
-            if (resetHour == null && resetHour == other.resetHour)
+            if (ResetHour == null && ResetHour == other.ResetHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetHour - other.resetHour);
+                diff += (int)(ResetHour - other.ResetHour);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            return data;
-        }
-	}
+    }
 }

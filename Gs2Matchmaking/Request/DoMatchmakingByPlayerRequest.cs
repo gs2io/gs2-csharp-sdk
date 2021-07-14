@@ -28,72 +28,61 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DoMatchmakingByPlayerRequest : Gs2Request<DoMatchmakingByPlayerRequest>
 	{
+        public string NamespaceName { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+        public string MatchmakingContextToken { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DoMatchmakingByPlayerRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** プレイヤー情報 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Matchmaking.Model.Player player;
-
-        /**
-         * プレイヤー情報を設定
-         *
-         * @param player プレイヤー情報
-         * @return this
-         */
-        public DoMatchmakingByPlayerRequest WithPlayer(global::Gs2.Gs2Matchmaking.Model.Player player) {
-            this.player = player;
+        public DoMatchmakingByPlayerRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
+            this.Player = player;
             return this;
         }
 
-
-        /** 検索の再開に使用する マッチメイキングの状態を保持するトークン */
-		[UnityEngine.SerializeField]
-        public string matchmakingContextToken;
-
-        /**
-         * 検索の再開に使用する マッチメイキングの状態を保持するトークンを設定
-         *
-         * @param matchmakingContextToken 検索の再開に使用する マッチメイキングの状態を保持するトークン
-         * @return this
-         */
         public DoMatchmakingByPlayerRequest WithMatchmakingContextToken(string matchmakingContextToken) {
-            this.matchmakingContextToken = matchmakingContextToken;
+            this.MatchmakingContextToken = matchmakingContextToken;
             return this;
         }
-
 
     	[Preserve]
-        public static DoMatchmakingByPlayerRequest FromDict(JsonData data)
+        public static DoMatchmakingByPlayerRequest FromJson(JsonData data)
         {
-            return new DoMatchmakingByPlayerRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                player = data.Keys.Contains("player") && data["player"] != null ? global::Gs2.Gs2Matchmaking.Model.Player.FromDict(data["player"]) : null,
-                matchmakingContextToken = data.Keys.Contains("matchmakingContextToken") && data["matchmakingContextToken"] != null ? data["matchmakingContextToken"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DoMatchmakingByPlayerRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPlayer(!data.Keys.Contains("player") || data["player"] == null ? null : Gs2.Gs2Matchmaking.Model.Player.FromJson(data["player"]))
+                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["player"] = Player?.ToJson(),
+                ["matchmakingContextToken"] = MatchmakingContextToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["player"] = player.ToDict();
-            data["matchmakingContextToken"] = matchmakingContextToken;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Player != null) {
+                Player.WriteJson(writer);
+            }
+            if (MatchmakingContextToken != null) {
+                writer.WritePropertyName("matchmakingContextToken");
+                writer.Write(MatchmakingContextToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

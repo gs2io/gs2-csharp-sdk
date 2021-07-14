@@ -23,574 +23,377 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class CategoryModelMaster : IComparable
 	{
+        public string CategoryModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? MinimumValue { set; get; }
+        public long? MaximumValue { set; get; }
+        public string OrderDirection { set; get; }
+        public string Scope { set; get; }
+        public bool? UniqueByUserId { set; get; }
+        public int? CalculateFixedTimingHour { set; get; }
+        public int? CalculateFixedTimingMinute { set; get; }
+        public int? CalculateIntervalMinutes { set; get; }
+        public string EntryPeriodEventId { set; get; }
+        public string AccessPeriodEventId { set; get; }
+        public string Generation { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** カテゴリマスター */
-        public string categoryModelId { set; get; }
-
-        /**
-         * カテゴリマスターを設定
-         *
-         * @param categoryModelId カテゴリマスター
-         * @return this
-         */
         public CategoryModelMaster WithCategoryModelId(string categoryModelId) {
-            this.categoryModelId = categoryModelId;
+            this.CategoryModelId = categoryModelId;
             return this;
         }
 
-        /** カテゴリモデル名 */
-        public string name { set; get; }
-
-        /**
-         * カテゴリモデル名を設定
-         *
-         * @param name カテゴリモデル名
-         * @return this
-         */
         public CategoryModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** カテゴリマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * カテゴリマスターの説明を設定
-         *
-         * @param description カテゴリマスターの説明
-         * @return this
-         */
         public CategoryModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** カテゴリマスターのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * カテゴリマスターのメタデータを設定
-         *
-         * @param metadata カテゴリマスターのメタデータ
-         * @return this
-         */
         public CategoryModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** スコアの最小値 */
-        public long? minimumValue { set; get; }
-
-        /**
-         * スコアの最小値を設定
-         *
-         * @param minimumValue スコアの最小値
-         * @return this
-         */
         public CategoryModelMaster WithMinimumValue(long? minimumValue) {
-            this.minimumValue = minimumValue;
+            this.MinimumValue = minimumValue;
             return this;
         }
 
-        /** スコアの最大値 */
-        public long? maximumValue { set; get; }
-
-        /**
-         * スコアの最大値を設定
-         *
-         * @param maximumValue スコアの最大値
-         * @return this
-         */
         public CategoryModelMaster WithMaximumValue(long? maximumValue) {
-            this.maximumValue = maximumValue;
+            this.MaximumValue = maximumValue;
             return this;
         }
 
-        /** スコアのソート方向 */
-        public string orderDirection { set; get; }
-
-        /**
-         * スコアのソート方向を設定
-         *
-         * @param orderDirection スコアのソート方向
-         * @return this
-         */
         public CategoryModelMaster WithOrderDirection(string orderDirection) {
-            this.orderDirection = orderDirection;
+            this.OrderDirection = orderDirection;
             return this;
         }
 
-        /** ランキングの種類 */
-        public string scope { set; get; }
-
-        /**
-         * ランキングの種類を設定
-         *
-         * @param scope ランキングの種類
-         * @return this
-         */
         public CategoryModelMaster WithScope(string scope) {
-            this.scope = scope;
+            this.Scope = scope;
             return this;
         }
 
-        /** ユーザID毎にスコアを1つしか登録されないようにする */
-        public bool? uniqueByUserId { set; get; }
-
-        /**
-         * ユーザID毎にスコアを1つしか登録されないようにするを設定
-         *
-         * @param uniqueByUserId ユーザID毎にスコアを1つしか登録されないようにする
-         * @return this
-         */
         public CategoryModelMaster WithUniqueByUserId(bool? uniqueByUserId) {
-            this.uniqueByUserId = uniqueByUserId;
+            this.UniqueByUserId = uniqueByUserId;
             return this;
         }
 
-        /** スコアの固定集計開始時刻(時) */
-        public int? calculateFixedTimingHour { set; get; }
-
-        /**
-         * スコアの固定集計開始時刻(時)を設定
-         *
-         * @param calculateFixedTimingHour スコアの固定集計開始時刻(時)
-         * @return this
-         */
         public CategoryModelMaster WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
-            this.calculateFixedTimingHour = calculateFixedTimingHour;
+            this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
 
-        /** スコアの固定集計開始時刻(分) */
-        public int? calculateFixedTimingMinute { set; get; }
-
-        /**
-         * スコアの固定集計開始時刻(分)を設定
-         *
-         * @param calculateFixedTimingMinute スコアの固定集計開始時刻(分)
-         * @return this
-         */
         public CategoryModelMaster WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
-            this.calculateFixedTimingMinute = calculateFixedTimingMinute;
+            this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
 
-        /** スコアの集計間隔(分) */
-        public int? calculateIntervalMinutes { set; get; }
-
-        /**
-         * スコアの集計間隔(分)を設定
-         *
-         * @param calculateIntervalMinutes スコアの集計間隔(分)
-         * @return this
-         */
         public CategoryModelMaster WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
-            this.calculateIntervalMinutes = calculateIntervalMinutes;
+            this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
 
-        /** スコアの登録可能期間とするイベントマスター のGRN */
-        public string entryPeriodEventId { set; get; }
-
-        /**
-         * スコアの登録可能期間とするイベントマスター のGRNを設定
-         *
-         * @param entryPeriodEventId スコアの登録可能期間とするイベントマスター のGRN
-         * @return this
-         */
         public CategoryModelMaster WithEntryPeriodEventId(string entryPeriodEventId) {
-            this.entryPeriodEventId = entryPeriodEventId;
+            this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
 
-        /** アクセス可能期間とするイベントマスター のGRN */
-        public string accessPeriodEventId { set; get; }
-
-        /**
-         * アクセス可能期間とするイベントマスター のGRNを設定
-         *
-         * @param accessPeriodEventId アクセス可能期間とするイベントマスター のGRN
-         * @return this
-         */
         public CategoryModelMaster WithAccessPeriodEventId(string accessPeriodEventId) {
-            this.accessPeriodEventId = accessPeriodEventId;
+            this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
 
-        /** ランキングの世代 */
-        public string generation { set; get; }
-
-        /**
-         * ランキングの世代を設定
-         *
-         * @param generation ランキングの世代
-         * @return this
-         */
         public CategoryModelMaster WithGeneration(string generation) {
-            this.generation = generation;
+            this.Generation = generation;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public CategoryModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public CategoryModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static CategoryModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CategoryModelMaster()
+                .WithCategoryModelId(!data.Keys.Contains("categoryModelId") || data["categoryModelId"] == null ? null : data["categoryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithMinimumValue(!data.Keys.Contains("minimumValue") || data["minimumValue"] == null ? null : (long?)long.Parse(data["minimumValue"].ToString()))
+                .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : (long?)long.Parse(data["maximumValue"].ToString()))
+                .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
+                .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)int.Parse(data["calculateFixedTimingHour"].ToString()))
+                .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()))
+                .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
+                .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
+                .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["categoryModelId"] = CategoryModelId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["minimumValue"] = MinimumValue,
+                ["maximumValue"] = MaximumValue,
+                ["orderDirection"] = OrderDirection,
+                ["scope"] = Scope,
+                ["uniqueByUserId"] = UniqueByUserId,
+                ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
+                ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
+                ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
+                ["entryPeriodEventId"] = EntryPeriodEventId,
+                ["accessPeriodEventId"] = AccessPeriodEventId,
+                ["generation"] = Generation,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.categoryModelId != null)
-            {
+            if (CategoryModelId != null) {
                 writer.WritePropertyName("categoryModelId");
-                writer.Write(this.categoryModelId);
+                writer.Write(CategoryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.minimumValue.HasValue)
-            {
+            if (MinimumValue != null) {
                 writer.WritePropertyName("minimumValue");
-                writer.Write(this.minimumValue.Value);
+                writer.Write(long.Parse(MinimumValue.ToString()));
             }
-            if(this.maximumValue.HasValue)
-            {
+            if (MaximumValue != null) {
                 writer.WritePropertyName("maximumValue");
-                writer.Write(this.maximumValue.Value);
+                writer.Write(long.Parse(MaximumValue.ToString()));
             }
-            if(this.orderDirection != null)
-            {
+            if (OrderDirection != null) {
                 writer.WritePropertyName("orderDirection");
-                writer.Write(this.orderDirection);
+                writer.Write(OrderDirection.ToString());
             }
-            if(this.scope != null)
-            {
+            if (Scope != null) {
                 writer.WritePropertyName("scope");
-                writer.Write(this.scope);
+                writer.Write(Scope.ToString());
             }
-            if(this.uniqueByUserId.HasValue)
-            {
+            if (UniqueByUserId != null) {
                 writer.WritePropertyName("uniqueByUserId");
-                writer.Write(this.uniqueByUserId.Value);
+                writer.Write(bool.Parse(UniqueByUserId.ToString()));
             }
-            if(this.calculateFixedTimingHour.HasValue)
-            {
+            if (CalculateFixedTimingHour != null) {
                 writer.WritePropertyName("calculateFixedTimingHour");
-                writer.Write(this.calculateFixedTimingHour.Value);
+                writer.Write(int.Parse(CalculateFixedTimingHour.ToString()));
             }
-            if(this.calculateFixedTimingMinute.HasValue)
-            {
+            if (CalculateFixedTimingMinute != null) {
                 writer.WritePropertyName("calculateFixedTimingMinute");
-                writer.Write(this.calculateFixedTimingMinute.Value);
+                writer.Write(int.Parse(CalculateFixedTimingMinute.ToString()));
             }
-            if(this.calculateIntervalMinutes.HasValue)
-            {
+            if (CalculateIntervalMinutes != null) {
                 writer.WritePropertyName("calculateIntervalMinutes");
-                writer.Write(this.calculateIntervalMinutes.Value);
+                writer.Write(int.Parse(CalculateIntervalMinutes.ToString()));
             }
-            if(this.entryPeriodEventId != null)
-            {
+            if (EntryPeriodEventId != null) {
                 writer.WritePropertyName("entryPeriodEventId");
-                writer.Write(this.entryPeriodEventId);
+                writer.Write(EntryPeriodEventId.ToString());
             }
-            if(this.accessPeriodEventId != null)
-            {
+            if (AccessPeriodEventId != null) {
                 writer.WritePropertyName("accessPeriodEventId");
-                writer.Write(this.accessPeriodEventId);
+                writer.Write(AccessPeriodEventId.ToString());
             }
-            if(this.generation != null)
-            {
+            if (Generation != null) {
                 writer.WritePropertyName("generation");
-                writer.Write(this.generation);
+                writer.Write(Generation.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetCategoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):category:(?<categoryName>.*)");
-        if (!match.Groups["categoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["categoryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):category:(?<categoryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):category:(?<categoryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):category:(?<categoryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static CategoryModelMaster FromDict(JsonData data)
-        {
-            return new CategoryModelMaster()
-                .WithCategoryModelId(data.Keys.Contains("categoryModelId") && data["categoryModelId"] != null ? data["categoryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithMinimumValue(data.Keys.Contains("minimumValue") && data["minimumValue"] != null ? (long?)long.Parse(data["minimumValue"].ToString()) : null)
-                .WithMaximumValue(data.Keys.Contains("maximumValue") && data["maximumValue"] != null ? (long?)long.Parse(data["maximumValue"].ToString()) : null)
-                .WithOrderDirection(data.Keys.Contains("orderDirection") && data["orderDirection"] != null ? data["orderDirection"].ToString() : null)
-                .WithScope(data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString() : null)
-                .WithUniqueByUserId(data.Keys.Contains("uniqueByUserId") && data["uniqueByUserId"] != null ? (bool?)bool.Parse(data["uniqueByUserId"].ToString()) : null)
-                .WithCalculateFixedTimingHour(data.Keys.Contains("calculateFixedTimingHour") && data["calculateFixedTimingHour"] != null ? (int?)int.Parse(data["calculateFixedTimingHour"].ToString()) : null)
-                .WithCalculateFixedTimingMinute(data.Keys.Contains("calculateFixedTimingMinute") && data["calculateFixedTimingMinute"] != null ? (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()) : null)
-                .WithCalculateIntervalMinutes(data.Keys.Contains("calculateIntervalMinutes") && data["calculateIntervalMinutes"] != null ? (int?)int.Parse(data["calculateIntervalMinutes"].ToString()) : null)
-                .WithEntryPeriodEventId(data.Keys.Contains("entryPeriodEventId") && data["entryPeriodEventId"] != null ? data["entryPeriodEventId"].ToString() : null)
-                .WithAccessPeriodEventId(data.Keys.Contains("accessPeriodEventId") && data["accessPeriodEventId"] != null ? data["accessPeriodEventId"].ToString() : null)
-                .WithGeneration(data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CategoryModelMaster;
             var diff = 0;
-            if (categoryModelId == null && categoryModelId == other.categoryModelId)
+            if (CategoryModelId == null && CategoryModelId == other.CategoryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += categoryModelId.CompareTo(other.categoryModelId);
+                diff += CategoryModelId.CompareTo(other.CategoryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (minimumValue == null && minimumValue == other.minimumValue)
+            if (MinimumValue == null && MinimumValue == other.MinimumValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(minimumValue - other.minimumValue);
+                diff += (int)(MinimumValue - other.MinimumValue);
             }
-            if (maximumValue == null && maximumValue == other.maximumValue)
+            if (MaximumValue == null && MaximumValue == other.MaximumValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maximumValue - other.maximumValue);
+                diff += (int)(MaximumValue - other.MaximumValue);
             }
-            if (orderDirection == null && orderDirection == other.orderDirection)
+            if (OrderDirection == null && OrderDirection == other.OrderDirection)
             {
                 // null and null
             }
             else
             {
-                diff += orderDirection.CompareTo(other.orderDirection);
+                diff += OrderDirection.CompareTo(other.OrderDirection);
             }
-            if (scope == null && scope == other.scope)
+            if (Scope == null && Scope == other.Scope)
             {
                 // null and null
             }
             else
             {
-                diff += scope.CompareTo(other.scope);
+                diff += Scope.CompareTo(other.Scope);
             }
-            if (uniqueByUserId == null && uniqueByUserId == other.uniqueByUserId)
+            if (UniqueByUserId == null && UniqueByUserId == other.UniqueByUserId)
             {
                 // null and null
             }
             else
             {
-                diff += uniqueByUserId == other.uniqueByUserId ? 0 : 1;
+                diff += UniqueByUserId == other.UniqueByUserId ? 0 : 1;
             }
-            if (calculateFixedTimingHour == null && calculateFixedTimingHour == other.calculateFixedTimingHour)
+            if (CalculateFixedTimingHour == null && CalculateFixedTimingHour == other.CalculateFixedTimingHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(calculateFixedTimingHour - other.calculateFixedTimingHour);
+                diff += (int)(CalculateFixedTimingHour - other.CalculateFixedTimingHour);
             }
-            if (calculateFixedTimingMinute == null && calculateFixedTimingMinute == other.calculateFixedTimingMinute)
+            if (CalculateFixedTimingMinute == null && CalculateFixedTimingMinute == other.CalculateFixedTimingMinute)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(calculateFixedTimingMinute - other.calculateFixedTimingMinute);
+                diff += (int)(CalculateFixedTimingMinute - other.CalculateFixedTimingMinute);
             }
-            if (calculateIntervalMinutes == null && calculateIntervalMinutes == other.calculateIntervalMinutes)
+            if (CalculateIntervalMinutes == null && CalculateIntervalMinutes == other.CalculateIntervalMinutes)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(calculateIntervalMinutes - other.calculateIntervalMinutes);
+                diff += (int)(CalculateIntervalMinutes - other.CalculateIntervalMinutes);
             }
-            if (entryPeriodEventId == null && entryPeriodEventId == other.entryPeriodEventId)
+            if (EntryPeriodEventId == null && EntryPeriodEventId == other.EntryPeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += entryPeriodEventId.CompareTo(other.entryPeriodEventId);
+                diff += EntryPeriodEventId.CompareTo(other.EntryPeriodEventId);
             }
-            if (accessPeriodEventId == null && accessPeriodEventId == other.accessPeriodEventId)
+            if (AccessPeriodEventId == null && AccessPeriodEventId == other.AccessPeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += accessPeriodEventId.CompareTo(other.accessPeriodEventId);
+                diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
             }
-            if (generation == null && generation == other.generation)
+            if (Generation == null && Generation == other.Generation)
             {
                 // null and null
             }
             else
             {
-                diff += generation.CompareTo(other.generation);
+                diff += Generation.CompareTo(other.Generation);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["categoryModelId"] = categoryModelId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["minimumValue"] = minimumValue;
-            data["maximumValue"] = maximumValue;
-            data["orderDirection"] = orderDirection;
-            data["scope"] = scope;
-            data["uniqueByUserId"] = uniqueByUserId;
-            data["calculateFixedTimingHour"] = calculateFixedTimingHour;
-            data["calculateFixedTimingMinute"] = calculateFixedTimingMinute;
-            data["calculateIntervalMinutes"] = calculateIntervalMinutes;
-            data["entryPeriodEventId"] = entryPeriodEventId;
-            data["accessPeriodEventId"] = accessPeriodEventId;
-            data["generation"] = generation;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

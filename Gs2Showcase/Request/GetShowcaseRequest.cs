@@ -28,86 +28,62 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class GetShowcaseRequest : Gs2Request<GetShowcaseRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ShowcaseName { set; get; }
+        public string AccessToken { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetShowcaseRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string showcaseName;
-
-        /**
-         * 商品名を設定
-         *
-         * @param showcaseName 商品名
-         * @return this
-         */
         public GetShowcaseRequest WithShowcaseName(string showcaseName) {
-            this.showcaseName = showcaseName;
+            this.ShowcaseName = showcaseName;
             return this;
         }
 
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetShowcaseRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetShowcaseRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
             return this;
         }
 
     	[Preserve]
-        public static GetShowcaseRequest FromDict(JsonData data)
+        public static GetShowcaseRequest FromJson(JsonData data)
         {
-            return new GetShowcaseRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                showcaseName = data.Keys.Contains("showcaseName") && data["showcaseName"] != null ? data["showcaseName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetShowcaseRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["showcaseName"] = ShowcaseName,
+                ["accessToken"] = AccessToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["showcaseName"] = showcaseName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ShowcaseName != null) {
+                writer.WritePropertyName("showcaseName");
+                writer.Write(ShowcaseName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

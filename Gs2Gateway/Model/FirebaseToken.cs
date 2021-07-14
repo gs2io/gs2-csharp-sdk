@@ -23,255 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Gateway.Model
 {
+
 	[Preserve]
 	public class FirebaseToken : IComparable
 	{
+        public string FirebaseTokenId { set; get; }
+        public string UserId { set; get; }
+        public string Token { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** Firebaseデバイストークン のGRN */
-        public string firebaseTokenId { set; get; }
-
-        /**
-         * Firebaseデバイストークン のGRNを設定
-         *
-         * @param firebaseTokenId Firebaseデバイストークン のGRN
-         * @return this
-         */
         public FirebaseToken WithFirebaseTokenId(string firebaseTokenId) {
-            this.firebaseTokenId = firebaseTokenId;
+            this.FirebaseTokenId = firebaseTokenId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public FirebaseToken WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public FirebaseToken WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** Firebase Cloud Messaging のデバイストークン */
-        public string token { set; get; }
-
-        /**
-         * Firebase Cloud Messaging のデバイストークンを設定
-         *
-         * @param token Firebase Cloud Messaging のデバイストークン
-         * @return this
-         */
         public FirebaseToken WithToken(string token) {
-            this.token = token;
+            this.Token = token;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public FirebaseToken WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public FirebaseToken WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static FirebaseToken FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new FirebaseToken()
+                .WithFirebaseTokenId(!data.Keys.Contains("firebaseTokenId") || data["firebaseTokenId"] == null ? null : data["firebaseTokenId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["firebaseTokenId"] = FirebaseTokenId,
+                ["userId"] = UserId,
+                ["token"] = Token,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.firebaseTokenId != null)
-            {
+            if (FirebaseTokenId != null) {
                 writer.WritePropertyName("firebaseTokenId");
-                writer.Write(this.firebaseTokenId);
+                writer.Write(FirebaseTokenId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.token != null)
-            {
+            if (Token != null) {
                 writer.WritePropertyName("token");
-                writer.Write(this.token);
+                writer.Write(Token.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):gateway:(?<namespaceName>.*):user:(?<userId>.*):firebase:token");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):gateway:(?<namespaceName>.*):user:(?<userId>.*):firebase:token");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):gateway:(?<namespaceName>.*):user:(?<userId>.*):firebase:token");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):gateway:(?<namespaceName>.*):user:(?<userId>.*):firebase:token");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static FirebaseToken FromDict(JsonData data)
-        {
-            return new FirebaseToken()
-                .WithFirebaseTokenId(data.Keys.Contains("firebaseTokenId") && data["firebaseTokenId"] != null ? data["firebaseTokenId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithToken(data.Keys.Contains("token") && data["token"] != null ? data["token"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as FirebaseToken;
             var diff = 0;
-            if (firebaseTokenId == null && firebaseTokenId == other.firebaseTokenId)
+            if (FirebaseTokenId == null && FirebaseTokenId == other.FirebaseTokenId)
             {
                 // null and null
             }
             else
             {
-                diff += firebaseTokenId.CompareTo(other.firebaseTokenId);
+                diff += FirebaseTokenId.CompareTo(other.FirebaseTokenId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (userId == null && userId == other.userId)
+            if (Token == null && Token == other.Token)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += Token.CompareTo(other.Token);
             }
-            if (token == null && token == other.token)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += token.CompareTo(other.token);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["firebaseTokenId"] = firebaseTokenId;
-            data["ownerId"] = ownerId;
-            data["userId"] = userId;
-            data["token"] = token;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetCategoryModelMasterRequest : Gs2Request<GetCategoryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリモデル名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリモデル名を設定
-         *
-         * @param categoryName カテゴリモデル名
-         * @return this
-         */
         public GetCategoryModelMasterRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetCategoryModelMasterRequest FromDict(JsonData data)
+        public static GetCategoryModelMasterRequest FromJson(JsonData data)
         {
-            return new GetCategoryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCategoryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

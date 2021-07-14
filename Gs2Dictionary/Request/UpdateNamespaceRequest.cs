@@ -28,108 +28,83 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; }
+        public Gs2.Gs2Dictionary.Model.ScriptSetting DuplicateEntryScript { set; get; }
+        public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** エントリー登録時に実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Dictionary.Model.ScriptSetting entryScript;
-
-        /**
-         * エントリー登録時に実行するスクリプトを設定
-         *
-         * @param entryScript エントリー登録時に実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithEntryScript(global::Gs2.Gs2Dictionary.Model.ScriptSetting entryScript) {
-            this.entryScript = entryScript;
+        public UpdateNamespaceRequest WithEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting entryScript) {
+            this.EntryScript = entryScript;
             return this;
         }
 
-
-        /** 登録済みのエントリーを再度登録しようとした時に実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Dictionary.Model.ScriptSetting duplicateEntryScript;
-
-        /**
-         * 登録済みのエントリーを再度登録しようとした時に実行するスクリプトを設定
-         *
-         * @param duplicateEntryScript 登録済みのエントリーを再度登録しようとした時に実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithDuplicateEntryScript(global::Gs2.Gs2Dictionary.Model.ScriptSetting duplicateEntryScript) {
-            this.duplicateEntryScript = duplicateEntryScript;
+        public UpdateNamespaceRequest WithDuplicateEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting duplicateEntryScript) {
+            this.DuplicateEntryScript = duplicateEntryScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Dictionary.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Dictionary.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Dictionary.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                entryScript = data.Keys.Contains("entryScript") && data["entryScript"] != null ? global::Gs2.Gs2Dictionary.Model.ScriptSetting.FromDict(data["entryScript"]) : null,
-                duplicateEntryScript = data.Keys.Contains("duplicateEntryScript") && data["duplicateEntryScript"] != null ? global::Gs2.Gs2Dictionary.Model.ScriptSetting.FromDict(data["duplicateEntryScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Dictionary.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithEntryScript(!data.Keys.Contains("entryScript") || data["entryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["entryScript"]))
+                .WithDuplicateEntryScript(!data.Keys.Contains("duplicateEntryScript") || data["duplicateEntryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["duplicateEntryScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Dictionary.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["entryScript"] = EntryScript?.ToJson(),
+                ["duplicateEntryScript"] = DuplicateEntryScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["entryScript"] = entryScript.ToDict();
-            data["duplicateEntryScript"] = duplicateEntryScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (EntryScript != null) {
+                EntryScript.WriteJson(writer);
+            }
+            if (DuplicateEntryScript != null) {
+                DuplicateEntryScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

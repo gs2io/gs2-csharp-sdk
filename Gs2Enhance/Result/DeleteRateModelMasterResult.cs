@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Enhance.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Enhance.Result
 {
 	[Preserve]
-	public class DeleteRateModelMasterResult
+	[System.Serializable]
+	public class DeleteRateModelMasterResult : IResult
 	{
-        /** 削除した強化レートマスター */
-        public RateModelMaster item { set; get; }
+        public Gs2.Gs2Enhance.Model.RateModelMaster Item { set; get; }
 
+        public DeleteRateModelMasterResult WithItem(Gs2.Gs2Enhance.Model.RateModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteRateModelMasterResult FromDict(JsonData data)
+        public static DeleteRateModelMasterResult FromJson(JsonData data)
         {
-            return new DeleteRateModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Enhance.Model.RateModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteRateModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enhance.Model.RateModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

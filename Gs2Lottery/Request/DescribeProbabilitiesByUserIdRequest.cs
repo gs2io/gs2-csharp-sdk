@@ -28,90 +28,62 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribeProbabilitiesByUserIdRequest : Gs2Request<DescribeProbabilitiesByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LotteryName { set; get; }
+        public string UserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeProbabilitiesByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 抽選モデルの種類名 */
-		[UnityEngine.SerializeField]
-        public string lotteryName;
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param lotteryName 抽選モデルの種類名
-         * @return this
-         */
         public DescribeProbabilitiesByUserIdRequest WithLotteryName(string lotteryName) {
-            this.lotteryName = lotteryName;
+            this.LotteryName = lotteryName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DescribeProbabilitiesByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DescribeProbabilitiesByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DescribeProbabilitiesByUserIdRequest FromDict(JsonData data)
+        public static DescribeProbabilitiesByUserIdRequest FromJson(JsonData data)
         {
-            return new DescribeProbabilitiesByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                lotteryName = data.Keys.Contains("lotteryName") && data["lotteryName"] != null ? data["lotteryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeProbabilitiesByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLotteryName(!data.Keys.Contains("lotteryName") || data["lotteryName"] == null ? null : data["lotteryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["lotteryName"] = LotteryName,
+                ["userId"] = UserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["lotteryName"] = lotteryName;
-            data["userId"] = userId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LotteryName != null) {
+                writer.WritePropertyName("lotteryName");
+                writer.Write(LotteryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

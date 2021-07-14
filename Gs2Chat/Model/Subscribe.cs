@@ -23,251 +23,155 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Chat.Model
 {
+
 	[Preserve]
 	public class Subscribe : IComparable
 	{
+        public string SubscribeId { set; get; }
+        public string UserId { set; get; }
+        public string RoomName { set; get; }
+        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** 購読 */
-        public string subscribeId { set; get; }
-
-        /**
-         * 購読を設定
-         *
-         * @param subscribeId 購読
-         * @return this
-         */
         public Subscribe WithSubscribeId(string subscribeId) {
-            this.subscribeId = subscribeId;
+            this.SubscribeId = subscribeId;
             return this;
         }
 
-        /** 購読するユーザID */
-        public string userId { set; get; }
-
-        /**
-         * 購読するユーザIDを設定
-         *
-         * @param userId 購読するユーザID
-         * @return this
-         */
         public Subscribe WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 購読するルーム名 */
-        public string roomName { set; get; }
-
-        /**
-         * 購読するルーム名を設定
-         *
-         * @param roomName 購読するルーム名
-         * @return this
-         */
         public Subscribe WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-        /** 新着メッセージ通知を受け取るカテゴリリスト */
-        public List<NotificationType> notificationTypes { set; get; }
-
-        /**
-         * 新着メッセージ通知を受け取るカテゴリリストを設定
-         *
-         * @param notificationTypes 新着メッセージ通知を受け取るカテゴリリスト
-         * @return this
-         */
-        public Subscribe WithNotificationTypes(List<NotificationType> notificationTypes) {
-            this.notificationTypes = notificationTypes;
+        public Subscribe WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
+            this.NotificationTypes = notificationTypes;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Subscribe WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Subscribe FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Subscribe()
+                .WithSubscribeId(!data.Keys.Contains("subscribeId") || data["subscribeId"] == null ? null : data["subscribeId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Chat.Model.NotificationType.FromJson(v);
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["subscribeId"] = SubscribeId,
+                ["userId"] = UserId,
+                ["roomName"] = RoomName,
+                ["notificationTypes"] = new JsonData(NotificationTypes == null ? new JsonData[]{} :
+                        NotificationTypes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.subscribeId != null)
-            {
+            if (SubscribeId != null) {
                 writer.WritePropertyName("subscribeId");
-                writer.Write(this.subscribeId);
+                writer.Write(SubscribeId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.roomName != null)
-            {
+            if (RoomName != null) {
                 writer.WritePropertyName("roomName");
-                writer.Write(this.roomName);
+                writer.Write(RoomName.ToString());
             }
-            if(this.notificationTypes != null)
-            {
+            if (NotificationTypes != null) {
                 writer.WritePropertyName("notificationTypes");
                 writer.WriteArrayStart();
-                foreach(var item in this.notificationTypes)
+                foreach (var notificationType in NotificationTypes)
                 {
-                    item.WriteJson(writer);
+                    if (notificationType != null) {
+                        notificationType.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRoomNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):user:(?<userId>.*):room:(?<roomName>.*):subscribe");
-        if (!match.Groups["roomName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["roomName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):user:(?<userId>.*):room:(?<roomName>.*):subscribe");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):user:(?<userId>.*):room:(?<roomName>.*):subscribe");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):user:(?<userId>.*):room:(?<roomName>.*):subscribe");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):user:(?<userId>.*):room:(?<roomName>.*):subscribe");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Subscribe FromDict(JsonData data)
-        {
-            return new Subscribe()
-                .WithSubscribeId(data.Keys.Contains("subscribeId") && data["subscribeId"] != null ? data["subscribeId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithRoomName(data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString() : null)
-                .WithNotificationTypes(data.Keys.Contains("notificationTypes") && data["notificationTypes"] != null ? data["notificationTypes"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Chat.Model.NotificationType.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Subscribe;
             var diff = 0;
-            if (subscribeId == null && subscribeId == other.subscribeId)
+            if (SubscribeId == null && SubscribeId == other.SubscribeId)
             {
                 // null and null
             }
             else
             {
-                diff += subscribeId.CompareTo(other.subscribeId);
+                diff += SubscribeId.CompareTo(other.SubscribeId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (roomName == null && roomName == other.roomName)
+            if (RoomName == null && RoomName == other.RoomName)
             {
                 // null and null
             }
             else
             {
-                diff += roomName.CompareTo(other.roomName);
+                diff += RoomName.CompareTo(other.RoomName);
             }
-            if (notificationTypes == null && notificationTypes == other.notificationTypes)
+            if (NotificationTypes == null && NotificationTypes == other.NotificationTypes)
             {
                 // null and null
             }
             else
             {
-                diff += notificationTypes.Count - other.notificationTypes.Count;
-                for (var i = 0; i < notificationTypes.Count; i++)
+                diff += NotificationTypes.Length - other.NotificationTypes.Length;
+                for (var i = 0; i < NotificationTypes.Length; i++)
                 {
-                    diff += notificationTypes[i].CompareTo(other.notificationTypes[i]);
+                    diff += NotificationTypes[i].CompareTo(other.NotificationTypes[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["subscribeId"] = subscribeId;
-            data["userId"] = userId;
-            data["roomName"] = roomName;
-            data["notificationTypes"] = new JsonData(notificationTypes.Select(item => item.ToDict()));
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

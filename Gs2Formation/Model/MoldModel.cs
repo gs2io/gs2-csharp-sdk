@@ -23,255 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class MoldModel : IComparable
 	{
+        public string MoldModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? InitialMaxCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
+        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
 
-        /** フォームの保存領域マスター */
-        public string moldModelId { set; get; }
-
-        /**
-         * フォームの保存領域マスターを設定
-         *
-         * @param moldModelId フォームの保存領域マスター
-         * @return this
-         */
         public MoldModel WithMoldModelId(string moldModelId) {
-            this.moldModelId = moldModelId;
+            this.MoldModelId = moldModelId;
             return this;
         }
 
-        /** フォームの保存領域名 */
-        public string name { set; get; }
-
-        /**
-         * フォームの保存領域名を設定
-         *
-         * @param name フォームの保存領域名
-         * @return this
-         */
         public MoldModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public MoldModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** フォームを保存できる初期キャパシティ */
-        public int? initialMaxCapacity { set; get; }
-
-        /**
-         * フォームを保存できる初期キャパシティを設定
-         *
-         * @param initialMaxCapacity フォームを保存できる初期キャパシティ
-         * @return this
-         */
         public MoldModel WithInitialMaxCapacity(int? initialMaxCapacity) {
-            this.initialMaxCapacity = initialMaxCapacity;
+            this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
 
-        /** フォームを保存できるキャパシティ */
-        public int? maxCapacity { set; get; }
-
-        /**
-         * フォームを保存できるキャパシティを設定
-         *
-         * @param maxCapacity フォームを保存できるキャパシティ
-         * @return this
-         */
         public MoldModel WithMaxCapacity(int? maxCapacity) {
-            this.maxCapacity = maxCapacity;
+            this.MaxCapacity = maxCapacity;
             return this;
         }
 
-        /** None */
-        public Gs2.Gs2Formation.Model.FormModel formModel { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param formModel None
-         * @return this
-         */
         public MoldModel WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
-            this.formModel = formModel;
+            this.FormModel = formModel;
             return this;
+        }
+
+    	[Preserve]
+        public static MoldModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new MoldModel()
+                .WithMoldModelId(!data.Keys.Contains("moldModelId") || data["moldModelId"] == null ? null : data["moldModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInitialMaxCapacity(!data.Keys.Contains("initialMaxCapacity") || data["initialMaxCapacity"] == null ? null : (int?)int.Parse(data["initialMaxCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
+                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["moldModelId"] = MoldModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["initialMaxCapacity"] = InitialMaxCapacity,
+                ["maxCapacity"] = MaxCapacity,
+                ["formModel"] = FormModel?.ToJson(),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.moldModelId != null)
-            {
+            if (MoldModelId != null) {
                 writer.WritePropertyName("moldModelId");
-                writer.Write(this.moldModelId);
+                writer.Write(MoldModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.initialMaxCapacity.HasValue)
-            {
+            if (InitialMaxCapacity != null) {
                 writer.WritePropertyName("initialMaxCapacity");
-                writer.Write(this.initialMaxCapacity.Value);
+                writer.Write(int.Parse(InitialMaxCapacity.ToString()));
             }
-            if(this.maxCapacity.HasValue)
-            {
+            if (MaxCapacity != null) {
                 writer.WritePropertyName("maxCapacity");
-                writer.Write(this.maxCapacity.Value);
+                writer.Write(int.Parse(MaxCapacity.ToString()));
             }
-            if(this.formModel != null)
-            {
+            if (FormModel != null) {
                 writer.WritePropertyName("formModel");
-                this.formModel.WriteJson(writer);
+                FormModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMoldNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<moldName>.*)");
-        if (!match.Groups["moldName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["moldName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<moldName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<moldName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<moldName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static MoldModel FromDict(JsonData data)
-        {
-            return new MoldModel()
-                .WithMoldModelId(data.Keys.Contains("moldModelId") && data["moldModelId"] != null ? data["moldModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithInitialMaxCapacity(data.Keys.Contains("initialMaxCapacity") && data["initialMaxCapacity"] != null ? (int?)int.Parse(data["initialMaxCapacity"].ToString()) : null)
-                .WithMaxCapacity(data.Keys.Contains("maxCapacity") && data["maxCapacity"] != null ? (int?)int.Parse(data["maxCapacity"].ToString()) : null)
-                .WithFormModel(data.Keys.Contains("formModel") && data["formModel"] != null ? Gs2.Gs2Formation.Model.FormModel.FromDict(data["formModel"]) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as MoldModel;
             var diff = 0;
-            if (moldModelId == null && moldModelId == other.moldModelId)
+            if (MoldModelId == null && MoldModelId == other.MoldModelId)
             {
                 // null and null
             }
             else
             {
-                diff += moldModelId.CompareTo(other.moldModelId);
+                diff += MoldModelId.CompareTo(other.MoldModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (initialMaxCapacity == null && initialMaxCapacity == other.initialMaxCapacity)
+            if (InitialMaxCapacity == null && InitialMaxCapacity == other.InitialMaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(initialMaxCapacity - other.initialMaxCapacity);
+                diff += (int)(InitialMaxCapacity - other.InitialMaxCapacity);
             }
-            if (maxCapacity == null && maxCapacity == other.maxCapacity)
+            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxCapacity - other.maxCapacity);
+                diff += (int)(MaxCapacity - other.MaxCapacity);
             }
-            if (formModel == null && formModel == other.formModel)
+            if (FormModel == null && FormModel == other.FormModel)
             {
                 // null and null
             }
             else
             {
-                diff += formModel.CompareTo(other.formModel);
+                diff += FormModel.CompareTo(other.FormModel);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["moldModelId"] = moldModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["initialMaxCapacity"] = initialMaxCapacity;
-            data["maxCapacity"] = maxCapacity;
-            data["formModel"] = formModel.ToDict();
-            return data;
-        }
-	}
+    }
 }

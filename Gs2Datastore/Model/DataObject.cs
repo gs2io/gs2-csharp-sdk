@@ -23,425 +23,274 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Datastore.Model
 {
+
 	[Preserve]
 	public class DataObject : IComparable
 	{
+        public string DataObjectId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string Scope { set; get; }
+        public string[] AllowUserIds { set; get; }
+        public string Platform { set; get; }
+        public string Status { set; get; }
+        public string Generation { set; get; }
+        public string PreviousGeneration { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** データオブジェクト */
-        public string dataObjectId { set; get; }
-
-        /**
-         * データオブジェクトを設定
-         *
-         * @param dataObjectId データオブジェクト
-         * @return this
-         */
         public DataObject WithDataObjectId(string dataObjectId) {
-            this.dataObjectId = dataObjectId;
+            this.DataObjectId = dataObjectId;
             return this;
         }
 
-        /** データの名前 */
-        public string name { set; get; }
-
-        /**
-         * データの名前を設定
-         *
-         * @param name データの名前
-         * @return this
-         */
         public DataObject WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DataObject WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ファイルのアクセス権 */
-        public string scope { set; get; }
-
-        /**
-         * ファイルのアクセス権を設定
-         *
-         * @param scope ファイルのアクセス権
-         * @return this
-         */
         public DataObject WithScope(string scope) {
-            this.scope = scope;
+            this.Scope = scope;
             return this;
         }
 
-        /** 公開するユーザIDリスト */
-        public List<string> allowUserIds { set; get; }
-
-        /**
-         * 公開するユーザIDリストを設定
-         *
-         * @param allowUserIds 公開するユーザIDリスト
-         * @return this
-         */
-        public DataObject WithAllowUserIds(List<string> allowUserIds) {
-            this.allowUserIds = allowUserIds;
+        public DataObject WithAllowUserIds(string[] allowUserIds) {
+            this.AllowUserIds = allowUserIds;
             return this;
         }
 
-        /** プラットフォーム */
-        public string platform { set; get; }
-
-        /**
-         * プラットフォームを設定
-         *
-         * @param platform プラットフォーム
-         * @return this
-         */
         public DataObject WithPlatform(string platform) {
-            this.platform = platform;
+            this.Platform = platform;
             return this;
         }
 
-        /** 状態 */
-        public string status { set; get; }
-
-        /**
-         * 状態を設定
-         *
-         * @param status 状態
-         * @return this
-         */
         public DataObject WithStatus(string status) {
-            this.status = status;
+            this.Status = status;
             return this;
         }
 
-        /** データの世代 */
-        public string generation { set; get; }
-
-        /**
-         * データの世代を設定
-         *
-         * @param generation データの世代
-         * @return this
-         */
         public DataObject WithGeneration(string generation) {
-            this.generation = generation;
+            this.Generation = generation;
             return this;
         }
 
-        /** 以前有効だったデータの世代 */
-        public string previousGeneration { set; get; }
-
-        /**
-         * 以前有効だったデータの世代を設定
-         *
-         * @param previousGeneration 以前有効だったデータの世代
-         * @return this
-         */
         public DataObject WithPreviousGeneration(string previousGeneration) {
-            this.previousGeneration = previousGeneration;
+            this.PreviousGeneration = previousGeneration;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public DataObject WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public DataObject WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static DataObject FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DataObject()
+                .WithDataObjectId(!data.Keys.Contains("dataObjectId") || data["dataObjectId"] == null ? null : data["dataObjectId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithPlatform(!data.Keys.Contains("platform") || data["platform"] == null ? null : data["platform"].ToString())
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
+                .WithPreviousGeneration(!data.Keys.Contains("previousGeneration") || data["previousGeneration"] == null ? null : data["previousGeneration"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["dataObjectId"] = DataObjectId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["scope"] = Scope,
+                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                        AllowUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["platform"] = Platform,
+                ["status"] = Status,
+                ["generation"] = Generation,
+                ["previousGeneration"] = PreviousGeneration,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.dataObjectId != null)
-            {
+            if (DataObjectId != null) {
                 writer.WritePropertyName("dataObjectId");
-                writer.Write(this.dataObjectId);
+                writer.Write(DataObjectId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.scope != null)
-            {
+            if (Scope != null) {
                 writer.WritePropertyName("scope");
-                writer.Write(this.scope);
+                writer.Write(Scope.ToString());
             }
-            if(this.allowUserIds != null)
-            {
+            if (AllowUserIds != null) {
                 writer.WritePropertyName("allowUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.allowUserIds)
+                foreach (var allowUserId in AllowUserIds)
                 {
-                    writer.Write(item);
+                    if (allowUserId != null) {
+                        writer.Write(allowUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.platform != null)
-            {
+            if (Platform != null) {
                 writer.WritePropertyName("platform");
-                writer.Write(this.platform);
+                writer.Write(Platform.ToString());
             }
-            if(this.status != null)
-            {
+            if (Status != null) {
                 writer.WritePropertyName("status");
-                writer.Write(this.status);
+                writer.Write(Status.ToString());
             }
-            if(this.generation != null)
-            {
+            if (Generation != null) {
                 writer.WritePropertyName("generation");
-                writer.Write(this.generation);
+                writer.Write(Generation.ToString());
             }
-            if(this.previousGeneration != null)
-            {
+            if (PreviousGeneration != null) {
                 writer.WritePropertyName("previousGeneration");
-                writer.Write(this.previousGeneration);
+                writer.Write(PreviousGeneration.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetDataObjectNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*)");
-        if (!match.Groups["dataObjectName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["dataObjectName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static DataObject FromDict(JsonData data)
-        {
-            return new DataObject()
-                .WithDataObjectId(data.Keys.Contains("dataObjectId") && data["dataObjectId"] != null ? data["dataObjectId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithScope(data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString() : null)
-                .WithAllowUserIds(data.Keys.Contains("allowUserIds") && data["allowUserIds"] != null ? data["allowUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithPlatform(data.Keys.Contains("platform") && data["platform"] != null ? data["platform"].ToString() : null)
-                .WithStatus(data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null)
-                .WithGeneration(data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString() : null)
-                .WithPreviousGeneration(data.Keys.Contains("previousGeneration") && data["previousGeneration"] != null ? data["previousGeneration"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DataObject;
             var diff = 0;
-            if (dataObjectId == null && dataObjectId == other.dataObjectId)
+            if (DataObjectId == null && DataObjectId == other.DataObjectId)
             {
                 // null and null
             }
             else
             {
-                diff += dataObjectId.CompareTo(other.dataObjectId);
+                diff += DataObjectId.CompareTo(other.DataObjectId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (scope == null && scope == other.scope)
+            if (Scope == null && Scope == other.Scope)
             {
                 // null and null
             }
             else
             {
-                diff += scope.CompareTo(other.scope);
+                diff += Scope.CompareTo(other.Scope);
             }
-            if (allowUserIds == null && allowUserIds == other.allowUserIds)
+            if (AllowUserIds == null && AllowUserIds == other.AllowUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += allowUserIds.Count - other.allowUserIds.Count;
-                for (var i = 0; i < allowUserIds.Count; i++)
+                diff += AllowUserIds.Length - other.AllowUserIds.Length;
+                for (var i = 0; i < AllowUserIds.Length; i++)
                 {
-                    diff += allowUserIds[i].CompareTo(other.allowUserIds[i]);
+                    diff += AllowUserIds[i].CompareTo(other.AllowUserIds[i]);
                 }
             }
-            if (platform == null && platform == other.platform)
+            if (Platform == null && Platform == other.Platform)
             {
                 // null and null
             }
             else
             {
-                diff += platform.CompareTo(other.platform);
+                diff += Platform.CompareTo(other.Platform);
             }
-            if (status == null && status == other.status)
+            if (Status == null && Status == other.Status)
             {
                 // null and null
             }
             else
             {
-                diff += status.CompareTo(other.status);
+                diff += Status.CompareTo(other.Status);
             }
-            if (generation == null && generation == other.generation)
+            if (Generation == null && Generation == other.Generation)
             {
                 // null and null
             }
             else
             {
-                diff += generation.CompareTo(other.generation);
+                diff += Generation.CompareTo(other.Generation);
             }
-            if (previousGeneration == null && previousGeneration == other.previousGeneration)
+            if (PreviousGeneration == null && PreviousGeneration == other.PreviousGeneration)
             {
                 // null and null
             }
             else
             {
-                diff += previousGeneration.CompareTo(other.previousGeneration);
+                diff += PreviousGeneration.CompareTo(other.PreviousGeneration);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["dataObjectId"] = dataObjectId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["scope"] = scope;
-            data["allowUserIds"] = new JsonData(allowUserIds);
-            data["platform"] = platform;
-            data["status"] = status;
-            data["generation"] = generation;
-            data["previousGeneration"] = previousGeneration;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

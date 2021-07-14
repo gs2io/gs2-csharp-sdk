@@ -28,112 +28,94 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UpdateRoomRequest : Gs2Request<UpdateRoomRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public string Metadata { set; get; }
+        public string Password { set; get; }
+        public string[] WhiteListUserIds { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateRoomRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public UpdateRoomRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public UpdateRoomRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** メッセージを投稿するために必要となるパスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * メッセージを投稿するために必要となるパスワードを設定
-         *
-         * @param password メッセージを投稿するために必要となるパスワード
-         * @return this
-         */
         public UpdateRoomRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
 
-
-        /** ルームに参加可能なユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> whiteListUserIds;
-
-        /**
-         * ルームに参加可能なユーザIDリストを設定
-         *
-         * @param whiteListUserIds ルームに参加可能なユーザIDリスト
-         * @return this
-         */
-        public UpdateRoomRequest WithWhiteListUserIds(List<string> whiteListUserIds) {
-            this.whiteListUserIds = whiteListUserIds;
+        public UpdateRoomRequest WithWhiteListUserIds(string[] whiteListUserIds) {
+            this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateRoomRequest FromDict(JsonData data)
+        public static UpdateRoomRequest FromJson(JsonData data)
         {
-            return new UpdateRoomRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
-                whiteListUserIds = data.Keys.Contains("whiteListUserIds") && data["whiteListUserIds"] != null ? data["whiteListUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateRoomRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
+                ["metadata"] = Metadata,
+                ["password"] = Password,
+                ["whiteListUserIds"] = new JsonData(WhiteListUserIds == null ? new JsonData[]{} :
+                        WhiteListUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            data["metadata"] = metadata;
-            data["password"] = password;
-            data["whiteListUserIds"] = new JsonData(whiteListUserIds);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var whiteListUserId in WhiteListUserIds)
+            {
+                writer.Write(whiteListUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

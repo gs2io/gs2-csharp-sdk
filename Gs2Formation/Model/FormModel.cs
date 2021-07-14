@@ -23,222 +23,135 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class FormModel : IComparable
 	{
+        public string FormModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
 
-        /** フォームマスター */
-        public string formModelId { set; get; }
-
-        /**
-         * フォームマスターを設定
-         *
-         * @param formModelId フォームマスター
-         * @return this
-         */
         public FormModel WithFormModelId(string formModelId) {
-            this.formModelId = formModelId;
+            this.FormModelId = formModelId;
             return this;
         }
 
-        /** フォームの種類名 */
-        public string name { set; get; }
-
-        /**
-         * フォームの種類名を設定
-         *
-         * @param name フォームの種類名
-         * @return this
-         */
         public FormModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** フォームの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * フォームの種類のメタデータを設定
-         *
-         * @param metadata フォームの種類のメタデータ
-         * @return this
-         */
         public FormModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** スリットリスト */
-        public List<SlotModel> slots { set; get; }
-
-        /**
-         * スリットリストを設定
-         *
-         * @param slots スリットリスト
-         * @return this
-         */
-        public FormModel WithSlots(List<SlotModel> slots) {
-            this.slots = slots;
+        public FormModel WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
+            this.Slots = slots;
             return this;
+        }
+
+    	[Preserve]
+        public static FormModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new FormModel()
+                .WithFormModelId(!data.Keys.Contains("formModelId") || data["formModelId"] == null ? null : data["formModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.SlotModel[]{} : data["slots"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.SlotModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["formModelId"] = FormModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["slots"] = new JsonData(Slots == null ? new JsonData[]{} :
+                        Slots.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.formModelId != null)
-            {
+            if (FormModelId != null) {
                 writer.WritePropertyName("formModelId");
-                writer.Write(this.formModelId);
+                writer.Write(FormModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.slots != null)
-            {
+            if (Slots != null) {
                 writer.WritePropertyName("slots");
                 writer.WriteArrayStart();
-                foreach(var item in this.slots)
+                foreach (var slot in Slots)
                 {
-                    item.WriteJson(writer);
+                    if (slot != null) {
+                        slot.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetFormModelNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<formModelName>.*)");
-        if (!match.Groups["formModelName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["formModelName"].Value;
-    }
-
-    public static string GetMoldNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<formModelName>.*)");
-        if (!match.Groups["moldName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["moldName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<formModelName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<formModelName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):model:(?<formModelName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static FormModel FromDict(JsonData data)
-        {
-            return new FormModel()
-                .WithFormModelId(data.Keys.Contains("formModelId") && data["formModelId"] != null ? data["formModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithSlots(data.Keys.Contains("slots") && data["slots"] != null ? data["slots"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Formation.Model.SlotModel.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as FormModel;
             var diff = 0;
-            if (formModelId == null && formModelId == other.formModelId)
+            if (FormModelId == null && FormModelId == other.FormModelId)
             {
                 // null and null
             }
             else
             {
-                diff += formModelId.CompareTo(other.formModelId);
+                diff += FormModelId.CompareTo(other.FormModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (slots == null && slots == other.slots)
+            if (Slots == null && Slots == other.Slots)
             {
                 // null and null
             }
             else
             {
-                diff += slots.Count - other.slots.Count;
-                for (var i = 0; i < slots.Count; i++)
+                diff += Slots.Length - other.Slots.Length;
+                for (var i = 0; i < Slots.Length; i++)
                 {
-                    diff += slots[i].CompareTo(other.slots[i]);
+                    diff += Slots[i].CompareTo(other.Slots[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["formModelId"] = formModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["slots"] = new JsonData(slots.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -28,36 +28,38 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class DescribeRawEventsRequest : Gs2Request<DescribeRawEventsRequest>
 	{
+        public string NamespaceName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeRawEventsRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
     	[Preserve]
-        public static DescribeRawEventsRequest FromDict(JsonData data)
+        public static DescribeRawEventsRequest FromJson(JsonData data)
         {
-            return new DescribeRawEventsRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeRawEventsRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

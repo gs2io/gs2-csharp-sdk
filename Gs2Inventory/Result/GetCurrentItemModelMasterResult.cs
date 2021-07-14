@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inventory.Result
 {
 	[Preserve]
-	public class GetCurrentItemModelMasterResult
+	[System.Serializable]
+	public class GetCurrentItemModelMasterResult : IResult
 	{
-        /** 現在有効な所持品マスター */
-        public CurrentItemModelMaster item { set; get; }
+        public Gs2.Gs2Inventory.Model.CurrentItemModelMaster Item { set; get; }
 
+        public GetCurrentItemModelMasterResult WithItem(Gs2.Gs2Inventory.Model.CurrentItemModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetCurrentItemModelMasterResult FromDict(JsonData data)
+        public static GetCurrentItemModelMasterResult FromJson(JsonData data)
         {
-            return new GetCurrentItemModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Inventory.Model.CurrentItemModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentItemModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.CurrentItemModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

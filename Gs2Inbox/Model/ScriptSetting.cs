@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inbox.Model
 {
+
 	[Preserve]
 	public class ScriptSetting : IComparable
 	{
+        public string TriggerScriptId { set; get; }
+        public string DoneTriggerTargetType { set; get; }
+        public string DoneTriggerScriptId { set; get; }
+        public string DoneTriggerQueueNamespaceId { set; get; }
 
-        /** 実行前に使用する GS2-Script のスクリプト のGRN */
-        public string triggerScriptId { set; get; }
-
-        /**
-         * 実行前に使用する GS2-Script のスクリプト のGRNを設定
-         *
-         * @param triggerScriptId 実行前に使用する GS2-Script のスクリプト のGRN
-         * @return this
-         */
         public ScriptSetting WithTriggerScriptId(string triggerScriptId) {
-            this.triggerScriptId = triggerScriptId;
+            this.TriggerScriptId = triggerScriptId;
             return this;
         }
 
-        /** 完了通知の通知先 */
-        public string doneTriggerTargetType { set; get; }
-
-        /**
-         * 完了通知の通知先を設定
-         *
-         * @param doneTriggerTargetType 完了通知の通知先
-         * @return this
-         */
         public ScriptSetting WithDoneTriggerTargetType(string doneTriggerTargetType) {
-            this.doneTriggerTargetType = doneTriggerTargetType;
+            this.DoneTriggerTargetType = doneTriggerTargetType;
             return this;
         }
 
-        /** 完了時に使用する GS2-Script のスクリプト のGRN */
-        public string doneTriggerScriptId { set; get; }
-
-        /**
-         * 完了時に使用する GS2-Script のスクリプト のGRNを設定
-         *
-         * @param doneTriggerScriptId 完了時に使用する GS2-Script のスクリプト のGRN
-         * @return this
-         */
         public ScriptSetting WithDoneTriggerScriptId(string doneTriggerScriptId) {
-            this.doneTriggerScriptId = doneTriggerScriptId;
+            this.DoneTriggerScriptId = doneTriggerScriptId;
             return this;
         }
 
-        /** 完了時に使用する GS2-JobQueue のネームスペース のGRN */
-        public string doneTriggerQueueNamespaceId { set; get; }
-
-        /**
-         * 完了時に使用する GS2-JobQueue のネームスペース のGRNを設定
-         *
-         * @param doneTriggerQueueNamespaceId 完了時に使用する GS2-JobQueue のネームスペース のGRN
-         * @return this
-         */
         public ScriptSetting WithDoneTriggerQueueNamespaceId(string doneTriggerQueueNamespaceId) {
-            this.doneTriggerQueueNamespaceId = doneTriggerQueueNamespaceId;
+            this.DoneTriggerQueueNamespaceId = doneTriggerQueueNamespaceId;
             return this;
+        }
+
+    	[Preserve]
+        public static ScriptSetting FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ScriptSetting()
+                .WithTriggerScriptId(!data.Keys.Contains("triggerScriptId") || data["triggerScriptId"] == null ? null : data["triggerScriptId"].ToString())
+                .WithDoneTriggerTargetType(!data.Keys.Contains("doneTriggerTargetType") || data["doneTriggerTargetType"] == null ? null : data["doneTriggerTargetType"].ToString())
+                .WithDoneTriggerScriptId(!data.Keys.Contains("doneTriggerScriptId") || data["doneTriggerScriptId"] == null ? null : data["doneTriggerScriptId"].ToString())
+                .WithDoneTriggerQueueNamespaceId(!data.Keys.Contains("doneTriggerQueueNamespaceId") || data["doneTriggerQueueNamespaceId"] == null ? null : data["doneTriggerQueueNamespaceId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["triggerScriptId"] = TriggerScriptId,
+                ["doneTriggerTargetType"] = DoneTriggerTargetType,
+                ["doneTriggerScriptId"] = DoneTriggerScriptId,
+                ["doneTriggerQueueNamespaceId"] = DoneTriggerQueueNamespaceId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.triggerScriptId != null)
-            {
+            if (TriggerScriptId != null) {
                 writer.WritePropertyName("triggerScriptId");
-                writer.Write(this.triggerScriptId);
+                writer.Write(TriggerScriptId.ToString());
             }
-            if(this.doneTriggerTargetType != null)
-            {
+            if (DoneTriggerTargetType != null) {
                 writer.WritePropertyName("doneTriggerTargetType");
-                writer.Write(this.doneTriggerTargetType);
+                writer.Write(DoneTriggerTargetType.ToString());
             }
-            if(this.doneTriggerScriptId != null)
-            {
+            if (DoneTriggerScriptId != null) {
                 writer.WritePropertyName("doneTriggerScriptId");
-                writer.Write(this.doneTriggerScriptId);
+                writer.Write(DoneTriggerScriptId.ToString());
             }
-            if(this.doneTriggerQueueNamespaceId != null)
-            {
+            if (DoneTriggerQueueNamespaceId != null) {
                 writer.WritePropertyName("doneTriggerQueueNamespaceId");
-                writer.Write(this.doneTriggerQueueNamespaceId);
+                writer.Write(DoneTriggerQueueNamespaceId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static ScriptSetting FromDict(JsonData data)
-        {
-            return new ScriptSetting()
-                .WithTriggerScriptId(data.Keys.Contains("triggerScriptId") && data["triggerScriptId"] != null ? data["triggerScriptId"].ToString() : null)
-                .WithDoneTriggerTargetType(data.Keys.Contains("doneTriggerTargetType") && data["doneTriggerTargetType"] != null ? data["doneTriggerTargetType"].ToString() : null)
-                .WithDoneTriggerScriptId(data.Keys.Contains("doneTriggerScriptId") && data["doneTriggerScriptId"] != null ? data["doneTriggerScriptId"].ToString() : null)
-                .WithDoneTriggerQueueNamespaceId(data.Keys.Contains("doneTriggerQueueNamespaceId") && data["doneTriggerQueueNamespaceId"] != null ? data["doneTriggerQueueNamespaceId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ScriptSetting;
             var diff = 0;
-            if (triggerScriptId == null && triggerScriptId == other.triggerScriptId)
+            if (TriggerScriptId == null && TriggerScriptId == other.TriggerScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += triggerScriptId.CompareTo(other.triggerScriptId);
+                diff += TriggerScriptId.CompareTo(other.TriggerScriptId);
             }
-            if (doneTriggerTargetType == null && doneTriggerTargetType == other.doneTriggerTargetType)
+            if (DoneTriggerTargetType == null && DoneTriggerTargetType == other.DoneTriggerTargetType)
             {
                 // null and null
             }
             else
             {
-                diff += doneTriggerTargetType.CompareTo(other.doneTriggerTargetType);
+                diff += DoneTriggerTargetType.CompareTo(other.DoneTriggerTargetType);
             }
-            if (doneTriggerScriptId == null && doneTriggerScriptId == other.doneTriggerScriptId)
+            if (DoneTriggerScriptId == null && DoneTriggerScriptId == other.DoneTriggerScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += doneTriggerScriptId.CompareTo(other.doneTriggerScriptId);
+                diff += DoneTriggerScriptId.CompareTo(other.DoneTriggerScriptId);
             }
-            if (doneTriggerQueueNamespaceId == null && doneTriggerQueueNamespaceId == other.doneTriggerQueueNamespaceId)
+            if (DoneTriggerQueueNamespaceId == null && DoneTriggerQueueNamespaceId == other.DoneTriggerQueueNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += doneTriggerQueueNamespaceId.CompareTo(other.doneTriggerQueueNamespaceId);
+                diff += DoneTriggerQueueNamespaceId.CompareTo(other.DoneTriggerQueueNamespaceId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["triggerScriptId"] = triggerScriptId;
-            data["doneTriggerTargetType"] = doneTriggerTargetType;
-            data["doneTriggerScriptId"] = doneTriggerScriptId;
-            data["doneTriggerQueueNamespaceId"] = doneTriggerQueueNamespaceId;
-            return data;
-        }
-	}
+    }
 }

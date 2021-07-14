@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class CreateAwaitByStampSheetResult
+	[System.Serializable]
+	public class CreateAwaitByStampSheetResult : IResult
 	{
-        /** 交換待機 */
-        public Await item { set; get; }
+        public Gs2.Gs2Exchange.Model.Await Item { set; get; }
+        public long? UnlockAt { set; get; }
 
+        public CreateAwaitByStampSheetResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
+            this.Item = item;
+            return this;
+        }
+
+        public CreateAwaitByStampSheetResult WithUnlockAt(long? unlockAt) {
+            this.UnlockAt = unlockAt;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateAwaitByStampSheetResult FromDict(JsonData data)
+        public static CreateAwaitByStampSheetResult FromJson(JsonData data)
         {
-            return new CreateAwaitByStampSheetResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Exchange.Model.Await.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateAwaitByStampSheetResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]))
+                .WithUnlockAt(!data.Keys.Contains("unlockAt") || data["unlockAt"] == null ? null : (long?)long.Parse(data["unlockAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["unlockAt"] = UnlockAt,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (UnlockAt != null) {
+                writer.WritePropertyName("unlockAt");
+                writer.Write(long.Parse(UnlockAt.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

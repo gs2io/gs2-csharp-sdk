@@ -23,426 +23,292 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Deploy.Model
 {
+
 	[Preserve]
 	public class Resource : IComparable
 	{
+        public string ResourceId { set; get; }
+        public string Type { set; get; }
+        public string Name { set; get; }
+        public string Request { set; get; }
+        public string Response { set; get; }
+        public string RollbackContext { set; get; }
+        public string RollbackRequest { set; get; }
+        public string[] RollbackAfter { set; get; }
+        public Gs2.Gs2Deploy.Model.OutputField[] OutputFields { set; get; }
+        public string WorkId { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** 作成されたのリソース */
-        public string resourceId { set; get; }
-
-        /**
-         * 作成されたのリソースを設定
-         *
-         * @param resourceId 作成されたのリソース
-         * @return this
-         */
         public Resource WithResourceId(string resourceId) {
-            this.resourceId = resourceId;
+            this.ResourceId = resourceId;
             return this;
         }
 
-        /** 操作対象のリソース */
-        public string type { set; get; }
-
-        /**
-         * 操作対象のリソースを設定
-         *
-         * @param type 操作対象のリソース
-         * @return this
-         */
         public Resource WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** 作成中のリソース名 */
-        public string name { set; get; }
-
-        /**
-         * 作成中のリソース名を設定
-         *
-         * @param name 作成中のリソース名
-         * @return this
-         */
         public Resource WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** リクエストパラメータ */
-        public string request { set; get; }
-
-        /**
-         * リクエストパラメータを設定
-         *
-         * @param request リクエストパラメータ
-         * @return this
-         */
         public Resource WithRequest(string request) {
-            this.request = request;
+            this.Request = request;
             return this;
         }
 
-        /** リソースの作成・更新のレスポンス */
-        public string response { set; get; }
-
-        /**
-         * リソースの作成・更新のレスポンスを設定
-         *
-         * @param response リソースの作成・更新のレスポンス
-         * @return this
-         */
         public Resource WithResponse(string response) {
-            this.response = response;
+            this.Response = response;
             return this;
         }
 
-        /** ロールバック操作の種類 */
-        public string rollbackContext { set; get; }
-
-        /**
-         * ロールバック操作の種類を設定
-         *
-         * @param rollbackContext ロールバック操作の種類
-         * @return this
-         */
         public Resource WithRollbackContext(string rollbackContext) {
-            this.rollbackContext = rollbackContext;
+            this.RollbackContext = rollbackContext;
             return this;
         }
 
-        /** ロールバック用のリクエストパラメータ */
-        public string rollbackRequest { set; get; }
-
-        /**
-         * ロールバック用のリクエストパラメータを設定
-         *
-         * @param rollbackRequest ロールバック用のリクエストパラメータ
-         * @return this
-         */
         public Resource WithRollbackRequest(string rollbackRequest) {
-            this.rollbackRequest = rollbackRequest;
+            this.RollbackRequest = rollbackRequest;
             return this;
         }
 
-        /** ロールバック時に依存しているリソースの名前 */
-        public List<string> rollbackAfter { set; get; }
-
-        /**
-         * ロールバック時に依存しているリソースの名前を設定
-         *
-         * @param rollbackAfter ロールバック時に依存しているリソースの名前
-         * @return this
-         */
-        public Resource WithRollbackAfter(List<string> rollbackAfter) {
-            this.rollbackAfter = rollbackAfter;
+        public Resource WithRollbackAfter(string[] rollbackAfter) {
+            this.RollbackAfter = rollbackAfter;
             return this;
         }
 
-        /** リソースを作成したときに Output に記録するフィールド */
-        public List<OutputField> outputFields { set; get; }
-
-        /**
-         * リソースを作成したときに Output に記録するフィールドを設定
-         *
-         * @param outputFields リソースを作成したときに Output に記録するフィールド
-         * @return this
-         */
-        public Resource WithOutputFields(List<OutputField> outputFields) {
-            this.outputFields = outputFields;
+        public Resource WithOutputFields(Gs2.Gs2Deploy.Model.OutputField[] outputFields) {
+            this.OutputFields = outputFields;
             return this;
         }
 
-        /** このリソースが作成された時の実行 ID */
-        public string workId { set; get; }
-
-        /**
-         * このリソースが作成された時の実行 IDを設定
-         *
-         * @param workId このリソースが作成された時の実行 ID
-         * @return this
-         */
         public Resource WithWorkId(string workId) {
-            this.workId = workId;
+            this.WorkId = workId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Resource WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Resource FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Resource()
+                .WithResourceId(!data.Keys.Contains("resourceId") || data["resourceId"] == null ? null : data["resourceId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString())
+                .WithResponse(!data.Keys.Contains("response") || data["response"] == null ? null : data["response"].ToString())
+                .WithRollbackContext(!data.Keys.Contains("rollbackContext") || data["rollbackContext"] == null ? null : data["rollbackContext"].ToString())
+                .WithRollbackRequest(!data.Keys.Contains("rollbackRequest") || data["rollbackRequest"] == null ? null : data["rollbackRequest"].ToString())
+                .WithRollbackAfter(!data.Keys.Contains("rollbackAfter") || data["rollbackAfter"] == null ? new string[]{} : data["rollbackAfter"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithOutputFields(!data.Keys.Contains("outputFields") || data["outputFields"] == null ? new Gs2.Gs2Deploy.Model.OutputField[]{} : data["outputFields"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Deploy.Model.OutputField.FromJson(v);
+                }).ToArray())
+                .WithWorkId(!data.Keys.Contains("workId") || data["workId"] == null ? null : data["workId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["resourceId"] = ResourceId,
+                ["type"] = Type,
+                ["name"] = Name,
+                ["request"] = Request,
+                ["response"] = Response,
+                ["rollbackContext"] = RollbackContext,
+                ["rollbackRequest"] = RollbackRequest,
+                ["rollbackAfter"] = new JsonData(RollbackAfter == null ? new JsonData[]{} :
+                        RollbackAfter.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["outputFields"] = new JsonData(OutputFields == null ? new JsonData[]{} :
+                        OutputFields.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["workId"] = WorkId,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.resourceId != null)
-            {
+            if (ResourceId != null) {
                 writer.WritePropertyName("resourceId");
-                writer.Write(this.resourceId);
+                writer.Write(ResourceId.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.request != null)
-            {
+            if (Request != null) {
                 writer.WritePropertyName("request");
-                writer.Write(this.request);
+                writer.Write(Request.ToString());
             }
-            if(this.response != null)
-            {
+            if (Response != null) {
                 writer.WritePropertyName("response");
-                writer.Write(this.response);
+                writer.Write(Response.ToString());
             }
-            if(this.rollbackContext != null)
-            {
+            if (RollbackContext != null) {
                 writer.WritePropertyName("rollbackContext");
-                writer.Write(this.rollbackContext);
+                writer.Write(RollbackContext.ToString());
             }
-            if(this.rollbackRequest != null)
-            {
+            if (RollbackRequest != null) {
                 writer.WritePropertyName("rollbackRequest");
-                writer.Write(this.rollbackRequest);
+                writer.Write(RollbackRequest.ToString());
             }
-            if(this.rollbackAfter != null)
-            {
+            if (RollbackAfter != null) {
                 writer.WritePropertyName("rollbackAfter");
                 writer.WriteArrayStart();
-                foreach(var item in this.rollbackAfter)
+                foreach (var rollbackAfte in RollbackAfter)
                 {
-                    writer.Write(item);
+                    if (rollbackAfte != null) {
+                        writer.Write(rollbackAfte.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.outputFields != null)
-            {
+            if (OutputFields != null) {
                 writer.WritePropertyName("outputFields");
                 writer.WriteArrayStart();
-                foreach(var item in this.outputFields)
+                foreach (var outputField in OutputFields)
                 {
-                    item.WriteJson(writer);
+                    if (outputField != null) {
+                        outputField.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.workId != null)
-            {
+            if (WorkId != null) {
                 writer.WritePropertyName("workId");
-                writer.Write(this.workId);
+                writer.Write(WorkId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetResourceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):resource:(?<resourceName>.*)");
-        if (!match.Groups["resourceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["resourceName"].Value;
-    }
-
-    public static string GetStackNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):resource:(?<resourceName>.*)");
-        if (!match.Groups["stackName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["stackName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):resource:(?<resourceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stack:(?<stackName>.*):resource:(?<resourceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Resource FromDict(JsonData data)
-        {
-            return new Resource()
-                .WithResourceId(data.Keys.Contains("resourceId") && data["resourceId"] != null ? data["resourceId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithRequest(data.Keys.Contains("request") && data["request"] != null ? data["request"].ToString() : null)
-                .WithResponse(data.Keys.Contains("response") && data["response"] != null ? data["response"].ToString() : null)
-                .WithRollbackContext(data.Keys.Contains("rollbackContext") && data["rollbackContext"] != null ? data["rollbackContext"].ToString() : null)
-                .WithRollbackRequest(data.Keys.Contains("rollbackRequest") && data["rollbackRequest"] != null ? data["rollbackRequest"].ToString() : null)
-                .WithRollbackAfter(data.Keys.Contains("rollbackAfter") && data["rollbackAfter"] != null ? data["rollbackAfter"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithOutputFields(data.Keys.Contains("outputFields") && data["outputFields"] != null ? data["outputFields"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Deploy.Model.OutputField.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithWorkId(data.Keys.Contains("workId") && data["workId"] != null ? data["workId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Resource;
             var diff = 0;
-            if (resourceId == null && resourceId == other.resourceId)
+            if (ResourceId == null && ResourceId == other.ResourceId)
             {
                 // null and null
             }
             else
             {
-                diff += resourceId.CompareTo(other.resourceId);
+                diff += ResourceId.CompareTo(other.ResourceId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += Type.CompareTo(other.Type);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (request == null && request == other.request)
+            if (Request == null && Request == other.Request)
             {
                 // null and null
             }
             else
             {
-                diff += request.CompareTo(other.request);
+                diff += Request.CompareTo(other.Request);
             }
-            if (response == null && response == other.response)
+            if (Response == null && Response == other.Response)
             {
                 // null and null
             }
             else
             {
-                diff += response.CompareTo(other.response);
+                diff += Response.CompareTo(other.Response);
             }
-            if (rollbackContext == null && rollbackContext == other.rollbackContext)
+            if (RollbackContext == null && RollbackContext == other.RollbackContext)
             {
                 // null and null
             }
             else
             {
-                diff += rollbackContext.CompareTo(other.rollbackContext);
+                diff += RollbackContext.CompareTo(other.RollbackContext);
             }
-            if (rollbackRequest == null && rollbackRequest == other.rollbackRequest)
+            if (RollbackRequest == null && RollbackRequest == other.RollbackRequest)
             {
                 // null and null
             }
             else
             {
-                diff += rollbackRequest.CompareTo(other.rollbackRequest);
+                diff += RollbackRequest.CompareTo(other.RollbackRequest);
             }
-            if (rollbackAfter == null && rollbackAfter == other.rollbackAfter)
+            if (RollbackAfter == null && RollbackAfter == other.RollbackAfter)
             {
                 // null and null
             }
             else
             {
-                diff += rollbackAfter.Count - other.rollbackAfter.Count;
-                for (var i = 0; i < rollbackAfter.Count; i++)
+                diff += RollbackAfter.Length - other.RollbackAfter.Length;
+                for (var i = 0; i < RollbackAfter.Length; i++)
                 {
-                    diff += rollbackAfter[i].CompareTo(other.rollbackAfter[i]);
+                    diff += RollbackAfter[i].CompareTo(other.RollbackAfter[i]);
                 }
             }
-            if (outputFields == null && outputFields == other.outputFields)
+            if (OutputFields == null && OutputFields == other.OutputFields)
             {
                 // null and null
             }
             else
             {
-                diff += outputFields.Count - other.outputFields.Count;
-                for (var i = 0; i < outputFields.Count; i++)
+                diff += OutputFields.Length - other.OutputFields.Length;
+                for (var i = 0; i < OutputFields.Length; i++)
                 {
-                    diff += outputFields[i].CompareTo(other.outputFields[i]);
+                    diff += OutputFields[i].CompareTo(other.OutputFields[i]);
                 }
             }
-            if (workId == null && workId == other.workId)
+            if (WorkId == null && WorkId == other.WorkId)
             {
                 // null and null
             }
             else
             {
-                diff += workId.CompareTo(other.workId);
+                diff += WorkId.CompareTo(other.WorkId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["resourceId"] = resourceId;
-            data["type"] = type;
-            data["name"] = name;
-            data["request"] = request;
-            data["response"] = response;
-            data["rollbackContext"] = rollbackContext;
-            data["rollbackRequest"] = rollbackRequest;
-            data["rollbackAfter"] = new JsonData(rollbackAfter);
-            data["outputFields"] = new JsonData(outputFields.Select(item => item.ToDict()));
-            data["workId"] = workId;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

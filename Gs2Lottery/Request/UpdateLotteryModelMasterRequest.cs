@@ -28,162 +28,122 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdateLotteryModelMasterRequest : Gs2Request<UpdateLotteryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LotteryName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string Mode { set; get; }
+        public string Method { set; get; }
+        public string PrizeTableName { set; get; }
+        public string ChoicePrizeTableScriptId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 抽選モデルの種類名 */
-		[UnityEngine.SerializeField]
-        public string lotteryName;
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param lotteryName 抽選モデルの種類名
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithLotteryName(string lotteryName) {
-            this.lotteryName = lotteryName;
+            this.LotteryName = lotteryName;
             return this;
         }
 
-
-        /** 抽選の種類マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 抽選の種類マスターの説明を設定
-         *
-         * @param description 抽選の種類マスターの説明
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 抽選モデルの種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 抽選モデルの種類のメタデータを設定
-         *
-         * @param metadata 抽選モデルの種類のメタデータ
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 抽選モード */
-		[UnityEngine.SerializeField]
-        public string mode;
-
-        /**
-         * 抽選モードを設定
-         *
-         * @param mode 抽選モード
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithMode(string mode) {
-            this.mode = mode;
+            this.Mode = mode;
             return this;
         }
 
-
-        /** 抽選方法 */
-		[UnityEngine.SerializeField]
-        public string method;
-
-        /**
-         * 抽選方法を設定
-         *
-         * @param method 抽選方法
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-
-        /** 景品テーブルの名前 */
-		[UnityEngine.SerializeField]
-        public string prizeTableName;
-
-        /**
-         * 景品テーブルの名前を設定
-         *
-         * @param prizeTableName 景品テーブルの名前
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-
-        /** 抽選テーブルを確定するスクリプト のGRN */
-		[UnityEngine.SerializeField]
-        public string choicePrizeTableScriptId;
-
-        /**
-         * 抽選テーブルを確定するスクリプト のGRNを設定
-         *
-         * @param choicePrizeTableScriptId 抽選テーブルを確定するスクリプト のGRN
-         * @return this
-         */
         public UpdateLotteryModelMasterRequest WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.choicePrizeTableScriptId = choicePrizeTableScriptId;
+            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateLotteryModelMasterRequest FromDict(JsonData data)
+        public static UpdateLotteryModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateLotteryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                lotteryName = data.Keys.Contains("lotteryName") && data["lotteryName"] != null ? data["lotteryName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                mode = data.Keys.Contains("mode") && data["mode"] != null ? data["mode"].ToString(): null,
-                method = data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString(): null,
-                prizeTableName = data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString(): null,
-                choicePrizeTableScriptId = data.Keys.Contains("choicePrizeTableScriptId") && data["choicePrizeTableScriptId"] != null ? data["choicePrizeTableScriptId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateLotteryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLotteryName(!data.Keys.Contains("lotteryName") || data["lotteryName"] == null ? null : data["lotteryName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["lotteryName"] = LotteryName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["mode"] = Mode,
+                ["method"] = Method,
+                ["prizeTableName"] = PrizeTableName,
+                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["lotteryName"] = lotteryName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["mode"] = mode;
-            data["method"] = method;
-            data["prizeTableName"] = prizeTableName;
-            data["choicePrizeTableScriptId"] = choicePrizeTableScriptId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LotteryName != null) {
+                writer.WritePropertyName("lotteryName");
+                writer.Write(LotteryName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
+            if (Method != null) {
+                writer.WritePropertyName("method");
+                writer.Write(Method.ToString());
+            }
+            if (PrizeTableName != null) {
+                writer.WritePropertyName("prizeTableName");
+                writer.Write(PrizeTableName.ToString());
+            }
+            if (ChoicePrizeTableScriptId != null) {
+                writer.WritePropertyName("choicePrizeTableScriptId");
+                writer.Write(ChoicePrizeTableScriptId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

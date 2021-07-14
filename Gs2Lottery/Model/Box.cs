@@ -23,280 +23,174 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class Box : IComparable
 	{
+        public string BoxId { set; get; }
+        public string PrizeTableName { set; get; }
+        public string UserId { set; get; }
+        public int[] DrawnIndexes { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ボックス */
-        public string boxId { set; get; }
-
-        /**
-         * ボックスを設定
-         *
-         * @param boxId ボックス
-         * @return this
-         */
         public Box WithBoxId(string boxId) {
-            this.boxId = boxId;
+            this.BoxId = boxId;
             return this;
         }
 
-        /** 排出確率テーブル名 */
-        public string prizeTableName { set; get; }
-
-        /**
-         * 排出確率テーブル名を設定
-         *
-         * @param prizeTableName 排出確率テーブル名
-         * @return this
-         */
         public Box WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Box WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 排出済み景品のインデックスのリスト */
-        public List<int?> drawnIndexes { set; get; }
-
-        /**
-         * 排出済み景品のインデックスのリストを設定
-         *
-         * @param drawnIndexes 排出済み景品のインデックスのリスト
-         * @return this
-         */
-        public Box WithDrawnIndexes(List<int?> drawnIndexes) {
-            this.drawnIndexes = drawnIndexes;
+        public Box WithDrawnIndexes(int[] drawnIndexes) {
+            this.DrawnIndexes = drawnIndexes;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Box WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Box WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Box FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Box()
+                .WithBoxId(!data.Keys.Contains("boxId") || data["boxId"] == null ? null : data["boxId"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithDrawnIndexes(!data.Keys.Contains("drawnIndexes") || data["drawnIndexes"] == null ? new int[]{} : data["drawnIndexes"].Cast<JsonData>().Select(v => {
+                    return int.Parse(v.ToString());
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["boxId"] = BoxId,
+                ["prizeTableName"] = PrizeTableName,
+                ["userId"] = UserId,
+                ["drawnIndexes"] = new JsonData(DrawnIndexes == null ? new JsonData[]{} :
+                        DrawnIndexes.Select(v => {
+                            return new JsonData((int?)int.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.boxId != null)
-            {
+            if (BoxId != null) {
                 writer.WritePropertyName("boxId");
-                writer.Write(this.boxId);
+                writer.Write(BoxId.ToString());
             }
-            if(this.prizeTableName != null)
-            {
+            if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
-                writer.Write(this.prizeTableName);
+                writer.Write(PrizeTableName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.drawnIndexes != null)
-            {
+            if (DrawnIndexes != null) {
                 writer.WritePropertyName("drawnIndexes");
                 writer.WriteArrayStart();
-                foreach(var item in this.drawnIndexes)
+                foreach (var drawnIndex in DrawnIndexes)
                 {
-                    writer.Write(item.Value);
+                    if (drawnIndex != null) {
+                        writer.Write(int.Parse(drawnIndex.ToString()));
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetPrizeTableNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):user:(?<userId>.*):box:table:(?<prizeTableName>.*)");
-        if (!match.Groups["prizeTableName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["prizeTableName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):user:(?<userId>.*):box:table:(?<prizeTableName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):user:(?<userId>.*):box:table:(?<prizeTableName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):user:(?<userId>.*):box:table:(?<prizeTableName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):user:(?<userId>.*):box:table:(?<prizeTableName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Box FromDict(JsonData data)
-        {
-            return new Box()
-                .WithBoxId(data.Keys.Contains("boxId") && data["boxId"] != null ? data["boxId"].ToString() : null)
-                .WithPrizeTableName(data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithDrawnIndexes(data.Keys.Contains("drawnIndexes") && data["drawnIndexes"] != null ? data["drawnIndexes"].Cast<JsonData>().Select(value =>
-                    {
-                        return (int?)int.Parse(value.ToString());
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Box;
             var diff = 0;
-            if (boxId == null && boxId == other.boxId)
+            if (BoxId == null && BoxId == other.BoxId)
             {
                 // null and null
             }
             else
             {
-                diff += boxId.CompareTo(other.boxId);
+                diff += BoxId.CompareTo(other.BoxId);
             }
-            if (prizeTableName == null && prizeTableName == other.prizeTableName)
+            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {
                 // null and null
             }
             else
             {
-                diff += prizeTableName.CompareTo(other.prizeTableName);
+                diff += PrizeTableName.CompareTo(other.PrizeTableName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (drawnIndexes == null && drawnIndexes == other.drawnIndexes)
+            if (DrawnIndexes == null && DrawnIndexes == other.DrawnIndexes)
             {
                 // null and null
             }
             else
             {
-                diff += drawnIndexes.Count - other.drawnIndexes.Count;
-                for (var i = 0; i < drawnIndexes.Count; i++)
+                diff += DrawnIndexes.Length - other.DrawnIndexes.Length;
+                for (var i = 0; i < DrawnIndexes.Length; i++)
                 {
-                    diff += (int)(drawnIndexes[i] - other.drawnIndexes[i]);
+                    diff += (int)(DrawnIndexes[i] - other.DrawnIndexes[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["boxId"] = boxId;
-            data["prizeTableName"] = prizeTableName;
-            data["userId"] = userId;
-            data["drawnIndexes"] = new JsonData(drawnIndexes);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

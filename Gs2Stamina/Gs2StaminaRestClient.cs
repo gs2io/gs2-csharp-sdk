@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Stamina
+using Gs2.Util.LitJson;namespace Gs2.Gs2Stamina
 {
 	public class Gs2StaminaRestClient : AbstractGs2Client
 	{
@@ -73,23 +71,23 @@ namespace Gs2.Gs2Stamina
                     + "/";
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -97,9 +95,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -139,35 +134,30 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.overflowTriggerScriptId != null)
+                if (_request.OverflowTriggerScript != null)
                 {
-                    jsonWriter.WritePropertyName("overflowTriggerScriptId");
-                    jsonWriter.Write(_request.overflowTriggerScriptId.ToString());
+                    jsonWriter.WritePropertyName("overflowTriggerScript");
+                    _request.OverflowTriggerScript.WriteJson(jsonWriter);
                 }
-                if (_request.overflowTriggerNamespaceId != null)
-                {
-                    jsonWriter.WritePropertyName("overflowTriggerNamespaceId");
-                    jsonWriter.Write(_request.overflowTriggerNamespaceId.ToString());
-                }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -178,9 +168,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -188,9 +178,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -225,20 +212,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/status";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -246,9 +233,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースの状態を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -283,20 +267,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -304,9 +288,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -341,37 +322,32 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.overflowTriggerScriptId != null)
+                if (_request.OverflowTriggerScript != null)
                 {
-                    jsonWriter.WritePropertyName("overflowTriggerScriptId");
-                    jsonWriter.Write(_request.overflowTriggerScriptId.ToString());
+                    jsonWriter.WritePropertyName("overflowTriggerScript");
+                    _request.OverflowTriggerScript.WriteJson(jsonWriter);
                 }
-                if (_request.overflowTriggerNamespaceId != null)
-                {
-                    jsonWriter.WritePropertyName("overflowTriggerNamespaceId");
-                    jsonWriter.Write(_request.overflowTriggerNamespaceId.ToString());
-                }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -382,9 +358,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -392,9 +368,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -429,20 +402,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -450,9 +423,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ネームスペースを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -487,26 +457,26 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -514,9 +484,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルマスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -551,72 +518,72 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.recoverIntervalMinutes != null)
+                if (_request.RecoverIntervalMinutes != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalMinutes");
-                    jsonWriter.Write(_request.recoverIntervalMinutes.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalMinutes.ToString());
                 }
-                if (_request.recoverValue != null)
+                if (_request.RecoverValue != null)
                 {
                     jsonWriter.WritePropertyName("recoverValue");
-                    jsonWriter.Write(_request.recoverValue.ToString());
+                    jsonWriter.Write(_request.RecoverValue.ToString());
                 }
-                if (_request.initialCapacity != null)
+                if (_request.InitialCapacity != null)
                 {
                     jsonWriter.WritePropertyName("initialCapacity");
-                    jsonWriter.Write(_request.initialCapacity.ToString());
+                    jsonWriter.Write(_request.InitialCapacity.ToString());
                 }
-                if (_request.isOverflow != null)
+                if (_request.IsOverflow != null)
                 {
                     jsonWriter.WritePropertyName("isOverflow");
-                    jsonWriter.Write(_request.isOverflow.ToString());
+                    jsonWriter.Write(_request.IsOverflow.ToString());
                 }
-                if (_request.maxCapacity != null)
+                if (_request.MaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("maxCapacity");
-                    jsonWriter.Write(_request.maxCapacity.ToString());
+                    jsonWriter.Write(_request.MaxCapacity.ToString());
                 }
-                if (_request.maxStaminaTableName != null)
+                if (_request.MaxStaminaTableName != null)
                 {
                     jsonWriter.WritePropertyName("maxStaminaTableName");
-                    jsonWriter.Write(_request.maxStaminaTableName.ToString());
+                    jsonWriter.Write(_request.MaxStaminaTableName.ToString());
                 }
-                if (_request.recoverIntervalTableName != null)
+                if (_request.RecoverIntervalTableName != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalTableName");
-                    jsonWriter.Write(_request.recoverIntervalTableName.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalTableName.ToString());
                 }
-                if (_request.recoverValueTableName != null)
+                if (_request.RecoverValueTableName != null)
                 {
                     jsonWriter.WritePropertyName("recoverValueTableName");
-                    jsonWriter.Write(_request.recoverValueTableName.ToString());
+                    jsonWriter.Write(_request.RecoverValueTableName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -627,9 +594,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -637,9 +604,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルマスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -674,21 +638,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -696,9 +660,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルマスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -733,68 +694,68 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.recoverIntervalMinutes != null)
+                if (_request.RecoverIntervalMinutes != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalMinutes");
-                    jsonWriter.Write(_request.recoverIntervalMinutes.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalMinutes.ToString());
                 }
-                if (_request.recoverValue != null)
+                if (_request.RecoverValue != null)
                 {
                     jsonWriter.WritePropertyName("recoverValue");
-                    jsonWriter.Write(_request.recoverValue.ToString());
+                    jsonWriter.Write(_request.RecoverValue.ToString());
                 }
-                if (_request.initialCapacity != null)
+                if (_request.InitialCapacity != null)
                 {
                     jsonWriter.WritePropertyName("initialCapacity");
-                    jsonWriter.Write(_request.initialCapacity.ToString());
+                    jsonWriter.Write(_request.InitialCapacity.ToString());
                 }
-                if (_request.isOverflow != null)
+                if (_request.IsOverflow != null)
                 {
                     jsonWriter.WritePropertyName("isOverflow");
-                    jsonWriter.Write(_request.isOverflow.ToString());
+                    jsonWriter.Write(_request.IsOverflow.ToString());
                 }
-                if (_request.maxCapacity != null)
+                if (_request.MaxCapacity != null)
                 {
                     jsonWriter.WritePropertyName("maxCapacity");
-                    jsonWriter.Write(_request.maxCapacity.ToString());
+                    jsonWriter.Write(_request.MaxCapacity.ToString());
                 }
-                if (_request.maxStaminaTableName != null)
+                if (_request.MaxStaminaTableName != null)
                 {
                     jsonWriter.WritePropertyName("maxStaminaTableName");
-                    jsonWriter.Write(_request.maxStaminaTableName.ToString());
+                    jsonWriter.Write(_request.MaxStaminaTableName.ToString());
                 }
-                if (_request.recoverIntervalTableName != null)
+                if (_request.RecoverIntervalTableName != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalTableName");
-                    jsonWriter.Write(_request.recoverIntervalTableName.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalTableName.ToString());
                 }
-                if (_request.recoverValueTableName != null)
+                if (_request.RecoverValueTableName != null)
                 {
                     jsonWriter.WritePropertyName("recoverValueTableName");
-                    jsonWriter.Write(_request.recoverValueTableName.ToString());
+                    jsonWriter.Write(_request.RecoverValueTableName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -805,9 +766,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -815,9 +776,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルマスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -852,21 +810,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/model/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -874,9 +832,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルマスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -911,26 +866,26 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/maxStaminaTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -938,9 +893,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値テーブルマスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -975,47 +927,47 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/maxStaminaTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1026,9 +978,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1036,9 +988,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値テーブルマスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1073,21 +1022,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/maxStaminaTable/{maxStaminaTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.maxStaminaTableName) ? _request.maxStaminaTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.MaxStaminaTableName) ? _request.MaxStaminaTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1095,9 +1044,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値テーブルマスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1132,43 +1078,43 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/maxStaminaTable/{maxStaminaTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.maxStaminaTableName) ? _request.maxStaminaTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.MaxStaminaTableName) ? _request.MaxStaminaTableName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1179,9 +1125,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1189,9 +1135,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値テーブルマスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1226,21 +1169,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/maxStaminaTable/{maxStaminaTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.maxStaminaTableName) ? _request.maxStaminaTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{maxStaminaTableName}", !string.IsNullOrEmpty(_request.MaxStaminaTableName) ? _request.MaxStaminaTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1248,9 +1191,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値テーブルマスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1285,26 +1225,26 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverIntervalTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1312,9 +1252,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復間隔テーブルマスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1349,47 +1286,47 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverIntervalTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1400,9 +1337,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1410,9 +1347,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復間隔テーブルマスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1447,21 +1381,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverIntervalTable/{recoverIntervalTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.recoverIntervalTableName) ? _request.recoverIntervalTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.RecoverIntervalTableName) ? _request.RecoverIntervalTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1469,9 +1403,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復間隔テーブルマスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1506,43 +1437,43 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverIntervalTable/{recoverIntervalTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.recoverIntervalTableName) ? _request.recoverIntervalTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.RecoverIntervalTableName) ? _request.RecoverIntervalTableName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1553,9 +1484,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1563,9 +1494,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復間隔テーブルマスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1600,21 +1528,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverIntervalTable/{recoverIntervalTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.recoverIntervalTableName) ? _request.recoverIntervalTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverIntervalTableName}", !string.IsNullOrEmpty(_request.RecoverIntervalTableName) ? _request.RecoverIntervalTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1622,9 +1550,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復間隔テーブルマスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1659,26 +1584,26 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverValueTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1686,9 +1611,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復量テーブルマスターの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1723,47 +1645,47 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverValueTable";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1774,9 +1696,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1784,9 +1706,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復量テーブルマスターを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1821,21 +1740,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverValueTable/{recoverValueTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.recoverValueTableName) ? _request.recoverValueTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.RecoverValueTableName) ? _request.RecoverValueTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1843,9 +1762,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復量テーブルマスターを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1880,43 +1796,43 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverValueTable/{recoverValueTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.recoverValueTableName) ? _request.recoverValueTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.RecoverValueTableName) ? _request.RecoverValueTableName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.experienceModelId != null)
+                if (_request.ExperienceModelId != null)
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
-                    jsonWriter.Write(_request.experienceModelId.ToString());
+                    jsonWriter.Write(_request.ExperienceModelId.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -1927,9 +1843,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1937,9 +1853,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復量テーブルマスターを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1974,21 +1887,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/recoverValueTable/{recoverValueTableName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.recoverValueTableName) ? _request.recoverValueTableName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{recoverValueTableName}", !string.IsNullOrEmpty(_request.RecoverValueTableName) ? _request.RecoverValueTableName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1996,9 +1909,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナ回復量テーブルマスターを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2033,20 +1943,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/export";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2054,9 +1964,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  現在有効なスタミナマスターのマスターデータをエクスポートします<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2091,20 +1998,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2112,9 +2019,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  現在有効なスタミナマスターを取得します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2149,22 +2053,22 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.settings != null)
+                if (_request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
-                    jsonWriter.Write(_request.settings.ToString());
+                    jsonWriter.Write(_request.Settings.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2175,9 +2079,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2185,9 +2089,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  現在有効なスタミナマスターを更新します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2222,22 +2123,22 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/master/from_git_hub";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.checkoutSetting != null)
+                if (_request.CheckoutSetting != null)
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
-                    _request.checkoutSetting.WriteJson(jsonWriter);
+                    _request.CheckoutSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2248,9 +2149,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2258,9 +2159,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  現在有効なスタミナマスターを更新します<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2295,20 +2193,20 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/model";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2316,9 +2214,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2353,21 +2248,21 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/model/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2375,9 +2270,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナモデルを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2412,34 +2304,30 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/stamina";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2447,9 +2335,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2484,31 +2369,27 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2516,9 +2397,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2553,29 +2431,25 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/stamina/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2583,9 +2457,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2620,26 +2491,22 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2647,9 +2514,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2684,39 +2548,39 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.value != null)
+                if (_request.Value != null)
                 {
                     jsonWriter.WritePropertyName("value");
-                    jsonWriter.Write(_request.value.ToString());
+                    jsonWriter.Write(_request.Value.ToString());
                 }
-                if (_request.maxValue != null)
+                if (_request.MaxValue != null)
                 {
                     jsonWriter.WritePropertyName("maxValue");
-                    jsonWriter.Write(_request.maxValue.ToString());
+                    jsonWriter.Write(_request.MaxValue.ToString());
                 }
-                if (_request.recoverIntervalMinutes != null)
+                if (_request.RecoverIntervalMinutes != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalMinutes");
-                    jsonWriter.Write(_request.recoverIntervalMinutes.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalMinutes.ToString());
                 }
-                if (_request.recoverValue != null)
+                if (_request.RecoverValue != null)
                 {
                     jsonWriter.WritePropertyName("recoverValue");
-                    jsonWriter.Write(_request.recoverValue.ToString());
+                    jsonWriter.Write(_request.RecoverValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2727,13 +2591,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2741,9 +2601,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを作成・更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2778,23 +2635,23 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/stamina/{staminaName}/consume";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.consumeValue != null)
+                if (_request.ConsumeValue != null)
                 {
                     jsonWriter.WritePropertyName("consumeValue");
-                    jsonWriter.Write(_request.consumeValue.ToString());
+                    jsonWriter.Write(_request.ConsumeValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2805,17 +2662,13 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2823,9 +2676,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナを消費<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2860,24 +2710,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/consume";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.consumeValue != null)
+                if (_request.ConsumeValue != null)
                 {
                     jsonWriter.WritePropertyName("consumeValue");
-                    jsonWriter.Write(_request.consumeValue.ToString());
+                    jsonWriter.Write(_request.ConsumeValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2888,13 +2738,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2902,9 +2748,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを消費<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -2939,24 +2782,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/recover";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.recoverValue != null)
+                if (_request.RecoverValue != null)
                 {
                     jsonWriter.WritePropertyName("recoverValue");
-                    jsonWriter.Write(_request.recoverValue.ToString());
+                    jsonWriter.Write(_request.RecoverValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -2967,13 +2810,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -2981,9 +2820,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを回復<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3018,24 +2854,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/raise";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.raiseValue != null)
+                if (_request.RaiseValue != null)
                 {
                     jsonWriter.WritePropertyName("raiseValue");
-                    jsonWriter.Write(_request.raiseValue.ToString());
+                    jsonWriter.Write(_request.RaiseValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3046,13 +2882,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3060,9 +2892,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナの最大値を加算<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3097,24 +2926,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.maxValue != null)
+                if (_request.MaxValue != null)
                 {
                     jsonWriter.WritePropertyName("maxValue");
-                    jsonWriter.Write(_request.maxValue.ToString());
+                    jsonWriter.Write(_request.MaxValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3125,13 +2954,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3139,9 +2964,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナの最大値を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3176,24 +2998,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/recoverInterval/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.recoverIntervalMinutes != null)
+                if (_request.RecoverIntervalMinutes != null)
                 {
                     jsonWriter.WritePropertyName("recoverIntervalMinutes");
-                    jsonWriter.Write(_request.recoverIntervalMinutes.ToString());
+                    jsonWriter.Write(_request.RecoverIntervalMinutes.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3204,13 +3026,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3218,9 +3036,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナの回復間隔(分)を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3255,24 +3070,24 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}/recoverValue/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.recoverValue != null)
+                if (_request.RecoverValue != null)
                 {
                     jsonWriter.WritePropertyName("recoverValue");
-                    jsonWriter.Write(_request.recoverValue.ToString());
+                    jsonWriter.Write(_request.RecoverValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3283,13 +3098,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3297,9 +3108,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナの回復間隔(分)を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3334,33 +3142,33 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/stamina/{staminaName}/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.signedStatusBody != null)
+                if (_request.SignedStatusBody != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusBody");
-                    jsonWriter.Write(_request.signedStatusBody.ToString());
+                    jsonWriter.Write(_request.SignedStatusBody.ToString());
                 }
-                if (_request.signedStatusSignature != null)
+                if (_request.SignedStatusSignature != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusSignature");
-                    jsonWriter.Write(_request.signedStatusSignature.ToString());
+                    jsonWriter.Write(_request.SignedStatusSignature.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3371,17 +3179,13 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3389,9 +3193,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値をGS2-Experienceのステータスを使用して更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3426,33 +3227,33 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/stamina/{staminaName}/recoverInterval/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.signedStatusBody != null)
+                if (_request.SignedStatusBody != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusBody");
-                    jsonWriter.Write(_request.signedStatusBody.ToString());
+                    jsonWriter.Write(_request.SignedStatusBody.ToString());
                 }
-                if (_request.signedStatusSignature != null)
+                if (_request.SignedStatusSignature != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusSignature");
-                    jsonWriter.Write(_request.signedStatusSignature.ToString());
+                    jsonWriter.Write(_request.SignedStatusSignature.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3463,17 +3264,13 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3481,9 +3278,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値をGS2-Experienceのステータスを使用して更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3516,35 +3310,35 @@ namespace Gs2.Gs2Stamina
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "stamina")
                     .Replace("{region}", gs2Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/stamina/{staminaName}/reoverValue/set";
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/recoverValue/set";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.signedStatusBody != null)
+                if (_request.SignedStatusBody != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusBody");
-                    jsonWriter.Write(_request.signedStatusBody.ToString());
+                    jsonWriter.Write(_request.SignedStatusBody.ToString());
                 }
-                if (_request.signedStatusSignature != null)
+                if (_request.SignedStatusSignature != null)
                 {
                     jsonWriter.WritePropertyName("signedStatusSignature");
-                    jsonWriter.Write(_request.signedStatusSignature.ToString());
+                    jsonWriter.Write(_request.SignedStatusSignature.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3555,17 +3349,13 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3573,9 +3363,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタミナの最大値をGS2-Experienceのステータスを使用して更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3610,26 +3397,22 @@ namespace Gs2.Gs2Stamina
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/stamina/{staminaName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
-                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.staminaName) ? _request.staminaName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.userId) ? _request.userId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(_request.StaminaName) ? _request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3637,9 +3420,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  ユーザIDを指定してスタミナを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3679,20 +3459,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3703,13 +3483,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3717,9 +3493,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプシートを使用してスタミナを回復<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3759,20 +3532,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3783,13 +3556,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3797,9 +3566,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプシートでスタミナの最大値を加算<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3839,20 +3605,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3863,13 +3629,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3877,9 +3639,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプシートでスタミナの最大値を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3919,20 +3678,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -3943,13 +3702,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -3957,9 +3712,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプシートでスタミナの最大値を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -3999,20 +3751,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -4023,13 +3775,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -4037,9 +3785,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプシートでスタミナの最大値を更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -4079,20 +3824,20 @@ namespace Gs2.Gs2Stamina
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.stampTask != null)
+                if (_request.StampTask != null)
                 {
                     jsonWriter.WritePropertyName("stampTask");
-                    jsonWriter.Write(_request.stampTask.ToString());
+                    jsonWriter.Write(_request.StampTask.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -4103,13 +3848,9 @@ namespace Gs2.Gs2Stamina
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -4117,9 +3858,6 @@ namespace Gs2.Gs2Stamina
         }
 
 		/// <summary>
-		///  スタンプタスクを使用してスタミナを消費<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>

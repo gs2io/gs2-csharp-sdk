@@ -28,108 +28,74 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class IncreaseCounterByUserIdRequest : Gs2Request<IncreaseCounterByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CounterName { set; get; }
+        public string UserId { set; get; }
+        public long? Value { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public IncreaseCounterByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カウンター名 */
-		[UnityEngine.SerializeField]
-        public string counterName;
-
-        /**
-         * カウンター名を設定
-         *
-         * @param counterName カウンター名
-         * @return this
-         */
         public IncreaseCounterByUserIdRequest WithCounterName(string counterName) {
-            this.counterName = counterName;
+            this.CounterName = counterName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public IncreaseCounterByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 加算する値 */
-		[UnityEngine.SerializeField]
-        public long? value;
-
-        /**
-         * 加算する値を設定
-         *
-         * @param value 加算する値
-         * @return this
-         */
         public IncreaseCounterByUserIdRequest WithValue(long? value) {
-            this.value = value;
+            this.Value = value;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public IncreaseCounterByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static IncreaseCounterByUserIdRequest FromDict(JsonData data)
+        public static IncreaseCounterByUserIdRequest FromJson(JsonData data)
         {
-            return new IncreaseCounterByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                counterName = data.Keys.Contains("counterName") && data["counterName"] != null ? data["counterName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                value = data.Keys.Contains("value") && data["value"] != null ? (long?)long.Parse(data["value"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new IncreaseCounterByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["counterName"] = CounterName,
+                ["userId"] = UserId,
+                ["value"] = Value,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["counterName"] = counterName;
-            data["userId"] = userId;
-            data["value"] = value;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Value != null) {
+                writer.WritePropertyName("value");
+                writer.Write(long.Parse(Value.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

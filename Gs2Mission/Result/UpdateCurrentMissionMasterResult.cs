@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Mission.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Mission.Result
 {
 	[Preserve]
-	public class UpdateCurrentMissionMasterResult
+	[System.Serializable]
+	public class UpdateCurrentMissionMasterResult : IResult
 	{
-        /** 更新した現在有効なミッション */
-        public CurrentMissionMaster item { set; get; }
+        public Gs2.Gs2Mission.Model.CurrentMissionMaster Item { set; get; }
 
+        public UpdateCurrentMissionMasterResult WithItem(Gs2.Gs2Mission.Model.CurrentMissionMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateCurrentMissionMasterResult FromDict(JsonData data)
+        public static UpdateCurrentMissionMasterResult FromJson(JsonData data)
         {
-            return new UpdateCurrentMissionMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Mission.Model.CurrentMissionMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentMissionMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.CurrentMissionMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

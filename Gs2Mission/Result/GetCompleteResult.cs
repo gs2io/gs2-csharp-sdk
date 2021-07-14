@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Mission.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Mission.Result
 {
 	[Preserve]
-	public class GetCompleteResult
+	[System.Serializable]
+	public class GetCompleteResult : IResult
 	{
-        /** 達成状況 */
-        public Complete item { set; get; }
+        public Gs2.Gs2Mission.Model.Complete Item { set; get; }
 
+        public GetCompleteResult WithItem(Gs2.Gs2Mission.Model.Complete item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetCompleteResult FromDict(JsonData data)
+        public static GetCompleteResult FromJson(JsonData data)
         {
-            return new GetCompleteResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Mission.Model.Complete.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCompleteResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.Complete.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

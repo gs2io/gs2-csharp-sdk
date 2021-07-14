@@ -23,255 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Dictionary.Model
 {
+
 	[Preserve]
 	public class EntryModelMaster : IComparable
 	{
+        public string EntryModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** エントリーモデルマスター */
-        public string entryModelId { set; get; }
-
-        /**
-         * エントリーモデルマスターを設定
-         *
-         * @param entryModelId エントリーモデルマスター
-         * @return this
-         */
         public EntryModelMaster WithEntryModelId(string entryModelId) {
-            this.entryModelId = entryModelId;
+            this.EntryModelId = entryModelId;
             return this;
         }
 
-        /** エントリーモデル名 */
-        public string name { set; get; }
-
-        /**
-         * エントリーモデル名を設定
-         *
-         * @param name エントリーモデル名
-         * @return this
-         */
         public EntryModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** エントリーモデルマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * エントリーモデルマスターの説明を設定
-         *
-         * @param description エントリーモデルマスターの説明
-         * @return this
-         */
         public EntryModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** エントリーモデルのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * エントリーモデルのメタデータを設定
-         *
-         * @param metadata エントリーモデルのメタデータ
-         * @return this
-         */
         public EntryModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public EntryModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public EntryModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static EntryModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new EntryModelMaster()
+                .WithEntryModelId(!data.Keys.Contains("entryModelId") || data["entryModelId"] == null ? null : data["entryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["entryModelId"] = EntryModelId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.entryModelId != null)
-            {
+            if (EntryModelId != null) {
                 writer.WritePropertyName("entryModelId");
-                writer.Write(this.entryModelId);
+                writer.Write(EntryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetEntryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["entryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["entryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static EntryModelMaster FromDict(JsonData data)
-        {
-            return new EntryModelMaster()
-                .WithEntryModelId(data.Keys.Contains("entryModelId") && data["entryModelId"] != null ? data["entryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as EntryModelMaster;
             var diff = 0;
-            if (entryModelId == null && entryModelId == other.entryModelId)
+            if (EntryModelId == null && EntryModelId == other.EntryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += entryModelId.CompareTo(other.entryModelId);
+                diff += EntryModelId.CompareTo(other.EntryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["entryModelId"] = entryModelId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

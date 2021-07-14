@@ -23,562 +23,357 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public bool? EnableRating { set; get; }
+        public string CreateGatheringTriggerType { set; get; }
+        public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
+        public string CreateGatheringTriggerScriptId { set; get; }
+        public string CompleteMatchmakingTriggerType { set; get; }
+        public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
+        public string CompleteMatchmakingTriggerScriptId { set; get; }
+        public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
+        public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
+        public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
+        public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** レーティング計算機能を使用するか */
-        public bool? enableRating { set; get; }
-
-        /**
-         * レーティング計算機能を使用するかを設定
-         *
-         * @param enableRating レーティング計算機能を使用するか
-         * @return this
-         */
         public Namespace WithEnableRating(bool? enableRating) {
-            this.enableRating = enableRating;
+            this.EnableRating = enableRating;
             return this;
         }
 
-        /** ギャザリング新規作成時のアクション */
-        public string createGatheringTriggerType { set; get; }
-
-        /**
-         * ギャザリング新規作成時のアクションを設定
-         *
-         * @param createGatheringTriggerType ギャザリング新規作成時のアクション
-         * @return this
-         */
         public Namespace WithCreateGatheringTriggerType(string createGatheringTriggerType) {
-            this.createGatheringTriggerType = createGatheringTriggerType;
+            this.CreateGatheringTriggerType = createGatheringTriggerType;
             return this;
         }
 
-        /** ギャザリング新規作成時 にルームを作成するネームスペース のGRN */
-        public string createGatheringTriggerRealtimeNamespaceId { set; get; }
-
-        /**
-         * ギャザリング新規作成時 にルームを作成するネームスペース のGRNを設定
-         *
-         * @param createGatheringTriggerRealtimeNamespaceId ギャザリング新規作成時 にルームを作成するネームスペース のGRN
-         * @return this
-         */
         public Namespace WithCreateGatheringTriggerRealtimeNamespaceId(string createGatheringTriggerRealtimeNamespaceId) {
-            this.createGatheringTriggerRealtimeNamespaceId = createGatheringTriggerRealtimeNamespaceId;
+            this.CreateGatheringTriggerRealtimeNamespaceId = createGatheringTriggerRealtimeNamespaceId;
             return this;
         }
 
-        /** ギャザリング新規作成時 に実行されるスクリプト のGRN */
-        public string createGatheringTriggerScriptId { set; get; }
-
-        /**
-         * ギャザリング新規作成時 に実行されるスクリプト のGRNを設定
-         *
-         * @param createGatheringTriggerScriptId ギャザリング新規作成時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public Namespace WithCreateGatheringTriggerScriptId(string createGatheringTriggerScriptId) {
-            this.createGatheringTriggerScriptId = createGatheringTriggerScriptId;
+            this.CreateGatheringTriggerScriptId = createGatheringTriggerScriptId;
             return this;
         }
 
-        /** マッチメイキング完了時のアクション */
-        public string completeMatchmakingTriggerType { set; get; }
-
-        /**
-         * マッチメイキング完了時のアクションを設定
-         *
-         * @param completeMatchmakingTriggerType マッチメイキング完了時のアクション
-         * @return this
-         */
         public Namespace WithCompleteMatchmakingTriggerType(string completeMatchmakingTriggerType) {
-            this.completeMatchmakingTriggerType = completeMatchmakingTriggerType;
+            this.CompleteMatchmakingTriggerType = completeMatchmakingTriggerType;
             return this;
         }
 
-        /** マッチメイキング完了時 にルームを作成するネームスペース のGRN */
-        public string completeMatchmakingTriggerRealtimeNamespaceId { set; get; }
-
-        /**
-         * マッチメイキング完了時 にルームを作成するネームスペース のGRNを設定
-         *
-         * @param completeMatchmakingTriggerRealtimeNamespaceId マッチメイキング完了時 にルームを作成するネームスペース のGRN
-         * @return this
-         */
         public Namespace WithCompleteMatchmakingTriggerRealtimeNamespaceId(string completeMatchmakingTriggerRealtimeNamespaceId) {
-            this.completeMatchmakingTriggerRealtimeNamespaceId = completeMatchmakingTriggerRealtimeNamespaceId;
+            this.CompleteMatchmakingTriggerRealtimeNamespaceId = completeMatchmakingTriggerRealtimeNamespaceId;
             return this;
         }
 
-        /** マッチメイキング完了時 に実行されるスクリプト のGRN */
-        public string completeMatchmakingTriggerScriptId { set; get; }
-
-        /**
-         * マッチメイキング完了時 に実行されるスクリプト のGRNを設定
-         *
-         * @param completeMatchmakingTriggerScriptId マッチメイキング完了時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public Namespace WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
-            this.completeMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
+            this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
             return this;
         }
 
-        /** ギャザリングに新規プレイヤーが参加したときのプッシュ通知 */
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification { set; get; }
-
-        /**
-         * ギャザリングに新規プレイヤーが参加したときのプッシュ通知を設定
-         *
-         * @param joinNotification ギャザリングに新規プレイヤーが参加したときのプッシュ通知
-         * @return this
-         */
         public Namespace WithJoinNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification) {
-            this.joinNotification = joinNotification;
+            this.JoinNotification = joinNotification;
             return this;
         }
 
-        /** ギャザリングからプレイヤーが離脱したときのプッシュ通知 */
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting leaveNotification { set; get; }
-
-        /**
-         * ギャザリングからプレイヤーが離脱したときのプッシュ通知を設定
-         *
-         * @param leaveNotification ギャザリングからプレイヤーが離脱したときのプッシュ通知
-         * @return this
-         */
         public Namespace WithLeaveNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting leaveNotification) {
-            this.leaveNotification = leaveNotification;
+            this.LeaveNotification = leaveNotification;
             return this;
         }
 
-        /** マッチメイキングが完了したときのプッシュ通知 */
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification { set; get; }
-
-        /**
-         * マッチメイキングが完了したときのプッシュ通知を設定
-         *
-         * @param completeNotification マッチメイキングが完了したときのプッシュ通知
-         * @return this
-         */
         public Namespace WithCompleteNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification) {
-            this.completeNotification = completeNotification;
+            this.CompleteNotification = completeNotification;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Matchmaking.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : (bool?)bool.Parse(data["enableRating"].ToString()))
+                .WithCreateGatheringTriggerType(!data.Keys.Contains("createGatheringTriggerType") || data["createGatheringTriggerType"] == null ? null : data["createGatheringTriggerType"].ToString())
+                .WithCreateGatheringTriggerRealtimeNamespaceId(!data.Keys.Contains("createGatheringTriggerRealtimeNamespaceId") || data["createGatheringTriggerRealtimeNamespaceId"] == null ? null : data["createGatheringTriggerRealtimeNamespaceId"].ToString())
+                .WithCreateGatheringTriggerScriptId(!data.Keys.Contains("createGatheringTriggerScriptId") || data["createGatheringTriggerScriptId"] == null ? null : data["createGatheringTriggerScriptId"].ToString())
+                .WithCompleteMatchmakingTriggerType(!data.Keys.Contains("completeMatchmakingTriggerType") || data["completeMatchmakingTriggerType"] == null ? null : data["completeMatchmakingTriggerType"].ToString())
+                .WithCompleteMatchmakingTriggerRealtimeNamespaceId(!data.Keys.Contains("completeMatchmakingTriggerRealtimeNamespaceId") || data["completeMatchmakingTriggerRealtimeNamespaceId"] == null ? null : data["completeMatchmakingTriggerRealtimeNamespaceId"].ToString())
+                .WithCompleteMatchmakingTriggerScriptId(!data.Keys.Contains("completeMatchmakingTriggerScriptId") || data["completeMatchmakingTriggerScriptId"] == null ? null : data["completeMatchmakingTriggerScriptId"].ToString())
+                .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
+                .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
+                .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["completeNotification"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["enableRating"] = EnableRating,
+                ["createGatheringTriggerType"] = CreateGatheringTriggerType,
+                ["createGatheringTriggerRealtimeNamespaceId"] = CreateGatheringTriggerRealtimeNamespaceId,
+                ["createGatheringTriggerScriptId"] = CreateGatheringTriggerScriptId,
+                ["completeMatchmakingTriggerType"] = CompleteMatchmakingTriggerType,
+                ["completeMatchmakingTriggerRealtimeNamespaceId"] = CompleteMatchmakingTriggerRealtimeNamespaceId,
+                ["completeMatchmakingTriggerScriptId"] = CompleteMatchmakingTriggerScriptId,
+                ["joinNotification"] = JoinNotification?.ToJson(),
+                ["leaveNotification"] = LeaveNotification?.ToJson(),
+                ["completeNotification"] = CompleteNotification?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.enableRating.HasValue)
-            {
+            if (EnableRating != null) {
                 writer.WritePropertyName("enableRating");
-                writer.Write(this.enableRating.Value);
+                writer.Write(bool.Parse(EnableRating.ToString()));
             }
-            if(this.createGatheringTriggerType != null)
-            {
+            if (CreateGatheringTriggerType != null) {
                 writer.WritePropertyName("createGatheringTriggerType");
-                writer.Write(this.createGatheringTriggerType);
+                writer.Write(CreateGatheringTriggerType.ToString());
             }
-            if(this.createGatheringTriggerRealtimeNamespaceId != null)
-            {
+            if (CreateGatheringTriggerRealtimeNamespaceId != null) {
                 writer.WritePropertyName("createGatheringTriggerRealtimeNamespaceId");
-                writer.Write(this.createGatheringTriggerRealtimeNamespaceId);
+                writer.Write(CreateGatheringTriggerRealtimeNamespaceId.ToString());
             }
-            if(this.createGatheringTriggerScriptId != null)
-            {
+            if (CreateGatheringTriggerScriptId != null) {
                 writer.WritePropertyName("createGatheringTriggerScriptId");
-                writer.Write(this.createGatheringTriggerScriptId);
+                writer.Write(CreateGatheringTriggerScriptId.ToString());
             }
-            if(this.completeMatchmakingTriggerType != null)
-            {
+            if (CompleteMatchmakingTriggerType != null) {
                 writer.WritePropertyName("completeMatchmakingTriggerType");
-                writer.Write(this.completeMatchmakingTriggerType);
+                writer.Write(CompleteMatchmakingTriggerType.ToString());
             }
-            if(this.completeMatchmakingTriggerRealtimeNamespaceId != null)
-            {
+            if (CompleteMatchmakingTriggerRealtimeNamespaceId != null) {
                 writer.WritePropertyName("completeMatchmakingTriggerRealtimeNamespaceId");
-                writer.Write(this.completeMatchmakingTriggerRealtimeNamespaceId);
+                writer.Write(CompleteMatchmakingTriggerRealtimeNamespaceId.ToString());
             }
-            if(this.completeMatchmakingTriggerScriptId != null)
-            {
+            if (CompleteMatchmakingTriggerScriptId != null) {
                 writer.WritePropertyName("completeMatchmakingTriggerScriptId");
-                writer.Write(this.completeMatchmakingTriggerScriptId);
+                writer.Write(CompleteMatchmakingTriggerScriptId.ToString());
             }
-            if(this.joinNotification != null)
-            {
+            if (JoinNotification != null) {
                 writer.WritePropertyName("joinNotification");
-                this.joinNotification.WriteJson(writer);
+                JoinNotification.WriteJson(writer);
             }
-            if(this.leaveNotification != null)
-            {
+            if (LeaveNotification != null) {
                 writer.WritePropertyName("leaveNotification");
-                this.leaveNotification.WriteJson(writer);
+                LeaveNotification.WriteJson(writer);
             }
-            if(this.completeNotification != null)
-            {
+            if (CompleteNotification != null) {
                 writer.WritePropertyName("completeNotification");
-                this.completeNotification.WriteJson(writer);
+                CompleteNotification.WriteJson(writer);
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithEnableRating(data.Keys.Contains("enableRating") && data["enableRating"] != null ? (bool?)bool.Parse(data["enableRating"].ToString()) : null)
-                .WithCreateGatheringTriggerType(data.Keys.Contains("createGatheringTriggerType") && data["createGatheringTriggerType"] != null ? data["createGatheringTriggerType"].ToString() : null)
-                .WithCreateGatheringTriggerRealtimeNamespaceId(data.Keys.Contains("createGatheringTriggerRealtimeNamespaceId") && data["createGatheringTriggerRealtimeNamespaceId"] != null ? data["createGatheringTriggerRealtimeNamespaceId"].ToString() : null)
-                .WithCreateGatheringTriggerScriptId(data.Keys.Contains("createGatheringTriggerScriptId") && data["createGatheringTriggerScriptId"] != null ? data["createGatheringTriggerScriptId"].ToString() : null)
-                .WithCompleteMatchmakingTriggerType(data.Keys.Contains("completeMatchmakingTriggerType") && data["completeMatchmakingTriggerType"] != null ? data["completeMatchmakingTriggerType"].ToString() : null)
-                .WithCompleteMatchmakingTriggerRealtimeNamespaceId(data.Keys.Contains("completeMatchmakingTriggerRealtimeNamespaceId") && data["completeMatchmakingTriggerRealtimeNamespaceId"] != null ? data["completeMatchmakingTriggerRealtimeNamespaceId"].ToString() : null)
-                .WithCompleteMatchmakingTriggerScriptId(data.Keys.Contains("completeMatchmakingTriggerScriptId") && data["completeMatchmakingTriggerScriptId"] != null ? data["completeMatchmakingTriggerScriptId"].ToString() : null)
-                .WithJoinNotification(data.Keys.Contains("joinNotification") && data["joinNotification"] != null ? Gs2.Gs2Matchmaking.Model.NotificationSetting.FromDict(data["joinNotification"]) : null)
-                .WithLeaveNotification(data.Keys.Contains("leaveNotification") && data["leaveNotification"] != null ? Gs2.Gs2Matchmaking.Model.NotificationSetting.FromDict(data["leaveNotification"]) : null)
-                .WithCompleteNotification(data.Keys.Contains("completeNotification") && data["completeNotification"] != null ? Gs2.Gs2Matchmaking.Model.NotificationSetting.FromDict(data["completeNotification"]) : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Matchmaking.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (EnableRating == null && EnableRating == other.EnableRating)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += EnableRating == other.EnableRating ? 0 : 1;
             }
-            if (enableRating == null && enableRating == other.enableRating)
+            if (CreateGatheringTriggerType == null && CreateGatheringTriggerType == other.CreateGatheringTriggerType)
             {
                 // null and null
             }
             else
             {
-                diff += enableRating == other.enableRating ? 0 : 1;
+                diff += CreateGatheringTriggerType.CompareTo(other.CreateGatheringTriggerType);
             }
-            if (createGatheringTriggerType == null && createGatheringTriggerType == other.createGatheringTriggerType)
+            if (CreateGatheringTriggerRealtimeNamespaceId == null && CreateGatheringTriggerRealtimeNamespaceId == other.CreateGatheringTriggerRealtimeNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += createGatheringTriggerType.CompareTo(other.createGatheringTriggerType);
+                diff += CreateGatheringTriggerRealtimeNamespaceId.CompareTo(other.CreateGatheringTriggerRealtimeNamespaceId);
             }
-            if (createGatheringTriggerRealtimeNamespaceId == null && createGatheringTriggerRealtimeNamespaceId == other.createGatheringTriggerRealtimeNamespaceId)
+            if (CreateGatheringTriggerScriptId == null && CreateGatheringTriggerScriptId == other.CreateGatheringTriggerScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += createGatheringTriggerRealtimeNamespaceId.CompareTo(other.createGatheringTriggerRealtimeNamespaceId);
+                diff += CreateGatheringTriggerScriptId.CompareTo(other.CreateGatheringTriggerScriptId);
             }
-            if (createGatheringTriggerScriptId == null && createGatheringTriggerScriptId == other.createGatheringTriggerScriptId)
+            if (CompleteMatchmakingTriggerType == null && CompleteMatchmakingTriggerType == other.CompleteMatchmakingTriggerType)
             {
                 // null and null
             }
             else
             {
-                diff += createGatheringTriggerScriptId.CompareTo(other.createGatheringTriggerScriptId);
+                diff += CompleteMatchmakingTriggerType.CompareTo(other.CompleteMatchmakingTriggerType);
             }
-            if (completeMatchmakingTriggerType == null && completeMatchmakingTriggerType == other.completeMatchmakingTriggerType)
+            if (CompleteMatchmakingTriggerRealtimeNamespaceId == null && CompleteMatchmakingTriggerRealtimeNamespaceId == other.CompleteMatchmakingTriggerRealtimeNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += completeMatchmakingTriggerType.CompareTo(other.completeMatchmakingTriggerType);
+                diff += CompleteMatchmakingTriggerRealtimeNamespaceId.CompareTo(other.CompleteMatchmakingTriggerRealtimeNamespaceId);
             }
-            if (completeMatchmakingTriggerRealtimeNamespaceId == null && completeMatchmakingTriggerRealtimeNamespaceId == other.completeMatchmakingTriggerRealtimeNamespaceId)
+            if (CompleteMatchmakingTriggerScriptId == null && CompleteMatchmakingTriggerScriptId == other.CompleteMatchmakingTriggerScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += completeMatchmakingTriggerRealtimeNamespaceId.CompareTo(other.completeMatchmakingTriggerRealtimeNamespaceId);
+                diff += CompleteMatchmakingTriggerScriptId.CompareTo(other.CompleteMatchmakingTriggerScriptId);
             }
-            if (completeMatchmakingTriggerScriptId == null && completeMatchmakingTriggerScriptId == other.completeMatchmakingTriggerScriptId)
+            if (JoinNotification == null && JoinNotification == other.JoinNotification)
             {
                 // null and null
             }
             else
             {
-                diff += completeMatchmakingTriggerScriptId.CompareTo(other.completeMatchmakingTriggerScriptId);
+                diff += JoinNotification.CompareTo(other.JoinNotification);
             }
-            if (joinNotification == null && joinNotification == other.joinNotification)
+            if (LeaveNotification == null && LeaveNotification == other.LeaveNotification)
             {
                 // null and null
             }
             else
             {
-                diff += joinNotification.CompareTo(other.joinNotification);
+                diff += LeaveNotification.CompareTo(other.LeaveNotification);
             }
-            if (leaveNotification == null && leaveNotification == other.leaveNotification)
+            if (CompleteNotification == null && CompleteNotification == other.CompleteNotification)
             {
                 // null and null
             }
             else
             {
-                diff += leaveNotification.CompareTo(other.leaveNotification);
+                diff += CompleteNotification.CompareTo(other.CompleteNotification);
             }
-            if (completeNotification == null && completeNotification == other.completeNotification)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += completeNotification.CompareTo(other.completeNotification);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["enableRating"] = enableRating;
-            data["createGatheringTriggerType"] = createGatheringTriggerType;
-            data["createGatheringTriggerRealtimeNamespaceId"] = createGatheringTriggerRealtimeNamespaceId;
-            data["createGatheringTriggerScriptId"] = createGatheringTriggerScriptId;
-            data["completeMatchmakingTriggerType"] = completeMatchmakingTriggerType;
-            data["completeMatchmakingTriggerRealtimeNamespaceId"] = completeMatchmakingTriggerRealtimeNamespaceId;
-            data["completeMatchmakingTriggerScriptId"] = completeMatchmakingTriggerScriptId;
-            data["joinNotification"] = joinNotification.ToDict();
-            data["leaveNotification"] = leaveNotification.ToDict();
-            data["completeNotification"] = completeNotification.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

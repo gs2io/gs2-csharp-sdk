@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class Reward : IComparable
 	{
+        public string Action { set; get; }
+        public string Request { set; get; }
+        public string ItemId { set; get; }
+        public int? Value { set; get; }
 
-        /** スタンプシートで実行するアクションの種類 */
-        public string action { set; get; }
-
-        /**
-         * スタンプシートで実行するアクションの種類を設定
-         *
-         * @param action スタンプシートで実行するアクションの種類
-         * @return this
-         */
         public Reward WithAction(string action) {
-            this.action = action;
+            this.Action = action;
             return this;
         }
 
-        /** リクエストモデル */
-        public string request { set; get; }
-
-        /**
-         * リクエストモデルを設定
-         *
-         * @param request リクエストモデル
-         * @return this
-         */
         public Reward WithRequest(string request) {
-            this.request = request;
+            this.Request = request;
             return this;
         }
 
-        /** 入手するリソースGRN */
-        public string itemId { set; get; }
-
-        /**
-         * 入手するリソースGRNを設定
-         *
-         * @param itemId 入手するリソースGRN
-         * @return this
-         */
         public Reward WithItemId(string itemId) {
-            this.itemId = itemId;
+            this.ItemId = itemId;
             return this;
         }
 
-        /** 入手する数量 */
-        public int? value { set; get; }
-
-        /**
-         * 入手する数量を設定
-         *
-         * @param value 入手する数量
-         * @return this
-         */
         public Reward WithValue(int? value) {
-            this.value = value;
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static Reward FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Reward()
+                .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
+                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString())
+                .WithItemId(!data.Keys.Contains("itemId") || data["itemId"] == null ? null : data["itemId"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["action"] = Action,
+                ["request"] = Request,
+                ["itemId"] = ItemId,
+                ["value"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.action != null)
-            {
+            if (Action != null) {
                 writer.WritePropertyName("action");
-                writer.Write(this.action);
+                writer.Write(Action.ToString());
             }
-            if(this.request != null)
-            {
+            if (Request != null) {
                 writer.WritePropertyName("request");
-                writer.Write(this.request);
+                writer.Write(Request.ToString());
             }
-            if(this.itemId != null)
-            {
+            if (ItemId != null) {
                 writer.WritePropertyName("itemId");
-                writer.Write(this.itemId);
+                writer.Write(ItemId.ToString());
             }
-            if(this.value.HasValue)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value.Value);
+                writer.Write(int.Parse(Value.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Reward FromDict(JsonData data)
-        {
-            return new Reward()
-                .WithAction(data.Keys.Contains("action") && data["action"] != null ? data["action"].ToString() : null)
-                .WithRequest(data.Keys.Contains("request") && data["request"] != null ? data["request"].ToString() : null)
-                .WithItemId(data.Keys.Contains("itemId") && data["itemId"] != null ? data["itemId"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? (int?)int.Parse(data["value"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Reward;
             var diff = 0;
-            if (action == null && action == other.action)
+            if (Action == null && Action == other.Action)
             {
                 // null and null
             }
             else
             {
-                diff += action.CompareTo(other.action);
+                diff += Action.CompareTo(other.Action);
             }
-            if (request == null && request == other.request)
+            if (Request == null && Request == other.Request)
             {
                 // null and null
             }
             else
             {
-                diff += request.CompareTo(other.request);
+                diff += Request.CompareTo(other.Request);
             }
-            if (itemId == null && itemId == other.itemId)
+            if (ItemId == null && ItemId == other.ItemId)
             {
                 // null and null
             }
             else
             {
-                diff += itemId.CompareTo(other.itemId);
+                diff += ItemId.CompareTo(other.ItemId);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(value - other.value);
+                diff += (int)(Value - other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["action"] = action;
-            data["request"] = request;
-            data["itemId"] = itemId;
-            data["value"] = value;
-            return data;
-        }
-	}
+    }
 }

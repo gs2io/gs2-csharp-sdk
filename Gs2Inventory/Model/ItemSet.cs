@@ -23,449 +23,274 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inventory.Model
 {
+
 	[Preserve]
 	public class ItemSet : IComparable
 	{
+        public string ItemSetId { set; get; }
+        public string Name { set; get; }
+        public string InventoryName { set; get; }
+        public string UserId { set; get; }
+        public string ItemName { set; get; }
+        public long? Count { set; get; }
+        public string[] ReferenceOf { set; get; }
+        public int? SortValue { set; get; }
+        public long? ExpiresAt { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 有効期限ごとのアイテム所持数量 */
-        public string itemSetId { set; get; }
-
-        /**
-         * 有効期限ごとのアイテム所持数量を設定
-         *
-         * @param itemSetId 有効期限ごとのアイテム所持数量
-         * @return this
-         */
         public ItemSet WithItemSetId(string itemSetId) {
-            this.itemSetId = itemSetId;
+            this.ItemSetId = itemSetId;
             return this;
         }
 
-        /** アイテムセットを識別する名前 */
-        public string name { set; get; }
-
-        /**
-         * アイテムセットを識別する名前を設定
-         *
-         * @param name アイテムセットを識別する名前
-         * @return this
-         */
         public ItemSet WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** インベントリの名前 */
-        public string inventoryName { set; get; }
-
-        /**
-         * インベントリの名前を設定
-         *
-         * @param inventoryName インベントリの名前
-         * @return this
-         */
         public ItemSet WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public ItemSet WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** アイテムマスターの名前 */
-        public string itemName { set; get; }
-
-        /**
-         * アイテムマスターの名前を設定
-         *
-         * @param itemName アイテムマスターの名前
-         * @return this
-         */
         public ItemSet WithItemName(string itemName) {
-            this.itemName = itemName;
+            this.ItemName = itemName;
             return this;
         }
 
-        /** 所持数量 */
-        public long? count { set; get; }
-
-        /**
-         * 所持数量を設定
-         *
-         * @param count 所持数量
-         * @return this
-         */
         public ItemSet WithCount(long? count) {
-            this.count = count;
+            this.Count = count;
             return this;
         }
 
-        /** この所持品の参照元リスト */
-        public List<string> referenceOf { set; get; }
-
-        /**
-         * この所持品の参照元リストを設定
-         *
-         * @param referenceOf この所持品の参照元リスト
-         * @return this
-         */
-        public ItemSet WithReferenceOf(List<string> referenceOf) {
-            this.referenceOf = referenceOf;
+        public ItemSet WithReferenceOf(string[] referenceOf) {
+            this.ReferenceOf = referenceOf;
             return this;
         }
 
-        /** 表示順番 */
-        public int? sortValue { set; get; }
-
-        /**
-         * 表示順番を設定
-         *
-         * @param sortValue 表示順番
-         * @return this
-         */
         public ItemSet WithSortValue(int? sortValue) {
-            this.sortValue = sortValue;
+            this.SortValue = sortValue;
             return this;
         }
 
-        /** 有効期限 */
-        public long? expiresAt { set; get; }
-
-        /**
-         * 有効期限を設定
-         *
-         * @param expiresAt 有効期限
-         * @return this
-         */
         public ItemSet WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public ItemSet WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public ItemSet WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static ItemSet FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ItemSet()
+                .WithItemSetId(!data.Keys.Contains("itemSetId") || data["itemSetId"] == null ? null : data["itemSetId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()))
+                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? new string[]{} : data["referenceOf"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["itemSetId"] = ItemSetId,
+                ["name"] = Name,
+                ["inventoryName"] = InventoryName,
+                ["userId"] = UserId,
+                ["itemName"] = ItemName,
+                ["count"] = Count,
+                ["referenceOf"] = new JsonData(ReferenceOf == null ? new JsonData[]{} :
+                        ReferenceOf.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["sortValue"] = SortValue,
+                ["expiresAt"] = ExpiresAt,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.itemSetId != null)
-            {
+            if (ItemSetId != null) {
                 writer.WritePropertyName("itemSetId");
-                writer.Write(this.itemSetId);
+                writer.Write(ItemSetId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.inventoryName != null)
-            {
+            if (InventoryName != null) {
                 writer.WritePropertyName("inventoryName");
-                writer.Write(this.inventoryName);
+                writer.Write(InventoryName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.itemName != null)
-            {
+            if (ItemName != null) {
                 writer.WritePropertyName("itemName");
-                writer.Write(this.itemName);
+                writer.Write(ItemName.ToString());
             }
-            if(this.count.HasValue)
-            {
+            if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(this.count.Value);
+                writer.Write(long.Parse(Count.ToString()));
             }
-            if(this.referenceOf != null)
-            {
+            if (ReferenceOf != null) {
                 writer.WritePropertyName("referenceOf");
                 writer.WriteArrayStart();
-                foreach(var item in this.referenceOf)
+                foreach (var referenceO in ReferenceOf)
                 {
-                    writer.Write(item);
+                    if (referenceO != null) {
+                        writer.Write(referenceO.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.sortValue.HasValue)
-            {
+            if (SortValue != null) {
                 writer.WritePropertyName("sortValue");
-                writer.Write(this.sortValue.Value);
+                writer.Write(int.Parse(SortValue.ToString()));
             }
-            if(this.expiresAt.HasValue)
-            {
+            if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
-                writer.Write(this.expiresAt.Value);
+                writer.Write(long.Parse(ExpiresAt.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetItemSetNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["itemSetName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["itemSetName"].Value;
-    }
-
-    public static string GetItemNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["itemName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["itemName"].Value;
-    }
-
-    public static string GetInventoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["inventoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["inventoryName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*):item:(?<itemName>.*):itemSet:(?<itemSetName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static ItemSet FromDict(JsonData data)
-        {
-            return new ItemSet()
-                .WithItemSetId(data.Keys.Contains("itemSetId") && data["itemSetId"] != null ? data["itemSetId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithInventoryName(data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithItemName(data.Keys.Contains("itemName") && data["itemName"] != null ? data["itemName"].ToString() : null)
-                .WithCount(data.Keys.Contains("count") && data["count"] != null ? (long?)long.Parse(data["count"].ToString()) : null)
-                .WithReferenceOf(data.Keys.Contains("referenceOf") && data["referenceOf"] != null ? data["referenceOf"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithSortValue(data.Keys.Contains("sortValue") && data["sortValue"] != null ? (int?)int.Parse(data["sortValue"].ToString()) : null)
-                .WithExpiresAt(data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ItemSet;
             var diff = 0;
-            if (itemSetId == null && itemSetId == other.itemSetId)
+            if (ItemSetId == null && ItemSetId == other.ItemSetId)
             {
                 // null and null
             }
             else
             {
-                diff += itemSetId.CompareTo(other.itemSetId);
+                diff += ItemSetId.CompareTo(other.ItemSetId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (inventoryName == null && inventoryName == other.inventoryName)
+            if (InventoryName == null && InventoryName == other.InventoryName)
             {
                 // null and null
             }
             else
             {
-                diff += inventoryName.CompareTo(other.inventoryName);
+                diff += InventoryName.CompareTo(other.InventoryName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (itemName == null && itemName == other.itemName)
+            if (ItemName == null && ItemName == other.ItemName)
             {
                 // null and null
             }
             else
             {
-                diff += itemName.CompareTo(other.itemName);
+                diff += ItemName.CompareTo(other.ItemName);
             }
-            if (count == null && count == other.count)
+            if (Count == null && Count == other.Count)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(count - other.count);
+                diff += (int)(Count - other.Count);
             }
-            if (referenceOf == null && referenceOf == other.referenceOf)
+            if (ReferenceOf == null && ReferenceOf == other.ReferenceOf)
             {
                 // null and null
             }
             else
             {
-                diff += referenceOf.Count - other.referenceOf.Count;
-                for (var i = 0; i < referenceOf.Count; i++)
+                diff += ReferenceOf.Length - other.ReferenceOf.Length;
+                for (var i = 0; i < ReferenceOf.Length; i++)
                 {
-                    diff += referenceOf[i].CompareTo(other.referenceOf[i]);
+                    diff += ReferenceOf[i].CompareTo(other.ReferenceOf[i]);
                 }
             }
-            if (sortValue == null && sortValue == other.sortValue)
+            if (SortValue == null && SortValue == other.SortValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(sortValue - other.sortValue);
+                diff += (int)(SortValue - other.SortValue);
             }
-            if (expiresAt == null && expiresAt == other.expiresAt)
+            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(expiresAt - other.expiresAt);
+                diff += (int)(ExpiresAt - other.ExpiresAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["itemSetId"] = itemSetId;
-            data["name"] = name;
-            data["inventoryName"] = inventoryName;
-            data["userId"] = userId;
-            data["itemName"] = itemName;
-            data["count"] = count;
-            data["referenceOf"] = new JsonData(referenceOf);
-            data["sortValue"] = sortValue;
-            data["expiresAt"] = expiresAt;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

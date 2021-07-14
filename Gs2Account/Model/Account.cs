@@ -23,226 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Account.Model
 {
+
 	[Preserve]
 	public class Account : IComparable
 	{
+        public string AccountId { set; get; }
+        public string UserId { set; get; }
+        public string Password { set; get; }
+        public int? TimeOffset { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** ゲームプレイヤーアカウント */
-        public string accountId { set; get; }
-
-        /**
-         * ゲームプレイヤーアカウントを設定
-         *
-         * @param accountId ゲームプレイヤーアカウント
-         * @return this
-         */
         public Account WithAccountId(string accountId) {
-            this.accountId = accountId;
+            this.AccountId = accountId;
             return this;
         }
 
-        /** アカウントID */
-        public string userId { set; get; }
-
-        /**
-         * アカウントIDを設定
-         *
-         * @param userId アカウントID
-         * @return this
-         */
         public Account WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** パスワード */
-        public string password { set; get; }
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public Account WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
 
-        /** 現在時刻に対する補正値（現在時刻を起点とした秒数） */
-        public int? timeOffset { set; get; }
-
-        /**
-         * 現在時刻に対する補正値（現在時刻を起点とした秒数）を設定
-         *
-         * @param timeOffset 現在時刻に対する補正値（現在時刻を起点とした秒数）
-         * @return this
-         */
         public Account WithTimeOffset(int? timeOffset) {
-            this.timeOffset = timeOffset;
+            this.TimeOffset = timeOffset;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Account WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Account FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Account()
+                .WithAccountId(!data.Keys.Contains("accountId") || data["accountId"] == null ? null : data["accountId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountId"] = AccountId,
+                ["userId"] = UserId,
+                ["password"] = Password,
+                ["timeOffset"] = TimeOffset,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.accountId != null)
-            {
+            if (AccountId != null) {
                 writer.WritePropertyName("accountId");
-                writer.Write(this.accountId);
+                writer.Write(AccountId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.password != null)
-            {
+            if (Password != null) {
                 writer.WritePropertyName("password");
-                writer.Write(this.password);
+                writer.Write(Password.ToString());
             }
-            if(this.timeOffset.HasValue)
-            {
+            if (TimeOffset != null) {
                 writer.WritePropertyName("timeOffset");
-                writer.Write(this.timeOffset.Value);
+                writer.Write(int.Parse(TimeOffset.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):account:(?<userId>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):account:(?<userId>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):account:(?<userId>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):account:(?<userId>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Account FromDict(JsonData data)
-        {
-            return new Account()
-                .WithAccountId(data.Keys.Contains("accountId") && data["accountId"] != null ? data["accountId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPassword(data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString() : null)
-                .WithTimeOffset(data.Keys.Contains("timeOffset") && data["timeOffset"] != null ? (int?)int.Parse(data["timeOffset"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Account;
             var diff = 0;
-            if (accountId == null && accountId == other.accountId)
+            if (AccountId == null && AccountId == other.AccountId)
             {
                 // null and null
             }
             else
             {
-                diff += accountId.CompareTo(other.accountId);
+                diff += AccountId.CompareTo(other.AccountId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (password == null && password == other.password)
+            if (Password == null && Password == other.Password)
             {
                 // null and null
             }
             else
             {
-                diff += password.CompareTo(other.password);
+                diff += Password.CompareTo(other.Password);
             }
-            if (timeOffset == null && timeOffset == other.timeOffset)
+            if (TimeOffset == null && TimeOffset == other.TimeOffset)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(timeOffset - other.timeOffset);
+                diff += (int)(TimeOffset - other.TimeOffset);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["accountId"] = accountId;
-            data["userId"] = userId;
-            data["password"] = password;
-            data["timeOffset"] = timeOffset;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

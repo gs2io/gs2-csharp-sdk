@@ -28,90 +28,62 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class GetJobByUserIdRequest : Gs2Request<GetJobByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string JobName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetJobByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public GetJobByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** ジョブの名前 */
-		[UnityEngine.SerializeField]
-        public string jobName;
-
-        /**
-         * ジョブの名前を設定
-         *
-         * @param jobName ジョブの名前
-         * @return this
-         */
         public GetJobByUserIdRequest WithJobName(string jobName) {
-            this.jobName = jobName;
+            this.JobName = jobName;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetJobByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static GetJobByUserIdRequest FromDict(JsonData data)
+        public static GetJobByUserIdRequest FromJson(JsonData data)
         {
-            return new GetJobByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                jobName = data.Keys.Contains("jobName") && data["jobName"] != null ? data["jobName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetJobByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["jobName"] = JobName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["jobName"] = jobName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (JobName != null) {
+                writer.WritePropertyName("jobName");
+                writer.Write(JobName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

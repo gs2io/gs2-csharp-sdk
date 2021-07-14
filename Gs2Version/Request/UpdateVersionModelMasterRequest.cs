@@ -28,198 +28,143 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class UpdateVersionModelMasterRequest : Gs2Request<UpdateVersionModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string VersionName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
+        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
+        public string Scope { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+        public bool? NeedSignature { set; get; }
+        public string SignatureKeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** バージョン名 */
-		[UnityEngine.SerializeField]
-        public string versionName;
-
-        /**
-         * バージョン名を設定
-         *
-         * @param versionName バージョン名
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithVersionName(string versionName) {
-            this.versionName = versionName;
+            this.VersionName = versionName;
             return this;
         }
 
-
-        /** バージョンマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * バージョンマスターの説明を設定
-         *
-         * @param description バージョンマスターの説明
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** バージョンのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * バージョンのメタデータを設定
-         *
-         * @param metadata バージョンのメタデータ
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** バージョンアップを促すバージョン */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Version.Model.Version_ warningVersion;
-
-        /**
-         * バージョンアップを促すバージョンを設定
-         *
-         * @param warningVersion バージョンアップを促すバージョン
-         * @return this
-         */
-        public UpdateVersionModelMasterRequest WithWarningVersion(global::Gs2.Gs2Version.Model.Version_ warningVersion) {
-            this.warningVersion = warningVersion;
+        public UpdateVersionModelMasterRequest WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
+            this.WarningVersion = warningVersion;
             return this;
         }
 
-
-        /** バージョンチェックを蹴るバージョン */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Version.Model.Version_ errorVersion;
-
-        /**
-         * バージョンチェックを蹴るバージョンを設定
-         *
-         * @param errorVersion バージョンチェックを蹴るバージョン
-         * @return this
-         */
-        public UpdateVersionModelMasterRequest WithErrorVersion(global::Gs2.Gs2Version.Model.Version_ errorVersion) {
-            this.errorVersion = errorVersion;
+        public UpdateVersionModelMasterRequest WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
+            this.ErrorVersion = errorVersion;
             return this;
         }
 
-
-        /** 判定に使用するバージョン値の種類 */
-		[UnityEngine.SerializeField]
-        public string scope;
-
-        /**
-         * 判定に使用するバージョン値の種類を設定
-         *
-         * @param scope 判定に使用するバージョン値の種類
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithScope(string scope) {
-            this.scope = scope;
+            this.Scope = scope;
             return this;
         }
 
-
-        /** 現在のバージョン */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Version.Model.Version_ currentVersion;
-
-        /**
-         * 現在のバージョンを設定
-         *
-         * @param currentVersion 現在のバージョン
-         * @return this
-         */
-        public UpdateVersionModelMasterRequest WithCurrentVersion(global::Gs2.Gs2Version.Model.Version_ currentVersion) {
-            this.currentVersion = currentVersion;
+        public UpdateVersionModelMasterRequest WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
+            this.CurrentVersion = currentVersion;
             return this;
         }
 
-
-        /** 判定するバージョン値に署名検証を必要とするか */
-		[UnityEngine.SerializeField]
-        public bool? needSignature;
-
-        /**
-         * 判定するバージョン値に署名検証を必要とするかを設定
-         *
-         * @param needSignature 判定するバージョン値に署名検証を必要とするか
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithNeedSignature(bool? needSignature) {
-            this.needSignature = needSignature;
+            this.NeedSignature = needSignature;
             return this;
         }
 
-
-        /** 署名検証に使用する暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string signatureKeyId;
-
-        /**
-         * 署名検証に使用する暗号鍵 のGRNを設定
-         *
-         * @param signatureKeyId 署名検証に使用する暗号鍵 のGRN
-         * @return this
-         */
         public UpdateVersionModelMasterRequest WithSignatureKeyId(string signatureKeyId) {
-            this.signatureKeyId = signatureKeyId;
+            this.SignatureKeyId = signatureKeyId;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateVersionModelMasterRequest FromDict(JsonData data)
+        public static UpdateVersionModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateVersionModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                versionName = data.Keys.Contains("versionName") && data["versionName"] != null ? data["versionName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                warningVersion = data.Keys.Contains("warningVersion") && data["warningVersion"] != null ? global::Gs2.Gs2Version.Model.Version_.FromDict(data["warningVersion"]) : null,
-                errorVersion = data.Keys.Contains("errorVersion") && data["errorVersion"] != null ? global::Gs2.Gs2Version.Model.Version_.FromDict(data["errorVersion"]) : null,
-                scope = data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString(): null,
-                currentVersion = data.Keys.Contains("currentVersion") && data["currentVersion"] != null ? global::Gs2.Gs2Version.Model.Version_.FromDict(data["currentVersion"]) : null,
-                needSignature = data.Keys.Contains("needSignature") && data["needSignature"] != null ? (bool?)bool.Parse(data["needSignature"].ToString()) : null,
-                signatureKeyId = data.Keys.Contains("signatureKeyId") && data["signatureKeyId"] != null ? data["signatureKeyId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateVersionModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithWarningVersion(!data.Keys.Contains("warningVersion") || data["warningVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["warningVersion"]))
+                .WithErrorVersion(!data.Keys.Contains("errorVersion") || data["errorVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["errorVersion"]))
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]))
+                .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
+                .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["versionName"] = VersionName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["warningVersion"] = WarningVersion?.ToJson(),
+                ["errorVersion"] = ErrorVersion?.ToJson(),
+                ["scope"] = Scope,
+                ["currentVersion"] = CurrentVersion?.ToJson(),
+                ["needSignature"] = NeedSignature,
+                ["signatureKeyId"] = SignatureKeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["versionName"] = versionName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["warningVersion"] = warningVersion.ToDict();
-            data["errorVersion"] = errorVersion.ToDict();
-            data["scope"] = scope;
-            data["currentVersion"] = currentVersion.ToDict();
-            data["needSignature"] = needSignature;
-            data["signatureKeyId"] = signatureKeyId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (VersionName != null) {
+                writer.WritePropertyName("versionName");
+                writer.Write(VersionName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (WarningVersion != null) {
+                WarningVersion.WriteJson(writer);
+            }
+            if (ErrorVersion != null) {
+                ErrorVersion.WriteJson(writer);
+            }
+            if (Scope != null) {
+                writer.WritePropertyName("scope");
+                writer.Write(Scope.ToString());
+            }
+            if (CurrentVersion != null) {
+                CurrentVersion.WriteJson(writer);
+            }
+            if (NeedSignature != null) {
+                writer.WritePropertyName("needSignature");
+                writer.Write(bool.Parse(NeedSignature.ToString()));
+            }
+            if (SignatureKeyId != null) {
+                writer.WritePropertyName("signatureKeyId");
+                writer.Write(SignatureKeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

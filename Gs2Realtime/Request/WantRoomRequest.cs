@@ -28,76 +28,70 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class WantRoomRequest : Gs2Request<WantRoomRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string[] NotificationUserIds { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public WantRoomRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param name ルーム名
-         * @return this
-         */
         public WantRoomRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ルームの作成が終わったときに通知を受けるユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> notificationUserIds;
-
-        /**
-         * ルームの作成が終わったときに通知を受けるユーザIDリストを設定
-         *
-         * @param notificationUserIds ルームの作成が終わったときに通知を受けるユーザIDリスト
-         * @return this
-         */
-        public WantRoomRequest WithNotificationUserIds(List<string> notificationUserIds) {
-            this.notificationUserIds = notificationUserIds;
+        public WantRoomRequest WithNotificationUserIds(string[] notificationUserIds) {
+            this.NotificationUserIds = notificationUserIds;
             return this;
         }
-
 
     	[Preserve]
-        public static WantRoomRequest FromDict(JsonData data)
+        public static WantRoomRequest FromJson(JsonData data)
         {
-            return new WantRoomRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                notificationUserIds = data.Keys.Contains("notificationUserIds") && data["notificationUserIds"] != null ? data["notificationUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new WantRoomRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null ? new string[]{} : data["notificationUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["notificationUserIds"] = new JsonData(NotificationUserIds == null ? new JsonData[]{} :
+                        NotificationUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["notificationUserIds"] = new JsonData(notificationUserIds);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var notificationUserId in NotificationUserIds)
+            {
+                writer.Write(notificationUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

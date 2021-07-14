@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class UpdateCurrentFormMasterFromGitHubResult
+	[System.Serializable]
+	public class UpdateCurrentFormMasterFromGitHubResult : IResult
 	{
-        /** 更新した現在有効なフォーム設定 */
-        public CurrentFormMaster item { set; get; }
+        public Gs2.Gs2Formation.Model.CurrentFormMaster Item { set; get; }
 
+        public UpdateCurrentFormMasterFromGitHubResult WithItem(Gs2.Gs2Formation.Model.CurrentFormMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateCurrentFormMasterFromGitHubResult FromDict(JsonData data)
+        public static UpdateCurrentFormMasterFromGitHubResult FromJson(JsonData data)
         {
-            return new UpdateCurrentFormMasterFromGitHubResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.CurrentFormMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentFormMasterFromGitHubResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.CurrentFormMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

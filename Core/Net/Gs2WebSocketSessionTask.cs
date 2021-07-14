@@ -50,7 +50,7 @@ namespace Gs2.Core.Net
                     if (!string.IsNullOrEmpty(gs2Response.Message) && gs2Response.Message != "Null")
                     {
                         var message = JsonMapper.ToObject(gs2Response.Message);
-                        result = (T)typeof(T).GetMethod("FromDict")?.Invoke(null, new object[] { message["body"] });
+                        result = (T)typeof(T).GetMethod("FromJson")?.Invoke(null, new object[] { message["body"] });
                     }
                 }
                 catch (System.Exception)

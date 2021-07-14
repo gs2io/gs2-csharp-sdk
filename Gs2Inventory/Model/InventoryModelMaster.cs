@@ -23,342 +23,217 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inventory.Model
 {
+
 	[Preserve]
 	public class InventoryModelMaster : IComparable
 	{
+        public string InventoryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public int? InitialCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
+        public bool? ProtectReferencedItem { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** インベントリモデルマスター */
-        public string inventoryModelId { set; get; }
-
-        /**
-         * インベントリモデルマスターを設定
-         *
-         * @param inventoryModelId インベントリモデルマスター
-         * @return this
-         */
         public InventoryModelMaster WithInventoryModelId(string inventoryModelId) {
-            this.inventoryModelId = inventoryModelId;
+            this.InventoryModelId = inventoryModelId;
             return this;
         }
 
-        /** インベントリの種類名 */
-        public string name { set; get; }
-
-        /**
-         * インベントリの種類名を設定
-         *
-         * @param name インベントリの種類名
-         * @return this
-         */
         public InventoryModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** インベントリの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * インベントリの種類のメタデータを設定
-         *
-         * @param metadata インベントリの種類のメタデータ
-         * @return this
-         */
         public InventoryModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** インベントリモデルマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * インベントリモデルマスターの説明を設定
-         *
-         * @param description インベントリモデルマスターの説明
-         * @return this
-         */
         public InventoryModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** インベントリの初期サイズ */
-        public int? initialCapacity { set; get; }
-
-        /**
-         * インベントリの初期サイズを設定
-         *
-         * @param initialCapacity インベントリの初期サイズ
-         * @return this
-         */
         public InventoryModelMaster WithInitialCapacity(int? initialCapacity) {
-            this.initialCapacity = initialCapacity;
+            this.InitialCapacity = initialCapacity;
             return this;
         }
 
-        /** インベントリの最大サイズ */
-        public int? maxCapacity { set; get; }
-
-        /**
-         * インベントリの最大サイズを設定
-         *
-         * @param maxCapacity インベントリの最大サイズ
-         * @return this
-         */
         public InventoryModelMaster WithMaxCapacity(int? maxCapacity) {
-            this.maxCapacity = maxCapacity;
+            this.MaxCapacity = maxCapacity;
             return this;
         }
 
-        /** 参照元が登録されているアイテムセットは削除できなくする */
-        public bool? protectReferencedItem { set; get; }
-
-        /**
-         * 参照元が登録されているアイテムセットは削除できなくするを設定
-         *
-         * @param protectReferencedItem 参照元が登録されているアイテムセットは削除できなくする
-         * @return this
-         */
         public InventoryModelMaster WithProtectReferencedItem(bool? protectReferencedItem) {
-            this.protectReferencedItem = protectReferencedItem;
+            this.ProtectReferencedItem = protectReferencedItem;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public InventoryModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public InventoryModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static InventoryModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new InventoryModelMaster()
+                .WithInventoryModelId(!data.Keys.Contains("inventoryModelId") || data["inventoryModelId"] == null ? null : data["inventoryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
+                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["inventoryModelId"] = InventoryModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["initialCapacity"] = InitialCapacity,
+                ["maxCapacity"] = MaxCapacity,
+                ["protectReferencedItem"] = ProtectReferencedItem,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.inventoryModelId != null)
-            {
+            if (InventoryModelId != null) {
                 writer.WritePropertyName("inventoryModelId");
-                writer.Write(this.inventoryModelId);
+                writer.Write(InventoryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.initialCapacity.HasValue)
-            {
+            if (InitialCapacity != null) {
                 writer.WritePropertyName("initialCapacity");
-                writer.Write(this.initialCapacity.Value);
+                writer.Write(int.Parse(InitialCapacity.ToString()));
             }
-            if(this.maxCapacity.HasValue)
-            {
+            if (MaxCapacity != null) {
                 writer.WritePropertyName("maxCapacity");
-                writer.Write(this.maxCapacity.Value);
+                writer.Write(int.Parse(MaxCapacity.ToString()));
             }
-            if(this.protectReferencedItem.HasValue)
-            {
+            if (ProtectReferencedItem != null) {
                 writer.WritePropertyName("protectReferencedItem");
-                writer.Write(this.protectReferencedItem.Value);
+                writer.Write(bool.Parse(ProtectReferencedItem.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetInventoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["inventoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["inventoryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static InventoryModelMaster FromDict(JsonData data)
-        {
-            return new InventoryModelMaster()
-                .WithInventoryModelId(data.Keys.Contains("inventoryModelId") && data["inventoryModelId"] != null ? data["inventoryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithInitialCapacity(data.Keys.Contains("initialCapacity") && data["initialCapacity"] != null ? (int?)int.Parse(data["initialCapacity"].ToString()) : null)
-                .WithMaxCapacity(data.Keys.Contains("maxCapacity") && data["maxCapacity"] != null ? (int?)int.Parse(data["maxCapacity"].ToString()) : null)
-                .WithProtectReferencedItem(data.Keys.Contains("protectReferencedItem") && data["protectReferencedItem"] != null ? (bool?)bool.Parse(data["protectReferencedItem"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as InventoryModelMaster;
             var diff = 0;
-            if (inventoryModelId == null && inventoryModelId == other.inventoryModelId)
+            if (InventoryModelId == null && InventoryModelId == other.InventoryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += inventoryModelId.CompareTo(other.inventoryModelId);
+                diff += InventoryModelId.CompareTo(other.InventoryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (initialCapacity == null && initialCapacity == other.initialCapacity)
+            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(initialCapacity - other.initialCapacity);
+                diff += (int)(InitialCapacity - other.InitialCapacity);
             }
-            if (maxCapacity == null && maxCapacity == other.maxCapacity)
+            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxCapacity - other.maxCapacity);
+                diff += (int)(MaxCapacity - other.MaxCapacity);
             }
-            if (protectReferencedItem == null && protectReferencedItem == other.protectReferencedItem)
+            if (ProtectReferencedItem == null && ProtectReferencedItem == other.ProtectReferencedItem)
             {
                 // null and null
             }
             else
             {
-                diff += protectReferencedItem == other.protectReferencedItem ? 0 : 1;
+                diff += ProtectReferencedItem == other.ProtectReferencedItem ? 0 : 1;
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["inventoryModelId"] = inventoryModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["initialCapacity"] = initialCapacity;
-            data["maxCapacity"] = maxCapacity;
-            data["protectReferencedItem"] = protectReferencedItem;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

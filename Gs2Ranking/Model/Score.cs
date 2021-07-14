@@ -23,349 +23,197 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class Score : IComparable
 	{
+        public string ScoreId { set; get; }
+        public string CategoryName { set; get; }
+        public string UserId { set; get; }
+        public string UniqueId { set; get; }
+        public string ScorerUserId { set; get; }
+        public long? Value { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** スコア */
-        public string scoreId { set; get; }
-
-        /**
-         * スコアを設定
-         *
-         * @param scoreId スコア
-         * @return this
-         */
         public Score WithScoreId(string scoreId) {
-            this.scoreId = scoreId;
+            this.ScoreId = scoreId;
             return this;
         }
 
-        /** カテゴリ名 */
-        public string categoryName { set; get; }
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public Score WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-        /** ユーザID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザIDを設定
-         *
-         * @param userId ユーザID
-         * @return this
-         */
         public Score WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** スコアのユニークID */
-        public string uniqueId { set; get; }
-
-        /**
-         * スコアのユニークIDを設定
-         *
-         * @param uniqueId スコアのユニークID
-         * @return this
-         */
         public Score WithUniqueId(string uniqueId) {
-            this.uniqueId = uniqueId;
+            this.UniqueId = uniqueId;
             return this;
         }
 
-        /** スコアを獲得したユーザID */
-        public string scorerUserId { set; get; }
-
-        /**
-         * スコアを獲得したユーザIDを設定
-         *
-         * @param scorerUserId スコアを獲得したユーザID
-         * @return this
-         */
         public Score WithScorerUserId(string scorerUserId) {
-            this.scorerUserId = scorerUserId;
+            this.ScorerUserId = scorerUserId;
             return this;
         }
 
-        /** スコア */
-        public long? score { set; get; }
-
-        /**
-         * スコアを設定
-         *
-         * @param score スコア
-         * @return this
-         */
-        public Score WithScore(long? score) {
-            this.score = score;
+        public Score WithValue(long? value) {
+            this.Value = value;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Score WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Score WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Score FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Score()
+                .WithScoreId(!data.Keys.Contains("scoreId") || data["scoreId"] == null ? null : data["scoreId"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithUniqueId(!data.Keys.Contains("uniqueId") || data["uniqueId"] == null ? null : data["uniqueId"].ToString())
+                .WithScorerUserId(!data.Keys.Contains("scorerUserId") || data["scorerUserId"] == null ? null : data["scorerUserId"].ToString())
+                .WithValue(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["scoreId"] = ScoreId,
+                ["categoryName"] = CategoryName,
+                ["userId"] = UserId,
+                ["uniqueId"] = UniqueId,
+                ["scorerUserId"] = ScorerUserId,
+                ["score"] = Value,
+                ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.scoreId != null)
-            {
+            if (ScoreId != null) {
                 writer.WritePropertyName("scoreId");
-                writer.Write(this.scoreId);
+                writer.Write(ScoreId.ToString());
             }
-            if(this.categoryName != null)
-            {
+            if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
-                writer.Write(this.categoryName);
+                writer.Write(CategoryName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.uniqueId != null)
-            {
+            if (UniqueId != null) {
                 writer.WritePropertyName("uniqueId");
-                writer.Write(this.uniqueId);
+                writer.Write(UniqueId.ToString());
             }
-            if(this.scorerUserId != null)
-            {
+            if (ScorerUserId != null) {
                 writer.WritePropertyName("scorerUserId");
-                writer.Write(this.scorerUserId);
+                writer.Write(ScorerUserId.ToString());
             }
-            if(this.score.HasValue)
-            {
-                writer.WritePropertyName("score");
-                writer.Write(this.score.Value);
+            if (Value != null) {
+                writer.WritePropertyName("value");
+                writer.Write(long.Parse(Value.ToString()));
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUniqueIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["uniqueId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["uniqueId"].Value;
-    }
-
-    public static string GetScorerUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["scorerUserId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["scorerUserId"].Value;
-    }
-
-    public static string GetCategoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["categoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["categoryName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):category:(?<categoryName>.*):score:(?<scorerUserId>.*):(?<uniqueId>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Score FromDict(JsonData data)
-        {
-            return new Score()
-                .WithScoreId(data.Keys.Contains("scoreId") && data["scoreId"] != null ? data["scoreId"].ToString() : null)
-                .WithCategoryName(data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithUniqueId(data.Keys.Contains("uniqueId") && data["uniqueId"] != null ? data["uniqueId"].ToString() : null)
-                .WithScorerUserId(data.Keys.Contains("scorerUserId") && data["scorerUserId"] != null ? data["scorerUserId"].ToString() : null)
-                .WithScore(data.Keys.Contains("score") && data["score"] != null ? (long?)long.Parse(data["score"].ToString()) : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Score;
             var diff = 0;
-            if (scoreId == null && scoreId == other.scoreId)
+            if (ScoreId == null && ScoreId == other.ScoreId)
             {
                 // null and null
             }
             else
             {
-                diff += scoreId.CompareTo(other.scoreId);
+                diff += ScoreId.CompareTo(other.ScoreId);
             }
-            if (categoryName == null && categoryName == other.categoryName)
+            if (CategoryName == null && CategoryName == other.CategoryName)
             {
                 // null and null
             }
             else
             {
-                diff += categoryName.CompareTo(other.categoryName);
+                diff += CategoryName.CompareTo(other.CategoryName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (uniqueId == null && uniqueId == other.uniqueId)
+            if (UniqueId == null && UniqueId == other.UniqueId)
             {
                 // null and null
             }
             else
             {
-                diff += uniqueId.CompareTo(other.uniqueId);
+                diff += UniqueId.CompareTo(other.UniqueId);
             }
-            if (scorerUserId == null && scorerUserId == other.scorerUserId)
+            if (ScorerUserId == null && ScorerUserId == other.ScorerUserId)
             {
                 // null and null
             }
             else
             {
-                diff += scorerUserId.CompareTo(other.scorerUserId);
+                diff += ScorerUserId.CompareTo(other.ScorerUserId);
             }
-            if (score == null && score == other.score)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(score - other.score);
+                diff += (int)(Value - other.Value);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["scoreId"] = scoreId;
-            data["categoryName"] = categoryName;
-            data["userId"] = userId;
-            data["uniqueId"] = uniqueId;
-            data["scorerUserId"] = scorerUserId;
-            data["score"] = score;
-            data["metadata"] = metadata;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

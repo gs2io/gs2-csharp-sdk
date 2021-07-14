@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class GetAwaitResult
+	[System.Serializable]
+	public class GetAwaitResult : IResult
 	{
-        /** 交換待機 */
-        public Await item { set; get; }
+        public Gs2.Gs2Exchange.Model.Await Item { set; get; }
 
+        public GetAwaitResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetAwaitResult FromDict(JsonData data)
+        public static GetAwaitResult FromJson(JsonData data)
         {
-            return new GetAwaitResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Exchange.Model.Await.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetAwaitResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

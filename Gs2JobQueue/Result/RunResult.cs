@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,63 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2JobQueue.Result
 {
 	[Preserve]
-	public class RunResult
+	[System.Serializable]
+	public class RunResult : IResult
 	{
-        /** ジョブ */
-        public Job item { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
+        public Gs2.Gs2JobQueue.Model.JobResultBody Result { set; get; }
+        public bool? IsLastJob { set; get; }
 
-        /** ジョブの実行結果 */
-        public JobResultBody result { set; get; }
+        public RunResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** None */
-        public bool? isLastJob { set; get; }
+        public RunResult WithResult(Gs2.Gs2JobQueue.Model.JobResultBody result) {
+            this.Result = result;
+            return this;
+        }
 
+        public RunResult WithIsLastJob(bool? isLastJob) {
+            this.IsLastJob = isLastJob;
+            return this;
+        }
 
     	[Preserve]
-        public static RunResult FromDict(JsonData data)
+        public static RunResult FromJson(JsonData data)
         {
-            return new RunResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2JobQueue.Model.Job.FromDict(data["item"]) : null,
-                result = data.Keys.Contains("result") && data["result"] != null ? Gs2.Gs2JobQueue.Model.JobResultBody.FromDict(data["result"]) : null,
-                isLastJob = data.Keys.Contains("isLastJob") && data["isLastJob"] != null ? (bool?)bool.Parse(data["isLastJob"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new RunResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2JobQueue.Model.Job.FromJson(data["item"]))
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : Gs2.Gs2JobQueue.Model.JobResultBody.FromJson(data["result"]))
+                .WithIsLastJob(!data.Keys.Contains("isLastJob") || data["isLastJob"] == null ? null : (bool?)bool.Parse(data["isLastJob"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["result"] = Result?.ToJson(),
+                ["isLastJob"] = IsLastJob,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Result != null) {
+                Result.WriteJson(writer);
+            }
+            if (IsLastJob != null) {
+                writer.WritePropertyName("isLastJob");
+                writer.Write(bool.Parse(IsLastJob.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

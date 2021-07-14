@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public BadGatewayException(List<RequestError> errors) : base(errors: errors)
+		public BadGatewayException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

@@ -28,36 +28,38 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetCurrentQuestMasterRequest : Gs2Request<GetCurrentQuestMasterRequest>
 	{
+        public string NamespaceName { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public GetCurrentQuestMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
     	[Preserve]
-        public static GetCurrentQuestMasterRequest FromDict(JsonData data)
+        public static GetCurrentQuestMasterRequest FromJson(JsonData data)
         {
-            return new GetCurrentQuestMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentQuestMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

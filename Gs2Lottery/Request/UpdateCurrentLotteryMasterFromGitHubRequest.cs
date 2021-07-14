@@ -28,54 +28,49 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdateCurrentLotteryMasterFromGitHubRequest : Gs2Request<UpdateCurrentLotteryMasterFromGitHubRequest>
 	{
+        public string NamespaceName { set; get; }
+        public Gs2.Gs2Lottery.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateCurrentLotteryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** GitHubからマスターデータをチェックアウトしてくる設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Lottery.Model.GitHubCheckoutSetting checkoutSetting;
-
-        /**
-         * GitHubからマスターデータをチェックアウトしてくる設定を設定
-         *
-         * @param checkoutSetting GitHubからマスターデータをチェックアウトしてくる設定
-         * @return this
-         */
-        public UpdateCurrentLotteryMasterFromGitHubRequest WithCheckoutSetting(global::Gs2.Gs2Lottery.Model.GitHubCheckoutSetting checkoutSetting) {
-            this.checkoutSetting = checkoutSetting;
+        public UpdateCurrentLotteryMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Lottery.Model.GitHubCheckoutSetting checkoutSetting) {
+            this.CheckoutSetting = checkoutSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateCurrentLotteryMasterFromGitHubRequest FromDict(JsonData data)
+        public static UpdateCurrentLotteryMasterFromGitHubRequest FromJson(JsonData data)
         {
-            return new UpdateCurrentLotteryMasterFromGitHubRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                checkoutSetting = data.Keys.Contains("checkoutSetting") && data["checkoutSetting"] != null ? global::Gs2.Gs2Lottery.Model.GitHubCheckoutSetting.FromDict(data["checkoutSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentLotteryMasterFromGitHubRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Lottery.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["checkoutSetting"] = CheckoutSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["checkoutSetting"] = checkoutSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CheckoutSetting != null) {
+                CheckoutSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

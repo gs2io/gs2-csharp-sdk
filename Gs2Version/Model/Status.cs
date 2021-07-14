@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class Status : IComparable
 	{
+        public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
 
-        /** バージョン設定 */
-        public Gs2.Gs2Version.Model.VersionModel versionModel { set; get; }
-
-        /**
-         * バージョン設定を設定
-         *
-         * @param versionModel バージョン設定
-         * @return this
-         */
         public Status WithVersionModel(Gs2.Gs2Version.Model.VersionModel versionModel) {
-            this.versionModel = versionModel;
+            this.VersionModel = versionModel;
             return this;
         }
 
-        /** 現在のバージョン */
-        public Gs2.Gs2Version.Model.Version_ currentVersion { set; get; }
-
-        /**
-         * 現在のバージョンを設定
-         *
-         * @param currentVersion 現在のバージョン
-         * @return this
-         */
         public Status WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
-            this.currentVersion = currentVersion;
+            this.CurrentVersion = currentVersion;
             return this;
+        }
+
+    	[Preserve]
+        public static Status FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Status()
+                .WithVersionModel(!data.Keys.Contains("versionModel") || data["versionModel"] == null ? null : Gs2.Gs2Version.Model.VersionModel.FromJson(data["versionModel"]))
+                .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["versionModel"] = VersionModel?.ToJson(),
+                ["currentVersion"] = CurrentVersion?.ToJson(),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.versionModel != null)
-            {
+            if (VersionModel != null) {
                 writer.WritePropertyName("versionModel");
-                this.versionModel.WriteJson(writer);
+                VersionModel.WriteJson(writer);
             }
-            if(this.currentVersion != null)
-            {
+            if (CurrentVersion != null) {
                 writer.WritePropertyName("currentVersion");
-                this.currentVersion.WriteJson(writer);
+                CurrentVersion.WriteJson(writer);
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Status FromDict(JsonData data)
-        {
-            return new Status()
-                .WithVersionModel(data.Keys.Contains("versionModel") && data["versionModel"] != null ? Gs2.Gs2Version.Model.VersionModel.FromDict(data["versionModel"]) : null)
-                .WithCurrentVersion(data.Keys.Contains("currentVersion") && data["currentVersion"] != null ? Gs2.Gs2Version.Model.Version_.FromDict(data["currentVersion"]) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Status;
             var diff = 0;
-            if (versionModel == null && versionModel == other.versionModel)
+            if (VersionModel == null && VersionModel == other.VersionModel)
             {
                 // null and null
             }
             else
             {
-                diff += versionModel.CompareTo(other.versionModel);
+                diff += VersionModel.CompareTo(other.VersionModel);
             }
-            if (currentVersion == null && currentVersion == other.currentVersion)
+            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
             {
                 // null and null
             }
             else
             {
-                diff += currentVersion.CompareTo(other.currentVersion);
+                diff += CurrentVersion.CompareTo(other.CurrentVersion);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["versionModel"] = versionModel.ToDict();
-            data["currentVersion"] = currentVersion.ToDict();
-            return data;
-        }
-	}
+    }
 }

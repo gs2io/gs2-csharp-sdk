@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class UpdateCurrentRateMasterResult
+	[System.Serializable]
+	public class UpdateCurrentRateMasterResult : IResult
 	{
-        /** 更新した現在有効な交換レート設定 */
-        public CurrentRateMaster item { set; get; }
+        public Gs2.Gs2Exchange.Model.CurrentRateMaster Item { set; get; }
 
+        public UpdateCurrentRateMasterResult WithItem(Gs2.Gs2Exchange.Model.CurrentRateMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateCurrentRateMasterResult FromDict(JsonData data)
+        public static UpdateCurrentRateMasterResult FromJson(JsonData data)
         {
-            return new UpdateCurrentRateMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Exchange.Model.CurrentRateMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentRateMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.CurrentRateMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,108 +28,86 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class UpdateRatingModelMasterRequest : Gs2Request<UpdateRatingModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public int? Volatility { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateRatingModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** レーティングの種類名 */
-		[UnityEngine.SerializeField]
-        public string ratingName;
-
-        /**
-         * レーティングの種類名を設定
-         *
-         * @param ratingName レーティングの種類名
-         * @return this
-         */
         public UpdateRatingModelMasterRequest WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-
-        /** レーティングモデルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * レーティングモデルマスターの説明を設定
-         *
-         * @param description レーティングモデルマスターの説明
-         * @return this
-         */
         public UpdateRatingModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** レーティングの種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * レーティングの種類のメタデータを設定
-         *
-         * @param metadata レーティングの種類のメタデータ
-         * @return this
-         */
         public UpdateRatingModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** レート値の変動の大きさ */
-		[UnityEngine.SerializeField]
-        public int? volatility;
-
-        /**
-         * レート値の変動の大きさを設定
-         *
-         * @param volatility レート値の変動の大きさ
-         * @return this
-         */
         public UpdateRatingModelMasterRequest WithVolatility(int? volatility) {
-            this.volatility = volatility;
+            this.Volatility = volatility;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateRatingModelMasterRequest FromDict(JsonData data)
+        public static UpdateRatingModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateRatingModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ratingName = data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                volatility = data.Keys.Contains("volatility") && data["volatility"] != null ? (int?)int.Parse(data["volatility"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateRatingModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ratingName"] = RatingName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["volatility"] = Volatility,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ratingName"] = ratingName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["volatility"] = volatility;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RatingName != null) {
+                writer.WritePropertyName("ratingName");
+                writer.Write(RatingName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Volatility != null) {
+                writer.WritePropertyName("volatility");
+                writer.Write(int.Parse(Volatility.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

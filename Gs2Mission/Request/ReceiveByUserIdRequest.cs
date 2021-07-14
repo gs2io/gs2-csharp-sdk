@@ -28,108 +28,74 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class ReceiveByUserIdRequest : Gs2Request<ReceiveByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MissionGroupName { set; get; }
+        public string MissionTaskName { set; get; }
+        public string UserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ミッショングループ名 */
-		[UnityEngine.SerializeField]
-        public string missionGroupName;
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public ReceiveByUserIdRequest WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-
-        /** タスク名 */
-		[UnityEngine.SerializeField]
-        public string missionTaskName;
-
-        /**
-         * タスク名を設定
-         *
-         * @param missionTaskName タスク名
-         * @return this
-         */
         public ReceiveByUserIdRequest WithMissionTaskName(string missionTaskName) {
-            this.missionTaskName = missionTaskName;
+            this.MissionTaskName = missionTaskName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public ReceiveByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public ReceiveByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static ReceiveByUserIdRequest FromDict(JsonData data)
+        public static ReceiveByUserIdRequest FromJson(JsonData data)
         {
-            return new ReceiveByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                missionGroupName = data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString(): null,
-                missionTaskName = data.Keys.Contains("missionTaskName") && data["missionTaskName"] != null ? data["missionTaskName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ReceiveByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithMissionTaskName(!data.Keys.Contains("missionTaskName") || data["missionTaskName"] == null ? null : data["missionTaskName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["missionGroupName"] = MissionGroupName,
+                ["missionTaskName"] = MissionTaskName,
+                ["userId"] = UserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["missionGroupName"] = missionGroupName;
-            data["missionTaskName"] = missionTaskName;
-            data["userId"] = userId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MissionGroupName != null) {
+                writer.WritePropertyName("missionGroupName");
+                writer.Write(MissionGroupName.ToString());
+            }
+            if (MissionTaskName != null) {
+                writer.WritePropertyName("missionTaskName");
+                writer.Write(MissionTaskName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

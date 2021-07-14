@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Experience
+using Gs2.Util.LitJson;namespace Gs2.Gs2Experience
 {
 	public class Gs2ExperienceWebSocketClient : AbstractGs2Client
 	{
@@ -34,10 +32,6 @@ namespace Gs2.Gs2Experience
 
         protected Gs2WebSocketSession Gs2WebSocketSession => (Gs2WebSocketSession) Gs2Session;
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="Gs2WebSocketSession">WebSocket API 用セッション</param>
 		public Gs2ExperienceWebSocketClient(Gs2WebSocketSession Gs2WebSocketSession) : base(Gs2WebSocketSession)
 		{
 
@@ -59,55 +53,55 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.experienceCapScriptId != null)
+                if (_request.ExperienceCapScriptId != null)
                 {
                     jsonWriter.WritePropertyName("experienceCapScriptId");
-                    jsonWriter.Write(_request.experienceCapScriptId.ToString());
+                    jsonWriter.Write(_request.ExperienceCapScriptId.ToString());
                 }
-                if (_request.changeExperienceScript != null)
+                if (_request.ChangeExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("changeExperienceScript");
-                    _request.changeExperienceScript.WriteJson(jsonWriter);
+                    _request.ChangeExperienceScript.WriteJson(jsonWriter);
                 }
-                if (_request.changeRankScript != null)
+                if (_request.ChangeRankScript != null)
                 {
                     jsonWriter.WritePropertyName("changeRankScript");
-                    _request.changeRankScript.WriteJson(jsonWriter);
+                    _request.ChangeRankScript.WriteJson(jsonWriter);
                 }
-                if (_request.changeRankCapScript != null)
+                if (_request.ChangeRankCapScript != null)
                 {
                     jsonWriter.WritePropertyName("changeRankCapScript");
-                    _request.changeRankCapScript.WriteJson(jsonWriter);
+                    _request.ChangeRankCapScript.WriteJson(jsonWriter);
                 }
-                if (_request.overflowExperienceScript != null)
+                if (_request.OverflowExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowExperienceScript");
-                    _request.overflowExperienceScript.WriteJson(jsonWriter);
+                    _request.OverflowExperienceScript.WriteJson(jsonWriter);
                 }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -137,94 +131,12 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ネームスペースを新規作成<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
         )
 		{
 			var task = new CreateNamespaceTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
-        }
-
-        private class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Result.GetNamespaceStatusResult>
-        {
-			private readonly Request.GetNamespaceStatusRequest _request;
-
-			public GetNamespaceStatusTask(Request.GetNamespaceStatusRequest request, UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (_request.namespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
-                }
-                if (_request.contextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
-                }
-                if (_request.requestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("experience");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("namespace");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getNamespaceStatus");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
-
-                jsonWriter.WriteObjectEnd();
-
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
-            }
-        }
-
-		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
-		public IEnumerator GetNamespaceStatus(
-                Request.GetNamespaceStatusRequest request,
-                UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
 
@@ -244,20 +156,20 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -287,13 +199,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
@@ -319,55 +224,55 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.experienceCapScriptId != null)
+                if (_request.ExperienceCapScriptId != null)
                 {
                     jsonWriter.WritePropertyName("experienceCapScriptId");
-                    jsonWriter.Write(_request.experienceCapScriptId.ToString());
+                    jsonWriter.Write(_request.ExperienceCapScriptId.ToString());
                 }
-                if (_request.changeExperienceScript != null)
+                if (_request.ChangeExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("changeExperienceScript");
-                    _request.changeExperienceScript.WriteJson(jsonWriter);
+                    _request.ChangeExperienceScript.WriteJson(jsonWriter);
                 }
-                if (_request.changeRankScript != null)
+                if (_request.ChangeRankScript != null)
                 {
                     jsonWriter.WritePropertyName("changeRankScript");
-                    _request.changeRankScript.WriteJson(jsonWriter);
+                    _request.ChangeRankScript.WriteJson(jsonWriter);
                 }
-                if (_request.changeRankCapScript != null)
+                if (_request.ChangeRankCapScript != null)
                 {
                     jsonWriter.WritePropertyName("changeRankCapScript");
-                    _request.changeRankCapScript.WriteJson(jsonWriter);
+                    _request.ChangeRankCapScript.WriteJson(jsonWriter);
                 }
-                if (_request.overflowExperienceScript != null)
+                if (_request.OverflowExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowExperienceScript");
-                    _request.overflowExperienceScript.WriteJson(jsonWriter);
+                    _request.OverflowExperienceScript.WriteJson(jsonWriter);
                 }
-                if (_request.logSetting != null)
+                if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.logSetting.WriteJson(jsonWriter);
+                    _request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -397,13 +302,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ネームスペースを更新<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
@@ -429,20 +327,20 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -472,13 +370,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ネームスペースを削除<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
@@ -504,55 +395,55 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.defaultExperience != null)
+                if (_request.DefaultExperience != null)
                 {
                     jsonWriter.WritePropertyName("defaultExperience");
-                    jsonWriter.Write(_request.defaultExperience.ToString());
+                    jsonWriter.Write(_request.DefaultExperience.ToString());
                 }
-                if (_request.defaultRankCap != null)
+                if (_request.DefaultRankCap != null)
                 {
                     jsonWriter.WritePropertyName("defaultRankCap");
-                    jsonWriter.Write(_request.defaultRankCap.ToString());
+                    jsonWriter.Write(_request.DefaultRankCap.ToString());
                 }
-                if (_request.maxRankCap != null)
+                if (_request.MaxRankCap != null)
                 {
                     jsonWriter.WritePropertyName("maxRankCap");
-                    jsonWriter.Write(_request.maxRankCap.ToString());
+                    jsonWriter.Write(_request.MaxRankCap.ToString());
                 }
-                if (_request.rankThresholdId != null)
+                if (_request.RankThresholdName != null)
                 {
-                    jsonWriter.WritePropertyName("rankThresholdId");
-                    jsonWriter.Write(_request.rankThresholdId.ToString());
+                    jsonWriter.WritePropertyName("rankThresholdName");
+                    jsonWriter.Write(_request.RankThresholdName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -582,13 +473,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値の種類マスターを新規作成<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator CreateExperienceModelMaster(
                 Request.CreateExperienceModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateExperienceModelMasterResult>> callback
@@ -614,25 +498,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -662,13 +546,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値の種類マスターを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetExperienceModelMaster(
                 Request.GetExperienceModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetExperienceModelMasterResult>> callback
@@ -694,55 +571,55 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.defaultExperience != null)
+                if (_request.DefaultExperience != null)
                 {
                     jsonWriter.WritePropertyName("defaultExperience");
-                    jsonWriter.Write(_request.defaultExperience.ToString());
+                    jsonWriter.Write(_request.DefaultExperience.ToString());
                 }
-                if (_request.defaultRankCap != null)
+                if (_request.DefaultRankCap != null)
                 {
                     jsonWriter.WritePropertyName("defaultRankCap");
-                    jsonWriter.Write(_request.defaultRankCap.ToString());
+                    jsonWriter.Write(_request.DefaultRankCap.ToString());
                 }
-                if (_request.maxRankCap != null)
+                if (_request.MaxRankCap != null)
                 {
                     jsonWriter.WritePropertyName("maxRankCap");
-                    jsonWriter.Write(_request.maxRankCap.ToString());
+                    jsonWriter.Write(_request.MaxRankCap.ToString());
                 }
-                if (_request.rankThresholdId != null)
+                if (_request.RankThresholdName != null)
                 {
-                    jsonWriter.WritePropertyName("rankThresholdId");
-                    jsonWriter.Write(_request.rankThresholdId.ToString());
+                    jsonWriter.WritePropertyName("rankThresholdName");
+                    jsonWriter.Write(_request.RankThresholdName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -772,13 +649,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値の種類マスターを更新<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator UpdateExperienceModelMaster(
                 Request.UpdateExperienceModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateExperienceModelMasterResult>> callback
@@ -804,25 +674,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -852,13 +722,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値の種類マスターを削除<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator DeleteExperienceModelMaster(
                 Request.DeleteExperienceModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteExperienceModelMasterResult>> callback
@@ -884,25 +747,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -932,13 +795,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値・ランクアップ閾値モデルを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetExperienceModel(
                 Request.GetExperienceModelRequest request,
                 UnityAction<AsyncResult<Result.GetExperienceModelResult>> callback
@@ -964,45 +820,45 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1032,13 +888,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクアップ閾値マスターを新規作成<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator CreateThresholdMaster(
                 Request.CreateThresholdMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateThresholdMasterResult>> callback
@@ -1064,25 +913,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.thresholdName != null)
+                if (_request.ThresholdName != null)
                 {
                     jsonWriter.WritePropertyName("thresholdName");
-                    jsonWriter.Write(_request.thresholdName.ToString());
+                    jsonWriter.Write(_request.ThresholdName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1112,13 +961,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクアップ閾値マスターを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetThresholdMaster(
                 Request.GetThresholdMasterRequest request,
                 UnityAction<AsyncResult<Result.GetThresholdMasterResult>> callback
@@ -1144,45 +986,45 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.thresholdName != null)
+                if (_request.ThresholdName != null)
                 {
                     jsonWriter.WritePropertyName("thresholdName");
-                    jsonWriter.Write(_request.thresholdName.ToString());
+                    jsonWriter.Write(_request.ThresholdName.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.metadata != null)
+                if (_request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.metadata.ToString());
+                    jsonWriter.Write(_request.Metadata.ToString());
                 }
-                if (_request.values != null)
+                if (_request.Values != null)
                 {
                     jsonWriter.WritePropertyName("values");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.values)
+                    foreach(var item in _request.Values)
                     {
-                        jsonWriter.Write(item.Value);
+                        jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1212,13 +1054,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクアップ閾値マスターを更新<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator UpdateThresholdMaster(
                 Request.UpdateThresholdMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateThresholdMasterResult>> callback
@@ -1244,25 +1079,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.thresholdName != null)
+                if (_request.ThresholdName != null)
                 {
                     jsonWriter.WritePropertyName("thresholdName");
-                    jsonWriter.Write(_request.thresholdName.ToString());
+                    jsonWriter.Write(_request.ThresholdName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1292,13 +1127,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクアップ閾値マスターを削除<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator DeleteThresholdMaster(
                 Request.DeleteThresholdMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteThresholdMasterResult>> callback
@@ -1324,40 +1152,40 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(_request.AccessToken.ToString());
+                }
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
-                if (_request.accessToken != null)
+                if (_request.AccessToken != null)
                 {
                     jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(_request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.AccessToken);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1387,13 +1215,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ステータスを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetStatus(
                 Request.GetStatusRequest request,
                 UnityAction<AsyncResult<Result.GetStatusResult>> callback
@@ -1419,40 +1240,35 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1482,119 +1298,12 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ステータスを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetStatusByUserId(
                 Request.GetStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetStatusByUserIdResult>> callback
         )
 		{
 			var task = new GetStatusByUserIdTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
-        }
-
-        private class GetStatusWithSignatureTask : Gs2WebSocketSessionTask<Result.GetStatusWithSignatureResult>
-        {
-			private readonly Request.GetStatusWithSignatureRequest _request;
-
-			public GetStatusWithSignatureTask(Request.GetStatusWithSignatureRequest request, UnityAction<AsyncResult<Result.GetStatusWithSignatureResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (_request.namespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
-                }
-                if (_request.experienceName != null)
-                {
-                    jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
-                }
-                if (_request.propertyId != null)
-                {
-                    jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
-                }
-                if (_request.keyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
-                }
-                if (_request.contextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
-                }
-                if (_request.requestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.accessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(_request.accessToken);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
-                }
-
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("experience");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("status");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getStatusWithSignature");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
-
-                jsonWriter.WriteObjectEnd();
-
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
-            }
-        }
-
-		/// <summary>
-		///  ステータスを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
-		public IEnumerator GetStatusWithSignature(
-                Request.GetStatusWithSignatureRequest request,
-                UnityAction<AsyncResult<Result.GetStatusWithSignatureResult>> callback
-        )
-		{
-			var task = new GetStatusWithSignatureTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
 
@@ -1614,45 +1323,40 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.experienceValue != null)
+                if (_request.ExperienceValue != null)
                 {
                     jsonWriter.WritePropertyName("experienceValue");
-                    jsonWriter.Write(_request.experienceValue.ToString());
+                    jsonWriter.Write(_request.ExperienceValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1682,13 +1386,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値を加算<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator AddExperienceByUserId(
                 Request.AddExperienceByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddExperienceByUserIdResult>> callback
@@ -1714,45 +1411,40 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.experienceValue != null)
+                if (_request.ExperienceValue != null)
                 {
                     jsonWriter.WritePropertyName("experienceValue");
-                    jsonWriter.Write(_request.experienceValue.ToString());
+                    jsonWriter.Write(_request.ExperienceValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1782,13 +1474,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  累計獲得経験値を設定<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator SetExperienceByUserId(
                 Request.SetExperienceByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetExperienceByUserIdResult>> callback
@@ -1814,45 +1499,40 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.rankCapValue != null)
+                if (_request.RankCapValue != null)
                 {
                     jsonWriter.WritePropertyName("rankCapValue");
-                    jsonWriter.Write(_request.rankCapValue.ToString());
+                    jsonWriter.Write(_request.RankCapValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1882,13 +1562,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクキャップを加算<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator AddRankCapByUserId(
                 Request.AddRankCapByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddRankCapByUserIdResult>> callback
@@ -1914,45 +1587,40 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.rankCapValue != null)
+                if (_request.RankCapValue != null)
                 {
                     jsonWriter.WritePropertyName("rankCapValue");
-                    jsonWriter.Write(_request.rankCapValue.ToString());
+                    jsonWriter.Write(_request.RankCapValue.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -1982,13 +1650,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクキャップを設定<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator SetRankCapByUserId(
                 Request.SetRankCapByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetRankCapByUserIdResult>> callback
@@ -2014,40 +1675,35 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.experienceName != null)
+                if (_request.ExperienceName != null)
                 {
                     jsonWriter.WritePropertyName("experienceName");
-                    jsonWriter.Write(_request.experienceName.ToString());
+                    jsonWriter.Write(_request.ExperienceName.ToString());
                 }
-                if (_request.propertyId != null)
+                if (_request.PropertyId != null)
                 {
                     jsonWriter.WritePropertyName("propertyId");
-                    jsonWriter.Write(_request.propertyId.ToString());
+                    jsonWriter.Write(_request.PropertyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -2077,13 +1733,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ステータスを削除<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator DeleteStatusByUserId(
                 Request.DeleteStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteStatusByUserIdResult>> callback
@@ -2109,30 +1758,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -2162,13 +1806,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  経験値を加算<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator AddExperienceByStampSheet(
                 Request.AddExperienceByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AddExperienceByStampSheetResult>> callback
@@ -2194,30 +1831,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -2247,13 +1879,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクキャップを加算<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator AddRankCapByStampSheet(
                 Request.AddRankCapByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AddRankCapByStampSheetResult>> callback
@@ -2279,30 +1904,25 @@ namespace Gs2.Gs2Experience
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.stampSheet != null)
+                if (_request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.stampSheet.ToString());
+                    jsonWriter.Write(_request.StampSheet.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(_request.duplicationAvoider);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -2332,13 +1952,6 @@ namespace Gs2.Gs2Experience
             }
         }
 
-		/// <summary>
-		///  ランクキャップを更新<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator SetRankCapByStampSheet(
                 Request.SetRankCapByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetRankCapByStampSheetResult>> callback

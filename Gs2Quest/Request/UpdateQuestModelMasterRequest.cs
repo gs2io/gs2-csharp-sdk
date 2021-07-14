@@ -28,214 +28,187 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class UpdateQuestModelMasterRequest : Gs2Request<UpdateQuestModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string QuestGroupName { set; get; }
+        public string QuestName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
+        public string[] PremiseQuestNames { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** クエストグループモデル名 */
-		[UnityEngine.SerializeField]
-        public string questGroupName;
-
-        /**
-         * クエストグループモデル名を設定
-         *
-         * @param questGroupName クエストグループモデル名
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
-            this.questGroupName = questGroupName;
+            this.QuestGroupName = questGroupName;
             return this;
         }
 
-
-        /** クエスト名 */
-		[UnityEngine.SerializeField]
-        public string questName;
-
-        /**
-         * クエスト名を設定
-         *
-         * @param questName クエスト名
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithQuestName(string questName) {
-            this.questName = questName;
+            this.QuestName = questName;
             return this;
         }
 
-
-        /** クエストモデルの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * クエストモデルの説明を設定
-         *
-         * @param description クエストモデルの説明
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** クエストのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * クエストのメタデータを設定
-         *
-         * @param metadata クエストのメタデータ
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** クエストの内容 */
-		[UnityEngine.SerializeField]
-        public List<Contents> contents;
-
-        /**
-         * クエストの内容を設定
-         *
-         * @param contents クエストの内容
-         * @return this
-         */
-        public UpdateQuestModelMasterRequest WithContents(List<Contents> contents) {
-            this.contents = contents;
+        public UpdateQuestModelMasterRequest WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
+            this.Contents = contents;
             return this;
         }
 
-
-        /** 挑戦可能な期間を指定するイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string challengePeriodEventId;
-
-        /**
-         * 挑戦可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId 挑戦可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public UpdateQuestModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
 
-
-        /** クエストの参加料 */
-		[UnityEngine.SerializeField]
-        public List<ConsumeAction> consumeActions;
-
-        /**
-         * クエストの参加料を設定
-         *
-         * @param consumeActions クエストの参加料
-         * @return this
-         */
-        public UpdateQuestModelMasterRequest WithConsumeActions(List<ConsumeAction> consumeActions) {
-            this.consumeActions = consumeActions;
+        public UpdateQuestModelMasterRequest WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
+            this.ConsumeActions = consumeActions;
             return this;
         }
 
-
-        /** クエスト失敗時の報酬 */
-		[UnityEngine.SerializeField]
-        public List<AcquireAction> failedAcquireActions;
-
-        /**
-         * クエスト失敗時の報酬を設定
-         *
-         * @param failedAcquireActions クエスト失敗時の報酬
-         * @return this
-         */
-        public UpdateQuestModelMasterRequest WithFailedAcquireActions(List<AcquireAction> failedAcquireActions) {
-            this.failedAcquireActions = failedAcquireActions;
+        public UpdateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
+            this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
 
-
-        /** クエストに挑戦するためにクリアしておく必要のあるクエスト名 */
-		[UnityEngine.SerializeField]
-        public List<string> premiseQuestNames;
-
-        /**
-         * クエストに挑戦するためにクリアしておく必要のあるクエスト名を設定
-         *
-         * @param premiseQuestNames クエストに挑戦するためにクリアしておく必要のあるクエスト名
-         * @return this
-         */
-        public UpdateQuestModelMasterRequest WithPremiseQuestNames(List<string> premiseQuestNames) {
-            this.premiseQuestNames = premiseQuestNames;
+        public UpdateQuestModelMasterRequest WithPremiseQuestNames(string[] premiseQuestNames) {
+            this.PremiseQuestNames = premiseQuestNames;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateQuestModelMasterRequest FromDict(JsonData data)
+        public static UpdateQuestModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateQuestModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                questGroupName = data.Keys.Contains("questGroupName") && data["questGroupName"] != null ? data["questGroupName"].ToString(): null,
-                questName = data.Keys.Contains("questName") && data["questName"] != null ? data["questName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                contents = data.Keys.Contains("contents") && data["contents"] != null ? data["contents"].Cast<JsonData>().Select(value =>
-                    {
-                        return Contents.FromDict(value);
-                    }
-                ).ToList() : null,
-                challengePeriodEventId = data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString(): null,
-                consumeActions = data.Keys.Contains("consumeActions") && data["consumeActions"] != null ? data["consumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                failedAcquireActions = data.Keys.Contains("failedAcquireActions") && data["failedAcquireActions"] != null ? data["failedAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                premiseQuestNames = data.Keys.Contains("premiseQuestNames") && data["premiseQuestNames"] != null ? data["premiseQuestNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateQuestModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithQuestName(!data.Keys.Contains("questName") || data["questName"] == null ? null : data["questName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithContents(!data.Keys.Contains("contents") || data["contents"] == null ? new Gs2.Gs2Quest.Model.Contents[]{} : data["contents"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Contents.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Quest.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithPremiseQuestNames(!data.Keys.Contains("premiseQuestNames") || data["premiseQuestNames"] == null ? new string[]{} : data["premiseQuestNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["questGroupName"] = QuestGroupName,
+                ["questName"] = QuestName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["contents"] = new JsonData(Contents == null ? new JsonData[]{} :
+                        Contents.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
+                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                        ConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["failedAcquireActions"] = new JsonData(FailedAcquireActions == null ? new JsonData[]{} :
+                        FailedAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["premiseQuestNames"] = new JsonData(PremiseQuestNames == null ? new JsonData[]{} :
+                        PremiseQuestNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["questGroupName"] = questGroupName;
-            data["questName"] = questName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["contents"] = new JsonData(contents.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            data["consumeActions"] = new JsonData(consumeActions.Select(item => item.ToDict()));
-            data["failedAcquireActions"] = new JsonData(failedAcquireActions.Select(item => item.ToDict()));
-            data["premiseQuestNames"] = new JsonData(premiseQuestNames);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (QuestGroupName != null) {
+                writer.WritePropertyName("questGroupName");
+                writer.Write(QuestGroupName.ToString());
+            }
+            if (QuestName != null) {
+                writer.WritePropertyName("questName");
+                writer.Write(QuestName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var content in Contents)
+            {
+                if (content != null) {
+                    content.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var consumeAction in ConsumeActions)
+            {
+                if (consumeAction != null) {
+                    consumeAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var failedAcquireAction in FailedAcquireActions)
+            {
+                if (failedAcquireAction != null) {
+                    failedAcquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var premiseQuestName in PremiseQuestNames)
+            {
+                writer.Write(premiseQuestName.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

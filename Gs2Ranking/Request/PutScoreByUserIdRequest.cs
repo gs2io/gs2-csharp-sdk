@@ -28,126 +28,86 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class PutScoreByUserIdRequest : Gs2Request<PutScoreByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
+        public string UserId { set; get; }
+        public long? Score { set; get; }
+        public string Metadata { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PutScoreByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public PutScoreByUserIdRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-
-        /** ユーザID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザIDを設定
-         *
-         * @param userId ユーザID
-         * @return this
-         */
         public PutScoreByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** スコア */
-		[UnityEngine.SerializeField]
-        public long? score;
-
-        /**
-         * スコアを設定
-         *
-         * @param score スコア
-         * @return this
-         */
         public PutScoreByUserIdRequest WithScore(long? score) {
-            this.score = score;
+            this.Score = score;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public PutScoreByUserIdRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PutScoreByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static PutScoreByUserIdRequest FromDict(JsonData data)
+        public static PutScoreByUserIdRequest FromJson(JsonData data)
         {
-            return new PutScoreByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                score = data.Keys.Contains("score") && data["score"] != null ? (long?)long.Parse(data["score"].ToString()) : null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PutScoreByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
+                ["userId"] = UserId,
+                ["score"] = Score,
+                ["metadata"] = Metadata,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            data["userId"] = userId;
-            data["score"] = score;
-            data["metadata"] = metadata;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Score != null) {
+                writer.WritePropertyName("score");
+                writer.Write(long.Parse(Score.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

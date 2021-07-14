@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Datastore.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Datastore.Result
 {
 	[Preserve]
-	public class PrepareReUploadResult
+	[System.Serializable]
+	public class PrepareReUploadResult : IResult
 	{
-        /** データオブジェクト */
-        public DataObject item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public string UploadUrl { set; get; }
 
-        /** アップロード処理の実行に使用するURL */
-        public string uploadUrl { set; get; }
+        public PrepareReUploadResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
+            this.Item = item;
+            return this;
+        }
 
+        public PrepareReUploadResult WithUploadUrl(string uploadUrl) {
+            this.UploadUrl = uploadUrl;
+            return this;
+        }
 
     	[Preserve]
-        public static PrepareReUploadResult FromDict(JsonData data)
+        public static PrepareReUploadResult FromJson(JsonData data)
         {
-            return new PrepareReUploadResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Datastore.Model.DataObject.FromDict(data["item"]) : null,
-                uploadUrl = data.Keys.Contains("uploadUrl") && data["uploadUrl"] != null ? data["uploadUrl"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareReUploadResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
+                .WithUploadUrl(!data.Keys.Contains("uploadUrl") || data["uploadUrl"] == null ? null : data["uploadUrl"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["uploadUrl"] = UploadUrl,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (UploadUrl != null) {
+                writer.WritePropertyName("uploadUrl");
+                writer.Write(UploadUrl.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

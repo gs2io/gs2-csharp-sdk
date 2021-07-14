@@ -28,134 +28,120 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class CreateSalesItemMasterRequest : Gs2Request<CreateSalesItemMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Showcase.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * 商品名を設定
-         *
-         * @param name 商品名
-         * @return this
-         */
         public CreateSalesItemMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** 商品マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 商品マスターの説明を設定
-         *
-         * @param description 商品マスターの説明
-         * @return this
-         */
         public CreateSalesItemMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 商品のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public CreateSalesItemMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 消費アクションリスト */
-		[UnityEngine.SerializeField]
-        public List<ConsumeAction> consumeActions;
-
-        /**
-         * 消費アクションリストを設定
-         *
-         * @param consumeActions 消費アクションリスト
-         * @return this
-         */
-        public CreateSalesItemMasterRequest WithConsumeActions(List<ConsumeAction> consumeActions) {
-            this.consumeActions = consumeActions;
+        public CreateSalesItemMasterRequest WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
+            this.ConsumeActions = consumeActions;
             return this;
         }
 
-
-        /** 入手アクションリスト */
-		[UnityEngine.SerializeField]
-        public List<AcquireAction> acquireActions;
-
-        /**
-         * 入手アクションリストを設定
-         *
-         * @param acquireActions 入手アクションリスト
-         * @return this
-         */
-        public CreateSalesItemMasterRequest WithAcquireActions(List<AcquireAction> acquireActions) {
-            this.acquireActions = acquireActions;
+        public CreateSalesItemMasterRequest WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateSalesItemMasterRequest FromDict(JsonData data)
+        public static CreateSalesItemMasterRequest FromJson(JsonData data)
         {
-            return new CreateSalesItemMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                consumeActions = data.Keys.Contains("consumeActions") && data["consumeActions"] != null ? data["consumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                acquireActions = data.Keys.Contains("acquireActions") && data["acquireActions"] != null ? data["acquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateSalesItemMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Showcase.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Showcase.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.AcquireAction.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                        ConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                        AcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["consumeActions"] = new JsonData(consumeActions.Select(item => item.ToDict()));
-            data["acquireActions"] = new JsonData(acquireActions.Select(item => item.ToDict()));
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var consumeAction in ConsumeActions)
+            {
+                if (consumeAction != null) {
+                    consumeAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var acquireAction in AcquireActions)
+            {
+                if (acquireAction != null) {
+                    acquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

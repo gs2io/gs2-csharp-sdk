@@ -28,72 +28,61 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class CalculateSignatureRequest : Gs2Request<CalculateSignatureRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string VersionName { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CalculateSignatureRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** バージョンの種類名 */
-		[UnityEngine.SerializeField]
-        public string versionName;
-
-        /**
-         * バージョンの種類名を設定
-         *
-         * @param versionName バージョンの種類名
-         * @return this
-         */
         public CalculateSignatureRequest WithVersionName(string versionName) {
-            this.versionName = versionName;
+            this.VersionName = versionName;
             return this;
         }
 
-
-        /** バージョン */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Version.Model.Version_ version;
-
-        /**
-         * バージョンを設定
-         *
-         * @param version バージョン
-         * @return this
-         */
-        public CalculateSignatureRequest WithVersion(global::Gs2.Gs2Version.Model.Version_ version) {
-            this.version = version;
+        public CalculateSignatureRequest WithVersion(Gs2.Gs2Version.Model.Version_ version) {
+            this.Version = version;
             return this;
         }
-
 
     	[Preserve]
-        public static CalculateSignatureRequest FromDict(JsonData data)
+        public static CalculateSignatureRequest FromJson(JsonData data)
         {
-            return new CalculateSignatureRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                versionName = data.Keys.Contains("versionName") && data["versionName"] != null ? data["versionName"].ToString(): null,
-                version = data.Keys.Contains("version") && data["version"] != null ? global::Gs2.Gs2Version.Model.Version_.FromDict(data["version"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CalculateSignatureRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["versionName"] = VersionName,
+                ["version"] = Version?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["versionName"] = versionName;
-            data["version"] = version.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (VersionName != null) {
+                writer.WritePropertyName("versionName");
+                writer.Write(VersionName.ToString());
+            }
+            if (Version != null) {
+                Version.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,175 +23,153 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class SalesItem : IComparable
 	{
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Showcase.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
 
-        /** 商品名 */
-        public string name { set; get; }
-
-        /**
-         * 商品名を設定
-         *
-         * @param name 商品名
-         * @return this
-         */
         public SalesItem WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 商品のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public SalesItem WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 消費アクションリスト */
-        public List<ConsumeAction> consumeActions { set; get; }
-
-        /**
-         * 消費アクションリストを設定
-         *
-         * @param consumeActions 消費アクションリスト
-         * @return this
-         */
-        public SalesItem WithConsumeActions(List<ConsumeAction> consumeActions) {
-            this.consumeActions = consumeActions;
+        public SalesItem WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
+            this.ConsumeActions = consumeActions;
             return this;
         }
 
-        /** 入手アクションリスト */
-        public List<AcquireAction> acquireActions { set; get; }
-
-        /**
-         * 入手アクションリストを設定
-         *
-         * @param acquireActions 入手アクションリスト
-         * @return this
-         */
-        public SalesItem WithAcquireActions(List<AcquireAction> acquireActions) {
-            this.acquireActions = acquireActions;
+        public SalesItem WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
             return this;
+        }
+
+    	[Preserve]
+        public static SalesItem FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SalesItem()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Showcase.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Showcase.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.AcquireAction.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                        ConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                        AcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.consumeActions != null)
-            {
+            if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.consumeActions)
+                foreach (var consumeAction in ConsumeActions)
                 {
-                    item.WriteJson(writer);
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.acquireActions != null)
-            {
+            if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.acquireActions)
+                foreach (var acquireAction in AcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static SalesItem FromDict(JsonData data)
-        {
-            return new SalesItem()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithConsumeActions(data.Keys.Contains("consumeActions") && data["consumeActions"] != null ? data["consumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Showcase.Model.ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithAcquireActions(data.Keys.Contains("acquireActions") && data["acquireActions"] != null ? data["acquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Showcase.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as SalesItem;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (consumeActions == null && consumeActions == other.consumeActions)
+            if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
                 // null and null
             }
             else
             {
-                diff += consumeActions.Count - other.consumeActions.Count;
-                for (var i = 0; i < consumeActions.Count; i++)
+                diff += ConsumeActions.Length - other.ConsumeActions.Length;
+                for (var i = 0; i < ConsumeActions.Length; i++)
                 {
-                    diff += consumeActions[i].CompareTo(other.consumeActions[i]);
+                    diff += ConsumeActions[i].CompareTo(other.ConsumeActions[i]);
                 }
             }
-            if (acquireActions == null && acquireActions == other.acquireActions)
+            if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += acquireActions.Count - other.acquireActions.Count;
-                for (var i = 0; i < acquireActions.Count; i++)
+                diff += AcquireActions.Length - other.AcquireActions.Length;
+                for (var i = 0; i < AcquireActions.Length; i++)
                 {
-                    diff += acquireActions[i].CompareTo(other.acquireActions[i]);
+                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["consumeActions"] = new JsonData(consumeActions.Select(item => item.ToDict()));
-            data["acquireActions"] = new JsonData(acquireActions.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Version.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,53 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Version.Result
 {
 	[Preserve]
-	public class CalculateSignatureResult
+	[System.Serializable]
+	public class CalculateSignatureResult : IResult
 	{
-        /** ボディ */
-        public string body { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
 
-        /** 署名 */
-        public string signature { set; get; }
+        public CalculateSignatureResult WithBody(string body) {
+            this.Body = body;
+            return this;
+        }
 
+        public CalculateSignatureResult WithSignature(string signature) {
+            this.Signature = signature;
+            return this;
+        }
 
     	[Preserve]
-        public static CalculateSignatureResult FromDict(JsonData data)
+        public static CalculateSignatureResult FromJson(JsonData data)
         {
-            return new CalculateSignatureResult {
-                body = data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null,
-                signature = data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new CalculateSignatureResult()
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["body"] = Body,
+                ["signature"] = Signature,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Body != null) {
+                writer.WritePropertyName("body");
+                writer.Write(Body.ToString());
+            }
+            if (Signature != null) {
+                writer.WritePropertyName("signature");
+                writer.Write(Signature.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

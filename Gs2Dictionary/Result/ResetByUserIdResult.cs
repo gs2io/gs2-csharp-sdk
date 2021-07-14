@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Dictionary.Result
 {
 	[Preserve]
-	public class ResetByUserIdResult
+	[System.Serializable]
+	public class ResetByUserIdResult : IResult
 	{
 
     	[Preserve]
-        public static ResetByUserIdResult FromDict(JsonData data)
+        public static ResetByUserIdResult FromJson(JsonData data)
         {
-            return new ResetByUserIdResult {
+            if (data == null) {
+                return null;
+            }
+            return new ResetByUserIdResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class GetLimitModelMasterRequest : Gs2Request<GetLimitModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LimitName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetLimitModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 回数制限の種類名 */
-		[UnityEngine.SerializeField]
-        public string limitName;
-
-        /**
-         * 回数制限の種類名を設定
-         *
-         * @param limitName 回数制限の種類名
-         * @return this
-         */
         public GetLimitModelMasterRequest WithLimitName(string limitName) {
-            this.limitName = limitName;
+            this.LimitName = limitName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetLimitModelMasterRequest FromDict(JsonData data)
+        public static GetLimitModelMasterRequest FromJson(JsonData data)
         {
-            return new GetLimitModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                limitName = data.Keys.Contains("limitName") && data["limitName"] != null ? data["limitName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetLimitModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["limitName"] = LimitName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["limitName"] = limitName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LimitName != null) {
+                writer.WritePropertyName("limitName");
+                writer.Write(LimitName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

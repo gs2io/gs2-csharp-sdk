@@ -23,417 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Experience.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string ExperienceCapScriptId { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting OverflowExperienceScript { set; get; }
+        public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** ランクキャップ取得時 に実行されるスクリプト のGRN */
-        public string experienceCapScriptId { set; get; }
-
-        /**
-         * ランクキャップ取得時 に実行されるスクリプト のGRNを設定
-         *
-         * @param experienceCapScriptId ランクキャップ取得時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public Namespace WithExperienceCapScriptId(string experienceCapScriptId) {
-            this.experienceCapScriptId = experienceCapScriptId;
+            this.ExperienceCapScriptId = experienceCapScriptId;
             return this;
         }
 
-        /** 経験値変化したときに実行するスクリプト */
-        public Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript { set; get; }
-
-        /**
-         * 経験値変化したときに実行するスクリプトを設定
-         *
-         * @param changeExperienceScript 経験値変化したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
-            this.changeExperienceScript = changeExperienceScript;
+            this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
 
-        /** ランク変化したときに実行するスクリプト */
-        public Gs2.Gs2Experience.Model.ScriptSetting changeRankScript { set; get; }
-
-        /**
-         * ランク変化したときに実行するスクリプトを設定
-         *
-         * @param changeRankScript ランク変化したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
-            this.changeRankScript = changeRankScript;
+            this.ChangeRankScript = changeRankScript;
             return this;
         }
 
-        /** ランクキャップ変化したときに実行するスクリプト */
-        public Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript { set; get; }
-
-        /**
-         * ランクキャップ変化したときに実行するスクリプトを設定
-         *
-         * @param changeRankCapScript ランクキャップ変化したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
-            this.changeRankCapScript = changeRankCapScript;
+            this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
 
-        /** 経験値あふれしたときに実行するスクリプト */
-        public Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript { set; get; }
-
-        /**
-         * 経験値あふれしたときに実行するスクリプトを設定
-         *
-         * @param overflowExperienceScript 経験値あふれしたときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithOverflowExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
-            this.overflowExperienceScript = overflowExperienceScript;
+            this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Experience.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithExperienceCapScriptId(!data.Keys.Contains("experienceCapScriptId") || data["experienceCapScriptId"] == null ? null : data["experienceCapScriptId"].ToString())
+                .WithChangeExperienceScript(!data.Keys.Contains("changeExperienceScript") || data["changeExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeExperienceScript"]))
+                .WithChangeRankScript(!data.Keys.Contains("changeRankScript") || data["changeRankScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankScript"]))
+                .WithChangeRankCapScript(!data.Keys.Contains("changeRankCapScript") || data["changeRankCapScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankCapScript"]))
+                .WithOverflowExperienceScript(!data.Keys.Contains("overflowExperienceScript") || data["overflowExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["overflowExperienceScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Experience.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["experienceCapScriptId"] = ExperienceCapScriptId,
+                ["changeExperienceScript"] = ChangeExperienceScript?.ToJson(),
+                ["changeRankScript"] = ChangeRankScript?.ToJson(),
+                ["changeRankCapScript"] = ChangeRankCapScript?.ToJson(),
+                ["overflowExperienceScript"] = OverflowExperienceScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.experienceCapScriptId != null)
-            {
+            if (ExperienceCapScriptId != null) {
                 writer.WritePropertyName("experienceCapScriptId");
-                writer.Write(this.experienceCapScriptId);
+                writer.Write(ExperienceCapScriptId.ToString());
             }
-            if(this.changeExperienceScript != null)
-            {
+            if (ChangeExperienceScript != null) {
                 writer.WritePropertyName("changeExperienceScript");
-                this.changeExperienceScript.WriteJson(writer);
+                ChangeExperienceScript.WriteJson(writer);
             }
-            if(this.changeRankScript != null)
-            {
+            if (ChangeRankScript != null) {
                 writer.WritePropertyName("changeRankScript");
-                this.changeRankScript.WriteJson(writer);
+                ChangeRankScript.WriteJson(writer);
             }
-            if(this.changeRankCapScript != null)
-            {
+            if (ChangeRankCapScript != null) {
                 writer.WritePropertyName("changeRankCapScript");
-                this.changeRankCapScript.WriteJson(writer);
+                ChangeRankCapScript.WriteJson(writer);
             }
-            if(this.overflowExperienceScript != null)
-            {
+            if (OverflowExperienceScript != null) {
                 writer.WritePropertyName("overflowExperienceScript");
-                this.overflowExperienceScript.WriteJson(writer);
+                OverflowExperienceScript.WriteJson(writer);
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithExperienceCapScriptId(data.Keys.Contains("experienceCapScriptId") && data["experienceCapScriptId"] != null ? data["experienceCapScriptId"].ToString() : null)
-                .WithChangeExperienceScript(data.Keys.Contains("changeExperienceScript") && data["changeExperienceScript"] != null ? Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeExperienceScript"]) : null)
-                .WithChangeRankScript(data.Keys.Contains("changeRankScript") && data["changeRankScript"] != null ? Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeRankScript"]) : null)
-                .WithChangeRankCapScript(data.Keys.Contains("changeRankCapScript") && data["changeRankCapScript"] != null ? Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeRankCapScript"]) : null)
-                .WithOverflowExperienceScript(data.Keys.Contains("overflowExperienceScript") && data["overflowExperienceScript"] != null ? Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["overflowExperienceScript"]) : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Experience.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (ExperienceCapScriptId == null && ExperienceCapScriptId == other.ExperienceCapScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += ExperienceCapScriptId.CompareTo(other.ExperienceCapScriptId);
             }
-            if (experienceCapScriptId == null && experienceCapScriptId == other.experienceCapScriptId)
+            if (ChangeExperienceScript == null && ChangeExperienceScript == other.ChangeExperienceScript)
             {
                 // null and null
             }
             else
             {
-                diff += experienceCapScriptId.CompareTo(other.experienceCapScriptId);
+                diff += ChangeExperienceScript.CompareTo(other.ChangeExperienceScript);
             }
-            if (changeExperienceScript == null && changeExperienceScript == other.changeExperienceScript)
+            if (ChangeRankScript == null && ChangeRankScript == other.ChangeRankScript)
             {
                 // null and null
             }
             else
             {
-                diff += changeExperienceScript.CompareTo(other.changeExperienceScript);
+                diff += ChangeRankScript.CompareTo(other.ChangeRankScript);
             }
-            if (changeRankScript == null && changeRankScript == other.changeRankScript)
+            if (ChangeRankCapScript == null && ChangeRankCapScript == other.ChangeRankCapScript)
             {
                 // null and null
             }
             else
             {
-                diff += changeRankScript.CompareTo(other.changeRankScript);
+                diff += ChangeRankCapScript.CompareTo(other.ChangeRankCapScript);
             }
-            if (changeRankCapScript == null && changeRankCapScript == other.changeRankCapScript)
+            if (OverflowExperienceScript == null && OverflowExperienceScript == other.OverflowExperienceScript)
             {
                 // null and null
             }
             else
             {
-                diff += changeRankCapScript.CompareTo(other.changeRankCapScript);
+                diff += OverflowExperienceScript.CompareTo(other.OverflowExperienceScript);
             }
-            if (overflowExperienceScript == null && overflowExperienceScript == other.overflowExperienceScript)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += overflowExperienceScript.CompareTo(other.overflowExperienceScript);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["experienceCapScriptId"] = experienceCapScriptId;
-            data["changeExperienceScript"] = changeExperienceScript.ToDict();
-            data["changeRankScript"] = changeRankScript.ToDict();
-            data["changeRankCapScript"] = changeRankCapScript.ToDict();
-            data["overflowExperienceScript"] = overflowExperienceScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

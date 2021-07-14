@@ -23,289 +23,197 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Project.Model
 {
+
 	[Preserve]
 	public class Receipt : IComparable
 	{
+        public string ReceiptId { set; get; }
+        public string AccountName { set; get; }
+        public string Name { set; get; }
+        public long? Date { set; get; }
+        public string Amount { set; get; }
+        public string PdfUrl { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 領収書 */
-        public string receiptId { set; get; }
-
-        /**
-         * 領収書を設定
-         *
-         * @param receiptId 領収書
-         * @return this
-         */
         public Receipt WithReceiptId(string receiptId) {
-            this.receiptId = receiptId;
+            this.ReceiptId = receiptId;
             return this;
         }
 
-        /** GS2アカウントの名前 */
-        public string accountName { set; get; }
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param accountName GS2アカウントの名前
-         * @return this
-         */
         public Receipt WithAccountName(string accountName) {
-            this.accountName = accountName;
+            this.AccountName = accountName;
             return this;
         }
 
-        /** 請求書名 */
-        public string name { set; get; }
-
-        /**
-         * 請求書名を設定
-         *
-         * @param name 請求書名
-         * @return this
-         */
         public Receipt WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 請求月 */
-        public long? date { set; get; }
-
-        /**
-         * 請求月を設定
-         *
-         * @param date 請求月
-         * @return this
-         */
         public Receipt WithDate(long? date) {
-            this.date = date;
+            this.Date = date;
             return this;
         }
 
-        /** 請求金額 */
-        public string amount { set; get; }
-
-        /**
-         * 請求金額を設定
-         *
-         * @param amount 請求金額
-         * @return this
-         */
         public Receipt WithAmount(string amount) {
-            this.amount = amount;
+            this.Amount = amount;
             return this;
         }
 
-        /** PDF URL */
-        public string pdfUrl { set; get; }
-
-        /**
-         * PDF URLを設定
-         *
-         * @param pdfUrl PDF URL
-         * @return this
-         */
         public Receipt WithPdfUrl(string pdfUrl) {
-            this.pdfUrl = pdfUrl;
+            this.PdfUrl = pdfUrl;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Receipt WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Receipt WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Receipt FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Receipt()
+                .WithReceiptId(!data.Keys.Contains("receiptId") || data["receiptId"] == null ? null : data["receiptId"].ToString())
+                .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDate(!data.Keys.Contains("date") || data["date"] == null ? null : (long?)long.Parse(data["date"].ToString()))
+                .WithAmount(!data.Keys.Contains("amount") || data["amount"] == null ? null : data["amount"].ToString())
+                .WithPdfUrl(!data.Keys.Contains("pdfUrl") || data["pdfUrl"] == null ? null : data["pdfUrl"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["receiptId"] = ReceiptId,
+                ["accountName"] = AccountName,
+                ["name"] = Name,
+                ["date"] = Date,
+                ["amount"] = Amount,
+                ["pdfUrl"] = PdfUrl,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.receiptId != null)
-            {
+            if (ReceiptId != null) {
                 writer.WritePropertyName("receiptId");
-                writer.Write(this.receiptId);
+                writer.Write(ReceiptId.ToString());
             }
-            if(this.accountName != null)
-            {
+            if (AccountName != null) {
                 writer.WritePropertyName("accountName");
-                writer.Write(this.accountName);
+                writer.Write(AccountName.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.date.HasValue)
-            {
+            if (Date != null) {
                 writer.WritePropertyName("date");
-                writer.Write(this.date.Value);
+                writer.Write(long.Parse(Date.ToString()));
             }
-            if(this.amount != null)
-            {
+            if (Amount != null) {
                 writer.WritePropertyName("amount");
-                writer.Write(this.amount);
+                writer.Write(Amount.ToString());
             }
-            if(this.pdfUrl != null)
-            {
+            if (PdfUrl != null) {
                 writer.WritePropertyName("pdfUrl");
-                writer.Write(this.pdfUrl);
+                writer.Write(PdfUrl.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetReceiptNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):receipt:(?<receiptName>.*)");
-        if (!match.Groups["receiptName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["receiptName"].Value;
-    }
-
-    public static string GetAccountNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):receipt:(?<receiptName>.*)");
-        if (!match.Groups["accountName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["accountName"].Value;
-    }
-
-    	[Preserve]
-        public static Receipt FromDict(JsonData data)
-        {
-            return new Receipt()
-                .WithReceiptId(data.Keys.Contains("receiptId") && data["receiptId"] != null ? data["receiptId"].ToString() : null)
-                .WithAccountName(data.Keys.Contains("accountName") && data["accountName"] != null ? data["accountName"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDate(data.Keys.Contains("date") && data["date"] != null ? (long?)long.Parse(data["date"].ToString()) : null)
-                .WithAmount(data.Keys.Contains("amount") && data["amount"] != null ? data["amount"].ToString() : null)
-                .WithPdfUrl(data.Keys.Contains("pdfUrl") && data["pdfUrl"] != null ? data["pdfUrl"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Receipt;
             var diff = 0;
-            if (receiptId == null && receiptId == other.receiptId)
+            if (ReceiptId == null && ReceiptId == other.ReceiptId)
             {
                 // null and null
             }
             else
             {
-                diff += receiptId.CompareTo(other.receiptId);
+                diff += ReceiptId.CompareTo(other.ReceiptId);
             }
-            if (accountName == null && accountName == other.accountName)
+            if (AccountName == null && AccountName == other.AccountName)
             {
                 // null and null
             }
             else
             {
-                diff += accountName.CompareTo(other.accountName);
+                diff += AccountName.CompareTo(other.AccountName);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (date == null && date == other.date)
+            if (Date == null && Date == other.Date)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(date - other.date);
+                diff += (int)(Date - other.Date);
             }
-            if (amount == null && amount == other.amount)
+            if (Amount == null && Amount == other.Amount)
             {
                 // null and null
             }
             else
             {
-                diff += amount.CompareTo(other.amount);
+                diff += Amount.CompareTo(other.Amount);
             }
-            if (pdfUrl == null && pdfUrl == other.pdfUrl)
+            if (PdfUrl == null && PdfUrl == other.PdfUrl)
             {
                 // null and null
             }
             else
             {
-                diff += pdfUrl.CompareTo(other.pdfUrl);
+                diff += PdfUrl.CompareTo(other.PdfUrl);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["receiptId"] = receiptId;
-            data["accountName"] = accountName;
-            data["name"] = name;
-            data["date"] = date;
-            data["amount"] = amount;
-            data["pdfUrl"] = pdfUrl;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

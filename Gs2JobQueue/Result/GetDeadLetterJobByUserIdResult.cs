@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2JobQueue.Result
 {
 	[Preserve]
-	public class GetDeadLetterJobByUserIdResult
+	[System.Serializable]
+	public class GetDeadLetterJobByUserIdResult : IResult
 	{
-        /** デッドレタージョブ */
-        public DeadLetterJob item { set; get; }
+        public Gs2.Gs2JobQueue.Model.DeadLetterJob Item { set; get; }
 
+        public GetDeadLetterJobByUserIdResult WithItem(Gs2.Gs2JobQueue.Model.DeadLetterJob item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetDeadLetterJobByUserIdResult FromDict(JsonData data)
+        public static GetDeadLetterJobByUserIdResult FromJson(JsonData data)
         {
-            return new GetDeadLetterJobByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2JobQueue.Model.DeadLetterJob.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetDeadLetterJobByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2JobQueue.Model.DeadLetterJob.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

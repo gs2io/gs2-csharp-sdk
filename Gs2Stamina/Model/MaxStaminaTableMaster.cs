@@ -23,326 +23,214 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Stamina.Model
 {
+
 	[Preserve]
 	public class MaxStaminaTableMaster : IComparable
 	{
+        public string MaxStaminaTableId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string ExperienceModelId { set; get; }
+        public int[] Values { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** スタミナの最大値テーブルマスター */
-        public string maxStaminaTableId { set; get; }
-
-        /**
-         * スタミナの最大値テーブルマスターを設定
-         *
-         * @param maxStaminaTableId スタミナの最大値テーブルマスター
-         * @return this
-         */
         public MaxStaminaTableMaster WithMaxStaminaTableId(string maxStaminaTableId) {
-            this.maxStaminaTableId = maxStaminaTableId;
+            this.MaxStaminaTableId = maxStaminaTableId;
             return this;
         }
 
-        /** 最大スタミナ値テーブル名 */
-        public string name { set; get; }
-
-        /**
-         * 最大スタミナ値テーブル名を設定
-         *
-         * @param name 最大スタミナ値テーブル名
-         * @return this
-         */
         public MaxStaminaTableMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 最大スタミナ値テーブルのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 最大スタミナ値テーブルのメタデータを設定
-         *
-         * @param metadata 最大スタミナ値テーブルのメタデータ
-         * @return this
-         */
         public MaxStaminaTableMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** スタミナの最大値テーブルマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * スタミナの最大値テーブルマスターの説明を設定
-         *
-         * @param description スタミナの最大値テーブルマスターの説明
-         * @return this
-         */
         public MaxStaminaTableMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 経験値の種類マスター のGRN */
-        public string experienceModelId { set; get; }
-
-        /**
-         * 経験値の種類マスター のGRNを設定
-         *
-         * @param experienceModelId 経験値の種類マスター のGRN
-         * @return this
-         */
         public MaxStaminaTableMaster WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-        /** ランク毎のスタミナの最大値テーブル */
-        public List<int?> values { set; get; }
-
-        /**
-         * ランク毎のスタミナの最大値テーブルを設定
-         *
-         * @param values ランク毎のスタミナの最大値テーブル
-         * @return this
-         */
-        public MaxStaminaTableMaster WithValues(List<int?> values) {
-            this.values = values;
+        public MaxStaminaTableMaster WithValues(int[] values) {
+            this.Values = values;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public MaxStaminaTableMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public MaxStaminaTableMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static MaxStaminaTableMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new MaxStaminaTableMaster()
+                .WithMaxStaminaTableId(!data.Keys.Contains("maxStaminaTableId") || data["maxStaminaTableId"] == null ? null : data["maxStaminaTableId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new int[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return int.Parse(v.ToString());
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["maxStaminaTableId"] = MaxStaminaTableId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["experienceModelId"] = ExperienceModelId,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((int?)int.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.maxStaminaTableId != null)
-            {
+            if (MaxStaminaTableId != null) {
                 writer.WritePropertyName("maxStaminaTableId");
-                writer.Write(this.maxStaminaTableId);
+                writer.Write(MaxStaminaTableId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.experienceModelId != null)
-            {
+            if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
-                writer.Write(this.experienceModelId);
+                writer.Write(ExperienceModelId.ToString());
             }
-            if(this.values != null)
-            {
+            if (Values != null) {
                 writer.WritePropertyName("values");
                 writer.WriteArrayStart();
-                foreach(var item in this.values)
+                foreach (var value in Values)
                 {
-                    writer.Write(item.Value);
+                    if (value != null) {
+                        writer.Write(int.Parse(value.ToString()));
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMaxStaminaTableNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):maxStaminaTable:(?<maxStaminaTableName>.*)");
-        if (!match.Groups["maxStaminaTableName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["maxStaminaTableName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):maxStaminaTable:(?<maxStaminaTableName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):maxStaminaTable:(?<maxStaminaTableName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):maxStaminaTable:(?<maxStaminaTableName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static MaxStaminaTableMaster FromDict(JsonData data)
-        {
-            return new MaxStaminaTableMaster()
-                .WithMaxStaminaTableId(data.Keys.Contains("maxStaminaTableId") && data["maxStaminaTableId"] != null ? data["maxStaminaTableId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithExperienceModelId(data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString() : null)
-                .WithValues(data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (int?)int.Parse(value.ToString());
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as MaxStaminaTableMaster;
             var diff = 0;
-            if (maxStaminaTableId == null && maxStaminaTableId == other.maxStaminaTableId)
+            if (MaxStaminaTableId == null && MaxStaminaTableId == other.MaxStaminaTableId)
             {
                 // null and null
             }
             else
             {
-                diff += maxStaminaTableId.CompareTo(other.maxStaminaTableId);
+                diff += MaxStaminaTableId.CompareTo(other.MaxStaminaTableId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (experienceModelId == null && experienceModelId == other.experienceModelId)
+            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
             {
                 // null and null
             }
             else
             {
-                diff += experienceModelId.CompareTo(other.experienceModelId);
+                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
             }
-            if (values == null && values == other.values)
+            if (Values == null && Values == other.Values)
             {
                 // null and null
             }
             else
             {
-                diff += values.Count - other.values.Count;
-                for (var i = 0; i < values.Count; i++)
+                diff += Values.Length - other.Values.Length;
+                for (var i = 0; i < Values.Length; i++)
                 {
-                    diff += (int)(values[i] - other.values[i]);
+                    diff += (int)(Values[i] - other.Values[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["maxStaminaTableId"] = maxStaminaTableId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["experienceModelId"] = experienceModelId;
-            data["values"] = new JsonData(values);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

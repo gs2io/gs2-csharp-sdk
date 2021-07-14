@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inbox.Model
 {
+
 	[Preserve]
-	public class TimeSpan : IComparable
+	public class TimeSpan_ : IComparable
 	{
+        public int? Days { set; get; }
+        public int? Hours { set; get; }
+        public int? Minutes { set; get; }
 
-        /** 現在時刻からの日数 */
-        public int? days { set; get; }
-
-        /**
-         * 現在時刻からの日数を設定
-         *
-         * @param days 現在時刻からの日数
-         * @return this
-         */
-        public TimeSpan WithDays(int? days) {
-            this.days = days;
+        public TimeSpan_ WithDays(int? days) {
+            this.Days = days;
             return this;
         }
 
-        /** 現在時刻からの時間 */
-        public int? hours { set; get; }
-
-        /**
-         * 現在時刻からの時間を設定
-         *
-         * @param hours 現在時刻からの時間
-         * @return this
-         */
-        public TimeSpan WithHours(int? hours) {
-            this.hours = hours;
+        public TimeSpan_ WithHours(int? hours) {
+            this.Hours = hours;
             return this;
         }
 
-        /** 現在時刻からの分 */
-        public int? minutes { set; get; }
-
-        /**
-         * 現在時刻からの分を設定
-         *
-         * @param minutes 現在時刻からの分
-         * @return this
-         */
-        public TimeSpan WithMinutes(int? minutes) {
-            this.minutes = minutes;
+        public TimeSpan_ WithMinutes(int? minutes) {
+            this.Minutes = minutes;
             return this;
+        }
+
+    	[Preserve]
+        public static TimeSpan_ FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new TimeSpan_()
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)int.Parse(data["days"].ToString()))
+                .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : (int?)int.Parse(data["hours"].ToString()))
+                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)int.Parse(data["minutes"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["days"] = Days,
+                ["hours"] = Hours,
+                ["minutes"] = Minutes,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.days.HasValue)
-            {
+            if (Days != null) {
                 writer.WritePropertyName("days");
-                writer.Write(this.days.Value);
+                writer.Write(int.Parse(Days.ToString()));
             }
-            if(this.hours.HasValue)
-            {
+            if (Hours != null) {
                 writer.WritePropertyName("hours");
-                writer.Write(this.hours.Value);
+                writer.Write(int.Parse(Hours.ToString()));
             }
-            if(this.minutes.HasValue)
-            {
+            if (Minutes != null) {
                 writer.WritePropertyName("minutes");
-                writer.Write(this.minutes.Value);
+                writer.Write(int.Parse(Minutes.ToString()));
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static TimeSpan FromDict(JsonData data)
-        {
-            return new TimeSpan()
-                .WithDays(data.Keys.Contains("days") && data["days"] != null ? (int?)int.Parse(data["days"].ToString()) : null)
-                .WithHours(data.Keys.Contains("hours") && data["hours"] != null ? (int?)int.Parse(data["hours"].ToString()) : null)
-                .WithMinutes(data.Keys.Contains("minutes") && data["minutes"] != null ? (int?)int.Parse(data["minutes"].ToString()) : null);
-        }
-
         public int CompareTo(object obj)
         {
-            var other = obj as TimeSpan;
+            var other = obj as TimeSpan_;
             var diff = 0;
-            if (days == null && days == other.days)
+            if (Days == null && Days == other.Days)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(days - other.days);
+                diff += (int)(Days - other.Days);
             }
-            if (hours == null && hours == other.hours)
+            if (Hours == null && Hours == other.Hours)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(hours - other.hours);
+                diff += (int)(Hours - other.Hours);
             }
-            if (minutes == null && minutes == other.minutes)
+            if (Minutes == null && Minutes == other.Minutes)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(minutes - other.minutes);
+                diff += (int)(Minutes - other.Minutes);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["days"] = days;
-            data["hours"] = hours;
-            data["minutes"] = minutes;
-            return data;
-        }
-	}
+    }
 }

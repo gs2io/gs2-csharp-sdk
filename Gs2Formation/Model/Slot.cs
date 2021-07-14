@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class Slot : IComparable
 	{
+        public string Name { set; get; }
+        public string PropertyId { set; get; }
+        public string Metadata { set; get; }
 
-        /** スロットモデル名 */
-        public string name { set; get; }
-
-        /**
-         * スロットモデル名を設定
-         *
-         * @param name スロットモデル名
-         * @return this
-         */
         public Slot WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** プロパティID */
-        public string propertyId { set; get; }
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
         public Slot WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
+            this.PropertyId = propertyId;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Slot WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
+        }
+
+    	[Preserve]
+        public static Slot FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Slot()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["propertyId"] = PropertyId,
+                ["metadata"] = Metadata,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.propertyId != null)
-            {
+            if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
-                writer.Write(this.propertyId);
+                writer.Write(PropertyId.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Slot FromDict(JsonData data)
-        {
-            return new Slot()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithPropertyId(data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Slot;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (propertyId == null && propertyId == other.propertyId)
+            if (PropertyId == null && PropertyId == other.PropertyId)
             {
                 // null and null
             }
             else
             {
-                diff += propertyId.CompareTo(other.propertyId);
+                diff += PropertyId.CompareTo(other.PropertyId);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["propertyId"] = propertyId;
-            data["metadata"] = metadata;
-            return data;
-        }
-	}
+    }
 }

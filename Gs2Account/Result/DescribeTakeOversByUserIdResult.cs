@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Account.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Account.Result
 {
 	[Preserve]
-	public class DescribeTakeOversByUserIdResult
+	[System.Serializable]
+	public class DescribeTakeOversByUserIdResult : IResult
 	{
-        /** 引き継ぎ設定のリスト */
-        public List<TakeOver> items { set; get; }
+        public Gs2.Gs2Account.Model.TakeOver[] Items { set; get; }
+        public string NextPageToken { set; get; }
 
-        /** リストの続きを取得するためのページトークン */
-        public string nextPageToken { set; get; }
+        public DescribeTakeOversByUserIdResult WithItems(Gs2.Gs2Account.Model.TakeOver[] items) {
+            this.Items = items;
+            return this;
+        }
 
+        public DescribeTakeOversByUserIdResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeTakeOversByUserIdResult FromDict(JsonData data)
+        public static DescribeTakeOversByUserIdResult FromJson(JsonData data)
         {
-            return new DescribeTakeOversByUserIdResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Account.Model.TakeOver.FromDict(value);
-                    }
-                ).ToList() : null,
-                nextPageToken = data.Keys.Contains("nextPageToken") && data["nextPageToken"] != null ? data["nextPageToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeTakeOversByUserIdResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Account.Model.TakeOver[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Account.Model.TakeOver.FromJson(v);
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["nextPageToken"] = NextPageToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

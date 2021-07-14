@@ -28,54 +28,50 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class DeleteEntryModelMasterRequest : Gs2Request<DeleteEntryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string EntryName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteEntryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** エントリーモデル名 */
-		[UnityEngine.SerializeField]
-        public string entryName;
-
-        /**
-         * エントリーモデル名を設定
-         *
-         * @param entryName エントリーモデル名
-         * @return this
-         */
         public DeleteEntryModelMasterRequest WithEntryName(string entryName) {
-            this.entryName = entryName;
+            this.EntryName = entryName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteEntryModelMasterRequest FromDict(JsonData data)
+        public static DeleteEntryModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteEntryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                entryName = data.Keys.Contains("entryName") && data["entryName"] != null ? data["entryName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteEntryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithEntryName(!data.Keys.Contains("entryName") || data["entryName"] == null ? null : data["entryName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["entryName"] = EntryName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["entryName"] = entryName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (EntryName != null) {
+                writer.WritePropertyName("entryName");
+                writer.Write(EntryName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

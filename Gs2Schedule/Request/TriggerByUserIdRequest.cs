@@ -28,126 +28,86 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class TriggerByUserIdRequest : Gs2Request<TriggerByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string TriggerName { set; get; }
+        public string UserId { set; get; }
+        public string TriggerStrategy { set; get; }
+        public int? Ttl { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** トリガーの名前 */
-		[UnityEngine.SerializeField]
-        public string triggerName;
-
-        /**
-         * トリガーの名前を設定
-         *
-         * @param triggerName トリガーの名前
-         * @return this
-         */
         public TriggerByUserIdRequest WithTriggerName(string triggerName) {
-            this.triggerName = triggerName;
+            this.TriggerName = triggerName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public TriggerByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** トリガーの引き方の方針 */
-		[UnityEngine.SerializeField]
-        public string triggerStrategy;
-
-        /**
-         * トリガーの引き方の方針を設定
-         *
-         * @param triggerStrategy トリガーの引き方の方針
-         * @return this
-         */
         public TriggerByUserIdRequest WithTriggerStrategy(string triggerStrategy) {
-            this.triggerStrategy = triggerStrategy;
+            this.TriggerStrategy = triggerStrategy;
             return this;
         }
 
-
-        /** トリガーの有効期限(秒) */
-		[UnityEngine.SerializeField]
-        public int? ttl;
-
-        /**
-         * トリガーの有効期限(秒)を設定
-         *
-         * @param ttl トリガーの有効期限(秒)
-         * @return this
-         */
         public TriggerByUserIdRequest WithTtl(int? ttl) {
-            this.ttl = ttl;
+            this.Ttl = ttl;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public TriggerByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static TriggerByUserIdRequest FromDict(JsonData data)
+        public static TriggerByUserIdRequest FromJson(JsonData data)
         {
-            return new TriggerByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                triggerName = data.Keys.Contains("triggerName") && data["triggerName"] != null ? data["triggerName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                triggerStrategy = data.Keys.Contains("triggerStrategy") && data["triggerStrategy"] != null ? data["triggerStrategy"].ToString(): null,
-                ttl = data.Keys.Contains("ttl") && data["ttl"] != null ? (int?)int.Parse(data["ttl"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new TriggerByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTriggerStrategy(!data.Keys.Contains("triggerStrategy") || data["triggerStrategy"] == null ? null : data["triggerStrategy"].ToString())
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)int.Parse(data["ttl"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["triggerName"] = TriggerName,
+                ["userId"] = UserId,
+                ["triggerStrategy"] = TriggerStrategy,
+                ["ttl"] = Ttl,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["triggerName"] = triggerName;
-            data["userId"] = userId;
-            data["triggerStrategy"] = triggerStrategy;
-            data["ttl"] = ttl;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (TriggerName != null) {
+                writer.WritePropertyName("triggerName");
+                writer.Write(TriggerName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (TriggerStrategy != null) {
+                writer.WritePropertyName("triggerStrategy");
+                writer.Write(TriggerStrategy.ToString());
+            }
+            if (Ttl != null) {
+                writer.WritePropertyName("ttl");
+                writer.Write(int.Parse(Ttl.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

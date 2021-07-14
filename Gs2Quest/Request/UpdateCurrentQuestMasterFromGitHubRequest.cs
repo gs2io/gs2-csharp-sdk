@@ -28,54 +28,49 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class UpdateCurrentQuestMasterFromGitHubRequest : Gs2Request<UpdateCurrentQuestMasterFromGitHubRequest>
 	{
+        public string NamespaceName { set; get; }
+        public Gs2.Gs2Quest.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public UpdateCurrentQuestMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** GitHubからマスターデータをチェックアウトしてくる設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Quest.Model.GitHubCheckoutSetting checkoutSetting;
-
-        /**
-         * GitHubからマスターデータをチェックアウトしてくる設定を設定
-         *
-         * @param checkoutSetting GitHubからマスターデータをチェックアウトしてくる設定
-         * @return this
-         */
-        public UpdateCurrentQuestMasterFromGitHubRequest WithCheckoutSetting(global::Gs2.Gs2Quest.Model.GitHubCheckoutSetting checkoutSetting) {
-            this.checkoutSetting = checkoutSetting;
+        public UpdateCurrentQuestMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Quest.Model.GitHubCheckoutSetting checkoutSetting) {
+            this.CheckoutSetting = checkoutSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateCurrentQuestMasterFromGitHubRequest FromDict(JsonData data)
+        public static UpdateCurrentQuestMasterFromGitHubRequest FromJson(JsonData data)
         {
-            return new UpdateCurrentQuestMasterFromGitHubRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                checkoutSetting = data.Keys.Contains("checkoutSetting") && data["checkoutSetting"] != null ? global::Gs2.Gs2Quest.Model.GitHubCheckoutSetting.FromDict(data["checkoutSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentQuestMasterFromGitHubRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Quest.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["checkoutSetting"] = CheckoutSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["checkoutSetting"] = checkoutSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CheckoutSetting != null) {
+                CheckoutSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

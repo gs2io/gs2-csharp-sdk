@@ -28,54 +28,50 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DeleteInventoryModelMasterRequest : Gs2Request<DeleteInventoryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteInventoryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリの種類名 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリの種類名を設定
-         *
-         * @param inventoryName インベントリの種類名
-         * @return this
-         */
         public DeleteInventoryModelMasterRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteInventoryModelMasterRequest FromDict(JsonData data)
+        public static DeleteInventoryModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteInventoryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteInventoryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

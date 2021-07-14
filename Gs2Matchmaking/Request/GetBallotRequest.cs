@@ -28,140 +28,98 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class GetBallotRequest : Gs2Request<GetBallotRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
+        public string GatheringName { set; get; }
+        public string AccessToken { set; get; }
+        public int? NumberOfPlayer { set; get; }
+        public string KeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetBallotRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** レーティング名 */
-		[UnityEngine.SerializeField]
-        public string ratingName;
-
-        /**
-         * レーティング名を設定
-         *
-         * @param ratingName レーティング名
-         * @return this
-         */
         public GetBallotRequest WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-
-        /** 投票対象のギャザリング名 */
-		[UnityEngine.SerializeField]
-        public string gatheringName;
-
-        /**
-         * 投票対象のギャザリング名を設定
-         *
-         * @param gatheringName 投票対象のギャザリング名
-         * @return this
-         */
         public GetBallotRequest WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
 
-
-        /** 参加人数 */
-		[UnityEngine.SerializeField]
-        public int? numberOfPlayer;
-
-        /**
-         * 参加人数を設定
-         *
-         * @param numberOfPlayer 参加人数
-         * @return this
-         */
-        public GetBallotRequest WithNumberOfPlayer(int? numberOfPlayer) {
-            this.numberOfPlayer = numberOfPlayer;
-            return this;
-        }
-
-
-        /** 投票用紙の署名計算に使用する暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 投票用紙の署名計算に使用する暗号鍵 のGRNを設定
-         *
-         * @param keyId 投票用紙の署名計算に使用する暗号鍵 のGRN
-         * @return this
-         */
-        public GetBallotRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetBallotRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetBallotRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public GetBallotRequest WithNumberOfPlayer(int? numberOfPlayer) {
+            this.NumberOfPlayer = numberOfPlayer;
+            return this;
+        }
+
+        public GetBallotRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
     	[Preserve]
-        public static GetBallotRequest FromDict(JsonData data)
+        public static GetBallotRequest FromJson(JsonData data)
         {
-            return new GetBallotRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ratingName = data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString(): null,
-                gatheringName = data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString(): null,
-                numberOfPlayer = data.Keys.Contains("numberOfPlayer") && data["numberOfPlayer"] != null ? (int?)int.Parse(data["numberOfPlayer"].ToString()) : null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetBallotRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithNumberOfPlayer(!data.Keys.Contains("numberOfPlayer") || data["numberOfPlayer"] == null ? null : (int?)int.Parse(data["numberOfPlayer"].ToString()))
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ratingName"] = RatingName,
+                ["gatheringName"] = GatheringName,
+                ["accessToken"] = AccessToken,
+                ["numberOfPlayer"] = NumberOfPlayer,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ratingName"] = ratingName;
-            data["gatheringName"] = gatheringName;
-            data["numberOfPlayer"] = numberOfPlayer;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RatingName != null) {
+                writer.WritePropertyName("ratingName");
+                writer.Write(RatingName.ToString());
+            }
+            if (GatheringName != null) {
+                writer.WritePropertyName("gatheringName");
+                writer.Write(GatheringName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (NumberOfPlayer != null) {
+                writer.WritePropertyName("numberOfPlayer");
+                writer.Write(int.Parse(NumberOfPlayer.ToString()));
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

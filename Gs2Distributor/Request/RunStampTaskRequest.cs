@@ -28,90 +28,62 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampTaskRequest : Gs2Request<RunStampTaskRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string StampTask { set; get; }
+        public string KeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public RunStampTaskRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 実行するスタンプタスク */
-		[UnityEngine.SerializeField]
-        public string stampTask;
-
-        /**
-         * 実行するスタンプタスクを設定
-         *
-         * @param stampTask 実行するスタンプタスク
-         * @return this
-         */
         public RunStampTaskRequest WithStampTask(string stampTask) {
-            this.stampTask = stampTask;
+            this.StampTask = stampTask;
             return this;
         }
 
-
-        /** スタンプシートの暗号化に使用した暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * スタンプシートの暗号化に使用した暗号鍵GRNを設定
-         *
-         * @param keyId スタンプシートの暗号化に使用した暗号鍵GRN
-         * @return this
-         */
         public RunStampTaskRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public RunStampTaskRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static RunStampTaskRequest FromDict(JsonData data)
+        public static RunStampTaskRequest FromJson(JsonData data)
         {
-            return new RunStampTaskRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                stampTask = data.Keys.Contains("stampTask") && data["stampTask"] != null ? data["stampTask"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampTaskRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithStampTask(!data.Keys.Contains("stampTask") || data["stampTask"] == null ? null : data["stampTask"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["stampTask"] = StampTask,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["stampTask"] = stampTask;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (StampTask != null) {
+                writer.WritePropertyName("stampTask");
+                writer.Write(StampTask.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

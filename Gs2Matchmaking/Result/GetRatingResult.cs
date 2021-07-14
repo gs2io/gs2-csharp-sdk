@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class GetRatingResult
+	[System.Serializable]
+	public class GetRatingResult : IResult
 	{
-        /** レーティング */
-        public Rating item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Rating Item { set; get; }
 
+        public GetRatingResult WithItem(Gs2.Gs2Matchmaking.Model.Rating item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetRatingResult FromDict(JsonData data)
+        public static GetRatingResult FromJson(JsonData data)
         {
-            return new GetRatingResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Matchmaking.Model.Rating.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetRatingResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.Rating.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Account.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Account.Result
 {
 	[Preserve]
-	public class DeleteTakeOverResult
+	[System.Serializable]
+	public class DeleteTakeOverResult : IResult
 	{
 
     	[Preserve]
-        public static DeleteTakeOverResult FromDict(JsonData data)
+        public static DeleteTakeOverResult FromJson(JsonData data)
         {
-            return new DeleteTakeOverResult {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteTakeOverResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

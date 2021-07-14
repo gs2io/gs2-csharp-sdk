@@ -28,54 +28,50 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DeleteCounterModelMasterRequest : Gs2Request<DeleteCounterModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CounterName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteCounterModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カウンター名 */
-		[UnityEngine.SerializeField]
-        public string counterName;
-
-        /**
-         * カウンター名を設定
-         *
-         * @param counterName カウンター名
-         * @return this
-         */
         public DeleteCounterModelMasterRequest WithCounterName(string counterName) {
-            this.counterName = counterName;
+            this.CounterName = counterName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteCounterModelMasterRequest FromDict(JsonData data)
+        public static DeleteCounterModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteCounterModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                counterName = data.Keys.Contains("counterName") && data["counterName"] != null ? data["counterName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteCounterModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["counterName"] = CounterName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["counterName"] = counterName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,72 +28,62 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateBillingMethodRequest : Gs2Request<UpdateBillingMethodRequest>
 	{
+        public string AccountToken { set; get; }
+        public string BillingMethodName { set; get; }
+        public string Description { set; get; }
 
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public UpdateBillingMethodRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
 
-
-        /** 名前 */
-		[UnityEngine.SerializeField]
-        public string billingMethodName;
-
-        /**
-         * 名前を設定
-         *
-         * @param billingMethodName 名前
-         * @return this
-         */
         public UpdateBillingMethodRequest WithBillingMethodName(string billingMethodName) {
-            this.billingMethodName = billingMethodName;
+            this.BillingMethodName = billingMethodName;
             return this;
         }
 
-
-        /** 名前 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 名前を設定
-         *
-         * @param description 名前
-         * @return this
-         */
         public UpdateBillingMethodRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateBillingMethodRequest FromDict(JsonData data)
+        public static UpdateBillingMethodRequest FromJson(JsonData data)
         {
-            return new UpdateBillingMethodRequest {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
-                billingMethodName = data.Keys.Contains("billingMethodName") && data["billingMethodName"] != null ? data["billingMethodName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateBillingMethodRequest()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
+                ["billingMethodName"] = BillingMethodName,
+                ["description"] = Description,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountToken"] = accountToken;
-            data["billingMethodName"] = billingMethodName;
-            data["description"] = description;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            if (BillingMethodName != null) {
+                writer.WritePropertyName("billingMethodName");
+                writer.Write(BillingMethodName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

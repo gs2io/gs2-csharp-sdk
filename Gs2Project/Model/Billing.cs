@@ -23,446 +23,297 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Project.Model
 {
+
 	[Preserve]
 	public class Billing : IComparable
 	{
+        public string BillingId { set; get; }
+        public string ProjectName { set; get; }
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public string Region { set; get; }
+        public string Service { set; get; }
+        public string ActivityType { set; get; }
+        public long? Unit { set; get; }
+        public string UnitName { set; get; }
+        public long? Price { set; get; }
+        public string Currency { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 利用状況 */
-        public string billingId { set; get; }
-
-        /**
-         * 利用状況を設定
-         *
-         * @param billingId 利用状況
-         * @return this
-         */
         public Billing WithBillingId(string billingId) {
-            this.billingId = billingId;
+            this.BillingId = billingId;
             return this;
         }
 
-        /** プロジェクト名 */
-        public string projectName { set; get; }
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public Billing WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
 
-        /** イベントの発生年 */
-        public int? year { set; get; }
-
-        /**
-         * イベントの発生年を設定
-         *
-         * @param year イベントの発生年
-         * @return this
-         */
         public Billing WithYear(int? year) {
-            this.year = year;
+            this.Year = year;
             return this;
         }
 
-        /** イベントの発生月 */
-        public int? month { set; get; }
-
-        /**
-         * イベントの発生月を設定
-         *
-         * @param month イベントの発生月
-         * @return this
-         */
         public Billing WithMonth(int? month) {
-            this.month = month;
+            this.Month = month;
             return this;
         }
 
-        /** リージョン */
-        public string region { set; get; }
-
-        /**
-         * リージョンを設定
-         *
-         * @param region リージョン
-         * @return this
-         */
         public Billing WithRegion(string region) {
-            this.region = region;
+            this.Region = region;
             return this;
         }
 
-        /** サービスの種類 */
-        public string service { set; get; }
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param service サービスの種類
-         * @return this
-         */
         public Billing WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-        /** イベントの種類 */
-        public string activityType { set; get; }
-
-        /**
-         * イベントの種類を設定
-         *
-         * @param activityType イベントの種類
-         * @return this
-         */
         public Billing WithActivityType(string activityType) {
-            this.activityType = activityType;
+            this.ActivityType = activityType;
             return this;
         }
 
-        /** 回数 */
-        public long? unit { set; get; }
-
-        /**
-         * 回数を設定
-         *
-         * @param unit 回数
-         * @return this
-         */
         public Billing WithUnit(long? unit) {
-            this.unit = unit;
+            this.Unit = unit;
             return this;
         }
 
-        /** 単位 */
-        public string unitName { set; get; }
-
-        /**
-         * 単位を設定
-         *
-         * @param unitName 単位
-         * @return this
-         */
         public Billing WithUnitName(string unitName) {
-            this.unitName = unitName;
+            this.UnitName = unitName;
             return this;
         }
 
-        /** 料金 */
-        public long? price { set; get; }
-
-        /**
-         * 料金を設定
-         *
-         * @param price 料金
-         * @return this
-         */
         public Billing WithPrice(long? price) {
-            this.price = price;
+            this.Price = price;
             return this;
         }
 
-        /** 通貨 */
-        public string currency { set; get; }
-
-        /**
-         * 通貨を設定
-         *
-         * @param currency 通貨
-         * @return this
-         */
         public Billing WithCurrency(string currency) {
-            this.currency = currency;
+            this.Currency = currency;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Billing WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Billing WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Billing FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Billing()
+                .WithBillingId(!data.Keys.Contains("billingId") || data["billingId"] == null ? null : data["billingId"].ToString())
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
+                .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : (long?)long.Parse(data["unit"].ToString()))
+                .WithUnitName(!data.Keys.Contains("unitName") || data["unitName"] == null ? null : data["unitName"].ToString())
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (long?)long.Parse(data["price"].ToString()))
+                .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["billingId"] = BillingId,
+                ["projectName"] = ProjectName,
+                ["year"] = Year,
+                ["month"] = Month,
+                ["region"] = Region,
+                ["service"] = Service,
+                ["activityType"] = ActivityType,
+                ["unit"] = Unit,
+                ["unitName"] = UnitName,
+                ["price"] = Price,
+                ["currency"] = Currency,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.billingId != null)
-            {
+            if (BillingId != null) {
                 writer.WritePropertyName("billingId");
-                writer.Write(this.billingId);
+                writer.Write(BillingId.ToString());
             }
-            if(this.projectName != null)
-            {
+            if (ProjectName != null) {
                 writer.WritePropertyName("projectName");
-                writer.Write(this.projectName);
+                writer.Write(ProjectName.ToString());
             }
-            if(this.year.HasValue)
-            {
+            if (Year != null) {
                 writer.WritePropertyName("year");
-                writer.Write(this.year.Value);
+                writer.Write(int.Parse(Year.ToString()));
             }
-            if(this.month.HasValue)
-            {
+            if (Month != null) {
                 writer.WritePropertyName("month");
-                writer.Write(this.month.Value);
+                writer.Write(int.Parse(Month.ToString()));
             }
-            if(this.region != null)
-            {
+            if (Region != null) {
                 writer.WritePropertyName("region");
-                writer.Write(this.region);
+                writer.Write(Region.ToString());
             }
-            if(this.service != null)
-            {
+            if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(this.service);
+                writer.Write(Service.ToString());
             }
-            if(this.activityType != null)
-            {
+            if (ActivityType != null) {
                 writer.WritePropertyName("activityType");
-                writer.Write(this.activityType);
+                writer.Write(ActivityType.ToString());
             }
-            if(this.unit.HasValue)
-            {
+            if (Unit != null) {
                 writer.WritePropertyName("unit");
-                writer.Write(this.unit.Value);
+                writer.Write(long.Parse(Unit.ToString()));
             }
-            if(this.unitName != null)
-            {
+            if (UnitName != null) {
                 writer.WritePropertyName("unitName");
-                writer.Write(this.unitName);
+                writer.Write(UnitName.ToString());
             }
-            if(this.price.HasValue)
-            {
+            if (Price != null) {
                 writer.WritePropertyName("price");
-                writer.Write(this.price.Value);
+                writer.Write(long.Parse(Price.ToString()));
             }
-            if(this.currency != null)
-            {
+            if (Currency != null) {
                 writer.WritePropertyName("currency");
-                writer.Write(this.currency);
+                writer.Write(Currency.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetBillingNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):project:(?<projectName>.*):billing:(?<year>.*):(?<month>.*):(?<region>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["billingName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["billingName"].Value;
-    }
-
-    public static string GetProjectNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):project:(?<projectName>.*):billing:(?<year>.*):(?<month>.*):(?<region>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["projectName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["projectName"].Value;
-    }
-
-    public static string GetAccountNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):project:(?<projectName>.*):billing:(?<year>.*):(?<month>.*):(?<region>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["accountName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["accountName"].Value;
-    }
-
-    	[Preserve]
-        public static Billing FromDict(JsonData data)
-        {
-            return new Billing()
-                .WithBillingId(data.Keys.Contains("billingId") && data["billingId"] != null ? data["billingId"].ToString() : null)
-                .WithProjectName(data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString() : null)
-                .WithYear(data.Keys.Contains("year") && data["year"] != null ? (int?)int.Parse(data["year"].ToString()) : null)
-                .WithMonth(data.Keys.Contains("month") && data["month"] != null ? (int?)int.Parse(data["month"].ToString()) : null)
-                .WithRegion(data.Keys.Contains("region") && data["region"] != null ? data["region"].ToString() : null)
-                .WithService(data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString() : null)
-                .WithActivityType(data.Keys.Contains("activityType") && data["activityType"] != null ? data["activityType"].ToString() : null)
-                .WithUnit(data.Keys.Contains("unit") && data["unit"] != null ? (long?)long.Parse(data["unit"].ToString()) : null)
-                .WithUnitName(data.Keys.Contains("unitName") && data["unitName"] != null ? data["unitName"].ToString() : null)
-                .WithPrice(data.Keys.Contains("price") && data["price"] != null ? (long?)long.Parse(data["price"].ToString()) : null)
-                .WithCurrency(data.Keys.Contains("currency") && data["currency"] != null ? data["currency"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Billing;
             var diff = 0;
-            if (billingId == null && billingId == other.billingId)
+            if (BillingId == null && BillingId == other.BillingId)
             {
                 // null and null
             }
             else
             {
-                diff += billingId.CompareTo(other.billingId);
+                diff += BillingId.CompareTo(other.BillingId);
             }
-            if (projectName == null && projectName == other.projectName)
+            if (ProjectName == null && ProjectName == other.ProjectName)
             {
                 // null and null
             }
             else
             {
-                diff += projectName.CompareTo(other.projectName);
+                diff += ProjectName.CompareTo(other.ProjectName);
             }
-            if (year == null && year == other.year)
+            if (Year == null && Year == other.Year)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(year - other.year);
+                diff += (int)(Year - other.Year);
             }
-            if (month == null && month == other.month)
+            if (Month == null && Month == other.Month)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(month - other.month);
+                diff += (int)(Month - other.Month);
             }
-            if (region == null && region == other.region)
+            if (Region == null && Region == other.Region)
             {
                 // null and null
             }
             else
             {
-                diff += region.CompareTo(other.region);
+                diff += Region.CompareTo(other.Region);
             }
-            if (service == null && service == other.service)
+            if (Service == null && Service == other.Service)
             {
                 // null and null
             }
             else
             {
-                diff += service.CompareTo(other.service);
+                diff += Service.CompareTo(other.Service);
             }
-            if (activityType == null && activityType == other.activityType)
+            if (ActivityType == null && ActivityType == other.ActivityType)
             {
                 // null and null
             }
             else
             {
-                diff += activityType.CompareTo(other.activityType);
+                diff += ActivityType.CompareTo(other.ActivityType);
             }
-            if (unit == null && unit == other.unit)
+            if (Unit == null && Unit == other.Unit)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(unit - other.unit);
+                diff += (int)(Unit - other.Unit);
             }
-            if (unitName == null && unitName == other.unitName)
+            if (UnitName == null && UnitName == other.UnitName)
             {
                 // null and null
             }
             else
             {
-                diff += unitName.CompareTo(other.unitName);
+                diff += UnitName.CompareTo(other.UnitName);
             }
-            if (price == null && price == other.price)
+            if (Price == null && Price == other.Price)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(price - other.price);
+                diff += (int)(Price - other.Price);
             }
-            if (currency == null && currency == other.currency)
+            if (Currency == null && Currency == other.Currency)
             {
                 // null and null
             }
             else
             {
-                diff += currency.CompareTo(other.currency);
+                diff += Currency.CompareTo(other.Currency);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["billingId"] = billingId;
-            data["projectName"] = projectName;
-            data["year"] = year;
-            data["month"] = month;
-            data["region"] = region;
-            data["service"] = service;
-            data["activityType"] = activityType;
-            data["unit"] = unit;
-            data["unitName"] = unitName;
-            data["price"] = price;
-            data["currency"] = currency;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

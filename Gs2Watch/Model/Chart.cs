@@ -23,149 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Watch.Model
 {
+
 	[Preserve]
 	public class Chart : IComparable
 	{
+        public string ChartId { set; get; }
+        public string EmbedId { set; get; }
+        public string Html { set; get; }
 
-        /** Datadog のJSON 形式のグラフ定義 */
-        public string chartId { set; get; }
-
-        /**
-         * Datadog のJSON 形式のグラフ定義を設定
-         *
-         * @param chartId Datadog のJSON 形式のグラフ定義
-         * @return this
-         */
         public Chart WithChartId(string chartId) {
-            this.chartId = chartId;
+            this.ChartId = chartId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Chart WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** Datadog から払い出された組み込みID */
-        public string embedId { set; get; }
-
-        /**
-         * Datadog から払い出された組み込みIDを設定
-         *
-         * @param embedId Datadog から払い出された組み込みID
-         * @return this
-         */
         public Chart WithEmbedId(string embedId) {
-            this.embedId = embedId;
+            this.EmbedId = embedId;
             return this;
         }
 
-        /** Datadog から払い出された組み込み用HTML */
-        public string html { set; get; }
-
-        /**
-         * Datadog から払い出された組み込み用HTMLを設定
-         *
-         * @param html Datadog から払い出された組み込み用HTML
-         * @return this
-         */
         public Chart WithHtml(string html) {
-            this.html = html;
+            this.Html = html;
             return this;
+        }
+
+    	[Preserve]
+        public static Chart FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Chart()
+                .WithChartId(!data.Keys.Contains("chartId") || data["chartId"] == null ? null : data["chartId"].ToString())
+                .WithEmbedId(!data.Keys.Contains("embedId") || data["embedId"] == null ? null : data["embedId"].ToString())
+                .WithHtml(!data.Keys.Contains("html") || data["html"] == null ? null : data["html"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["chartId"] = ChartId,
+                ["embedId"] = EmbedId,
+                ["html"] = Html,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.chartId != null)
-            {
+            if (ChartId != null) {
                 writer.WritePropertyName("chartId");
-                writer.Write(this.chartId);
+                writer.Write(ChartId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.embedId != null)
-            {
+            if (EmbedId != null) {
                 writer.WritePropertyName("embedId");
-                writer.Write(this.embedId);
+                writer.Write(EmbedId.ToString());
             }
-            if(this.html != null)
-            {
+            if (Html != null) {
                 writer.WritePropertyName("html");
-                writer.Write(this.html);
+                writer.Write(Html.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Chart FromDict(JsonData data)
-        {
-            return new Chart()
-                .WithChartId(data.Keys.Contains("chartId") && data["chartId"] != null ? data["chartId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithEmbedId(data.Keys.Contains("embedId") && data["embedId"] != null ? data["embedId"].ToString() : null)
-                .WithHtml(data.Keys.Contains("html") && data["html"] != null ? data["html"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Chart;
             var diff = 0;
-            if (chartId == null && chartId == other.chartId)
+            if (ChartId == null && ChartId == other.ChartId)
             {
                 // null and null
             }
             else
             {
-                diff += chartId.CompareTo(other.chartId);
+                diff += ChartId.CompareTo(other.ChartId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (EmbedId == null && EmbedId == other.EmbedId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += EmbedId.CompareTo(other.EmbedId);
             }
-            if (embedId == null && embedId == other.embedId)
+            if (Html == null && Html == other.Html)
             {
                 // null and null
             }
             else
             {
-                diff += embedId.CompareTo(other.embedId);
-            }
-            if (html == null && html == other.html)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += html.CompareTo(other.html);
+                diff += Html.CompareTo(other.Html);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["chartId"] = chartId;
-            data["ownerId"] = ownerId;
-            data["embedId"] = embedId;
-            data["html"] = html;
-            return data;
-        }
-	}
+    }
 }

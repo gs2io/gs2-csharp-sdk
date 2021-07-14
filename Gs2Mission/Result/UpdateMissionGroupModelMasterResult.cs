@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Mission.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Mission.Result
 {
 	[Preserve]
-	public class UpdateMissionGroupModelMasterResult
+	[System.Serializable]
+	public class UpdateMissionGroupModelMasterResult : IResult
 	{
-        /** 更新したミッショングループマスター */
-        public MissionGroupModelMaster item { set; get; }
+        public Gs2.Gs2Mission.Model.MissionGroupModelMaster Item { set; get; }
 
+        public UpdateMissionGroupModelMasterResult WithItem(Gs2.Gs2Mission.Model.MissionGroupModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateMissionGroupModelMasterResult FromDict(JsonData data)
+        public static UpdateMissionGroupModelMasterResult FromJson(JsonData data)
         {
-            return new UpdateMissionGroupModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Mission.Model.MissionGroupModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateMissionGroupModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.MissionGroupModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Ranking.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Ranking.Result
 {
 	[Preserve]
-	public class GetCurrentRankingMasterResult
+	[System.Serializable]
+	public class GetCurrentRankingMasterResult : IResult
 	{
-        /** 現在有効なランキング設定 */
-        public CurrentRankingMaster item { set; get; }
+        public Gs2.Gs2Ranking.Model.CurrentRankingMaster Item { set; get; }
 
+        public GetCurrentRankingMasterResult WithItem(Gs2.Gs2Ranking.Model.CurrentRankingMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetCurrentRankingMasterResult FromDict(JsonData data)
+        public static GetCurrentRankingMasterResult FromJson(JsonData data)
         {
-            return new GetCurrentRankingMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Ranking.Model.CurrentRankingMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentRankingMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Ranking.Model.CurrentRankingMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

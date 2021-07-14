@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class UpdateAccountResult
+	[System.Serializable]
+	public class UpdateAccountResult : IResult
 	{
-        /** 更新したGS2アカウント */
-        public Account item { set; get; }
+        public Gs2.Gs2Project.Model.Account Item { set; get; }
 
+        public UpdateAccountResult WithItem(Gs2.Gs2Project.Model.Account item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateAccountResult FromDict(JsonData data)
+        public static UpdateAccountResult FromJson(JsonData data)
         {
-            return new UpdateAccountResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Project.Model.Account.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateAccountResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.Account.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

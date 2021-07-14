@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2News.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2News.Result
 {
 	[Preserve]
-	public class UpdateCurrentNewsMasterResult
+	[System.Serializable]
+	public class UpdateCurrentNewsMasterResult : IResult
 	{
 
     	[Preserve]
-        public static UpdateCurrentNewsMasterResult FromDict(JsonData data)
+        public static UpdateCurrentNewsMasterResult FromJson(JsonData data)
         {
-            return new UpdateCurrentNewsMasterResult {
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentNewsMasterResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

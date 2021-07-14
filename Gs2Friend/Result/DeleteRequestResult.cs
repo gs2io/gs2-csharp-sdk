@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Friend.Result
 {
 	[Preserve]
-	public class DeleteRequestResult
+	[System.Serializable]
+	public class DeleteRequestResult : IResult
 	{
-        /** 削除したフレンドリクエスト */
-        public FriendRequest item { set; get; }
+        public Gs2.Gs2Friend.Model.FriendRequest Item { set; get; }
 
+        public DeleteRequestResult WithItem(Gs2.Gs2Friend.Model.FriendRequest item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteRequestResult FromDict(JsonData data)
+        public static DeleteRequestResult FromJson(JsonData data)
         {
-            return new DeleteRequestResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Friend.Model.FriendRequest.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteRequestResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Friend.Model.FriendRequest.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,108 +28,74 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareDownloadByGenerationAndUserIdRequest : Gs2Request<PrepareDownloadByGenerationAndUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string DataObjectId { set; get; }
+        public string Generation { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PrepareDownloadByGenerationAndUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public PrepareDownloadByGenerationAndUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** データオブジェクト */
-		[UnityEngine.SerializeField]
-        public string dataObjectId;
-
-        /**
-         * データオブジェクトを設定
-         *
-         * @param dataObjectId データオブジェクト
-         * @return this
-         */
         public PrepareDownloadByGenerationAndUserIdRequest WithDataObjectId(string dataObjectId) {
-            this.dataObjectId = dataObjectId;
+            this.DataObjectId = dataObjectId;
             return this;
         }
 
-
-        /** 世代 */
-		[UnityEngine.SerializeField]
-        public string generation;
-
-        /**
-         * 世代を設定
-         *
-         * @param generation 世代
-         * @return this
-         */
         public PrepareDownloadByGenerationAndUserIdRequest WithGeneration(string generation) {
-            this.generation = generation;
+            this.Generation = generation;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PrepareDownloadByGenerationAndUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static PrepareDownloadByGenerationAndUserIdRequest FromDict(JsonData data)
+        public static PrepareDownloadByGenerationAndUserIdRequest FromJson(JsonData data)
         {
-            return new PrepareDownloadByGenerationAndUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                dataObjectId = data.Keys.Contains("dataObjectId") && data["dataObjectId"] != null ? data["dataObjectId"].ToString(): null,
-                generation = data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareDownloadByGenerationAndUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithDataObjectId(!data.Keys.Contains("dataObjectId") || data["dataObjectId"] == null ? null : data["dataObjectId"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["dataObjectId"] = DataObjectId,
+                ["generation"] = Generation,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["dataObjectId"] = dataObjectId;
-            data["generation"] = generation;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (DataObjectId != null) {
+                writer.WritePropertyName("dataObjectId");
+                writer.Write(DataObjectId.ToString());
+            }
+            if (Generation != null) {
+                writer.WritePropertyName("generation");
+                writer.Write(Generation.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

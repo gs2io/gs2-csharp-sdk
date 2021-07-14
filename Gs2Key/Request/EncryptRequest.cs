@@ -28,72 +28,62 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class EncryptRequest : Gs2Request<EncryptRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string KeyName { set; get; }
+        public string Data { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public EncryptRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 暗号鍵名 */
-		[UnityEngine.SerializeField]
-        public string keyName;
-
-        /**
-         * 暗号鍵名を設定
-         *
-         * @param keyName 暗号鍵名
-         * @return this
-         */
         public EncryptRequest WithKeyName(string keyName) {
-            this.keyName = keyName;
+            this.KeyName = keyName;
             return this;
         }
 
-
-        /** None */
-		[UnityEngine.SerializeField]
-        public string data;
-
-        /**
-         * Noneを設定
-         *
-         * @param data None
-         * @return this
-         */
         public EncryptRequest WithData(string data) {
-            this.data = data;
+            this.Data = data;
             return this;
         }
-
 
     	[Preserve]
-        public static EncryptRequest FromDict(JsonData data)
+        public static EncryptRequest FromJson(JsonData data)
         {
-            return new EncryptRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                keyName = data.Keys.Contains("keyName") && data["keyName"] != null ? data["keyName"].ToString(): null,
-                data = data.Keys.Contains("data") && data["data"] != null ? data["data"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new EncryptRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithKeyName(!data.Keys.Contains("keyName") || data["keyName"] == null ? null : data["keyName"].ToString())
+                .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["keyName"] = KeyName,
+                ["data"] = Data,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["keyName"] = keyName;
-            data["data"] = data;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (KeyName != null) {
+                writer.WritePropertyName("keyName");
+                writer.Write(KeyName.ToString());
+            }
+            if (Data != null) {
+                writer.WritePropertyName("data");
+                writer.Write(Data.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

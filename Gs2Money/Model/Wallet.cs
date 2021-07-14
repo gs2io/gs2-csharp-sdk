@@ -23,338 +23,215 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Money.Model
 {
+
 	[Preserve]
 	public class Wallet : IComparable
 	{
+        public string WalletId { set; get; }
+        public string UserId { set; get; }
+        public int? Slot { set; get; }
+        public int? Paid { set; get; }
+        public int? Free { set; get; }
+        public Gs2.Gs2Money.Model.WalletDetail[] Detail { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ウォレット */
-        public string walletId { set; get; }
-
-        /**
-         * ウォレットを設定
-         *
-         * @param walletId ウォレット
-         * @return this
-         */
         public Wallet WithWalletId(string walletId) {
-            this.walletId = walletId;
+            this.WalletId = walletId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Wallet WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** スロット番号 */
-        public int? slot { set; get; }
-
-        /**
-         * スロット番号を設定
-         *
-         * @param slot スロット番号
-         * @return this
-         */
         public Wallet WithSlot(int? slot) {
-            this.slot = slot;
+            this.Slot = slot;
             return this;
         }
 
-        /** 有償課金通貨所持量 */
-        public int? paid { set; get; }
-
-        /**
-         * 有償課金通貨所持量を設定
-         *
-         * @param paid 有償課金通貨所持量
-         * @return this
-         */
         public Wallet WithPaid(int? paid) {
-            this.paid = paid;
+            this.Paid = paid;
             return this;
         }
 
-        /** 無償課金通貨所持量 */
-        public int? free { set; get; }
-
-        /**
-         * 無償課金通貨所持量を設定
-         *
-         * @param free 無償課金通貨所持量
-         * @return this
-         */
         public Wallet WithFree(int? free) {
-            this.free = free;
+            this.Free = free;
             return this;
         }
 
-        /** 詳細 */
-        public List<WalletDetail> detail { set; get; }
-
-        /**
-         * 詳細を設定
-         *
-         * @param detail 詳細
-         * @return this
-         */
-        public Wallet WithDetail(List<WalletDetail> detail) {
-            this.detail = detail;
+        public Wallet WithDetail(Gs2.Gs2Money.Model.WalletDetail[] detail) {
+            this.Detail = detail;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Wallet WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Wallet WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Wallet FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Wallet()
+                .WithWalletId(!data.Keys.Contains("walletId") || data["walletId"] == null ? null : data["walletId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
+                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)int.Parse(data["paid"].ToString()))
+                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)int.Parse(data["free"].ToString()))
+                .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null ? new Gs2.Gs2Money.Model.WalletDetail[]{} : data["detail"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Money.Model.WalletDetail.FromJson(v);
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["walletId"] = WalletId,
+                ["userId"] = UserId,
+                ["slot"] = Slot,
+                ["paid"] = Paid,
+                ["free"] = Free,
+                ["detail"] = new JsonData(Detail == null ? new JsonData[]{} :
+                        Detail.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.walletId != null)
-            {
+            if (WalletId != null) {
                 writer.WritePropertyName("walletId");
-                writer.Write(this.walletId);
+                writer.Write(WalletId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.slot.HasValue)
-            {
+            if (Slot != null) {
                 writer.WritePropertyName("slot");
-                writer.Write(this.slot.Value);
+                writer.Write(int.Parse(Slot.ToString()));
             }
-            if(this.paid.HasValue)
-            {
+            if (Paid != null) {
                 writer.WritePropertyName("paid");
-                writer.Write(this.paid.Value);
+                writer.Write(int.Parse(Paid.ToString()));
             }
-            if(this.free.HasValue)
-            {
+            if (Free != null) {
                 writer.WritePropertyName("free");
-                writer.Write(this.free.Value);
+                writer.Write(int.Parse(Free.ToString()));
             }
-            if(this.detail != null)
-            {
+            if (Detail != null) {
                 writer.WritePropertyName("detail");
                 writer.WriteArrayStart();
-                foreach(var item in this.detail)
+                foreach (var detai in Detail)
                 {
-                    item.WriteJson(writer);
+                    if (detai != null) {
+                        detai.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetSlotFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):wallet:(?<slot>.*)");
-        if (!match.Groups["slot"].Success)
-        {
-            return null;
-        }
-        return match.Groups["slot"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):wallet:(?<slot>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):wallet:(?<slot>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):wallet:(?<slot>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):wallet:(?<slot>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Wallet FromDict(JsonData data)
-        {
-            return new Wallet()
-                .WithWalletId(data.Keys.Contains("walletId") && data["walletId"] != null ? data["walletId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithSlot(data.Keys.Contains("slot") && data["slot"] != null ? (int?)int.Parse(data["slot"].ToString()) : null)
-                .WithPaid(data.Keys.Contains("paid") && data["paid"] != null ? (int?)int.Parse(data["paid"].ToString()) : null)
-                .WithFree(data.Keys.Contains("free") && data["free"] != null ? (int?)int.Parse(data["free"].ToString()) : null)
-                .WithDetail(data.Keys.Contains("detail") && data["detail"] != null ? data["detail"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Money.Model.WalletDetail.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Wallet;
             var diff = 0;
-            if (walletId == null && walletId == other.walletId)
+            if (WalletId == null && WalletId == other.WalletId)
             {
                 // null and null
             }
             else
             {
-                diff += walletId.CompareTo(other.walletId);
+                diff += WalletId.CompareTo(other.WalletId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (slot == null && slot == other.slot)
+            if (Slot == null && Slot == other.Slot)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(slot - other.slot);
+                diff += (int)(Slot - other.Slot);
             }
-            if (paid == null && paid == other.paid)
+            if (Paid == null && Paid == other.Paid)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(paid - other.paid);
+                diff += (int)(Paid - other.Paid);
             }
-            if (free == null && free == other.free)
+            if (Free == null && Free == other.Free)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(free - other.free);
+                diff += (int)(Free - other.Free);
             }
-            if (detail == null && detail == other.detail)
+            if (Detail == null && Detail == other.Detail)
             {
                 // null and null
             }
             else
             {
-                diff += detail.Count - other.detail.Count;
-                for (var i = 0; i < detail.Count; i++)
+                diff += Detail.Length - other.Detail.Length;
+                for (var i = 0; i < Detail.Length; i++)
                 {
-                    diff += detail[i].CompareTo(other.detail[i]);
+                    diff += Detail[i].CompareTo(other.Detail[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["walletId"] = walletId;
-            data["userId"] = userId;
-            data["slot"] = slot;
-            data["paid"] = paid;
-            data["free"] = free;
-            data["detail"] = new JsonData(detail.Select(item => item.ToDict()));
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

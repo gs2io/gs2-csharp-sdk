@@ -28,54 +28,50 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DeleteRatingModelMasterRequest : Gs2Request<DeleteRatingModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteRatingModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** レーティングの種類名 */
-		[UnityEngine.SerializeField]
-        public string ratingName;
-
-        /**
-         * レーティングの種類名を設定
-         *
-         * @param ratingName レーティングの種類名
-         * @return this
-         */
         public DeleteRatingModelMasterRequest WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteRatingModelMasterRequest FromDict(JsonData data)
+        public static DeleteRatingModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteRatingModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ratingName = data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteRatingModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ratingName"] = RatingName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ratingName"] = ratingName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RatingName != null) {
+                writer.WritePropertyName("ratingName");
+                writer.Write(RatingName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class TargetVersion : IComparable
 	{
+        public string VersionName { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
 
-        /** バージョンの名前 */
-        public string versionName { set; get; }
-
-        /**
-         * バージョンの名前を設定
-         *
-         * @param versionName バージョンの名前
-         * @return this
-         */
         public TargetVersion WithVersionName(string versionName) {
-            this.versionName = versionName;
+            this.VersionName = versionName;
             return this;
         }
 
-        /** バージョン */
-        public Gs2.Gs2Version.Model.Version_ version { set; get; }
-
-        /**
-         * バージョンを設定
-         *
-         * @param version バージョン
-         * @return this
-         */
         public TargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
-            this.version = version;
+            this.Version = version;
             return this;
         }
 
-        /** ボディ */
-        public string body { set; get; }
-
-        /**
-         * ボディを設定
-         *
-         * @param body ボディ
-         * @return this
-         */
         public TargetVersion WithBody(string body) {
-            this.body = body;
+            this.Body = body;
             return this;
         }
 
-        /** 署名 */
-        public string signature { set; get; }
-
-        /**
-         * 署名を設定
-         *
-         * @param signature 署名
-         * @return this
-         */
         public TargetVersion WithSignature(string signature) {
-            this.signature = signature;
+            this.Signature = signature;
             return this;
+        }
+
+    	[Preserve]
+        public static TargetVersion FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new TargetVersion()
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]))
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["versionName"] = VersionName,
+                ["version"] = Version?.ToJson(),
+                ["body"] = Body,
+                ["signature"] = Signature,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.versionName != null)
-            {
+            if (VersionName != null) {
                 writer.WritePropertyName("versionName");
-                writer.Write(this.versionName);
+                writer.Write(VersionName.ToString());
             }
-            if(this.version != null)
-            {
+            if (Version != null) {
                 writer.WritePropertyName("version");
-                this.version.WriteJson(writer);
+                Version.WriteJson(writer);
             }
-            if(this.body != null)
-            {
+            if (Body != null) {
                 writer.WritePropertyName("body");
-                writer.Write(this.body);
+                writer.Write(Body.ToString());
             }
-            if(this.signature != null)
-            {
+            if (Signature != null) {
                 writer.WritePropertyName("signature");
-                writer.Write(this.signature);
+                writer.Write(Signature.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static TargetVersion FromDict(JsonData data)
-        {
-            return new TargetVersion()
-                .WithVersionName(data.Keys.Contains("versionName") && data["versionName"] != null ? data["versionName"].ToString() : null)
-                .WithVersion(data.Keys.Contains("version") && data["version"] != null ? Gs2.Gs2Version.Model.Version_.FromDict(data["version"]) : null)
-                .WithBody(data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null)
-                .WithSignature(data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as TargetVersion;
             var diff = 0;
-            if (versionName == null && versionName == other.versionName)
+            if (VersionName == null && VersionName == other.VersionName)
             {
                 // null and null
             }
             else
             {
-                diff += versionName.CompareTo(other.versionName);
+                diff += VersionName.CompareTo(other.VersionName);
             }
-            if (version == null && version == other.version)
+            if (Version == null && Version == other.Version)
             {
                 // null and null
             }
             else
             {
-                diff += version.CompareTo(other.version);
+                diff += Version.CompareTo(other.Version);
             }
-            if (body == null && body == other.body)
+            if (Body == null && Body == other.Body)
             {
                 // null and null
             }
             else
             {
-                diff += body.CompareTo(other.body);
+                diff += Body.CompareTo(other.Body);
             }
-            if (signature == null && signature == other.signature)
+            if (Signature == null && Signature == other.Signature)
             {
                 // null and null
             }
             else
             {
-                diff += signature.CompareTo(other.signature);
+                diff += Signature.CompareTo(other.Signature);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["versionName"] = versionName;
-            data["version"] = version.ToDict();
-            data["body"] = body;
-            data["signature"] = signature;
-            return data;
-        }
-	}
+    }
 }

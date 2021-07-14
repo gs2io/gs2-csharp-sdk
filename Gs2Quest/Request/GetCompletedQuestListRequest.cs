@@ -28,86 +28,62 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetCompletedQuestListRequest : Gs2Request<GetCompletedQuestListRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string QuestGroupName { set; get; }
+        public string AccessToken { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public GetCompletedQuestListRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** クエストグループモデル名 */
-		[UnityEngine.SerializeField]
-        public string questGroupName;
-
-        /**
-         * クエストグループモデル名を設定
-         *
-         * @param questGroupName クエストグループモデル名
-         * @return this
-         */
         public GetCompletedQuestListRequest WithQuestGroupName(string questGroupName) {
-            this.questGroupName = questGroupName;
+            this.QuestGroupName = questGroupName;
             return this;
         }
 
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetCompletedQuestListRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetCompletedQuestListRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
             return this;
         }
 
     	[Preserve]
-        public static GetCompletedQuestListRequest FromDict(JsonData data)
+        public static GetCompletedQuestListRequest FromJson(JsonData data)
         {
-            return new GetCompletedQuestListRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                questGroupName = data.Keys.Contains("questGroupName") && data["questGroupName"] != null ? data["questGroupName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCompletedQuestListRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["questGroupName"] = QuestGroupName,
+                ["accessToken"] = AccessToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["questGroupName"] = questGroupName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (QuestGroupName != null) {
+                writer.WritePropertyName("questGroupName");
+                writer.Write(QuestGroupName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

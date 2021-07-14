@@ -28,108 +28,86 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class CreateGitHubApiKeyRequest : Gs2Request<CreateGitHubApiKeyRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string ApiKey { set; get; }
+        public string EncryptionKeyName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateGitHubApiKeyRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** GitHub APIキー名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * GitHub APIキー名を設定
-         *
-         * @param name GitHub APIキー名
-         * @return this
-         */
         public CreateGitHubApiKeyRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** 説明文 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public CreateGitHubApiKeyRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** APIキー */
-		[UnityEngine.SerializeField]
-        public string apiKey;
-
-        /**
-         * APIキーを設定
-         *
-         * @param apiKey APIキー
-         * @return this
-         */
         public CreateGitHubApiKeyRequest WithApiKey(string apiKey) {
-            this.apiKey = apiKey;
+            this.ApiKey = apiKey;
             return this;
         }
 
-
-        /** APIキーの暗号化に使用する暗号鍵名 */
-		[UnityEngine.SerializeField]
-        public string encryptionKeyName;
-
-        /**
-         * APIキーの暗号化に使用する暗号鍵名を設定
-         *
-         * @param encryptionKeyName APIキーの暗号化に使用する暗号鍵名
-         * @return this
-         */
         public CreateGitHubApiKeyRequest WithEncryptionKeyName(string encryptionKeyName) {
-            this.encryptionKeyName = encryptionKeyName;
+            this.EncryptionKeyName = encryptionKeyName;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateGitHubApiKeyRequest FromDict(JsonData data)
+        public static CreateGitHubApiKeyRequest FromJson(JsonData data)
         {
-            return new CreateGitHubApiKeyRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                apiKey = data.Keys.Contains("apiKey") && data["apiKey"] != null ? data["apiKey"].ToString(): null,
-                encryptionKeyName = data.Keys.Contains("encryptionKeyName") && data["encryptionKeyName"] != null ? data["encryptionKeyName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateGitHubApiKeyRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithApiKey(!data.Keys.Contains("apiKey") || data["apiKey"] == null ? null : data["apiKey"].ToString())
+                .WithEncryptionKeyName(!data.Keys.Contains("encryptionKeyName") || data["encryptionKeyName"] == null ? null : data["encryptionKeyName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["apiKey"] = ApiKey,
+                ["encryptionKeyName"] = EncryptionKeyName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["apiKey"] = apiKey;
-            data["encryptionKeyName"] = encryptionKeyName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (ApiKey != null) {
+                writer.WritePropertyName("apiKey");
+                writer.Write(ApiKey.ToString());
+            }
+            if (EncryptionKeyName != null) {
+                writer.WritePropertyName("encryptionKeyName");
+                writer.Write(EncryptionKeyName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

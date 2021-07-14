@@ -28,54 +28,50 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class GetGatheringRequest : Gs2Request<GetGatheringRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string GatheringName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetGatheringRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ギャザリング名 */
-		[UnityEngine.SerializeField]
-        public string gatheringName;
-
-        /**
-         * ギャザリング名を設定
-         *
-         * @param gatheringName ギャザリング名
-         * @return this
-         */
         public GetGatheringRequest WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetGatheringRequest FromDict(JsonData data)
+        public static GetGatheringRequest FromJson(JsonData data)
         {
-            return new GetGatheringRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                gatheringName = data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetGatheringRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["gatheringName"] = GatheringName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["gatheringName"] = gatheringName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (GatheringName != null) {
+                writer.WritePropertyName("gatheringName");
+                writer.Write(GatheringName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

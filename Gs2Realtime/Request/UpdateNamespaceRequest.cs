@@ -28,126 +28,96 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public string ServerType { set; get; }
+        public string ServerSpec { set; get; }
+        public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
+        public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** サーバの種類 */
-		[UnityEngine.SerializeField]
-        public string serverType;
-
-        /**
-         * サーバの種類を設定
-         *
-         * @param serverType サーバの種類
-         * @return this
-         */
         public UpdateNamespaceRequest WithServerType(string serverType) {
-            this.serverType = serverType;
+            this.ServerType = serverType;
             return this;
         }
 
-
-        /** サーバのスペック */
-		[UnityEngine.SerializeField]
-        public string serverSpec;
-
-        /**
-         * サーバのスペックを設定
-         *
-         * @param serverSpec サーバのスペック
-         * @return this
-         */
         public UpdateNamespaceRequest WithServerSpec(string serverSpec) {
-            this.serverSpec = serverSpec;
+            this.ServerSpec = serverSpec;
             return this;
         }
 
-
-        /** ルームの作成が終わったときのプッシュ通知 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Realtime.Model.NotificationSetting createNotification;
-
-        /**
-         * ルームの作成が終わったときのプッシュ通知を設定
-         *
-         * @param createNotification ルームの作成が終わったときのプッシュ通知
-         * @return this
-         */
-        public UpdateNamespaceRequest WithCreateNotification(global::Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
-            this.createNotification = createNotification;
+        public UpdateNamespaceRequest WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
+            this.CreateNotification = createNotification;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Realtime.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Realtime.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Realtime.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                serverType = data.Keys.Contains("serverType") && data["serverType"] != null ? data["serverType"].ToString(): null,
-                serverSpec = data.Keys.Contains("serverSpec") && data["serverSpec"] != null ? data["serverSpec"].ToString(): null,
-                createNotification = data.Keys.Contains("createNotification") && data["createNotification"] != null ? global::Gs2.Gs2Realtime.Model.NotificationSetting.FromDict(data["createNotification"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Realtime.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithServerType(!data.Keys.Contains("serverType") || data["serverType"] == null ? null : data["serverType"].ToString())
+                .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
+                .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Realtime.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["serverType"] = ServerType,
+                ["serverSpec"] = ServerSpec,
+                ["createNotification"] = CreateNotification?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["serverType"] = serverType;
-            data["serverSpec"] = serverSpec;
-            data["createNotification"] = createNotification.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (ServerType != null) {
+                writer.WritePropertyName("serverType");
+                writer.Write(ServerType.ToString());
+            }
+            if (ServerSpec != null) {
+                writer.WritePropertyName("serverSpec");
+                writer.Write(ServerSpec.ToString());
+            }
+            if (CreateNotification != null) {
+                CreateNotification.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

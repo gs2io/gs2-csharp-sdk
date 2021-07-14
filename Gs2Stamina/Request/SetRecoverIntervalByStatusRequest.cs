@@ -28,140 +28,98 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class SetRecoverIntervalByStatusRequest : Gs2Request<SetRecoverIntervalByStatusRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string StaminaName { set; get; }
+        public string AccessToken { set; get; }
+        public string KeyId { set; get; }
+        public string SignedStatusBody { set; get; }
+        public string SignedStatusSignature { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetRecoverIntervalByStatusRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スタミナの種類名 */
-		[UnityEngine.SerializeField]
-        public string staminaName;
-
-        /**
-         * スタミナの種類名を設定
-         *
-         * @param staminaName スタミナの種類名
-         * @return this
-         */
         public SetRecoverIntervalByStatusRequest WithStaminaName(string staminaName) {
-            this.staminaName = staminaName;
+            this.StaminaName = staminaName;
             return this;
         }
 
-
-        /** 署名をつけるのに使用した暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 署名をつけるのに使用した暗号鍵 のGRNを設定
-         *
-         * @param keyId 署名をつけるのに使用した暗号鍵 のGRN
-         * @return this
-         */
-        public SetRecoverIntervalByStatusRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
-            return this;
-        }
-
-
-        /** 署名対象のステータスボディ */
-		[UnityEngine.SerializeField]
-        public string signedStatusBody;
-
-        /**
-         * 署名対象のステータスボディを設定
-         *
-         * @param signedStatusBody 署名対象のステータスボディ
-         * @return this
-         */
-        public SetRecoverIntervalByStatusRequest WithSignedStatusBody(string signedStatusBody) {
-            this.signedStatusBody = signedStatusBody;
-            return this;
-        }
-
-
-        /** ステータスの署名 */
-		[UnityEngine.SerializeField]
-        public string signedStatusSignature;
-
-        /**
-         * ステータスの署名を設定
-         *
-         * @param signedStatusSignature ステータスの署名
-         * @return this
-         */
-        public SetRecoverIntervalByStatusRequest WithSignedStatusSignature(string signedStatusSignature) {
-            this.signedStatusSignature = signedStatusSignature;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetRecoverIntervalByStatusRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public SetRecoverIntervalByStatusRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public SetRecoverIntervalByStatusRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
+            return this;
+        }
+
+        public SetRecoverIntervalByStatusRequest WithSignedStatusBody(string signedStatusBody) {
+            this.SignedStatusBody = signedStatusBody;
+            return this;
+        }
+
+        public SetRecoverIntervalByStatusRequest WithSignedStatusSignature(string signedStatusSignature) {
+            this.SignedStatusSignature = signedStatusSignature;
             return this;
         }
 
     	[Preserve]
-        public static SetRecoverIntervalByStatusRequest FromDict(JsonData data)
+        public static SetRecoverIntervalByStatusRequest FromJson(JsonData data)
         {
-            return new SetRecoverIntervalByStatusRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                staminaName = data.Keys.Contains("staminaName") && data["staminaName"] != null ? data["staminaName"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                signedStatusBody = data.Keys.Contains("signedStatusBody") && data["signedStatusBody"] != null ? data["signedStatusBody"].ToString(): null,
-                signedStatusSignature = data.Keys.Contains("signedStatusSignature") && data["signedStatusSignature"] != null ? data["signedStatusSignature"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetRecoverIntervalByStatusRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithSignedStatusBody(!data.Keys.Contains("signedStatusBody") || data["signedStatusBody"] == null ? null : data["signedStatusBody"].ToString())
+                .WithSignedStatusSignature(!data.Keys.Contains("signedStatusSignature") || data["signedStatusSignature"] == null ? null : data["signedStatusSignature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["staminaName"] = StaminaName,
+                ["accessToken"] = AccessToken,
+                ["keyId"] = KeyId,
+                ["signedStatusBody"] = SignedStatusBody,
+                ["signedStatusSignature"] = SignedStatusSignature,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["staminaName"] = staminaName;
-            data["keyId"] = keyId;
-            data["signedStatusBody"] = signedStatusBody;
-            data["signedStatusSignature"] = signedStatusSignature;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (StaminaName != null) {
+                writer.WritePropertyName("staminaName");
+                writer.Write(StaminaName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (SignedStatusBody != null) {
+                writer.WritePropertyName("signedStatusBody");
+                writer.Write(SignedStatusBody.ToString());
+            }
+            if (SignedStatusSignature != null) {
+                writer.WritePropertyName("signedStatusSignature");
+                writer.Write(SignedStatusSignature.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

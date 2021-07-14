@@ -28,94 +28,73 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class PushByUserIdRequest : Gs2Request<PushByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2JobQueue.Model.JobEntry[] Jobs { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PushByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public PushByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 追加するジョブの一覧 */
-		[UnityEngine.SerializeField]
-        public List<JobEntry> jobs;
-
-        /**
-         * 追加するジョブの一覧を設定
-         *
-         * @param jobs 追加するジョブの一覧
-         * @return this
-         */
-        public PushByUserIdRequest WithJobs(List<JobEntry> jobs) {
-            this.jobs = jobs;
+        public PushByUserIdRequest WithJobs(Gs2.Gs2JobQueue.Model.JobEntry[] jobs) {
+            this.Jobs = jobs;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PushByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static PushByUserIdRequest FromDict(JsonData data)
+        public static PushByUserIdRequest FromJson(JsonData data)
         {
-            return new PushByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                jobs = data.Keys.Contains("jobs") && data["jobs"] != null ? data["jobs"].Cast<JsonData>().Select(value =>
-                    {
-                        return JobEntry.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PushByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithJobs(!data.Keys.Contains("jobs") || data["jobs"] == null ? new Gs2.Gs2JobQueue.Model.JobEntry[]{} : data["jobs"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2JobQueue.Model.JobEntry.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["jobs"] = new JsonData(Jobs == null ? new JsonData[]{} :
+                        Jobs.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["jobs"] = new JsonData(jobs.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var job in Jobs)
+            {
+                if (job != null) {
+                    job.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

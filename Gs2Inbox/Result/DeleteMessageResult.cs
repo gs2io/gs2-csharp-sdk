@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inbox.Result
 {
 	[Preserve]
-	public class DeleteMessageResult
+	[System.Serializable]
+	public class DeleteMessageResult : IResult
 	{
 
     	[Preserve]
-        public static DeleteMessageResult FromDict(JsonData data)
+        public static DeleteMessageResult FromJson(JsonData data)
         {
-            return new DeleteMessageResult {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMessageResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

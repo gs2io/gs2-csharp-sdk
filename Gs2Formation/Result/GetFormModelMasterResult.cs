@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class GetFormModelMasterResult
+	[System.Serializable]
+	public class GetFormModelMasterResult : IResult
 	{
-        /** フォームマスター */
-        public FormModelMaster item { set; get; }
+        public Gs2.Gs2Formation.Model.FormModelMaster Item { set; get; }
 
+        public GetFormModelMasterResult WithItem(Gs2.Gs2Formation.Model.FormModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetFormModelMasterResult FromDict(JsonData data)
+        public static GetFormModelMasterResult FromJson(JsonData data)
         {
-            return new GetFormModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.FormModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetFormModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.FormModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

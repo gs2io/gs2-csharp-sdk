@@ -23,397 +23,272 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Enhance.Model
 {
+
 	[Preserve]
 	public class RateModel : IComparable
 	{
+        public string RateModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string TargetInventoryModelId { set; get; }
+        public string AcquireExperienceSuffix { set; get; }
+        public string MaterialInventoryModelId { set; get; }
+        public string[] AcquireExperienceHierarchy { set; get; }
+        public string ExperienceModelId { set; get; }
+        public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; }
 
-        /** 強化レートモデル */
-        public string rateModelId { set; get; }
-
-        /**
-         * 強化レートモデルを設定
-         *
-         * @param rateModelId 強化レートモデル
-         * @return this
-         */
         public RateModel WithRateModelId(string rateModelId) {
-            this.rateModelId = rateModelId;
+            this.RateModelId = rateModelId;
             return this;
         }
 
-        /** 強化レート名 */
-        public string name { set; get; }
-
-        /**
-         * 強化レート名を設定
-         *
-         * @param name 強化レート名
-         * @return this
-         */
         public RateModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 強化レートの説明 */
-        public string description { set; get; }
-
-        /**
-         * 強化レートの説明を設定
-         *
-         * @param description 強化レートの説明
-         * @return this
-         */
         public RateModel WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 強化レートのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 強化レートのメタデータを設定
-         *
-         * @param metadata 強化レートのメタデータ
-         * @return this
-         */
         public RateModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 強化対象に使用できるインベントリモデル のGRN */
-        public string targetInventoryModelId { set; get; }
-
-        /**
-         * 強化対象に使用できるインベントリモデル のGRNを設定
-         *
-         * @param targetInventoryModelId 強化対象に使用できるインベントリモデル のGRN
-         * @return this
-         */
         public RateModel WithTargetInventoryModelId(string targetInventoryModelId) {
-            this.targetInventoryModelId = targetInventoryModelId;
+            this.TargetInventoryModelId = targetInventoryModelId;
             return this;
         }
 
-        /** GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックス */
-        public string acquireExperienceSuffix { set; get; }
-
-        /**
-         * GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックスを設定
-         *
-         * @param acquireExperienceSuffix GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックス
-         * @return this
-         */
         public RateModel WithAcquireExperienceSuffix(string acquireExperienceSuffix) {
-            this.acquireExperienceSuffix = acquireExperienceSuffix;
+            this.AcquireExperienceSuffix = acquireExperienceSuffix;
             return this;
         }
 
-        /** 強化素材に使用できるインベントリモデル のGRN */
-        public string materialInventoryModelId { set; get; }
-
-        /**
-         * 強化素材に使用できるインベントリモデル のGRNを設定
-         *
-         * @param materialInventoryModelId 強化素材に使用できるインベントリモデル のGRN
-         * @return this
-         */
         public RateModel WithMaterialInventoryModelId(string materialInventoryModelId) {
-            this.materialInventoryModelId = materialInventoryModelId;
+            this.MaterialInventoryModelId = materialInventoryModelId;
             return this;
         }
 
-        /** 入手経験値を格納しているメタデータのJSON階層 */
-        public List<string> acquireExperienceHierarchy { set; get; }
-
-        /**
-         * 入手経験値を格納しているメタデータのJSON階層を設定
-         *
-         * @param acquireExperienceHierarchy 入手経験値を格納しているメタデータのJSON階層
-         * @return this
-         */
-        public RateModel WithAcquireExperienceHierarchy(List<string> acquireExperienceHierarchy) {
-            this.acquireExperienceHierarchy = acquireExperienceHierarchy;
+        public RateModel WithAcquireExperienceHierarchy(string[] acquireExperienceHierarchy) {
+            this.AcquireExperienceHierarchy = acquireExperienceHierarchy;
             return this;
         }
 
-        /** 獲得できる経験値の種類マスター のGRN */
-        public string experienceModelId { set; get; }
-
-        /**
-         * 獲得できる経験値の種類マスター のGRNを設定
-         *
-         * @param experienceModelId 獲得できる経験値の種類マスター のGRN
-         * @return this
-         */
         public RateModel WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-        /** 経験値獲得量ボーナス */
-        public List<BonusRate> bonusRates { set; get; }
-
-        /**
-         * 経験値獲得量ボーナスを設定
-         *
-         * @param bonusRates 経験値獲得量ボーナス
-         * @return this
-         */
-        public RateModel WithBonusRates(List<BonusRate> bonusRates) {
-            this.bonusRates = bonusRates;
+        public RateModel WithBonusRates(Gs2.Gs2Enhance.Model.BonusRate[] bonusRates) {
+            this.BonusRates = bonusRates;
             return this;
+        }
+
+    	[Preserve]
+        public static RateModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new RateModel()
+                .WithRateModelId(!data.Keys.Contains("rateModelId") || data["rateModelId"] == null ? null : data["rateModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
+                .WithAcquireExperienceSuffix(!data.Keys.Contains("acquireExperienceSuffix") || data["acquireExperienceSuffix"] == null ? null : data["acquireExperienceSuffix"].ToString())
+                .WithMaterialInventoryModelId(!data.Keys.Contains("materialInventoryModelId") || data["materialInventoryModelId"] == null ? null : data["materialInventoryModelId"].ToString())
+                .WithAcquireExperienceHierarchy(!data.Keys.Contains("acquireExperienceHierarchy") || data["acquireExperienceHierarchy"] == null ? new string[]{} : data["acquireExperienceHierarchy"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithBonusRates(!data.Keys.Contains("bonusRates") || data["bonusRates"] == null ? new Gs2.Gs2Enhance.Model.BonusRate[]{} : data["bonusRates"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Enhance.Model.BonusRate.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["rateModelId"] = RateModelId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["targetInventoryModelId"] = TargetInventoryModelId,
+                ["acquireExperienceSuffix"] = AcquireExperienceSuffix,
+                ["materialInventoryModelId"] = MaterialInventoryModelId,
+                ["acquireExperienceHierarchy"] = new JsonData(AcquireExperienceHierarchy == null ? new JsonData[]{} :
+                        AcquireExperienceHierarchy.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["experienceModelId"] = ExperienceModelId,
+                ["bonusRates"] = new JsonData(BonusRates == null ? new JsonData[]{} :
+                        BonusRates.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.rateModelId != null)
-            {
+            if (RateModelId != null) {
                 writer.WritePropertyName("rateModelId");
-                writer.Write(this.rateModelId);
+                writer.Write(RateModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.targetInventoryModelId != null)
-            {
+            if (TargetInventoryModelId != null) {
                 writer.WritePropertyName("targetInventoryModelId");
-                writer.Write(this.targetInventoryModelId);
+                writer.Write(TargetInventoryModelId.ToString());
             }
-            if(this.acquireExperienceSuffix != null)
-            {
+            if (AcquireExperienceSuffix != null) {
                 writer.WritePropertyName("acquireExperienceSuffix");
-                writer.Write(this.acquireExperienceSuffix);
+                writer.Write(AcquireExperienceSuffix.ToString());
             }
-            if(this.materialInventoryModelId != null)
-            {
+            if (MaterialInventoryModelId != null) {
                 writer.WritePropertyName("materialInventoryModelId");
-                writer.Write(this.materialInventoryModelId);
+                writer.Write(MaterialInventoryModelId.ToString());
             }
-            if(this.acquireExperienceHierarchy != null)
-            {
+            if (AcquireExperienceHierarchy != null) {
                 writer.WritePropertyName("acquireExperienceHierarchy");
                 writer.WriteArrayStart();
-                foreach(var item in this.acquireExperienceHierarchy)
+                foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
                 {
-                    writer.Write(item);
+                    if (acquireExperienceHierarch != null) {
+                        writer.Write(acquireExperienceHierarch.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.experienceModelId != null)
-            {
+            if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
-                writer.Write(this.experienceModelId);
+                writer.Write(ExperienceModelId.ToString());
             }
-            if(this.bonusRates != null)
-            {
+            if (BonusRates != null) {
                 writer.WritePropertyName("bonusRates");
                 writer.WriteArrayStart();
-                foreach(var item in this.bonusRates)
+                foreach (var bonusRate in BonusRates)
                 {
-                    item.WriteJson(writer);
+                    if (bonusRate != null) {
+                        bonusRate.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetRateNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):enhance:(?<namespaceName>.*):");
-        if (!match.Groups["rateName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["rateName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):enhance:(?<namespaceName>.*):");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):enhance:(?<namespaceName>.*):");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):enhance:(?<namespaceName>.*):");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static RateModel FromDict(JsonData data)
-        {
-            return new RateModel()
-                .WithRateModelId(data.Keys.Contains("rateModelId") && data["rateModelId"] != null ? data["rateModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithTargetInventoryModelId(data.Keys.Contains("targetInventoryModelId") && data["targetInventoryModelId"] != null ? data["targetInventoryModelId"].ToString() : null)
-                .WithAcquireExperienceSuffix(data.Keys.Contains("acquireExperienceSuffix") && data["acquireExperienceSuffix"] != null ? data["acquireExperienceSuffix"].ToString() : null)
-                .WithMaterialInventoryModelId(data.Keys.Contains("materialInventoryModelId") && data["materialInventoryModelId"] != null ? data["materialInventoryModelId"].ToString() : null)
-                .WithAcquireExperienceHierarchy(data.Keys.Contains("acquireExperienceHierarchy") && data["acquireExperienceHierarchy"] != null ? data["acquireExperienceHierarchy"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithExperienceModelId(data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString() : null)
-                .WithBonusRates(data.Keys.Contains("bonusRates") && data["bonusRates"] != null ? data["bonusRates"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Enhance.Model.BonusRate.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as RateModel;
             var diff = 0;
-            if (rateModelId == null && rateModelId == other.rateModelId)
+            if (RateModelId == null && RateModelId == other.RateModelId)
             {
                 // null and null
             }
             else
             {
-                diff += rateModelId.CompareTo(other.rateModelId);
+                diff += RateModelId.CompareTo(other.RateModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (targetInventoryModelId == null && targetInventoryModelId == other.targetInventoryModelId)
+            if (TargetInventoryModelId == null && TargetInventoryModelId == other.TargetInventoryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += targetInventoryModelId.CompareTo(other.targetInventoryModelId);
+                diff += TargetInventoryModelId.CompareTo(other.TargetInventoryModelId);
             }
-            if (acquireExperienceSuffix == null && acquireExperienceSuffix == other.acquireExperienceSuffix)
+            if (AcquireExperienceSuffix == null && AcquireExperienceSuffix == other.AcquireExperienceSuffix)
             {
                 // null and null
             }
             else
             {
-                diff += acquireExperienceSuffix.CompareTo(other.acquireExperienceSuffix);
+                diff += AcquireExperienceSuffix.CompareTo(other.AcquireExperienceSuffix);
             }
-            if (materialInventoryModelId == null && materialInventoryModelId == other.materialInventoryModelId)
+            if (MaterialInventoryModelId == null && MaterialInventoryModelId == other.MaterialInventoryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += materialInventoryModelId.CompareTo(other.materialInventoryModelId);
+                diff += MaterialInventoryModelId.CompareTo(other.MaterialInventoryModelId);
             }
-            if (acquireExperienceHierarchy == null && acquireExperienceHierarchy == other.acquireExperienceHierarchy)
+            if (AcquireExperienceHierarchy == null && AcquireExperienceHierarchy == other.AcquireExperienceHierarchy)
             {
                 // null and null
             }
             else
             {
-                diff += acquireExperienceHierarchy.Count - other.acquireExperienceHierarchy.Count;
-                for (var i = 0; i < acquireExperienceHierarchy.Count; i++)
+                diff += AcquireExperienceHierarchy.Length - other.AcquireExperienceHierarchy.Length;
+                for (var i = 0; i < AcquireExperienceHierarchy.Length; i++)
                 {
-                    diff += acquireExperienceHierarchy[i].CompareTo(other.acquireExperienceHierarchy[i]);
+                    diff += AcquireExperienceHierarchy[i].CompareTo(other.AcquireExperienceHierarchy[i]);
                 }
             }
-            if (experienceModelId == null && experienceModelId == other.experienceModelId)
+            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
             {
                 // null and null
             }
             else
             {
-                diff += experienceModelId.CompareTo(other.experienceModelId);
+                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
             }
-            if (bonusRates == null && bonusRates == other.bonusRates)
+            if (BonusRates == null && BonusRates == other.BonusRates)
             {
                 // null and null
             }
             else
             {
-                diff += bonusRates.Count - other.bonusRates.Count;
-                for (var i = 0; i < bonusRates.Count; i++)
+                diff += BonusRates.Length - other.BonusRates.Length;
+                for (var i = 0; i < BonusRates.Length; i++)
                 {
-                    diff += bonusRates[i].CompareTo(other.bonusRates[i]);
+                    diff += BonusRates[i].CompareTo(other.BonusRates[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["rateModelId"] = rateModelId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["targetInventoryModelId"] = targetInventoryModelId;
-            data["acquireExperienceSuffix"] = acquireExperienceSuffix;
-            data["materialInventoryModelId"] = materialInventoryModelId;
-            data["acquireExperienceHierarchy"] = new JsonData(acquireExperienceHierarchy);
-            data["experienceModelId"] = experienceModelId;
-            data["bonusRates"] = new JsonData(bonusRates.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

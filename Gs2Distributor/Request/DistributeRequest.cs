@@ -28,104 +28,73 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DistributeRequest : Gs2Request<DistributeRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DistributorName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DistributeRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ディストリビューターの種類名 */
-		[UnityEngine.SerializeField]
-        public string distributorName;
-
-        /**
-         * ディストリビューターの種類名を設定
-         *
-         * @param distributorName ディストリビューターの種類名
-         * @return this
-         */
         public DistributeRequest WithDistributorName(string distributorName) {
-            this.distributorName = distributorName;
+            this.DistributorName = distributorName;
             return this;
         }
 
-
-        /** 加算するリソース */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Distributor.Model.DistributeResource distributeResource;
-
-        /**
-         * 加算するリソースを設定
-         *
-         * @param distributeResource 加算するリソース
-         * @return this
-         */
-        public DistributeRequest WithDistributeResource(global::Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
-            this.distributeResource = distributeResource;
+        public DistributeRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DistributeRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
-        public DistributeRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+        public DistributeRequest WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
+            this.DistributeResource = distributeResource;
             return this;
         }
 
     	[Preserve]
-        public static DistributeRequest FromDict(JsonData data)
+        public static DistributeRequest FromJson(JsonData data)
         {
-            return new DistributeRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                distributorName = data.Keys.Contains("distributorName") && data["distributorName"] != null ? data["distributorName"].ToString(): null,
-                distributeResource = data.Keys.Contains("distributeResource") && data["distributeResource"] != null ? global::Gs2.Gs2Distributor.Model.DistributeResource.FromDict(data["distributeResource"]) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DistributeRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDistributorName(!data.Keys.Contains("distributorName") || data["distributorName"] == null ? null : data["distributorName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["distributorName"] = DistributorName,
+                ["userId"] = UserId,
+                ["distributeResource"] = DistributeResource?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["distributorName"] = distributorName;
-            data["distributeResource"] = distributeResource.ToDict();
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DistributorName != null) {
+                writer.WritePropertyName("distributorName");
+                writer.Write(DistributorName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (DistributeResource != null) {
+                DistributeResource.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

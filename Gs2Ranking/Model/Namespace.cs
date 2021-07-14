@@ -23,314 +23,195 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Ranking.Model.CalculatedAt[] LastCalculatedAts { set; get; }
+        public Gs2.Gs2Ranking.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 最終集計日時リスト */
-        public List<CalculatedAt> lastCalculatedAts { set; get; }
-
-        /**
-         * 最終集計日時リストを設定
-         *
-         * @param lastCalculatedAts 最終集計日時リスト
-         * @return this
-         */
-        public Namespace WithLastCalculatedAts(List<CalculatedAt> lastCalculatedAts) {
-            this.lastCalculatedAts = lastCalculatedAts;
+        public Namespace WithLastCalculatedAts(Gs2.Gs2Ranking.Model.CalculatedAt[] lastCalculatedAts) {
+            this.LastCalculatedAts = lastCalculatedAts;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Ranking.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Ranking.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithLastCalculatedAts(!data.Keys.Contains("lastCalculatedAts") || data["lastCalculatedAts"] == null ? new Gs2.Gs2Ranking.Model.CalculatedAt[]{} : data["lastCalculatedAts"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Ranking.Model.CalculatedAt.FromJson(v);
+                }).ToArray())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Ranking.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["lastCalculatedAts"] = new JsonData(LastCalculatedAts == null ? new JsonData[]{} :
+                        LastCalculatedAts.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.lastCalculatedAts != null)
-            {
+            if (LastCalculatedAts != null) {
                 writer.WritePropertyName("lastCalculatedAts");
                 writer.WriteArrayStart();
-                foreach(var item in this.lastCalculatedAts)
+                foreach (var lastCalculatedAt in LastCalculatedAts)
                 {
-                    item.WriteJson(writer);
+                    if (lastCalculatedAt != null) {
+                        lastCalculatedAt.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithLastCalculatedAts(data.Keys.Contains("lastCalculatedAts") && data["lastCalculatedAts"] != null ? data["lastCalculatedAts"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Ranking.Model.CalculatedAt.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Ranking.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (LastCalculatedAts == null && LastCalculatedAts == other.LastCalculatedAts)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
-            }
-            if (lastCalculatedAts == null && lastCalculatedAts == other.lastCalculatedAts)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += lastCalculatedAts.Count - other.lastCalculatedAts.Count;
-                for (var i = 0; i < lastCalculatedAts.Count; i++)
+                diff += LastCalculatedAts.Length - other.LastCalculatedAts.Length;
+                for (var i = 0; i < LastCalculatedAts.Length; i++)
                 {
-                    diff += lastCalculatedAts[i].CompareTo(other.lastCalculatedAts[i]);
+                    diff += LastCalculatedAts[i].CompareTo(other.LastCalculatedAts[i]);
                 }
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["lastCalculatedAts"] = new JsonData(lastCalculatedAts.Select(item => item.ToDict()));
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

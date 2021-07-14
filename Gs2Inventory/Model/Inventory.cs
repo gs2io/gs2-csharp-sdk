@@ -23,296 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inventory.Model
 {
+
 	[Preserve]
 	public class Inventory : IComparable
 	{
+        public string InventoryId { set; get; }
+        public string InventoryName { set; get; }
+        public string UserId { set; get; }
+        public int? CurrentInventoryCapacityUsage { set; get; }
+        public int? CurrentInventoryMaxCapacity { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** インベントリ */
-        public string inventoryId { set; get; }
-
-        /**
-         * インベントリを設定
-         *
-         * @param inventoryId インベントリ
-         * @return this
-         */
         public Inventory WithInventoryId(string inventoryId) {
-            this.inventoryId = inventoryId;
+            this.InventoryId = inventoryId;
             return this;
         }
 
-        /** インベントリモデル名 */
-        public string inventoryName { set; get; }
-
-        /**
-         * インベントリモデル名を設定
-         *
-         * @param inventoryName インベントリモデル名
-         * @return this
-         */
         public Inventory WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Inventory WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 現在のインベントリのキャパシティ使用量 */
-        public int? currentInventoryCapacityUsage { set; get; }
-
-        /**
-         * 現在のインベントリのキャパシティ使用量を設定
-         *
-         * @param currentInventoryCapacityUsage 現在のインベントリのキャパシティ使用量
-         * @return this
-         */
         public Inventory WithCurrentInventoryCapacityUsage(int? currentInventoryCapacityUsage) {
-            this.currentInventoryCapacityUsage = currentInventoryCapacityUsage;
+            this.CurrentInventoryCapacityUsage = currentInventoryCapacityUsage;
             return this;
         }
 
-        /** 現在のインベントリの最大キャパシティ */
-        public int? currentInventoryMaxCapacity { set; get; }
-
-        /**
-         * 現在のインベントリの最大キャパシティを設定
-         *
-         * @param currentInventoryMaxCapacity 現在のインベントリの最大キャパシティ
-         * @return this
-         */
         public Inventory WithCurrentInventoryMaxCapacity(int? currentInventoryMaxCapacity) {
-            this.currentInventoryMaxCapacity = currentInventoryMaxCapacity;
+            this.CurrentInventoryMaxCapacity = currentInventoryMaxCapacity;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Inventory WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Inventory WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Inventory FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Inventory()
+                .WithInventoryId(!data.Keys.Contains("inventoryId") || data["inventoryId"] == null ? null : data["inventoryId"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCurrentInventoryCapacityUsage(!data.Keys.Contains("currentInventoryCapacityUsage") || data["currentInventoryCapacityUsage"] == null ? null : (int?)int.Parse(data["currentInventoryCapacityUsage"].ToString()))
+                .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)int.Parse(data["currentInventoryMaxCapacity"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["inventoryId"] = InventoryId,
+                ["inventoryName"] = InventoryName,
+                ["userId"] = UserId,
+                ["currentInventoryCapacityUsage"] = CurrentInventoryCapacityUsage,
+                ["currentInventoryMaxCapacity"] = CurrentInventoryMaxCapacity,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.inventoryId != null)
-            {
+            if (InventoryId != null) {
                 writer.WritePropertyName("inventoryId");
-                writer.Write(this.inventoryId);
+                writer.Write(InventoryId.ToString());
             }
-            if(this.inventoryName != null)
-            {
+            if (InventoryName != null) {
                 writer.WritePropertyName("inventoryName");
-                writer.Write(this.inventoryName);
+                writer.Write(InventoryName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.currentInventoryCapacityUsage.HasValue)
-            {
+            if (CurrentInventoryCapacityUsage != null) {
                 writer.WritePropertyName("currentInventoryCapacityUsage");
-                writer.Write(this.currentInventoryCapacityUsage.Value);
+                writer.Write(int.Parse(CurrentInventoryCapacityUsage.ToString()));
             }
-            if(this.currentInventoryMaxCapacity.HasValue)
-            {
+            if (CurrentInventoryMaxCapacity != null) {
                 writer.WritePropertyName("currentInventoryMaxCapacity");
-                writer.Write(this.currentInventoryMaxCapacity.Value);
+                writer.Write(int.Parse(CurrentInventoryMaxCapacity.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetInventoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*)");
-        if (!match.Groups["inventoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["inventoryName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):user:(?<userId>.*):inventory:(?<inventoryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Inventory FromDict(JsonData data)
-        {
-            return new Inventory()
-                .WithInventoryId(data.Keys.Contains("inventoryId") && data["inventoryId"] != null ? data["inventoryId"].ToString() : null)
-                .WithInventoryName(data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCurrentInventoryCapacityUsage(data.Keys.Contains("currentInventoryCapacityUsage") && data["currentInventoryCapacityUsage"] != null ? (int?)int.Parse(data["currentInventoryCapacityUsage"].ToString()) : null)
-                .WithCurrentInventoryMaxCapacity(data.Keys.Contains("currentInventoryMaxCapacity") && data["currentInventoryMaxCapacity"] != null ? (int?)int.Parse(data["currentInventoryMaxCapacity"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Inventory;
             var diff = 0;
-            if (inventoryId == null && inventoryId == other.inventoryId)
+            if (InventoryId == null && InventoryId == other.InventoryId)
             {
                 // null and null
             }
             else
             {
-                diff += inventoryId.CompareTo(other.inventoryId);
+                diff += InventoryId.CompareTo(other.InventoryId);
             }
-            if (inventoryName == null && inventoryName == other.inventoryName)
+            if (InventoryName == null && InventoryName == other.InventoryName)
             {
                 // null and null
             }
             else
             {
-                diff += inventoryName.CompareTo(other.inventoryName);
+                diff += InventoryName.CompareTo(other.InventoryName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (currentInventoryCapacityUsage == null && currentInventoryCapacityUsage == other.currentInventoryCapacityUsage)
+            if (CurrentInventoryCapacityUsage == null && CurrentInventoryCapacityUsage == other.CurrentInventoryCapacityUsage)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(currentInventoryCapacityUsage - other.currentInventoryCapacityUsage);
+                diff += (int)(CurrentInventoryCapacityUsage - other.CurrentInventoryCapacityUsage);
             }
-            if (currentInventoryMaxCapacity == null && currentInventoryMaxCapacity == other.currentInventoryMaxCapacity)
+            if (CurrentInventoryMaxCapacity == null && CurrentInventoryMaxCapacity == other.CurrentInventoryMaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(currentInventoryMaxCapacity - other.currentInventoryMaxCapacity);
+                diff += (int)(CurrentInventoryMaxCapacity - other.CurrentInventoryMaxCapacity);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["inventoryId"] = inventoryId;
-            data["inventoryName"] = inventoryName;
-            data["userId"] = userId;
-            data["currentInventoryCapacityUsage"] = currentInventoryCapacityUsage;
-            data["currentInventoryMaxCapacity"] = currentInventoryMaxCapacity;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

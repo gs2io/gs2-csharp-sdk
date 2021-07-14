@@ -28,112 +28,97 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateFormModelMasterRequest : Gs2Request<UpdateFormModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string FormModelName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateFormModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォーム名 */
-		[UnityEngine.SerializeField]
-        public string formModelName;
-
-        /**
-         * フォーム名を設定
-         *
-         * @param formModelName フォーム名
-         * @return this
-         */
         public UpdateFormModelMasterRequest WithFormModelName(string formModelName) {
-            this.formModelName = formModelName;
+            this.FormModelName = formModelName;
             return this;
         }
 
-
-        /** フォームマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * フォームマスターの説明を設定
-         *
-         * @param description フォームマスターの説明
-         * @return this
-         */
         public UpdateFormModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** フォームのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * フォームのメタデータを設定
-         *
-         * @param metadata フォームのメタデータ
-         * @return this
-         */
         public UpdateFormModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** スロットリスト */
-		[UnityEngine.SerializeField]
-        public List<SlotModel> slots;
-
-        /**
-         * スロットリストを設定
-         *
-         * @param slots スロットリスト
-         * @return this
-         */
-        public UpdateFormModelMasterRequest WithSlots(List<SlotModel> slots) {
-            this.slots = slots;
+        public UpdateFormModelMasterRequest WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
+            this.Slots = slots;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateFormModelMasterRequest FromDict(JsonData data)
+        public static UpdateFormModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateFormModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                formModelName = data.Keys.Contains("formModelName") && data["formModelName"] != null ? data["formModelName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                slots = data.Keys.Contains("slots") && data["slots"] != null ? data["slots"].Cast<JsonData>().Select(value =>
-                    {
-                        return SlotModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateFormModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.SlotModel[]{} : data["slots"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.SlotModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["formModelName"] = FormModelName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["slots"] = new JsonData(Slots == null ? new JsonData[]{} :
+                        Slots.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["formModelName"] = formModelName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["slots"] = new JsonData(slots.Select(item => item.ToDict()));
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (FormModelName != null) {
+                writer.WritePropertyName("formModelName");
+                writer.Write(FormModelName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var slot in Slots)
+            {
+                if (slot != null) {
+                    slot.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

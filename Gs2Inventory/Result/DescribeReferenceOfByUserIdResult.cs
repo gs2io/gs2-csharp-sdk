@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,84 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inventory.Result
 {
 	[Preserve]
-	public class DescribeReferenceOfByUserIdResult
+	[System.Serializable]
+	public class DescribeReferenceOfByUserIdResult : IResult
 	{
-        /** この所持品の参照元リスト */
-        public List<string> items { set; get; }
+        public string[] Items { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
 
-        /** 有効期限ごとのアイテム所持数量 */
-        public ItemSet itemSet { set; get; }
+        public DescribeReferenceOfByUserIdResult WithItems(string[] items) {
+            this.Items = items;
+            return this;
+        }
 
-        /** アイテムモデル */
-        public ItemModel itemModel { set; get; }
+        public DescribeReferenceOfByUserIdResult WithItemSet(Gs2.Gs2Inventory.Model.ItemSet itemSet) {
+            this.ItemSet = itemSet;
+            return this;
+        }
 
-        /** インベントリ */
-        public Inventory inventory { set; get; }
+        public DescribeReferenceOfByUserIdResult WithItemModel(Gs2.Gs2Inventory.Model.ItemModel itemModel) {
+            this.ItemModel = itemModel;
+            return this;
+        }
 
+        public DescribeReferenceOfByUserIdResult WithInventory(Gs2.Gs2Inventory.Model.Inventory inventory) {
+            this.Inventory = inventory;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeReferenceOfByUserIdResult FromDict(JsonData data)
+        public static DescribeReferenceOfByUserIdResult FromJson(JsonData data)
         {
-            return new DescribeReferenceOfByUserIdResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                itemSet = data.Keys.Contains("itemSet") && data["itemSet"] != null ? Gs2.Gs2Inventory.Model.ItemSet.FromDict(data["itemSet"]) : null,
-                itemModel = data.Keys.Contains("itemModel") && data["itemModel"] != null ? Gs2.Gs2Inventory.Model.ItemModel.FromDict(data["itemModel"]) : null,
-                inventory = data.Keys.Contains("inventory") && data["inventory"] != null ? Gs2.Gs2Inventory.Model.Inventory.FromDict(data["inventory"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeReferenceOfByUserIdResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new string[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithItemSet(!data.Keys.Contains("itemSet") || data["itemSet"] == null ? null : Gs2.Gs2Inventory.Model.ItemSet.FromJson(data["itemSet"]))
+                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
+                .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["itemSet"] = ItemSet?.ToJson(),
+                ["itemModel"] = ItemModel?.ToJson(),
+                ["inventory"] = Inventory?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    writer.Write(item.ToString());
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ItemSet != null) {
+                ItemSet.WriteJson(writer);
+            }
+            if (ItemModel != null) {
+                ItemModel.WriteJson(writer);
+            }
+            if (Inventory != null) {
+                Inventory.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

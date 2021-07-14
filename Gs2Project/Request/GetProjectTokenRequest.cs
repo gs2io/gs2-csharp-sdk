@@ -28,54 +28,50 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetProjectTokenRequest : Gs2Request<GetProjectTokenRequest>
 	{
+        public string ProjectName { set; get; }
+        public string AccountToken { set; get; }
 
-        /** プロジェクト名 */
-		[UnityEngine.SerializeField]
-        public string projectName;
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public GetProjectTokenRequest WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
 
-
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public GetProjectTokenRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
-
 
     	[Preserve]
-        public static GetProjectTokenRequest FromDict(JsonData data)
+        public static GetProjectTokenRequest FromJson(JsonData data)
         {
-            return new GetProjectTokenRequest {
-                projectName = data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString(): null,
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetProjectTokenRequest()
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["projectName"] = ProjectName,
+                ["accountToken"] = AccountToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["projectName"] = projectName;
-            data["accountToken"] = accountToken;
-            return data;
+            writer.WriteObjectStart();
+            if (ProjectName != null) {
+                writer.WritePropertyName("projectName");
+                writer.Write(ProjectName.ToString());
+            }
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Friend.Result
 {
 	[Preserve]
-	public class GetSendRequestResult
+	[System.Serializable]
+	public class GetSendRequestResult : IResult
 	{
-        /** フレンドリクエスト */
-        public FriendRequest item { set; get; }
+        public Gs2.Gs2Friend.Model.FriendRequest Item { set; get; }
 
+        public GetSendRequestResult WithItem(Gs2.Gs2Friend.Model.FriendRequest item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetSendRequestResult FromDict(JsonData data)
+        public static GetSendRequestResult FromJson(JsonData data)
         {
-            return new GetSendRequestResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Friend.Model.FriendRequest.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetSendRequestResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Friend.Model.FriendRequest.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Version.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Version.Result
 {
 	[Preserve]
-	public class DeleteAcceptVersionByUserIdResult
+	[System.Serializable]
+	public class DeleteAcceptVersionByUserIdResult : IResult
 	{
 
     	[Preserve]
-        public static DeleteAcceptVersionByUserIdResult FromDict(JsonData data)
+        public static DeleteAcceptVersionByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteAcceptVersionByUserIdResult {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteAcceptVersionByUserIdResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

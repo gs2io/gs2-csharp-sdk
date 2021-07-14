@@ -28,108 +28,74 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SetMoldCapacityByUserIdRequest : Gs2Request<SetMoldCapacityByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string MoldName { set; get; }
+        public int? Capacity { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetMoldCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SetMoldCapacityByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** フォームの保存領域の名前 */
-		[UnityEngine.SerializeField]
-        public string moldName;
-
-        /**
-         * フォームの保存領域の名前を設定
-         *
-         * @param moldName フォームの保存領域の名前
-         * @return this
-         */
         public SetMoldCapacityByUserIdRequest WithMoldName(string moldName) {
-            this.moldName = moldName;
+            this.MoldName = moldName;
             return this;
         }
 
-
-        /** 現在のキャパシティ */
-		[UnityEngine.SerializeField]
-        public int? capacity;
-
-        /**
-         * 現在のキャパシティを設定
-         *
-         * @param capacity 現在のキャパシティ
-         * @return this
-         */
         public SetMoldCapacityByUserIdRequest WithCapacity(int? capacity) {
-            this.capacity = capacity;
+            this.Capacity = capacity;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetMoldCapacityByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SetMoldCapacityByUserIdRequest FromDict(JsonData data)
+        public static SetMoldCapacityByUserIdRequest FromJson(JsonData data)
         {
-            return new SetMoldCapacityByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                moldName = data.Keys.Contains("moldName") && data["moldName"] != null ? data["moldName"].ToString(): null,
-                capacity = data.Keys.Contains("capacity") && data["capacity"] != null ? (int?)int.Parse(data["capacity"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetMoldCapacityByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["moldName"] = MoldName,
+                ["capacity"] = Capacity,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["moldName"] = moldName;
-            data["capacity"] = capacity;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (MoldName != null) {
+                writer.WritePropertyName("moldName");
+                writer.Write(MoldName.ToString());
+            }
+            if (Capacity != null) {
+                writer.WritePropertyName("capacity");
+                writer.Write(int.Parse(Capacity.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

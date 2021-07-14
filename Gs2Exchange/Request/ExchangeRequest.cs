@@ -28,126 +28,97 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class ExchangeRequest : Gs2Request<ExchangeRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RateName { set; get; }
+        public string AccessToken { set; get; }
+        public int? Count { set; get; }
+        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public ExchangeRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 交換レートの種類名 */
-		[UnityEngine.SerializeField]
-        public string rateName;
-
-        /**
-         * 交換レートの種類名を設定
-         *
-         * @param rateName 交換レートの種類名
-         * @return this
-         */
         public ExchangeRequest WithRateName(string rateName) {
-            this.rateName = rateName;
+            this.RateName = rateName;
             return this;
         }
 
-
-        /** 交換するロット数 */
-		[UnityEngine.SerializeField]
-        public int? count;
-
-        /**
-         * 交換するロット数を設定
-         *
-         * @param count 交換するロット数
-         * @return this
-         */
-        public ExchangeRequest WithCount(int? count) {
-            this.count = count;
-            return this;
-        }
-
-
-        /** 設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * 設定値を設定
-         *
-         * @param config 設定値
-         * @return this
-         */
-        public ExchangeRequest WithConfig(List<Config> config) {
-            this.config = config;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public ExchangeRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public ExchangeRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public ExchangeRequest WithCount(int? count) {
+            this.Count = count;
+            return this;
+        }
+
+        public ExchangeRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
 
     	[Preserve]
-        public static ExchangeRequest FromDict(JsonData data)
+        public static ExchangeRequest FromJson(JsonData data)
         {
-            return new ExchangeRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                rateName = data.Keys.Contains("rateName") && data["rateName"] != null ? data["rateName"].ToString(): null,
-                count = data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ExchangeRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["rateName"] = RateName,
+                ["accessToken"] = AccessToken,
+                ["count"] = Count,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["rateName"] = rateName;
-            data["count"] = count;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RateName != null) {
+                writer.WritePropertyName("rateName");
+                writer.Write(RateName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Count != null) {
+                writer.WritePropertyName("count");
+                writer.Write(int.Parse(Count.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class GetGitHubApiKeyRequest : Gs2Request<GetGitHubApiKeyRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ApiKeyName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetGitHubApiKeyRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** GitHub APIキー名 */
-		[UnityEngine.SerializeField]
-        public string apiKeyName;
-
-        /**
-         * GitHub APIキー名を設定
-         *
-         * @param apiKeyName GitHub APIキー名
-         * @return this
-         */
         public GetGitHubApiKeyRequest WithApiKeyName(string apiKeyName) {
-            this.apiKeyName = apiKeyName;
+            this.ApiKeyName = apiKeyName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetGitHubApiKeyRequest FromDict(JsonData data)
+        public static GetGitHubApiKeyRequest FromJson(JsonData data)
         {
-            return new GetGitHubApiKeyRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                apiKeyName = data.Keys.Contains("apiKeyName") && data["apiKeyName"] != null ? data["apiKeyName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetGitHubApiKeyRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithApiKeyName(!data.Keys.Contains("apiKeyName") || data["apiKeyName"] == null ? null : data["apiKeyName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["apiKeyName"] = ApiKeyName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["apiKeyName"] = apiKeyName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ApiKeyName != null) {
+                writer.WritePropertyName("apiKeyName");
+                writer.Write(ApiKeyName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

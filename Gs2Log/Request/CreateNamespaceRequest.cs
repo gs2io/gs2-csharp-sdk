@@ -28,198 +28,146 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Type { set; get; }
+        public string GcpCredentialJson { set; get; }
+        public string BigQueryDatasetName { set; get; }
+        public int? LogExpireDays { set; get; }
+        public string AwsRegion { set; get; }
+        public string AwsAccessKeyId { set; get; }
+        public string AwsSecretAccessKey { set; get; }
+        public string FirehoseStreamName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ログの書き出し方法 */
-		[UnityEngine.SerializeField]
-        public string type;
-
-        /**
-         * ログの書き出し方法を設定
-         *
-         * @param type ログの書き出し方法
-         * @return this
-         */
         public CreateNamespaceRequest WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-
-        /** GCPのクレデンシャル */
-		[UnityEngine.SerializeField]
-        public string gcpCredentialJson;
-
-        /**
-         * GCPのクレデンシャルを設定
-         *
-         * @param gcpCredentialJson GCPのクレデンシャル
-         * @return this
-         */
         public CreateNamespaceRequest WithGcpCredentialJson(string gcpCredentialJson) {
-            this.gcpCredentialJson = gcpCredentialJson;
+            this.GcpCredentialJson = gcpCredentialJson;
             return this;
         }
 
-
-        /** BigQueryのデータセット名 */
-		[UnityEngine.SerializeField]
-        public string bigQueryDatasetName;
-
-        /**
-         * BigQueryのデータセット名を設定
-         *
-         * @param bigQueryDatasetName BigQueryのデータセット名
-         * @return this
-         */
         public CreateNamespaceRequest WithBigQueryDatasetName(string bigQueryDatasetName) {
-            this.bigQueryDatasetName = bigQueryDatasetName;
+            this.BigQueryDatasetName = bigQueryDatasetName;
             return this;
         }
 
-
-        /** ログの保存期間(日) */
-		[UnityEngine.SerializeField]
-        public int? logExpireDays;
-
-        /**
-         * ログの保存期間(日)を設定
-         *
-         * @param logExpireDays ログの保存期間(日)
-         * @return this
-         */
         public CreateNamespaceRequest WithLogExpireDays(int? logExpireDays) {
-            this.logExpireDays = logExpireDays;
+            this.LogExpireDays = logExpireDays;
             return this;
         }
 
-
-        /** AWSのリージョン */
-		[UnityEngine.SerializeField]
-        public string awsRegion;
-
-        /**
-         * AWSのリージョンを設定
-         *
-         * @param awsRegion AWSのリージョン
-         * @return this
-         */
         public CreateNamespaceRequest WithAwsRegion(string awsRegion) {
-            this.awsRegion = awsRegion;
+            this.AwsRegion = awsRegion;
             return this;
         }
 
-
-        /** AWSのアクセスキーID */
-		[UnityEngine.SerializeField]
-        public string awsAccessKeyId;
-
-        /**
-         * AWSのアクセスキーIDを設定
-         *
-         * @param awsAccessKeyId AWSのアクセスキーID
-         * @return this
-         */
         public CreateNamespaceRequest WithAwsAccessKeyId(string awsAccessKeyId) {
-            this.awsAccessKeyId = awsAccessKeyId;
+            this.AwsAccessKeyId = awsAccessKeyId;
             return this;
         }
 
-
-        /** AWSのシークレットアクセスキー */
-		[UnityEngine.SerializeField]
-        public string awsSecretAccessKey;
-
-        /**
-         * AWSのシークレットアクセスキーを設定
-         *
-         * @param awsSecretAccessKey AWSのシークレットアクセスキー
-         * @return this
-         */
         public CreateNamespaceRequest WithAwsSecretAccessKey(string awsSecretAccessKey) {
-            this.awsSecretAccessKey = awsSecretAccessKey;
+            this.AwsSecretAccessKey = awsSecretAccessKey;
             return this;
         }
 
-
-        /** Kinesis Firehose のストリーム名 */
-		[UnityEngine.SerializeField]
-        public string firehoseStreamName;
-
-        /**
-         * Kinesis Firehose のストリーム名を設定
-         *
-         * @param firehoseStreamName Kinesis Firehose のストリーム名
-         * @return this
-         */
         public CreateNamespaceRequest WithFirehoseStreamName(string firehoseStreamName) {
-            this.firehoseStreamName = firehoseStreamName;
+            this.FirehoseStreamName = firehoseStreamName;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                type = data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString(): null,
-                gcpCredentialJson = data.Keys.Contains("gcpCredentialJson") && data["gcpCredentialJson"] != null ? data["gcpCredentialJson"].ToString(): null,
-                bigQueryDatasetName = data.Keys.Contains("bigQueryDatasetName") && data["bigQueryDatasetName"] != null ? data["bigQueryDatasetName"].ToString(): null,
-                logExpireDays = data.Keys.Contains("logExpireDays") && data["logExpireDays"] != null ? (int?)int.Parse(data["logExpireDays"].ToString()) : null,
-                awsRegion = data.Keys.Contains("awsRegion") && data["awsRegion"] != null ? data["awsRegion"].ToString(): null,
-                awsAccessKeyId = data.Keys.Contains("awsAccessKeyId") && data["awsAccessKeyId"] != null ? data["awsAccessKeyId"].ToString(): null,
-                awsSecretAccessKey = data.Keys.Contains("awsSecretAccessKey") && data["awsSecretAccessKey"] != null ? data["awsSecretAccessKey"].ToString(): null,
-                firehoseStreamName = data.Keys.Contains("firehoseStreamName") && data["firehoseStreamName"] != null ? data["firehoseStreamName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithGcpCredentialJson(!data.Keys.Contains("gcpCredentialJson") || data["gcpCredentialJson"] == null ? null : data["gcpCredentialJson"].ToString())
+                .WithBigQueryDatasetName(!data.Keys.Contains("bigQueryDatasetName") || data["bigQueryDatasetName"] == null ? null : data["bigQueryDatasetName"].ToString())
+                .WithLogExpireDays(!data.Keys.Contains("logExpireDays") || data["logExpireDays"] == null ? null : (int?)int.Parse(data["logExpireDays"].ToString()))
+                .WithAwsRegion(!data.Keys.Contains("awsRegion") || data["awsRegion"] == null ? null : data["awsRegion"].ToString())
+                .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
+                .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())
+                .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["type"] = Type,
+                ["gcpCredentialJson"] = GcpCredentialJson,
+                ["bigQueryDatasetName"] = BigQueryDatasetName,
+                ["logExpireDays"] = LogExpireDays,
+                ["awsRegion"] = AwsRegion,
+                ["awsAccessKeyId"] = AwsAccessKeyId,
+                ["awsSecretAccessKey"] = AwsSecretAccessKey,
+                ["firehoseStreamName"] = FirehoseStreamName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["type"] = type;
-            data["gcpCredentialJson"] = gcpCredentialJson;
-            data["bigQueryDatasetName"] = bigQueryDatasetName;
-            data["logExpireDays"] = logExpireDays;
-            data["awsRegion"] = awsRegion;
-            data["awsAccessKeyId"] = awsAccessKeyId;
-            data["awsSecretAccessKey"] = awsSecretAccessKey;
-            data["firehoseStreamName"] = firehoseStreamName;
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(Type.ToString());
+            }
+            if (GcpCredentialJson != null) {
+                writer.WritePropertyName("gcpCredentialJson");
+                writer.Write(GcpCredentialJson.ToString());
+            }
+            if (BigQueryDatasetName != null) {
+                writer.WritePropertyName("bigQueryDatasetName");
+                writer.Write(BigQueryDatasetName.ToString());
+            }
+            if (LogExpireDays != null) {
+                writer.WritePropertyName("logExpireDays");
+                writer.Write(int.Parse(LogExpireDays.ToString()));
+            }
+            if (AwsRegion != null) {
+                writer.WritePropertyName("awsRegion");
+                writer.Write(AwsRegion.ToString());
+            }
+            if (AwsAccessKeyId != null) {
+                writer.WritePropertyName("awsAccessKeyId");
+                writer.Write(AwsAccessKeyId.ToString());
+            }
+            if (AwsSecretAccessKey != null) {
+                writer.WritePropertyName("awsSecretAccessKey");
+                writer.Write(AwsSecretAccessKey.ToString());
+            }
+            if (FirehoseStreamName != null) {
+                writer.WritePropertyName("firehoseStreamName");
+                writer.Write(FirehoseStreamName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

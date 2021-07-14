@@ -28,108 +28,86 @@ namespace Gs2.Gs2Watch.Request
 	[System.Serializable]
 	public class DescribeBillingActivitiesRequest : Gs2Request<DescribeBillingActivitiesRequest>
 	{
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public string Service { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** イベントの発生年 */
-		[UnityEngine.SerializeField]
-        public int? year;
-
-        /**
-         * イベントの発生年を設定
-         *
-         * @param year イベントの発生年
-         * @return this
-         */
         public DescribeBillingActivitiesRequest WithYear(int? year) {
-            this.year = year;
+            this.Year = year;
             return this;
         }
 
-
-        /** イベントの発生月 */
-		[UnityEngine.SerializeField]
-        public int? month;
-
-        /**
-         * イベントの発生月を設定
-         *
-         * @param month イベントの発生月
-         * @return this
-         */
         public DescribeBillingActivitiesRequest WithMonth(int? month) {
-            this.month = month;
+            this.Month = month;
             return this;
         }
 
-
-        /** サービスの種類 */
-		[UnityEngine.SerializeField]
-        public string service;
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param service サービスの種類
-         * @return this
-         */
         public DescribeBillingActivitiesRequest WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
         public DescribeBillingActivitiesRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
+            this.PageToken = pageToken;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeBillingActivitiesRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public DescribeBillingActivitiesRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeBillingActivitiesRequest FromDict(JsonData data)
+        public static DescribeBillingActivitiesRequest FromJson(JsonData data)
         {
-            return new DescribeBillingActivitiesRequest {
-                year = data.Keys.Contains("year") && data["year"] != null ? (int?)int.Parse(data["year"].ToString()) : null,
-                month = data.Keys.Contains("month") && data["month"] != null ? (int?)int.Parse(data["month"].ToString()) : null,
-                service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeBillingActivitiesRequest()
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["year"] = Year,
+                ["month"] = Month,
+                ["service"] = Service,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["year"] = year;
-            data["month"] = month;
-            data["service"] = service;
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            return data;
+            writer.WriteObjectStart();
+            if (Year != null) {
+                writer.WritePropertyName("year");
+                writer.Write(int.Parse(Year.ToString()));
+            }
+            if (Month != null) {
+                writer.WritePropertyName("month");
+                writer.Write(int.Parse(Month.ToString()));
+            }
+            if (Service != null) {
+                writer.WritePropertyName("service");
+                writer.Write(Service.ToString());
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

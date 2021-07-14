@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Distributor.Model
 {
+
 	[Preserve]
 	public class DistributeResource : IComparable
 	{
+        public string Action { set; get; }
+        public string Request { set; get; }
 
-        /** スタンプシートで実行するアクションの種類 */
-        public string action { set; get; }
-
-        /**
-         * スタンプシートで実行するアクションの種類を設定
-         *
-         * @param action スタンプシートで実行するアクションの種類
-         * @return this
-         */
         public DistributeResource WithAction(string action) {
-            this.action = action;
+            this.Action = action;
             return this;
         }
 
-        /** 加算リクエストのJSON */
-        public string request { set; get; }
-
-        /**
-         * 加算リクエストのJSONを設定
-         *
-         * @param request 加算リクエストのJSON
-         * @return this
-         */
         public DistributeResource WithRequest(string request) {
-            this.request = request;
+            this.Request = request;
             return this;
+        }
+
+    	[Preserve]
+        public static DistributeResource FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DistributeResource()
+                .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
+                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["action"] = Action,
+                ["request"] = Request,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.action != null)
-            {
+            if (Action != null) {
                 writer.WritePropertyName("action");
-                writer.Write(this.action);
+                writer.Write(Action.ToString());
             }
-            if(this.request != null)
-            {
+            if (Request != null) {
                 writer.WritePropertyName("request");
-                writer.Write(this.request);
+                writer.Write(Request.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static DistributeResource FromDict(JsonData data)
-        {
-            return new DistributeResource()
-                .WithAction(data.Keys.Contains("action") && data["action"] != null ? data["action"].ToString() : null)
-                .WithRequest(data.Keys.Contains("request") && data["request"] != null ? data["request"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DistributeResource;
             var diff = 0;
-            if (action == null && action == other.action)
+            if (Action == null && Action == other.Action)
             {
                 // null and null
             }
             else
             {
-                diff += action.CompareTo(other.action);
+                diff += Action.CompareTo(other.Action);
             }
-            if (request == null && request == other.request)
+            if (Request == null && Request == other.Request)
             {
                 // null and null
             }
             else
             {
-                diff += request.CompareTo(other.request);
+                diff += Request.CompareTo(other.Request);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["action"] = action;
-            data["request"] = request;
-            return data;
-        }
-	}
+    }
 }

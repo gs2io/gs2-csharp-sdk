@@ -28,202 +28,154 @@ namespace Gs2.Gs2Watch.Request
 	[System.Serializable]
 	public class GetChartRequest : Gs2Request<GetChartRequest>
 	{
+        public string Metrics { set; get; }
+        public string Grn { set; get; }
+        public string[] Queries { set; get; }
+        public string By { set; get; }
+        public string Timeframe { set; get; }
+        public string Size { set; get; }
+        public string Format { set; get; }
+        public string Aggregator { set; get; }
+        public string Style { set; get; }
+        public string Title { set; get; }
 
-        /** 指標 */
-		[UnityEngine.SerializeField]
-        public string metrics;
-
-        /**
-         * 指標を設定
-         *
-         * @param metrics 指標
-         * @return this
-         */
         public GetChartRequest WithMetrics(string metrics) {
-            this.metrics = metrics;
+            this.Metrics = metrics;
             return this;
         }
 
-
-        /** リソースのGRN */
-		[UnityEngine.SerializeField]
-        public string grn;
-
-        /**
-         * リソースのGRNを設定
-         *
-         * @param grn リソースのGRN
-         * @return this
-         */
         public GetChartRequest WithGrn(string grn) {
-            this.grn = grn;
+            this.Grn = grn;
             return this;
         }
 
-
-        /** クエリリスト */
-		[UnityEngine.SerializeField]
-        public List<string> queries;
-
-        /**
-         * クエリリストを設定
-         *
-         * @param queries クエリリスト
-         * @return this
-         */
-        public GetChartRequest WithQueries(List<string> queries) {
-            this.queries = queries;
+        public GetChartRequest WithQueries(string[] queries) {
+            this.Queries = queries;
             return this;
         }
 
-
-        /** グルーピング対象 */
-		[UnityEngine.SerializeField]
-        public string by;
-
-        /**
-         * グルーピング対象を設定
-         *
-         * @param by グルーピング対象
-         * @return this
-         */
         public GetChartRequest WithBy(string by) {
-            this.by = by;
+            this.By = by;
             return this;
         }
 
-
-        /** データの取得期間 */
-		[UnityEngine.SerializeField]
-        public string timeframe;
-
-        /**
-         * データの取得期間を設定
-         *
-         * @param timeframe データの取得期間
-         * @return this
-         */
         public GetChartRequest WithTimeframe(string timeframe) {
-            this.timeframe = timeframe;
+            this.Timeframe = timeframe;
             return this;
         }
 
-
-        /** グラフのサイズ */
-		[UnityEngine.SerializeField]
-        public string size;
-
-        /**
-         * グラフのサイズを設定
-         *
-         * @param size グラフのサイズ
-         * @return this
-         */
         public GetChartRequest WithSize(string size) {
-            this.size = size;
+            this.Size = size;
             return this;
         }
 
-
-        /** フォーマット */
-		[UnityEngine.SerializeField]
-        public string format;
-
-        /**
-         * フォーマットを設定
-         *
-         * @param format フォーマット
-         * @return this
-         */
         public GetChartRequest WithFormat(string format) {
-            this.format = format;
+            this.Format = format;
             return this;
         }
 
-
-        /** 集計方針 */
-		[UnityEngine.SerializeField]
-        public string aggregator;
-
-        /**
-         * 集計方針を設定
-         *
-         * @param aggregator 集計方針
-         * @return this
-         */
         public GetChartRequest WithAggregator(string aggregator) {
-            this.aggregator = aggregator;
+            this.Aggregator = aggregator;
             return this;
         }
 
-
-        /** スタイル */
-		[UnityEngine.SerializeField]
-        public string style;
-
-        /**
-         * スタイルを設定
-         *
-         * @param style スタイル
-         * @return this
-         */
         public GetChartRequest WithStyle(string style) {
-            this.style = style;
+            this.Style = style;
             return this;
         }
 
-
-        /** タイトル */
-		[UnityEngine.SerializeField]
-        public string title;
-
-        /**
-         * タイトルを設定
-         *
-         * @param title タイトル
-         * @return this
-         */
         public GetChartRequest WithTitle(string title) {
-            this.title = title;
+            this.Title = title;
             return this;
         }
-
 
     	[Preserve]
-        public static GetChartRequest FromDict(JsonData data)
+        public static GetChartRequest FromJson(JsonData data)
         {
-            return new GetChartRequest {
-                metrics = data.Keys.Contains("metrics") && data["metrics"] != null ? data["metrics"].ToString(): null,
-                grn = data.Keys.Contains("grn") && data["grn"] != null ? data["grn"].ToString(): null,
-                queries = data.Keys.Contains("queries") && data["queries"] != null ? data["queries"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                by = data.Keys.Contains("by") && data["by"] != null ? data["by"].ToString(): null,
-                timeframe = data.Keys.Contains("timeframe") && data["timeframe"] != null ? data["timeframe"].ToString(): null,
-                size = data.Keys.Contains("size") && data["size"] != null ? data["size"].ToString(): null,
-                format = data.Keys.Contains("format") && data["format"] != null ? data["format"].ToString(): null,
-                aggregator = data.Keys.Contains("aggregator") && data["aggregator"] != null ? data["aggregator"].ToString(): null,
-                style = data.Keys.Contains("style") && data["style"] != null ? data["style"].ToString(): null,
-                title = data.Keys.Contains("title") && data["title"] != null ? data["title"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetChartRequest()
+                .WithMetrics(!data.Keys.Contains("metrics") || data["metrics"] == null ? null : data["metrics"].ToString())
+                .WithGrn(!data.Keys.Contains("grn") || data["grn"] == null ? null : data["grn"].ToString())
+                .WithQueries(!data.Keys.Contains("queries") || data["queries"] == null ? new string[]{} : data["queries"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithBy(!data.Keys.Contains("by") || data["by"] == null ? null : data["by"].ToString())
+                .WithTimeframe(!data.Keys.Contains("timeframe") || data["timeframe"] == null ? null : data["timeframe"].ToString())
+                .WithSize(!data.Keys.Contains("size") || data["size"] == null ? null : data["size"].ToString())
+                .WithFormat(!data.Keys.Contains("format") || data["format"] == null ? null : data["format"].ToString())
+                .WithAggregator(!data.Keys.Contains("aggregator") || data["aggregator"] == null ? null : data["aggregator"].ToString())
+                .WithStyle(!data.Keys.Contains("style") || data["style"] == null ? null : data["style"].ToString())
+                .WithTitle(!data.Keys.Contains("title") || data["title"] == null ? null : data["title"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["metrics"] = Metrics,
+                ["grn"] = Grn,
+                ["queries"] = new JsonData(Queries == null ? new JsonData[]{} :
+                        Queries.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["by"] = By,
+                ["timeframe"] = Timeframe,
+                ["size"] = Size,
+                ["format"] = Format,
+                ["aggregator"] = Aggregator,
+                ["style"] = Style,
+                ["title"] = Title,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["metrics"] = metrics;
-            data["grn"] = grn;
-            data["queries"] = new JsonData(queries);
-            data["by"] = by;
-            data["timeframe"] = timeframe;
-            data["size"] = size;
-            data["format"] = format;
-            data["aggregator"] = aggregator;
-            data["style"] = style;
-            data["title"] = title;
-            return data;
+            writer.WriteObjectStart();
+            if (Metrics != null) {
+                writer.WritePropertyName("metrics");
+                writer.Write(Metrics.ToString());
+            }
+            if (Grn != null) {
+                writer.WritePropertyName("grn");
+                writer.Write(Grn.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var query in Queries)
+            {
+                writer.Write(query.ToString());
+            }
+            writer.WriteArrayEnd();
+            if (By != null) {
+                writer.WritePropertyName("by");
+                writer.Write(By.ToString());
+            }
+            if (Timeframe != null) {
+                writer.WritePropertyName("timeframe");
+                writer.Write(Timeframe.ToString());
+            }
+            if (Size != null) {
+                writer.WritePropertyName("size");
+                writer.Write(Size.ToString());
+            }
+            if (Format != null) {
+                writer.WritePropertyName("format");
+                writer.Write(Format.ToString());
+            }
+            if (Aggregator != null) {
+                writer.WritePropertyName("aggregator");
+                writer.Write(Aggregator.ToString());
+            }
+            if (Style != null) {
+                writer.WritePropertyName("style");
+                writer.Write(Style.ToString());
+            }
+            if (Title != null) {
+                writer.WritePropertyName("title");
+                writer.Write(Title.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

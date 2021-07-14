@@ -23,239 +23,154 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class SendBox : IComparable
 	{
+        public string SendBoxId { set; get; }
+        public string UserId { set; get; }
+        public string[] TargetUserIds { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** フレンドリクエストの受信ボックス */
-        public string sendBoxId { set; get; }
-
-        /**
-         * フレンドリクエストの受信ボックスを設定
-         *
-         * @param sendBoxId フレンドリクエストの受信ボックス
-         * @return this
-         */
         public SendBox WithSendBoxId(string sendBoxId) {
-            this.sendBoxId = sendBoxId;
+            this.SendBoxId = sendBoxId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SendBox WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** フレンドリクエストの宛先ユーザーIDリスト */
-        public List<string> targetUserIds { set; get; }
-
-        /**
-         * フレンドリクエストの宛先ユーザーIDリストを設定
-         *
-         * @param targetUserIds フレンドリクエストの宛先ユーザーIDリスト
-         * @return this
-         */
-        public SendBox WithTargetUserIds(List<string> targetUserIds) {
-            this.targetUserIds = targetUserIds;
+        public SendBox WithTargetUserIds(string[] targetUserIds) {
+            this.TargetUserIds = targetUserIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public SendBox WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public SendBox WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static SendBox FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SendBox()
+                .WithSendBoxId(!data.Keys.Contains("sendBoxId") || data["sendBoxId"] == null ? null : data["sendBoxId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetUserIds(!data.Keys.Contains("targetUserIds") || data["targetUserIds"] == null ? new string[]{} : data["targetUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["sendBoxId"] = SendBoxId,
+                ["userId"] = UserId,
+                ["targetUserIds"] = new JsonData(TargetUserIds == null ? new JsonData[]{} :
+                        TargetUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.sendBoxId != null)
-            {
+            if (SendBoxId != null) {
                 writer.WritePropertyName("sendBoxId");
-                writer.Write(this.sendBoxId);
+                writer.Write(SendBoxId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.targetUserIds != null)
-            {
+            if (TargetUserIds != null) {
                 writer.WritePropertyName("targetUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.targetUserIds)
+                foreach (var targetUserId in TargetUserIds)
                 {
-                    writer.Write(item);
+                    if (targetUserId != null) {
+                        writer.Write(targetUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):sendBox");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):sendBox");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):sendBox");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):sendBox");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static SendBox FromDict(JsonData data)
-        {
-            return new SendBox()
-                .WithSendBoxId(data.Keys.Contains("sendBoxId") && data["sendBoxId"] != null ? data["sendBoxId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithTargetUserIds(data.Keys.Contains("targetUserIds") && data["targetUserIds"] != null ? data["targetUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SendBox;
             var diff = 0;
-            if (sendBoxId == null && sendBoxId == other.sendBoxId)
+            if (SendBoxId == null && SendBoxId == other.SendBoxId)
             {
                 // null and null
             }
             else
             {
-                diff += sendBoxId.CompareTo(other.sendBoxId);
+                diff += SendBoxId.CompareTo(other.SendBoxId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (targetUserIds == null && targetUserIds == other.targetUserIds)
+            if (TargetUserIds == null && TargetUserIds == other.TargetUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += targetUserIds.Count - other.targetUserIds.Count;
-                for (var i = 0; i < targetUserIds.Count; i++)
+                diff += TargetUserIds.Length - other.TargetUserIds.Length;
+                for (var i = 0; i < TargetUserIds.Length; i++)
                 {
-                    diff += targetUserIds[i].CompareTo(other.targetUserIds[i]);
+                    diff += TargetUserIds[i].CompareTo(other.TargetUserIds[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["sendBoxId"] = sendBoxId;
-            data["userId"] = userId;
-            data["targetUserIds"] = new JsonData(targetUserIds);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

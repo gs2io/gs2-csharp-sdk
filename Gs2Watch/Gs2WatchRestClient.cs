@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Watch
+using Gs2.Util.LitJson;namespace Gs2.Gs2Watch
 {
 	public class Gs2WatchRestClient : AbstractGs2Client
 	{
@@ -72,67 +70,67 @@ namespace Gs2.Gs2Watch
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/chart/{metrics}";
 
-                url = url.Replace("{metrics}", !string.IsNullOrEmpty(_request.metrics) ? _request.metrics.ToString() : "null");
+                url = url.Replace("{metrics}", !string.IsNullOrEmpty(_request.Metrics) ? _request.Metrics.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.grn != null)
+                if (_request.Grn != null)
                 {
                     jsonWriter.WritePropertyName("grn");
-                    jsonWriter.Write(_request.grn.ToString());
+                    jsonWriter.Write(_request.Grn.ToString());
                 }
-                if (_request.queries != null)
+                if (_request.Queries != null)
                 {
                     jsonWriter.WritePropertyName("queries");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.queries)
+                    foreach(var item in _request.Queries)
                     {
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.by != null)
+                if (_request.By != null)
                 {
                     jsonWriter.WritePropertyName("by");
-                    jsonWriter.Write(_request.by.ToString());
+                    jsonWriter.Write(_request.By.ToString());
                 }
-                if (_request.timeframe != null)
+                if (_request.Timeframe != null)
                 {
                     jsonWriter.WritePropertyName("timeframe");
-                    jsonWriter.Write(_request.timeframe.ToString());
+                    jsonWriter.Write(_request.Timeframe.ToString());
                 }
-                if (_request.size != null)
+                if (_request.Size != null)
                 {
                     jsonWriter.WritePropertyName("size");
-                    jsonWriter.Write(_request.size.ToString());
+                    jsonWriter.Write(_request.Size.ToString());
                 }
-                if (_request.format != null)
+                if (_request.Format != null)
                 {
                     jsonWriter.WritePropertyName("format");
-                    jsonWriter.Write(_request.format.ToString());
+                    jsonWriter.Write(_request.Format.ToString());
                 }
-                if (_request.aggregator != null)
+                if (_request.Aggregator != null)
                 {
                     jsonWriter.WritePropertyName("aggregator");
-                    jsonWriter.Write(_request.aggregator.ToString());
+                    jsonWriter.Write(_request.Aggregator.ToString());
                 }
-                if (_request.style != null)
+                if (_request.Style != null)
                 {
                     jsonWriter.WritePropertyName("style");
-                    jsonWriter.Write(_request.style.ToString());
+                    jsonWriter.Write(_request.Style.ToString());
                 }
-                if (_request.title != null)
+                if (_request.Title != null)
                 {
                     jsonWriter.WritePropertyName("title");
-                    jsonWriter.Write(_request.title.ToString());
+                    jsonWriter.Write(_request.Title.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -143,9 +141,9 @@ namespace Gs2.Gs2Watch
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -153,9 +151,6 @@ namespace Gs2.Gs2Watch
         }
 
 		/// <summary>
-		///  チャートを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -190,22 +185,22 @@ namespace Gs2.Gs2Watch
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/cumulative/{name}";
 
-                url = url.Replace("{name}", !string.IsNullOrEmpty(_request.name) ? _request.name.ToString() : "null");
+                url = url.Replace("{name}", !string.IsNullOrEmpty(_request.Name) ? _request.Name.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.resourceGrn != null)
+                if (_request.ResourceGrn != null)
                 {
                     jsonWriter.WritePropertyName("resourceGrn");
-                    jsonWriter.Write(_request.resourceGrn.ToString());
+                    jsonWriter.Write(_request.ResourceGrn.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -216,9 +211,9 @@ namespace Gs2.Gs2Watch
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -226,9 +221,6 @@ namespace Gs2.Gs2Watch
         }
 
 		/// <summary>
-		///  累積値を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -263,30 +255,30 @@ namespace Gs2.Gs2Watch
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/billingActivity/{year}/{month}";
 
-                url = url.Replace("{year}",_request.year != null ? _request.year.ToString() : "null");
-                url = url.Replace("{month}",_request.month != null ? _request.month.ToString() : "null");
+                url = url.Replace("{year}",_request.Year != null ? _request.Year.ToString() : "null");
+                url = url.Replace("{month}",_request.Month != null ? _request.Month.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -294,9 +286,6 @@ namespace Gs2.Gs2Watch
         }
 
 		/// <summary>
-		///  請求にまつわるアクティビティの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -331,20 +320,20 @@ namespace Gs2.Gs2Watch
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/billingActivity/{year}/{month}/{service}/{activityType}";
 
-                url = url.Replace("{year}",_request.year != null ? _request.year.ToString() : "null");
-                url = url.Replace("{month}",_request.month != null ? _request.month.ToString() : "null");
-                url = url.Replace("{service}", !string.IsNullOrEmpty(_request.service) ? _request.service.ToString() : "null");
-                url = url.Replace("{activityType}", !string.IsNullOrEmpty(_request.activityType) ? _request.activityType.ToString() : "null");
+                url = url.Replace("{year}",_request.Year != null ? _request.Year.ToString() : "null");
+                url = url.Replace("{month}",_request.Month != null ? _request.Month.ToString() : "null");
+                url = url.Replace("{service}", !string.IsNullOrEmpty(_request.Service) ? _request.Service.ToString() : "null");
+                url = url.Replace("{activityType}", !string.IsNullOrEmpty(_request.ActivityType) ? _request.ActivityType.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -355,9 +344,9 @@ namespace Gs2.Gs2Watch
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -365,9 +354,6 @@ namespace Gs2.Gs2Watch
         }
 
 		/// <summary>
-		///  請求にまつわるアクティビティを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>

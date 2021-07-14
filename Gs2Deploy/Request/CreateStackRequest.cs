@@ -28,72 +28,62 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class CreateStackRequest : Gs2Request<CreateStackRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Template { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * スタック名を設定
-         *
-         * @param name スタック名
-         * @return this
-         */
         public CreateStackRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** スタックの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * スタックの説明を設定
-         *
-         * @param description スタックの説明
-         * @return this
-         */
         public CreateStackRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** テンプレートデータ */
-		[UnityEngine.SerializeField]
-        public string template;
-
-        /**
-         * テンプレートデータを設定
-         *
-         * @param template テンプレートデータ
-         * @return this
-         */
         public CreateStackRequest WithTemplate(string template) {
-            this.template = template;
+            this.Template = template;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateStackRequest FromDict(JsonData data)
+        public static CreateStackRequest FromJson(JsonData data)
         {
-            return new CreateStackRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                template = data.Keys.Contains("template") && data["template"] != null ? data["template"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateStackRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["template"] = Template,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["template"] = template;
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Template != null) {
+                writer.WritePropertyName("template");
+                writer.Write(Template.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

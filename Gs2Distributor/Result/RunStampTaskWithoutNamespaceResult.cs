@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,53 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class RunStampTaskWithoutNamespaceResult
+	[System.Serializable]
+	public class RunStampTaskWithoutNamespaceResult : IResult
 	{
-        /** タスクの実行結果を反映したコンテキストスタック */
-        public string contextStack { set; get; }
+        public string ContextStack { set; get; }
+        public string Result { set; get; }
 
-        /** レスポンス内容 */
-        public string result { set; get; }
+        public RunStampTaskWithoutNamespaceResult WithContextStack(string contextStack) {
+            this.ContextStack = contextStack;
+            return this;
+        }
 
+        public RunStampTaskWithoutNamespaceResult WithResult(string result) {
+            this.Result = result;
+            return this;
+        }
 
     	[Preserve]
-        public static RunStampTaskWithoutNamespaceResult FromDict(JsonData data)
+        public static RunStampTaskWithoutNamespaceResult FromJson(JsonData data)
         {
-            return new RunStampTaskWithoutNamespaceResult {
-                contextStack = data.Keys.Contains("contextStack") && data["contextStack"] != null ? data["contextStack"].ToString() : null,
-                result = data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampTaskWithoutNamespaceResult()
+                .WithContextStack(!data.Keys.Contains("contextStack") || data["contextStack"] == null ? null : data["contextStack"].ToString())
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["contextStack"] = ContextStack,
+                ["result"] = Result,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (ContextStack != null) {
+                writer.WritePropertyName("contextStack");
+                writer.Write(ContextStack.ToString());
+            }
+            if (Result != null) {
+                writer.WritePropertyName("result");
+                writer.Write(Result.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

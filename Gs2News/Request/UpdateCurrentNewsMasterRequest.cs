@@ -28,54 +28,50 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class UpdateCurrentNewsMasterRequest : Gs2Request<UpdateCurrentNewsMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UploadToken { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public UpdateCurrentNewsMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** アップロード準備で受け取ったトークン */
-		[UnityEngine.SerializeField]
-        public string uploadToken;
-
-        /**
-         * アップロード準備で受け取ったトークンを設定
-         *
-         * @param uploadToken アップロード準備で受け取ったトークン
-         * @return this
-         */
         public UpdateCurrentNewsMasterRequest WithUploadToken(string uploadToken) {
-            this.uploadToken = uploadToken;
+            this.UploadToken = uploadToken;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateCurrentNewsMasterRequest FromDict(JsonData data)
+        public static UpdateCurrentNewsMasterRequest FromJson(JsonData data)
         {
-            return new UpdateCurrentNewsMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                uploadToken = data.Keys.Contains("uploadToken") && data["uploadToken"] != null ? data["uploadToken"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentNewsMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["uploadToken"] = UploadToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["uploadToken"] = uploadToken;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

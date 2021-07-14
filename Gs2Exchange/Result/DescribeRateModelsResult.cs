@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class DescribeRateModelsResult
+	[System.Serializable]
+	public class DescribeRateModelsResult : IResult
 	{
-        /** 交換レートモデルのリスト */
-        public List<RateModel> items { set; get; }
+        public Gs2.Gs2Exchange.Model.RateModel[] Items { set; get; }
 
+        public DescribeRateModelsResult WithItems(Gs2.Gs2Exchange.Model.RateModel[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeRateModelsResult FromDict(JsonData data)
+        public static DescribeRateModelsResult FromJson(JsonData data)
         {
-            return new DescribeRateModelsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Exchange.Model.RateModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeRateModelsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Exchange.Model.RateModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.RateModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

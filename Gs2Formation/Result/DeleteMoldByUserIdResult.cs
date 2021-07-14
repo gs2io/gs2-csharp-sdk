@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class DeleteMoldByUserIdResult
+	[System.Serializable]
+	public class DeleteMoldByUserIdResult : IResult
 	{
-        /** 保存したフォーム */
-        public Mold item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
 
+        public DeleteMoldByUserIdResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteMoldByUserIdResult FromDict(JsonData data)
+        public static DeleteMoldByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteMoldByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.Mold.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMoldByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

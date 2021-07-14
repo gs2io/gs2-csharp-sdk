@@ -28,90 +28,62 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class SetUserIdByUserIdRequest : Gs2Request<SetUserIdByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public bool? AllowConcurrentAccess { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetUserIdByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SetUserIdByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 同時に異なるクライアントからの接続を許容するか */
-		[UnityEngine.SerializeField]
-        public bool? allowConcurrentAccess;
-
-        /**
-         * 同時に異なるクライアントからの接続を許容するかを設定
-         *
-         * @param allowConcurrentAccess 同時に異なるクライアントからの接続を許容するか
-         * @return this
-         */
         public SetUserIdByUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
-            this.allowConcurrentAccess = allowConcurrentAccess;
+            this.AllowConcurrentAccess = allowConcurrentAccess;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetUserIdByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SetUserIdByUserIdRequest FromDict(JsonData data)
+        public static SetUserIdByUserIdRequest FromJson(JsonData data)
         {
-            return new SetUserIdByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                allowConcurrentAccess = data.Keys.Contains("allowConcurrentAccess") && data["allowConcurrentAccess"] != null ? (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetUserIdByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["allowConcurrentAccess"] = AllowConcurrentAccess,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["allowConcurrentAccess"] = allowConcurrentAccess;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (AllowConcurrentAccess != null) {
+                writer.WritePropertyName("allowConcurrentAccess");
+                writer.Write(bool.Parse(AllowConcurrentAccess.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Lottery.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Lottery.Result
 {
 	[Preserve]
-	public class DescribeLotteryModelsResult
+	[System.Serializable]
+	public class DescribeLotteryModelsResult : IResult
 	{
-        /** 抽選の種類のリスト */
-        public List<LotteryModel> items { set; get; }
+        public Gs2.Gs2Lottery.Model.LotteryModel[] Items { set; get; }
 
+        public DescribeLotteryModelsResult WithItems(Gs2.Gs2Lottery.Model.LotteryModel[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeLotteryModelsResult FromDict(JsonData data)
+        public static DescribeLotteryModelsResult FromJson(JsonData data)
         {
-            return new DescribeLotteryModelsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Lottery.Model.LotteryModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeLotteryModelsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.LotteryModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.LotteryModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

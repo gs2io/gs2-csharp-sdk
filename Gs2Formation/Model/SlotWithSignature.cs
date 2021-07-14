@@ -23,178 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class SlotWithSignature : IComparable
 	{
+        public string Name { set; get; }
+        public string PropertyType { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public string Metadata { set; get; }
 
-        /** スロットモデル名 */
-        public string name { set; get; }
-
-        /**
-         * スロットモデル名を設定
-         *
-         * @param name スロットモデル名
-         * @return this
-         */
         public SlotWithSignature WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** プロパティの種類 */
-        public string propertyType { set; get; }
-
-        /**
-         * プロパティの種類を設定
-         *
-         * @param propertyType プロパティの種類
-         * @return this
-         */
         public SlotWithSignature WithPropertyType(string propertyType) {
-            this.propertyType = propertyType;
+            this.PropertyType = propertyType;
             return this;
         }
 
-        /** ペイロード */
-        public string body { set; get; }
-
-        /**
-         * ペイロードを設定
-         *
-         * @param body ペイロード
-         * @return this
-         */
         public SlotWithSignature WithBody(string body) {
-            this.body = body;
+            this.Body = body;
             return this;
         }
 
-        /** プロパティIDのリソースを所有していることを証明する署名 */
-        public string signature { set; get; }
-
-        /**
-         * プロパティIDのリソースを所有していることを証明する署名を設定
-         *
-         * @param signature プロパティIDのリソースを所有していることを証明する署名
-         * @return this
-         */
         public SlotWithSignature WithSignature(string signature) {
-            this.signature = signature;
+            this.Signature = signature;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public SlotWithSignature WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
+        }
+
+    	[Preserve]
+        public static SlotWithSignature FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SlotWithSignature()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithPropertyType(!data.Keys.Contains("propertyType") || data["propertyType"] == null ? null : data["propertyType"].ToString())
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["propertyType"] = PropertyType,
+                ["body"] = Body,
+                ["signature"] = Signature,
+                ["metadata"] = Metadata,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.propertyType != null)
-            {
+            if (PropertyType != null) {
                 writer.WritePropertyName("propertyType");
-                writer.Write(this.propertyType);
+                writer.Write(PropertyType.ToString());
             }
-            if(this.body != null)
-            {
+            if (Body != null) {
                 writer.WritePropertyName("body");
-                writer.Write(this.body);
+                writer.Write(Body.ToString());
             }
-            if(this.signature != null)
-            {
+            if (Signature != null) {
                 writer.WritePropertyName("signature");
-                writer.Write(this.signature);
+                writer.Write(Signature.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static SlotWithSignature FromDict(JsonData data)
-        {
-            return new SlotWithSignature()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithPropertyType(data.Keys.Contains("propertyType") && data["propertyType"] != null ? data["propertyType"].ToString() : null)
-                .WithBody(data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null)
-                .WithSignature(data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SlotWithSignature;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (propertyType == null && propertyType == other.propertyType)
+            if (PropertyType == null && PropertyType == other.PropertyType)
             {
                 // null and null
             }
             else
             {
-                diff += propertyType.CompareTo(other.propertyType);
+                diff += PropertyType.CompareTo(other.PropertyType);
             }
-            if (body == null && body == other.body)
+            if (Body == null && Body == other.Body)
             {
                 // null and null
             }
             else
             {
-                diff += body.CompareTo(other.body);
+                diff += Body.CompareTo(other.Body);
             }
-            if (signature == null && signature == other.signature)
+            if (Signature == null && Signature == other.Signature)
             {
                 // null and null
             }
             else
             {
-                diff += signature.CompareTo(other.signature);
+                diff += Signature.CompareTo(other.Signature);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["propertyType"] = propertyType;
-            data["body"] = body;
-            data["signature"] = signature;
-            data["metadata"] = metadata;
-            return data;
-        }
-	}
+    }
 }

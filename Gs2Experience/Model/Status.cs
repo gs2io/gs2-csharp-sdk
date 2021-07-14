@@ -23,366 +23,217 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Experience.Model
 {
+
 	[Preserve]
 	public class Status : IComparable
 	{
+        public string StatusId { set; get; }
+        public string ExperienceName { set; get; }
+        public string UserId { set; get; }
+        public string PropertyId { set; get; }
+        public long? ExperienceValue { set; get; }
+        public long? RankValue { set; get; }
+        public long? RankCapValue { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ステータス */
-        public string statusId { set; get; }
-
-        /**
-         * ステータスを設定
-         *
-         * @param statusId ステータス
-         * @return this
-         */
         public Status WithStatusId(string statusId) {
-            this.statusId = statusId;
+            this.StatusId = statusId;
             return this;
         }
 
-        /** 経験値の種類の名前 */
-        public string experienceName { set; get; }
-
-        /**
-         * 経験値の種類の名前を設定
-         *
-         * @param experienceName 経験値の種類の名前
-         * @return this
-         */
         public Status WithExperienceName(string experienceName) {
-            this.experienceName = experienceName;
+            this.ExperienceName = experienceName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Status WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** プロパティID */
-        public string propertyId { set; get; }
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
         public Status WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
+            this.PropertyId = propertyId;
             return this;
         }
 
-        /** 累計獲得経験値 */
-        public long? experienceValue { set; get; }
-
-        /**
-         * 累計獲得経験値を設定
-         *
-         * @param experienceValue 累計獲得経験値
-         * @return this
-         */
         public Status WithExperienceValue(long? experienceValue) {
-            this.experienceValue = experienceValue;
+            this.ExperienceValue = experienceValue;
             return this;
         }
 
-        /** 現在のランク */
-        public long? rankValue { set; get; }
-
-        /**
-         * 現在のランクを設定
-         *
-         * @param rankValue 現在のランク
-         * @return this
-         */
         public Status WithRankValue(long? rankValue) {
-            this.rankValue = rankValue;
+            this.RankValue = rankValue;
             return this;
         }
 
-        /** 現在のランクキャップ */
-        public long? rankCapValue { set; get; }
-
-        /**
-         * 現在のランクキャップを設定
-         *
-         * @param rankCapValue 現在のランクキャップ
-         * @return this
-         */
         public Status WithRankCapValue(long? rankCapValue) {
-            this.rankCapValue = rankCapValue;
+            this.RankCapValue = rankCapValue;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Status WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Status WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Status FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Status()
+                .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
+                .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)long.Parse(data["experienceValue"].ToString()))
+                .WithRankValue(!data.Keys.Contains("rankValue") || data["rankValue"] == null ? null : (long?)long.Parse(data["rankValue"].ToString()))
+                .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)long.Parse(data["rankCapValue"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["statusId"] = StatusId,
+                ["experienceName"] = ExperienceName,
+                ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
+                ["experienceValue"] = ExperienceValue,
+                ["rankValue"] = RankValue,
+                ["rankCapValue"] = RankCapValue,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.statusId != null)
-            {
+            if (StatusId != null) {
                 writer.WritePropertyName("statusId");
-                writer.Write(this.statusId);
+                writer.Write(StatusId.ToString());
             }
-            if(this.experienceName != null)
-            {
+            if (ExperienceName != null) {
                 writer.WritePropertyName("experienceName");
-                writer.Write(this.experienceName);
+                writer.Write(ExperienceName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.propertyId != null)
-            {
+            if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
-                writer.Write(this.propertyId);
+                writer.Write(PropertyId.ToString());
             }
-            if(this.experienceValue.HasValue)
-            {
+            if (ExperienceValue != null) {
                 writer.WritePropertyName("experienceValue");
-                writer.Write(this.experienceValue.Value);
+                writer.Write(long.Parse(ExperienceValue.ToString()));
             }
-            if(this.rankValue.HasValue)
-            {
+            if (RankValue != null) {
                 writer.WritePropertyName("rankValue");
-                writer.Write(this.rankValue.Value);
+                writer.Write(long.Parse(RankValue.ToString()));
             }
-            if(this.rankCapValue.HasValue)
-            {
+            if (RankCapValue != null) {
                 writer.WritePropertyName("rankCapValue");
-                writer.Write(this.rankCapValue.Value);
+                writer.Write(long.Parse(RankCapValue.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetPropertyIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["propertyId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["propertyId"].Value;
-    }
-
-    public static string GetExperienceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["experienceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["experienceName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):user:(?<userId>.*):experienceModel:(?<experienceName>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Status FromDict(JsonData data)
-        {
-            return new Status()
-                .WithStatusId(data.Keys.Contains("statusId") && data["statusId"] != null ? data["statusId"].ToString() : null)
-                .WithExperienceName(data.Keys.Contains("experienceName") && data["experienceName"] != null ? data["experienceName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPropertyId(data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString() : null)
-                .WithExperienceValue(data.Keys.Contains("experienceValue") && data["experienceValue"] != null ? (long?)long.Parse(data["experienceValue"].ToString()) : null)
-                .WithRankValue(data.Keys.Contains("rankValue") && data["rankValue"] != null ? (long?)long.Parse(data["rankValue"].ToString()) : null)
-                .WithRankCapValue(data.Keys.Contains("rankCapValue") && data["rankCapValue"] != null ? (long?)long.Parse(data["rankCapValue"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Status;
             var diff = 0;
-            if (statusId == null && statusId == other.statusId)
+            if (StatusId == null && StatusId == other.StatusId)
             {
                 // null and null
             }
             else
             {
-                diff += statusId.CompareTo(other.statusId);
+                diff += StatusId.CompareTo(other.StatusId);
             }
-            if (experienceName == null && experienceName == other.experienceName)
+            if (ExperienceName == null && ExperienceName == other.ExperienceName)
             {
                 // null and null
             }
             else
             {
-                diff += experienceName.CompareTo(other.experienceName);
+                diff += ExperienceName.CompareTo(other.ExperienceName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (propertyId == null && propertyId == other.propertyId)
+            if (PropertyId == null && PropertyId == other.PropertyId)
             {
                 // null and null
             }
             else
             {
-                diff += propertyId.CompareTo(other.propertyId);
+                diff += PropertyId.CompareTo(other.PropertyId);
             }
-            if (experienceValue == null && experienceValue == other.experienceValue)
+            if (ExperienceValue == null && ExperienceValue == other.ExperienceValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(experienceValue - other.experienceValue);
+                diff += (int)(ExperienceValue - other.ExperienceValue);
             }
-            if (rankValue == null && rankValue == other.rankValue)
+            if (RankValue == null && RankValue == other.RankValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rankValue - other.rankValue);
+                diff += (int)(RankValue - other.RankValue);
             }
-            if (rankCapValue == null && rankCapValue == other.rankCapValue)
+            if (RankCapValue == null && RankCapValue == other.RankCapValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rankCapValue - other.rankCapValue);
+                diff += (int)(RankCapValue - other.RankCapValue);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["statusId"] = statusId;
-            data["experienceName"] = experienceName;
-            data["userId"] = userId;
-            data["propertyId"] = propertyId;
-            data["experienceValue"] = experienceValue;
-            data["rankValue"] = rankValue;
-            data["rankCapValue"] = rankCapValue;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

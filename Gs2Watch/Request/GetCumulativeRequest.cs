@@ -28,54 +28,50 @@ namespace Gs2.Gs2Watch.Request
 	[System.Serializable]
 	public class GetCumulativeRequest : Gs2Request<GetCumulativeRequest>
 	{
+        public string Name { set; get; }
+        public string ResourceGrn { set; get; }
 
-        /** 名前 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * 名前を設定
-         *
-         * @param name 名前
-         * @return this
-         */
         public GetCumulativeRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** リソースのGRN */
-		[UnityEngine.SerializeField]
-        public string resourceGrn;
-
-        /**
-         * リソースのGRNを設定
-         *
-         * @param resourceGrn リソースのGRN
-         * @return this
-         */
         public GetCumulativeRequest WithResourceGrn(string resourceGrn) {
-            this.resourceGrn = resourceGrn;
+            this.ResourceGrn = resourceGrn;
             return this;
         }
-
 
     	[Preserve]
-        public static GetCumulativeRequest FromDict(JsonData data)
+        public static GetCumulativeRequest FromJson(JsonData data)
         {
-            return new GetCumulativeRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                resourceGrn = data.Keys.Contains("resourceGrn") && data["resourceGrn"] != null ? data["resourceGrn"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCumulativeRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithResourceGrn(!data.Keys.Contains("resourceGrn") || data["resourceGrn"] == null ? null : data["resourceGrn"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["resourceGrn"] = ResourceGrn,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["resourceGrn"] = resourceGrn;
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (ResourceGrn != null) {
+                writer.WritePropertyName("resourceGrn");
+                writer.Write(ResourceGrn.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

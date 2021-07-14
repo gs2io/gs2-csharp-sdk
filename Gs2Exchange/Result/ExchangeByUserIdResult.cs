@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class ExchangeByUserIdResult
+	[System.Serializable]
+	public class ExchangeByUserIdResult : IResult
 	{
-        /** 交換レートモデル */
-        public RateModel item { set; get; }
+        public Gs2.Gs2Exchange.Model.RateModel Item { set; get; }
+        public string StampSheet { set; get; }
+        public string StampSheetEncryptionKeyId { set; get; }
 
-        /** 交換処理の実行に使用するスタンプシート */
-        public string stampSheet { set; get; }
+        public ExchangeByUserIdResult WithItem(Gs2.Gs2Exchange.Model.RateModel item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** スタンプシートの署名計算に使用した暗号鍵GRN */
-        public string stampSheetEncryptionKeyId { set; get; }
+        public ExchangeByUserIdResult WithStampSheet(string stampSheet) {
+            this.StampSheet = stampSheet;
+            return this;
+        }
 
+        public ExchangeByUserIdResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
+            this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
+            return this;
+        }
 
     	[Preserve]
-        public static ExchangeByUserIdResult FromDict(JsonData data)
+        public static ExchangeByUserIdResult FromJson(JsonData data)
         {
-            return new ExchangeByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Exchange.Model.RateModel.FromDict(data["item"]) : null,
-                stampSheet = data.Keys.Contains("stampSheet") && data["stampSheet"] != null ? data["stampSheet"].ToString() : null,
-                stampSheetEncryptionKeyId = data.Keys.Contains("stampSheetEncryptionKeyId") && data["stampSheetEncryptionKeyId"] != null ? data["stampSheetEncryptionKeyId"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new ExchangeByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.RateModel.FromJson(data["item"]))
+                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
+                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["stampSheet"] = StampSheet,
+                ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (StampSheet != null) {
+                writer.WritePropertyName("stampSheet");
+                writer.Write(StampSheet.ToString());
+            }
+            if (StampSheetEncryptionKeyId != null) {
+                writer.WritePropertyName("stampSheetEncryptionKeyId");
+                writer.Write(StampSheetEncryptionKeyId.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

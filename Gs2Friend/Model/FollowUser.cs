@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class FollowUser : IComparable
 	{
+        public string UserId { set; get; }
+        public string PublicProfile { set; get; }
+        public string FollowerProfile { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public FollowUser WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 公開されるプロフィール */
-        public string publicProfile { set; get; }
-
-        /**
-         * 公開されるプロフィールを設定
-         *
-         * @param publicProfile 公開されるプロフィール
-         * @return this
-         */
         public FollowUser WithPublicProfile(string publicProfile) {
-            this.publicProfile = publicProfile;
+            this.PublicProfile = publicProfile;
             return this;
         }
 
-        /** フォロワー向けに公開されるプロフィール */
-        public string followerProfile { set; get; }
-
-        /**
-         * フォロワー向けに公開されるプロフィールを設定
-         *
-         * @param followerProfile フォロワー向けに公開されるプロフィール
-         * @return this
-         */
         public FollowUser WithFollowerProfile(string followerProfile) {
-            this.followerProfile = followerProfile;
+            this.FollowerProfile = followerProfile;
             return this;
+        }
+
+    	[Preserve]
+        public static FollowUser FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new FollowUser()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString())
+                .WithFollowerProfile(!data.Keys.Contains("followerProfile") || data["followerProfile"] == null ? null : data["followerProfile"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["publicProfile"] = PublicProfile,
+                ["followerProfile"] = FollowerProfile,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.publicProfile != null)
-            {
+            if (PublicProfile != null) {
                 writer.WritePropertyName("publicProfile");
-                writer.Write(this.publicProfile);
+                writer.Write(PublicProfile.ToString());
             }
-            if(this.followerProfile != null)
-            {
+            if (FollowerProfile != null) {
                 writer.WritePropertyName("followerProfile");
-                writer.Write(this.followerProfile);
+                writer.Write(FollowerProfile.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static FollowUser FromDict(JsonData data)
-        {
-            return new FollowUser()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPublicProfile(data.Keys.Contains("publicProfile") && data["publicProfile"] != null ? data["publicProfile"].ToString() : null)
-                .WithFollowerProfile(data.Keys.Contains("followerProfile") && data["followerProfile"] != null ? data["followerProfile"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as FollowUser;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (publicProfile == null && publicProfile == other.publicProfile)
+            if (PublicProfile == null && PublicProfile == other.PublicProfile)
             {
                 // null and null
             }
             else
             {
-                diff += publicProfile.CompareTo(other.publicProfile);
+                diff += PublicProfile.CompareTo(other.PublicProfile);
             }
-            if (followerProfile == null && followerProfile == other.followerProfile)
+            if (FollowerProfile == null && FollowerProfile == other.FollowerProfile)
             {
                 // null and null
             }
             else
             {
-                diff += followerProfile.CompareTo(other.followerProfile);
+                diff += FollowerProfile.CompareTo(other.FollowerProfile);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["publicProfile"] = publicProfile;
-            data["followerProfile"] = followerProfile;
-            return data;
-        }
-	}
+    }
 }

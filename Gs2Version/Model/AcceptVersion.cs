@@ -23,267 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class AcceptVersion : IComparable
 	{
+        public string AcceptVersionId { set; get; }
+        public string VersionName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 承認したバージョン */
-        public string acceptVersionId { set; get; }
-
-        /**
-         * 承認したバージョンを設定
-         *
-         * @param acceptVersionId 承認したバージョン
-         * @return this
-         */
         public AcceptVersion WithAcceptVersionId(string acceptVersionId) {
-            this.acceptVersionId = acceptVersionId;
+            this.AcceptVersionId = acceptVersionId;
             return this;
         }
 
-        /** 承認したバージョン名 */
-        public string versionName { set; get; }
-
-        /**
-         * 承認したバージョン名を設定
-         *
-         * @param versionName 承認したバージョン名
-         * @return this
-         */
         public AcceptVersion WithVersionName(string versionName) {
-            this.versionName = versionName;
+            this.VersionName = versionName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AcceptVersion WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 承認したバージョン */
-        public Gs2.Gs2Version.Model.Version_ version { set; get; }
-
-        /**
-         * 承認したバージョンを設定
-         *
-         * @param version 承認したバージョン
-         * @return this
-         */
         public AcceptVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
-            this.version = version;
+            this.Version = version;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public AcceptVersion WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public AcceptVersion WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static AcceptVersion FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AcceptVersion()
+                .WithAcceptVersionId(!data.Keys.Contains("acceptVersionId") || data["acceptVersionId"] == null ? null : data["acceptVersionId"].ToString())
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["acceptVersionId"] = AcceptVersionId,
+                ["versionName"] = VersionName,
+                ["userId"] = UserId,
+                ["version"] = Version?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.acceptVersionId != null)
-            {
+            if (AcceptVersionId != null) {
                 writer.WritePropertyName("acceptVersionId");
-                writer.Write(this.acceptVersionId);
+                writer.Write(AcceptVersionId.ToString());
             }
-            if(this.versionName != null)
-            {
+            if (VersionName != null) {
                 writer.WritePropertyName("versionName");
-                writer.Write(this.versionName);
+                writer.Write(VersionName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.version != null)
-            {
+            if (Version != null) {
                 writer.WritePropertyName("version");
-                this.version.WriteJson(writer);
+                Version.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetVersionNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*):user:(?<userId>.*):version:(?<versionName>.*):accept:");
-        if (!match.Groups["versionName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["versionName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*):user:(?<userId>.*):version:(?<versionName>.*):accept:");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*):user:(?<userId>.*):version:(?<versionName>.*):accept:");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*):user:(?<userId>.*):version:(?<versionName>.*):accept:");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*):user:(?<userId>.*):version:(?<versionName>.*):accept:");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static AcceptVersion FromDict(JsonData data)
-        {
-            return new AcceptVersion()
-                .WithAcceptVersionId(data.Keys.Contains("acceptVersionId") && data["acceptVersionId"] != null ? data["acceptVersionId"].ToString() : null)
-                .WithVersionName(data.Keys.Contains("versionName") && data["versionName"] != null ? data["versionName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithVersion(data.Keys.Contains("version") && data["version"] != null ? Gs2.Gs2Version.Model.Version_.FromDict(data["version"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AcceptVersion;
             var diff = 0;
-            if (acceptVersionId == null && acceptVersionId == other.acceptVersionId)
+            if (AcceptVersionId == null && AcceptVersionId == other.AcceptVersionId)
             {
                 // null and null
             }
             else
             {
-                diff += acceptVersionId.CompareTo(other.acceptVersionId);
+                diff += AcceptVersionId.CompareTo(other.AcceptVersionId);
             }
-            if (versionName == null && versionName == other.versionName)
+            if (VersionName == null && VersionName == other.VersionName)
             {
                 // null and null
             }
             else
             {
-                diff += versionName.CompareTo(other.versionName);
+                diff += VersionName.CompareTo(other.VersionName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (version == null && version == other.version)
+            if (Version == null && Version == other.Version)
             {
                 // null and null
             }
             else
             {
-                diff += version.CompareTo(other.version);
+                diff += Version.CompareTo(other.Version);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["acceptVersionId"] = acceptVersionId;
-            data["versionName"] = versionName;
-            data["userId"] = userId;
-            data["version"] = version.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

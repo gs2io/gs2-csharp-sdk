@@ -23,162 +23,135 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class BoxItems : IComparable
 	{
+        public string BoxId { set; get; }
+        public string PrizeTableName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Lottery.Model.BoxItem[] Items { set; get; }
 
-        /** ボックス */
-        public string boxId { set; get; }
-
-        /**
-         * ボックスを設定
-         *
-         * @param boxId ボックス
-         * @return this
-         */
         public BoxItems WithBoxId(string boxId) {
-            this.boxId = boxId;
+            this.BoxId = boxId;
             return this;
         }
 
-        /** 排出確率テーブル名 */
-        public string prizeTableName { set; get; }
-
-        /**
-         * 排出確率テーブル名を設定
-         *
-         * @param prizeTableName 排出確率テーブル名
-         * @return this
-         */
         public BoxItems WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public BoxItems WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ボックスから取り出したアイテムのリスト */
-        public List<BoxItem> items { set; get; }
-
-        /**
-         * ボックスから取り出したアイテムのリストを設定
-         *
-         * @param items ボックスから取り出したアイテムのリスト
-         * @return this
-         */
-        public BoxItems WithItems(List<BoxItem> items) {
-            this.items = items;
+        public BoxItems WithItems(Gs2.Gs2Lottery.Model.BoxItem[] items) {
+            this.Items = items;
             return this;
+        }
+
+    	[Preserve]
+        public static BoxItems FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new BoxItems()
+                .WithBoxId(!data.Keys.Contains("boxId") || data["boxId"] == null ? null : data["boxId"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.BoxItem[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.BoxItem.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["boxId"] = BoxId,
+                ["prizeTableName"] = PrizeTableName,
+                ["userId"] = UserId,
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.boxId != null)
-            {
+            if (BoxId != null) {
                 writer.WritePropertyName("boxId");
-                writer.Write(this.boxId);
+                writer.Write(BoxId.ToString());
             }
-            if(this.prizeTableName != null)
-            {
+            if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
-                writer.Write(this.prizeTableName);
+                writer.Write(PrizeTableName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.items != null)
-            {
+            if (Items != null) {
                 writer.WritePropertyName("items");
                 writer.WriteArrayStart();
-                foreach(var item in this.items)
+                foreach (var item in Items)
                 {
-                    item.WriteJson(writer);
+                    if (item != null) {
+                        item.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static BoxItems FromDict(JsonData data)
-        {
-            return new BoxItems()
-                .WithBoxId(data.Keys.Contains("boxId") && data["boxId"] != null ? data["boxId"].ToString() : null)
-                .WithPrizeTableName(data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithItems(data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Lottery.Model.BoxItem.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as BoxItems;
             var diff = 0;
-            if (boxId == null && boxId == other.boxId)
+            if (BoxId == null && BoxId == other.BoxId)
             {
                 // null and null
             }
             else
             {
-                diff += boxId.CompareTo(other.boxId);
+                diff += BoxId.CompareTo(other.BoxId);
             }
-            if (prizeTableName == null && prizeTableName == other.prizeTableName)
+            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {
                 // null and null
             }
             else
             {
-                diff += prizeTableName.CompareTo(other.prizeTableName);
+                diff += PrizeTableName.CompareTo(other.PrizeTableName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (items == null && items == other.items)
+            if (Items == null && Items == other.Items)
             {
                 // null and null
             }
             else
             {
-                diff += items.Count - other.items.Count;
-                for (var i = 0; i < items.Count; i++)
+                diff += Items.Length - other.Items.Length;
+                for (var i = 0; i < Items.Length; i++)
                 {
-                    diff += items[i].CompareTo(other.items[i]);
+                    diff += Items[i].CompareTo(other.Items[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["boxId"] = boxId;
-            data["prizeTableName"] = prizeTableName;
-            data["userId"] = userId;
-            data["items"] = new JsonData(items.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -28,144 +28,109 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class StartRequest : Gs2Request<StartRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string QuestGroupName { set; get; }
+        public string QuestName { set; get; }
+        public string AccessToken { set; get; }
+        public bool? Force { set; get; }
+        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public StartRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** クエストグループ名 */
-		[UnityEngine.SerializeField]
-        public string questGroupName;
-
-        /**
-         * クエストグループ名を設定
-         *
-         * @param questGroupName クエストグループ名
-         * @return this
-         */
         public StartRequest WithQuestGroupName(string questGroupName) {
-            this.questGroupName = questGroupName;
+            this.QuestGroupName = questGroupName;
             return this;
         }
 
-
-        /** クエストモデル名 */
-		[UnityEngine.SerializeField]
-        public string questName;
-
-        /**
-         * クエストモデル名を設定
-         *
-         * @param questName クエストモデル名
-         * @return this
-         */
         public StartRequest WithQuestName(string questName) {
-            this.questName = questName;
+            this.QuestName = questName;
             return this;
         }
 
-
-        /** すでに開始しているクエストがある場合にそれを破棄して開始するか */
-		[UnityEngine.SerializeField]
-        public bool? force;
-
-        /**
-         * すでに開始しているクエストがある場合にそれを破棄して開始するかを設定
-         *
-         * @param force すでに開始しているクエストがある場合にそれを破棄して開始するか
-         * @return this
-         */
-        public StartRequest WithForce(bool? force) {
-            this.force = force;
-            return this;
-        }
-
-
-        /** スタンプシートの変数に適用する設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * スタンプシートの変数に適用する設定値を設定
-         *
-         * @param config スタンプシートの変数に適用する設定値
-         * @return this
-         */
-        public StartRequest WithConfig(List<Config> config) {
-            this.config = config;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public StartRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public StartRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public StartRequest WithForce(bool? force) {
+            this.Force = force;
+            return this;
+        }
+
+        public StartRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
 
     	[Preserve]
-        public static StartRequest FromDict(JsonData data)
+        public static StartRequest FromJson(JsonData data)
         {
-            return new StartRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                questGroupName = data.Keys.Contains("questGroupName") && data["questGroupName"] != null ? data["questGroupName"].ToString(): null,
-                questName = data.Keys.Contains("questName") && data["questName"] != null ? data["questName"].ToString(): null,
-                force = data.Keys.Contains("force") && data["force"] != null ? (bool?)bool.Parse(data["force"].ToString()) : null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new StartRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithQuestName(!data.Keys.Contains("questName") || data["questName"] == null ? null : data["questName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Quest.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["questGroupName"] = QuestGroupName,
+                ["questName"] = QuestName,
+                ["accessToken"] = AccessToken,
+                ["force"] = Force,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["questGroupName"] = questGroupName;
-            data["questName"] = questName;
-            data["force"] = force;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (QuestGroupName != null) {
+                writer.WritePropertyName("questGroupName");
+                writer.Write(QuestGroupName.ToString());
+            }
+            if (QuestName != null) {
+                writer.WritePropertyName("questName");
+                writer.Write(QuestName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Force != null) {
+                writer.WritePropertyName("force");
+                writer.Write(bool.Parse(Force.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

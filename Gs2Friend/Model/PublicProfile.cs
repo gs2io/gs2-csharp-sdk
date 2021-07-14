@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class PublicProfile : IComparable
 	{
+        public string UserId { set; get; }
+        public string Value { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public PublicProfile WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 公開されるプロフィール */
-        public string publicProfile { set; get; }
-
-        /**
-         * 公開されるプロフィールを設定
-         *
-         * @param publicProfile 公開されるプロフィール
-         * @return this
-         */
-        public PublicProfile WithPublicProfile(string publicProfile) {
-            this.publicProfile = publicProfile;
+        public PublicProfile WithValue(string value) {
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static PublicProfile FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new PublicProfile()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithValue(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["publicProfile"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.publicProfile != null)
-            {
-                writer.WritePropertyName("publicProfile");
-                writer.Write(this.publicProfile);
+            if (Value != null) {
+                writer.WritePropertyName("value");
+                writer.Write(Value.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static PublicProfile FromDict(JsonData data)
-        {
-            return new PublicProfile()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPublicProfile(data.Keys.Contains("publicProfile") && data["publicProfile"] != null ? data["publicProfile"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as PublicProfile;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (publicProfile == null && publicProfile == other.publicProfile)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += publicProfile.CompareTo(other.publicProfile);
+                diff += Value.CompareTo(other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["publicProfile"] = publicProfile;
-            return data;
-        }
-	}
+    }
 }

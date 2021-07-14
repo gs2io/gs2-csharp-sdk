@@ -28,130 +28,97 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DrawByUserIdRequest : Gs2Request<DrawByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string LotteryName { set; get; }
+        public string UserId { set; get; }
+        public int? Count { set; get; }
+        public Gs2.Gs2Lottery.Model.Config[] Config { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DrawByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 抽選モデルの種類名 */
-		[UnityEngine.SerializeField]
-        public string lotteryName;
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param lotteryName 抽選モデルの種類名
-         * @return this
-         */
         public DrawByUserIdRequest WithLotteryName(string lotteryName) {
-            this.lotteryName = lotteryName;
+            this.LotteryName = lotteryName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DrawByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 抽選回数 */
-		[UnityEngine.SerializeField]
-        public int? count;
-
-        /**
-         * 抽選回数を設定
-         *
-         * @param count 抽選回数
-         * @return this
-         */
         public DrawByUserIdRequest WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
         }
 
-
-        /** スタンプシートのプレースホルダの適用する設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * スタンプシートのプレースホルダの適用する設定値を設定
-         *
-         * @param config スタンプシートのプレースホルダの適用する設定値
-         * @return this
-         */
-        public DrawByUserIdRequest WithConfig(List<Config> config) {
-            this.config = config;
+        public DrawByUserIdRequest WithConfig(Gs2.Gs2Lottery.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DrawByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DrawByUserIdRequest FromDict(JsonData data)
+        public static DrawByUserIdRequest FromJson(JsonData data)
         {
-            return new DrawByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                lotteryName = data.Keys.Contains("lotteryName") && data["lotteryName"] != null ? data["lotteryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                count = data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DrawByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithLotteryName(!data.Keys.Contains("lotteryName") || data["lotteryName"] == null ? null : data["lotteryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Lottery.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["lotteryName"] = LotteryName,
+                ["userId"] = UserId,
+                ["count"] = Count,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["lotteryName"] = lotteryName;
-            data["userId"] = userId;
-            data["count"] = count;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (LotteryName != null) {
+                writer.WritePropertyName("lotteryName");
+                writer.Write(LotteryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Count != null) {
+                writer.WritePropertyName("count");
+                writer.Write(int.Parse(Count.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

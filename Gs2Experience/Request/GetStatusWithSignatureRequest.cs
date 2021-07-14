@@ -28,122 +28,86 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class GetStatusWithSignatureRequest : Gs2Request<GetStatusWithSignatureRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string ExperienceName { set; get; }
+        public string PropertyId { set; get; }
+        public string KeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetStatusWithSignatureRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 経験値の種類の名前 */
-		[UnityEngine.SerializeField]
-        public string experienceName;
-
-        /**
-         * 経験値の種類の名前を設定
-         *
-         * @param experienceName 経験値の種類の名前
-         * @return this
-         */
-        public GetStatusWithSignatureRequest WithExperienceName(string experienceName) {
-            this.experienceName = experienceName;
-            return this;
-        }
-
-
-        /** プロパティID */
-		[UnityEngine.SerializeField]
-        public string propertyId;
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
-        public GetStatusWithSignatureRequest WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
-            return this;
-        }
-
-
-        /** 署名の作成に使用する 暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 署名の作成に使用する 暗号鍵 のGRNを設定
-         *
-         * @param keyId 署名の作成に使用する 暗号鍵 のGRN
-         * @return this
-         */
-        public GetStatusWithSignatureRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetStatusWithSignatureRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetStatusWithSignatureRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public GetStatusWithSignatureRequest WithExperienceName(string experienceName) {
+            this.ExperienceName = experienceName;
+            return this;
+        }
+
+        public GetStatusWithSignatureRequest WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
+            return this;
+        }
+
+        public GetStatusWithSignatureRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
     	[Preserve]
-        public static GetStatusWithSignatureRequest FromDict(JsonData data)
+        public static GetStatusWithSignatureRequest FromJson(JsonData data)
         {
-            return new GetStatusWithSignatureRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                experienceName = data.Keys.Contains("experienceName") && data["experienceName"] != null ? data["experienceName"].ToString(): null,
-                propertyId = data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetStatusWithSignatureRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["experienceName"] = ExperienceName,
+                ["propertyId"] = PropertyId,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["experienceName"] = experienceName;
-            data["propertyId"] = propertyId;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (ExperienceName != null) {
+                writer.WritePropertyName("experienceName");
+                writer.Write(ExperienceName.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

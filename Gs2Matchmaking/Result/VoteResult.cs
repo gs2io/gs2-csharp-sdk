@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class VoteResult
+	[System.Serializable]
+	public class VoteResult : IResult
 	{
-        /** 投票用紙 */
-        public Ballot item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Ballot Item { set; get; }
 
+        public VoteResult WithItem(Gs2.Gs2Matchmaking.Model.Ballot item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static VoteResult FromDict(JsonData data)
+        public static VoteResult FromJson(JsonData data)
         {
-            return new VoteResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Matchmaking.Model.Ballot.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new VoteResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.Ballot.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

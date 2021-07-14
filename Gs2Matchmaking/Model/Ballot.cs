@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class Ballot : IComparable
 	{
+        public string UserId { set; get; }
+        public string RatingName { set; get; }
+        public string GatheringName { set; get; }
+        public int? NumberOfPlayer { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Ballot WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** レーティング計算に使用するレーティング名 */
-        public string ratingName { set; get; }
-
-        /**
-         * レーティング計算に使用するレーティング名を設定
-         *
-         * @param ratingName レーティング計算に使用するレーティング名
-         * @return this
-         */
         public Ballot WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-        /** 投票対象のギャザリング名 */
-        public string gatheringName { set; get; }
-
-        /**
-         * 投票対象のギャザリング名を設定
-         *
-         * @param gatheringName 投票対象のギャザリング名
-         * @return this
-         */
         public Ballot WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
 
-        /** 参加人数 */
-        public int? numberOfPlayer { set; get; }
-
-        /**
-         * 参加人数を設定
-         *
-         * @param numberOfPlayer 参加人数
-         * @return this
-         */
         public Ballot WithNumberOfPlayer(int? numberOfPlayer) {
-            this.numberOfPlayer = numberOfPlayer;
+            this.NumberOfPlayer = numberOfPlayer;
             return this;
+        }
+
+    	[Preserve]
+        public static Ballot FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Ballot()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithNumberOfPlayer(!data.Keys.Contains("numberOfPlayer") || data["numberOfPlayer"] == null ? null : (int?)int.Parse(data["numberOfPlayer"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["ratingName"] = RatingName,
+                ["gatheringName"] = GatheringName,
+                ["numberOfPlayer"] = NumberOfPlayer,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.ratingName != null)
-            {
+            if (RatingName != null) {
                 writer.WritePropertyName("ratingName");
-                writer.Write(this.ratingName);
+                writer.Write(RatingName.ToString());
             }
-            if(this.gatheringName != null)
-            {
+            if (GatheringName != null) {
                 writer.WritePropertyName("gatheringName");
-                writer.Write(this.gatheringName);
+                writer.Write(GatheringName.ToString());
             }
-            if(this.numberOfPlayer.HasValue)
-            {
+            if (NumberOfPlayer != null) {
                 writer.WritePropertyName("numberOfPlayer");
-                writer.Write(this.numberOfPlayer.Value);
+                writer.Write(int.Parse(NumberOfPlayer.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Ballot FromDict(JsonData data)
-        {
-            return new Ballot()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithRatingName(data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString() : null)
-                .WithGatheringName(data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString() : null)
-                .WithNumberOfPlayer(data.Keys.Contains("numberOfPlayer") && data["numberOfPlayer"] != null ? (int?)int.Parse(data["numberOfPlayer"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Ballot;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (ratingName == null && ratingName == other.ratingName)
+            if (RatingName == null && RatingName == other.RatingName)
             {
                 // null and null
             }
             else
             {
-                diff += ratingName.CompareTo(other.ratingName);
+                diff += RatingName.CompareTo(other.RatingName);
             }
-            if (gatheringName == null && gatheringName == other.gatheringName)
+            if (GatheringName == null && GatheringName == other.GatheringName)
             {
                 // null and null
             }
             else
             {
-                diff += gatheringName.CompareTo(other.gatheringName);
+                diff += GatheringName.CompareTo(other.GatheringName);
             }
-            if (numberOfPlayer == null && numberOfPlayer == other.numberOfPlayer)
+            if (NumberOfPlayer == null && NumberOfPlayer == other.NumberOfPlayer)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(numberOfPlayer - other.numberOfPlayer);
+                diff += (int)(NumberOfPlayer - other.NumberOfPlayer);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["ratingName"] = ratingName;
-            data["gatheringName"] = gatheringName;
-            data["numberOfPlayer"] = numberOfPlayer;
-            return data;
-        }
-	}
+    }
 }

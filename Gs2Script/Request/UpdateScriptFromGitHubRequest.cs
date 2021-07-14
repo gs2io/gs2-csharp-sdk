@@ -28,90 +28,73 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class UpdateScriptFromGitHubRequest : Gs2Request<UpdateScriptFromGitHubRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ScriptName { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Script.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateScriptFromGitHubRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スクリプト名 */
-		[UnityEngine.SerializeField]
-        public string scriptName;
-
-        /**
-         * スクリプト名を設定
-         *
-         * @param scriptName スクリプト名
-         * @return this
-         */
         public UpdateScriptFromGitHubRequest WithScriptName(string scriptName) {
-            this.scriptName = scriptName;
+            this.ScriptName = scriptName;
             return this;
         }
 
-
-        /** 説明文 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public UpdateScriptFromGitHubRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** GitHubからソースコードをチェックアウトしてくる設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Script.Model.GitHubCheckoutSetting checkoutSetting;
-
-        /**
-         * GitHubからソースコードをチェックアウトしてくる設定を設定
-         *
-         * @param checkoutSetting GitHubからソースコードをチェックアウトしてくる設定
-         * @return this
-         */
-        public UpdateScriptFromGitHubRequest WithCheckoutSetting(global::Gs2.Gs2Script.Model.GitHubCheckoutSetting checkoutSetting) {
-            this.checkoutSetting = checkoutSetting;
+        public UpdateScriptFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Script.Model.GitHubCheckoutSetting checkoutSetting) {
+            this.CheckoutSetting = checkoutSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateScriptFromGitHubRequest FromDict(JsonData data)
+        public static UpdateScriptFromGitHubRequest FromJson(JsonData data)
         {
-            return new UpdateScriptFromGitHubRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                scriptName = data.Keys.Contains("scriptName") && data["scriptName"] != null ? data["scriptName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                checkoutSetting = data.Keys.Contains("checkoutSetting") && data["checkoutSetting"] != null ? global::Gs2.Gs2Script.Model.GitHubCheckoutSetting.FromDict(data["checkoutSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateScriptFromGitHubRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithScriptName(!data.Keys.Contains("scriptName") || data["scriptName"] == null ? null : data["scriptName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Script.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["scriptName"] = ScriptName,
+                ["description"] = Description,
+                ["checkoutSetting"] = CheckoutSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["scriptName"] = scriptName;
-            data["description"] = description;
-            data["checkoutSetting"] = checkoutSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ScriptName != null) {
+                writer.WritePropertyName("scriptName");
+                writer.Write(ScriptName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (CheckoutSetting != null) {
+                CheckoutSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

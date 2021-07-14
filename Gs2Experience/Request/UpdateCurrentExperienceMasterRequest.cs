@@ -28,54 +28,50 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateCurrentExperienceMasterRequest : Gs2Request<UpdateCurrentExperienceMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Settings { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateCurrentExperienceMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** マスターデータ */
-		[UnityEngine.SerializeField]
-        public string settings;
-
-        /**
-         * マスターデータを設定
-         *
-         * @param settings マスターデータ
-         * @return this
-         */
         public UpdateCurrentExperienceMasterRequest WithSettings(string settings) {
-            this.settings = settings;
+            this.Settings = settings;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateCurrentExperienceMasterRequest FromDict(JsonData data)
+        public static UpdateCurrentExperienceMasterRequest FromJson(JsonData data)
         {
-            return new UpdateCurrentExperienceMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                settings = data.Keys.Contains("settings") && data["settings"] != null ? data["settings"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentExperienceMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithSettings(!data.Keys.Contains("settings") || data["settings"] == null ? null : data["settings"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["settings"] = Settings,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["settings"] = settings;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Settings != null) {
+                writer.WritePropertyName("settings");
+                writer.Write(Settings.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

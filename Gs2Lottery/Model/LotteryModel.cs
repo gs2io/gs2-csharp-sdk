@@ -23,284 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class LotteryModel : IComparable
 	{
+        public string LotteryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Mode { set; get; }
+        public string Method { set; get; }
+        public string PrizeTableName { set; get; }
+        public string ChoicePrizeTableScriptId { set; get; }
 
-        /** 抽選の種類マスター */
-        public string lotteryModelId { set; get; }
-
-        /**
-         * 抽選の種類マスターを設定
-         *
-         * @param lotteryModelId 抽選の種類マスター
-         * @return this
-         */
         public LotteryModel WithLotteryModelId(string lotteryModelId) {
-            this.lotteryModelId = lotteryModelId;
+            this.LotteryModelId = lotteryModelId;
             return this;
         }
 
-        /** 抽選モデルの種類名 */
-        public string name { set; get; }
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param name 抽選モデルの種類名
-         * @return this
-         */
         public LotteryModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 抽選モデルの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 抽選モデルの種類のメタデータを設定
-         *
-         * @param metadata 抽選モデルの種類のメタデータ
-         * @return this
-         */
         public LotteryModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 抽選モード */
-        public string mode { set; get; }
-
-        /**
-         * 抽選モードを設定
-         *
-         * @param mode 抽選モード
-         * @return this
-         */
         public LotteryModel WithMode(string mode) {
-            this.mode = mode;
+            this.Mode = mode;
             return this;
         }
 
-        /** 抽選方法 */
-        public string method { set; get; }
-
-        /**
-         * 抽選方法を設定
-         *
-         * @param method 抽選方法
-         * @return this
-         */
         public LotteryModel WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-        /** 景品テーブルの名前 */
-        public string prizeTableName { set; get; }
-
-        /**
-         * 景品テーブルの名前を設定
-         *
-         * @param prizeTableName 景品テーブルの名前
-         * @return this
-         */
         public LotteryModel WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-        /** 抽選テーブルを確定するスクリプト のGRN */
-        public string choicePrizeTableScriptId { set; get; }
-
-        /**
-         * 抽選テーブルを確定するスクリプト のGRNを設定
-         *
-         * @param choicePrizeTableScriptId 抽選テーブルを確定するスクリプト のGRN
-         * @return this
-         */
         public LotteryModel WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.choicePrizeTableScriptId = choicePrizeTableScriptId;
+            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
+        }
+
+    	[Preserve]
+        public static LotteryModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new LotteryModel()
+                .WithLotteryModelId(!data.Keys.Contains("lotteryModelId") || data["lotteryModelId"] == null ? null : data["lotteryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["lotteryModelId"] = LotteryModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["mode"] = Mode,
+                ["method"] = Method,
+                ["prizeTableName"] = PrizeTableName,
+                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.lotteryModelId != null)
-            {
+            if (LotteryModelId != null) {
                 writer.WritePropertyName("lotteryModelId");
-                writer.Write(this.lotteryModelId);
+                writer.Write(LotteryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.mode != null)
-            {
+            if (Mode != null) {
                 writer.WritePropertyName("mode");
-                writer.Write(this.mode);
+                writer.Write(Mode.ToString());
             }
-            if(this.method != null)
-            {
+            if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(this.method);
+                writer.Write(Method.ToString());
             }
-            if(this.prizeTableName != null)
-            {
+            if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
-                writer.Write(this.prizeTableName);
+                writer.Write(PrizeTableName.ToString());
             }
-            if(this.choicePrizeTableScriptId != null)
-            {
+            if (ChoicePrizeTableScriptId != null) {
                 writer.WritePropertyName("choicePrizeTableScriptId");
-                writer.Write(this.choicePrizeTableScriptId);
+                writer.Write(ChoicePrizeTableScriptId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetLotteryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["lotteryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["lotteryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static LotteryModel FromDict(JsonData data)
-        {
-            return new LotteryModel()
-                .WithLotteryModelId(data.Keys.Contains("lotteryModelId") && data["lotteryModelId"] != null ? data["lotteryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithMode(data.Keys.Contains("mode") && data["mode"] != null ? data["mode"].ToString() : null)
-                .WithMethod(data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString() : null)
-                .WithPrizeTableName(data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString() : null)
-                .WithChoicePrizeTableScriptId(data.Keys.Contains("choicePrizeTableScriptId") && data["choicePrizeTableScriptId"] != null ? data["choicePrizeTableScriptId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as LotteryModel;
             var diff = 0;
-            if (lotteryModelId == null && lotteryModelId == other.lotteryModelId)
+            if (LotteryModelId == null && LotteryModelId == other.LotteryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += lotteryModelId.CompareTo(other.lotteryModelId);
+                diff += LotteryModelId.CompareTo(other.LotteryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (mode == null && mode == other.mode)
+            if (Mode == null && Mode == other.Mode)
             {
                 // null and null
             }
             else
             {
-                diff += mode.CompareTo(other.mode);
+                diff += Mode.CompareTo(other.Mode);
             }
-            if (method == null && method == other.method)
+            if (Method == null && Method == other.Method)
             {
                 // null and null
             }
             else
             {
-                diff += method.CompareTo(other.method);
+                diff += Method.CompareTo(other.Method);
             }
-            if (prizeTableName == null && prizeTableName == other.prizeTableName)
+            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {
                 // null and null
             }
             else
             {
-                diff += prizeTableName.CompareTo(other.prizeTableName);
+                diff += PrizeTableName.CompareTo(other.PrizeTableName);
             }
-            if (choicePrizeTableScriptId == null && choicePrizeTableScriptId == other.choicePrizeTableScriptId)
+            if (ChoicePrizeTableScriptId == null && ChoicePrizeTableScriptId == other.ChoicePrizeTableScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += choicePrizeTableScriptId.CompareTo(other.choicePrizeTableScriptId);
+                diff += ChoicePrizeTableScriptId.CompareTo(other.ChoicePrizeTableScriptId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["lotteryModelId"] = lotteryModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["mode"] = mode;
-            data["method"] = method;
-            data["prizeTableName"] = prizeTableName;
-            data["choicePrizeTableScriptId"] = choicePrizeTableScriptId;
-            return data;
-        }
-	}
+    }
 }

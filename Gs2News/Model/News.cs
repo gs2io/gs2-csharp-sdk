@@ -23,207 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2News.Model
 {
+
 	[Preserve]
 	public class News : IComparable
 	{
+        public string Section { set; get; }
+        public string Content { set; get; }
+        public string Title { set; get; }
+        public string ScheduleEventId { set; get; }
+        public long? Timestamp { set; get; }
+        public string FrontMatter { set; get; }
 
-        /** セクション名 */
-        public string section { set; get; }
-
-        /**
-         * セクション名を設定
-         *
-         * @param section セクション名
-         * @return this
-         */
         public News WithSection(string section) {
-            this.section = section;
+            this.Section = section;
             return this;
         }
 
-        /** コンテンツ名 */
-        public string content { set; get; }
-
-        /**
-         * コンテンツ名を設定
-         *
-         * @param content コンテンツ名
-         * @return this
-         */
         public News WithContent(string content) {
-            this.content = content;
+            this.Content = content;
             return this;
         }
 
-        /** 記事見出し */
-        public string title { set; get; }
-
-        /**
-         * 記事見出しを設定
-         *
-         * @param title 記事見出し
-         * @return this
-         */
         public News WithTitle(string title) {
-            this.title = title;
+            this.Title = title;
             return this;
         }
 
-        /** 配信期間を決定する GS2-Schedule のイベントID */
-        public string scheduleEventId { set; get; }
-
-        /**
-         * 配信期間を決定する GS2-Schedule のイベントIDを設定
-         *
-         * @param scheduleEventId 配信期間を決定する GS2-Schedule のイベントID
-         * @return this
-         */
         public News WithScheduleEventId(string scheduleEventId) {
-            this.scheduleEventId = scheduleEventId;
+            this.ScheduleEventId = scheduleEventId;
             return this;
         }
 
-        /** タイムスタンプ */
-        public long? timestamp { set; get; }
-
-        /**
-         * タイムスタンプを設定
-         *
-         * @param timestamp タイムスタンプ
-         * @return this
-         */
         public News WithTimestamp(long? timestamp) {
-            this.timestamp = timestamp;
+            this.Timestamp = timestamp;
             return this;
         }
 
-        /** Front Matter */
-        public string frontMatter { set; get; }
-
-        /**
-         * Front Matterを設定
-         *
-         * @param frontMatter Front Matter
-         * @return this
-         */
         public News WithFrontMatter(string frontMatter) {
-            this.frontMatter = frontMatter;
+            this.FrontMatter = frontMatter;
             return this;
+        }
+
+    	[Preserve]
+        public static News FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new News()
+                .WithSection(!data.Keys.Contains("section") || data["section"] == null ? null : data["section"].ToString())
+                .WithContent(!data.Keys.Contains("content") || data["content"] == null ? null : data["content"].ToString())
+                .WithTitle(!data.Keys.Contains("title") || data["title"] == null ? null : data["title"].ToString())
+                .WithScheduleEventId(!data.Keys.Contains("scheduleEventId") || data["scheduleEventId"] == null ? null : data["scheduleEventId"].ToString())
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()))
+                .WithFrontMatter(!data.Keys.Contains("frontMatter") || data["frontMatter"] == null ? null : data["frontMatter"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["section"] = Section,
+                ["content"] = Content,
+                ["title"] = Title,
+                ["scheduleEventId"] = ScheduleEventId,
+                ["timestamp"] = Timestamp,
+                ["frontMatter"] = FrontMatter,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.section != null)
-            {
+            if (Section != null) {
                 writer.WritePropertyName("section");
-                writer.Write(this.section);
+                writer.Write(Section.ToString());
             }
-            if(this.content != null)
-            {
+            if (Content != null) {
                 writer.WritePropertyName("content");
-                writer.Write(this.content);
+                writer.Write(Content.ToString());
             }
-            if(this.title != null)
-            {
+            if (Title != null) {
                 writer.WritePropertyName("title");
-                writer.Write(this.title);
+                writer.Write(Title.ToString());
             }
-            if(this.scheduleEventId != null)
-            {
+            if (ScheduleEventId != null) {
                 writer.WritePropertyName("scheduleEventId");
-                writer.Write(this.scheduleEventId);
+                writer.Write(ScheduleEventId.ToString());
             }
-            if(this.timestamp.HasValue)
-            {
+            if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(this.timestamp.Value);
+                writer.Write(long.Parse(Timestamp.ToString()));
             }
-            if(this.frontMatter != null)
-            {
+            if (FrontMatter != null) {
                 writer.WritePropertyName("frontMatter");
-                writer.Write(this.frontMatter);
+                writer.Write(FrontMatter.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static News FromDict(JsonData data)
-        {
-            return new News()
-                .WithSection(data.Keys.Contains("section") && data["section"] != null ? data["section"].ToString() : null)
-                .WithContent(data.Keys.Contains("content") && data["content"] != null ? data["content"].ToString() : null)
-                .WithTitle(data.Keys.Contains("title") && data["title"] != null ? data["title"].ToString() : null)
-                .WithScheduleEventId(data.Keys.Contains("scheduleEventId") && data["scheduleEventId"] != null ? data["scheduleEventId"].ToString() : null)
-                .WithTimestamp(data.Keys.Contains("timestamp") && data["timestamp"] != null ? (long?)long.Parse(data["timestamp"].ToString()) : null)
-                .WithFrontMatter(data.Keys.Contains("frontMatter") && data["frontMatter"] != null ? data["frontMatter"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as News;
             var diff = 0;
-            if (section == null && section == other.section)
+            if (Section == null && Section == other.Section)
             {
                 // null and null
             }
             else
             {
-                diff += section.CompareTo(other.section);
+                diff += Section.CompareTo(other.Section);
             }
-            if (content == null && content == other.content)
+            if (Content == null && Content == other.Content)
             {
                 // null and null
             }
             else
             {
-                diff += content.CompareTo(other.content);
+                diff += Content.CompareTo(other.Content);
             }
-            if (title == null && title == other.title)
+            if (Title == null && Title == other.Title)
             {
                 // null and null
             }
             else
             {
-                diff += title.CompareTo(other.title);
+                diff += Title.CompareTo(other.Title);
             }
-            if (scheduleEventId == null && scheduleEventId == other.scheduleEventId)
+            if (ScheduleEventId == null && ScheduleEventId == other.ScheduleEventId)
             {
                 // null and null
             }
             else
             {
-                diff += scheduleEventId.CompareTo(other.scheduleEventId);
+                diff += ScheduleEventId.CompareTo(other.ScheduleEventId);
             }
-            if (timestamp == null && timestamp == other.timestamp)
+            if (Timestamp == null && Timestamp == other.Timestamp)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(timestamp - other.timestamp);
+                diff += (int)(Timestamp - other.Timestamp);
             }
-            if (frontMatter == null && frontMatter == other.frontMatter)
+            if (FrontMatter == null && FrontMatter == other.FrontMatter)
             {
                 // null and null
             }
             else
             {
-                diff += frontMatter.CompareTo(other.frontMatter);
+                diff += FrontMatter.CompareTo(other.FrontMatter);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["section"] = section;
-            data["content"] = content;
-            data["title"] = title;
-            data["scheduleEventId"] = scheduleEventId;
-            data["timestamp"] = timestamp;
-            data["frontMatter"] = frontMatter;
-            return data;
-        }
-	}
+    }
 }

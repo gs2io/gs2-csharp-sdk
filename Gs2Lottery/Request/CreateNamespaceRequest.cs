@@ -28,144 +28,109 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public string LotteryTriggerScriptId { set; get; }
+        public string ChoicePrizeTableScriptId { set; get; }
+        public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 景品付与処理をジョブとして追加するキューのネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string queueNamespaceId;
-
-        /**
-         * 景品付与処理をジョブとして追加するキューのネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 景品付与処理をジョブとして追加するキューのネームスペース のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-
-        /** 景品付与処理のスタンプシートで使用する暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 景品付与処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 景品付与処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-
-        /** 抽選処理時 に実行されるスクリプト のGRN */
-		[UnityEngine.SerializeField]
-        public string lotteryTriggerScriptId;
-
-        /**
-         * 抽選処理時 に実行されるスクリプト のGRNを設定
-         *
-         * @param lotteryTriggerScriptId 抽選処理時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithLotteryTriggerScriptId(string lotteryTriggerScriptId) {
-            this.lotteryTriggerScriptId = lotteryTriggerScriptId;
+            this.LotteryTriggerScriptId = lotteryTriggerScriptId;
             return this;
         }
 
-
-        /** 排出テーブル選択時 に実行されるスクリプト のGRN */
-		[UnityEngine.SerializeField]
-        public string choicePrizeTableScriptId;
-
-        /**
-         * 排出テーブル選択時 に実行されるスクリプト のGRNを設定
-         *
-         * @param choicePrizeTableScriptId 排出テーブル選択時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.choicePrizeTableScriptId = choicePrizeTableScriptId;
+            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Lottery.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Lottery.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Lottery.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                queueNamespaceId = data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                lotteryTriggerScriptId = data.Keys.Contains("lotteryTriggerScriptId") && data["lotteryTriggerScriptId"] != null ? data["lotteryTriggerScriptId"].ToString(): null,
-                choicePrizeTableScriptId = data.Keys.Contains("choicePrizeTableScriptId") && data["choicePrizeTableScriptId"] != null ? data["choicePrizeTableScriptId"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Lottery.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithLotteryTriggerScriptId(!data.Keys.Contains("lotteryTriggerScriptId") || data["lotteryTriggerScriptId"] == null ? null : data["lotteryTriggerScriptId"].ToString())
+                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Lottery.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["lotteryTriggerScriptId"] = LotteryTriggerScriptId,
+                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["lotteryTriggerScriptId"] = lotteryTriggerScriptId;
-            data["choicePrizeTableScriptId"] = choicePrizeTableScriptId;
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (LotteryTriggerScriptId != null) {
+                writer.WritePropertyName("lotteryTriggerScriptId");
+                writer.Write(LotteryTriggerScriptId.ToString());
+            }
+            if (ChoicePrizeTableScriptId != null) {
+                writer.WritePropertyName("choicePrizeTableScriptId");
+                writer.Write(ChoicePrizeTableScriptId.ToString());
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

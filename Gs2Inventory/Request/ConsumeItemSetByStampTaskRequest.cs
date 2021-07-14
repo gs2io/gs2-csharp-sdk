@@ -28,72 +28,50 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class ConsumeItemSetByStampTaskRequest : Gs2Request<ConsumeItemSetByStampTaskRequest>
 	{
+        public string StampTask { set; get; }
+        public string KeyId { set; get; }
 
-        /** スタンプタスク */
-		[UnityEngine.SerializeField]
-        public string stampTask;
-
-        /**
-         * スタンプタスクを設定
-         *
-         * @param stampTask スタンプタスク
-         * @return this
-         */
         public ConsumeItemSetByStampTaskRequest WithStampTask(string stampTask) {
-            this.stampTask = stampTask;
+            this.StampTask = stampTask;
             return this;
         }
 
-
-        /** スタンプタスクの署名検証に使用する 暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * スタンプタスクの署名検証に使用する 暗号鍵 のGRNを設定
-         *
-         * @param keyId スタンプタスクの署名検証に使用する 暗号鍵 のGRN
-         * @return this
-         */
         public ConsumeItemSetByStampTaskRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public ConsumeItemSetByStampTaskRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static ConsumeItemSetByStampTaskRequest FromDict(JsonData data)
+        public static ConsumeItemSetByStampTaskRequest FromJson(JsonData data)
         {
-            return new ConsumeItemSetByStampTaskRequest {
-                stampTask = data.Keys.Contains("stampTask") && data["stampTask"] != null ? data["stampTask"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ConsumeItemSetByStampTaskRequest()
+                .WithStampTask(!data.Keys.Contains("stampTask") || data["stampTask"] == null ? null : data["stampTask"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stampTask"] = StampTask,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stampTask"] = stampTask;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (StampTask != null) {
+                writer.WritePropertyName("stampTask");
+                writer.Write(StampTask.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

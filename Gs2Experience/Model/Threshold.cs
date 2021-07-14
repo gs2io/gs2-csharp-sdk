@@ -23,104 +23,94 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Experience.Model
 {
+
 	[Preserve]
 	public class Threshold : IComparable
 	{
+        public string Metadata { set; get; }
+        public long[] Values { set; get; }
 
-        /** ランクアップ閾値のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * ランクアップ閾値のメタデータを設定
-         *
-         * @param metadata ランクアップ閾値のメタデータ
-         * @return this
-         */
         public Threshold WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** ランクアップ経験値閾値リスト */
-        public List<long?> values { set; get; }
-
-        /**
-         * ランクアップ経験値閾値リストを設定
-         *
-         * @param values ランクアップ経験値閾値リスト
-         * @return this
-         */
-        public Threshold WithValues(List<long?> values) {
-            this.values = values;
+        public Threshold WithValues(long[] values) {
+            this.Values = values;
             return this;
+        }
+
+    	[Preserve]
+        public static Threshold FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Threshold()
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return long.Parse(v.ToString());
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["metadata"] = Metadata,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((long?)long.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.values != null)
-            {
+            if (Values != null) {
                 writer.WritePropertyName("values");
                 writer.WriteArrayStart();
-                foreach(var item in this.values)
+                foreach (var value in Values)
                 {
-                    writer.Write(item.Value);
+                    if (value != null) {
+                        writer.Write(long.Parse(value.ToString()));
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static Threshold FromDict(JsonData data)
-        {
-            return new Threshold()
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithValues(data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (long?)long.Parse(value.ToString());
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as Threshold;
             var diff = 0;
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (values == null && values == other.values)
+            if (Values == null && Values == other.Values)
             {
                 // null and null
             }
             else
             {
-                diff += values.Count - other.values.Count;
-                for (var i = 0; i < values.Count; i++)
+                diff += Values.Length - other.Values.Length;
+                for (var i = 0; i < Values.Length; i++)
                 {
-                    diff += (int)(values[i] - other.values[i]);
+                    diff += (int)(Values[i] - other.Values[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["metadata"] = metadata;
-            data["values"] = new JsonData(values);
-            return data;
-        }
-	}
+    }
 }

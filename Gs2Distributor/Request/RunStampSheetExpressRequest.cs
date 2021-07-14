@@ -28,90 +28,62 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampSheetExpressRequest : Gs2Request<RunStampSheetExpressRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string StampSheet { set; get; }
+        public string KeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public RunStampSheetExpressRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 実行するスタンプシート */
-		[UnityEngine.SerializeField]
-        public string stampSheet;
-
-        /**
-         * 実行するスタンプシートを設定
-         *
-         * @param stampSheet 実行するスタンプシート
-         * @return this
-         */
         public RunStampSheetExpressRequest WithStampSheet(string stampSheet) {
-            this.stampSheet = stampSheet;
+            this.StampSheet = stampSheet;
             return this;
         }
 
-
-        /** スタンプシートの暗号化に使用した暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * スタンプシートの暗号化に使用した暗号鍵GRNを設定
-         *
-         * @param keyId スタンプシートの暗号化に使用した暗号鍵GRN
-         * @return this
-         */
         public RunStampSheetExpressRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public RunStampSheetExpressRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static RunStampSheetExpressRequest FromDict(JsonData data)
+        public static RunStampSheetExpressRequest FromJson(JsonData data)
         {
-            return new RunStampSheetExpressRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                stampSheet = data.Keys.Contains("stampSheet") && data["stampSheet"] != null ? data["stampSheet"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampSheetExpressRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["stampSheet"] = StampSheet,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["stampSheet"] = stampSheet;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (StampSheet != null) {
+                writer.WritePropertyName("stampSheet");
+                writer.Write(StampSheet.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

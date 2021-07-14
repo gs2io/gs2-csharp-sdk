@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class AttributeRange : IComparable
 	{
+        public string Name { set; get; }
+        public int? Min { set; get; }
+        public int? Max { set; get; }
 
-        /** 属性名 */
-        public string name { set; get; }
-
-        /**
-         * 属性名を設定
-         *
-         * @param name 属性名
-         * @return this
-         */
         public AttributeRange WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ギャザリング参加可能な属性値の最小値 */
-        public int? min { set; get; }
-
-        /**
-         * ギャザリング参加可能な属性値の最小値を設定
-         *
-         * @param min ギャザリング参加可能な属性値の最小値
-         * @return this
-         */
         public AttributeRange WithMin(int? min) {
-            this.min = min;
+            this.Min = min;
             return this;
         }
 
-        /** ギャザリング参加可能な属性値の最大値 */
-        public int? max { set; get; }
-
-        /**
-         * ギャザリング参加可能な属性値の最大値を設定
-         *
-         * @param max ギャザリング参加可能な属性値の最大値
-         * @return this
-         */
         public AttributeRange WithMax(int? max) {
-            this.max = max;
+            this.Max = max;
             return this;
+        }
+
+    	[Preserve]
+        public static AttributeRange FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AttributeRange()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : (int?)int.Parse(data["min"].ToString()))
+                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : (int?)int.Parse(data["max"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["min"] = Min,
+                ["max"] = Max,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.min.HasValue)
-            {
+            if (Min != null) {
                 writer.WritePropertyName("min");
-                writer.Write(this.min.Value);
+                writer.Write(int.Parse(Min.ToString()));
             }
-            if(this.max.HasValue)
-            {
+            if (Max != null) {
                 writer.WritePropertyName("max");
-                writer.Write(this.max.Value);
+                writer.Write(int.Parse(Max.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static AttributeRange FromDict(JsonData data)
-        {
-            return new AttributeRange()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMin(data.Keys.Contains("min") && data["min"] != null ? (int?)int.Parse(data["min"].ToString()) : null)
-                .WithMax(data.Keys.Contains("max") && data["max"] != null ? (int?)int.Parse(data["max"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AttributeRange;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (min == null && min == other.min)
+            if (Min == null && Min == other.Min)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(min - other.min);
+                diff += (int)(Min - other.Min);
             }
-            if (max == null && max == other.max)
+            if (Max == null && Max == other.Max)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(max - other.max);
+                diff += (int)(Max - other.Max);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["min"] = min;
-            data["max"] = max;
-            return data;
-        }
-	}
+    }
 }

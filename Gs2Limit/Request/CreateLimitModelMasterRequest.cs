@@ -28,162 +28,122 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CreateLimitModelMasterRequest : Gs2Request<CreateLimitModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 回数制限の種類名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * 回数制限の種類名を設定
-         *
-         * @param name 回数制限の種類名
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** 回数制限の種類マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 回数制限の種類マスターの説明を設定
-         *
-         * @param description 回数制限の種類マスターの説明
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 回数制限の種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 回数制限の種類のメタデータを設定
-         *
-         * @param metadata 回数制限の種類のメタデータ
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** リセットタイミング */
-		[UnityEngine.SerializeField]
-        public string resetType;
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-
-        /** リセットをする日にち */
-		[UnityEngine.SerializeField]
-        public int? resetDayOfMonth;
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-
-        /** リセットする曜日 */
-		[UnityEngine.SerializeField]
-        public string resetDayOfWeek;
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-
-        /** リセット時刻 */
-		[UnityEngine.SerializeField]
-        public int? resetHour;
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public CreateLimitModelMasterRequest WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateLimitModelMasterRequest FromDict(JsonData data)
+        public static CreateLimitModelMasterRequest FromJson(JsonData data)
         {
-            return new CreateLimitModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                resetType = data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString(): null,
-                resetDayOfMonth = data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null,
-                resetDayOfWeek = data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString(): null,
-                resetHour = data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateLimitModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (ResetType != null) {
+                writer.WritePropertyName("resetType");
+                writer.Write(ResetType.ToString());
+            }
+            if (ResetDayOfMonth != null) {
+                writer.WritePropertyName("resetDayOfMonth");
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
+            }
+            if (ResetDayOfWeek != null) {
+                writer.WritePropertyName("resetDayOfWeek");
+                writer.Write(ResetDayOfWeek.ToString());
+            }
+            if (ResetHour != null) {
+                writer.WritePropertyName("resetHour");
+                writer.Write(int.Parse(ResetHour.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

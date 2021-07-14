@@ -28,122 +28,86 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetScoreRequest : Gs2Request<GetScoreRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
+        public string AccessToken { set; get; }
+        public string ScorerUserId { set; get; }
+        public string UniqueId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetScoreRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public GetScoreRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-
-        /** スコアを獲得したユーザID */
-		[UnityEngine.SerializeField]
-        public string scorerUserId;
-
-        /**
-         * スコアを獲得したユーザIDを設定
-         *
-         * @param scorerUserId スコアを獲得したユーザID
-         * @return this
-         */
-        public GetScoreRequest WithScorerUserId(string scorerUserId) {
-            this.scorerUserId = scorerUserId;
-            return this;
-        }
-
-
-        /** スコアのユニークID */
-		[UnityEngine.SerializeField]
-        public string uniqueId;
-
-        /**
-         * スコアのユニークIDを設定
-         *
-         * @param uniqueId スコアのユニークID
-         * @return this
-         */
-        public GetScoreRequest WithUniqueId(string uniqueId) {
-            this.uniqueId = uniqueId;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetScoreRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetScoreRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public GetScoreRequest WithScorerUserId(string scorerUserId) {
+            this.ScorerUserId = scorerUserId;
+            return this;
+        }
+
+        public GetScoreRequest WithUniqueId(string uniqueId) {
+            this.UniqueId = uniqueId;
             return this;
         }
 
     	[Preserve]
-        public static GetScoreRequest FromDict(JsonData data)
+        public static GetScoreRequest FromJson(JsonData data)
         {
-            return new GetScoreRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
-                scorerUserId = data.Keys.Contains("scorerUserId") && data["scorerUserId"] != null ? data["scorerUserId"].ToString(): null,
-                uniqueId = data.Keys.Contains("uniqueId") && data["uniqueId"] != null ? data["uniqueId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetScoreRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithScorerUserId(!data.Keys.Contains("scorerUserId") || data["scorerUserId"] == null ? null : data["scorerUserId"].ToString())
+                .WithUniqueId(!data.Keys.Contains("uniqueId") || data["uniqueId"] == null ? null : data["uniqueId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
+                ["accessToken"] = AccessToken,
+                ["scorerUserId"] = ScorerUserId,
+                ["uniqueId"] = UniqueId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            data["scorerUserId"] = scorerUserId;
-            data["uniqueId"] = uniqueId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (ScorerUserId != null) {
+                writer.WritePropertyName("scorerUserId");
+                writer.Write(ScorerUserId.ToString());
+            }
+            if (UniqueId != null) {
+                writer.WritePropertyName("uniqueId");
+                writer.Write(UniqueId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

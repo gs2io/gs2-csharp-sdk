@@ -28,54 +28,50 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class DeleteGlobalMessageMasterRequest : Gs2Request<DeleteGlobalMessageMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string GlobalMessageName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 全ユーザに向けたメッセージ名 */
-		[UnityEngine.SerializeField]
-        public string globalMessageName;
-
-        /**
-         * 全ユーザに向けたメッセージ名を設定
-         *
-         * @param globalMessageName 全ユーザに向けたメッセージ名
-         * @return this
-         */
         public DeleteGlobalMessageMasterRequest WithGlobalMessageName(string globalMessageName) {
-            this.globalMessageName = globalMessageName;
+            this.GlobalMessageName = globalMessageName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteGlobalMessageMasterRequest FromDict(JsonData data)
+        public static DeleteGlobalMessageMasterRequest FromJson(JsonData data)
         {
-            return new DeleteGlobalMessageMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                globalMessageName = data.Keys.Contains("globalMessageName") && data["globalMessageName"] != null ? data["globalMessageName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteGlobalMessageMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGlobalMessageName(!data.Keys.Contains("globalMessageName") || data["globalMessageName"] == null ? null : data["globalMessageName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["globalMessageName"] = GlobalMessageName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["globalMessageName"] = globalMessageName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (GlobalMessageName != null) {
+                writer.WritePropertyName("globalMessageName");
+                writer.Write(GlobalMessageName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Mission.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Mission.Result
 {
 	[Preserve]
-	public class UpdateCounterModelMasterResult
+	[System.Serializable]
+	public class UpdateCounterModelMasterResult : IResult
 	{
-        /** 更新したカウンターの種類マスター */
-        public CounterModelMaster item { set; get; }
+        public Gs2.Gs2Mission.Model.CounterModelMaster Item { set; get; }
 
+        public UpdateCounterModelMasterResult WithItem(Gs2.Gs2Mission.Model.CounterModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateCounterModelMasterResult FromDict(JsonData data)
+        public static UpdateCounterModelMasterResult FromJson(JsonData data)
         {
-            return new UpdateCounterModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Mission.Model.CounterModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCounterModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.CounterModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

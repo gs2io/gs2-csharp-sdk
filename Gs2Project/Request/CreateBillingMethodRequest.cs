@@ -28,108 +28,86 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateBillingMethodRequest : Gs2Request<CreateBillingMethodRequest>
 	{
+        public string AccountToken { set; get; }
+        public string Description { set; get; }
+        public string MethodType { set; get; }
+        public string CardCustomerId { set; get; }
+        public string PartnerId { set; get; }
 
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public CreateBillingMethodRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
 
-
-        /** 名前 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 名前を設定
-         *
-         * @param description 名前
-         * @return this
-         */
         public CreateBillingMethodRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 支払い方法 */
-		[UnityEngine.SerializeField]
-        public string methodType;
-
-        /**
-         * 支払い方法を設定
-         *
-         * @param methodType 支払い方法
-         * @return this
-         */
         public CreateBillingMethodRequest WithMethodType(string methodType) {
-            this.methodType = methodType;
+            this.MethodType = methodType;
             return this;
         }
 
-
-        /** クレジットカードカスタマーID */
-		[UnityEngine.SerializeField]
-        public string cardCustomerId;
-
-        /**
-         * クレジットカードカスタマーIDを設定
-         *
-         * @param cardCustomerId クレジットカードカスタマーID
-         * @return this
-         */
         public CreateBillingMethodRequest WithCardCustomerId(string cardCustomerId) {
-            this.cardCustomerId = cardCustomerId;
+            this.CardCustomerId = cardCustomerId;
             return this;
         }
 
-
-        /** パートナーID */
-		[UnityEngine.SerializeField]
-        public string partnerId;
-
-        /**
-         * パートナーIDを設定
-         *
-         * @param partnerId パートナーID
-         * @return this
-         */
         public CreateBillingMethodRequest WithPartnerId(string partnerId) {
-            this.partnerId = partnerId;
+            this.PartnerId = partnerId;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateBillingMethodRequest FromDict(JsonData data)
+        public static CreateBillingMethodRequest FromJson(JsonData data)
         {
-            return new CreateBillingMethodRequest {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                methodType = data.Keys.Contains("methodType") && data["methodType"] != null ? data["methodType"].ToString(): null,
-                cardCustomerId = data.Keys.Contains("cardCustomerId") && data["cardCustomerId"] != null ? data["cardCustomerId"].ToString(): null,
-                partnerId = data.Keys.Contains("partnerId") && data["partnerId"] != null ? data["partnerId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateBillingMethodRequest()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMethodType(!data.Keys.Contains("methodType") || data["methodType"] == null ? null : data["methodType"].ToString())
+                .WithCardCustomerId(!data.Keys.Contains("cardCustomerId") || data["cardCustomerId"] == null ? null : data["cardCustomerId"].ToString())
+                .WithPartnerId(!data.Keys.Contains("partnerId") || data["partnerId"] == null ? null : data["partnerId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
+                ["description"] = Description,
+                ["methodType"] = MethodType,
+                ["cardCustomerId"] = CardCustomerId,
+                ["partnerId"] = PartnerId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountToken"] = accountToken;
-            data["description"] = description;
-            data["methodType"] = methodType;
-            data["cardCustomerId"] = cardCustomerId;
-            data["partnerId"] = partnerId;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (MethodType != null) {
+                writer.WritePropertyName("methodType");
+                writer.Write(MethodType.ToString());
+            }
+            if (CardCustomerId != null) {
+                writer.WritePropertyName("cardCustomerId");
+                writer.Write(CardCustomerId.ToString());
+            }
+            if (PartnerId != null) {
+                writer.WritePropertyName("partnerId");
+                writer.Write(PartnerId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

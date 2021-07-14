@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Account.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Account.Result
 {
 	[Preserve]
-	public class AuthenticationResult
+	[System.Serializable]
+	public class AuthenticationResult : IResult
 	{
-        /** ゲームプレイヤーアカウント */
-        public Account item { set; get; }
+        public Gs2.Gs2Account.Model.Account Item { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
 
-        /** 署名対象のアカウント情報 */
-        public string body { set; get; }
+        public AuthenticationResult WithItem(Gs2.Gs2Account.Model.Account item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** 署名 */
-        public string signature { set; get; }
+        public AuthenticationResult WithBody(string body) {
+            this.Body = body;
+            return this;
+        }
 
+        public AuthenticationResult WithSignature(string signature) {
+            this.Signature = signature;
+            return this;
+        }
 
     	[Preserve]
-        public static AuthenticationResult FromDict(JsonData data)
+        public static AuthenticationResult FromJson(JsonData data)
         {
-            return new AuthenticationResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Account.Model.Account.FromDict(data["item"]) : null,
-                body = data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null,
-                signature = data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new AuthenticationResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Account.Model.Account.FromJson(data["item"]))
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["body"] = Body,
+                ["signature"] = Signature,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Body != null) {
+                writer.WritePropertyName("body");
+                writer.Write(Body.ToString());
+            }
+            if (Signature != null) {
+                writer.WritePropertyName("signature");
+                writer.Write(Signature.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

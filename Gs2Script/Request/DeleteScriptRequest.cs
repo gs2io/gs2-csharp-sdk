@@ -28,54 +28,50 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class DeleteScriptRequest : Gs2Request<DeleteScriptRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ScriptName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteScriptRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スクリプト名 */
-		[UnityEngine.SerializeField]
-        public string scriptName;
-
-        /**
-         * スクリプト名を設定
-         *
-         * @param scriptName スクリプト名
-         * @return this
-         */
         public DeleteScriptRequest WithScriptName(string scriptName) {
-            this.scriptName = scriptName;
+            this.ScriptName = scriptName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteScriptRequest FromDict(JsonData data)
+        public static DeleteScriptRequest FromJson(JsonData data)
         {
-            return new DeleteScriptRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                scriptName = data.Keys.Contains("scriptName") && data["scriptName"] != null ? data["scriptName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteScriptRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithScriptName(!data.Keys.Contains("scriptName") || data["scriptName"] == null ? null : data["scriptName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["scriptName"] = ScriptName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["scriptName"] = scriptName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ScriptName != null) {
+                writer.WritePropertyName("scriptName");
+                writer.Write(ScriptName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

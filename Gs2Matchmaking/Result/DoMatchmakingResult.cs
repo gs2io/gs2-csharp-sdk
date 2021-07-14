@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class DoMatchmakingResult
+	[System.Serializable]
+	public class DoMatchmakingResult : IResult
 	{
-        /** ギャザリング */
-        public Gathering item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; }
+        public string MatchmakingContextToken { set; get; }
 
-        /** マッチメイキングの状態を保持するトークン */
-        public string matchmakingContextToken { set; get; }
+        public DoMatchmakingResult WithItem(Gs2.Gs2Matchmaking.Model.Gathering item) {
+            this.Item = item;
+            return this;
+        }
 
+        public DoMatchmakingResult WithMatchmakingContextToken(string matchmakingContextToken) {
+            this.MatchmakingContextToken = matchmakingContextToken;
+            return this;
+        }
 
     	[Preserve]
-        public static DoMatchmakingResult FromDict(JsonData data)
+        public static DoMatchmakingResult FromJson(JsonData data)
         {
-            return new DoMatchmakingResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Matchmaking.Model.Gathering.FromDict(data["item"]) : null,
-                matchmakingContextToken = data.Keys.Contains("matchmakingContextToken") && data["matchmakingContextToken"] != null ? data["matchmakingContextToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DoMatchmakingResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.Gathering.FromJson(data["item"]))
+                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["matchmakingContextToken"] = MatchmakingContextToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (MatchmakingContextToken != null) {
+                writer.WritePropertyName("matchmakingContextToken");
+                writer.Write(MatchmakingContextToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

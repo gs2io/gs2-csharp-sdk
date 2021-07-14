@@ -28,130 +28,106 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class CreateRecoverValueTableMasterRequest : Gs2Request<CreateRecoverValueTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ExperienceModelId { set; get; }
+        public int[] Values { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スタミナ回復量テーブル名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * スタミナ回復量テーブル名を設定
-         *
-         * @param name スタミナ回復量テーブル名
-         * @return this
-         */
         public CreateRecoverValueTableMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** スタミナ回復量テーブルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * スタミナ回復量テーブルマスターの説明を設定
-         *
-         * @param description スタミナ回復量テーブルマスターの説明
-         * @return this
-         */
         public CreateRecoverValueTableMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** スタミナ回復量テーブルのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * スタミナ回復量テーブルのメタデータを設定
-         *
-         * @param metadata スタミナ回復量テーブルのメタデータ
-         * @return this
-         */
         public CreateRecoverValueTableMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 経験値の種類マスター のGRN */
-		[UnityEngine.SerializeField]
-        public string experienceModelId;
-
-        /**
-         * 経験値の種類マスター のGRNを設定
-         *
-         * @param experienceModelId 経験値の種類マスター のGRN
-         * @return this
-         */
         public CreateRecoverValueTableMasterRequest WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-
-        /** ランク毎のスタミナ回復量テーブル */
-		[UnityEngine.SerializeField]
-        public List<int?> values;
-
-        /**
-         * ランク毎のスタミナ回復量テーブルを設定
-         *
-         * @param values ランク毎のスタミナ回復量テーブル
-         * @return this
-         */
-        public CreateRecoverValueTableMasterRequest WithValues(List<int?> values) {
-            this.values = values;
+        public CreateRecoverValueTableMasterRequest WithValues(int[] values) {
+            this.Values = values;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateRecoverValueTableMasterRequest FromDict(JsonData data)
+        public static CreateRecoverValueTableMasterRequest FromJson(JsonData data)
         {
-            return new CreateRecoverValueTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                experienceModelId = data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString(): null,
-                values = data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (int?)int.Parse(value.ToString());
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateRecoverValueTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new int[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return int.Parse(v.ToString());
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["experienceModelId"] = ExperienceModelId,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((int?)int.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["experienceModelId"] = experienceModelId;
-            data["values"] = new JsonData(values);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (ExperienceModelId != null) {
+                writer.WritePropertyName("experienceModelId");
+                writer.Write(ExperienceModelId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var value in Values)
+            {
+                writer.Write(int.Parse(value.ToString()));
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

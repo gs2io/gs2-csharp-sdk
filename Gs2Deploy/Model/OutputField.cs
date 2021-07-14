@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Deploy.Model
 {
+
 	[Preserve]
 	public class OutputField : IComparable
 	{
+        public string Name { set; get; }
+        public string FieldName { set; get; }
 
-        /** 名前 */
-        public string name { set; get; }
-
-        /**
-         * 名前を設定
-         *
-         * @param name 名前
-         * @return this
-         */
         public OutputField WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** フィールド名 */
-        public string fieldName { set; get; }
-
-        /**
-         * フィールド名を設定
-         *
-         * @param fieldName フィールド名
-         * @return this
-         */
         public OutputField WithFieldName(string fieldName) {
-            this.fieldName = fieldName;
+            this.FieldName = fieldName;
             return this;
+        }
+
+    	[Preserve]
+        public static OutputField FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new OutputField()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithFieldName(!data.Keys.Contains("fieldName") || data["fieldName"] == null ? null : data["fieldName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["fieldName"] = FieldName,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.fieldName != null)
-            {
+            if (FieldName != null) {
                 writer.WritePropertyName("fieldName");
-                writer.Write(this.fieldName);
+                writer.Write(FieldName.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static OutputField FromDict(JsonData data)
-        {
-            return new OutputField()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithFieldName(data.Keys.Contains("fieldName") && data["fieldName"] != null ? data["fieldName"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as OutputField;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (fieldName == null && fieldName == other.fieldName)
+            if (FieldName == null && FieldName == other.FieldName)
             {
                 // null and null
             }
             else
             {
-                diff += fieldName.CompareTo(other.fieldName);
+                diff += FieldName.CompareTo(other.FieldName);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["fieldName"] = fieldName;
-            return data;
-        }
-	}
+    }
 }

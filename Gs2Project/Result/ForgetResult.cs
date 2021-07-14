@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class ForgetResult
+	[System.Serializable]
+	public class ForgetResult : IResult
 	{
-        /** パスワードを再発行するために必要なトークン */
-        public string issuePasswordToken { set; get; }
+        public string IssuePasswordToken { set; get; }
 
+        public ForgetResult WithIssuePasswordToken(string issuePasswordToken) {
+            this.IssuePasswordToken = issuePasswordToken;
+            return this;
+        }
 
     	[Preserve]
-        public static ForgetResult FromDict(JsonData data)
+        public static ForgetResult FromJson(JsonData data)
         {
-            return new ForgetResult {
-                issuePasswordToken = data.Keys.Contains("issuePasswordToken") && data["issuePasswordToken"] != null ? data["issuePasswordToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new ForgetResult()
+                .WithIssuePasswordToken(!data.Keys.Contains("issuePasswordToken") || data["issuePasswordToken"] == null ? null : data["issuePasswordToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["issuePasswordToken"] = IssuePasswordToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (IssuePasswordToken != null) {
+                writer.WritePropertyName("issuePasswordToken");
+                writer.Write(IssuePasswordToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

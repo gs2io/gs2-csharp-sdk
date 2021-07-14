@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2News.Model;
 using Gs2.Util.LitJson;
@@ -24,30 +25,76 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2News.Result
 {
 	[Preserve]
-	public class WantGrantResult
+	[System.Serializable]
+	public class WantGrantResult : IResult
 	{
-        /** お知らせコンテンツにアクセスするために設定の必要なクッキー のリスト */
-        public List<SetCookieRequestEntry> items { set; get; }
+        public Gs2.Gs2News.Model.SetCookieRequestEntry[] Items { set; get; }
+        public string BrowserUrl { set; get; }
+        public string ZipUrl { set; get; }
 
-        /** お知らせコンテンツにアクセスするためのURL */
-        public string browserUrl { set; get; }
+        public WantGrantResult WithItems(Gs2.Gs2News.Model.SetCookieRequestEntry[] items) {
+            this.Items = items;
+            return this;
+        }
 
-        /** ZIP形式のお知らせコンテンツにアクセスするためのURL Cookieの設定は不要 */
-        public string zipUrl { set; get; }
+        public WantGrantResult WithBrowserUrl(string browserUrl) {
+            this.BrowserUrl = browserUrl;
+            return this;
+        }
 
+        public WantGrantResult WithZipUrl(string zipUrl) {
+            this.ZipUrl = zipUrl;
+            return this;
+        }
 
     	[Preserve]
-        public static WantGrantResult FromDict(JsonData data)
+        public static WantGrantResult FromJson(JsonData data)
         {
-            return new WantGrantResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2News.Model.SetCookieRequestEntry.FromDict(value);
-                    }
-                ).ToList() : null,
-                browserUrl = data.Keys.Contains("browserUrl") && data["browserUrl"] != null ? data["browserUrl"].ToString() : null,
-                zipUrl = data.Keys.Contains("zipUrl") && data["zipUrl"] != null ? data["zipUrl"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new WantGrantResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2News.Model.SetCookieRequestEntry[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2News.Model.SetCookieRequestEntry.FromJson(v);
+                }).ToArray())
+                .WithBrowserUrl(!data.Keys.Contains("browserUrl") || data["browserUrl"] == null ? null : data["browserUrl"].ToString())
+                .WithZipUrl(!data.Keys.Contains("zipUrl") || data["zipUrl"] == null ? null : data["zipUrl"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["browserUrl"] = BrowserUrl,
+                ["zipUrl"] = ZipUrl,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (BrowserUrl != null) {
+                writer.WritePropertyName("browserUrl");
+                writer.Write(BrowserUrl.ToString());
+            }
+            if (ZipUrl != null) {
+                writer.WritePropertyName("zipUrl");
+                writer.Write(ZipUrl.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

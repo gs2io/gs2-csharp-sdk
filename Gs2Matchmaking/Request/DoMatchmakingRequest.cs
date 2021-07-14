@@ -28,104 +28,73 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DoMatchmakingRequest : Gs2Request<DoMatchmakingRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+        public string MatchmakingContextToken { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DoMatchmakingRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 自身のプレイヤー情報 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Matchmaking.Model.Player player;
-
-        /**
-         * 自身のプレイヤー情報を設定
-         *
-         * @param player 自身のプレイヤー情報
-         * @return this
-         */
-        public DoMatchmakingRequest WithPlayer(global::Gs2.Gs2Matchmaking.Model.Player player) {
-            this.player = player;
-            return this;
-        }
-
-
-        /** 検索の再開に使用する マッチメイキングの状態を保持するトークン */
-		[UnityEngine.SerializeField]
-        public string matchmakingContextToken;
-
-        /**
-         * 検索の再開に使用する マッチメイキングの状態を保持するトークンを設定
-         *
-         * @param matchmakingContextToken 検索の再開に使用する マッチメイキングの状態を保持するトークン
-         * @return this
-         */
-        public DoMatchmakingRequest WithMatchmakingContextToken(string matchmakingContextToken) {
-            this.matchmakingContextToken = matchmakingContextToken;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DoMatchmakingRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public DoMatchmakingRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public DoMatchmakingRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
+            this.Player = player;
+            return this;
+        }
+
+        public DoMatchmakingRequest WithMatchmakingContextToken(string matchmakingContextToken) {
+            this.MatchmakingContextToken = matchmakingContextToken;
             return this;
         }
 
     	[Preserve]
-        public static DoMatchmakingRequest FromDict(JsonData data)
+        public static DoMatchmakingRequest FromJson(JsonData data)
         {
-            return new DoMatchmakingRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                player = data.Keys.Contains("player") && data["player"] != null ? global::Gs2.Gs2Matchmaking.Model.Player.FromDict(data["player"]) : null,
-                matchmakingContextToken = data.Keys.Contains("matchmakingContextToken") && data["matchmakingContextToken"] != null ? data["matchmakingContextToken"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DoMatchmakingRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithPlayer(!data.Keys.Contains("player") || data["player"] == null ? null : Gs2.Gs2Matchmaking.Model.Player.FromJson(data["player"]))
+                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["player"] = Player?.ToJson(),
+                ["matchmakingContextToken"] = MatchmakingContextToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["player"] = player.ToDict();
-            data["matchmakingContextToken"] = matchmakingContextToken;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Player != null) {
+                Player.WriteJson(writer);
+            }
+            if (MatchmakingContextToken != null) {
+                writer.WritePropertyName("matchmakingContextToken");
+                writer.Write(MatchmakingContextToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

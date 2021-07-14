@@ -28,104 +28,74 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareDownloadOwnDataByGenerationRequest : Gs2Request<PrepareDownloadOwnDataByGenerationRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string DataObjectName { set; get; }
+        public string Generation { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PrepareDownloadOwnDataByGenerationRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データの名前 */
-		[UnityEngine.SerializeField]
-        public string dataObjectName;
-
-        /**
-         * データの名前を設定
-         *
-         * @param dataObjectName データの名前
-         * @return this
-         */
-        public PrepareDownloadOwnDataByGenerationRequest WithDataObjectName(string dataObjectName) {
-            this.dataObjectName = dataObjectName;
-            return this;
-        }
-
-
-        /** 世代 */
-		[UnityEngine.SerializeField]
-        public string generation;
-
-        /**
-         * 世代を設定
-         *
-         * @param generation 世代
-         * @return this
-         */
-        public PrepareDownloadOwnDataByGenerationRequest WithGeneration(string generation) {
-            this.generation = generation;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PrepareDownloadOwnDataByGenerationRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public PrepareDownloadOwnDataByGenerationRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public PrepareDownloadOwnDataByGenerationRequest WithDataObjectName(string dataObjectName) {
+            this.DataObjectName = dataObjectName;
+            return this;
+        }
+
+        public PrepareDownloadOwnDataByGenerationRequest WithGeneration(string generation) {
+            this.Generation = generation;
             return this;
         }
 
     	[Preserve]
-        public static PrepareDownloadOwnDataByGenerationRequest FromDict(JsonData data)
+        public static PrepareDownloadOwnDataByGenerationRequest FromJson(JsonData data)
         {
-            return new PrepareDownloadOwnDataByGenerationRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                dataObjectName = data.Keys.Contains("dataObjectName") && data["dataObjectName"] != null ? data["dataObjectName"].ToString(): null,
-                generation = data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareDownloadOwnDataByGenerationRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["dataObjectName"] = DataObjectName,
+                ["generation"] = Generation,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["dataObjectName"] = dataObjectName;
-            data["generation"] = generation;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (DataObjectName != null) {
+                writer.WritePropertyName("dataObjectName");
+                writer.Write(DataObjectName.ToString());
+            }
+            if (Generation != null) {
+                writer.WritePropertyName("generation");
+                writer.Write(Generation.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

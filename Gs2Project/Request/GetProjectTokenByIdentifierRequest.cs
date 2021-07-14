@@ -28,90 +28,74 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetProjectTokenByIdentifierRequest : Gs2Request<GetProjectTokenByIdentifierRequest>
 	{
+        public string AccountName { set; get; }
+        public string ProjectName { set; get; }
+        public string UserName { set; get; }
+        public string Password { set; get; }
 
-        /** GS2アカウントの名前 */
-		[UnityEngine.SerializeField]
-        public string accountName;
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param accountName GS2アカウントの名前
-         * @return this
-         */
         public GetProjectTokenByIdentifierRequest WithAccountName(string accountName) {
-            this.accountName = accountName;
+            this.AccountName = accountName;
             return this;
         }
 
-
-        /** プロジェクト名 */
-		[UnityEngine.SerializeField]
-        public string projectName;
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public GetProjectTokenByIdentifierRequest WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
 
-
-        /** ユーザ名 */
-		[UnityEngine.SerializeField]
-        public string userName;
-
-        /**
-         * ユーザ名を設定
-         *
-         * @param userName ユーザ名
-         * @return this
-         */
         public GetProjectTokenByIdentifierRequest WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public GetProjectTokenByIdentifierRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
 
     	[Preserve]
-        public static GetProjectTokenByIdentifierRequest FromDict(JsonData data)
+        public static GetProjectTokenByIdentifierRequest FromJson(JsonData data)
         {
-            return new GetProjectTokenByIdentifierRequest {
-                accountName = data.Keys.Contains("accountName") && data["accountName"] != null ? data["accountName"].ToString(): null,
-                projectName = data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString(): null,
-                userName = data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetProjectTokenByIdentifierRequest()
+                .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountName"] = AccountName,
+                ["projectName"] = ProjectName,
+                ["userName"] = UserName,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountName"] = accountName;
-            data["projectName"] = projectName;
-            data["userName"] = userName;
-            data["password"] = password;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountName != null) {
+                writer.WritePropertyName("accountName");
+                writer.Write(AccountName.ToString());
+            }
+            if (ProjectName != null) {
+                writer.WritePropertyName("projectName");
+                writer.Write(ProjectName.ToString());
+            }
+            if (UserName != null) {
+                writer.WritePropertyName("userName");
+                writer.Write(UserName.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

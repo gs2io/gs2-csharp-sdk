@@ -28,54 +28,50 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetRecoverValueTableMasterRequest : Gs2Request<GetRecoverValueTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RecoverValueTableName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スタミナ回復量テーブル名 */
-		[UnityEngine.SerializeField]
-        public string recoverValueTableName;
-
-        /**
-         * スタミナ回復量テーブル名を設定
-         *
-         * @param recoverValueTableName スタミナ回復量テーブル名
-         * @return this
-         */
         public GetRecoverValueTableMasterRequest WithRecoverValueTableName(string recoverValueTableName) {
-            this.recoverValueTableName = recoverValueTableName;
+            this.RecoverValueTableName = recoverValueTableName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetRecoverValueTableMasterRequest FromDict(JsonData data)
+        public static GetRecoverValueTableMasterRequest FromJson(JsonData data)
         {
-            return new GetRecoverValueTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                recoverValueTableName = data.Keys.Contains("recoverValueTableName") && data["recoverValueTableName"] != null ? data["recoverValueTableName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetRecoverValueTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRecoverValueTableName(!data.Keys.Contains("recoverValueTableName") || data["recoverValueTableName"] == null ? null : data["recoverValueTableName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["recoverValueTableName"] = RecoverValueTableName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["recoverValueTableName"] = recoverValueTableName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RecoverValueTableName != null) {
+                writer.WritePropertyName("recoverValueTableName");
+                writer.Write(RecoverValueTableName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

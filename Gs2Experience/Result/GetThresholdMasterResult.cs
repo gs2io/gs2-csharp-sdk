@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Experience.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Experience.Result
 {
 	[Preserve]
-	public class GetThresholdMasterResult
+	[System.Serializable]
+	public class GetThresholdMasterResult : IResult
 	{
-        /** ランクアップ閾値マスター */
-        public ThresholdMaster item { set; get; }
+        public Gs2.Gs2Experience.Model.ThresholdMaster Item { set; get; }
 
+        public GetThresholdMasterResult WithItem(Gs2.Gs2Experience.Model.ThresholdMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetThresholdMasterResult FromDict(JsonData data)
+        public static GetThresholdMasterResult FromJson(JsonData data)
         {
-            return new GetThresholdMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Experience.Model.ThresholdMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetThresholdMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Experience.Model.ThresholdMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

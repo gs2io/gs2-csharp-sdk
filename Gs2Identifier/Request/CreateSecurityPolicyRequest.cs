@@ -28,72 +28,62 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class CreateSecurityPolicyRequest : Gs2Request<CreateSecurityPolicyRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Policy { set; get; }
 
-        /** セキュリティポリシー名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * セキュリティポリシー名を設定
-         *
-         * @param name セキュリティポリシー名
-         * @return this
-         */
         public CreateSecurityPolicyRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** セキュリティポリシーの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * セキュリティポリシーの説明を設定
-         *
-         * @param description セキュリティポリシーの説明
-         * @return this
-         */
         public CreateSecurityPolicyRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ポリシードキュメント */
-		[UnityEngine.SerializeField]
-        public string policy;
-
-        /**
-         * ポリシードキュメントを設定
-         *
-         * @param policy ポリシードキュメント
-         * @return this
-         */
         public CreateSecurityPolicyRequest WithPolicy(string policy) {
-            this.policy = policy;
+            this.Policy = policy;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateSecurityPolicyRequest FromDict(JsonData data)
+        public static CreateSecurityPolicyRequest FromJson(JsonData data)
         {
-            return new CreateSecurityPolicyRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                policy = data.Keys.Contains("policy") && data["policy"] != null ? data["policy"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateSecurityPolicyRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPolicy(!data.Keys.Contains("policy") || data["policy"] == null ? null : data["policy"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["policy"] = Policy,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["policy"] = policy;
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Policy != null) {
+                writer.WritePropertyName("policy");
+                writer.Write(Policy.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

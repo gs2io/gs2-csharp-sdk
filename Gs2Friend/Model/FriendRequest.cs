@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class FriendRequest : IComparable
 	{
+        public string UserId { set; get; }
+        public string TargetUserId { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public FriendRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ユーザーID */
-        public string targetUserId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param targetUserId ユーザーID
-         * @return this
-         */
         public FriendRequest WithTargetUserId(string targetUserId) {
-            this.targetUserId = targetUserId;
+            this.TargetUserId = targetUserId;
             return this;
+        }
+
+    	[Preserve]
+        public static FriendRequest FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new FriendRequest()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["targetUserId"] = TargetUserId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.targetUserId != null)
-            {
+            if (TargetUserId != null) {
                 writer.WritePropertyName("targetUserId");
-                writer.Write(this.targetUserId);
+                writer.Write(TargetUserId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static FriendRequest FromDict(JsonData data)
-        {
-            return new FriendRequest()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithTargetUserId(data.Keys.Contains("targetUserId") && data["targetUserId"] != null ? data["targetUserId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as FriendRequest;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (targetUserId == null && targetUserId == other.targetUserId)
+            if (TargetUserId == null && TargetUserId == other.TargetUserId)
             {
                 // null and null
             }
             else
             {
-                diff += targetUserId.CompareTo(other.targetUserId);
+                diff += TargetUserId.CompareTo(other.TargetUserId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["targetUserId"] = targetUserId;
-            return data;
-        }
-	}
+    }
 }

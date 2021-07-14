@@ -28,122 +28,86 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class CreateTakeOverRequest : Gs2Request<CreateTakeOverRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public string Password { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateTakeOverRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? type;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param type スロット番号
-         * @return this
-         */
-        public CreateTakeOverRequest WithType(int? type) {
-            this.type = type;
-            return this;
-        }
-
-
-        /** 引き継ぎ用ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userIdentifier;
-
-        /**
-         * 引き継ぎ用ユーザーIDを設定
-         *
-         * @param userIdentifier 引き継ぎ用ユーザーID
-         * @return this
-         */
-        public CreateTakeOverRequest WithUserIdentifier(string userIdentifier) {
-            this.userIdentifier = userIdentifier;
-            return this;
-        }
-
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
-        public CreateTakeOverRequest WithPassword(string password) {
-            this.password = password;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CreateTakeOverRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public CreateTakeOverRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public CreateTakeOverRequest WithType(int? type) {
+            this.Type = type;
+            return this;
+        }
+
+        public CreateTakeOverRequest WithUserIdentifier(string userIdentifier) {
+            this.UserIdentifier = userIdentifier;
+            return this;
+        }
+
+        public CreateTakeOverRequest WithPassword(string password) {
+            this.Password = password;
             return this;
         }
 
     	[Preserve]
-        public static CreateTakeOverRequest FromDict(JsonData data)
+        public static CreateTakeOverRequest FromJson(JsonData data)
         {
-            return new CreateTakeOverRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                type = data.Keys.Contains("type") && data["type"] != null ? (int?)int.Parse(data["type"].ToString()) : null,
-                userIdentifier = data.Keys.Contains("userIdentifier") && data["userIdentifier"] != null ? data["userIdentifier"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateTakeOverRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()))
+                .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["type"] = Type,
+                ["userIdentifier"] = UserIdentifier,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["type"] = type;
-            data["userIdentifier"] = userIdentifier;
-            data["password"] = password;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(int.Parse(Type.ToString()));
+            }
+            if (UserIdentifier != null) {
+                writer.WritePropertyName("userIdentifier");
+                writer.Write(UserIdentifier.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

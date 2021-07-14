@@ -28,126 +28,86 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class SendMobileNotificationByUserIdRequest : Gs2Request<SendMobileNotificationByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string Subject { set; get; }
+        public string Payload { set; get; }
+        public string Sound { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SendMobileNotificationByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SendMobileNotificationByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** タイトル */
-		[UnityEngine.SerializeField]
-        public string subject;
-
-        /**
-         * タイトルを設定
-         *
-         * @param subject タイトル
-         * @return this
-         */
         public SendMobileNotificationByUserIdRequest WithSubject(string subject) {
-            this.subject = subject;
+            this.Subject = subject;
             return this;
         }
 
-
-        /** ペイロード */
-		[UnityEngine.SerializeField]
-        public string payload;
-
-        /**
-         * ペイロードを設定
-         *
-         * @param payload ペイロード
-         * @return this
-         */
         public SendMobileNotificationByUserIdRequest WithPayload(string payload) {
-            this.payload = payload;
+            this.Payload = payload;
             return this;
         }
 
-
-        /** 再生する音声ファイル名 */
-		[UnityEngine.SerializeField]
-        public string sound;
-
-        /**
-         * 再生する音声ファイル名を設定
-         *
-         * @param sound 再生する音声ファイル名
-         * @return this
-         */
         public SendMobileNotificationByUserIdRequest WithSound(string sound) {
-            this.sound = sound;
+            this.Sound = sound;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SendMobileNotificationByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SendMobileNotificationByUserIdRequest FromDict(JsonData data)
+        public static SendMobileNotificationByUserIdRequest FromJson(JsonData data)
         {
-            return new SendMobileNotificationByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                subject = data.Keys.Contains("subject") && data["subject"] != null ? data["subject"].ToString(): null,
-                payload = data.Keys.Contains("payload") && data["payload"] != null ? data["payload"].ToString(): null,
-                sound = data.Keys.Contains("sound") && data["sound"] != null ? data["sound"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SendMobileNotificationByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSubject(!data.Keys.Contains("subject") || data["subject"] == null ? null : data["subject"].ToString())
+                .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())
+                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["subject"] = Subject,
+                ["payload"] = Payload,
+                ["sound"] = Sound,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["subject"] = subject;
-            data["payload"] = payload;
-            data["sound"] = sound;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Subject != null) {
+                writer.WritePropertyName("subject");
+                writer.Write(Subject.ToString());
+            }
+            if (Payload != null) {
+                writer.WritePropertyName("payload");
+                writer.Write(Payload.ToString());
+            }
+            if (Sound != null) {
+                writer.WritePropertyName("sound");
+                writer.Write(Sound.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

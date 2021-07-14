@@ -28,126 +28,94 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
+        public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** アイテム入手したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inventory.Model.ScriptSetting acquireScript;
-
-        /**
-         * アイテム入手したときに実行するスクリプトを設定
-         *
-         * @param acquireScript アイテム入手したときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithAcquireScript(global::Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
-            this.acquireScript = acquireScript;
+        public CreateNamespaceRequest WithAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
+            this.AcquireScript = acquireScript;
             return this;
         }
 
-
-        /** 入手上限に当たって入手できなかったときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inventory.Model.ScriptSetting overflowScript;
-
-        /**
-         * 入手上限に当たって入手できなかったときに実行するスクリプトを設定
-         *
-         * @param overflowScript 入手上限に当たって入手できなかったときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithOverflowScript(global::Gs2.Gs2Inventory.Model.ScriptSetting overflowScript) {
-            this.overflowScript = overflowScript;
+        public CreateNamespaceRequest WithOverflowScript(Gs2.Gs2Inventory.Model.ScriptSetting overflowScript) {
+            this.OverflowScript = overflowScript;
             return this;
         }
 
-
-        /** アイテム消費するときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inventory.Model.ScriptSetting consumeScript;
-
-        /**
-         * アイテム消費するときに実行するスクリプトを設定
-         *
-         * @param consumeScript アイテム消費するときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithConsumeScript(global::Gs2.Gs2Inventory.Model.ScriptSetting consumeScript) {
-            this.consumeScript = consumeScript;
+        public CreateNamespaceRequest WithConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting consumeScript) {
+            this.ConsumeScript = consumeScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inventory.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Inventory.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                acquireScript = data.Keys.Contains("acquireScript") && data["acquireScript"] != null ? global::Gs2.Gs2Inventory.Model.ScriptSetting.FromDict(data["acquireScript"]) : null,
-                overflowScript = data.Keys.Contains("overflowScript") && data["overflowScript"] != null ? global::Gs2.Gs2Inventory.Model.ScriptSetting.FromDict(data["overflowScript"]) : null,
-                consumeScript = data.Keys.Contains("consumeScript") && data["consumeScript"] != null ? global::Gs2.Gs2Inventory.Model.ScriptSetting.FromDict(data["consumeScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Inventory.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithAcquireScript(!data.Keys.Contains("acquireScript") || data["acquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["acquireScript"]))
+                .WithOverflowScript(!data.Keys.Contains("overflowScript") || data["overflowScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["overflowScript"]))
+                .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inventory.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["acquireScript"] = AcquireScript?.ToJson(),
+                ["overflowScript"] = OverflowScript?.ToJson(),
+                ["consumeScript"] = ConsumeScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["acquireScript"] = acquireScript.ToDict();
-            data["overflowScript"] = overflowScript.ToDict();
-            data["consumeScript"] = consumeScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (AcquireScript != null) {
+                AcquireScript.WriteJson(writer);
+            }
+            if (OverflowScript != null) {
+                OverflowScript.WriteJson(writer);
+            }
+            if (ConsumeScript != null) {
+                ConsumeScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

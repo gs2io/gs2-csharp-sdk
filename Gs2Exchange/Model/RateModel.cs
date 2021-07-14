@@ -23,381 +23,271 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Exchange.Model
 {
+
 	[Preserve]
 	public class RateModel : IComparable
 	{
+        public string RateModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Exchange.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public string TimingType { set; get; }
+        public int? LockTime { set; get; }
+        public bool? EnableSkip { set; get; }
+        public Gs2.Gs2Exchange.Model.ConsumeAction[] SkipConsumeActions { set; get; }
+        public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
 
-        /** 交換レートマスター */
-        public string rateModelId { set; get; }
-
-        /**
-         * 交換レートマスターを設定
-         *
-         * @param rateModelId 交換レートマスター
-         * @return this
-         */
         public RateModel WithRateModelId(string rateModelId) {
-            this.rateModelId = rateModelId;
+            this.RateModelId = rateModelId;
             return this;
         }
 
-        /** 交換レートの種類名 */
-        public string name { set; get; }
-
-        /**
-         * 交換レートの種類名を設定
-         *
-         * @param name 交換レートの種類名
-         * @return this
-         */
         public RateModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 交換レートの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 交換レートの種類のメタデータを設定
-         *
-         * @param metadata 交換レートの種類のメタデータ
-         * @return this
-         */
         public RateModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 消費アクションリスト */
-        public List<ConsumeAction> consumeActions { set; get; }
-
-        /**
-         * 消費アクションリストを設定
-         *
-         * @param consumeActions 消費アクションリスト
-         * @return this
-         */
-        public RateModel WithConsumeActions(List<ConsumeAction> consumeActions) {
-            this.consumeActions = consumeActions;
+        public RateModel WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
+            this.ConsumeActions = consumeActions;
             return this;
         }
 
-        /** 交換の種類 */
-        public string timingType { set; get; }
-
-        /**
-         * 交換の種類を設定
-         *
-         * @param timingType 交換の種類
-         * @return this
-         */
         public RateModel WithTimingType(string timingType) {
-            this.timingType = timingType;
+            this.TimingType = timingType;
             return this;
         }
 
-        /** 交換実行から実際に報酬を受け取れるようになるまでの待ち時間（分） */
-        public int? lockTime { set; get; }
-
-        /**
-         * 交換実行から実際に報酬を受け取れるようになるまでの待ち時間（分）を設定
-         *
-         * @param lockTime 交換実行から実際に報酬を受け取れるようになるまでの待ち時間（分）
-         * @return this
-         */
         public RateModel WithLockTime(int? lockTime) {
-            this.lockTime = lockTime;
+            this.LockTime = lockTime;
             return this;
         }
 
-        /** スキップをすることができるか */
-        public bool? enableSkip { set; get; }
-
-        /**
-         * スキップをすることができるかを設定
-         *
-         * @param enableSkip スキップをすることができるか
-         * @return this
-         */
         public RateModel WithEnableSkip(bool? enableSkip) {
-            this.enableSkip = enableSkip;
+            this.EnableSkip = enableSkip;
             return this;
         }
 
-        /** 時短消費アクションリスト */
-        public List<ConsumeAction> skipConsumeActions { set; get; }
-
-        /**
-         * 時短消費アクションリストを設定
-         *
-         * @param skipConsumeActions 時短消費アクションリスト
-         * @return this
-         */
-        public RateModel WithSkipConsumeActions(List<ConsumeAction> skipConsumeActions) {
-            this.skipConsumeActions = skipConsumeActions;
+        public RateModel WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
+            this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
 
-        /** 入手アクションリスト */
-        public List<AcquireAction> acquireActions { set; get; }
-
-        /**
-         * 入手アクションリストを設定
-         *
-         * @param acquireActions 入手アクションリスト
-         * @return this
-         */
-        public RateModel WithAcquireActions(List<AcquireAction> acquireActions) {
-            this.acquireActions = acquireActions;
+        public RateModel WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
             return this;
+        }
+
+    	[Preserve]
+        public static RateModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new RateModel()
+                .WithRateModelId(!data.Keys.Contains("rateModelId") || data["rateModelId"] == null ? null : data["rateModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Exchange.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithTimingType(!data.Keys.Contains("timingType") || data["timingType"] == null ? null : data["timingType"].ToString())
+                .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : (int?)int.Parse(data["lockTime"].ToString()))
+                .WithEnableSkip(!data.Keys.Contains("enableSkip") || data["enableSkip"] == null ? null : (bool?)bool.Parse(data["enableSkip"].ToString()))
+                .WithSkipConsumeActions(!data.Keys.Contains("skipConsumeActions") || data["skipConsumeActions"] == null ? new Gs2.Gs2Exchange.Model.ConsumeAction[]{} : data["skipConsumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Exchange.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.AcquireAction.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["rateModelId"] = RateModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                        ConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["timingType"] = TimingType,
+                ["lockTime"] = LockTime,
+                ["enableSkip"] = EnableSkip,
+                ["skipConsumeActions"] = new JsonData(SkipConsumeActions == null ? new JsonData[]{} :
+                        SkipConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                        AcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.rateModelId != null)
-            {
+            if (RateModelId != null) {
                 writer.WritePropertyName("rateModelId");
-                writer.Write(this.rateModelId);
+                writer.Write(RateModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.consumeActions != null)
-            {
+            if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.consumeActions)
+                foreach (var consumeAction in ConsumeActions)
                 {
-                    item.WriteJson(writer);
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.timingType != null)
-            {
+            if (TimingType != null) {
                 writer.WritePropertyName("timingType");
-                writer.Write(this.timingType);
+                writer.Write(TimingType.ToString());
             }
-            if(this.lockTime.HasValue)
-            {
+            if (LockTime != null) {
                 writer.WritePropertyName("lockTime");
-                writer.Write(this.lockTime.Value);
+                writer.Write(int.Parse(LockTime.ToString()));
             }
-            if(this.enableSkip.HasValue)
-            {
+            if (EnableSkip != null) {
                 writer.WritePropertyName("enableSkip");
-                writer.Write(this.enableSkip.Value);
+                writer.Write(bool.Parse(EnableSkip.ToString()));
             }
-            if(this.skipConsumeActions != null)
-            {
+            if (SkipConsumeActions != null) {
                 writer.WritePropertyName("skipConsumeActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.skipConsumeActions)
+                foreach (var skipConsumeAction in SkipConsumeActions)
                 {
-                    item.WriteJson(writer);
+                    if (skipConsumeAction != null) {
+                        skipConsumeAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.acquireActions != null)
-            {
+            if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.acquireActions)
+                foreach (var acquireAction in AcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetRateNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):exchange:(?<namespaceName>.*):model:(?<rateName>.*)");
-        if (!match.Groups["rateName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["rateName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):exchange:(?<namespaceName>.*):model:(?<rateName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):exchange:(?<namespaceName>.*):model:(?<rateName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):exchange:(?<namespaceName>.*):model:(?<rateName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static RateModel FromDict(JsonData data)
-        {
-            return new RateModel()
-                .WithRateModelId(data.Keys.Contains("rateModelId") && data["rateModelId"] != null ? data["rateModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithConsumeActions(data.Keys.Contains("consumeActions") && data["consumeActions"] != null ? data["consumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Exchange.Model.ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithTimingType(data.Keys.Contains("timingType") && data["timingType"] != null ? data["timingType"].ToString() : null)
-                .WithLockTime(data.Keys.Contains("lockTime") && data["lockTime"] != null ? (int?)int.Parse(data["lockTime"].ToString()) : null)
-                .WithEnableSkip(data.Keys.Contains("enableSkip") && data["enableSkip"] != null ? (bool?)bool.Parse(data["enableSkip"].ToString()) : null)
-                .WithSkipConsumeActions(data.Keys.Contains("skipConsumeActions") && data["skipConsumeActions"] != null ? data["skipConsumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Exchange.Model.ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithAcquireActions(data.Keys.Contains("acquireActions") && data["acquireActions"] != null ? data["acquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Exchange.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as RateModel;
             var diff = 0;
-            if (rateModelId == null && rateModelId == other.rateModelId)
+            if (RateModelId == null && RateModelId == other.RateModelId)
             {
                 // null and null
             }
             else
             {
-                diff += rateModelId.CompareTo(other.rateModelId);
+                diff += RateModelId.CompareTo(other.RateModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (consumeActions == null && consumeActions == other.consumeActions)
+            if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
                 // null and null
             }
             else
             {
-                diff += consumeActions.Count - other.consumeActions.Count;
-                for (var i = 0; i < consumeActions.Count; i++)
+                diff += ConsumeActions.Length - other.ConsumeActions.Length;
+                for (var i = 0; i < ConsumeActions.Length; i++)
                 {
-                    diff += consumeActions[i].CompareTo(other.consumeActions[i]);
+                    diff += ConsumeActions[i].CompareTo(other.ConsumeActions[i]);
                 }
             }
-            if (timingType == null && timingType == other.timingType)
+            if (TimingType == null && TimingType == other.TimingType)
             {
                 // null and null
             }
             else
             {
-                diff += timingType.CompareTo(other.timingType);
+                diff += TimingType.CompareTo(other.TimingType);
             }
-            if (lockTime == null && lockTime == other.lockTime)
+            if (LockTime == null && LockTime == other.LockTime)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(lockTime - other.lockTime);
+                diff += (int)(LockTime - other.LockTime);
             }
-            if (enableSkip == null && enableSkip == other.enableSkip)
+            if (EnableSkip == null && EnableSkip == other.EnableSkip)
             {
                 // null and null
             }
             else
             {
-                diff += enableSkip == other.enableSkip ? 0 : 1;
+                diff += EnableSkip == other.EnableSkip ? 0 : 1;
             }
-            if (skipConsumeActions == null && skipConsumeActions == other.skipConsumeActions)
+            if (SkipConsumeActions == null && SkipConsumeActions == other.SkipConsumeActions)
             {
                 // null and null
             }
             else
             {
-                diff += skipConsumeActions.Count - other.skipConsumeActions.Count;
-                for (var i = 0; i < skipConsumeActions.Count; i++)
+                diff += SkipConsumeActions.Length - other.SkipConsumeActions.Length;
+                for (var i = 0; i < SkipConsumeActions.Length; i++)
                 {
-                    diff += skipConsumeActions[i].CompareTo(other.skipConsumeActions[i]);
+                    diff += SkipConsumeActions[i].CompareTo(other.SkipConsumeActions[i]);
                 }
             }
-            if (acquireActions == null && acquireActions == other.acquireActions)
+            if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += acquireActions.Count - other.acquireActions.Count;
-                for (var i = 0; i < acquireActions.Count; i++)
+                diff += AcquireActions.Length - other.AcquireActions.Length;
+                for (var i = 0; i < AcquireActions.Length; i++)
                 {
-                    diff += acquireActions[i].CompareTo(other.acquireActions[i]);
+                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["rateModelId"] = rateModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["consumeActions"] = new JsonData(consumeActions.Select(item => item.ToDict()));
-            data["timingType"] = timingType;
-            data["lockTime"] = lockTime;
-            data["enableSkip"] = enableSkip;
-            data["skipConsumeActions"] = new JsonData(skipConsumeActions.Select(item => item.ToDict()));
-            data["acquireActions"] = new JsonData(acquireActions.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

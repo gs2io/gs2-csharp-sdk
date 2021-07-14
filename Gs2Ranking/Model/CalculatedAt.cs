@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class CalculatedAt : IComparable
 	{
+        public string CategoryName { set; get; }
+        public long? Value { set; get; }
 
-        /** カテゴリ名 */
-        public string categoryName { set; get; }
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public CalculatedAt WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-        /** 集計日時 */
-        public long? calculatedAt { set; get; }
-
-        /**
-         * 集計日時を設定
-         *
-         * @param calculatedAt 集計日時
-         * @return this
-         */
-        public CalculatedAt WithCalculatedAt(long? calculatedAt) {
-            this.calculatedAt = calculatedAt;
+        public CalculatedAt WithValue(long? value) {
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static CalculatedAt FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CalculatedAt()
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : (long?)long.Parse(data["calculatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["categoryName"] = CategoryName,
+                ["calculatedAt"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.categoryName != null)
-            {
+            if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
-                writer.Write(this.categoryName);
+                writer.Write(CategoryName.ToString());
             }
-            if(this.calculatedAt.HasValue)
-            {
-                writer.WritePropertyName("calculatedAt");
-                writer.Write(this.calculatedAt.Value);
+            if (Value != null) {
+                writer.WritePropertyName("value");
+                writer.Write(long.Parse(Value.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static CalculatedAt FromDict(JsonData data)
-        {
-            return new CalculatedAt()
-                .WithCategoryName(data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString() : null)
-                .WithCalculatedAt(data.Keys.Contains("calculatedAt") && data["calculatedAt"] != null ? (long?)long.Parse(data["calculatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CalculatedAt;
             var diff = 0;
-            if (categoryName == null && categoryName == other.categoryName)
+            if (CategoryName == null && CategoryName == other.CategoryName)
             {
                 // null and null
             }
             else
             {
-                diff += categoryName.CompareTo(other.categoryName);
+                diff += CategoryName.CompareTo(other.CategoryName);
             }
-            if (calculatedAt == null && calculatedAt == other.calculatedAt)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(calculatedAt - other.calculatedAt);
+                diff += (int)(Value - other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["categoryName"] = categoryName;
-            data["calculatedAt"] = calculatedAt;
-            return data;
-        }
-	}
+    }
 }

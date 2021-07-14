@@ -28,36 +28,38 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class VerifyRequest : Gs2Request<VerifyRequest>
 	{
+        public string VerifyToken { set; get; }
 
-        /** 有効化に使用するトークン */
-		[UnityEngine.SerializeField]
-        public string verifyToken;
-
-        /**
-         * 有効化に使用するトークンを設定
-         *
-         * @param verifyToken 有効化に使用するトークン
-         * @return this
-         */
         public VerifyRequest WithVerifyToken(string verifyToken) {
-            this.verifyToken = verifyToken;
+            this.VerifyToken = verifyToken;
             return this;
         }
 
-
     	[Preserve]
-        public static VerifyRequest FromDict(JsonData data)
+        public static VerifyRequest FromJson(JsonData data)
         {
-            return new VerifyRequest {
-                verifyToken = data.Keys.Contains("verifyToken") && data["verifyToken"] != null ? data["verifyToken"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new VerifyRequest()
+                .WithVerifyToken(!data.Keys.Contains("verifyToken") || data["verifyToken"] == null ? null : data["verifyToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["verifyToken"] = VerifyToken,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["verifyToken"] = verifyToken;
-            return data;
+            writer.WriteObjectStart();
+            if (VerifyToken != null) {
+                writer.WritePropertyName("verifyToken");
+                writer.Write(VerifyToken.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

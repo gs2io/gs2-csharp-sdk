@@ -46,7 +46,7 @@ namespace Gs2.Core.Net
 	        /** メッセージ本体 */
 	        public JsonData body { set; get; }
 
-	        public static Gs2Message FromDict(JsonData data)
+	        public static Gs2Message FromJson(JsonData data)
 	        {
 		        if (data == null)
 		        {
@@ -66,13 +66,13 @@ namespace Gs2.Core.Net
 	    {
 	        try
 	        {
-		        var gs2Message = Gs2Message.FromDict(JsonMapper.ToObject(message));
+		        var gs2Message = Gs2Message.FromJson(JsonMapper.ToObject(message));
 		        Body = gs2Message.body;
 
 		        var errorMessage = "";
 		        if (gs2Message.status != 200)
 		        {
-			        var error = GeneralError.FromDict(gs2Message.body);
+			        var error = GeneralError.FromJson(gs2Message.body);
 			        if (error != null)
 			        {
 				        errorMessage = error.Message;

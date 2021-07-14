@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2News.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2News.Result
 {
 	[Preserve]
-	public class PrepareUpdateCurrentNewsMasterFromGitHubResult
+	[System.Serializable]
+	public class PrepareUpdateCurrentNewsMasterFromGitHubResult : IResult
 	{
-        /** アップロード後に結果を反映する際に使用するトークン */
-        public string uploadToken { set; get; }
+        public string UploadToken { set; get; }
 
+        public PrepareUpdateCurrentNewsMasterFromGitHubResult WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
+            return this;
+        }
 
     	[Preserve]
-        public static PrepareUpdateCurrentNewsMasterFromGitHubResult FromDict(JsonData data)
+        public static PrepareUpdateCurrentNewsMasterFromGitHubResult FromJson(JsonData data)
         {
-            return new PrepareUpdateCurrentNewsMasterFromGitHubResult {
-                uploadToken = data.Keys.Contains("uploadToken") && data["uploadToken"] != null ? data["uploadToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareUpdateCurrentNewsMasterFromGitHubResult()
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["uploadToken"] = UploadToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

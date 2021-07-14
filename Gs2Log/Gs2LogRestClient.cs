@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Log
+using Gs2.Util.LitJson;namespace Gs2.Gs2Log
 {
 	public class Gs2LogRestClient : AbstractGs2Client
 	{
@@ -73,23 +71,23 @@ namespace Gs2.Gs2Log
                     + "/";
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -97,9 +95,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -139,60 +134,60 @@ namespace Gs2.Gs2Log
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.type != null)
+                if (_request.Type != null)
                 {
                     jsonWriter.WritePropertyName("type");
-                    jsonWriter.Write(_request.type.ToString());
+                    jsonWriter.Write(_request.Type.ToString());
                 }
-                if (_request.gcpCredentialJson != null)
+                if (_request.GcpCredentialJson != null)
                 {
                     jsonWriter.WritePropertyName("gcpCredentialJson");
-                    jsonWriter.Write(_request.gcpCredentialJson.ToString());
+                    jsonWriter.Write(_request.GcpCredentialJson.ToString());
                 }
-                if (_request.bigQueryDatasetName != null)
+                if (_request.BigQueryDatasetName != null)
                 {
                     jsonWriter.WritePropertyName("bigQueryDatasetName");
-                    jsonWriter.Write(_request.bigQueryDatasetName.ToString());
+                    jsonWriter.Write(_request.BigQueryDatasetName.ToString());
                 }
-                if (_request.logExpireDays != null)
+                if (_request.LogExpireDays != null)
                 {
                     jsonWriter.WritePropertyName("logExpireDays");
-                    jsonWriter.Write(_request.logExpireDays.ToString());
+                    jsonWriter.Write(_request.LogExpireDays.ToString());
                 }
-                if (_request.awsRegion != null)
+                if (_request.AwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("awsRegion");
-                    jsonWriter.Write(_request.awsRegion.ToString());
+                    jsonWriter.Write(_request.AwsRegion.ToString());
                 }
-                if (_request.awsAccessKeyId != null)
+                if (_request.AwsAccessKeyId != null)
                 {
                     jsonWriter.WritePropertyName("awsAccessKeyId");
-                    jsonWriter.Write(_request.awsAccessKeyId.ToString());
+                    jsonWriter.Write(_request.AwsAccessKeyId.ToString());
                 }
-                if (_request.awsSecretAccessKey != null)
+                if (_request.AwsSecretAccessKey != null)
                 {
                     jsonWriter.WritePropertyName("awsSecretAccessKey");
-                    jsonWriter.Write(_request.awsSecretAccessKey.ToString());
+                    jsonWriter.Write(_request.AwsSecretAccessKey.ToString());
                 }
-                if (_request.firehoseStreamName != null)
+                if (_request.FirehoseStreamName != null)
                 {
                     jsonWriter.WritePropertyName("firehoseStreamName");
-                    jsonWriter.Write(_request.firehoseStreamName.ToString());
+                    jsonWriter.Write(_request.FirehoseStreamName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -203,9 +198,9 @@ namespace Gs2.Gs2Log
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -213,9 +208,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースを新規作成<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -250,20 +242,20 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/status";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -271,9 +263,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースの状態を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -308,20 +297,20 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -329,9 +318,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -366,62 +352,62 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.type != null)
+                if (_request.Type != null)
                 {
                     jsonWriter.WritePropertyName("type");
-                    jsonWriter.Write(_request.type.ToString());
+                    jsonWriter.Write(_request.Type.ToString());
                 }
-                if (_request.gcpCredentialJson != null)
+                if (_request.GcpCredentialJson != null)
                 {
                     jsonWriter.WritePropertyName("gcpCredentialJson");
-                    jsonWriter.Write(_request.gcpCredentialJson.ToString());
+                    jsonWriter.Write(_request.GcpCredentialJson.ToString());
                 }
-                if (_request.bigQueryDatasetName != null)
+                if (_request.BigQueryDatasetName != null)
                 {
                     jsonWriter.WritePropertyName("bigQueryDatasetName");
-                    jsonWriter.Write(_request.bigQueryDatasetName.ToString());
+                    jsonWriter.Write(_request.BigQueryDatasetName.ToString());
                 }
-                if (_request.logExpireDays != null)
+                if (_request.LogExpireDays != null)
                 {
                     jsonWriter.WritePropertyName("logExpireDays");
-                    jsonWriter.Write(_request.logExpireDays.ToString());
+                    jsonWriter.Write(_request.LogExpireDays.ToString());
                 }
-                if (_request.awsRegion != null)
+                if (_request.AwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("awsRegion");
-                    jsonWriter.Write(_request.awsRegion.ToString());
+                    jsonWriter.Write(_request.AwsRegion.ToString());
                 }
-                if (_request.awsAccessKeyId != null)
+                if (_request.AwsAccessKeyId != null)
                 {
                     jsonWriter.WritePropertyName("awsAccessKeyId");
-                    jsonWriter.Write(_request.awsAccessKeyId.ToString());
+                    jsonWriter.Write(_request.AwsAccessKeyId.ToString());
                 }
-                if (_request.awsSecretAccessKey != null)
+                if (_request.AwsSecretAccessKey != null)
                 {
                     jsonWriter.WritePropertyName("awsSecretAccessKey");
-                    jsonWriter.Write(_request.awsSecretAccessKey.ToString());
+                    jsonWriter.Write(_request.AwsSecretAccessKey.ToString());
                 }
-                if (_request.firehoseStreamName != null)
+                if (_request.FirehoseStreamName != null)
                 {
                     jsonWriter.WritePropertyName("firehoseStreamName");
-                    jsonWriter.Write(_request.firehoseStreamName.ToString());
+                    jsonWriter.Write(_request.FirehoseStreamName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -432,9 +418,9 @@ namespace Gs2.Gs2Log
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -442,9 +428,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースを更新<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -479,20 +462,20 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -500,9 +483,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  ネームスペースを削除<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -537,48 +517,44 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/access";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -586,9 +562,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  アクセスログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -623,48 +596,44 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/access/count";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -672,9 +641,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  アクセスログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -709,51 +675,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/issue/stamp/sheet";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -761,9 +723,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプシート発行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -798,51 +757,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/issue/stamp/sheet/count";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -850,9 +805,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプシート発行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -887,51 +839,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/execute/stamp/sheet";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -939,9 +887,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプシート実行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -976,51 +921,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/execute/stamp/sheet/count";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1028,9 +969,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプシート実行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1065,51 +1003,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/execute/stamp/task";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1117,9 +1051,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプタスク実行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -1154,51 +1085,47 @@ namespace Gs2.Gs2Log
                     .Replace("{region}", gs2Session.Region.DisplayName())
                     + "/{namespaceName}/log/execute/stamp/task/count";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.namespaceName) ? _request.namespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
 
                 var queryStrings = new List<string> ();
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.contextStack)));
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
-                if (_request.service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.service)));
+                if (_request.Service != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
                 }
-                if (_request.method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.method)));
+                if (_request.Method != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
                 }
-                if (_request.userId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.userId)));
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
                 }
-                if (_request.action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.action)));
+                if (_request.Action != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
                 }
-                if (_request.begin != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.begin));
+                if (_request.Begin != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
                 }
-                if (_request.end != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "end", _request.end));
+                if (_request.End != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "end", _request.End));
                 }
-                if (_request.longTerm != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.longTerm));
+                if (_request.LongTerm != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "longTerm", _request.LongTerm));
                 }
-                if (_request.pageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.pageToken)));
+                if (_request.PageToken != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
                 }
-                if (_request.limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.limit));
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
                 }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -1206,9 +1133,6 @@ namespace Gs2.Gs2Log
         }
 
 		/// <summary>
-		///  スタンプタスク実行ログの一覧を取得<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>

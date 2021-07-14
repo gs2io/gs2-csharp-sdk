@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public NotFoundException(List<RequestError> errors) : base(errors: errors)
+		public NotFoundException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

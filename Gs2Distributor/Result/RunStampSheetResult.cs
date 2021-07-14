@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class RunStampSheetResult
+	[System.Serializable]
+	public class RunStampSheetResult : IResult
 	{
-        /** レスポンス内容 */
-        public string result { set; get; }
+        public string Result { set; get; }
 
+        public RunStampSheetResult WithResult(string result) {
+            this.Result = result;
+            return this;
+        }
 
     	[Preserve]
-        public static RunStampSheetResult FromDict(JsonData data)
+        public static RunStampSheetResult FromJson(JsonData data)
         {
-            return new RunStampSheetResult {
-                result = data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampSheetResult()
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["result"] = Result,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Result != null) {
+                writer.WritePropertyName("result");
+                writer.Write(Result.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -23,178 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Identifier.Model
 {
+
 	[Preserve]
 	public class Identifier : IComparable
 	{
+        public string ClientId { set; get; }
+        public string UserName { set; get; }
+        public string ClientSecret { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Identifier WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** クライアントID */
-        public string clientId { set; get; }
-
-        /**
-         * クライアントIDを設定
-         *
-         * @param clientId クライアントID
-         * @return this
-         */
         public Identifier WithClientId(string clientId) {
-            this.clientId = clientId;
+            this.ClientId = clientId;
             return this;
         }
 
-        /** ユーザー名 */
-        public string userName { set; get; }
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public Identifier WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-        /** クライアントシークレット */
-        public string clientSecret { set; get; }
-
-        /**
-         * クライアントシークレットを設定
-         *
-         * @param clientSecret クライアントシークレット
-         * @return this
-         */
         public Identifier WithClientSecret(string clientSecret) {
-            this.clientSecret = clientSecret;
+            this.ClientSecret = clientSecret;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Identifier WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Identifier FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Identifier()
+                .WithClientId(!data.Keys.Contains("clientId") || data["clientId"] == null ? null : data["clientId"].ToString())
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["clientId"] = ClientId,
+                ["userName"] = UserName,
+                ["clientSecret"] = ClientSecret,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.clientId != null)
-            {
+            if (ClientId != null) {
                 writer.WritePropertyName("clientId");
-                writer.Write(this.clientId);
+                writer.Write(ClientId.ToString());
             }
-            if(this.userName != null)
-            {
+            if (UserName != null) {
                 writer.WritePropertyName("userName");
-                writer.Write(this.userName);
+                writer.Write(UserName.ToString());
             }
-            if(this.clientSecret != null)
-            {
+            if (ClientSecret != null) {
                 writer.WritePropertyName("clientSecret");
-                writer.Write(this.clientSecret);
+                writer.Write(ClientSecret.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Identifier FromDict(JsonData data)
-        {
-            return new Identifier()
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithClientId(data.Keys.Contains("clientId") && data["clientId"] != null ? data["clientId"].ToString() : null)
-                .WithUserName(data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString() : null)
-                .WithClientSecret(data.Keys.Contains("clientSecret") && data["clientSecret"] != null ? data["clientSecret"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Identifier;
             var diff = 0;
-            if (ownerId == null && ownerId == other.ownerId)
+            if (ClientId == null && ClientId == other.ClientId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += ClientId.CompareTo(other.ClientId);
             }
-            if (clientId == null && clientId == other.clientId)
+            if (UserName == null && UserName == other.UserName)
             {
                 // null and null
             }
             else
             {
-                diff += clientId.CompareTo(other.clientId);
+                diff += UserName.CompareTo(other.UserName);
             }
-            if (userName == null && userName == other.userName)
+            if (ClientSecret == null && ClientSecret == other.ClientSecret)
             {
                 // null and null
             }
             else
             {
-                diff += userName.CompareTo(other.userName);
+                diff += ClientSecret.CompareTo(other.ClientSecret);
             }
-            if (clientSecret == null && clientSecret == other.clientSecret)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += clientSecret.CompareTo(other.clientSecret);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ownerId"] = ownerId;
-            data["clientId"] = clientId;
-            data["userName"] = userName;
-            data["clientSecret"] = clientSecret;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

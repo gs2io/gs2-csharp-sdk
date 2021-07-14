@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class CommitVoteResult
+	[System.Serializable]
+	public class CommitVoteResult : IResult
 	{
 
     	[Preserve]
-        public static CommitVoteResult FromDict(JsonData data)
+        public static CommitVoteResult FromJson(JsonData data)
         {
-            return new CommitVoteResult {
+            if (data == null) {
+                return null;
+            }
+            return new CommitVoteResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

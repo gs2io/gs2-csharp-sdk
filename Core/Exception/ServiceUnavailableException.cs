@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public ServiceUnavailableException(List<RequestError> errors) : base(errors: errors)
+		public ServiceUnavailableException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

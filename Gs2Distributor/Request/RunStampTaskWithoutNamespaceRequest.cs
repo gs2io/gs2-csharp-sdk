@@ -28,72 +28,50 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampTaskWithoutNamespaceRequest : Gs2Request<RunStampTaskWithoutNamespaceRequest>
 	{
+        public string StampTask { set; get; }
+        public string KeyId { set; get; }
 
-        /** 実行するスタンプタスク */
-		[UnityEngine.SerializeField]
-        public string stampTask;
-
-        /**
-         * 実行するスタンプタスクを設定
-         *
-         * @param stampTask 実行するスタンプタスク
-         * @return this
-         */
         public RunStampTaskWithoutNamespaceRequest WithStampTask(string stampTask) {
-            this.stampTask = stampTask;
+            this.StampTask = stampTask;
             return this;
         }
 
-
-        /** スタンプシートの暗号化に使用した暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * スタンプシートの暗号化に使用した暗号鍵GRNを設定
-         *
-         * @param keyId スタンプシートの暗号化に使用した暗号鍵GRN
-         * @return this
-         */
         public RunStampTaskWithoutNamespaceRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public RunStampTaskWithoutNamespaceRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static RunStampTaskWithoutNamespaceRequest FromDict(JsonData data)
+        public static RunStampTaskWithoutNamespaceRequest FromJson(JsonData data)
         {
-            return new RunStampTaskWithoutNamespaceRequest {
-                stampTask = data.Keys.Contains("stampTask") && data["stampTask"] != null ? data["stampTask"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampTaskWithoutNamespaceRequest()
+                .WithStampTask(!data.Keys.Contains("stampTask") || data["stampTask"] == null ? null : data["stampTask"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stampTask"] = StampTask,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stampTask"] = stampTask;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (StampTask != null) {
+                writer.WritePropertyName("stampTask");
+                writer.Write(StampTask.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

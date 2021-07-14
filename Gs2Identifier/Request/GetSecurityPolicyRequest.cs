@@ -28,36 +28,38 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class GetSecurityPolicyRequest : Gs2Request<GetSecurityPolicyRequest>
 	{
+        public string SecurityPolicyName { set; get; }
 
-        /** セキュリティポリシー名 */
-		[UnityEngine.SerializeField]
-        public string securityPolicyName;
-
-        /**
-         * セキュリティポリシー名を設定
-         *
-         * @param securityPolicyName セキュリティポリシー名
-         * @return this
-         */
         public GetSecurityPolicyRequest WithSecurityPolicyName(string securityPolicyName) {
-            this.securityPolicyName = securityPolicyName;
+            this.SecurityPolicyName = securityPolicyName;
             return this;
         }
 
-
     	[Preserve]
-        public static GetSecurityPolicyRequest FromDict(JsonData data)
+        public static GetSecurityPolicyRequest FromJson(JsonData data)
         {
-            return new GetSecurityPolicyRequest {
-                securityPolicyName = data.Keys.Contains("securityPolicyName") && data["securityPolicyName"] != null ? data["securityPolicyName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetSecurityPolicyRequest()
+                .WithSecurityPolicyName(!data.Keys.Contains("securityPolicyName") || data["securityPolicyName"] == null ? null : data["securityPolicyName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["securityPolicyName"] = SecurityPolicyName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["securityPolicyName"] = securityPolicyName;
-            return data;
+            writer.WriteObjectStart();
+            if (SecurityPolicyName != null) {
+                writer.WritePropertyName("securityPolicyName");
+                writer.Write(SecurityPolicyName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetEventRequest : Gs2Request<GetEventRequest>
 	{
+        public string StackName { set; get; }
+        public string EventName { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public GetEventRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
-        /** イベント名 */
-		[UnityEngine.SerializeField]
-        public string eventName;
-
-        /**
-         * イベント名を設定
-         *
-         * @param eventName イベント名
-         * @return this
-         */
         public GetEventRequest WithEventName(string eventName) {
-            this.eventName = eventName;
+            this.EventName = eventName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetEventRequest FromDict(JsonData data)
+        public static GetEventRequest FromJson(JsonData data)
         {
-            return new GetEventRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
-                eventName = data.Keys.Contains("eventName") && data["eventName"] != null ? data["eventName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetEventRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
+                .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
+                ["eventName"] = EventName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            data["eventName"] = eventName;
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            if (EventName != null) {
+                writer.WritePropertyName("eventName");
+                writer.Write(EventName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

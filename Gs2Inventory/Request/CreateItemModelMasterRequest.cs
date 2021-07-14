@@ -28,162 +28,122 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class CreateItemModelMasterRequest : Gs2Request<CreateItemModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? StackingLimit { set; get; }
+        public bool? AllowMultipleStacks { set; get; }
+        public int? SortValue { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateItemModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** アイテムの種類名 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * アイテムの種類名を設定
-         *
-         * @param inventoryName アイテムの種類名
-         * @return this
-         */
         public CreateItemModelMasterRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** アイテムモデルの種類名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * アイテムモデルの種類名を設定
-         *
-         * @param name アイテムモデルの種類名
-         * @return this
-         */
         public CreateItemModelMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** アイテムモデルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * アイテムモデルマスターの説明を設定
-         *
-         * @param description アイテムモデルマスターの説明
-         * @return this
-         */
         public CreateItemModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** アイテムモデルの種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * アイテムモデルの種類のメタデータを設定
-         *
-         * @param metadata アイテムモデルの種類のメタデータ
-         * @return this
-         */
         public CreateItemModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** スタック可能な最大数量 */
-		[UnityEngine.SerializeField]
-        public long? stackingLimit;
-
-        /**
-         * スタック可能な最大数量を設定
-         *
-         * @param stackingLimit スタック可能な最大数量
-         * @return this
-         */
         public CreateItemModelMasterRequest WithStackingLimit(long? stackingLimit) {
-            this.stackingLimit = stackingLimit;
+            this.StackingLimit = stackingLimit;
             return this;
         }
 
-
-        /** スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すか */
-		[UnityEngine.SerializeField]
-        public bool? allowMultipleStacks;
-
-        /**
-         * スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すかを設定
-         *
-         * @param allowMultipleStacks スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すか
-         * @return this
-         */
         public CreateItemModelMasterRequest WithAllowMultipleStacks(bool? allowMultipleStacks) {
-            this.allowMultipleStacks = allowMultipleStacks;
+            this.AllowMultipleStacks = allowMultipleStacks;
             return this;
         }
 
-
-        /** 表示順番 */
-		[UnityEngine.SerializeField]
-        public int? sortValue;
-
-        /**
-         * 表示順番を設定
-         *
-         * @param sortValue 表示順番
-         * @return this
-         */
         public CreateItemModelMasterRequest WithSortValue(int? sortValue) {
-            this.sortValue = sortValue;
+            this.SortValue = sortValue;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateItemModelMasterRequest FromDict(JsonData data)
+        public static CreateItemModelMasterRequest FromJson(JsonData data)
         {
-            return new CreateItemModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                stackingLimit = data.Keys.Contains("stackingLimit") && data["stackingLimit"] != null ? (long?)long.Parse(data["stackingLimit"].ToString()) : null,
-                allowMultipleStacks = data.Keys.Contains("allowMultipleStacks") && data["allowMultipleStacks"] != null ? (bool?)bool.Parse(data["allowMultipleStacks"].ToString()) : null,
-                sortValue = data.Keys.Contains("sortValue") && data["sortValue"] != null ? (int?)int.Parse(data["sortValue"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateItemModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : (long?)long.Parse(data["stackingLimit"].ToString()))
+                .WithAllowMultipleStacks(!data.Keys.Contains("allowMultipleStacks") || data["allowMultipleStacks"] == null ? null : (bool?)bool.Parse(data["allowMultipleStacks"].ToString()))
+                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["stackingLimit"] = StackingLimit,
+                ["allowMultipleStacks"] = AllowMultipleStacks,
+                ["sortValue"] = SortValue,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["stackingLimit"] = stackingLimit;
-            data["allowMultipleStacks"] = allowMultipleStacks;
-            data["sortValue"] = sortValue;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (StackingLimit != null) {
+                writer.WritePropertyName("stackingLimit");
+                writer.Write(long.Parse(StackingLimit.ToString()));
+            }
+            if (AllowMultipleStacks != null) {
+                writer.WritePropertyName("allowMultipleStacks");
+                writer.Write(bool.Parse(AllowMultipleStacks.ToString()));
+            }
+            if (SortValue != null) {
+                writer.WritePropertyName("sortValue");
+                writer.Write(int.Parse(SortValue.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

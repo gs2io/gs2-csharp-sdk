@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Enhance.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,88 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Enhance.Result
 {
 	[Preserve]
-	public class EndResult
+	[System.Serializable]
+	public class EndResult : IResult
 	{
-        /** 強化実行 */
-        public Progress item { set; get; }
+        public Gs2.Gs2Enhance.Model.Progress Item { set; get; }
+        public string StampSheet { set; get; }
+        public string StampSheetEncryptionKeyId { set; get; }
+        public long? AcquireExperience { set; get; }
+        public float? BonusRate { set; get; }
 
-        /** 報酬付与処理の実行に使用するスタンプシート */
-        public string stampSheet { set; get; }
+        public EndResult WithItem(Gs2.Gs2Enhance.Model.Progress item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** スタンプシートの署名計算に使用した暗号鍵GRN */
-        public string stampSheetEncryptionKeyId { set; get; }
+        public EndResult WithStampSheet(string stampSheet) {
+            this.StampSheet = stampSheet;
+            return this;
+        }
 
-        /** 獲得経験値量 */
-        public long? acquireExperience { set; get; }
+        public EndResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
+            this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
+            return this;
+        }
 
-        /** 経験値ボーナスの倍率(1.0=ボーナスなし) */
-        public float? bonusRate { set; get; }
+        public EndResult WithAcquireExperience(long? acquireExperience) {
+            this.AcquireExperience = acquireExperience;
+            return this;
+        }
 
+        public EndResult WithBonusRate(float? bonusRate) {
+            this.BonusRate = bonusRate;
+            return this;
+        }
 
     	[Preserve]
-        public static EndResult FromDict(JsonData data)
+        public static EndResult FromJson(JsonData data)
         {
-            return new EndResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Enhance.Model.Progress.FromDict(data["item"]) : null,
-                stampSheet = data.Keys.Contains("stampSheet") && data["stampSheet"] != null ? data["stampSheet"].ToString() : null,
-                stampSheetEncryptionKeyId = data.Keys.Contains("stampSheetEncryptionKeyId") && data["stampSheetEncryptionKeyId"] != null ? data["stampSheetEncryptionKeyId"].ToString() : null,
-                acquireExperience = data.Keys.Contains("acquireExperience") && data["acquireExperience"] != null ? (long?)long.Parse(data["acquireExperience"].ToString()) : null,
-                bonusRate = data.Keys.Contains("bonusRate") && data["bonusRate"] != null ? (float?)float.Parse(data["bonusRate"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new EndResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enhance.Model.Progress.FromJson(data["item"]))
+                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
+                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
+                .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)long.Parse(data["acquireExperience"].ToString()))
+                .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["stampSheet"] = StampSheet,
+                ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
+                ["acquireExperience"] = AcquireExperience,
+                ["bonusRate"] = BonusRate,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (StampSheet != null) {
+                writer.WritePropertyName("stampSheet");
+                writer.Write(StampSheet.ToString());
+            }
+            if (StampSheetEncryptionKeyId != null) {
+                writer.WritePropertyName("stampSheetEncryptionKeyId");
+                writer.Write(StampSheetEncryptionKeyId.ToString());
+            }
+            if (AcquireExperience != null) {
+                writer.WritePropertyName("acquireExperience");
+                writer.Write(long.Parse(AcquireExperience.ToString()));
+            }
+            if (BonusRate != null) {
+                writer.WritePropertyName("bonusRate");
+                writer.Write(float.Parse(BonusRate.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

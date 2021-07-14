@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Identifier.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Identifier.Result
 {
 	[Preserve]
-	public class CreateIdentifierResult
+	[System.Serializable]
+	public class CreateIdentifierResult : IResult
 	{
-        /** 作成したクレデンシャル */
-        public Identifier item { set; get; }
+        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; }
+        public string ClientSecret { set; get; }
 
-        /** クライアントシークレット */
-        public string clientSecret { set; get; }
+        public CreateIdentifierResult WithItem(Gs2.Gs2Identifier.Model.Identifier item) {
+            this.Item = item;
+            return this;
+        }
 
+        public CreateIdentifierResult WithClientSecret(string clientSecret) {
+            this.ClientSecret = clientSecret;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateIdentifierResult FromDict(JsonData data)
+        public static CreateIdentifierResult FromJson(JsonData data)
         {
-            return new CreateIdentifierResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Identifier.Model.Identifier.FromDict(data["item"]) : null,
-                clientSecret = data.Keys.Contains("clientSecret") && data["clientSecret"] != null ? data["clientSecret"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateIdentifierResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Identifier.Model.Identifier.FromJson(data["item"]))
+                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["clientSecret"] = ClientSecret,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (ClientSecret != null) {
+                writer.WritePropertyName("clientSecret");
+                writer.Write(ClientSecret.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

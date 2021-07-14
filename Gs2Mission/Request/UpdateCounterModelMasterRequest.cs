@@ -28,130 +28,109 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateCounterModelMasterRequest : Gs2Request<UpdateCounterModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CounterName { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
+        public string ChallengePeriodEventId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateCounterModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カウンター名 */
-		[UnityEngine.SerializeField]
-        public string counterName;
-
-        /**
-         * カウンター名を設定
-         *
-         * @param counterName カウンター名
-         * @return this
-         */
         public UpdateCounterModelMasterRequest WithCounterName(string counterName) {
-            this.counterName = counterName;
+            this.CounterName = counterName;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public UpdateCounterModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** カウンターの種類マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * カウンターの種類マスターの説明を設定
-         *
-         * @param description カウンターの種類マスターの説明
-         * @return this
-         */
         public UpdateCounterModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** カウンターのリセットタイミング */
-		[UnityEngine.SerializeField]
-        public List<CounterScopeModel> scopes;
-
-        /**
-         * カウンターのリセットタイミングを設定
-         *
-         * @param scopes カウンターのリセットタイミング
-         * @return this
-         */
-        public UpdateCounterModelMasterRequest WithScopes(List<CounterScopeModel> scopes) {
-            this.scopes = scopes;
+        public UpdateCounterModelMasterRequest WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
+            this.Scopes = scopes;
             return this;
         }
 
-
-        /** カウントアップ可能な期間を指定するイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string challengePeriodEventId;
-
-        /**
-         * カウントアップ可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId カウントアップ可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public UpdateCounterModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateCounterModelMasterRequest FromDict(JsonData data)
+        public static UpdateCounterModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateCounterModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                counterName = data.Keys.Contains("counterName") && data["counterName"] != null ? data["counterName"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                scopes = data.Keys.Contains("scopes") && data["scopes"] != null ? data["scopes"].Cast<JsonData>().Select(value =>
-                    {
-                        return CounterScopeModel.FromDict(value);
-                    }
-                ).ToList() : null,
-                challengePeriodEventId = data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCounterModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null ? new Gs2.Gs2Mission.Model.CounterScopeModel[]{} : data["scopes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.CounterScopeModel.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["counterName"] = CounterName,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                        Scopes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["counterName"] = counterName;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["scopes"] = new JsonData(scopes.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var scope in Scopes)
+            {
+                if (scope != null) {
+                    scope.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

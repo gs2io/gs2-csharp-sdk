@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2JobQueue.Model
 {
+
 	[Preserve]
 	public class JobEntry : IComparable
 	{
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
+        public int? MaxTryCount { set; get; }
 
-        /** スクリプト のGRN */
-        public string scriptId { set; get; }
-
-        /**
-         * スクリプト のGRNを設定
-         *
-         * @param scriptId スクリプト のGRN
-         * @return this
-         */
         public JobEntry WithScriptId(string scriptId) {
-            this.scriptId = scriptId;
+            this.ScriptId = scriptId;
             return this;
         }
 
-        /** 引数 */
-        public string args { set; get; }
-
-        /**
-         * 引数を設定
-         *
-         * @param args 引数
-         * @return this
-         */
         public JobEntry WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
         }
 
-        /** 最大試行回数 */
-        public int? maxTryCount { set; get; }
-
-        /**
-         * 最大試行回数を設定
-         *
-         * @param maxTryCount 最大試行回数
-         * @return this
-         */
         public JobEntry WithMaxTryCount(int? maxTryCount) {
-            this.maxTryCount = maxTryCount;
+            this.MaxTryCount = maxTryCount;
             return this;
+        }
+
+    	[Preserve]
+        public static JobEntry FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new JobEntry()
+                .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)int.Parse(data["maxTryCount"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["scriptId"] = ScriptId,
+                ["args"] = Args,
+                ["maxTryCount"] = MaxTryCount,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.scriptId != null)
-            {
+            if (ScriptId != null) {
                 writer.WritePropertyName("scriptId");
-                writer.Write(this.scriptId);
+                writer.Write(ScriptId.ToString());
             }
-            if(this.args != null)
-            {
+            if (Args != null) {
                 writer.WritePropertyName("args");
-                writer.Write(this.args);
+                writer.Write(Args.ToString());
             }
-            if(this.maxTryCount.HasValue)
-            {
+            if (MaxTryCount != null) {
                 writer.WritePropertyName("maxTryCount");
-                writer.Write(this.maxTryCount.Value);
+                writer.Write(int.Parse(MaxTryCount.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static JobEntry FromDict(JsonData data)
-        {
-            return new JobEntry()
-                .WithScriptId(data.Keys.Contains("scriptId") && data["scriptId"] != null ? data["scriptId"].ToString() : null)
-                .WithArgs(data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString() : null)
-                .WithMaxTryCount(data.Keys.Contains("maxTryCount") && data["maxTryCount"] != null ? (int?)int.Parse(data["maxTryCount"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as JobEntry;
             var diff = 0;
-            if (scriptId == null && scriptId == other.scriptId)
+            if (ScriptId == null && ScriptId == other.ScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += scriptId.CompareTo(other.scriptId);
+                diff += ScriptId.CompareTo(other.ScriptId);
             }
-            if (args == null && args == other.args)
+            if (Args == null && Args == other.Args)
             {
                 // null and null
             }
             else
             {
-                diff += args.CompareTo(other.args);
+                diff += Args.CompareTo(other.Args);
             }
-            if (maxTryCount == null && maxTryCount == other.maxTryCount)
+            if (MaxTryCount == null && MaxTryCount == other.MaxTryCount)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxTryCount - other.maxTryCount);
+                diff += (int)(MaxTryCount - other.MaxTryCount);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["scriptId"] = scriptId;
-            data["args"] = args;
-            data["maxTryCount"] = maxTryCount;
-            return data;
-        }
-	}
+    }
 }

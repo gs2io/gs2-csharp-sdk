@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Lottery.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Lottery.Result
 {
 	[Preserve]
-	public class GetPrizeTableResult
+	[System.Serializable]
+	public class GetPrizeTableResult : IResult
 	{
-        /** 排出確率テーブル */
-        public PrizeTable item { set; get; }
+        public Gs2.Gs2Lottery.Model.PrizeTable Item { set; get; }
 
+        public GetPrizeTableResult WithItem(Gs2.Gs2Lottery.Model.PrizeTable item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetPrizeTableResult FromDict(JsonData data)
+        public static GetPrizeTableResult FromJson(JsonData data)
         {
-            return new GetPrizeTableResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Lottery.Model.PrizeTable.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetPrizeTableResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Lottery.Model.PrizeTable.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

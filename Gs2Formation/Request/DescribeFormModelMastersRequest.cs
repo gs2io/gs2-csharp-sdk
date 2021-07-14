@@ -28,72 +28,62 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DescribeFormModelMastersRequest : Gs2Request<DescribeFormModelMastersRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeFormModelMastersRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
         public DescribeFormModelMastersRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
+            this.PageToken = pageToken;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeFormModelMastersRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public DescribeFormModelMastersRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeFormModelMastersRequest FromDict(JsonData data)
+        public static DescribeFormModelMastersRequest FromJson(JsonData data)
         {
-            return new DescribeFormModelMastersRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeFormModelMastersRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,251 +23,154 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class Subscribe : IComparable
 	{
+        public string SubscribeId { set; get; }
+        public string CategoryName { set; get; }
+        public string UserId { set; get; }
+        public string[] TargetUserIds { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** 購読 */
-        public string subscribeId { set; get; }
-
-        /**
-         * 購読を設定
-         *
-         * @param subscribeId 購読
-         * @return this
-         */
         public Subscribe WithSubscribeId(string subscribeId) {
-            this.subscribeId = subscribeId;
+            this.SubscribeId = subscribeId;
             return this;
         }
 
-        /** カテゴリ名 */
-        public string categoryName { set; get; }
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public Subscribe WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-        /** 購読するユーザID */
-        public string userId { set; get; }
-
-        /**
-         * 購読するユーザIDを設定
-         *
-         * @param userId 購読するユーザID
-         * @return this
-         */
         public Subscribe WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 購読されるユーザIDリスト */
-        public List<string> targetUserIds { set; get; }
-
-        /**
-         * 購読されるユーザIDリストを設定
-         *
-         * @param targetUserIds 購読されるユーザIDリスト
-         * @return this
-         */
-        public Subscribe WithTargetUserIds(List<string> targetUserIds) {
-            this.targetUserIds = targetUserIds;
+        public Subscribe WithTargetUserIds(string[] targetUserIds) {
+            this.TargetUserIds = targetUserIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Subscribe WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Subscribe FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Subscribe()
+                .WithSubscribeId(!data.Keys.Contains("subscribeId") || data["subscribeId"] == null ? null : data["subscribeId"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetUserIds(!data.Keys.Contains("targetUserIds") || data["targetUserIds"] == null ? new string[]{} : data["targetUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["subscribeId"] = SubscribeId,
+                ["categoryName"] = CategoryName,
+                ["userId"] = UserId,
+                ["targetUserIds"] = new JsonData(TargetUserIds == null ? new JsonData[]{} :
+                        TargetUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.subscribeId != null)
-            {
+            if (SubscribeId != null) {
                 writer.WritePropertyName("subscribeId");
-                writer.Write(this.subscribeId);
+                writer.Write(SubscribeId.ToString());
             }
-            if(this.categoryName != null)
-            {
+            if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
-                writer.Write(this.categoryName);
+                writer.Write(CategoryName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.targetUserIds != null)
-            {
+            if (TargetUserIds != null) {
                 writer.WritePropertyName("targetUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.targetUserIds)
+                foreach (var targetUserId in TargetUserIds)
                 {
-                    writer.Write(item);
+                    if (targetUserId != null) {
+                        writer.Write(targetUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetCategoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):subscribe:category:(?<categoryName>.*)");
-        if (!match.Groups["categoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["categoryName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):subscribe:category:(?<categoryName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):subscribe:category:(?<categoryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):subscribe:category:(?<categoryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):ranking:(?<namespaceName>.*):user:(?<userId>.*):subscribe:category:(?<categoryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Subscribe FromDict(JsonData data)
-        {
-            return new Subscribe()
-                .WithSubscribeId(data.Keys.Contains("subscribeId") && data["subscribeId"] != null ? data["subscribeId"].ToString() : null)
-                .WithCategoryName(data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithTargetUserIds(data.Keys.Contains("targetUserIds") && data["targetUserIds"] != null ? data["targetUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Subscribe;
             var diff = 0;
-            if (subscribeId == null && subscribeId == other.subscribeId)
+            if (SubscribeId == null && SubscribeId == other.SubscribeId)
             {
                 // null and null
             }
             else
             {
-                diff += subscribeId.CompareTo(other.subscribeId);
+                diff += SubscribeId.CompareTo(other.SubscribeId);
             }
-            if (categoryName == null && categoryName == other.categoryName)
+            if (CategoryName == null && CategoryName == other.CategoryName)
             {
                 // null and null
             }
             else
             {
-                diff += categoryName.CompareTo(other.categoryName);
+                diff += CategoryName.CompareTo(other.CategoryName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (targetUserIds == null && targetUserIds == other.targetUserIds)
+            if (TargetUserIds == null && TargetUserIds == other.TargetUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += targetUserIds.Count - other.targetUserIds.Count;
-                for (var i = 0; i < targetUserIds.Count; i++)
+                diff += TargetUserIds.Length - other.TargetUserIds.Length;
+                for (var i = 0; i < TargetUserIds.Length; i++)
                 {
-                    diff += targetUserIds[i].CompareTo(other.targetUserIds[i]);
+                    diff += TargetUserIds[i].CompareTo(other.TargetUserIds[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["subscribeId"] = subscribeId;
-            data["categoryName"] = categoryName;
-            data["userId"] = userId;
-            data["targetUserIds"] = new JsonData(targetUserIds);
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

@@ -28,68 +28,49 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DistributeWithoutOverflowProcessRequest : Gs2Request<DistributeWithoutOverflowProcessRequest>
 	{
+        public string UserId { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
 
-        /** 加算するリソース */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Distributor.Model.DistributeResource distributeResource;
-
-        /**
-         * 加算するリソースを設定
-         *
-         * @param distributeResource 加算するリソース
-         * @return this
-         */
-        public DistributeWithoutOverflowProcessRequest WithDistributeResource(global::Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
-            this.distributeResource = distributeResource;
+        public DistributeWithoutOverflowProcessRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DistributeWithoutOverflowProcessRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
-        public DistributeWithoutOverflowProcessRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+        public DistributeWithoutOverflowProcessRequest WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
+            this.DistributeResource = distributeResource;
             return this;
         }
 
     	[Preserve]
-        public static DistributeWithoutOverflowProcessRequest FromDict(JsonData data)
+        public static DistributeWithoutOverflowProcessRequest FromJson(JsonData data)
         {
-            return new DistributeWithoutOverflowProcessRequest {
-                distributeResource = data.Keys.Contains("distributeResource") && data["distributeResource"] != null ? global::Gs2.Gs2Distributor.Model.DistributeResource.FromDict(data["distributeResource"]) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DistributeWithoutOverflowProcessRequest()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["distributeResource"] = DistributeResource?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["distributeResource"] = distributeResource.ToDict();
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (DistributeResource != null) {
+                DistributeResource.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

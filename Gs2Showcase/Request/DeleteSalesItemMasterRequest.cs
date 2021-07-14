@@ -28,54 +28,50 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DeleteSalesItemMasterRequest : Gs2Request<DeleteSalesItemMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string SalesItemName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteSalesItemMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string salesItemName;
-
-        /**
-         * 商品名を設定
-         *
-         * @param salesItemName 商品名
-         * @return this
-         */
         public DeleteSalesItemMasterRequest WithSalesItemName(string salesItemName) {
-            this.salesItemName = salesItemName;
+            this.SalesItemName = salesItemName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteSalesItemMasterRequest FromDict(JsonData data)
+        public static DeleteSalesItemMasterRequest FromJson(JsonData data)
         {
-            return new DeleteSalesItemMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                salesItemName = data.Keys.Contains("salesItemName") && data["salesItemName"] != null ? data["salesItemName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteSalesItemMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithSalesItemName(!data.Keys.Contains("salesItemName") || data["salesItemName"] == null ? null : data["salesItemName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["salesItemName"] = SalesItemName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["salesItemName"] = salesItemName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (SalesItemName != null) {
+                writer.WritePropertyName("salesItemName");
+                writer.Write(SalesItemName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

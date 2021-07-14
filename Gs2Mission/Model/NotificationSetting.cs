@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class NotificationSetting : IComparable
 	{
+        public string GatewayNamespaceId { set; get; }
+        public bool? EnableTransferMobileNotification { set; get; }
+        public string Sound { set; get; }
 
-        /** プッシュ通知に使用する GS2-Gateway のネームスペース のGRN */
-        public string gatewayNamespaceId { set; get; }
-
-        /**
-         * プッシュ通知に使用する GS2-Gateway のネームスペース のGRNを設定
-         *
-         * @param gatewayNamespaceId プッシュ通知に使用する GS2-Gateway のネームスペース のGRN
-         * @return this
-         */
         public NotificationSetting WithGatewayNamespaceId(string gatewayNamespaceId) {
-            this.gatewayNamespaceId = gatewayNamespaceId;
+            this.GatewayNamespaceId = gatewayNamespaceId;
             return this;
         }
 
-        /** モバイルプッシュ通知へ転送するか */
-        public bool? enableTransferMobileNotification { set; get; }
-
-        /**
-         * モバイルプッシュ通知へ転送するかを設定
-         *
-         * @param enableTransferMobileNotification モバイルプッシュ通知へ転送するか
-         * @return this
-         */
         public NotificationSetting WithEnableTransferMobileNotification(bool? enableTransferMobileNotification) {
-            this.enableTransferMobileNotification = enableTransferMobileNotification;
+            this.EnableTransferMobileNotification = enableTransferMobileNotification;
             return this;
         }
 
-        /** モバイルプッシュ通知で使用するサウンドファイル名 */
-        public string sound { set; get; }
-
-        /**
-         * モバイルプッシュ通知で使用するサウンドファイル名を設定
-         *
-         * @param sound モバイルプッシュ通知で使用するサウンドファイル名
-         * @return this
-         */
         public NotificationSetting WithSound(string sound) {
-            this.sound = sound;
+            this.Sound = sound;
             return this;
+        }
+
+    	[Preserve]
+        public static NotificationSetting FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new NotificationSetting()
+                .WithGatewayNamespaceId(!data.Keys.Contains("gatewayNamespaceId") || data["gatewayNamespaceId"] == null ? null : data["gatewayNamespaceId"].ToString())
+                .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
+                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["gatewayNamespaceId"] = GatewayNamespaceId,
+                ["enableTransferMobileNotification"] = EnableTransferMobileNotification,
+                ["sound"] = Sound,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.gatewayNamespaceId != null)
-            {
+            if (GatewayNamespaceId != null) {
                 writer.WritePropertyName("gatewayNamespaceId");
-                writer.Write(this.gatewayNamespaceId);
+                writer.Write(GatewayNamespaceId.ToString());
             }
-            if(this.enableTransferMobileNotification.HasValue)
-            {
+            if (EnableTransferMobileNotification != null) {
                 writer.WritePropertyName("enableTransferMobileNotification");
-                writer.Write(this.enableTransferMobileNotification.Value);
+                writer.Write(bool.Parse(EnableTransferMobileNotification.ToString()));
             }
-            if(this.sound != null)
-            {
+            if (Sound != null) {
                 writer.WritePropertyName("sound");
-                writer.Write(this.sound);
+                writer.Write(Sound.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static NotificationSetting FromDict(JsonData data)
-        {
-            return new NotificationSetting()
-                .WithGatewayNamespaceId(data.Keys.Contains("gatewayNamespaceId") && data["gatewayNamespaceId"] != null ? data["gatewayNamespaceId"].ToString() : null)
-                .WithEnableTransferMobileNotification(data.Keys.Contains("enableTransferMobileNotification") && data["enableTransferMobileNotification"] != null ? (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()) : null)
-                .WithSound(data.Keys.Contains("sound") && data["sound"] != null ? data["sound"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as NotificationSetting;
             var diff = 0;
-            if (gatewayNamespaceId == null && gatewayNamespaceId == other.gatewayNamespaceId)
+            if (GatewayNamespaceId == null && GatewayNamespaceId == other.GatewayNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += gatewayNamespaceId.CompareTo(other.gatewayNamespaceId);
+                diff += GatewayNamespaceId.CompareTo(other.GatewayNamespaceId);
             }
-            if (enableTransferMobileNotification == null && enableTransferMobileNotification == other.enableTransferMobileNotification)
+            if (EnableTransferMobileNotification == null && EnableTransferMobileNotification == other.EnableTransferMobileNotification)
             {
                 // null and null
             }
             else
             {
-                diff += enableTransferMobileNotification == other.enableTransferMobileNotification ? 0 : 1;
+                diff += EnableTransferMobileNotification == other.EnableTransferMobileNotification ? 0 : 1;
             }
-            if (sound == null && sound == other.sound)
+            if (Sound == null && Sound == other.Sound)
             {
                 // null and null
             }
             else
             {
-                diff += sound.CompareTo(other.sound);
+                diff += Sound.CompareTo(other.Sound);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["gatewayNamespaceId"] = gatewayNamespaceId;
-            data["enableTransferMobileNotification"] = enableTransferMobileNotification;
-            data["sound"] = sound;
-            return data;
-        }
-	}
+    }
 }

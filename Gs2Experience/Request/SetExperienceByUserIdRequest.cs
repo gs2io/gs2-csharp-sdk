@@ -28,126 +28,86 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class SetExperienceByUserIdRequest : Gs2Request<SetExperienceByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string ExperienceName { set; get; }
+        public string PropertyId { set; get; }
+        public long? ExperienceValue { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetExperienceByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SetExperienceByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 経験値の種類の名前 */
-		[UnityEngine.SerializeField]
-        public string experienceName;
-
-        /**
-         * 経験値の種類の名前を設定
-         *
-         * @param experienceName 経験値の種類の名前
-         * @return this
-         */
         public SetExperienceByUserIdRequest WithExperienceName(string experienceName) {
-            this.experienceName = experienceName;
+            this.ExperienceName = experienceName;
             return this;
         }
 
-
-        /** プロパティID */
-		[UnityEngine.SerializeField]
-        public string propertyId;
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
         public SetExperienceByUserIdRequest WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
+            this.PropertyId = propertyId;
             return this;
         }
 
-
-        /** 累計獲得経験値 */
-		[UnityEngine.SerializeField]
-        public long? experienceValue;
-
-        /**
-         * 累計獲得経験値を設定
-         *
-         * @param experienceValue 累計獲得経験値
-         * @return this
-         */
         public SetExperienceByUserIdRequest WithExperienceValue(long? experienceValue) {
-            this.experienceValue = experienceValue;
+            this.ExperienceValue = experienceValue;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetExperienceByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SetExperienceByUserIdRequest FromDict(JsonData data)
+        public static SetExperienceByUserIdRequest FromJson(JsonData data)
         {
-            return new SetExperienceByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                experienceName = data.Keys.Contains("experienceName") && data["experienceName"] != null ? data["experienceName"].ToString(): null,
-                propertyId = data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString(): null,
-                experienceValue = data.Keys.Contains("experienceValue") && data["experienceValue"] != null ? (long?)long.Parse(data["experienceValue"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetExperienceByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)long.Parse(data["experienceValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["experienceName"] = ExperienceName,
+                ["propertyId"] = PropertyId,
+                ["experienceValue"] = ExperienceValue,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["experienceName"] = experienceName;
-            data["propertyId"] = propertyId;
-            data["experienceValue"] = experienceValue;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (ExperienceName != null) {
+                writer.WritePropertyName("experienceName");
+                writer.Write(ExperienceName.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
+            }
+            if (ExperienceValue != null) {
+                writer.WritePropertyName("experienceValue");
+                writer.Write(long.Parse(ExperienceValue.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

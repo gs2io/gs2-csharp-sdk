@@ -45,7 +45,7 @@ namespace Gs2.Core.Net
             /** 有効期間(秒) */
             public int? expires_in;
 
-            public static LoginResult FromDict(JsonData data)
+            public static LoginResult FromJson(JsonData data)
             {
                 if (data == null)
                 {
@@ -115,7 +115,7 @@ namespace Gs2.Core.Net
                             {
                                 if (gs2WebSocketResponse.Error == null)
                                 {
-                                    LoginResult loginResult = LoginResult.FromDict(gs2WebSocketResponse.Body);
+                                    LoginResult loginResult = LoginResult.FromJson(gs2WebSocketResponse.Body);
                                     if (loginResult.access_token != null)
                                     {
                                         _state = State.Available;
@@ -144,7 +144,7 @@ namespace Gs2.Core.Net
                             {
                                 // API 応答以外のメッセージ
                                 OnNotificationMessage?.Invoke(
-                                    NotificationMessage.FromDict(gs2WebSocketResponse.Body)
+                                    NotificationMessage.FromJson(gs2WebSocketResponse.Body)
                                 );
                             }
                             else

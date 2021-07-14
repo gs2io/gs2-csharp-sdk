@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inbox.Result
 {
 	[Preserve]
-	public class UpdateGlobalMessageMasterResult
+	[System.Serializable]
+	public class UpdateGlobalMessageMasterResult : IResult
 	{
-        /** 全ユーザに向けたメッセージ */
-        public GlobalMessageMaster item { set; get; }
+        public Gs2.Gs2Inbox.Model.GlobalMessageMaster Item { set; get; }
 
+        public UpdateGlobalMessageMasterResult WithItem(Gs2.Gs2Inbox.Model.GlobalMessageMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateGlobalMessageMasterResult FromDict(JsonData data)
+        public static UpdateGlobalMessageMasterResult FromJson(JsonData data)
         {
-            return new UpdateGlobalMessageMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Inbox.Model.GlobalMessageMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateGlobalMessageMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inbox.Model.GlobalMessageMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

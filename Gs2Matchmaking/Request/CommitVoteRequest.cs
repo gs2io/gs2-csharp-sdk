@@ -28,72 +28,62 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CommitVoteRequest : Gs2Request<CommitVoteRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
+        public string GatheringName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CommitVoteRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** レーティング名 */
-		[UnityEngine.SerializeField]
-        public string ratingName;
-
-        /**
-         * レーティング名を設定
-         *
-         * @param ratingName レーティング名
-         * @return this
-         */
         public CommitVoteRequest WithRatingName(string ratingName) {
-            this.ratingName = ratingName;
+            this.RatingName = ratingName;
             return this;
         }
 
-
-        /** 投票対象のギャザリング名 */
-		[UnityEngine.SerializeField]
-        public string gatheringName;
-
-        /**
-         * 投票対象のギャザリング名を設定
-         *
-         * @param gatheringName 投票対象のギャザリング名
-         * @return this
-         */
         public CommitVoteRequest WithGatheringName(string gatheringName) {
-            this.gatheringName = gatheringName;
+            this.GatheringName = gatheringName;
             return this;
         }
-
 
     	[Preserve]
-        public static CommitVoteRequest FromDict(JsonData data)
+        public static CommitVoteRequest FromJson(JsonData data)
         {
-            return new CommitVoteRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ratingName = data.Keys.Contains("ratingName") && data["ratingName"] != null ? data["ratingName"].ToString(): null,
-                gatheringName = data.Keys.Contains("gatheringName") && data["gatheringName"] != null ? data["gatheringName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CommitVoteRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ratingName"] = RatingName,
+                ["gatheringName"] = GatheringName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ratingName"] = ratingName;
-            data["gatheringName"] = gatheringName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RatingName != null) {
+                writer.WritePropertyName("ratingName");
+                writer.Write(RatingName.ToString());
+            }
+            if (GatheringName != null) {
+                writer.WritePropertyName("gatheringName");
+                writer.Write(GatheringName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

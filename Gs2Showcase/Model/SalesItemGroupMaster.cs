@@ -23,297 +23,194 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class SalesItemGroupMaster : IComparable
 	{
+        public string SalesItemGroupId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string[] SalesItemNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 商品グループマスター */
-        public string salesItemGroupId { set; get; }
-
-        /**
-         * 商品グループマスターを設定
-         *
-         * @param salesItemGroupId 商品グループマスター
-         * @return this
-         */
         public SalesItemGroupMaster WithSalesItemGroupId(string salesItemGroupId) {
-            this.salesItemGroupId = salesItemGroupId;
+            this.SalesItemGroupId = salesItemGroupId;
             return this;
         }
 
-        /** 商品名 */
-        public string name { set; get; }
-
-        /**
-         * 商品名を設定
-         *
-         * @param name 商品名
-         * @return this
-         */
         public SalesItemGroupMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 商品グループマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * 商品グループマスターの説明を設定
-         *
-         * @param description 商品グループマスターの説明
-         * @return this
-         */
         public SalesItemGroupMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 商品のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public SalesItemGroupMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 商品グループに含める商品リスト */
-        public List<string> salesItemNames { set; get; }
-
-        /**
-         * 商品グループに含める商品リストを設定
-         *
-         * @param salesItemNames 商品グループに含める商品リスト
-         * @return this
-         */
-        public SalesItemGroupMaster WithSalesItemNames(List<string> salesItemNames) {
-            this.salesItemNames = salesItemNames;
+        public SalesItemGroupMaster WithSalesItemNames(string[] salesItemNames) {
+            this.SalesItemNames = salesItemNames;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public SalesItemGroupMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public SalesItemGroupMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static SalesItemGroupMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SalesItemGroupMaster()
+                .WithSalesItemGroupId(!data.Keys.Contains("salesItemGroupId") || data["salesItemGroupId"] == null ? null : data["salesItemGroupId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSalesItemNames(!data.Keys.Contains("salesItemNames") || data["salesItemNames"] == null ? new string[]{} : data["salesItemNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["salesItemGroupId"] = SalesItemGroupId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["salesItemNames"] = new JsonData(SalesItemNames == null ? new JsonData[]{} :
+                        SalesItemNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.salesItemGroupId != null)
-            {
+            if (SalesItemGroupId != null) {
                 writer.WritePropertyName("salesItemGroupId");
-                writer.Write(this.salesItemGroupId);
+                writer.Write(SalesItemGroupId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.salesItemNames != null)
-            {
+            if (SalesItemNames != null) {
                 writer.WritePropertyName("salesItemNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.salesItemNames)
+                foreach (var salesItemName in SalesItemNames)
                 {
-                    writer.Write(item);
+                    if (salesItemName != null) {
+                        writer.Write(salesItemName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetSalesItemGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):salesItemGroup:(?<salesItemGroupName>.*)");
-        if (!match.Groups["salesItemGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["salesItemGroupName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):salesItemGroup:(?<salesItemGroupName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):salesItemGroup:(?<salesItemGroupName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):salesItemGroup:(?<salesItemGroupName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static SalesItemGroupMaster FromDict(JsonData data)
-        {
-            return new SalesItemGroupMaster()
-                .WithSalesItemGroupId(data.Keys.Contains("salesItemGroupId") && data["salesItemGroupId"] != null ? data["salesItemGroupId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithSalesItemNames(data.Keys.Contains("salesItemNames") && data["salesItemNames"] != null ? data["salesItemNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SalesItemGroupMaster;
             var diff = 0;
-            if (salesItemGroupId == null && salesItemGroupId == other.salesItemGroupId)
+            if (SalesItemGroupId == null && SalesItemGroupId == other.SalesItemGroupId)
             {
                 // null and null
             }
             else
             {
-                diff += salesItemGroupId.CompareTo(other.salesItemGroupId);
+                diff += SalesItemGroupId.CompareTo(other.SalesItemGroupId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (salesItemNames == null && salesItemNames == other.salesItemNames)
+            if (SalesItemNames == null && SalesItemNames == other.SalesItemNames)
             {
                 // null and null
             }
             else
             {
-                diff += salesItemNames.Count - other.salesItemNames.Count;
-                for (var i = 0; i < salesItemNames.Count; i++)
+                diff += SalesItemNames.Length - other.SalesItemNames.Length;
+                for (var i = 0; i < SalesItemNames.Length; i++)
                 {
-                    diff += salesItemNames[i].CompareTo(other.salesItemNames[i]);
+                    diff += SalesItemNames[i].CompareTo(other.SalesItemNames[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["salesItemGroupId"] = salesItemGroupId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["salesItemNames"] = new JsonData(salesItemNames);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

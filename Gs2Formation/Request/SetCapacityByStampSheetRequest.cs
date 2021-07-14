@@ -28,72 +28,50 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SetCapacityByStampSheetRequest : Gs2Request<SetCapacityByStampSheetRequest>
 	{
+        public string StampSheet { set; get; }
+        public string KeyId { set; get; }
 
-        /** スタンプシート */
-		[UnityEngine.SerializeField]
-        public string stampSheet;
-
-        /**
-         * スタンプシートを設定
-         *
-         * @param stampSheet スタンプシート
-         * @return this
-         */
         public SetCapacityByStampSheetRequest WithStampSheet(string stampSheet) {
-            this.stampSheet = stampSheet;
+            this.StampSheet = stampSheet;
             return this;
         }
 
-
-        /** スタンプシートの署名検証に使用する 暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * スタンプシートの署名検証に使用する 暗号鍵 のGRNを設定
-         *
-         * @param keyId スタンプシートの署名検証に使用する 暗号鍵 のGRN
-         * @return this
-         */
         public SetCapacityByStampSheetRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetCapacityByStampSheetRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SetCapacityByStampSheetRequest FromDict(JsonData data)
+        public static SetCapacityByStampSheetRequest FromJson(JsonData data)
         {
-            return new SetCapacityByStampSheetRequest {
-                stampSheet = data.Keys.Contains("stampSheet") && data["stampSheet"] != null ? data["stampSheet"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetCapacityByStampSheetRequest()
+                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stampSheet"] = StampSheet,
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stampSheet"] = stampSheet;
-            data["keyId"] = keyId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (StampSheet != null) {
+                writer.WritePropertyName("stampSheet");
+                writer.Write(StampSheet.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Auth
+using Gs2.Util.LitJson;namespace Gs2.Gs2Auth
 {
 	public class Gs2AuthRestClient : AbstractGs2Client
 	{
@@ -77,20 +75,20 @@ namespace Gs2.Gs2Auth
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.timeOffset != null)
+                if (_request.TimeOffset != null)
                 {
                     jsonWriter.WritePropertyName("timeOffset");
-                    jsonWriter.Write(_request.timeOffset.ToString());
+                    jsonWriter.Write(_request.TimeOffset.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -101,13 +99,9 @@ namespace Gs2.Gs2Auth
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -115,11 +109,6 @@ namespace Gs2.Gs2Auth
         }
 
 		/// <summary>
-		///  指定したユーザIDでGS2にログインし、アクセストークンを取得します<br />
-		///    本APIは信頼出来るゲームサーバーから呼び出されることを想定しています。<br />
-		///    ユーザIDの値の検証処理が存在しないため、クライアントから呼び出すのは不適切です。<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
@@ -159,30 +148,30 @@ namespace Gs2.Gs2Auth
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.userId != null)
+                if (_request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.userId.ToString());
+                    jsonWriter.Write(_request.UserId.ToString());
                 }
-                if (_request.keyId != null)
+                if (_request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.keyId.ToString());
+                    jsonWriter.Write(_request.KeyId.ToString());
                 }
-                if (_request.body != null)
+                if (_request.Body != null)
                 {
                     jsonWriter.WritePropertyName("body");
-                    jsonWriter.Write(_request.body.ToString());
+                    jsonWriter.Write(_request.Body.ToString());
                 }
-                if (_request.signature != null)
+                if (_request.Signature != null)
                 {
                     jsonWriter.WritePropertyName("signature");
-                    jsonWriter.Write(_request.signature.ToString());
+                    jsonWriter.Write(_request.Signature.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
@@ -193,13 +182,9 @@ namespace Gs2.Gs2Auth
                 }
                 UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
 
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.requestId);
-                }
-                if (_request.duplicationAvoider != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-DUPLICATION-AVOIDER", _request.duplicationAvoider);
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
 
                 return Send((Gs2RestSession)gs2Session);
@@ -207,10 +192,6 @@ namespace Gs2.Gs2Auth
         }
 
 		/// <summary>
-		///  指定したユーザIDでGS2にログインし、アクセストークンを取得します<br />
-		///    ユーザIDの署名検証を実施することで、本APIはクライアントから呼び出しても安全です。<br />
-		/// </summary>
-        ///
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>

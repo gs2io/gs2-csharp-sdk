@@ -28,112 +28,97 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdatePrizeTableMasterRequest : Gs2Request<UpdatePrizeTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string PrizeTableName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Lottery.Model.Prize[] Prizes { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdatePrizeTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 排出確率テーブル名 */
-		[UnityEngine.SerializeField]
-        public string prizeTableName;
-
-        /**
-         * 排出確率テーブル名を設定
-         *
-         * @param prizeTableName 排出確率テーブル名
-         * @return this
-         */
         public UpdatePrizeTableMasterRequest WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-
-        /** 排出確率テーブルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 排出確率テーブルマスターの説明を設定
-         *
-         * @param description 排出確率テーブルマスターの説明
-         * @return this
-         */
         public UpdatePrizeTableMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 排出確率テーブルのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 排出確率テーブルのメタデータを設定
-         *
-         * @param metadata 排出確率テーブルのメタデータ
-         * @return this
-         */
         public UpdatePrizeTableMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 景品リスト */
-		[UnityEngine.SerializeField]
-        public List<Prize> prizes;
-
-        /**
-         * 景品リストを設定
-         *
-         * @param prizes 景品リスト
-         * @return this
-         */
-        public UpdatePrizeTableMasterRequest WithPrizes(List<Prize> prizes) {
-            this.prizes = prizes;
+        public UpdatePrizeTableMasterRequest WithPrizes(Gs2.Gs2Lottery.Model.Prize[] prizes) {
+            this.Prizes = prizes;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdatePrizeTableMasterRequest FromDict(JsonData data)
+        public static UpdatePrizeTableMasterRequest FromJson(JsonData data)
         {
-            return new UpdatePrizeTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                prizeTableName = data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                prizes = data.Keys.Contains("prizes") && data["prizes"] != null ? data["prizes"].Cast<JsonData>().Select(value =>
-                    {
-                        return Prize.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdatePrizeTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithPrizes(!data.Keys.Contains("prizes") || data["prizes"] == null ? new Gs2.Gs2Lottery.Model.Prize[]{} : data["prizes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.Prize.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["prizeTableName"] = PrizeTableName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["prizes"] = new JsonData(Prizes == null ? new JsonData[]{} :
+                        Prizes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["prizeTableName"] = prizeTableName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["prizes"] = new JsonData(prizes.Select(item => item.ToDict()));
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (PrizeTableName != null) {
+                writer.WritePropertyName("prizeTableName");
+                writer.Write(PrizeTableName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var prize in Prizes)
+            {
+                if (prize != null) {
+                    prize.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,149 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Auth.Model
 {
+
 	[Preserve]
 	public class AccessToken : IComparable
 	{
+        public string Token { set; get; }
+        public string UserId { set; get; }
+        public long? Expire { set; get; }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public AccessToken WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** アクセストークン */
-        public string token { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param token アクセストークン
-         * @return this
-         */
         public AccessToken WithToken(string token) {
-            this.token = token;
+            this.Token = token;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AccessToken WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 有効期限 */
-        public long? expire { set; get; }
-
-        /**
-         * 有効期限を設定
-         *
-         * @param expire 有効期限
-         * @return this
-         */
         public AccessToken WithExpire(long? expire) {
-            this.expire = expire;
+            this.Expire = expire;
             return this;
+        }
+
+    	[Preserve]
+        public static AccessToken FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AccessToken()
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["token"] = Token,
+                ["userId"] = UserId,
+                ["expire"] = Expire,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.token != null)
-            {
+            if (Token != null) {
                 writer.WritePropertyName("token");
-                writer.Write(this.token);
+                writer.Write(Token.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.expire.HasValue)
-            {
+            if (Expire != null) {
                 writer.WritePropertyName("expire");
-                writer.Write(this.expire.Value);
+                writer.Write(long.Parse(Expire.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static AccessToken FromDict(JsonData data)
-        {
-            return new AccessToken()
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithToken(data.Keys.Contains("token") && data["token"] != null ? data["token"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithExpire(data.Keys.Contains("expire") && data["expire"] != null ? (long?)long.Parse(data["expire"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AccessToken;
             var diff = 0;
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Token == null && Token == other.Token)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Token.CompareTo(other.Token);
             }
-            if (token == null && token == other.token)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += token.CompareTo(other.token);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (userId == null && userId == other.userId)
+            if (Expire == null && Expire == other.Expire)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
-            }
-            if (expire == null && expire == other.expire)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(expire - other.expire);
+                diff += (int)(Expire - other.Expire);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ownerId"] = ownerId;
-            data["token"] = token;
-            data["userId"] = userId;
-            data["expire"] = expire;
-            return data;
-        }
-	}
+    }
 }

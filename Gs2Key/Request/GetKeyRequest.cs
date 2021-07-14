@@ -28,54 +28,50 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class GetKeyRequest : Gs2Request<GetKeyRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string KeyName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetKeyRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 暗号鍵名 */
-		[UnityEngine.SerializeField]
-        public string keyName;
-
-        /**
-         * 暗号鍵名を設定
-         *
-         * @param keyName 暗号鍵名
-         * @return this
-         */
         public GetKeyRequest WithKeyName(string keyName) {
-            this.keyName = keyName;
+            this.KeyName = keyName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetKeyRequest FromDict(JsonData data)
+        public static GetKeyRequest FromJson(JsonData data)
         {
-            return new GetKeyRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                keyName = data.Keys.Contains("keyName") && data["keyName"] != null ? data["keyName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetKeyRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithKeyName(!data.Keys.Contains("keyName") || data["keyName"] == null ? null : data["keyName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["keyName"] = KeyName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["keyName"] = keyName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (KeyName != null) {
+                writer.WritePropertyName("keyName");
+                writer.Write(KeyName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

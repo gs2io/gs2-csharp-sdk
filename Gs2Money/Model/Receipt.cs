@@ -23,412 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Money.Model
 {
+
 	[Preserve]
 	public class Receipt : IComparable
 	{
+        public string ReceiptId { set; get; }
+        public string TransactionId { set; get; }
+        public string UserId { set; get; }
+        public string Type { set; get; }
+        public int? Slot { set; get; }
+        public float? Price { set; get; }
+        public int? Paid { set; get; }
+        public int? Free { set; get; }
+        public int? Total { set; get; }
+        public string ContentsId { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** レシート */
-        public string receiptId { set; get; }
-
-        /**
-         * レシートを設定
-         *
-         * @param receiptId レシート
-         * @return this
-         */
         public Receipt WithReceiptId(string receiptId) {
-            this.receiptId = receiptId;
+            this.ReceiptId = receiptId;
             return this;
         }
 
-        /** トランザクションID */
-        public string transactionId { set; get; }
-
-        /**
-         * トランザクションIDを設定
-         *
-         * @param transactionId トランザクションID
-         * @return this
-         */
         public Receipt WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
+            this.TransactionId = transactionId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Receipt WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 種類 */
-        public string type { set; get; }
-
-        /**
-         * 種類を設定
-         *
-         * @param type 種類
-         * @return this
-         */
         public Receipt WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** スロット番号 */
-        public int? slot { set; get; }
-
-        /**
-         * スロット番号を設定
-         *
-         * @param slot スロット番号
-         * @return this
-         */
         public Receipt WithSlot(int? slot) {
-            this.slot = slot;
+            this.Slot = slot;
             return this;
         }
 
-        /** 単価 */
-        public float? price { set; get; }
-
-        /**
-         * 単価を設定
-         *
-         * @param price 単価
-         * @return this
-         */
         public Receipt WithPrice(float? price) {
-            this.price = price;
+            this.Price = price;
             return this;
         }
 
-        /** 有償課金通貨 */
-        public int? paid { set; get; }
-
-        /**
-         * 有償課金通貨を設定
-         *
-         * @param paid 有償課金通貨
-         * @return this
-         */
         public Receipt WithPaid(int? paid) {
-            this.paid = paid;
+            this.Paid = paid;
             return this;
         }
 
-        /** 無償課金通貨 */
-        public int? free { set; get; }
-
-        /**
-         * 無償課金通貨を設定
-         *
-         * @param free 無償課金通貨
-         * @return this
-         */
         public Receipt WithFree(int? free) {
-            this.free = free;
+            this.Free = free;
             return this;
         }
 
-        /** 総数 */
-        public int? total { set; get; }
-
-        /**
-         * 総数を設定
-         *
-         * @param total 総数
-         * @return this
-         */
         public Receipt WithTotal(int? total) {
-            this.total = total;
+            this.Total = total;
             return this;
         }
 
-        /** ストアプラットフォームで販売されているコンテンツID */
-        public string contentsId { set; get; }
-
-        /**
-         * ストアプラットフォームで販売されているコンテンツIDを設定
-         *
-         * @param contentsId ストアプラットフォームで販売されているコンテンツID
-         * @return this
-         */
         public Receipt WithContentsId(string contentsId) {
-            this.contentsId = contentsId;
+            this.ContentsId = contentsId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Receipt WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Receipt FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Receipt()
+                .WithReceiptId(!data.Keys.Contains("receiptId") || data["receiptId"] == null ? null : data["receiptId"].ToString())
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)int.Parse(data["paid"].ToString()))
+                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)int.Parse(data["free"].ToString()))
+                .WithTotal(!data.Keys.Contains("total") || data["total"] == null ? null : (int?)int.Parse(data["total"].ToString()))
+                .WithContentsId(!data.Keys.Contains("contentsId") || data["contentsId"] == null ? null : data["contentsId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["receiptId"] = ReceiptId,
+                ["transactionId"] = TransactionId,
+                ["userId"] = UserId,
+                ["type"] = Type,
+                ["slot"] = Slot,
+                ["price"] = Price,
+                ["paid"] = Paid,
+                ["free"] = Free,
+                ["total"] = Total,
+                ["contentsId"] = ContentsId,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.receiptId != null)
-            {
+            if (ReceiptId != null) {
                 writer.WritePropertyName("receiptId");
-                writer.Write(this.receiptId);
+                writer.Write(ReceiptId.ToString());
             }
-            if(this.transactionId != null)
-            {
+            if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
-                writer.Write(this.transactionId);
+                writer.Write(TransactionId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.slot.HasValue)
-            {
+            if (Slot != null) {
                 writer.WritePropertyName("slot");
-                writer.Write(this.slot.Value);
+                writer.Write(int.Parse(Slot.ToString()));
             }
-            if(this.price.HasValue)
-            {
+            if (Price != null) {
                 writer.WritePropertyName("price");
-                writer.Write(this.price.Value);
+                writer.Write(float.Parse(Price.ToString()));
             }
-            if(this.paid.HasValue)
-            {
+            if (Paid != null) {
                 writer.WritePropertyName("paid");
-                writer.Write(this.paid.Value);
+                writer.Write(int.Parse(Paid.ToString()));
             }
-            if(this.free.HasValue)
-            {
+            if (Free != null) {
                 writer.WritePropertyName("free");
-                writer.Write(this.free.Value);
+                writer.Write(int.Parse(Free.ToString()));
             }
-            if(this.total.HasValue)
-            {
+            if (Total != null) {
                 writer.WritePropertyName("total");
-                writer.Write(this.total.Value);
+                writer.Write(int.Parse(Total.ToString()));
             }
-            if(this.contentsId != null)
-            {
+            if (ContentsId != null) {
                 writer.WritePropertyName("contentsId");
-                writer.Write(this.contentsId);
+                writer.Write(ContentsId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetTransactionIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):receipt:(?<transactionId>.*)");
-        if (!match.Groups["transactionId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["transactionId"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):receipt:(?<transactionId>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):receipt:(?<transactionId>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):receipt:(?<transactionId>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):money:(?<namespaceName>.*):user:(?<userId>.*):receipt:(?<transactionId>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Receipt FromDict(JsonData data)
-        {
-            return new Receipt()
-                .WithReceiptId(data.Keys.Contains("receiptId") && data["receiptId"] != null ? data["receiptId"].ToString() : null)
-                .WithTransactionId(data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithSlot(data.Keys.Contains("slot") && data["slot"] != null ? (int?)int.Parse(data["slot"].ToString()) : null)
-                .WithPrice(data.Keys.Contains("price") && data["price"] != null ? (float?)float.Parse(data["price"].ToString()) : null)
-                .WithPaid(data.Keys.Contains("paid") && data["paid"] != null ? (int?)int.Parse(data["paid"].ToString()) : null)
-                .WithFree(data.Keys.Contains("free") && data["free"] != null ? (int?)int.Parse(data["free"].ToString()) : null)
-                .WithTotal(data.Keys.Contains("total") && data["total"] != null ? (int?)int.Parse(data["total"].ToString()) : null)
-                .WithContentsId(data.Keys.Contains("contentsId") && data["contentsId"] != null ? data["contentsId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Receipt;
             var diff = 0;
-            if (receiptId == null && receiptId == other.receiptId)
+            if (ReceiptId == null && ReceiptId == other.ReceiptId)
             {
                 // null and null
             }
             else
             {
-                diff += receiptId.CompareTo(other.receiptId);
+                diff += ReceiptId.CompareTo(other.ReceiptId);
             }
-            if (transactionId == null && transactionId == other.transactionId)
+            if (TransactionId == null && TransactionId == other.TransactionId)
             {
                 // null and null
             }
             else
             {
-                diff += transactionId.CompareTo(other.transactionId);
+                diff += TransactionId.CompareTo(other.TransactionId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += Type.CompareTo(other.Type);
             }
-            if (slot == null && slot == other.slot)
+            if (Slot == null && Slot == other.Slot)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(slot - other.slot);
+                diff += (int)(Slot - other.Slot);
             }
-            if (price == null && price == other.price)
+            if (Price == null && Price == other.Price)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(price - other.price);
+                diff += (int)(Price - other.Price);
             }
-            if (paid == null && paid == other.paid)
+            if (Paid == null && Paid == other.Paid)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(paid - other.paid);
+                diff += (int)(Paid - other.Paid);
             }
-            if (free == null && free == other.free)
+            if (Free == null && Free == other.Free)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(free - other.free);
+                diff += (int)(Free - other.Free);
             }
-            if (total == null && total == other.total)
+            if (Total == null && Total == other.Total)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(total - other.total);
+                diff += (int)(Total - other.Total);
             }
-            if (contentsId == null && contentsId == other.contentsId)
+            if (ContentsId == null && ContentsId == other.ContentsId)
             {
                 // null and null
             }
             else
             {
-                diff += contentsId.CompareTo(other.contentsId);
+                diff += ContentsId.CompareTo(other.ContentsId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["receiptId"] = receiptId;
-            data["transactionId"] = transactionId;
-            data["userId"] = userId;
-            data["type"] = type;
-            data["slot"] = slot;
-            data["price"] = price;
-            data["paid"] = paid;
-            data["free"] = free;
-            data["total"] = total;
-            data["contentsId"] = contentsId;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

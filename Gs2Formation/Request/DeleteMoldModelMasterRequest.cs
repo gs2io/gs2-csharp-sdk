@@ -28,54 +28,50 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DeleteMoldModelMasterRequest : Gs2Request<DeleteMoldModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MoldName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteMoldModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォームの保存領域名 */
-		[UnityEngine.SerializeField]
-        public string moldName;
-
-        /**
-         * フォームの保存領域名を設定
-         *
-         * @param moldName フォームの保存領域名
-         * @return this
-         */
         public DeleteMoldModelMasterRequest WithMoldName(string moldName) {
-            this.moldName = moldName;
+            this.MoldName = moldName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteMoldModelMasterRequest FromDict(JsonData data)
+        public static DeleteMoldModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteMoldModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                moldName = data.Keys.Contains("moldName") && data["moldName"] != null ? data["moldName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMoldModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["moldName"] = MoldName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["moldName"] = moldName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MoldName != null) {
+                writer.WritePropertyName("moldName");
+                writer.Write(MoldName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

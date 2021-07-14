@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class DescribeBillingsResult
+	[System.Serializable]
+	public class DescribeBillingsResult : IResult
 	{
-        /** 利用状況のリスト */
-        public List<Billing> items { set; get; }
+        public Gs2.Gs2Project.Model.Billing[] Items { set; get; }
 
+        public DescribeBillingsResult WithItems(Gs2.Gs2Project.Model.Billing[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeBillingsResult FromDict(JsonData data)
+        public static DescribeBillingsResult FromJson(JsonData data)
         {
-            return new DescribeBillingsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Project.Model.Billing.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeBillingsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Project.Model.Billing[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Project.Model.Billing.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

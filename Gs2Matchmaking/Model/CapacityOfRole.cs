@@ -23,175 +23,152 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class CapacityOfRole : IComparable
 	{
+        public string RoleName { set; get; }
+        public string[] RoleAliases { set; get; }
+        public int? Capacity { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; }
 
-        /** ロール名 */
-        public string roleName { set; get; }
-
-        /**
-         * ロール名を設定
-         *
-         * @param roleName ロール名
-         * @return this
-         */
         public CapacityOfRole WithRoleName(string roleName) {
-            this.roleName = roleName;
+            this.RoleName = roleName;
             return this;
         }
 
-        /** ロール名の別名リスト */
-        public List<string> roleAliases { set; get; }
-
-        /**
-         * ロール名の別名リストを設定
-         *
-         * @param roleAliases ロール名の別名リスト
-         * @return this
-         */
-        public CapacityOfRole WithRoleAliases(List<string> roleAliases) {
-            this.roleAliases = roleAliases;
+        public CapacityOfRole WithRoleAliases(string[] roleAliases) {
+            this.RoleAliases = roleAliases;
             return this;
         }
 
-        /** 募集人数 */
-        public int? capacity { set; get; }
-
-        /**
-         * 募集人数を設定
-         *
-         * @param capacity 募集人数
-         * @return this
-         */
         public CapacityOfRole WithCapacity(int? capacity) {
-            this.capacity = capacity;
+            this.Capacity = capacity;
             return this;
         }
 
-        /** 参加者のプレイヤー情報リスト */
-        public List<Player> participants { set; get; }
-
-        /**
-         * 参加者のプレイヤー情報リストを設定
-         *
-         * @param participants 参加者のプレイヤー情報リスト
-         * @return this
-         */
-        public CapacityOfRole WithParticipants(List<Player> participants) {
-            this.participants = participants;
+        public CapacityOfRole WithParticipants(Gs2.Gs2Matchmaking.Model.Player[] participants) {
+            this.Participants = participants;
             return this;
+        }
+
+    	[Preserve]
+        public static CapacityOfRole FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CapacityOfRole()
+                .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
+                .WithRoleAliases(!data.Keys.Contains("roleAliases") || data["roleAliases"] == null ? new string[]{} : data["roleAliases"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()))
+                .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null ? new Gs2.Gs2Matchmaking.Model.Player[]{} : data["participants"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.Player.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["roleName"] = RoleName,
+                ["roleAliases"] = new JsonData(RoleAliases == null ? new JsonData[]{} :
+                        RoleAliases.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["capacity"] = Capacity,
+                ["participants"] = new JsonData(Participants == null ? new JsonData[]{} :
+                        Participants.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.roleName != null)
-            {
+            if (RoleName != null) {
                 writer.WritePropertyName("roleName");
-                writer.Write(this.roleName);
+                writer.Write(RoleName.ToString());
             }
-            if(this.roleAliases != null)
-            {
+            if (RoleAliases != null) {
                 writer.WritePropertyName("roleAliases");
                 writer.WriteArrayStart();
-                foreach(var item in this.roleAliases)
+                foreach (var roleAlias in RoleAliases)
                 {
-                    writer.Write(item);
+                    if (roleAlias != null) {
+                        writer.Write(roleAlias.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.capacity.HasValue)
-            {
+            if (Capacity != null) {
                 writer.WritePropertyName("capacity");
-                writer.Write(this.capacity.Value);
+                writer.Write(int.Parse(Capacity.ToString()));
             }
-            if(this.participants != null)
-            {
+            if (Participants != null) {
                 writer.WritePropertyName("participants");
                 writer.WriteArrayStart();
-                foreach(var item in this.participants)
+                foreach (var participant in Participants)
                 {
-                    item.WriteJson(writer);
+                    if (participant != null) {
+                        participant.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static CapacityOfRole FromDict(JsonData data)
-        {
-            return new CapacityOfRole()
-                .WithRoleName(data.Keys.Contains("roleName") && data["roleName"] != null ? data["roleName"].ToString() : null)
-                .WithRoleAliases(data.Keys.Contains("roleAliases") && data["roleAliases"] != null ? data["roleAliases"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCapacity(data.Keys.Contains("capacity") && data["capacity"] != null ? (int?)int.Parse(data["capacity"].ToString()) : null)
-                .WithParticipants(data.Keys.Contains("participants") && data["participants"] != null ? data["participants"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.Player.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as CapacityOfRole;
             var diff = 0;
-            if (roleName == null && roleName == other.roleName)
+            if (RoleName == null && RoleName == other.RoleName)
             {
                 // null and null
             }
             else
             {
-                diff += roleName.CompareTo(other.roleName);
+                diff += RoleName.CompareTo(other.RoleName);
             }
-            if (roleAliases == null && roleAliases == other.roleAliases)
+            if (RoleAliases == null && RoleAliases == other.RoleAliases)
             {
                 // null and null
             }
             else
             {
-                diff += roleAliases.Count - other.roleAliases.Count;
-                for (var i = 0; i < roleAliases.Count; i++)
+                diff += RoleAliases.Length - other.RoleAliases.Length;
+                for (var i = 0; i < RoleAliases.Length; i++)
                 {
-                    diff += roleAliases[i].CompareTo(other.roleAliases[i]);
+                    diff += RoleAliases[i].CompareTo(other.RoleAliases[i]);
                 }
             }
-            if (capacity == null && capacity == other.capacity)
+            if (Capacity == null && Capacity == other.Capacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(capacity - other.capacity);
+                diff += (int)(Capacity - other.Capacity);
             }
-            if (participants == null && participants == other.participants)
+            if (Participants == null && Participants == other.Participants)
             {
                 // null and null
             }
             else
             {
-                diff += participants.Count - other.participants.Count;
-                for (var i = 0; i < participants.Count; i++)
+                diff += Participants.Length - other.Participants.Length;
+                for (var i = 0; i < Participants.Length; i++)
                 {
-                    diff += participants[i].CompareTo(other.participants[i]);
+                    diff += Participants[i].CompareTo(other.Participants[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["roleName"] = roleName;
-            data["roleAliases"] = new JsonData(roleAliases);
-            data["capacity"] = capacity;
-            data["participants"] = new JsonData(participants.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Lock.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Lock.Result
 {
 	[Preserve]
-	public class LockResult
+	[System.Serializable]
+	public class LockResult : IResult
 	{
-        /** ミューテックス */
-        public Mutex item { set; get; }
+        public Gs2.Gs2Lock.Model.Mutex Item { set; get; }
 
+        public LockResult WithItem(Gs2.Gs2Lock.Model.Mutex item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static LockResult FromDict(JsonData data)
+        public static LockResult FromJson(JsonData data)
         {
-            return new LockResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Lock.Model.Mutex.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new LockResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Lock.Model.Mutex.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

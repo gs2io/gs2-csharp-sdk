@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class DescribeFormsByUserIdResult
+	[System.Serializable]
+	public class DescribeFormsByUserIdResult : IResult
 	{
-        /** フォームのリスト */
-        public List<Form> items { set; get; }
+        public Gs2.Gs2Formation.Model.Form[] Items { set; get; }
+        public string NextPageToken { set; get; }
 
-        /** リストの続きを取得するためのページトークン */
-        public string nextPageToken { set; get; }
+        public DescribeFormsByUserIdResult WithItems(Gs2.Gs2Formation.Model.Form[] items) {
+            this.Items = items;
+            return this;
+        }
 
+        public DescribeFormsByUserIdResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeFormsByUserIdResult FromDict(JsonData data)
+        public static DescribeFormsByUserIdResult FromJson(JsonData data)
         {
-            return new DescribeFormsByUserIdResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Formation.Model.Form.FromDict(value);
-                    }
-                ).ToList() : null,
-                nextPageToken = data.Keys.Contains("nextPageToken") && data["nextPageToken"] != null ? data["nextPageToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeFormsByUserIdResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Formation.Model.Form[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.Form.FromJson(v);
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["nextPageToken"] = NextPageToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

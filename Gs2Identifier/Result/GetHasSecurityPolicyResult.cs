@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Identifier.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Identifier.Result
 {
 	[Preserve]
-	public class GetHasSecurityPolicyResult
+	[System.Serializable]
+	public class GetHasSecurityPolicyResult : IResult
 	{
-        /** セキュリティポリシーのリスト */
-        public List<SecurityPolicy> items { set; get; }
+        public Gs2.Gs2Identifier.Model.SecurityPolicy[] Items { set; get; }
 
+        public GetHasSecurityPolicyResult WithItems(Gs2.Gs2Identifier.Model.SecurityPolicy[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static GetHasSecurityPolicyResult FromDict(JsonData data)
+        public static GetHasSecurityPolicyResult FromJson(JsonData data)
         {
-            return new GetHasSecurityPolicyResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Identifier.Model.SecurityPolicy.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetHasSecurityPolicyResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Identifier.Model.SecurityPolicy[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Identifier.Model.SecurityPolicy.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

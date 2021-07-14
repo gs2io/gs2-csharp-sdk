@@ -28,104 +28,74 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class GetFormRequest : Gs2Request<GetFormRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string MoldName { set; get; }
+        public int? Index { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetFormRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォームの保存領域の名前 */
-		[UnityEngine.SerializeField]
-        public string moldName;
-
-        /**
-         * フォームの保存領域の名前を設定
-         *
-         * @param moldName フォームの保存領域の名前
-         * @return this
-         */
-        public GetFormRequest WithMoldName(string moldName) {
-            this.moldName = moldName;
-            return this;
-        }
-
-
-        /** 保存領域のインデックス */
-		[UnityEngine.SerializeField]
-        public int? index;
-
-        /**
-         * 保存領域のインデックスを設定
-         *
-         * @param index 保存領域のインデックス
-         * @return this
-         */
-        public GetFormRequest WithIndex(int? index) {
-            this.index = index;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetFormRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public GetFormRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public GetFormRequest WithMoldName(string moldName) {
+            this.MoldName = moldName;
+            return this;
+        }
+
+        public GetFormRequest WithIndex(int? index) {
+            this.Index = index;
             return this;
         }
 
     	[Preserve]
-        public static GetFormRequest FromDict(JsonData data)
+        public static GetFormRequest FromJson(JsonData data)
         {
-            return new GetFormRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                moldName = data.Keys.Contains("moldName") && data["moldName"] != null ? data["moldName"].ToString(): null,
-                index = data.Keys.Contains("index") && data["index"] != null ? (int?)int.Parse(data["index"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetFormRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["moldName"] = MoldName,
+                ["index"] = Index,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["moldName"] = moldName;
-            data["index"] = index;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (MoldName != null) {
+                writer.WritePropertyName("moldName");
+                writer.Write(MoldName.ToString());
+            }
+            if (Index != null) {
+                writer.WritePropertyName("index");
+                writer.Write(int.Parse(Index.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

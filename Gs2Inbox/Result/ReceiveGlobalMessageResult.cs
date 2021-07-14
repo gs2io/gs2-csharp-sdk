@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inbox.Result
 {
 	[Preserve]
-	public class ReceiveGlobalMessageResult
+	[System.Serializable]
+	public class ReceiveGlobalMessageResult : IResult
 	{
-        /** 受信したメッセージ一覧 */
-        public List<Message> item { set; get; }
+        public Gs2.Gs2Inbox.Model.Message[] Item { set; get; }
 
+        public ReceiveGlobalMessageResult WithItem(Gs2.Gs2Inbox.Model.Message[] item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static ReceiveGlobalMessageResult FromDict(JsonData data)
+        public static ReceiveGlobalMessageResult FromJson(JsonData data)
         {
-            return new ReceiveGlobalMessageResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? data["item"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Inbox.Model.Message.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new ReceiveGlobalMessageResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? new Gs2.Gs2Inbox.Model.Message[]{} : data["item"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inbox.Model.Message.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = new JsonData(Item == null ? new JsonData[]{} :
+                        Item.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var ite in Item)
+            {
+                if (ite != null) {
+                    ite.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -23,405 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Project.Model
 {
+
 	[Preserve]
 	public class BillingMethod : IComparable
 	{
+        public string BillingMethodId { set; get; }
+        public string AccountName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string MethodType { set; get; }
+        public string CardSignatureName { set; get; }
+        public string CardBrand { set; get; }
+        public string CardLast4 { set; get; }
+        public string PartnerId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 支払い方法 */
-        public string billingMethodId { set; get; }
-
-        /**
-         * 支払い方法を設定
-         *
-         * @param billingMethodId 支払い方法
-         * @return this
-         */
         public BillingMethod WithBillingMethodId(string billingMethodId) {
-            this.billingMethodId = billingMethodId;
+            this.BillingMethodId = billingMethodId;
             return this;
         }
 
-        /** GS2アカウントの名前 */
-        public string accountName { set; get; }
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param accountName GS2アカウントの名前
-         * @return this
-         */
         public BillingMethod WithAccountName(string accountName) {
-            this.accountName = accountName;
+            this.AccountName = accountName;
             return this;
         }
 
-        /** 名前 */
-        public string name { set; get; }
-
-        /**
-         * 名前を設定
-         *
-         * @param name 名前
-         * @return this
-         */
         public BillingMethod WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 名前 */
-        public string description { set; get; }
-
-        /**
-         * 名前を設定
-         *
-         * @param description 名前
-         * @return this
-         */
         public BillingMethod WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 支払い方法 */
-        public string methodType { set; get; }
-
-        /**
-         * 支払い方法を設定
-         *
-         * @param methodType 支払い方法
-         * @return this
-         */
         public BillingMethod WithMethodType(string methodType) {
-            this.methodType = methodType;
+            this.MethodType = methodType;
             return this;
         }
 
-        /** クレジットカードカスタマーID */
-        public string cardCustomerId { set; get; }
-
-        /**
-         * クレジットカードカスタマーIDを設定
-         *
-         * @param cardCustomerId クレジットカードカスタマーID
-         * @return this
-         */
-        public BillingMethod WithCardCustomerId(string cardCustomerId) {
-            this.cardCustomerId = cardCustomerId;
-            return this;
-        }
-
-        /** カード署名 */
-        public string cardSignatureName { set; get; }
-
-        /**
-         * カード署名を設定
-         *
-         * @param cardSignatureName カード署名
-         * @return this
-         */
         public BillingMethod WithCardSignatureName(string cardSignatureName) {
-            this.cardSignatureName = cardSignatureName;
+            this.CardSignatureName = cardSignatureName;
             return this;
         }
 
-        /** カードブランド */
-        public string cardBrand { set; get; }
-
-        /**
-         * カードブランドを設定
-         *
-         * @param cardBrand カードブランド
-         * @return this
-         */
         public BillingMethod WithCardBrand(string cardBrand) {
-            this.cardBrand = cardBrand;
+            this.CardBrand = cardBrand;
             return this;
         }
 
-        /** 末尾4桁 */
-        public string cardLast4 { set; get; }
-
-        /**
-         * 末尾4桁を設定
-         *
-         * @param cardLast4 末尾4桁
-         * @return this
-         */
         public BillingMethod WithCardLast4(string cardLast4) {
-            this.cardLast4 = cardLast4;
+            this.CardLast4 = cardLast4;
             return this;
         }
 
-        /** パートナーID */
-        public string partnerId { set; get; }
-
-        /**
-         * パートナーIDを設定
-         *
-         * @param partnerId パートナーID
-         * @return this
-         */
         public BillingMethod WithPartnerId(string partnerId) {
-            this.partnerId = partnerId;
+            this.PartnerId = partnerId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public BillingMethod WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public BillingMethod WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static BillingMethod FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new BillingMethod()
+                .WithBillingMethodId(!data.Keys.Contains("billingMethodId") || data["billingMethodId"] == null ? null : data["billingMethodId"].ToString())
+                .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMethodType(!data.Keys.Contains("methodType") || data["methodType"] == null ? null : data["methodType"].ToString())
+                .WithCardSignatureName(!data.Keys.Contains("cardSignatureName") || data["cardSignatureName"] == null ? null : data["cardSignatureName"].ToString())
+                .WithCardBrand(!data.Keys.Contains("cardBrand") || data["cardBrand"] == null ? null : data["cardBrand"].ToString())
+                .WithCardLast4(!data.Keys.Contains("cardLast4") || data["cardLast4"] == null ? null : data["cardLast4"].ToString())
+                .WithPartnerId(!data.Keys.Contains("partnerId") || data["partnerId"] == null ? null : data["partnerId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["billingMethodId"] = BillingMethodId,
+                ["accountName"] = AccountName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["methodType"] = MethodType,
+                ["cardSignatureName"] = CardSignatureName,
+                ["cardBrand"] = CardBrand,
+                ["cardLast4"] = CardLast4,
+                ["partnerId"] = PartnerId,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.billingMethodId != null)
-            {
+            if (BillingMethodId != null) {
                 writer.WritePropertyName("billingMethodId");
-                writer.Write(this.billingMethodId);
+                writer.Write(BillingMethodId.ToString());
             }
-            if(this.accountName != null)
-            {
+            if (AccountName != null) {
                 writer.WritePropertyName("accountName");
-                writer.Write(this.accountName);
+                writer.Write(AccountName.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.methodType != null)
-            {
+            if (MethodType != null) {
                 writer.WritePropertyName("methodType");
-                writer.Write(this.methodType);
+                writer.Write(MethodType.ToString());
             }
-            if(this.cardCustomerId != null)
-            {
-                writer.WritePropertyName("cardCustomerId");
-                writer.Write(this.cardCustomerId);
-            }
-            if(this.cardSignatureName != null)
-            {
+            if (CardSignatureName != null) {
                 writer.WritePropertyName("cardSignatureName");
-                writer.Write(this.cardSignatureName);
+                writer.Write(CardSignatureName.ToString());
             }
-            if(this.cardBrand != null)
-            {
+            if (CardBrand != null) {
                 writer.WritePropertyName("cardBrand");
-                writer.Write(this.cardBrand);
+                writer.Write(CardBrand.ToString());
             }
-            if(this.cardLast4 != null)
-            {
+            if (CardLast4 != null) {
                 writer.WritePropertyName("cardLast4");
-                writer.Write(this.cardLast4);
+                writer.Write(CardLast4.ToString());
             }
-            if(this.partnerId != null)
-            {
+            if (PartnerId != null) {
                 writer.WritePropertyName("partnerId");
-                writer.Write(this.partnerId);
+                writer.Write(PartnerId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetBillingMethodNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):billingMethod:(?<billingMethodName>.*)");
-        if (!match.Groups["billingMethodName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["billingMethodName"].Value;
-    }
-
-    public static string GetAccountNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):billingMethod:(?<billingMethodName>.*)");
-        if (!match.Groups["accountName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["accountName"].Value;
-    }
-
-    	[Preserve]
-        public static BillingMethod FromDict(JsonData data)
-        {
-            return new BillingMethod()
-                .WithBillingMethodId(data.Keys.Contains("billingMethodId") && data["billingMethodId"] != null ? data["billingMethodId"].ToString() : null)
-                .WithAccountName(data.Keys.Contains("accountName") && data["accountName"] != null ? data["accountName"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMethodType(data.Keys.Contains("methodType") && data["methodType"] != null ? data["methodType"].ToString() : null)
-                .WithCardCustomerId(data.Keys.Contains("cardCustomerId") && data["cardCustomerId"] != null ? data["cardCustomerId"].ToString() : null)
-                .WithCardSignatureName(data.Keys.Contains("cardSignatureName") && data["cardSignatureName"] != null ? data["cardSignatureName"].ToString() : null)
-                .WithCardBrand(data.Keys.Contains("cardBrand") && data["cardBrand"] != null ? data["cardBrand"].ToString() : null)
-                .WithCardLast4(data.Keys.Contains("cardLast4") && data["cardLast4"] != null ? data["cardLast4"].ToString() : null)
-                .WithPartnerId(data.Keys.Contains("partnerId") && data["partnerId"] != null ? data["partnerId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as BillingMethod;
             var diff = 0;
-            if (billingMethodId == null && billingMethodId == other.billingMethodId)
+            if (BillingMethodId == null && BillingMethodId == other.BillingMethodId)
             {
                 // null and null
             }
             else
             {
-                diff += billingMethodId.CompareTo(other.billingMethodId);
+                diff += BillingMethodId.CompareTo(other.BillingMethodId);
             }
-            if (accountName == null && accountName == other.accountName)
+            if (AccountName == null && AccountName == other.AccountName)
             {
                 // null and null
             }
             else
             {
-                diff += accountName.CompareTo(other.accountName);
+                diff += AccountName.CompareTo(other.AccountName);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (methodType == null && methodType == other.methodType)
+            if (MethodType == null && MethodType == other.MethodType)
             {
                 // null and null
             }
             else
             {
-                diff += methodType.CompareTo(other.methodType);
+                diff += MethodType.CompareTo(other.MethodType);
             }
-            if (cardCustomerId == null && cardCustomerId == other.cardCustomerId)
+            if (CardSignatureName == null && CardSignatureName == other.CardSignatureName)
             {
                 // null and null
             }
             else
             {
-                diff += cardCustomerId.CompareTo(other.cardCustomerId);
+                diff += CardSignatureName.CompareTo(other.CardSignatureName);
             }
-            if (cardSignatureName == null && cardSignatureName == other.cardSignatureName)
+            if (CardBrand == null && CardBrand == other.CardBrand)
             {
                 // null and null
             }
             else
             {
-                diff += cardSignatureName.CompareTo(other.cardSignatureName);
+                diff += CardBrand.CompareTo(other.CardBrand);
             }
-            if (cardBrand == null && cardBrand == other.cardBrand)
+            if (CardLast4 == null && CardLast4 == other.CardLast4)
             {
                 // null and null
             }
             else
             {
-                diff += cardBrand.CompareTo(other.cardBrand);
+                diff += CardLast4.CompareTo(other.CardLast4);
             }
-            if (cardLast4 == null && cardLast4 == other.cardLast4)
+            if (PartnerId == null && PartnerId == other.PartnerId)
             {
                 // null and null
             }
             else
             {
-                diff += cardLast4.CompareTo(other.cardLast4);
+                diff += PartnerId.CompareTo(other.PartnerId);
             }
-            if (partnerId == null && partnerId == other.partnerId)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += partnerId.CompareTo(other.partnerId);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["billingMethodId"] = billingMethodId;
-            data["accountName"] = accountName;
-            data["name"] = name;
-            data["description"] = description;
-            data["methodType"] = methodType;
-            data["cardCustomerId"] = cardCustomerId;
-            data["cardSignatureName"] = cardSignatureName;
-            data["cardBrand"] = cardBrand;
-            data["cardLast4"] = cardLast4;
-            data["partnerId"] = partnerId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

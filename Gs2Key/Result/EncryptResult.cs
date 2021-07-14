@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Key.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Key.Result
 {
 	[Preserve]
-	public class EncryptResult
+	[System.Serializable]
+	public class EncryptResult : IResult
 	{
-        /** 暗号化済みデータ */
-        public string data { set; get; }
+        public string Data { set; get; }
 
+        public EncryptResult WithData(string data) {
+            this.Data = data;
+            return this;
+        }
 
     	[Preserve]
-        public static EncryptResult FromDict(JsonData data)
+        public static EncryptResult FromJson(JsonData data)
         {
-            return new EncryptResult {
-                data = data.Keys.Contains("data") && data["data"] != null ? data["data"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new EncryptResult()
+                .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["data"] = Data,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Data != null) {
+                writer.WritePropertyName("data");
+                writer.Write(Data.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

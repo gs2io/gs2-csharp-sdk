@@ -28,144 +28,98 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class PostByUserIdRequest : Gs2Request<PostByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public string UserId { set; get; }
+        public int? Category { set; get; }
+        public string Metadata { set; get; }
+        public string Password { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PostByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public PostByUserIdRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-
-        /** 発言したユーザID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * 発言したユーザIDを設定
-         *
-         * @param userId 発言したユーザID
-         * @return this
-         */
         public PostByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** メッセージの種類を分類したい時の種類番号 */
-		[UnityEngine.SerializeField]
-        public int? category;
-
-        /**
-         * メッセージの種類を分類したい時の種類番号を設定
-         *
-         * @param category メッセージの種類を分類したい時の種類番号
-         * @return this
-         */
         public PostByUserIdRequest WithCategory(int? category) {
-            this.category = category;
+            this.Category = category;
             return this;
         }
 
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public PostByUserIdRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** メッセージを投稿するために必要となるパスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * メッセージを投稿するために必要となるパスワードを設定
-         *
-         * @param password メッセージを投稿するために必要となるパスワード
-         * @return this
-         */
         public PostByUserIdRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PostByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static PostByUserIdRequest FromDict(JsonData data)
+        public static PostByUserIdRequest FromJson(JsonData data)
         {
-            return new PostByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                category = data.Keys.Contains("category") && data["category"] != null ? (int?)int.Parse(data["category"].ToString()) : null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PostByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)int.Parse(data["category"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
+                ["userId"] = UserId,
+                ["category"] = Category,
+                ["metadata"] = Metadata,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            data["userId"] = userId;
-            data["category"] = category;
-            data["metadata"] = metadata;
-            data["password"] = password;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Category != null) {
+                writer.WritePropertyName("category");
+                writer.Write(int.Parse(Category.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

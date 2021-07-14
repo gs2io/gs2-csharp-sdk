@@ -28,180 +28,122 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AcquireItemSetByUserIdRequest : Gs2Request<AcquireItemSetByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string ItemName { set; get; }
+        public string UserId { set; get; }
+        public long? AcquireCount { set; get; }
+        public long? ExpiresAt { set; get; }
+        public bool? CreateNewItemSet { set; get; }
+        public string ItemSetName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリの種類名 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリの種類名を設定
-         *
-         * @param inventoryName インベントリの種類名
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** アイテムマスターの名前 */
-		[UnityEngine.SerializeField]
-        public string itemName;
-
-        /**
-         * アイテムマスターの名前を設定
-         *
-         * @param itemName アイテムマスターの名前
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithItemName(string itemName) {
-            this.itemName = itemName;
+            this.ItemName = itemName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 入手する量 */
-		[UnityEngine.SerializeField]
-        public long? acquireCount;
-
-        /**
-         * 入手する量を設定
-         *
-         * @param acquireCount 入手する量
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithAcquireCount(long? acquireCount) {
-            this.acquireCount = acquireCount;
+            this.AcquireCount = acquireCount;
             return this;
         }
 
-
-        /** 有効期限 */
-		[UnityEngine.SerializeField]
-        public long? expiresAt;
-
-        /**
-         * 有効期限を設定
-         *
-         * @param expiresAt 有効期限
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
 
-
-        /** 既存の ItemSet に空きがあったとしても、新しい ItemSet を作成するか */
-		[UnityEngine.SerializeField]
-        public bool? createNewItemSet;
-
-        /**
-         * 既存の ItemSet に空きがあったとしても、新しい ItemSet を作成するかを設定
-         *
-         * @param createNewItemSet 既存の ItemSet に空きがあったとしても、新しい ItemSet を作成するか
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithCreateNewItemSet(bool? createNewItemSet) {
-            this.createNewItemSet = createNewItemSet;
+            this.CreateNewItemSet = createNewItemSet;
             return this;
         }
 
-
-        /** 追加先のアイテムセットの名前 */
-		[UnityEngine.SerializeField]
-        public string itemSetName;
-
-        /**
-         * 追加先のアイテムセットの名前を設定
-         *
-         * @param itemSetName 追加先のアイテムセットの名前
-         * @return this
-         */
         public AcquireItemSetByUserIdRequest WithItemSetName(string itemSetName) {
-            this.itemSetName = itemSetName;
+            this.ItemSetName = itemSetName;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public AcquireItemSetByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static AcquireItemSetByUserIdRequest FromDict(JsonData data)
+        public static AcquireItemSetByUserIdRequest FromJson(JsonData data)
         {
-            return new AcquireItemSetByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                itemName = data.Keys.Contains("itemName") && data["itemName"] != null ? data["itemName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                acquireCount = data.Keys.Contains("acquireCount") && data["acquireCount"] != null ? (long?)long.Parse(data["acquireCount"].ToString()) : null,
-                expiresAt = data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null,
-                createNewItemSet = data.Keys.Contains("createNewItemSet") && data["createNewItemSet"] != null ? (bool?)bool.Parse(data["createNewItemSet"].ToString()) : null,
-                itemSetName = data.Keys.Contains("itemSetName") && data["itemSetName"] != null ? data["itemSetName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new AcquireItemSetByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAcquireCount(!data.Keys.Contains("acquireCount") || data["acquireCount"] == null ? null : (long?)long.Parse(data["acquireCount"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithCreateNewItemSet(!data.Keys.Contains("createNewItemSet") || data["createNewItemSet"] == null ? null : (bool?)bool.Parse(data["createNewItemSet"].ToString()))
+                .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["itemName"] = ItemName,
+                ["userId"] = UserId,
+                ["acquireCount"] = AcquireCount,
+                ["expiresAt"] = ExpiresAt,
+                ["createNewItemSet"] = CreateNewItemSet,
+                ["itemSetName"] = ItemSetName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["itemName"] = itemName;
-            data["userId"] = userId;
-            data["acquireCount"] = acquireCount;
-            data["expiresAt"] = expiresAt;
-            data["createNewItemSet"] = createNewItemSet;
-            data["itemSetName"] = itemSetName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (ItemName != null) {
+                writer.WritePropertyName("itemName");
+                writer.Write(ItemName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (AcquireCount != null) {
+                writer.WritePropertyName("acquireCount");
+                writer.Write(long.Parse(AcquireCount.ToString()));
+            }
+            if (ExpiresAt != null) {
+                writer.WritePropertyName("expiresAt");
+                writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            if (CreateNewItemSet != null) {
+                writer.WritePropertyName("createNewItemSet");
+                writer.Write(bool.Parse(CreateNewItemSet.ToString()));
+            }
+            if (ItemSetName != null) {
+                writer.WritePropertyName("itemSetName");
+                writer.Write(ItemSetName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

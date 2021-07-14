@@ -28,54 +28,50 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetOutputRequest : Gs2Request<GetOutputRequest>
 	{
+        public string StackName { set; get; }
+        public string OutputName { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public GetOutputRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
-        /** アウトプット名 */
-		[UnityEngine.SerializeField]
-        public string outputName;
-
-        /**
-         * アウトプット名を設定
-         *
-         * @param outputName アウトプット名
-         * @return this
-         */
         public GetOutputRequest WithOutputName(string outputName) {
-            this.outputName = outputName;
+            this.OutputName = outputName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetOutputRequest FromDict(JsonData data)
+        public static GetOutputRequest FromJson(JsonData data)
         {
-            return new GetOutputRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
-                outputName = data.Keys.Contains("outputName") && data["outputName"] != null ? data["outputName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetOutputRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
+                .WithOutputName(!data.Keys.Contains("outputName") || data["outputName"] == null ? null : data["outputName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
+                ["outputName"] = OutputName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            data["outputName"] = outputName;
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            if (OutputName != null) {
+                writer.WritePropertyName("outputName");
+                writer.Write(OutputName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

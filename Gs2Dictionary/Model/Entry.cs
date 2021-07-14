@@ -23,209 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Dictionary.Model
 {
+
 	[Preserve]
 	public class Entry : IComparable
 	{
+        public string EntryId { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
+        public long? AcquiredAt { set; get; }
 
-        /** エントリー のGRN */
-        public string entryId { set; get; }
-
-        /**
-         * エントリー のGRNを設定
-         *
-         * @param entryId エントリー のGRN
-         * @return this
-         */
         public Entry WithEntryId(string entryId) {
-            this.entryId = entryId;
+            this.EntryId = entryId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Entry WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** エントリーの種類名 */
-        public string name { set; get; }
-
-        /**
-         * エントリーの種類名を設定
-         *
-         * @param name エントリーの種類名
-         * @return this
-         */
         public Entry WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** None */
-        public long? acquiredAt { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param acquiredAt None
-         * @return this
-         */
         public Entry WithAcquiredAt(long? acquiredAt) {
-            this.acquiredAt = acquiredAt;
+            this.AcquiredAt = acquiredAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Entry FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Entry()
+                .WithEntryId(!data.Keys.Contains("entryId") || data["entryId"] == null ? null : data["entryId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithAcquiredAt(!data.Keys.Contains("acquiredAt") || data["acquiredAt"] == null ? null : (long?)long.Parse(data["acquiredAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["entryId"] = EntryId,
+                ["userId"] = UserId,
+                ["name"] = Name,
+                ["acquiredAt"] = AcquiredAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.entryId != null)
-            {
+            if (EntryId != null) {
                 writer.WritePropertyName("entryId");
-                writer.Write(this.entryId);
+                writer.Write(EntryId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.acquiredAt.HasValue)
-            {
+            if (AcquiredAt != null) {
                 writer.WritePropertyName("acquiredAt");
-                writer.Write(this.acquiredAt.Value);
+                writer.Write(long.Parse(AcquiredAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetEntryModelNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):user:(?<userId>.*):entry:(?<entryModelName>.*)");
-        if (!match.Groups["entryModelName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["entryModelName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):user:(?<userId>.*):entry:(?<entryModelName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):user:(?<userId>.*):entry:(?<entryModelName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):user:(?<userId>.*):entry:(?<entryModelName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):user:(?<userId>.*):entry:(?<entryModelName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Entry FromDict(JsonData data)
-        {
-            return new Entry()
-                .WithEntryId(data.Keys.Contains("entryId") && data["entryId"] != null ? data["entryId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithAcquiredAt(data.Keys.Contains("acquiredAt") && data["acquiredAt"] != null ? (long?)long.Parse(data["acquiredAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Entry;
             var diff = 0;
-            if (entryId == null && entryId == other.entryId)
+            if (EntryId == null && EntryId == other.EntryId)
             {
                 // null and null
             }
             else
             {
-                diff += entryId.CompareTo(other.entryId);
+                diff += EntryId.CompareTo(other.EntryId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (acquiredAt == null && acquiredAt == other.acquiredAt)
+            if (AcquiredAt == null && AcquiredAt == other.AcquiredAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(acquiredAt - other.acquiredAt);
+                diff += (int)(AcquiredAt - other.AcquiredAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["entryId"] = entryId;
-            data["userId"] = userId;
-            data["name"] = name;
-            data["acquiredAt"] = acquiredAt;
-            return data;
-        }
-	}
+    }
 }

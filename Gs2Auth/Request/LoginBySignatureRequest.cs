@@ -28,108 +28,74 @@ namespace Gs2.Gs2Auth.Request
 	[System.Serializable]
 	public class LoginBySignatureRequest : Gs2Request<LoginBySignatureRequest>
 	{
+        public string UserId { set; get; }
+        public string KeyId { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
 
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public LoginBySignatureRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 署名の作成に使用した暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 署名の作成に使用した暗号鍵 のGRNを設定
-         *
-         * @param keyId 署名の作成に使用した暗号鍵 のGRN
-         * @return this
-         */
         public LoginBySignatureRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-
-        /** アカウント認証情報の署名対象 */
-		[UnityEngine.SerializeField]
-        public string body;
-
-        /**
-         * アカウント認証情報の署名対象を設定
-         *
-         * @param body アカウント認証情報の署名対象
-         * @return this
-         */
         public LoginBySignatureRequest WithBody(string body) {
-            this.body = body;
+            this.Body = body;
             return this;
         }
 
-
-        /** 署名 */
-		[UnityEngine.SerializeField]
-        public string signature;
-
-        /**
-         * 署名を設定
-         *
-         * @param signature 署名
-         * @return this
-         */
         public LoginBySignatureRequest WithSignature(string signature) {
-            this.signature = signature;
+            this.Signature = signature;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public LoginBySignatureRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static LoginBySignatureRequest FromDict(JsonData data)
+        public static LoginBySignatureRequest FromJson(JsonData data)
         {
-            return new LoginBySignatureRequest {
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                body = data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString(): null,
-                signature = data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new LoginBySignatureRequest()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["keyId"] = KeyId,
+                ["body"] = Body,
+                ["signature"] = Signature,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["keyId"] = keyId;
-            data["body"] = body;
-            data["signature"] = signature;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (Body != null) {
+                writer.WritePropertyName("body");
+                writer.Write(Body.ToString());
+            }
+            if (Signature != null) {
+                writer.WritePropertyName("signature");
+                writer.Write(Signature.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

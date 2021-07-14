@@ -28,162 +28,118 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting StartQuestScript { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param name カテゴリ名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** クエスト開始したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Quest.Model.ScriptSetting startQuestScript;
-
-        /**
-         * クエスト開始したときに実行するスクリプトを設定
-         *
-         * @param startQuestScript クエスト開始したときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithStartQuestScript(global::Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
-            this.startQuestScript = startQuestScript;
+        public CreateNamespaceRequest WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
+            this.StartQuestScript = startQuestScript;
             return this;
         }
 
-
-        /** クエストクリアしたときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript;
-
-        /**
-         * クエストクリアしたときに実行するスクリプトを設定
-         *
-         * @param completeQuestScript クエストクリアしたときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithCompleteQuestScript(global::Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
-            this.completeQuestScript = completeQuestScript;
+        public CreateNamespaceRequest WithCompleteQuestScript(Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
+            this.CompleteQuestScript = completeQuestScript;
             return this;
         }
 
-
-        /** クエスト失敗したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript;
-
-        /**
-         * クエスト失敗したときに実行するスクリプトを設定
-         *
-         * @param failedQuestScript クエスト失敗したときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithFailedQuestScript(global::Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
-            this.failedQuestScript = failedQuestScript;
+        public CreateNamespaceRequest WithFailedQuestScript(Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
+            this.FailedQuestScript = failedQuestScript;
             return this;
         }
 
-
-        /** 報酬付与処理をジョブとして追加するキューのネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string queueNamespaceId;
-
-        /**
-         * 報酬付与処理をジョブとして追加するキューのネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 報酬付与処理をジョブとして追加するキューのネームスペース のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-
-        /** 報酬付与処理のスタンプシートで使用する暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 報酬付与処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 報酬付与処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Quest.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Quest.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                startQuestScript = data.Keys.Contains("startQuestScript") && data["startQuestScript"] != null ? global::Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["startQuestScript"]) : null,
-                completeQuestScript = data.Keys.Contains("completeQuestScript") && data["completeQuestScript"] != null ? global::Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["completeQuestScript"]) : null,
-                failedQuestScript = data.Keys.Contains("failedQuestScript") && data["failedQuestScript"] != null ? global::Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["failedQuestScript"]) : null,
-                queueNamespaceId = data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Quest.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithStartQuestScript(!data.Keys.Contains("startQuestScript") || data["startQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["startQuestScript"]))
+                .WithCompleteQuestScript(!data.Keys.Contains("completeQuestScript") || data["completeQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["completeQuestScript"]))
+                .WithFailedQuestScript(!data.Keys.Contains("failedQuestScript") || data["failedQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["failedQuestScript"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Quest.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["startQuestScript"] = StartQuestScript?.ToJson(),
+                ["completeQuestScript"] = CompleteQuestScript?.ToJson(),
+                ["failedQuestScript"] = FailedQuestScript?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["startQuestScript"] = startQuestScript.ToDict();
-            data["completeQuestScript"] = completeQuestScript.ToDict();
-            data["failedQuestScript"] = failedQuestScript.ToDict();
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (StartQuestScript != null) {
+                StartQuestScript.WriteJson(writer);
+            }
+            if (CompleteQuestScript != null) {
+                CompleteQuestScript.WriteJson(writer);
+            }
+            if (FailedQuestScript != null) {
+                FailedQuestScript.WriteJson(writer);
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

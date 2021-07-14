@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class IssueAccountTokenResult
+	[System.Serializable]
+	public class IssueAccountTokenResult : IResult
 	{
-        /** GS2-Console にアクセスするのに使用するトークン */
-        public string accountToken { set; get; }
+        public string AccountToken { set; get; }
 
+        public IssueAccountTokenResult WithAccountToken(string accountToken) {
+            this.AccountToken = accountToken;
+            return this;
+        }
 
     	[Preserve]
-        public static IssueAccountTokenResult FromDict(JsonData data)
+        public static IssueAccountTokenResult FromJson(JsonData data)
         {
-            return new IssueAccountTokenResult {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new IssueAccountTokenResult()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

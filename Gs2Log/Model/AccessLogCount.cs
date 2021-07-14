@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Log.Model
 {
+
 	[Preserve]
 	public class AccessLogCount : IComparable
 	{
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public long? Count { set; get; }
 
-        /** マイクロサービスの種類 */
-        public string service { set; get; }
-
-        /**
-         * マイクロサービスの種類を設定
-         *
-         * @param service マイクロサービスの種類
-         * @return this
-         */
         public AccessLogCount WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-        /** マイクロサービスのメソッド */
-        public string method { set; get; }
-
-        /**
-         * マイクロサービスのメソッドを設定
-         *
-         * @param method マイクロサービスのメソッド
-         * @return this
-         */
         public AccessLogCount WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AccessLogCount WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 回数 */
-        public long? count { set; get; }
-
-        /**
-         * 回数を設定
-         *
-         * @param count 回数
-         * @return this
-         */
         public AccessLogCount WithCount(long? count) {
-            this.count = count;
+            this.Count = count;
             return this;
+        }
+
+    	[Preserve]
+        public static AccessLogCount FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AccessLogCount()
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["service"] = Service,
+                ["method"] = Method,
+                ["userId"] = UserId,
+                ["count"] = Count,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.service != null)
-            {
+            if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(this.service);
+                writer.Write(Service.ToString());
             }
-            if(this.method != null)
-            {
+            if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(this.method);
+                writer.Write(Method.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.count.HasValue)
-            {
+            if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(this.count.Value);
+                writer.Write(long.Parse(Count.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static AccessLogCount FromDict(JsonData data)
-        {
-            return new AccessLogCount()
-                .WithService(data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString() : null)
-                .WithMethod(data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCount(data.Keys.Contains("count") && data["count"] != null ? (long?)long.Parse(data["count"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AccessLogCount;
             var diff = 0;
-            if (service == null && service == other.service)
+            if (Service == null && Service == other.Service)
             {
                 // null and null
             }
             else
             {
-                diff += service.CompareTo(other.service);
+                diff += Service.CompareTo(other.Service);
             }
-            if (method == null && method == other.method)
+            if (Method == null && Method == other.Method)
             {
                 // null and null
             }
             else
             {
-                diff += method.CompareTo(other.method);
+                diff += Method.CompareTo(other.Method);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (count == null && count == other.count)
+            if (Count == null && Count == other.Count)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(count - other.count);
+                diff += (int)(Count - other.Count);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["service"] = service;
-            data["method"] = method;
-            data["userId"] = userId;
-            data["count"] = count;
-            return data;
-        }
-	}
+    }
 }

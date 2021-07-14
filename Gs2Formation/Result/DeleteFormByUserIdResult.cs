@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,30 +25,73 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class DeleteFormByUserIdResult
+	[System.Serializable]
+	public class DeleteFormByUserIdResult : IResult
 	{
-        /** フォーム */
-        public Form item { set; get; }
+        public Gs2.Gs2Formation.Model.Form Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Mold { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
 
-        /** 保存したフォーム */
-        public Mold mold { set; get; }
+        public DeleteFormByUserIdResult WithItem(Gs2.Gs2Formation.Model.Form item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** フォームの保存領域 */
-        public MoldModel moldModel { set; get; }
+        public DeleteFormByUserIdResult WithMold(Gs2.Gs2Formation.Model.Mold mold) {
+            this.Mold = mold;
+            return this;
+        }
 
-        /** フォームモデル */
-        public FormModel formModel { set; get; }
+        public DeleteFormByUserIdResult WithMoldModel(Gs2.Gs2Formation.Model.MoldModel moldModel) {
+            this.MoldModel = moldModel;
+            return this;
+        }
 
+        public DeleteFormByUserIdResult WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
+            this.FormModel = formModel;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteFormByUserIdResult FromDict(JsonData data)
+        public static DeleteFormByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteFormByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.Form.FromDict(data["item"]) : null,
-                mold = data.Keys.Contains("mold") && data["mold"] != null ? Gs2.Gs2Formation.Model.Mold.FromDict(data["mold"]) : null,
-                moldModel = data.Keys.Contains("moldModel") && data["moldModel"] != null ? Gs2.Gs2Formation.Model.MoldModel.FromDict(data["moldModel"]) : null,
-                formModel = data.Keys.Contains("formModel") && data["formModel"] != null ? Gs2.Gs2Formation.Model.FormModel.FromDict(data["formModel"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteFormByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Form.FromJson(data["item"]))
+                .WithMold(!data.Keys.Contains("mold") || data["mold"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["mold"]))
+                .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]))
+                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["mold"] = Mold?.ToJson(),
+                ["moldModel"] = MoldModel?.ToJson(),
+                ["formModel"] = FormModel?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Mold != null) {
+                Mold.WriteJson(writer);
+            }
+            if (MoldModel != null) {
+                MoldModel.WriteJson(writer);
+            }
+            if (FormModel != null) {
+                FormModel.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

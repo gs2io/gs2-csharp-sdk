@@ -23,168 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Dictionary.Model
 {
+
 	[Preserve]
 	public class EntryModel : IComparable
 	{
+        public string EntryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
 
-        /** エントリーモデルマスター */
-        public string entryModelId { set; get; }
-
-        /**
-         * エントリーモデルマスターを設定
-         *
-         * @param entryModelId エントリーモデルマスター
-         * @return this
-         */
         public EntryModel WithEntryModelId(string entryModelId) {
-            this.entryModelId = entryModelId;
+            this.EntryModelId = entryModelId;
             return this;
         }
 
-        /** エントリーの種類名 */
-        public string name { set; get; }
-
-        /**
-         * エントリーの種類名を設定
-         *
-         * @param name エントリーの種類名
-         * @return this
-         */
         public EntryModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** エントリーの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * エントリーの種類のメタデータを設定
-         *
-         * @param metadata エントリーの種類のメタデータ
-         * @return this
-         */
         public EntryModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
+        }
+
+    	[Preserve]
+        public static EntryModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new EntryModel()
+                .WithEntryModelId(!data.Keys.Contains("entryModelId") || data["entryModelId"] == null ? null : data["entryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["entryModelId"] = EntryModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.entryModelId != null)
-            {
+            if (EntryModelId != null) {
                 writer.WritePropertyName("entryModelId");
-                writer.Write(this.entryModelId);
+                writer.Write(EntryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetEntryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["entryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["entryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):dictionary:(?<namespaceName>.*):model:(?<entryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static EntryModel FromDict(JsonData data)
-        {
-            return new EntryModel()
-                .WithEntryModelId(data.Keys.Contains("entryModelId") && data["entryModelId"] != null ? data["entryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as EntryModel;
             var diff = 0;
-            if (entryModelId == null && entryModelId == other.entryModelId)
+            if (EntryModelId == null && EntryModelId == other.EntryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += entryModelId.CompareTo(other.entryModelId);
+                diff += EntryModelId.CompareTo(other.EntryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["entryModelId"] = entryModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            return data;
-        }
-	}
+    }
 }

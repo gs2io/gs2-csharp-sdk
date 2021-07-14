@@ -28,126 +28,98 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeBillingsRequest : Gs2Request<DescribeBillingsRequest>
 	{
+        public string AccountToken { set; get; }
+        public string ProjectName { set; get; }
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public string Region { set; get; }
+        public string Service { set; get; }
 
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public DescribeBillingsRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
 
-
-        /** プロジェクト名 */
-		[UnityEngine.SerializeField]
-        public string projectName;
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public DescribeBillingsRequest WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
 
-
-        /** イベントの発生年 */
-		[UnityEngine.SerializeField]
-        public int? year;
-
-        /**
-         * イベントの発生年を設定
-         *
-         * @param year イベントの発生年
-         * @return this
-         */
         public DescribeBillingsRequest WithYear(int? year) {
-            this.year = year;
+            this.Year = year;
             return this;
         }
 
-
-        /** イベントの発生月 */
-		[UnityEngine.SerializeField]
-        public int? month;
-
-        /**
-         * イベントの発生月を設定
-         *
-         * @param month イベントの発生月
-         * @return this
-         */
         public DescribeBillingsRequest WithMonth(int? month) {
-            this.month = month;
+            this.Month = month;
             return this;
         }
 
-
-        /** サービスの種類 */
-		[UnityEngine.SerializeField]
-        public string region;
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param region サービスの種類
-         * @return this
-         */
         public DescribeBillingsRequest WithRegion(string region) {
-            this.region = region;
+            this.Region = region;
             return this;
         }
 
-
-        /** サービスの種類 */
-		[UnityEngine.SerializeField]
-        public string service;
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param service サービスの種類
-         * @return this
-         */
         public DescribeBillingsRequest WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeBillingsRequest FromDict(JsonData data)
+        public static DescribeBillingsRequest FromJson(JsonData data)
         {
-            return new DescribeBillingsRequest {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
-                projectName = data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString(): null,
-                year = data.Keys.Contains("year") && data["year"] != null ? (int?)int.Parse(data["year"].ToString()) : null,
-                month = data.Keys.Contains("month") && data["month"] != null ? (int?)int.Parse(data["month"].ToString()) : null,
-                region = data.Keys.Contains("region") && data["region"] != null ? data["region"].ToString(): null,
-                service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeBillingsRequest()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
+                ["projectName"] = ProjectName,
+                ["year"] = Year,
+                ["month"] = Month,
+                ["region"] = Region,
+                ["service"] = Service,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountToken"] = accountToken;
-            data["projectName"] = projectName;
-            data["year"] = year;
-            data["month"] = month;
-            data["region"] = region;
-            data["service"] = service;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            if (ProjectName != null) {
+                writer.WritePropertyName("projectName");
+                writer.Write(ProjectName.ToString());
+            }
+            if (Year != null) {
+                writer.WritePropertyName("year");
+                writer.Write(int.Parse(Year.ToString()));
+            }
+            if (Month != null) {
+                writer.WritePropertyName("month");
+                writer.Write(int.Parse(Month.ToString()));
+            }
+            if (Region != null) {
+                writer.WritePropertyName("region");
+                writer.Write(Region.ToString());
+            }
+            if (Service != null) {
+                writer.WritePropertyName("service");
+                writer.Write(Service.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

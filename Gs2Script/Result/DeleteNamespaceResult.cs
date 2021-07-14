@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Script.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Script.Result
 {
 	[Preserve]
-	public class DeleteNamespaceResult
+	[System.Serializable]
+	public class DeleteNamespaceResult : IResult
 	{
 
     	[Preserve]
-        public static DeleteNamespaceResult FromDict(JsonData data)
+        public static DeleteNamespaceResult FromJson(JsonData data)
         {
-            return new DeleteNamespaceResult {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteNamespaceResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

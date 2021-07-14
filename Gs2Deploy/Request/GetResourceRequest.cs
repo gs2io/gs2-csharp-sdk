@@ -28,54 +28,50 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetResourceRequest : Gs2Request<GetResourceRequest>
 	{
+        public string StackName { set; get; }
+        public string ResourceName { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public GetResourceRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
-        /** 作成中のリソース名 */
-		[UnityEngine.SerializeField]
-        public string resourceName;
-
-        /**
-         * 作成中のリソース名を設定
-         *
-         * @param resourceName 作成中のリソース名
-         * @return this
-         */
         public GetResourceRequest WithResourceName(string resourceName) {
-            this.resourceName = resourceName;
+            this.ResourceName = resourceName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetResourceRequest FromDict(JsonData data)
+        public static GetResourceRequest FromJson(JsonData data)
         {
-            return new GetResourceRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
-                resourceName = data.Keys.Contains("resourceName") && data["resourceName"] != null ? data["resourceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetResourceRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
+                .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
+                ["resourceName"] = ResourceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            data["resourceName"] = resourceName;
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            if (ResourceName != null) {
+                writer.WritePropertyName("resourceName");
+                writer.Write(ResourceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

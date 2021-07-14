@@ -28,54 +28,50 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class GetExperienceModelRequest : Gs2Request<GetExperienceModelRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ExperienceName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetExperienceModelRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 経験値の種類名 */
-		[UnityEngine.SerializeField]
-        public string experienceName;
-
-        /**
-         * 経験値の種類名を設定
-         *
-         * @param experienceName 経験値の種類名
-         * @return this
-         */
         public GetExperienceModelRequest WithExperienceName(string experienceName) {
-            this.experienceName = experienceName;
+            this.ExperienceName = experienceName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetExperienceModelRequest FromDict(JsonData data)
+        public static GetExperienceModelRequest FromJson(JsonData data)
         {
-            return new GetExperienceModelRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                experienceName = data.Keys.Contains("experienceName") && data["experienceName"] != null ? data["experienceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetExperienceModelRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["experienceName"] = ExperienceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["experienceName"] = experienceName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ExperienceName != null) {
+                writer.WritePropertyName("experienceName");
+                writer.Write(ExperienceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inbox.Result
 {
 	[Preserve]
-	public class DescribeGlobalMessagesResult
+	[System.Serializable]
+	public class DescribeGlobalMessagesResult : IResult
 	{
-        /** 全ユーザに向けたメッセージのリスト */
-        public List<GlobalMessage> items { set; get; }
+        public Gs2.Gs2Inbox.Model.GlobalMessage[] Items { set; get; }
 
+        public DescribeGlobalMessagesResult WithItems(Gs2.Gs2Inbox.Model.GlobalMessage[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeGlobalMessagesResult FromDict(JsonData data)
+        public static DescribeGlobalMessagesResult FromJson(JsonData data)
         {
-            return new DescribeGlobalMessagesResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Inbox.Model.GlobalMessage.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeGlobalMessagesResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Inbox.Model.GlobalMessage[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inbox.Model.GlobalMessage.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

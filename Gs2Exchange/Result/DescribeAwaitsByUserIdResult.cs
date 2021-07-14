@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Exchange.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Exchange.Result
 {
 	[Preserve]
-	public class DescribeAwaitsByUserIdResult
+	[System.Serializable]
+	public class DescribeAwaitsByUserIdResult : IResult
 	{
-        /** 交換待機のリスト */
-        public List<Await> items { set; get; }
+        public Gs2.Gs2Exchange.Model.Await[] Items { set; get; }
+        public string NextPageToken { set; get; }
 
-        /** 次のページを取得するためのトークン */
-        public string nextPageToken { set; get; }
+        public DescribeAwaitsByUserIdResult WithItems(Gs2.Gs2Exchange.Model.Await[] items) {
+            this.Items = items;
+            return this;
+        }
 
+        public DescribeAwaitsByUserIdResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeAwaitsByUserIdResult FromDict(JsonData data)
+        public static DescribeAwaitsByUserIdResult FromJson(JsonData data)
         {
-            return new DescribeAwaitsByUserIdResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Exchange.Model.Await.FromDict(value);
-                    }
-                ).ToList() : null,
-                nextPageToken = data.Keys.Contains("nextPageToken") && data["nextPageToken"] != null ? data["nextPageToken"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeAwaitsByUserIdResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Exchange.Model.Await[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.Await.FromJson(v);
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["nextPageToken"] = NextPageToken,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

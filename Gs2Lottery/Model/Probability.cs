@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class Probability : IComparable
 	{
+        public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; }
+        public float? Rate { set; get; }
 
-        /** 景品の種類 */
-        public Gs2.Gs2Lottery.Model.DrawnPrize prize { set; get; }
-
-        /**
-         * 景品の種類を設定
-         *
-         * @param prize 景品の種類
-         * @return this
-         */
         public Probability WithPrize(Gs2.Gs2Lottery.Model.DrawnPrize prize) {
-            this.prize = prize;
+            this.Prize = prize;
             return this;
         }
 
-        /** 排出確率(0.0〜1.0) */
-        public float? rate { set; get; }
-
-        /**
-         * 排出確率(0.0〜1.0)を設定
-         *
-         * @param rate 排出確率(0.0〜1.0)
-         * @return this
-         */
         public Probability WithRate(float? rate) {
-            this.rate = rate;
+            this.Rate = rate;
             return this;
+        }
+
+    	[Preserve]
+        public static Probability FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Probability()
+                .WithPrize(!data.Keys.Contains("prize") || data["prize"] == null ? null : Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(data["prize"]))
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["prize"] = Prize?.ToJson(),
+                ["rate"] = Rate,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.prize != null)
-            {
+            if (Prize != null) {
                 writer.WritePropertyName("prize");
-                this.prize.WriteJson(writer);
+                Prize.WriteJson(writer);
             }
-            if(this.rate.HasValue)
-            {
+            if (Rate != null) {
                 writer.WritePropertyName("rate");
-                writer.Write(this.rate.Value);
+                writer.Write(float.Parse(Rate.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Probability FromDict(JsonData data)
-        {
-            return new Probability()
-                .WithPrize(data.Keys.Contains("prize") && data["prize"] != null ? Gs2.Gs2Lottery.Model.DrawnPrize.FromDict(data["prize"]) : null)
-                .WithRate(data.Keys.Contains("rate") && data["rate"] != null ? (float?)float.Parse(data["rate"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Probability;
             var diff = 0;
-            if (prize == null && prize == other.prize)
+            if (Prize == null && Prize == other.Prize)
             {
                 // null and null
             }
             else
             {
-                diff += prize.CompareTo(other.prize);
+                diff += Prize.CompareTo(other.Prize);
             }
-            if (rate == null && rate == other.rate)
+            if (Rate == null && Rate == other.Rate)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rate - other.rate);
+                diff += (int)(Rate - other.Rate);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["prize"] = prize.ToDict();
-            data["rate"] = rate;
-            return data;
-        }
-	}
+    }
 }

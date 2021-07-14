@@ -23,355 +23,235 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class Progress : IComparable
 	{
+        public string ProgressId { set; get; }
+        public string UserId { set; get; }
+        public string TransactionId { set; get; }
+        public string QuestModelId { set; get; }
+        public long? RandomSeed { set; get; }
+        public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** クエスト挑戦 */
-        public string progressId { set; get; }
-
-        /**
-         * クエスト挑戦を設定
-         *
-         * @param progressId クエスト挑戦
-         * @return this
-         */
         public Progress WithProgressId(string progressId) {
-            this.progressId = progressId;
+            this.ProgressId = progressId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Progress WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** トランザクションID */
-        public string transactionId { set; get; }
-
-        /**
-         * トランザクションIDを設定
-         *
-         * @param transactionId トランザクションID
-         * @return this
-         */
         public Progress WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
+            this.TransactionId = transactionId;
             return this;
         }
 
-        /** クエストモデル */
-        public string questModelId { set; get; }
-
-        /**
-         * クエストモデルを設定
-         *
-         * @param questModelId クエストモデル
-         * @return this
-         */
         public Progress WithQuestModelId(string questModelId) {
-            this.questModelId = questModelId;
+            this.QuestModelId = questModelId;
             return this;
         }
 
-        /** 乱数シード */
-        public long? randomSeed { set; get; }
-
-        /**
-         * 乱数シードを設定
-         *
-         * @param randomSeed 乱数シード
-         * @return this
-         */
         public Progress WithRandomSeed(long? randomSeed) {
-            this.randomSeed = randomSeed;
+            this.RandomSeed = randomSeed;
             return this;
         }
 
-        /** クエストで得られる報酬の上限 */
-        public List<Reward> rewards { set; get; }
-
-        /**
-         * クエストで得られる報酬の上限を設定
-         *
-         * @param rewards クエストで得られる報酬の上限
-         * @return this
-         */
-        public Progress WithRewards(List<Reward> rewards) {
-            this.rewards = rewards;
+        public Progress WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
+            this.Rewards = rewards;
             return this;
         }
 
-        /** クエストモデルのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * クエストモデルのメタデータを設定
-         *
-         * @param metadata クエストモデルのメタデータ
-         * @return this
-         */
         public Progress WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Progress WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Progress WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Progress FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Progress()
+                .WithProgressId(!data.Keys.Contains("progressId") || data["progressId"] == null ? null : data["progressId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithQuestModelId(!data.Keys.Contains("questModelId") || data["questModelId"] == null ? null : data["questModelId"].ToString())
+                .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)long.Parse(data["randomSeed"].ToString()))
+                .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null ? new Gs2.Gs2Quest.Model.Reward[]{} : data["rewards"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Reward.FromJson(v);
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["progressId"] = ProgressId,
+                ["userId"] = UserId,
+                ["transactionId"] = TransactionId,
+                ["questModelId"] = QuestModelId,
+                ["randomSeed"] = RandomSeed,
+                ["rewards"] = new JsonData(Rewards == null ? new JsonData[]{} :
+                        Rewards.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.progressId != null)
-            {
+            if (ProgressId != null) {
                 writer.WritePropertyName("progressId");
-                writer.Write(this.progressId);
+                writer.Write(ProgressId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.transactionId != null)
-            {
+            if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
-                writer.Write(this.transactionId);
+                writer.Write(TransactionId.ToString());
             }
-            if(this.questModelId != null)
-            {
+            if (QuestModelId != null) {
                 writer.WritePropertyName("questModelId");
-                writer.Write(this.questModelId);
+                writer.Write(QuestModelId.ToString());
             }
-            if(this.randomSeed.HasValue)
-            {
+            if (RandomSeed != null) {
                 writer.WritePropertyName("randomSeed");
-                writer.Write(this.randomSeed.Value);
+                writer.Write(long.Parse(RandomSeed.ToString()));
             }
-            if(this.rewards != null)
-            {
+            if (Rewards != null) {
                 writer.WritePropertyName("rewards");
                 writer.WriteArrayStart();
-                foreach(var item in this.rewards)
+                foreach (var reward in Rewards)
                 {
-                    item.WriteJson(writer);
+                    if (reward != null) {
+                        reward.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):progress");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):progress");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):progress");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):progress");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Progress FromDict(JsonData data)
-        {
-            return new Progress()
-                .WithProgressId(data.Keys.Contains("progressId") && data["progressId"] != null ? data["progressId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithTransactionId(data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString() : null)
-                .WithQuestModelId(data.Keys.Contains("questModelId") && data["questModelId"] != null ? data["questModelId"].ToString() : null)
-                .WithRandomSeed(data.Keys.Contains("randomSeed") && data["randomSeed"] != null ? (long?)long.Parse(data["randomSeed"].ToString()) : null)
-                .WithRewards(data.Keys.Contains("rewards") && data["rewards"] != null ? data["rewards"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.Reward.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Progress;
             var diff = 0;
-            if (progressId == null && progressId == other.progressId)
+            if (ProgressId == null && ProgressId == other.ProgressId)
             {
                 // null and null
             }
             else
             {
-                diff += progressId.CompareTo(other.progressId);
+                diff += ProgressId.CompareTo(other.ProgressId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (transactionId == null && transactionId == other.transactionId)
+            if (TransactionId == null && TransactionId == other.TransactionId)
             {
                 // null and null
             }
             else
             {
-                diff += transactionId.CompareTo(other.transactionId);
+                diff += TransactionId.CompareTo(other.TransactionId);
             }
-            if (questModelId == null && questModelId == other.questModelId)
+            if (QuestModelId == null && QuestModelId == other.QuestModelId)
             {
                 // null and null
             }
             else
             {
-                diff += questModelId.CompareTo(other.questModelId);
+                diff += QuestModelId.CompareTo(other.QuestModelId);
             }
-            if (randomSeed == null && randomSeed == other.randomSeed)
+            if (RandomSeed == null && RandomSeed == other.RandomSeed)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(randomSeed - other.randomSeed);
+                diff += (int)(RandomSeed - other.RandomSeed);
             }
-            if (rewards == null && rewards == other.rewards)
+            if (Rewards == null && Rewards == other.Rewards)
             {
                 // null and null
             }
             else
             {
-                diff += rewards.Count - other.rewards.Count;
-                for (var i = 0; i < rewards.Count; i++)
+                diff += Rewards.Length - other.Rewards.Length;
+                for (var i = 0; i < Rewards.Length; i++)
                 {
-                    diff += rewards[i].CompareTo(other.rewards[i]);
+                    diff += Rewards[i].CompareTo(other.Rewards[i]);
                 }
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["progressId"] = progressId;
-            data["userId"] = userId;
-            data["transactionId"] = transactionId;
-            data["questModelId"] = questModelId;
-            data["randomSeed"] = randomSeed;
-            data["rewards"] = new JsonData(rewards.Select(item => item.ToDict()));
-            data["metadata"] = metadata;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

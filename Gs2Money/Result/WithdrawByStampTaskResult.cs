@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Money.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Money.Result
 {
 	[Preserve]
-	public class WithdrawByStampTaskResult
+	[System.Serializable]
+	public class WithdrawByStampTaskResult : IResult
 	{
-        /** 消費後のウォレット */
-        public Wallet item { set; get; }
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
+        public float? Price { set; get; }
+        public string NewContextStack { set; get; }
 
-        /** スタンプタスクの実行結果を記録したコンテキスト */
-        public string newContextStack { set; get; }
+        public WithdrawByStampTaskResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
+            this.Item = item;
+            return this;
+        }
 
+        public WithdrawByStampTaskResult WithPrice(float? price) {
+            this.Price = price;
+            return this;
+        }
+
+        public WithdrawByStampTaskResult WithNewContextStack(string newContextStack) {
+            this.NewContextStack = newContextStack;
+            return this;
+        }
 
     	[Preserve]
-        public static WithdrawByStampTaskResult FromDict(JsonData data)
+        public static WithdrawByStampTaskResult FromJson(JsonData data)
         {
-            return new WithdrawByStampTaskResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Money.Model.Wallet.FromDict(data["item"]) : null,
-                newContextStack = data.Keys.Contains("newContextStack") && data["newContextStack"] != null ? data["newContextStack"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new WithdrawByStampTaskResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money.Model.Wallet.FromJson(data["item"]))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["price"] = Price,
+                ["newContextStack"] = NewContextStack,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Price != null) {
+                writer.WritePropertyName("price");
+                writer.Write(float.Parse(Price.ToString()));
+            }
+            if (NewContextStack != null) {
+                writer.WritePropertyName("newContextStack");
+                writer.Write(NewContextStack.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

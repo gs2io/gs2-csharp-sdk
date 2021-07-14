@@ -23,191 +23,155 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class Prize : IComparable
 	{
+        public string PrizeId { set; get; }
+        public string Type { set; get; }
+        public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public string PrizeTableName { set; get; }
+        public int? Weight { set; get; }
 
-        /** 景品ID */
-        public string prizeId { set; get; }
-
-        /**
-         * 景品IDを設定
-         *
-         * @param prizeId 景品ID
-         * @return this
-         */
         public Prize WithPrizeId(string prizeId) {
-            this.prizeId = prizeId;
+            this.PrizeId = prizeId;
             return this;
         }
 
-        /** 景品の種類 */
-        public string type { set; get; }
-
-        /**
-         * 景品の種類を設定
-         *
-         * @param type 景品の種類
-         * @return this
-         */
         public Prize WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** 景品の入手アクションリスト */
-        public List<AcquireAction> acquireActions { set; get; }
-
-        /**
-         * 景品の入手アクションリストを設定
-         *
-         * @param acquireActions 景品の入手アクションリスト
-         * @return this
-         */
-        public Prize WithAcquireActions(List<AcquireAction> acquireActions) {
-            this.acquireActions = acquireActions;
+        public Prize WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
             return this;
         }
 
-        /** 排出確率テーブルの名前 */
-        public string prizeTableName { set; get; }
-
-        /**
-         * 排出確率テーブルの名前を設定
-         *
-         * @param prizeTableName 排出確率テーブルの名前
-         * @return this
-         */
         public Prize WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-        /** 排出重み */
-        public int? weight { set; get; }
-
-        /**
-         * 排出重みを設定
-         *
-         * @param weight 排出重み
-         * @return this
-         */
         public Prize WithWeight(int? weight) {
-            this.weight = weight;
+            this.Weight = weight;
             return this;
+        }
+
+    	[Preserve]
+        public static Prize FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Prize()
+                .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["prizeId"] = PrizeId,
+                ["type"] = Type,
+                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                        AcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["prizeTableName"] = PrizeTableName,
+                ["weight"] = Weight,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.prizeId != null)
-            {
+            if (PrizeId != null) {
                 writer.WritePropertyName("prizeId");
-                writer.Write(this.prizeId);
+                writer.Write(PrizeId.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.acquireActions != null)
-            {
+            if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.acquireActions)
+                foreach (var acquireAction in AcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.prizeTableName != null)
-            {
+            if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
-                writer.Write(this.prizeTableName);
+                writer.Write(PrizeTableName.ToString());
             }
-            if(this.weight.HasValue)
-            {
+            if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(this.weight.Value);
+                writer.Write(int.Parse(Weight.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Prize FromDict(JsonData data)
-        {
-            return new Prize()
-                .WithPrizeId(data.Keys.Contains("prizeId") && data["prizeId"] != null ? data["prizeId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithAcquireActions(data.Keys.Contains("acquireActions") && data["acquireActions"] != null ? data["acquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Lottery.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithPrizeTableName(data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString() : null)
-                .WithWeight(data.Keys.Contains("weight") && data["weight"] != null ? (int?)int.Parse(data["weight"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Prize;
             var diff = 0;
-            if (prizeId == null && prizeId == other.prizeId)
+            if (PrizeId == null && PrizeId == other.PrizeId)
             {
                 // null and null
             }
             else
             {
-                diff += prizeId.CompareTo(other.prizeId);
+                diff += PrizeId.CompareTo(other.PrizeId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += Type.CompareTo(other.Type);
             }
-            if (acquireActions == null && acquireActions == other.acquireActions)
+            if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += acquireActions.Count - other.acquireActions.Count;
-                for (var i = 0; i < acquireActions.Count; i++)
+                diff += AcquireActions.Length - other.AcquireActions.Length;
+                for (var i = 0; i < AcquireActions.Length; i++)
                 {
-                    diff += acquireActions[i].CompareTo(other.acquireActions[i]);
+                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
                 }
             }
-            if (prizeTableName == null && prizeTableName == other.prizeTableName)
+            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {
                 // null and null
             }
             else
             {
-                diff += prizeTableName.CompareTo(other.prizeTableName);
+                diff += PrizeTableName.CompareTo(other.PrizeTableName);
             }
-            if (weight == null && weight == other.weight)
+            if (Weight == null && Weight == other.Weight)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(weight - other.weight);
+                diff += (int)(Weight - other.Weight);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["prizeId"] = prizeId;
-            data["type"] = type;
-            data["acquireActions"] = new JsonData(acquireActions.Select(item => item.ToDict()));
-            data["prizeTableName"] = prizeTableName;
-            data["weight"] = weight;
-            return data;
-        }
-	}
+    }
 }

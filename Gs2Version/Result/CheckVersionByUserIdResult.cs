@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Version.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,87 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Version.Result
 {
 	[Preserve]
-	public class CheckVersionByUserIdResult
+	[System.Serializable]
+	public class CheckVersionByUserIdResult : IResult
 	{
-        /** プロジェクトトークン */
-        public string projectToken { set; get; }
+        public string ProjectToken { set; get; }
+        public Gs2.Gs2Version.Model.Status[] Warnings { set; get; }
+        public Gs2.Gs2Version.Model.Status[] Errors { set; get; }
 
-        /** バージョンの検証結果のリスト */
-        public List<Status> warnings { set; get; }
+        public CheckVersionByUserIdResult WithProjectToken(string projectToken) {
+            this.ProjectToken = projectToken;
+            return this;
+        }
 
-        /** バージョンの検証結果のリスト */
-        public List<Status> errors { set; get; }
+        public CheckVersionByUserIdResult WithWarnings(Gs2.Gs2Version.Model.Status[] warnings) {
+            this.Warnings = warnings;
+            return this;
+        }
 
+        public CheckVersionByUserIdResult WithErrors(Gs2.Gs2Version.Model.Status[] errors) {
+            this.Errors = errors;
+            return this;
+        }
 
     	[Preserve]
-        public static CheckVersionByUserIdResult FromDict(JsonData data)
+        public static CheckVersionByUserIdResult FromJson(JsonData data)
         {
-            return new CheckVersionByUserIdResult {
-                projectToken = data.Keys.Contains("projectToken") && data["projectToken"] != null ? data["projectToken"].ToString() : null,
-                warnings = data.Keys.Contains("warnings") && data["warnings"] != null ? data["warnings"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Version.Model.Status.FromDict(value);
-                    }
-                ).ToList() : null,
-                errors = data.Keys.Contains("errors") && data["errors"] != null ? data["errors"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Version.Model.Status.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new CheckVersionByUserIdResult()
+                .WithProjectToken(!data.Keys.Contains("projectToken") || data["projectToken"] == null ? null : data["projectToken"].ToString())
+                .WithWarnings(!data.Keys.Contains("warnings") || data["warnings"] == null ? new Gs2.Gs2Version.Model.Status[]{} : data["warnings"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Version.Model.Status.FromJson(v);
+                }).ToArray())
+                .WithErrors(!data.Keys.Contains("errors") || data["errors"] == null ? new Gs2.Gs2Version.Model.Status[]{} : data["errors"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Version.Model.Status.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["projectToken"] = ProjectToken,
+                ["warnings"] = new JsonData(Warnings == null ? new JsonData[]{} :
+                        Warnings.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["errors"] = new JsonData(Errors == null ? new JsonData[]{} :
+                        Errors.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (ProjectToken != null) {
+                writer.WritePropertyName("projectToken");
+                writer.Write(ProjectToken.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var warning in Warnings)
+            {
+                if (warning != null) {
+                    warning.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var error in Errors)
+            {
+                if (error != null) {
+                    error.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

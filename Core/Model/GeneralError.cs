@@ -31,7 +31,7 @@ namespace Gs2.Core.Model
 			get { return message; }
 		}
 
-		public static GeneralError FromDict(JsonData data)
+		public static GeneralError FromJson(JsonData data)
 		{
 			return new GeneralError
 			{

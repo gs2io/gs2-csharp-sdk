@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Datastore.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,64 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Datastore.Result
 {
 	[Preserve]
-	public class PrepareDownloadByUserIdAndDataObjectNameResult
+	[System.Serializable]
+	public class PrepareDownloadByUserIdAndDataObjectNameResult : IResult
 	{
-        /** データオブジェクト */
-        public DataObject item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public string FileUrl { set; get; }
+        public long? ContentLength { set; get; }
 
-        /** ファイルをダウンロードするためのURL */
-        public string fileUrl { set; get; }
+        public PrepareDownloadByUserIdAndDataObjectNameResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** ファイルの容量 */
-        public long? contentLength { set; get; }
+        public PrepareDownloadByUserIdAndDataObjectNameResult WithFileUrl(string fileUrl) {
+            this.FileUrl = fileUrl;
+            return this;
+        }
 
+        public PrepareDownloadByUserIdAndDataObjectNameResult WithContentLength(long? contentLength) {
+            this.ContentLength = contentLength;
+            return this;
+        }
 
     	[Preserve]
-        public static PrepareDownloadByUserIdAndDataObjectNameResult FromDict(JsonData data)
+        public static PrepareDownloadByUserIdAndDataObjectNameResult FromJson(JsonData data)
         {
-            return new PrepareDownloadByUserIdAndDataObjectNameResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Datastore.Model.DataObject.FromDict(data["item"]) : null,
-                fileUrl = data.Keys.Contains("fileUrl") && data["fileUrl"] != null ? data["fileUrl"].ToString() : null,
-                contentLength = data.Keys.Contains("contentLength") && data["contentLength"] != null ? (long?)long.Parse(data["contentLength"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareDownloadByUserIdAndDataObjectNameResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
+                .WithFileUrl(!data.Keys.Contains("fileUrl") || data["fileUrl"] == null ? null : data["fileUrl"].ToString())
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)long.Parse(data["contentLength"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["fileUrl"] = FileUrl,
+                ["contentLength"] = ContentLength,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (FileUrl != null) {
+                writer.WritePropertyName("fileUrl");
+                writer.Write(FileUrl.ToString());
+            }
+            if (ContentLength != null) {
+                writer.WritePropertyName("contentLength");
+                writer.Write(long.Parse(ContentLength.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

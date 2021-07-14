@@ -28,126 +28,86 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DescribeItemSetsByUserIdRequest : Gs2Request<DescribeItemSetsByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string UserId { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeItemSetsByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリの名前 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリの名前を設定
-         *
-         * @param inventoryName インベントリの名前
-         * @return this
-         */
         public DescribeItemSetsByUserIdRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DescribeItemSetsByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
         public DescribeItemSetsByUserIdRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
+            this.PageToken = pageToken;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeItemSetsByUserIdRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public DescribeItemSetsByUserIdRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DescribeItemSetsByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DescribeItemSetsByUserIdRequest FromDict(JsonData data)
+        public static DescribeItemSetsByUserIdRequest FromJson(JsonData data)
         {
-            return new DescribeItemSetsByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeItemSetsByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["userId"] = UserId,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["userId"] = userId;
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

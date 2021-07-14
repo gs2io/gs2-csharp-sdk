@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Chat.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Chat.Result
 {
 	[Preserve]
-	public class PostByUserIdResult
+	[System.Serializable]
+	public class PostByUserIdResult : IResult
 	{
-        /** 投稿したメッセージ */
-        public Message item { set; get; }
+        public Gs2.Gs2Chat.Model.Message Item { set; get; }
 
+        public PostByUserIdResult WithItem(Gs2.Gs2Chat.Model.Message item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static PostByUserIdResult FromDict(JsonData data)
+        public static PostByUserIdResult FromJson(JsonData data)
         {
-            return new PostByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Chat.Model.Message.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new PostByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Chat.Model.Message.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

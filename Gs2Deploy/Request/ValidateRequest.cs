@@ -28,36 +28,38 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class ValidateRequest : Gs2Request<ValidateRequest>
 	{
+        public string Template { set; get; }
 
-        /** テンプレートデータ */
-		[UnityEngine.SerializeField]
-        public string template;
-
-        /**
-         * テンプレートデータを設定
-         *
-         * @param template テンプレートデータ
-         * @return this
-         */
         public ValidateRequest WithTemplate(string template) {
-            this.template = template;
+            this.Template = template;
             return this;
         }
 
-
     	[Preserve]
-        public static ValidateRequest FromDict(JsonData data)
+        public static ValidateRequest FromJson(JsonData data)
         {
-            return new ValidateRequest {
-                template = data.Keys.Contains("template") && data["template"] != null ? data["template"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ValidateRequest()
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["template"] = Template,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["template"] = template;
-            return data;
+            writer.WriteObjectStart();
+            if (Template != null) {
+                writer.WritePropertyName("template");
+                writer.Write(Template.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

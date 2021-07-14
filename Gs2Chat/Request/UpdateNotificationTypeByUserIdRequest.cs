@@ -28,112 +28,85 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UpdateNotificationTypeByUserIdRequest : Gs2Request<UpdateNotificationTypeByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNotificationTypeByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public UpdateNotificationTypeByUserIdRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-
-        /** 購読するユーザID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * 購読するユーザIDを設定
-         *
-         * @param userId 購読するユーザID
-         * @return this
-         */
         public UpdateNotificationTypeByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 新着メッセージ通知を受け取るカテゴリリスト */
-		[UnityEngine.SerializeField]
-        public List<NotificationType> notificationTypes;
-
-        /**
-         * 新着メッセージ通知を受け取るカテゴリリストを設定
-         *
-         * @param notificationTypes 新着メッセージ通知を受け取るカテゴリリスト
-         * @return this
-         */
-        public UpdateNotificationTypeByUserIdRequest WithNotificationTypes(List<NotificationType> notificationTypes) {
-            this.notificationTypes = notificationTypes;
+        public UpdateNotificationTypeByUserIdRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
+            this.NotificationTypes = notificationTypes;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public UpdateNotificationTypeByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static UpdateNotificationTypeByUserIdRequest FromDict(JsonData data)
+        public static UpdateNotificationTypeByUserIdRequest FromJson(JsonData data)
         {
-            return new UpdateNotificationTypeByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                notificationTypes = data.Keys.Contains("notificationTypes") && data["notificationTypes"] != null ? data["notificationTypes"].Cast<JsonData>().Select(value =>
-                    {
-                        return NotificationType.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNotificationTypeByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Chat.Model.NotificationType.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
+                ["userId"] = UserId,
+                ["notificationTypes"] = new JsonData(NotificationTypes == null ? new JsonData[]{} :
+                        NotificationTypes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            data["userId"] = userId;
-            data["notificationTypes"] = new JsonData(notificationTypes.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var notificationType in NotificationTypes)
+            {
+                if (notificationType != null) {
+                    notificationType.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

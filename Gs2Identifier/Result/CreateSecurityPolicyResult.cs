@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Identifier.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Identifier.Result
 {
 	[Preserve]
-	public class CreateSecurityPolicyResult
+	[System.Serializable]
+	public class CreateSecurityPolicyResult : IResult
 	{
-        /** 作成したセキュリティポリシー */
-        public SecurityPolicy item { set; get; }
+        public Gs2.Gs2Identifier.Model.SecurityPolicy Item { set; get; }
 
+        public CreateSecurityPolicyResult WithItem(Gs2.Gs2Identifier.Model.SecurityPolicy item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateSecurityPolicyResult FromDict(JsonData data)
+        public static CreateSecurityPolicyResult FromJson(JsonData data)
         {
-            return new CreateSecurityPolicyResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Identifier.Model.SecurityPolicy.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateSecurityPolicyResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Identifier.Model.SecurityPolicy.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

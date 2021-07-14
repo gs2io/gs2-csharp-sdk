@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Stamina.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Stamina.Result
 {
 	[Preserve]
-	public class GetStaminaModelResult
+	[System.Serializable]
+	public class GetStaminaModelResult : IResult
 	{
-        /** スタミナモデル */
-        public StaminaModel item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel Item { set; get; }
 
+        public GetStaminaModelResult WithItem(Gs2.Gs2Stamina.Model.StaminaModel item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetStaminaModelResult FromDict(JsonData data)
+        public static GetStaminaModelResult FromJson(JsonData data)
         {
-            return new GetStaminaModelResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Stamina.Model.StaminaModel.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetStaminaModelResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

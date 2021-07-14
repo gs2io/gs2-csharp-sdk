@@ -23,267 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inventory.Model
 {
+
 	[Preserve]
 	public class ItemModel : IComparable
 	{
+        public string ItemModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public long? StackingLimit { set; get; }
+        public bool? AllowMultipleStacks { set; get; }
+        public int? SortValue { set; get; }
 
-        /** アイテムモデルマスター */
-        public string itemModelId { set; get; }
-
-        /**
-         * アイテムモデルマスターを設定
-         *
-         * @param itemModelId アイテムモデルマスター
-         * @return this
-         */
         public ItemModel WithItemModelId(string itemModelId) {
-            this.itemModelId = itemModelId;
+            this.ItemModelId = itemModelId;
             return this;
         }
 
-        /** アイテムモデルの種類名 */
-        public string name { set; get; }
-
-        /**
-         * アイテムモデルの種類名を設定
-         *
-         * @param name アイテムモデルの種類名
-         * @return this
-         */
         public ItemModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** アイテムモデルの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * アイテムモデルの種類のメタデータを設定
-         *
-         * @param metadata アイテムモデルの種類のメタデータ
-         * @return this
-         */
         public ItemModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** スタック可能な最大数量 */
-        public long? stackingLimit { set; get; }
-
-        /**
-         * スタック可能な最大数量を設定
-         *
-         * @param stackingLimit スタック可能な最大数量
-         * @return this
-         */
         public ItemModel WithStackingLimit(long? stackingLimit) {
-            this.stackingLimit = stackingLimit;
+            this.StackingLimit = stackingLimit;
             return this;
         }
 
-        /** スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すか */
-        public bool? allowMultipleStacks { set; get; }
-
-        /**
-         * スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すかを設定
-         *
-         * @param allowMultipleStacks スタック可能な最大数量を超えた時複数枠にアイテムを保管することを許すか
-         * @return this
-         */
         public ItemModel WithAllowMultipleStacks(bool? allowMultipleStacks) {
-            this.allowMultipleStacks = allowMultipleStacks;
+            this.AllowMultipleStacks = allowMultipleStacks;
             return this;
         }
 
-        /** 表示順番 */
-        public int? sortValue { set; get; }
-
-        /**
-         * 表示順番を設定
-         *
-         * @param sortValue 表示順番
-         * @return this
-         */
         public ItemModel WithSortValue(int? sortValue) {
-            this.sortValue = sortValue;
+            this.SortValue = sortValue;
             return this;
+        }
+
+    	[Preserve]
+        public static ItemModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ItemModel()
+                .WithItemModelId(!data.Keys.Contains("itemModelId") || data["itemModelId"] == null ? null : data["itemModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : (long?)long.Parse(data["stackingLimit"].ToString()))
+                .WithAllowMultipleStacks(!data.Keys.Contains("allowMultipleStacks") || data["allowMultipleStacks"] == null ? null : (bool?)bool.Parse(data["allowMultipleStacks"].ToString()))
+                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["itemModelId"] = ItemModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["stackingLimit"] = StackingLimit,
+                ["allowMultipleStacks"] = AllowMultipleStacks,
+                ["sortValue"] = SortValue,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.itemModelId != null)
-            {
+            if (ItemModelId != null) {
                 writer.WritePropertyName("itemModelId");
-                writer.Write(this.itemModelId);
+                writer.Write(ItemModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.stackingLimit.HasValue)
-            {
+            if (StackingLimit != null) {
                 writer.WritePropertyName("stackingLimit");
-                writer.Write(this.stackingLimit.Value);
+                writer.Write(long.Parse(StackingLimit.ToString()));
             }
-            if(this.allowMultipleStacks.HasValue)
-            {
+            if (AllowMultipleStacks != null) {
                 writer.WritePropertyName("allowMultipleStacks");
-                writer.Write(this.allowMultipleStacks.Value);
+                writer.Write(bool.Parse(AllowMultipleStacks.ToString()));
             }
-            if(this.sortValue.HasValue)
-            {
+            if (SortValue != null) {
                 writer.WritePropertyName("sortValue");
-                writer.Write(this.sortValue.Value);
+                writer.Write(int.Parse(SortValue.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetItemNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*):item:(?<itemName>.*)");
-        if (!match.Groups["itemName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["itemName"].Value;
-    }
-
-    public static string GetInventoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*):item:(?<itemName>.*)");
-        if (!match.Groups["inventoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["inventoryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*):item:(?<itemName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*):item:(?<itemName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*):item:(?<itemName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static ItemModel FromDict(JsonData data)
-        {
-            return new ItemModel()
-                .WithItemModelId(data.Keys.Contains("itemModelId") && data["itemModelId"] != null ? data["itemModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithStackingLimit(data.Keys.Contains("stackingLimit") && data["stackingLimit"] != null ? (long?)long.Parse(data["stackingLimit"].ToString()) : null)
-                .WithAllowMultipleStacks(data.Keys.Contains("allowMultipleStacks") && data["allowMultipleStacks"] != null ? (bool?)bool.Parse(data["allowMultipleStacks"].ToString()) : null)
-                .WithSortValue(data.Keys.Contains("sortValue") && data["sortValue"] != null ? (int?)int.Parse(data["sortValue"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ItemModel;
             var diff = 0;
-            if (itemModelId == null && itemModelId == other.itemModelId)
+            if (ItemModelId == null && ItemModelId == other.ItemModelId)
             {
                 // null and null
             }
             else
             {
-                diff += itemModelId.CompareTo(other.itemModelId);
+                diff += ItemModelId.CompareTo(other.ItemModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (stackingLimit == null && stackingLimit == other.stackingLimit)
+            if (StackingLimit == null && StackingLimit == other.StackingLimit)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(stackingLimit - other.stackingLimit);
+                diff += (int)(StackingLimit - other.StackingLimit);
             }
-            if (allowMultipleStacks == null && allowMultipleStacks == other.allowMultipleStacks)
+            if (AllowMultipleStacks == null && AllowMultipleStacks == other.AllowMultipleStacks)
             {
                 // null and null
             }
             else
             {
-                diff += allowMultipleStacks == other.allowMultipleStacks ? 0 : 1;
+                diff += AllowMultipleStacks == other.AllowMultipleStacks ? 0 : 1;
             }
-            if (sortValue == null && sortValue == other.sortValue)
+            if (SortValue == null && SortValue == other.SortValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(sortValue - other.sortValue);
+                diff += (int)(SortValue - other.SortValue);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["itemModelId"] = itemModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["stackingLimit"] = stackingLimit;
-            data["allowMultipleStacks"] = allowMultipleStacks;
-            data["sortValue"] = sortValue;
-            return data;
-        }
-	}
+    }
 }

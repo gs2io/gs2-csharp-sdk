@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Chat.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Chat.Result
 {
 	[Preserve]
-	public class CreateRoomResult
+	[System.Serializable]
+	public class CreateRoomResult : IResult
 	{
-        /** 作成したルーム */
-        public Room item { set; get; }
+        public Gs2.Gs2Chat.Model.Room Item { set; get; }
 
+        public CreateRoomResult WithItem(Gs2.Gs2Chat.Model.Room item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateRoomResult FromDict(JsonData data)
+        public static CreateRoomResult FromJson(JsonData data)
         {
-            return new CreateRoomResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Chat.Model.Room.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateRoomResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Chat.Model.Room.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,162 +28,110 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateStaminaByUserIdRequest : Gs2Request<UpdateStaminaByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string StaminaName { set; get; }
+        public string UserId { set; get; }
+        public int? Value { set; get; }
+        public int? MaxValue { set; get; }
+        public int? RecoverIntervalMinutes { set; get; }
+        public int? RecoverValue { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スタミナの種類名 */
-		[UnityEngine.SerializeField]
-        public string staminaName;
-
-        /**
-         * スタミナの種類名を設定
-         *
-         * @param staminaName スタミナの種類名
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithStaminaName(string staminaName) {
-            this.staminaName = staminaName;
+            this.StaminaName = staminaName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 最終更新時におけるスタミナ値 */
-		[UnityEngine.SerializeField]
-        public int? value;
-
-        /**
-         * 最終更新時におけるスタミナ値を設定
-         *
-         * @param value 最終更新時におけるスタミナ値
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithValue(int? value) {
-            this.value = value;
+            this.Value = value;
             return this;
         }
 
-
-        /** スタミナの最大値 */
-		[UnityEngine.SerializeField]
-        public int? maxValue;
-
-        /**
-         * スタミナの最大値を設定
-         *
-         * @param maxValue スタミナの最大値
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithMaxValue(int? maxValue) {
-            this.maxValue = maxValue;
+            this.MaxValue = maxValue;
             return this;
         }
 
-
-        /** スタミナの回復間隔(分) */
-		[UnityEngine.SerializeField]
-        public int? recoverIntervalMinutes;
-
-        /**
-         * スタミナの回復間隔(分)を設定
-         *
-         * @param recoverIntervalMinutes スタミナの回復間隔(分)
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
-            this.recoverIntervalMinutes = recoverIntervalMinutes;
+            this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
 
-
-        /** スタミナの回復量 */
-		[UnityEngine.SerializeField]
-        public int? recoverValue;
-
-        /**
-         * スタミナの回復量を設定
-         *
-         * @param recoverValue スタミナの回復量
-         * @return this
-         */
         public UpdateStaminaByUserIdRequest WithRecoverValue(int? recoverValue) {
-            this.recoverValue = recoverValue;
+            this.RecoverValue = recoverValue;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public UpdateStaminaByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static UpdateStaminaByUserIdRequest FromDict(JsonData data)
+        public static UpdateStaminaByUserIdRequest FromJson(JsonData data)
         {
-            return new UpdateStaminaByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                staminaName = data.Keys.Contains("staminaName") && data["staminaName"] != null ? data["staminaName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                value = data.Keys.Contains("value") && data["value"] != null ? (int?)int.Parse(data["value"].ToString()) : null,
-                maxValue = data.Keys.Contains("maxValue") && data["maxValue"] != null ? (int?)int.Parse(data["maxValue"].ToString()) : null,
-                recoverIntervalMinutes = data.Keys.Contains("recoverIntervalMinutes") && data["recoverIntervalMinutes"] != null ? (int?)int.Parse(data["recoverIntervalMinutes"].ToString()) : null,
-                recoverValue = data.Keys.Contains("recoverValue") && data["recoverValue"] != null ? (int?)int.Parse(data["recoverValue"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateStaminaByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()))
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()))
+                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)int.Parse(data["recoverValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["staminaName"] = StaminaName,
+                ["userId"] = UserId,
+                ["value"] = Value,
+                ["maxValue"] = MaxValue,
+                ["recoverIntervalMinutes"] = RecoverIntervalMinutes,
+                ["recoverValue"] = RecoverValue,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["staminaName"] = staminaName;
-            data["userId"] = userId;
-            data["value"] = value;
-            data["maxValue"] = maxValue;
-            data["recoverIntervalMinutes"] = recoverIntervalMinutes;
-            data["recoverValue"] = recoverValue;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (StaminaName != null) {
+                writer.WritePropertyName("staminaName");
+                writer.Write(StaminaName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Value != null) {
+                writer.WritePropertyName("value");
+                writer.Write(int.Parse(Value.ToString()));
+            }
+            if (MaxValue != null) {
+                writer.WritePropertyName("maxValue");
+                writer.Write(int.Parse(MaxValue.ToString()));
+            }
+            if (RecoverIntervalMinutes != null) {
+                writer.WritePropertyName("recoverIntervalMinutes");
+                writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
+            }
+            if (RecoverValue != null) {
+                writer.WritePropertyName("recoverValue");
+                writer.Write(int.Parse(RecoverValue.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

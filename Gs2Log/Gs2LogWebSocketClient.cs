@@ -23,9 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;
-
-namespace Gs2.Gs2Log
+using Gs2.Util.LitJson;namespace Gs2.Gs2Log
 {
 	public class Gs2LogWebSocketClient : AbstractGs2Client
 	{
@@ -34,10 +32,6 @@ namespace Gs2.Gs2Log
 
         protected Gs2WebSocketSession Gs2WebSocketSession => (Gs2WebSocketSession) Gs2Session;
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="Gs2WebSocketSession">WebSocket API 用セッション</param>
 		public Gs2LogWebSocketClient(Gs2WebSocketSession Gs2WebSocketSession) : base(Gs2WebSocketSession)
 		{
 
@@ -59,65 +53,65 @@ namespace Gs2.Gs2Log
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.name != null)
+                if (_request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.name.ToString());
+                    jsonWriter.Write(_request.Name.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.type != null)
+                if (_request.Type != null)
                 {
                     jsonWriter.WritePropertyName("type");
-                    jsonWriter.Write(_request.type.ToString());
+                    jsonWriter.Write(_request.Type.ToString());
                 }
-                if (_request.gcpCredentialJson != null)
+                if (_request.GcpCredentialJson != null)
                 {
                     jsonWriter.WritePropertyName("gcpCredentialJson");
-                    jsonWriter.Write(_request.gcpCredentialJson.ToString());
+                    jsonWriter.Write(_request.GcpCredentialJson.ToString());
                 }
-                if (_request.bigQueryDatasetName != null)
+                if (_request.BigQueryDatasetName != null)
                 {
                     jsonWriter.WritePropertyName("bigQueryDatasetName");
-                    jsonWriter.Write(_request.bigQueryDatasetName.ToString());
+                    jsonWriter.Write(_request.BigQueryDatasetName.ToString());
                 }
-                if (_request.logExpireDays != null)
+                if (_request.LogExpireDays != null)
                 {
                     jsonWriter.WritePropertyName("logExpireDays");
-                    jsonWriter.Write(_request.logExpireDays.ToString());
+                    jsonWriter.Write(_request.LogExpireDays.ToString());
                 }
-                if (_request.awsRegion != null)
+                if (_request.AwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("awsRegion");
-                    jsonWriter.Write(_request.awsRegion.ToString());
+                    jsonWriter.Write(_request.AwsRegion.ToString());
                 }
-                if (_request.awsAccessKeyId != null)
+                if (_request.AwsAccessKeyId != null)
                 {
                     jsonWriter.WritePropertyName("awsAccessKeyId");
-                    jsonWriter.Write(_request.awsAccessKeyId.ToString());
+                    jsonWriter.Write(_request.AwsAccessKeyId.ToString());
                 }
-                if (_request.awsSecretAccessKey != null)
+                if (_request.AwsSecretAccessKey != null)
                 {
                     jsonWriter.WritePropertyName("awsSecretAccessKey");
-                    jsonWriter.Write(_request.awsSecretAccessKey.ToString());
+                    jsonWriter.Write(_request.AwsSecretAccessKey.ToString());
                 }
-                if (_request.firehoseStreamName != null)
+                if (_request.FirehoseStreamName != null)
                 {
                     jsonWriter.WritePropertyName("firehoseStreamName");
-                    jsonWriter.Write(_request.firehoseStreamName.ToString());
+                    jsonWriter.Write(_request.FirehoseStreamName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -147,94 +141,12 @@ namespace Gs2.Gs2Log
             }
         }
 
-		/// <summary>
-		///  ネームスペースを新規作成<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
         )
 		{
 			var task = new CreateNamespaceTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
-        }
-
-        private class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Result.GetNamespaceStatusResult>
-        {
-			private readonly Request.GetNamespaceStatusRequest _request;
-
-			public GetNamespaceStatusTask(Request.GetNamespaceStatusRequest request, UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (_request.namespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
-                }
-                if (_request.contextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
-                }
-                if (_request.requestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
-                }
-
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("log");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("namespace");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getNamespaceStatus");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
-
-                jsonWriter.WriteObjectEnd();
-
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
-            }
-        }
-
-		/// <summary>
-		///  ネームスペースの状態を取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
-		public IEnumerator GetNamespaceStatus(
-                Request.GetNamespaceStatusRequest request,
-                UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
 
@@ -254,20 +166,20 @@ namespace Gs2.Gs2Log
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -297,13 +209,6 @@ namespace Gs2.Gs2Log
             }
         }
 
-		/// <summary>
-		///  ネームスペースを取得<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
@@ -329,65 +234,65 @@ namespace Gs2.Gs2Log
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.description != null)
+                if (_request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.description.ToString());
+                    jsonWriter.Write(_request.Description.ToString());
                 }
-                if (_request.type != null)
+                if (_request.Type != null)
                 {
                     jsonWriter.WritePropertyName("type");
-                    jsonWriter.Write(_request.type.ToString());
+                    jsonWriter.Write(_request.Type.ToString());
                 }
-                if (_request.gcpCredentialJson != null)
+                if (_request.GcpCredentialJson != null)
                 {
                     jsonWriter.WritePropertyName("gcpCredentialJson");
-                    jsonWriter.Write(_request.gcpCredentialJson.ToString());
+                    jsonWriter.Write(_request.GcpCredentialJson.ToString());
                 }
-                if (_request.bigQueryDatasetName != null)
+                if (_request.BigQueryDatasetName != null)
                 {
                     jsonWriter.WritePropertyName("bigQueryDatasetName");
-                    jsonWriter.Write(_request.bigQueryDatasetName.ToString());
+                    jsonWriter.Write(_request.BigQueryDatasetName.ToString());
                 }
-                if (_request.logExpireDays != null)
+                if (_request.LogExpireDays != null)
                 {
                     jsonWriter.WritePropertyName("logExpireDays");
-                    jsonWriter.Write(_request.logExpireDays.ToString());
+                    jsonWriter.Write(_request.LogExpireDays.ToString());
                 }
-                if (_request.awsRegion != null)
+                if (_request.AwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("awsRegion");
-                    jsonWriter.Write(_request.awsRegion.ToString());
+                    jsonWriter.Write(_request.AwsRegion.ToString());
                 }
-                if (_request.awsAccessKeyId != null)
+                if (_request.AwsAccessKeyId != null)
                 {
                     jsonWriter.WritePropertyName("awsAccessKeyId");
-                    jsonWriter.Write(_request.awsAccessKeyId.ToString());
+                    jsonWriter.Write(_request.AwsAccessKeyId.ToString());
                 }
-                if (_request.awsSecretAccessKey != null)
+                if (_request.AwsSecretAccessKey != null)
                 {
                     jsonWriter.WritePropertyName("awsSecretAccessKey");
-                    jsonWriter.Write(_request.awsSecretAccessKey.ToString());
+                    jsonWriter.Write(_request.AwsSecretAccessKey.ToString());
                 }
-                if (_request.firehoseStreamName != null)
+                if (_request.FirehoseStreamName != null)
                 {
                     jsonWriter.WritePropertyName("firehoseStreamName");
-                    jsonWriter.Write(_request.firehoseStreamName.ToString());
+                    jsonWriter.Write(_request.FirehoseStreamName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -417,13 +322,6 @@ namespace Gs2.Gs2Log
             }
         }
 
-		/// <summary>
-		///  ネームスペースを更新<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
@@ -449,20 +347,20 @@ namespace Gs2.Gs2Log
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.namespaceName != null)
+                if (_request.NamespaceName != null)
                 {
                     jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(_request.namespaceName.ToString());
+                    jsonWriter.Write(_request.NamespaceName.ToString());
                 }
-                if (_request.contextStack != null)
+                if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.contextStack.ToString());
+                    jsonWriter.Write(_request.ContextStack.ToString());
                 }
-                if (_request.requestId != null)
+                if (_request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.requestId);
+                    jsonWriter.Write(_request.RequestId);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -492,13 +390,6 @@ namespace Gs2.Gs2Log
             }
         }
 
-		/// <summary>
-		///  ネームスペースを削除<br />
-		/// </summary>
-        ///
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback

@@ -28,90 +28,62 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeSubscribesByCategoryNameAndUserIdRequest : Gs2Request<DescribeSubscribesByCategoryNameAndUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
+        public string UserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-
-        /** 購読するユーザID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * 購読するユーザIDを設定
-         *
-         * @param userId 購読するユーザID
-         * @return this
-         */
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DescribeSubscribesByCategoryNameAndUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static DescribeSubscribesByCategoryNameAndUserIdRequest FromDict(JsonData data)
+        public static DescribeSubscribesByCategoryNameAndUserIdRequest FromJson(JsonData data)
         {
-            return new DescribeSubscribesByCategoryNameAndUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeSubscribesByCategoryNameAndUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
+                ["userId"] = UserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            data["userId"] = userId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

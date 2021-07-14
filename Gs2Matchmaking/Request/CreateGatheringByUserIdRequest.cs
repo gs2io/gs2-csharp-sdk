@@ -28,174 +28,139 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CreateGatheringByUserIdRequest : Gs2Request<CreateGatheringByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+        public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
+        public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
+        public string[] AllowUserIds { set; get; }
+        public long? ExpiresAt { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public CreateGatheringByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 自身のプレイヤー情報 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Matchmaking.Model.Player player;
-
-        /**
-         * 自身のプレイヤー情報を設定
-         *
-         * @param player 自身のプレイヤー情報
-         * @return this
-         */
-        public CreateGatheringByUserIdRequest WithPlayer(global::Gs2.Gs2Matchmaking.Model.Player player) {
-            this.player = player;
+        public CreateGatheringByUserIdRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
+            this.Player = player;
             return this;
         }
 
-
-        /** 募集条件 */
-		[UnityEngine.SerializeField]
-        public List<AttributeRange> attributeRanges;
-
-        /**
-         * 募集条件を設定
-         *
-         * @param attributeRanges 募集条件
-         * @return this
-         */
-        public CreateGatheringByUserIdRequest WithAttributeRanges(List<AttributeRange> attributeRanges) {
-            this.attributeRanges = attributeRanges;
+        public CreateGatheringByUserIdRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
+            this.AttributeRanges = attributeRanges;
             return this;
         }
 
-
-        /** 参加者 */
-		[UnityEngine.SerializeField]
-        public List<CapacityOfRole> capacityOfRoles;
-
-        /**
-         * 参加者を設定
-         *
-         * @param capacityOfRoles 参加者
-         * @return this
-         */
-        public CreateGatheringByUserIdRequest WithCapacityOfRoles(List<CapacityOfRole> capacityOfRoles) {
-            this.capacityOfRoles = capacityOfRoles;
+        public CreateGatheringByUserIdRequest WithCapacityOfRoles(Gs2.Gs2Matchmaking.Model.CapacityOfRole[] capacityOfRoles) {
+            this.CapacityOfRoles = capacityOfRoles;
             return this;
         }
 
-
-        /** 参加を許可するユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> allowUserIds;
-
-        /**
-         * 参加を許可するユーザIDリストを設定
-         *
-         * @param allowUserIds 参加を許可するユーザIDリスト
-         * @return this
-         */
-        public CreateGatheringByUserIdRequest WithAllowUserIds(List<string> allowUserIds) {
-            this.allowUserIds = allowUserIds;
+        public CreateGatheringByUserIdRequest WithAllowUserIds(string[] allowUserIds) {
+            this.AllowUserIds = allowUserIds;
             return this;
         }
 
-
-        /** ギャザリングの有効期限 */
-		[UnityEngine.SerializeField]
-        public long? expiresAt;
-
-        /**
-         * ギャザリングの有効期限を設定
-         *
-         * @param expiresAt ギャザリングの有効期限
-         * @return this
-         */
         public CreateGatheringByUserIdRequest WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CreateGatheringByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static CreateGatheringByUserIdRequest FromDict(JsonData data)
+        public static CreateGatheringByUserIdRequest FromJson(JsonData data)
         {
-            return new CreateGatheringByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                player = data.Keys.Contains("player") && data["player"] != null ? global::Gs2.Gs2Matchmaking.Model.Player.FromDict(data["player"]) : null,
-                attributeRanges = data.Keys.Contains("attributeRanges") && data["attributeRanges"] != null ? data["attributeRanges"].Cast<JsonData>().Select(value =>
-                    {
-                        return AttributeRange.FromDict(value);
-                    }
-                ).ToList() : null,
-                capacityOfRoles = data.Keys.Contains("capacityOfRoles") && data["capacityOfRoles"] != null ? data["capacityOfRoles"].Cast<JsonData>().Select(value =>
-                    {
-                        return CapacityOfRole.FromDict(value);
-                    }
-                ).ToList() : null,
-                allowUserIds = data.Keys.Contains("allowUserIds") && data["allowUserIds"] != null ? data["allowUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                expiresAt = data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateGatheringByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPlayer(!data.Keys.Contains("player") || data["player"] == null ? null : Gs2.Gs2Matchmaking.Model.Player.FromJson(data["player"]))
+                .WithAttributeRanges(!data.Keys.Contains("attributeRanges") || data["attributeRanges"] == null ? new Gs2.Gs2Matchmaking.Model.AttributeRange[]{} : data["attributeRanges"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.AttributeRange.FromJson(v);
+                }).ToArray())
+                .WithCapacityOfRoles(!data.Keys.Contains("capacityOfRoles") || data["capacityOfRoles"] == null ? new Gs2.Gs2Matchmaking.Model.CapacityOfRole[]{} : data["capacityOfRoles"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.CapacityOfRole.FromJson(v);
+                }).ToArray())
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["player"] = Player?.ToJson(),
+                ["attributeRanges"] = new JsonData(AttributeRanges == null ? new JsonData[]{} :
+                        AttributeRanges.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["capacityOfRoles"] = new JsonData(CapacityOfRoles == null ? new JsonData[]{} :
+                        CapacityOfRoles.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                        AllowUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["expiresAt"] = ExpiresAt,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["player"] = player.ToDict();
-            data["attributeRanges"] = new JsonData(attributeRanges.Select(item => item.ToDict()));
-            data["capacityOfRoles"] = new JsonData(capacityOfRoles.Select(item => item.ToDict()));
-            data["allowUserIds"] = new JsonData(allowUserIds);
-            data["expiresAt"] = expiresAt;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Player != null) {
+                Player.WriteJson(writer);
+            }
+            writer.WriteArrayStart();
+            foreach (var attributeRange in AttributeRanges)
+            {
+                if (attributeRange != null) {
+                    attributeRange.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var capacityOfRole in CapacityOfRoles)
+            {
+                if (capacityOfRole != null) {
+                    capacityOfRole.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteArrayStart();
+            foreach (var allowUserId in AllowUserIds)
+            {
+                writer.Write(allowUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            if (ExpiresAt != null) {
+                writer.WritePropertyName("expiresAt");
+                writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

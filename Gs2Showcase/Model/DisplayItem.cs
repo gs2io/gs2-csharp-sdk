@@ -23,178 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class DisplayItem : IComparable
 	{
+        public string DisplayItemId { set; get; }
+        public string Type { set; get; }
+        public Gs2.Gs2Showcase.Model.SalesItem SalesItem { set; get; }
+        public Gs2.Gs2Showcase.Model.SalesItemGroup SalesItemGroup { set; get; }
+        public string SalesPeriodEventId { set; get; }
 
-        /** 陳列商品ID */
-        public string displayItemId { set; get; }
-
-        /**
-         * 陳列商品IDを設定
-         *
-         * @param displayItemId 陳列商品ID
-         * @return this
-         */
         public DisplayItem WithDisplayItemId(string displayItemId) {
-            this.displayItemId = displayItemId;
+            this.DisplayItemId = displayItemId;
             return this;
         }
 
-        /** 種類 */
-        public string type { set; get; }
-
-        /**
-         * 種類を設定
-         *
-         * @param type 種類
-         * @return this
-         */
         public DisplayItem WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** 陳列する商品 */
-        public Gs2.Gs2Showcase.Model.SalesItem salesItem { set; get; }
-
-        /**
-         * 陳列する商品を設定
-         *
-         * @param salesItem 陳列する商品
-         * @return this
-         */
         public DisplayItem WithSalesItem(Gs2.Gs2Showcase.Model.SalesItem salesItem) {
-            this.salesItem = salesItem;
+            this.SalesItem = salesItem;
             return this;
         }
 
-        /** 陳列する商品グループ */
-        public Gs2.Gs2Showcase.Model.SalesItemGroup salesItemGroup { set; get; }
-
-        /**
-         * 陳列する商品グループを設定
-         *
-         * @param salesItemGroup 陳列する商品グループ
-         * @return this
-         */
         public DisplayItem WithSalesItemGroup(Gs2.Gs2Showcase.Model.SalesItemGroup salesItemGroup) {
-            this.salesItemGroup = salesItemGroup;
+            this.SalesItemGroup = salesItemGroup;
             return this;
         }
 
-        /** 販売期間とするイベントマスター のGRN */
-        public string salesPeriodEventId { set; get; }
-
-        /**
-         * 販売期間とするイベントマスター のGRNを設定
-         *
-         * @param salesPeriodEventId 販売期間とするイベントマスター のGRN
-         * @return this
-         */
         public DisplayItem WithSalesPeriodEventId(string salesPeriodEventId) {
-            this.salesPeriodEventId = salesPeriodEventId;
+            this.SalesPeriodEventId = salesPeriodEventId;
             return this;
+        }
+
+    	[Preserve]
+        public static DisplayItem FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DisplayItem()
+                .WithDisplayItemId(!data.Keys.Contains("displayItemId") || data["displayItemId"] == null ? null : data["displayItemId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithSalesItem(!data.Keys.Contains("salesItem") || data["salesItem"] == null ? null : Gs2.Gs2Showcase.Model.SalesItem.FromJson(data["salesItem"]))
+                .WithSalesItemGroup(!data.Keys.Contains("salesItemGroup") || data["salesItemGroup"] == null ? null : Gs2.Gs2Showcase.Model.SalesItemGroup.FromJson(data["salesItemGroup"]))
+                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["displayItemId"] = DisplayItemId,
+                ["type"] = Type,
+                ["salesItem"] = SalesItem?.ToJson(),
+                ["salesItemGroup"] = SalesItemGroup?.ToJson(),
+                ["salesPeriodEventId"] = SalesPeriodEventId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.displayItemId != null)
-            {
+            if (DisplayItemId != null) {
                 writer.WritePropertyName("displayItemId");
-                writer.Write(this.displayItemId);
+                writer.Write(DisplayItemId.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.salesItem != null)
-            {
+            if (SalesItem != null) {
                 writer.WritePropertyName("salesItem");
-                this.salesItem.WriteJson(writer);
+                SalesItem.WriteJson(writer);
             }
-            if(this.salesItemGroup != null)
-            {
+            if (SalesItemGroup != null) {
                 writer.WritePropertyName("salesItemGroup");
-                this.salesItemGroup.WriteJson(writer);
+                SalesItemGroup.WriteJson(writer);
             }
-            if(this.salesPeriodEventId != null)
-            {
+            if (SalesPeriodEventId != null) {
                 writer.WritePropertyName("salesPeriodEventId");
-                writer.Write(this.salesPeriodEventId);
+                writer.Write(SalesPeriodEventId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static DisplayItem FromDict(JsonData data)
-        {
-            return new DisplayItem()
-                .WithDisplayItemId(data.Keys.Contains("displayItemId") && data["displayItemId"] != null ? data["displayItemId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithSalesItem(data.Keys.Contains("salesItem") && data["salesItem"] != null ? Gs2.Gs2Showcase.Model.SalesItem.FromDict(data["salesItem"]) : null)
-                .WithSalesItemGroup(data.Keys.Contains("salesItemGroup") && data["salesItemGroup"] != null ? Gs2.Gs2Showcase.Model.SalesItemGroup.FromDict(data["salesItemGroup"]) : null)
-                .WithSalesPeriodEventId(data.Keys.Contains("salesPeriodEventId") && data["salesPeriodEventId"] != null ? data["salesPeriodEventId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DisplayItem;
             var diff = 0;
-            if (displayItemId == null && displayItemId == other.displayItemId)
+            if (DisplayItemId == null && DisplayItemId == other.DisplayItemId)
             {
                 // null and null
             }
             else
             {
-                diff += displayItemId.CompareTo(other.displayItemId);
+                diff += DisplayItemId.CompareTo(other.DisplayItemId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += Type.CompareTo(other.Type);
             }
-            if (salesItem == null && salesItem == other.salesItem)
+            if (SalesItem == null && SalesItem == other.SalesItem)
             {
                 // null and null
             }
             else
             {
-                diff += salesItem.CompareTo(other.salesItem);
+                diff += SalesItem.CompareTo(other.SalesItem);
             }
-            if (salesItemGroup == null && salesItemGroup == other.salesItemGroup)
+            if (SalesItemGroup == null && SalesItemGroup == other.SalesItemGroup)
             {
                 // null and null
             }
             else
             {
-                diff += salesItemGroup.CompareTo(other.salesItemGroup);
+                diff += SalesItemGroup.CompareTo(other.SalesItemGroup);
             }
-            if (salesPeriodEventId == null && salesPeriodEventId == other.salesPeriodEventId)
+            if (SalesPeriodEventId == null && SalesPeriodEventId == other.SalesPeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += salesPeriodEventId.CompareTo(other.salesPeriodEventId);
+                diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["displayItemId"] = displayItemId;
-            data["type"] = type;
-            data["salesItem"] = salesItem.ToDict();
-            data["salesItemGroup"] = salesItemGroup.ToDict();
-            data["salesPeriodEventId"] = salesPeriodEventId;
-            return data;
-        }
-	}
+    }
 }

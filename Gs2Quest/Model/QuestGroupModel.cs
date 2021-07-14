@@ -23,239 +23,155 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class QuestGroupModel : IComparable
 	{
+        public string QuestGroupModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Quest.Model.QuestModel[] Quests { set; get; }
+        public string ChallengePeriodEventId { set; get; }
 
-        /** クエストグループ */
-        public string questGroupModelId { set; get; }
-
-        /**
-         * クエストグループを設定
-         *
-         * @param questGroupModelId クエストグループ
-         * @return this
-         */
         public QuestGroupModel WithQuestGroupModelId(string questGroupModelId) {
-            this.questGroupModelId = questGroupModelId;
+            this.QuestGroupModelId = questGroupModelId;
             return this;
         }
 
-        /** クエストグループ名 */
-        public string name { set; get; }
-
-        /**
-         * クエストグループ名を設定
-         *
-         * @param name クエストグループ名
-         * @return this
-         */
         public QuestGroupModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** クエストグループのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * クエストグループのメタデータを設定
-         *
-         * @param metadata クエストグループのメタデータ
-         * @return this
-         */
         public QuestGroupModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** グループに属するクエスト */
-        public List<QuestModel> quests { set; get; }
-
-        /**
-         * グループに属するクエストを設定
-         *
-         * @param quests グループに属するクエスト
-         * @return this
-         */
-        public QuestGroupModel WithQuests(List<QuestModel> quests) {
-            this.quests = quests;
+        public QuestGroupModel WithQuests(Gs2.Gs2Quest.Model.QuestModel[] quests) {
+            this.Quests = quests;
             return this;
         }
 
-        /** 挑戦可能な期間を指定するイベントマスター のGRN */
-        public string challengePeriodEventId { set; get; }
-
-        /**
-         * 挑戦可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId 挑戦可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public QuestGroupModel WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
+        }
+
+    	[Preserve]
+        public static QuestGroupModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new QuestGroupModel()
+                .WithQuestGroupModelId(!data.Keys.Contains("questGroupModelId") || data["questGroupModelId"] == null ? null : data["questGroupModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithQuests(!data.Keys.Contains("quests") || data["quests"] == null ? new Gs2.Gs2Quest.Model.QuestModel[]{} : data["quests"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.QuestModel.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["questGroupModelId"] = QuestGroupModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["quests"] = new JsonData(Quests == null ? new JsonData[]{} :
+                        Quests.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.questGroupModelId != null)
-            {
+            if (QuestGroupModelId != null) {
                 writer.WritePropertyName("questGroupModelId");
-                writer.Write(this.questGroupModelId);
+                writer.Write(QuestGroupModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.quests != null)
-            {
+            if (Quests != null) {
                 writer.WritePropertyName("quests");
                 writer.WriteArrayStart();
-                foreach(var item in this.quests)
+                foreach (var quest in Quests)
                 {
-                    item.WriteJson(writer);
+                    if (quest != null) {
+                        quest.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.challengePeriodEventId != null)
-            {
+            if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
-                writer.Write(this.challengePeriodEventId);
+                writer.Write(ChallengePeriodEventId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetQuestGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*)");
-        if (!match.Groups["questGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["questGroupName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static QuestGroupModel FromDict(JsonData data)
-        {
-            return new QuestGroupModel()
-                .WithQuestGroupModelId(data.Keys.Contains("questGroupModelId") && data["questGroupModelId"] != null ? data["questGroupModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithQuests(data.Keys.Contains("quests") && data["quests"] != null ? data["quests"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.QuestModel.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithChallengePeriodEventId(data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as QuestGroupModel;
             var diff = 0;
-            if (questGroupModelId == null && questGroupModelId == other.questGroupModelId)
+            if (QuestGroupModelId == null && QuestGroupModelId == other.QuestGroupModelId)
             {
                 // null and null
             }
             else
             {
-                diff += questGroupModelId.CompareTo(other.questGroupModelId);
+                diff += QuestGroupModelId.CompareTo(other.QuestGroupModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (quests == null && quests == other.quests)
+            if (Quests == null && Quests == other.Quests)
             {
                 // null and null
             }
             else
             {
-                diff += quests.Count - other.quests.Count;
-                for (var i = 0; i < quests.Count; i++)
+                diff += Quests.Length - other.Quests.Length;
+                for (var i = 0; i < Quests.Length; i++)
                 {
-                    diff += quests[i].CompareTo(other.quests[i]);
+                    diff += Quests[i].CompareTo(other.Quests[i]);
                 }
             }
-            if (challengePeriodEventId == null && challengePeriodEventId == other.challengePeriodEventId)
+            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += challengePeriodEventId.CompareTo(other.challengePeriodEventId);
+                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["questGroupModelId"] = questGroupModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["quests"] = new JsonData(quests.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            return data;
-        }
-	}
+    }
 }

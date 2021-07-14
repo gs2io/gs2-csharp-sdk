@@ -28,90 +28,74 @@ namespace Gs2.Gs2Watch.Request
 	[System.Serializable]
 	public class GetBillingActivityRequest : Gs2Request<GetBillingActivityRequest>
 	{
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public string Service { set; get; }
+        public string ActivityType { set; get; }
 
-        /** イベントの発生年 */
-		[UnityEngine.SerializeField]
-        public int? year;
-
-        /**
-         * イベントの発生年を設定
-         *
-         * @param year イベントの発生年
-         * @return this
-         */
         public GetBillingActivityRequest WithYear(int? year) {
-            this.year = year;
+            this.Year = year;
             return this;
         }
 
-
-        /** イベントの発生月 */
-		[UnityEngine.SerializeField]
-        public int? month;
-
-        /**
-         * イベントの発生月を設定
-         *
-         * @param month イベントの発生月
-         * @return this
-         */
         public GetBillingActivityRequest WithMonth(int? month) {
-            this.month = month;
+            this.Month = month;
             return this;
         }
 
-
-        /** サービスの種類 */
-		[UnityEngine.SerializeField]
-        public string service;
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param service サービスの種類
-         * @return this
-         */
         public GetBillingActivityRequest WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-
-        /** イベントの種類 */
-		[UnityEngine.SerializeField]
-        public string activityType;
-
-        /**
-         * イベントの種類を設定
-         *
-         * @param activityType イベントの種類
-         * @return this
-         */
         public GetBillingActivityRequest WithActivityType(string activityType) {
-            this.activityType = activityType;
+            this.ActivityType = activityType;
             return this;
         }
-
 
     	[Preserve]
-        public static GetBillingActivityRequest FromDict(JsonData data)
+        public static GetBillingActivityRequest FromJson(JsonData data)
         {
-            return new GetBillingActivityRequest {
-                year = data.Keys.Contains("year") && data["year"] != null ? (int?)int.Parse(data["year"].ToString()) : null,
-                month = data.Keys.Contains("month") && data["month"] != null ? (int?)int.Parse(data["month"].ToString()) : null,
-                service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
-                activityType = data.Keys.Contains("activityType") && data["activityType"] != null ? data["activityType"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetBillingActivityRequest()
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["year"] = Year,
+                ["month"] = Month,
+                ["service"] = Service,
+                ["activityType"] = ActivityType,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["year"] = year;
-            data["month"] = month;
-            data["service"] = service;
-            data["activityType"] = activityType;
-            return data;
+            writer.WriteObjectStart();
+            if (Year != null) {
+                writer.WritePropertyName("year");
+                writer.Write(int.Parse(Year.ToString()));
+            }
+            if (Month != null) {
+                writer.WritePropertyName("month");
+                writer.Write(int.Parse(Month.ToString()));
+            }
+            if (Service != null) {
+                writer.WritePropertyName("service");
+                writer.Write(Service.ToString());
+            }
+            if (ActivityType != null) {
+                writer.WritePropertyName("activityType");
+                writer.Write(ActivityType.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

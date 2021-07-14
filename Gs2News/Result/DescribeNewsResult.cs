@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2News.Model;
 using Gs2.Util.LitJson;
@@ -24,30 +25,76 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2News.Result
 {
 	[Preserve]
-	public class DescribeNewsResult
+	[System.Serializable]
+	public class DescribeNewsResult : IResult
 	{
-        /** お知らせ記事のリスト */
-        public List<News> items { set; get; }
+        public Gs2.Gs2News.Model.News[] Items { set; get; }
+        public string ContentHash { set; get; }
+        public string TemplateHash { set; get; }
 
-        /** お知らせ記事データのハッシュ値 */
-        public string contentHash { set; get; }
+        public DescribeNewsResult WithItems(Gs2.Gs2News.Model.News[] items) {
+            this.Items = items;
+            return this;
+        }
 
-        /** テンプレートデータのハッシュ値 */
-        public string templateHash { set; get; }
+        public DescribeNewsResult WithContentHash(string contentHash) {
+            this.ContentHash = contentHash;
+            return this;
+        }
 
+        public DescribeNewsResult WithTemplateHash(string templateHash) {
+            this.TemplateHash = templateHash;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeNewsResult FromDict(JsonData data)
+        public static DescribeNewsResult FromJson(JsonData data)
         {
-            return new DescribeNewsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2News.Model.News.FromDict(value);
-                    }
-                ).ToList() : null,
-                contentHash = data.Keys.Contains("contentHash") && data["contentHash"] != null ? data["contentHash"].ToString() : null,
-                templateHash = data.Keys.Contains("templateHash") && data["templateHash"] != null ? data["templateHash"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeNewsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2News.Model.News[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2News.Model.News.FromJson(v);
+                }).ToArray())
+                .WithContentHash(!data.Keys.Contains("contentHash") || data["contentHash"] == null ? null : data["contentHash"].ToString())
+                .WithTemplateHash(!data.Keys.Contains("templateHash") || data["templateHash"] == null ? null : data["templateHash"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["contentHash"] = ContentHash,
+                ["templateHash"] = TemplateHash,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ContentHash != null) {
+                writer.WritePropertyName("contentHash");
+                writer.Write(ContentHash.ToString());
+            }
+            if (TemplateHash != null) {
+                writer.WritePropertyName("templateHash");
+                writer.Write(TemplateHash.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -23,308 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Limit.Model
 {
+
 	[Preserve]
 	public class Counter : IComparable
 	{
+        public string CounterId { set; get; }
+        public string LimitName { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public int? Count { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** カウンター */
-        public string counterId { set; get; }
-
-        /**
-         * カウンターを設定
-         *
-         * @param counterId カウンター
-         * @return this
-         */
         public Counter WithCounterId(string counterId) {
-            this.counterId = counterId;
+            this.CounterId = counterId;
             return this;
         }
 
-        /** 回数制限の種類の名前 */
-        public string limitName { set; get; }
-
-        /**
-         * 回数制限の種類の名前を設定
-         *
-         * @param limitName 回数制限の種類の名前
-         * @return this
-         */
         public Counter WithLimitName(string limitName) {
-            this.limitName = limitName;
+            this.LimitName = limitName;
             return this;
         }
 
-        /** カウンターの名前 */
-        public string name { set; get; }
-
-        /**
-         * カウンターの名前を設定
-         *
-         * @param name カウンターの名前
-         * @return this
-         */
         public Counter WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Counter WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** カウント値 */
-        public int? count { set; get; }
-
-        /**
-         * カウント値を設定
-         *
-         * @param count カウント値
-         * @return this
-         */
         public Counter WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Counter WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Counter WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Counter FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Counter()
+                .WithCounterId(!data.Keys.Contains("counterId") || data["counterId"] == null ? null : data["counterId"].ToString())
+                .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["counterId"] = CounterId,
+                ["limitName"] = LimitName,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["count"] = Count,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.counterId != null)
-            {
+            if (CounterId != null) {
                 writer.WritePropertyName("counterId");
-                writer.Write(this.counterId);
+                writer.Write(CounterId.ToString());
             }
-            if(this.limitName != null)
-            {
+            if (LimitName != null) {
                 writer.WritePropertyName("limitName");
-                writer.Write(this.limitName);
+                writer.Write(LimitName.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.count.HasValue)
-            {
+            if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(this.count.Value);
+                writer.Write(int.Parse(Count.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetCounterNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["counterName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["counterName"].Value;
-    }
-
-    public static string GetLimitNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["limitName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["limitName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):user:(?<userId>.*):limit:(?<limitName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Counter FromDict(JsonData data)
-        {
-            return new Counter()
-                .WithCounterId(data.Keys.Contains("counterId") && data["counterId"] != null ? data["counterId"].ToString() : null)
-                .WithLimitName(data.Keys.Contains("limitName") && data["limitName"] != null ? data["limitName"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCount(data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Counter;
             var diff = 0;
-            if (counterId == null && counterId == other.counterId)
+            if (CounterId == null && CounterId == other.CounterId)
             {
                 // null and null
             }
             else
             {
-                diff += counterId.CompareTo(other.counterId);
+                diff += CounterId.CompareTo(other.CounterId);
             }
-            if (limitName == null && limitName == other.limitName)
+            if (LimitName == null && LimitName == other.LimitName)
             {
                 // null and null
             }
             else
             {
-                diff += limitName.CompareTo(other.limitName);
+                diff += LimitName.CompareTo(other.LimitName);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (count == null && count == other.count)
+            if (Count == null && Count == other.Count)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(count - other.count);
+                diff += (int)(Count - other.Count);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["counterId"] = counterId;
-            data["limitName"] = limitName;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["count"] = count;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

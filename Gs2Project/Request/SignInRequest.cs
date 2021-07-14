@@ -28,54 +28,50 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class SignInRequest : Gs2Request<SignInRequest>
 	{
+        public string Email { set; get; }
+        public string Password { set; get; }
 
-        /** メールアドレス */
-		[UnityEngine.SerializeField]
-        public string email;
-
-        /**
-         * メールアドレスを設定
-         *
-         * @param email メールアドレス
-         * @return this
-         */
         public SignInRequest WithEmail(string email) {
-            this.email = email;
+            this.Email = email;
             return this;
         }
 
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public SignInRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
 
     	[Preserve]
-        public static SignInRequest FromDict(JsonData data)
+        public static SignInRequest FromJson(JsonData data)
         {
-            return new SignInRequest {
-                email = data.Keys.Contains("email") && data["email"] != null ? data["email"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SignInRequest()
+                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["email"] = Email,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["email"] = email;
-            data["password"] = password;
-            return data;
+            writer.WriteObjectStart();
+            if (Email != null) {
+                writer.WritePropertyName("email");
+                writer.Write(Email.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

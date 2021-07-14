@@ -23,133 +23,115 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class Contents : IComparable
 	{
+        public string Metadata { set; get; }
+        public Gs2.Gs2Quest.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public int? Weight { set; get; }
 
-        /** クエストモデルのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * クエストモデルのメタデータを設定
-         *
-         * @param metadata クエストモデルのメタデータ
-         * @return this
-         */
         public Contents WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** クエストクリア時の報酬 */
-        public List<AcquireAction> completeAcquireActions { set; get; }
-
-        /**
-         * クエストクリア時の報酬を設定
-         *
-         * @param completeAcquireActions クエストクリア時の報酬
-         * @return this
-         */
-        public Contents WithCompleteAcquireActions(List<AcquireAction> completeAcquireActions) {
-            this.completeAcquireActions = completeAcquireActions;
+        public Contents WithCompleteAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] completeAcquireActions) {
+            this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
 
-        /** 抽選する重み */
-        public int? weight { set; get; }
-
-        /**
-         * 抽選する重みを設定
-         *
-         * @param weight 抽選する重み
-         * @return this
-         */
         public Contents WithWeight(int? weight) {
-            this.weight = weight;
+            this.Weight = weight;
             return this;
+        }
+
+    	[Preserve]
+        public static Contents FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Contents()
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["metadata"] = Metadata,
+                ["completeAcquireActions"] = new JsonData(CompleteAcquireActions == null ? new JsonData[]{} :
+                        CompleteAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["weight"] = Weight,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.completeAcquireActions != null)
-            {
+            if (CompleteAcquireActions != null) {
                 writer.WritePropertyName("completeAcquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.completeAcquireActions)
+                foreach (var completeAcquireAction in CompleteAcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (completeAcquireAction != null) {
+                        completeAcquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.weight.HasValue)
-            {
+            if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(this.weight.Value);
+                writer.Write(int.Parse(Weight.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Contents FromDict(JsonData data)
-        {
-            return new Contents()
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCompleteAcquireActions(data.Keys.Contains("completeAcquireActions") && data["completeAcquireActions"] != null ? data["completeAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithWeight(data.Keys.Contains("weight") && data["weight"] != null ? (int?)int.Parse(data["weight"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Contents;
             var diff = 0;
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (completeAcquireActions == null && completeAcquireActions == other.completeAcquireActions)
+            if (CompleteAcquireActions == null && CompleteAcquireActions == other.CompleteAcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += completeAcquireActions.Count - other.completeAcquireActions.Count;
-                for (var i = 0; i < completeAcquireActions.Count; i++)
+                diff += CompleteAcquireActions.Length - other.CompleteAcquireActions.Length;
+                for (var i = 0; i < CompleteAcquireActions.Length; i++)
                 {
-                    diff += completeAcquireActions[i].CompareTo(other.completeAcquireActions[i]);
+                    diff += CompleteAcquireActions[i].CompareTo(other.CompleteAcquireActions[i]);
                 }
             }
-            if (weight == null && weight == other.weight)
+            if (Weight == null && Weight == other.Weight)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(weight - other.weight);
+                diff += (int)(Weight - other.Weight);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["metadata"] = metadata;
-            data["completeAcquireActions"] = new JsonData(completeAcquireActions.Select(item => item.ToDict()));
-            data["weight"] = weight;
-            return data;
-        }
-	}
+    }
 }

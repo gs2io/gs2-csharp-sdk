@@ -28,90 +28,74 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DoTakeOverRequest : Gs2Request<DoTakeOverRequest>
 	{
+        public string NamespaceName { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public string Password { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DoTakeOverRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? type;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param type スロット番号
-         * @return this
-         */
         public DoTakeOverRequest WithType(int? type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-
-        /** 引き継ぎ用ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userIdentifier;
-
-        /**
-         * 引き継ぎ用ユーザーIDを設定
-         *
-         * @param userIdentifier 引き継ぎ用ユーザーID
-         * @return this
-         */
         public DoTakeOverRequest WithUserIdentifier(string userIdentifier) {
-            this.userIdentifier = userIdentifier;
+            this.UserIdentifier = userIdentifier;
             return this;
         }
 
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public DoTakeOverRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
 
     	[Preserve]
-        public static DoTakeOverRequest FromDict(JsonData data)
+        public static DoTakeOverRequest FromJson(JsonData data)
         {
-            return new DoTakeOverRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                type = data.Keys.Contains("type") && data["type"] != null ? (int?)int.Parse(data["type"].ToString()) : null,
-                userIdentifier = data.Keys.Contains("userIdentifier") && data["userIdentifier"] != null ? data["userIdentifier"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DoTakeOverRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()))
+                .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["type"] = Type,
+                ["userIdentifier"] = UserIdentifier,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["type"] = type;
-            data["userIdentifier"] = userIdentifier;
-            data["password"] = password;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(int.Parse(Type.ToString()));
+            }
+            if (UserIdentifier != null) {
+                writer.WritePropertyName("userIdentifier");
+                writer.Write(UserIdentifier.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

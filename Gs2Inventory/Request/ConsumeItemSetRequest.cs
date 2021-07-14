@@ -28,140 +28,98 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class ConsumeItemSetRequest : Gs2Request<ConsumeItemSetRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string AccessToken { set; get; }
+        public string ItemName { set; get; }
+        public long? ConsumeCount { set; get; }
+        public string ItemSetName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public ConsumeItemSetRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリの名前 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリの名前を設定
-         *
-         * @param inventoryName インベントリの名前
-         * @return this
-         */
         public ConsumeItemSetRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** アイテムマスターの名前 */
-		[UnityEngine.SerializeField]
-        public string itemName;
-
-        /**
-         * アイテムマスターの名前を設定
-         *
-         * @param itemName アイテムマスターの名前
-         * @return this
-         */
-        public ConsumeItemSetRequest WithItemName(string itemName) {
-            this.itemName = itemName;
-            return this;
-        }
-
-
-        /** 消費する量 */
-		[UnityEngine.SerializeField]
-        public long? consumeCount;
-
-        /**
-         * 消費する量を設定
-         *
-         * @param consumeCount 消費する量
-         * @return this
-         */
-        public ConsumeItemSetRequest WithConsumeCount(long? consumeCount) {
-            this.consumeCount = consumeCount;
-            return this;
-        }
-
-
-        /** アイテムセットを識別する名前 */
-		[UnityEngine.SerializeField]
-        public string itemSetName;
-
-        /**
-         * アイテムセットを識別する名前を設定
-         *
-         * @param itemSetName アイテムセットを識別する名前
-         * @return this
-         */
-        public ConsumeItemSetRequest WithItemSetName(string itemSetName) {
-            this.itemSetName = itemSetName;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public ConsumeItemSetRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public ConsumeItemSetRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public ConsumeItemSetRequest WithItemName(string itemName) {
+            this.ItemName = itemName;
+            return this;
+        }
+
+        public ConsumeItemSetRequest WithConsumeCount(long? consumeCount) {
+            this.ConsumeCount = consumeCount;
+            return this;
+        }
+
+        public ConsumeItemSetRequest WithItemSetName(string itemSetName) {
+            this.ItemSetName = itemSetName;
             return this;
         }
 
     	[Preserve]
-        public static ConsumeItemSetRequest FromDict(JsonData data)
+        public static ConsumeItemSetRequest FromJson(JsonData data)
         {
-            return new ConsumeItemSetRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                itemName = data.Keys.Contains("itemName") && data["itemName"] != null ? data["itemName"].ToString(): null,
-                consumeCount = data.Keys.Contains("consumeCount") && data["consumeCount"] != null ? (long?)long.Parse(data["consumeCount"].ToString()) : null,
-                itemSetName = data.Keys.Contains("itemSetName") && data["itemSetName"] != null ? data["itemSetName"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ConsumeItemSetRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
+                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)long.Parse(data["consumeCount"].ToString()))
+                .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["accessToken"] = AccessToken,
+                ["itemName"] = ItemName,
+                ["consumeCount"] = ConsumeCount,
+                ["itemSetName"] = ItemSetName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["itemName"] = itemName;
-            data["consumeCount"] = consumeCount;
-            data["itemSetName"] = itemSetName;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (ItemName != null) {
+                writer.WritePropertyName("itemName");
+                writer.Write(ItemName.ToString());
+            }
+            if (ConsumeCount != null) {
+                writer.WritePropertyName("consumeCount");
+                writer.Write(long.Parse(ConsumeCount.ToString()));
+            }
+            if (ItemSetName != null) {
+                writer.WritePropertyName("itemSetName");
+                writer.Write(ItemSetName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

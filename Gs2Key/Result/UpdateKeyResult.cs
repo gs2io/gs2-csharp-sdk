@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Key.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Key.Result
 {
 	[Preserve]
-	public class UpdateKeyResult
+	[System.Serializable]
+	public class UpdateKeyResult : IResult
 	{
-        /** 更新した暗号鍵 */
-        public Key item { set; get; }
+        public Gs2.Gs2Key.Model.Key Item { set; get; }
 
+        public UpdateKeyResult WithItem(Gs2.Gs2Key.Model.Key item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateKeyResult FromDict(JsonData data)
+        public static UpdateKeyResult FromJson(JsonData data)
         {
-            return new UpdateKeyResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Key.Model.Key.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateKeyResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Key.Model.Key.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

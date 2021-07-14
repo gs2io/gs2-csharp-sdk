@@ -23,338 +23,215 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2JobQueue.Model
 {
+
 	[Preserve]
 	public class DeadLetterJob : IComparable
 	{
+        public string DeadLetterJobId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
+        public Gs2.Gs2JobQueue.Model.JobResultBody[] Result { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** デッドレタージョブ */
-        public string deadLetterJobId { set; get; }
-
-        /**
-         * デッドレタージョブを設定
-         *
-         * @param deadLetterJobId デッドレタージョブ
-         * @return this
-         */
         public DeadLetterJob WithDeadLetterJobId(string deadLetterJobId) {
-            this.deadLetterJobId = deadLetterJobId;
+            this.DeadLetterJobId = deadLetterJobId;
             return this;
         }
 
-        /** ジョブの名前 */
-        public string name { set; get; }
-
-        /**
-         * ジョブの名前を設定
-         *
-         * @param name ジョブの名前
-         * @return this
-         */
         public DeadLetterJob WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public DeadLetterJob WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ジョブの実行に使用するスクリプト のGRN */
-        public string scriptId { set; get; }
-
-        /**
-         * ジョブの実行に使用するスクリプト のGRNを設定
-         *
-         * @param scriptId ジョブの実行に使用するスクリプト のGRN
-         * @return this
-         */
         public DeadLetterJob WithScriptId(string scriptId) {
-            this.scriptId = scriptId;
+            this.ScriptId = scriptId;
             return this;
         }
 
-        /** 引数 */
-        public string args { set; get; }
-
-        /**
-         * 引数を設定
-         *
-         * @param args 引数
-         * @return this
-         */
         public DeadLetterJob WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
         }
 
-        /** ジョブ実行結果 */
-        public List<JobResultBody> result { set; get; }
-
-        /**
-         * ジョブ実行結果を設定
-         *
-         * @param result ジョブ実行結果
-         * @return this
-         */
-        public DeadLetterJob WithResult(List<JobResultBody> result) {
-            this.result = result;
+        public DeadLetterJob WithResult(Gs2.Gs2JobQueue.Model.JobResultBody[] result) {
+            this.Result = result;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public DeadLetterJob WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public DeadLetterJob WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static DeadLetterJob FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DeadLetterJob()
+                .WithDeadLetterJobId(!data.Keys.Contains("deadLetterJobId") || data["deadLetterJobId"] == null ? null : data["deadLetterJobId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? new Gs2.Gs2JobQueue.Model.JobResultBody[]{} : data["result"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2JobQueue.Model.JobResultBody.FromJson(v);
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["deadLetterJobId"] = DeadLetterJobId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["scriptId"] = ScriptId,
+                ["args"] = Args,
+                ["result"] = new JsonData(Result == null ? new JsonData[]{} :
+                        Result.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.deadLetterJobId != null)
-            {
+            if (DeadLetterJobId != null) {
                 writer.WritePropertyName("deadLetterJobId");
-                writer.Write(this.deadLetterJobId);
+                writer.Write(DeadLetterJobId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.scriptId != null)
-            {
+            if (ScriptId != null) {
                 writer.WritePropertyName("scriptId");
-                writer.Write(this.scriptId);
+                writer.Write(ScriptId.ToString());
             }
-            if(this.args != null)
-            {
+            if (Args != null) {
                 writer.WritePropertyName("args");
-                writer.Write(this.args);
+                writer.Write(Args.ToString());
             }
-            if(this.result != null)
-            {
+            if (Result != null) {
                 writer.WritePropertyName("result");
                 writer.WriteArrayStart();
-                foreach(var item in this.result)
+                foreach (var resul in Result)
                 {
-                    item.WriteJson(writer);
+                    if (resul != null) {
+                        resul.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetDeadLetterJobNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):dead:(?<deadLetterJobName>.*)");
-        if (!match.Groups["deadLetterJobName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["deadLetterJobName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):dead:(?<deadLetterJobName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):dead:(?<deadLetterJobName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):dead:(?<deadLetterJobName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):dead:(?<deadLetterJobName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static DeadLetterJob FromDict(JsonData data)
-        {
-            return new DeadLetterJob()
-                .WithDeadLetterJobId(data.Keys.Contains("deadLetterJobId") && data["deadLetterJobId"] != null ? data["deadLetterJobId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithScriptId(data.Keys.Contains("scriptId") && data["scriptId"] != null ? data["scriptId"].ToString() : null)
-                .WithArgs(data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString() : null)
-                .WithResult(data.Keys.Contains("result") && data["result"] != null ? data["result"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2JobQueue.Model.JobResultBody.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DeadLetterJob;
             var diff = 0;
-            if (deadLetterJobId == null && deadLetterJobId == other.deadLetterJobId)
+            if (DeadLetterJobId == null && DeadLetterJobId == other.DeadLetterJobId)
             {
                 // null and null
             }
             else
             {
-                diff += deadLetterJobId.CompareTo(other.deadLetterJobId);
+                diff += DeadLetterJobId.CompareTo(other.DeadLetterJobId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (scriptId == null && scriptId == other.scriptId)
+            if (ScriptId == null && ScriptId == other.ScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += scriptId.CompareTo(other.scriptId);
+                diff += ScriptId.CompareTo(other.ScriptId);
             }
-            if (args == null && args == other.args)
+            if (Args == null && Args == other.Args)
             {
                 // null and null
             }
             else
             {
-                diff += args.CompareTo(other.args);
+                diff += Args.CompareTo(other.Args);
             }
-            if (result == null && result == other.result)
+            if (Result == null && Result == other.Result)
             {
                 // null and null
             }
             else
             {
-                diff += result.Count - other.result.Count;
-                for (var i = 0; i < result.Count; i++)
+                diff += Result.Length - other.Result.Length;
+                for (var i = 0; i < Result.Length; i++)
                 {
-                    diff += result[i].CompareTo(other.result[i]);
+                    diff += Result[i].CompareTo(other.Result[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["deadLetterJobId"] = deadLetterJobId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["scriptId"] = scriptId;
-            data["args"] = args;
-            data["result"] = new JsonData(result.Select(item => item.ToDict()));
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

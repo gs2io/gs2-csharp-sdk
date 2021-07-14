@@ -23,441 +23,277 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Stamina.Model
 {
+
 	[Preserve]
 	public class Stamina : IComparable
 	{
+        public string StaminaId { set; get; }
+        public string StaminaName { set; get; }
+        public string UserId { set; get; }
+        public int? Value { set; get; }
+        public int? MaxValue { set; get; }
+        public int? RecoverIntervalMinutes { set; get; }
+        public int? RecoverValue { set; get; }
+        public int? OverflowValue { set; get; }
+        public long? NextRecoverAt { set; get; }
+        public long? LastRecoveredAt { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** スタミナ */
-        public string staminaId { set; get; }
-
-        /**
-         * スタミナを設定
-         *
-         * @param staminaId スタミナ
-         * @return this
-         */
         public Stamina WithStaminaId(string staminaId) {
-            this.staminaId = staminaId;
+            this.StaminaId = staminaId;
             return this;
         }
 
-        /** スタミナモデルの名前 */
-        public string staminaName { set; get; }
-
-        /**
-         * スタミナモデルの名前を設定
-         *
-         * @param staminaName スタミナモデルの名前
-         * @return this
-         */
         public Stamina WithStaminaName(string staminaName) {
-            this.staminaName = staminaName;
+            this.StaminaName = staminaName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Stamina WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 最終更新時におけるスタミナ値 */
-        public int? value { set; get; }
-
-        /**
-         * 最終更新時におけるスタミナ値を設定
-         *
-         * @param value 最終更新時におけるスタミナ値
-         * @return this
-         */
         public Stamina WithValue(int? value) {
-            this.value = value;
+            this.Value = value;
             return this;
         }
 
-        /** スタミナの最大値 */
-        public int? maxValue { set; get; }
-
-        /**
-         * スタミナの最大値を設定
-         *
-         * @param maxValue スタミナの最大値
-         * @return this
-         */
         public Stamina WithMaxValue(int? maxValue) {
-            this.maxValue = maxValue;
+            this.MaxValue = maxValue;
             return this;
         }
 
-        /** スタミナの回復間隔(分) */
-        public int? recoverIntervalMinutes { set; get; }
-
-        /**
-         * スタミナの回復間隔(分)を設定
-         *
-         * @param recoverIntervalMinutes スタミナの回復間隔(分)
-         * @return this
-         */
         public Stamina WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
-            this.recoverIntervalMinutes = recoverIntervalMinutes;
+            this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
 
-        /** スタミナの回復量 */
-        public int? recoverValue { set; get; }
-
-        /**
-         * スタミナの回復量を設定
-         *
-         * @param recoverValue スタミナの回復量
-         * @return this
-         */
         public Stamina WithRecoverValue(int? recoverValue) {
-            this.recoverValue = recoverValue;
+            this.RecoverValue = recoverValue;
             return this;
         }
 
-        /** スタミナの最大値を超えて格納されているスタミナ値 */
-        public int? overflowValue { set; get; }
-
-        /**
-         * スタミナの最大値を超えて格納されているスタミナ値を設定
-         *
-         * @param overflowValue スタミナの最大値を超えて格納されているスタミナ値
-         * @return this
-         */
         public Stamina WithOverflowValue(int? overflowValue) {
-            this.overflowValue = overflowValue;
+            this.OverflowValue = overflowValue;
             return this;
         }
 
-        /** 次回スタミナが回復する時間 */
-        public long? nextRecoverAt { set; get; }
-
-        /**
-         * 次回スタミナが回復する時間を設定
-         *
-         * @param nextRecoverAt 次回スタミナが回復する時間
-         * @return this
-         */
         public Stamina WithNextRecoverAt(long? nextRecoverAt) {
-            this.nextRecoverAt = nextRecoverAt;
+            this.NextRecoverAt = nextRecoverAt;
             return this;
         }
 
-        /** 作成日時 */
-        public long? lastRecoveredAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param lastRecoveredAt 作成日時
-         * @return this
-         */
         public Stamina WithLastRecoveredAt(long? lastRecoveredAt) {
-            this.lastRecoveredAt = lastRecoveredAt;
+            this.LastRecoveredAt = lastRecoveredAt;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Stamina WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Stamina WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Stamina FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Stamina()
+                .WithStaminaId(!data.Keys.Contains("staminaId") || data["staminaId"] == null ? null : data["staminaId"].ToString())
+                .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()))
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()))
+                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)int.Parse(data["recoverValue"].ToString()))
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)int.Parse(data["overflowValue"].ToString()))
+                .WithNextRecoverAt(!data.Keys.Contains("nextRecoverAt") || data["nextRecoverAt"] == null ? null : (long?)long.Parse(data["nextRecoverAt"].ToString()))
+                .WithLastRecoveredAt(!data.Keys.Contains("lastRecoveredAt") || data["lastRecoveredAt"] == null ? null : (long?)long.Parse(data["lastRecoveredAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["staminaId"] = StaminaId,
+                ["staminaName"] = StaminaName,
+                ["userId"] = UserId,
+                ["value"] = Value,
+                ["maxValue"] = MaxValue,
+                ["recoverIntervalMinutes"] = RecoverIntervalMinutes,
+                ["recoverValue"] = RecoverValue,
+                ["overflowValue"] = OverflowValue,
+                ["nextRecoverAt"] = NextRecoverAt,
+                ["lastRecoveredAt"] = LastRecoveredAt,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.staminaId != null)
-            {
+            if (StaminaId != null) {
                 writer.WritePropertyName("staminaId");
-                writer.Write(this.staminaId);
+                writer.Write(StaminaId.ToString());
             }
-            if(this.staminaName != null)
-            {
+            if (StaminaName != null) {
                 writer.WritePropertyName("staminaName");
-                writer.Write(this.staminaName);
+                writer.Write(StaminaName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.value.HasValue)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value.Value);
+                writer.Write(int.Parse(Value.ToString()));
             }
-            if(this.maxValue.HasValue)
-            {
+            if (MaxValue != null) {
                 writer.WritePropertyName("maxValue");
-                writer.Write(this.maxValue.Value);
+                writer.Write(int.Parse(MaxValue.ToString()));
             }
-            if(this.recoverIntervalMinutes.HasValue)
-            {
+            if (RecoverIntervalMinutes != null) {
                 writer.WritePropertyName("recoverIntervalMinutes");
-                writer.Write(this.recoverIntervalMinutes.Value);
+                writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
             }
-            if(this.recoverValue.HasValue)
-            {
+            if (RecoverValue != null) {
                 writer.WritePropertyName("recoverValue");
-                writer.Write(this.recoverValue.Value);
+                writer.Write(int.Parse(RecoverValue.ToString()));
             }
-            if(this.overflowValue.HasValue)
-            {
+            if (OverflowValue != null) {
                 writer.WritePropertyName("overflowValue");
-                writer.Write(this.overflowValue.Value);
+                writer.Write(int.Parse(OverflowValue.ToString()));
             }
-            if(this.nextRecoverAt.HasValue)
-            {
+            if (NextRecoverAt != null) {
                 writer.WritePropertyName("nextRecoverAt");
-                writer.Write(this.nextRecoverAt.Value);
+                writer.Write(long.Parse(NextRecoverAt.ToString()));
             }
-            if(this.lastRecoveredAt.HasValue)
-            {
+            if (LastRecoveredAt != null) {
                 writer.WritePropertyName("lastRecoveredAt");
-                writer.Write(this.lastRecoveredAt.Value);
+                writer.Write(long.Parse(LastRecoveredAt.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetStaminaNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):user:(?<userId>.*):stamina:(?<staminaName>.*)");
-        if (!match.Groups["staminaName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["staminaName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):user:(?<userId>.*):stamina:(?<staminaName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):user:(?<userId>.*):stamina:(?<staminaName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):user:(?<userId>.*):stamina:(?<staminaName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):user:(?<userId>.*):stamina:(?<staminaName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Stamina FromDict(JsonData data)
-        {
-            return new Stamina()
-                .WithStaminaId(data.Keys.Contains("staminaId") && data["staminaId"] != null ? data["staminaId"].ToString() : null)
-                .WithStaminaName(data.Keys.Contains("staminaName") && data["staminaName"] != null ? data["staminaName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? (int?)int.Parse(data["value"].ToString()) : null)
-                .WithMaxValue(data.Keys.Contains("maxValue") && data["maxValue"] != null ? (int?)int.Parse(data["maxValue"].ToString()) : null)
-                .WithRecoverIntervalMinutes(data.Keys.Contains("recoverIntervalMinutes") && data["recoverIntervalMinutes"] != null ? (int?)int.Parse(data["recoverIntervalMinutes"].ToString()) : null)
-                .WithRecoverValue(data.Keys.Contains("recoverValue") && data["recoverValue"] != null ? (int?)int.Parse(data["recoverValue"].ToString()) : null)
-                .WithOverflowValue(data.Keys.Contains("overflowValue") && data["overflowValue"] != null ? (int?)int.Parse(data["overflowValue"].ToString()) : null)
-                .WithNextRecoverAt(data.Keys.Contains("nextRecoverAt") && data["nextRecoverAt"] != null ? (long?)long.Parse(data["nextRecoverAt"].ToString()) : null)
-                .WithLastRecoveredAt(data.Keys.Contains("lastRecoveredAt") && data["lastRecoveredAt"] != null ? (long?)long.Parse(data["lastRecoveredAt"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Stamina;
             var diff = 0;
-            if (staminaId == null && staminaId == other.staminaId)
+            if (StaminaId == null && StaminaId == other.StaminaId)
             {
                 // null and null
             }
             else
             {
-                diff += staminaId.CompareTo(other.staminaId);
+                diff += StaminaId.CompareTo(other.StaminaId);
             }
-            if (staminaName == null && staminaName == other.staminaName)
+            if (StaminaName == null && StaminaName == other.StaminaName)
             {
                 // null and null
             }
             else
             {
-                diff += staminaName.CompareTo(other.staminaName);
+                diff += StaminaName.CompareTo(other.StaminaName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (value == null && value == other.value)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(value - other.value);
+                diff += (int)(Value - other.Value);
             }
-            if (maxValue == null && maxValue == other.maxValue)
+            if (MaxValue == null && MaxValue == other.MaxValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxValue - other.maxValue);
+                diff += (int)(MaxValue - other.MaxValue);
             }
-            if (recoverIntervalMinutes == null && recoverIntervalMinutes == other.recoverIntervalMinutes)
+            if (RecoverIntervalMinutes == null && RecoverIntervalMinutes == other.RecoverIntervalMinutes)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(recoverIntervalMinutes - other.recoverIntervalMinutes);
+                diff += (int)(RecoverIntervalMinutes - other.RecoverIntervalMinutes);
             }
-            if (recoverValue == null && recoverValue == other.recoverValue)
+            if (RecoverValue == null && RecoverValue == other.RecoverValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(recoverValue - other.recoverValue);
+                diff += (int)(RecoverValue - other.RecoverValue);
             }
-            if (overflowValue == null && overflowValue == other.overflowValue)
+            if (OverflowValue == null && OverflowValue == other.OverflowValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(overflowValue - other.overflowValue);
+                diff += (int)(OverflowValue - other.OverflowValue);
             }
-            if (nextRecoverAt == null && nextRecoverAt == other.nextRecoverAt)
+            if (NextRecoverAt == null && NextRecoverAt == other.NextRecoverAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(nextRecoverAt - other.nextRecoverAt);
+                diff += (int)(NextRecoverAt - other.NextRecoverAt);
             }
-            if (lastRecoveredAt == null && lastRecoveredAt == other.lastRecoveredAt)
+            if (LastRecoveredAt == null && LastRecoveredAt == other.LastRecoveredAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(lastRecoveredAt - other.lastRecoveredAt);
+                diff += (int)(LastRecoveredAt - other.LastRecoveredAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["staminaId"] = staminaId;
-            data["staminaName"] = staminaName;
-            data["userId"] = userId;
-            data["value"] = value;
-            data["maxValue"] = maxValue;
-            data["recoverIntervalMinutes"] = recoverIntervalMinutes;
-            data["recoverValue"] = recoverValue;
-            data["overflowValue"] = overflowValue;
-            data["nextRecoverAt"] = nextRecoverAt;
-            data["lastRecoveredAt"] = lastRecoveredAt;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

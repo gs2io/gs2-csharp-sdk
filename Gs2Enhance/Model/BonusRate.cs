@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Enhance.Model
 {
+
 	[Preserve]
 	public class BonusRate : IComparable
 	{
+        public float? Rate { set; get; }
+        public int? Weight { set; get; }
 
-        /** 経験値ボーナスの倍率(1.0=ボーナスなし) */
-        public float? rate { set; get; }
-
-        /**
-         * 経験値ボーナスの倍率(1.0=ボーナスなし)を設定
-         *
-         * @param rate 経験値ボーナスの倍率(1.0=ボーナスなし)
-         * @return this
-         */
         public BonusRate WithRate(float? rate) {
-            this.rate = rate;
+            this.Rate = rate;
             return this;
         }
 
-        /** 抽選重み */
-        public int? weight { set; get; }
-
-        /**
-         * 抽選重みを設定
-         *
-         * @param weight 抽選重み
-         * @return this
-         */
         public BonusRate WithWeight(int? weight) {
-            this.weight = weight;
+            this.Weight = weight;
             return this;
+        }
+
+    	[Preserve]
+        public static BonusRate FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new BonusRate()
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["rate"] = Rate,
+                ["weight"] = Weight,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.rate.HasValue)
-            {
+            if (Rate != null) {
                 writer.WritePropertyName("rate");
-                writer.Write(this.rate.Value);
+                writer.Write(float.Parse(Rate.ToString()));
             }
-            if(this.weight.HasValue)
-            {
+            if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(this.weight.Value);
+                writer.Write(int.Parse(Weight.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static BonusRate FromDict(JsonData data)
-        {
-            return new BonusRate()
-                .WithRate(data.Keys.Contains("rate") && data["rate"] != null ? (float?)float.Parse(data["rate"].ToString()) : null)
-                .WithWeight(data.Keys.Contains("weight") && data["weight"] != null ? (int?)int.Parse(data["weight"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as BonusRate;
             var diff = 0;
-            if (rate == null && rate == other.rate)
+            if (Rate == null && Rate == other.Rate)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rate - other.rate);
+                diff += (int)(Rate - other.Rate);
             }
-            if (weight == null && weight == other.weight)
+            if (Weight == null && Weight == other.Weight)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(weight - other.weight);
+                diff += (int)(Weight - other.Weight);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["rate"] = rate;
-            data["weight"] = weight;
-            return data;
-        }
-	}
+    }
 }

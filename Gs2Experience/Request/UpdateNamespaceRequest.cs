@@ -28,162 +28,117 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public string ExperienceCapScriptId { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
+        public Gs2.Gs2Experience.Model.ScriptSetting OverflowExperienceScript { set; get; }
+        public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ランクキャップ取得時 に実行されるスクリプト のGRN */
-		[UnityEngine.SerializeField]
-        public string experienceCapScriptId;
-
-        /**
-         * ランクキャップ取得時 に実行されるスクリプト のGRNを設定
-         *
-         * @param experienceCapScriptId ランクキャップ取得時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public UpdateNamespaceRequest WithExperienceCapScriptId(string experienceCapScriptId) {
-            this.experienceCapScriptId = experienceCapScriptId;
+            this.ExperienceCapScriptId = experienceCapScriptId;
             return this;
         }
 
-
-        /** 経験値変化したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript;
-
-        /**
-         * 経験値変化したときに実行するスクリプトを設定
-         *
-         * @param changeExperienceScript 経験値変化したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithChangeExperienceScript(global::Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
-            this.changeExperienceScript = changeExperienceScript;
+        public UpdateNamespaceRequest WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
+            this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
 
-
-        /** ランク変化したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Experience.Model.ScriptSetting changeRankScript;
-
-        /**
-         * ランク変化したときに実行するスクリプトを設定
-         *
-         * @param changeRankScript ランク変化したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithChangeRankScript(global::Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
-            this.changeRankScript = changeRankScript;
+        public UpdateNamespaceRequest WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
+            this.ChangeRankScript = changeRankScript;
             return this;
         }
 
-
-        /** ランクキャップ変化したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript;
-
-        /**
-         * ランクキャップ変化したときに実行するスクリプトを設定
-         *
-         * @param changeRankCapScript ランクキャップ変化したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithChangeRankCapScript(global::Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
-            this.changeRankCapScript = changeRankCapScript;
+        public UpdateNamespaceRequest WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
+            this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
 
-
-        /** 経験値あふれしたときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript;
-
-        /**
-         * 経験値あふれしたときに実行するスクリプトを設定
-         *
-         * @param overflowExperienceScript 経験値あふれしたときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithOverflowExperienceScript(global::Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
-            this.overflowExperienceScript = overflowExperienceScript;
+        public UpdateNamespaceRequest WithOverflowExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
+            this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Experience.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Experience.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                experienceCapScriptId = data.Keys.Contains("experienceCapScriptId") && data["experienceCapScriptId"] != null ? data["experienceCapScriptId"].ToString(): null,
-                changeExperienceScript = data.Keys.Contains("changeExperienceScript") && data["changeExperienceScript"] != null ? global::Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeExperienceScript"]) : null,
-                changeRankScript = data.Keys.Contains("changeRankScript") && data["changeRankScript"] != null ? global::Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeRankScript"]) : null,
-                changeRankCapScript = data.Keys.Contains("changeRankCapScript") && data["changeRankCapScript"] != null ? global::Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["changeRankCapScript"]) : null,
-                overflowExperienceScript = data.Keys.Contains("overflowExperienceScript") && data["overflowExperienceScript"] != null ? global::Gs2.Gs2Experience.Model.ScriptSetting.FromDict(data["overflowExperienceScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Experience.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithExperienceCapScriptId(!data.Keys.Contains("experienceCapScriptId") || data["experienceCapScriptId"] == null ? null : data["experienceCapScriptId"].ToString())
+                .WithChangeExperienceScript(!data.Keys.Contains("changeExperienceScript") || data["changeExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeExperienceScript"]))
+                .WithChangeRankScript(!data.Keys.Contains("changeRankScript") || data["changeRankScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankScript"]))
+                .WithChangeRankCapScript(!data.Keys.Contains("changeRankCapScript") || data["changeRankCapScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankCapScript"]))
+                .WithOverflowExperienceScript(!data.Keys.Contains("overflowExperienceScript") || data["overflowExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["overflowExperienceScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Experience.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["experienceCapScriptId"] = ExperienceCapScriptId,
+                ["changeExperienceScript"] = ChangeExperienceScript?.ToJson(),
+                ["changeRankScript"] = ChangeRankScript?.ToJson(),
+                ["changeRankCapScript"] = ChangeRankCapScript?.ToJson(),
+                ["overflowExperienceScript"] = OverflowExperienceScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["experienceCapScriptId"] = experienceCapScriptId;
-            data["changeExperienceScript"] = changeExperienceScript.ToDict();
-            data["changeRankScript"] = changeRankScript.ToDict();
-            data["changeRankCapScript"] = changeRankCapScript.ToDict();
-            data["overflowExperienceScript"] = overflowExperienceScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (ExperienceCapScriptId != null) {
+                writer.WritePropertyName("experienceCapScriptId");
+                writer.Write(ExperienceCapScriptId.ToString());
+            }
+            if (ChangeExperienceScript != null) {
+                ChangeExperienceScript.WriteJson(writer);
+            }
+            if (ChangeRankScript != null) {
+                ChangeRankScript.WriteJson(writer);
+            }
+            if (ChangeRankCapScript != null) {
+                ChangeRankCapScript.WriteJson(writer);
+            }
+            if (OverflowExperienceScript != null) {
+                OverflowExperienceScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

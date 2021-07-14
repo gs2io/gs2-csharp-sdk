@@ -28,108 +28,86 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class CreateQuestGroupModelMasterRequest : Gs2Request<CreateQuestGroupModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ChallengePeriodEventId { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public CreateQuestGroupModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** クエストグループモデル名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * クエストグループモデル名を設定
-         *
-         * @param name クエストグループモデル名
-         * @return this
-         */
         public CreateQuestGroupModelMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** クエストグループマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * クエストグループマスターの説明を設定
-         *
-         * @param description クエストグループマスターの説明
-         * @return this
-         */
         public CreateQuestGroupModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** クエストグループのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * クエストグループのメタデータを設定
-         *
-         * @param metadata クエストグループのメタデータ
-         * @return this
-         */
         public CreateQuestGroupModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 挑戦可能な期間を指定するイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string challengePeriodEventId;
-
-        /**
-         * 挑戦可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId 挑戦可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public CreateQuestGroupModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateQuestGroupModelMasterRequest FromDict(JsonData data)
+        public static CreateQuestGroupModelMasterRequest FromJson(JsonData data)
         {
-            return new CreateQuestGroupModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                challengePeriodEventId = data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateQuestGroupModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

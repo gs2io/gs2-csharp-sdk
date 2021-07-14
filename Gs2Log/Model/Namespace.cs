@@ -23,504 +23,297 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Log.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Type { set; get; }
+        public string GcpCredentialJson { set; get; }
+        public string BigQueryDatasetName { set; get; }
+        public int? LogExpireDays { set; get; }
+        public string AwsRegion { set; get; }
+        public string AwsAccessKeyId { set; get; }
+        public string AwsSecretAccessKey { set; get; }
+        public string FirehoseStreamName { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** ログの書き出し方法 */
-        public string type { set; get; }
-
-        /**
-         * ログの書き出し方法を設定
-         *
-         * @param type ログの書き出し方法
-         * @return this
-         */
         public Namespace WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** GCPのクレデンシャル */
-        public string gcpCredentialJson { set; get; }
-
-        /**
-         * GCPのクレデンシャルを設定
-         *
-         * @param gcpCredentialJson GCPのクレデンシャル
-         * @return this
-         */
         public Namespace WithGcpCredentialJson(string gcpCredentialJson) {
-            this.gcpCredentialJson = gcpCredentialJson;
+            this.GcpCredentialJson = gcpCredentialJson;
             return this;
         }
 
-        /** BigQueryのデータセット名 */
-        public string bigQueryDatasetName { set; get; }
-
-        /**
-         * BigQueryのデータセット名を設定
-         *
-         * @param bigQueryDatasetName BigQueryのデータセット名
-         * @return this
-         */
         public Namespace WithBigQueryDatasetName(string bigQueryDatasetName) {
-            this.bigQueryDatasetName = bigQueryDatasetName;
+            this.BigQueryDatasetName = bigQueryDatasetName;
             return this;
         }
 
-        /** ログの保存期間(日) */
-        public int? logExpireDays { set; get; }
-
-        /**
-         * ログの保存期間(日)を設定
-         *
-         * @param logExpireDays ログの保存期間(日)
-         * @return this
-         */
         public Namespace WithLogExpireDays(int? logExpireDays) {
-            this.logExpireDays = logExpireDays;
+            this.LogExpireDays = logExpireDays;
             return this;
         }
 
-        /** AWSのリージョン */
-        public string awsRegion { set; get; }
-
-        /**
-         * AWSのリージョンを設定
-         *
-         * @param awsRegion AWSのリージョン
-         * @return this
-         */
         public Namespace WithAwsRegion(string awsRegion) {
-            this.awsRegion = awsRegion;
+            this.AwsRegion = awsRegion;
             return this;
         }
 
-        /** AWSのアクセスキーID */
-        public string awsAccessKeyId { set; get; }
-
-        /**
-         * AWSのアクセスキーIDを設定
-         *
-         * @param awsAccessKeyId AWSのアクセスキーID
-         * @return this
-         */
         public Namespace WithAwsAccessKeyId(string awsAccessKeyId) {
-            this.awsAccessKeyId = awsAccessKeyId;
+            this.AwsAccessKeyId = awsAccessKeyId;
             return this;
         }
 
-        /** AWSのシークレットアクセスキー */
-        public string awsSecretAccessKey { set; get; }
-
-        /**
-         * AWSのシークレットアクセスキーを設定
-         *
-         * @param awsSecretAccessKey AWSのシークレットアクセスキー
-         * @return this
-         */
         public Namespace WithAwsSecretAccessKey(string awsSecretAccessKey) {
-            this.awsSecretAccessKey = awsSecretAccessKey;
+            this.AwsSecretAccessKey = awsSecretAccessKey;
             return this;
         }
 
-        /** Kinesis Firehose のストリーム名 */
-        public string firehoseStreamName { set; get; }
-
-        /**
-         * Kinesis Firehose のストリーム名を設定
-         *
-         * @param firehoseStreamName Kinesis Firehose のストリーム名
-         * @return this
-         */
         public Namespace WithFirehoseStreamName(string firehoseStreamName) {
-            this.firehoseStreamName = firehoseStreamName;
+            this.FirehoseStreamName = firehoseStreamName;
             return this;
         }
 
-        /** None */
-        public string status { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param status None
-         * @return this
-         */
-        public Namespace WithStatus(string status) {
-            this.status = status;
-            return this;
-        }
-
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithGcpCredentialJson(!data.Keys.Contains("gcpCredentialJson") || data["gcpCredentialJson"] == null ? null : data["gcpCredentialJson"].ToString())
+                .WithBigQueryDatasetName(!data.Keys.Contains("bigQueryDatasetName") || data["bigQueryDatasetName"] == null ? null : data["bigQueryDatasetName"].ToString())
+                .WithLogExpireDays(!data.Keys.Contains("logExpireDays") || data["logExpireDays"] == null ? null : (int?)int.Parse(data["logExpireDays"].ToString()))
+                .WithAwsRegion(!data.Keys.Contains("awsRegion") || data["awsRegion"] == null ? null : data["awsRegion"].ToString())
+                .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
+                .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())
+                .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["type"] = Type,
+                ["gcpCredentialJson"] = GcpCredentialJson,
+                ["bigQueryDatasetName"] = BigQueryDatasetName,
+                ["logExpireDays"] = LogExpireDays,
+                ["awsRegion"] = AwsRegion,
+                ["awsAccessKeyId"] = AwsAccessKeyId,
+                ["awsSecretAccessKey"] = AwsSecretAccessKey,
+                ["firehoseStreamName"] = FirehoseStreamName,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.gcpCredentialJson != null)
-            {
+            if (GcpCredentialJson != null) {
                 writer.WritePropertyName("gcpCredentialJson");
-                writer.Write(this.gcpCredentialJson);
+                writer.Write(GcpCredentialJson.ToString());
             }
-            if(this.bigQueryDatasetName != null)
-            {
+            if (BigQueryDatasetName != null) {
                 writer.WritePropertyName("bigQueryDatasetName");
-                writer.Write(this.bigQueryDatasetName);
+                writer.Write(BigQueryDatasetName.ToString());
             }
-            if(this.logExpireDays.HasValue)
-            {
+            if (LogExpireDays != null) {
                 writer.WritePropertyName("logExpireDays");
-                writer.Write(this.logExpireDays.Value);
+                writer.Write(int.Parse(LogExpireDays.ToString()));
             }
-            if(this.awsRegion != null)
-            {
+            if (AwsRegion != null) {
                 writer.WritePropertyName("awsRegion");
-                writer.Write(this.awsRegion);
+                writer.Write(AwsRegion.ToString());
             }
-            if(this.awsAccessKeyId != null)
-            {
+            if (AwsAccessKeyId != null) {
                 writer.WritePropertyName("awsAccessKeyId");
-                writer.Write(this.awsAccessKeyId);
+                writer.Write(AwsAccessKeyId.ToString());
             }
-            if(this.awsSecretAccessKey != null)
-            {
+            if (AwsSecretAccessKey != null) {
                 writer.WritePropertyName("awsSecretAccessKey");
-                writer.Write(this.awsSecretAccessKey);
+                writer.Write(AwsSecretAccessKey.ToString());
             }
-            if(this.firehoseStreamName != null)
-            {
+            if (FirehoseStreamName != null) {
                 writer.WritePropertyName("firehoseStreamName");
-                writer.Write(this.firehoseStreamName);
+                writer.Write(FirehoseStreamName.ToString());
             }
-            if(this.status != null)
-            {
-                writer.WritePropertyName("status");
-                writer.Write(this.status);
-            }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):log:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):log:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):log:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithGcpCredentialJson(data.Keys.Contains("gcpCredentialJson") && data["gcpCredentialJson"] != null ? data["gcpCredentialJson"].ToString() : null)
-                .WithBigQueryDatasetName(data.Keys.Contains("bigQueryDatasetName") && data["bigQueryDatasetName"] != null ? data["bigQueryDatasetName"].ToString() : null)
-                .WithLogExpireDays(data.Keys.Contains("logExpireDays") && data["logExpireDays"] != null ? (int?)int.Parse(data["logExpireDays"].ToString()) : null)
-                .WithAwsRegion(data.Keys.Contains("awsRegion") && data["awsRegion"] != null ? data["awsRegion"].ToString() : null)
-                .WithAwsAccessKeyId(data.Keys.Contains("awsAccessKeyId") && data["awsAccessKeyId"] != null ? data["awsAccessKeyId"].ToString() : null)
-                .WithAwsSecretAccessKey(data.Keys.Contains("awsSecretAccessKey") && data["awsSecretAccessKey"] != null ? data["awsSecretAccessKey"].ToString() : null)
-                .WithFirehoseStreamName(data.Keys.Contains("firehoseStreamName") && data["firehoseStreamName"] != null ? data["firehoseStreamName"].ToString() : null)
-                .WithStatus(data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Type.CompareTo(other.Type);
             }
-            if (type == null && type == other.type)
+            if (GcpCredentialJson == null && GcpCredentialJson == other.GcpCredentialJson)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += GcpCredentialJson.CompareTo(other.GcpCredentialJson);
             }
-            if (gcpCredentialJson == null && gcpCredentialJson == other.gcpCredentialJson)
+            if (BigQueryDatasetName == null && BigQueryDatasetName == other.BigQueryDatasetName)
             {
                 // null and null
             }
             else
             {
-                diff += gcpCredentialJson.CompareTo(other.gcpCredentialJson);
+                diff += BigQueryDatasetName.CompareTo(other.BigQueryDatasetName);
             }
-            if (bigQueryDatasetName == null && bigQueryDatasetName == other.bigQueryDatasetName)
+            if (LogExpireDays == null && LogExpireDays == other.LogExpireDays)
             {
                 // null and null
             }
             else
             {
-                diff += bigQueryDatasetName.CompareTo(other.bigQueryDatasetName);
+                diff += (int)(LogExpireDays - other.LogExpireDays);
             }
-            if (logExpireDays == null && logExpireDays == other.logExpireDays)
+            if (AwsRegion == null && AwsRegion == other.AwsRegion)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(logExpireDays - other.logExpireDays);
+                diff += AwsRegion.CompareTo(other.AwsRegion);
             }
-            if (awsRegion == null && awsRegion == other.awsRegion)
+            if (AwsAccessKeyId == null && AwsAccessKeyId == other.AwsAccessKeyId)
             {
                 // null and null
             }
             else
             {
-                diff += awsRegion.CompareTo(other.awsRegion);
+                diff += AwsAccessKeyId.CompareTo(other.AwsAccessKeyId);
             }
-            if (awsAccessKeyId == null && awsAccessKeyId == other.awsAccessKeyId)
+            if (AwsSecretAccessKey == null && AwsSecretAccessKey == other.AwsSecretAccessKey)
             {
                 // null and null
             }
             else
             {
-                diff += awsAccessKeyId.CompareTo(other.awsAccessKeyId);
+                diff += AwsSecretAccessKey.CompareTo(other.AwsSecretAccessKey);
             }
-            if (awsSecretAccessKey == null && awsSecretAccessKey == other.awsSecretAccessKey)
+            if (FirehoseStreamName == null && FirehoseStreamName == other.FirehoseStreamName)
             {
                 // null and null
             }
             else
             {
-                diff += awsSecretAccessKey.CompareTo(other.awsSecretAccessKey);
+                diff += FirehoseStreamName.CompareTo(other.FirehoseStreamName);
             }
-            if (firehoseStreamName == null && firehoseStreamName == other.firehoseStreamName)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += firehoseStreamName.CompareTo(other.firehoseStreamName);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (status == null && status == other.status)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += status.CompareTo(other.status);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["type"] = type;
-            data["gcpCredentialJson"] = gcpCredentialJson;
-            data["bigQueryDatasetName"] = bigQueryDatasetName;
-            data["logExpireDays"] = logExpireDays;
-            data["awsRegion"] = awsRegion;
-            data["awsAccessKeyId"] = awsAccessKeyId;
-            data["awsSecretAccessKey"] = awsSecretAccessKey;
-            data["firehoseStreamName"] = firehoseStreamName;
-            data["status"] = status;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

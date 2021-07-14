@@ -23,308 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Watch.Model
 {
+
 	[Preserve]
 	public class BillingActivity : IComparable
 	{
+        public string BillingActivityId { set; get; }
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public string Service { set; get; }
+        public string ActivityType { set; get; }
+        public long? Value { set; get; }
 
-        /** 請求にまつわるアクティビティ */
-        public string billingActivityId { set; get; }
-
-        /**
-         * 請求にまつわるアクティビティを設定
-         *
-         * @param billingActivityId 請求にまつわるアクティビティ
-         * @return this
-         */
         public BillingActivity WithBillingActivityId(string billingActivityId) {
-            this.billingActivityId = billingActivityId;
+            this.BillingActivityId = billingActivityId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public BillingActivity WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** イベントの発生年 */
-        public int? year { set; get; }
-
-        /**
-         * イベントの発生年を設定
-         *
-         * @param year イベントの発生年
-         * @return this
-         */
         public BillingActivity WithYear(int? year) {
-            this.year = year;
+            this.Year = year;
             return this;
         }
 
-        /** イベントの発生月 */
-        public int? month { set; get; }
-
-        /**
-         * イベントの発生月を設定
-         *
-         * @param month イベントの発生月
-         * @return this
-         */
         public BillingActivity WithMonth(int? month) {
-            this.month = month;
+            this.Month = month;
             return this;
         }
 
-        /** サービスの種類 */
-        public string service { set; get; }
-
-        /**
-         * サービスの種類を設定
-         *
-         * @param service サービスの種類
-         * @return this
-         */
         public BillingActivity WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-        /** イベントの種類 */
-        public string activityType { set; get; }
-
-        /**
-         * イベントの種類を設定
-         *
-         * @param activityType イベントの種類
-         * @return this
-         */
         public BillingActivity WithActivityType(string activityType) {
-            this.activityType = activityType;
+            this.ActivityType = activityType;
             return this;
         }
 
-        /** イベントの値 */
-        public long? value { set; get; }
-
-        /**
-         * イベントの値を設定
-         *
-         * @param value イベントの値
-         * @return this
-         */
         public BillingActivity WithValue(long? value) {
-            this.value = value;
+            this.Value = value;
             return this;
+        }
+
+    	[Preserve]
+        public static BillingActivity FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new BillingActivity()
+                .WithBillingActivityId(!data.Keys.Contains("billingActivityId") || data["billingActivityId"] == null ? null : data["billingActivityId"].ToString())
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["billingActivityId"] = BillingActivityId,
+                ["year"] = Year,
+                ["month"] = Month,
+                ["service"] = Service,
+                ["activityType"] = ActivityType,
+                ["value"] = Value,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.billingActivityId != null)
-            {
+            if (BillingActivityId != null) {
                 writer.WritePropertyName("billingActivityId");
-                writer.Write(this.billingActivityId);
+                writer.Write(BillingActivityId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.year.HasValue)
-            {
+            if (Year != null) {
                 writer.WritePropertyName("year");
-                writer.Write(this.year.Value);
+                writer.Write(int.Parse(Year.ToString()));
             }
-            if(this.month.HasValue)
-            {
+            if (Month != null) {
                 writer.WritePropertyName("month");
-                writer.Write(this.month.Value);
+                writer.Write(int.Parse(Month.ToString()));
             }
-            if(this.service != null)
-            {
+            if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(this.service);
+                writer.Write(Service.ToString());
             }
-            if(this.activityType != null)
-            {
+            if (ActivityType != null) {
                 writer.WritePropertyName("activityType");
-                writer.Write(this.activityType);
+                writer.Write(ActivityType.ToString());
             }
-            if(this.value.HasValue)
-            {
+            if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(this.value.Value);
+                writer.Write(long.Parse(Value.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetActivityTypeFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["activityType"].Success)
-        {
-            return null;
-        }
-        return match.Groups["activityType"].Value;
-    }
-
-    public static string GetServiceFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["service"].Success)
-        {
-            return null;
-        }
-        return match.Groups["service"].Value;
-    }
-
-    public static string GetMonthFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["month"].Success)
-        {
-            return null;
-        }
-        return match.Groups["month"].Value;
-    }
-
-    public static string GetYearFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["year"].Success)
-        {
-            return null;
-        }
-        return match.Groups["year"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):watch:billingActivity:(?<year>.*):(?<month>.*):(?<service>.*):(?<activityType>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static BillingActivity FromDict(JsonData data)
-        {
-            return new BillingActivity()
-                .WithBillingActivityId(data.Keys.Contains("billingActivityId") && data["billingActivityId"] != null ? data["billingActivityId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithYear(data.Keys.Contains("year") && data["year"] != null ? (int?)int.Parse(data["year"].ToString()) : null)
-                .WithMonth(data.Keys.Contains("month") && data["month"] != null ? (int?)int.Parse(data["month"].ToString()) : null)
-                .WithService(data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString() : null)
-                .WithActivityType(data.Keys.Contains("activityType") && data["activityType"] != null ? data["activityType"].ToString() : null)
-                .WithValue(data.Keys.Contains("value") && data["value"] != null ? (long?)long.Parse(data["value"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as BillingActivity;
             var diff = 0;
-            if (billingActivityId == null && billingActivityId == other.billingActivityId)
+            if (BillingActivityId == null && BillingActivityId == other.BillingActivityId)
             {
                 // null and null
             }
             else
             {
-                diff += billingActivityId.CompareTo(other.billingActivityId);
+                diff += BillingActivityId.CompareTo(other.BillingActivityId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Year == null && Year == other.Year)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += (int)(Year - other.Year);
             }
-            if (year == null && year == other.year)
+            if (Month == null && Month == other.Month)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(year - other.year);
+                diff += (int)(Month - other.Month);
             }
-            if (month == null && month == other.month)
+            if (Service == null && Service == other.Service)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(month - other.month);
+                diff += Service.CompareTo(other.Service);
             }
-            if (service == null && service == other.service)
+            if (ActivityType == null && ActivityType == other.ActivityType)
             {
                 // null and null
             }
             else
             {
-                diff += service.CompareTo(other.service);
+                diff += ActivityType.CompareTo(other.ActivityType);
             }
-            if (activityType == null && activityType == other.activityType)
+            if (Value == null && Value == other.Value)
             {
                 // null and null
             }
             else
             {
-                diff += activityType.CompareTo(other.activityType);
-            }
-            if (value == null && value == other.value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(value - other.value);
+                diff += (int)(Value - other.Value);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["billingActivityId"] = billingActivityId;
-            data["ownerId"] = ownerId;
-            data["year"] = year;
-            data["month"] = month;
-            data["service"] = service;
-            data["activityType"] = activityType;
-            data["value"] = value;
-            return data;
-        }
-	}
+    }
 }

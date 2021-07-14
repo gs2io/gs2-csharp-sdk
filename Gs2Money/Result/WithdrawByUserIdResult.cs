@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Money.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Money.Result
 {
 	[Preserve]
-	public class WithdrawByUserIdResult
+	[System.Serializable]
+	public class WithdrawByUserIdResult : IResult
 	{
-        /** 消費後のウォレット */
-        public Wallet item { set; get; }
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
+        public float? Price { set; get; }
 
-        /** 消費した通貨の価格 */
-        public float? price { set; get; }
+        public WithdrawByUserIdResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
+            this.Item = item;
+            return this;
+        }
 
+        public WithdrawByUserIdResult WithPrice(float? price) {
+            this.Price = price;
+            return this;
+        }
 
     	[Preserve]
-        public static WithdrawByUserIdResult FromDict(JsonData data)
+        public static WithdrawByUserIdResult FromJson(JsonData data)
         {
-            return new WithdrawByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Money.Model.Wallet.FromDict(data["item"]) : null,
-                price = data.Keys.Contains("price") && data["price"] != null ? (float?)float.Parse(data["price"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new WithdrawByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money.Model.Wallet.FromJson(data["item"]))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["price"] = Price,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Price != null) {
+                writer.WritePropertyName("price");
+                writer.Write(float.Parse(Price.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

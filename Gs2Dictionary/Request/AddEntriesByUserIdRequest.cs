@@ -28,94 +28,70 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class AddEntriesByUserIdRequest : Gs2Request<AddEntriesByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string[] EntryModelNames { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public AddEntriesByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AddEntriesByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** エントリー名のリスト */
-		[UnityEngine.SerializeField]
-        public List<string> entryModelNames;
-
-        /**
-         * エントリー名のリストを設定
-         *
-         * @param entryModelNames エントリー名のリスト
-         * @return this
-         */
-        public AddEntriesByUserIdRequest WithEntryModelNames(List<string> entryModelNames) {
-            this.entryModelNames = entryModelNames;
+        public AddEntriesByUserIdRequest WithEntryModelNames(string[] entryModelNames) {
+            this.EntryModelNames = entryModelNames;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public AddEntriesByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static AddEntriesByUserIdRequest FromDict(JsonData data)
+        public static AddEntriesByUserIdRequest FromJson(JsonData data)
         {
-            return new AddEntriesByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                entryModelNames = data.Keys.Contains("entryModelNames") && data["entryModelNames"] != null ? data["entryModelNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new AddEntriesByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithEntryModelNames(!data.Keys.Contains("entryModelNames") || data["entryModelNames"] == null ? new string[]{} : data["entryModelNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["entryModelNames"] = new JsonData(EntryModelNames == null ? new JsonData[]{} :
+                        EntryModelNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["entryModelNames"] = new JsonData(entryModelNames);
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var entryModelName in EntryModelNames)
+            {
+                writer.Write(entryModelName.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

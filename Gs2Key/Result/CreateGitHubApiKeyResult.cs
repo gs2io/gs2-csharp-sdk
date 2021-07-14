@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Key.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Key.Result
 {
 	[Preserve]
-	public class CreateGitHubApiKeyResult
+	[System.Serializable]
+	public class CreateGitHubApiKeyResult : IResult
 	{
-        /** 作成したGitHub のAPIキー */
-        public GitHubApiKey item { set; get; }
+        public Gs2.Gs2Key.Model.GitHubApiKey Item { set; get; }
 
+        public CreateGitHubApiKeyResult WithItem(Gs2.Gs2Key.Model.GitHubApiKey item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateGitHubApiKeyResult FromDict(JsonData data)
+        public static CreateGitHubApiKeyResult FromJson(JsonData data)
         {
-            return new CreateGitHubApiKeyResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Key.Model.GitHubApiKey.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateGitHubApiKeyResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Key.Model.GitHubApiKey.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

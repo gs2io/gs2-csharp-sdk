@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class DistributeWithoutOverflowProcessResult
+	[System.Serializable]
+	public class DistributeWithoutOverflowProcessResult : IResult
 	{
-        /** 処理した DistributeResource */
-        public DistributeResource distributeResource { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
+        public string Result { set; get; }
 
-        /** レスポンス内容 */
-        public string result { set; get; }
+        public DistributeWithoutOverflowProcessResult WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
+            this.DistributeResource = distributeResource;
+            return this;
+        }
 
+        public DistributeWithoutOverflowProcessResult WithResult(string result) {
+            this.Result = result;
+            return this;
+        }
 
     	[Preserve]
-        public static DistributeWithoutOverflowProcessResult FromDict(JsonData data)
+        public static DistributeWithoutOverflowProcessResult FromJson(JsonData data)
         {
-            return new DistributeWithoutOverflowProcessResult {
-                distributeResource = data.Keys.Contains("distributeResource") && data["distributeResource"] != null ? Gs2.Gs2Distributor.Model.DistributeResource.FromDict(data["distributeResource"]) : null,
-                result = data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DistributeWithoutOverflowProcessResult()
+                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]))
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["distributeResource"] = DistributeResource?.ToJson(),
+                ["result"] = Result,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (DistributeResource != null) {
+                DistributeResource.WriteJson(writer);
+            }
+            if (Result != null) {
+                writer.WritePropertyName("result");
+                writer.Write(Result.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

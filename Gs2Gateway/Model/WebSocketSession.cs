@@ -23,236 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Gateway.Model
 {
+
 	[Preserve]
 	public class WebSocketSession : IComparable
 	{
+        public string WebSocketSessionId { set; get; }
+        public string ConnectionId { set; get; }
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** コネクションID */
-        public string connectionId { set; get; }
+        public WebSocketSession WithWebSocketSessionId(string webSocketSessionId) {
+            this.WebSocketSessionId = webSocketSessionId;
+            return this;
+        }
 
-        /**
-         * コネクションIDを設定
-         *
-         * @param connectionId コネクションID
-         * @return this
-         */
         public WebSocketSession WithConnectionId(string connectionId) {
-            this.connectionId = connectionId;
+            this.ConnectionId = connectionId;
             return this;
         }
 
-        /** API ID */
-        public string apiId { set; get; }
-
-        /**
-         * API IDを設定
-         *
-         * @param apiId API ID
-         * @return this
-         */
-        public WebSocketSession WithApiId(string apiId) {
-            this.apiId = apiId;
-            return this;
-        }
-
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public WebSocketSession WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string namespaceName { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public WebSocketSession WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public WebSocketSession WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public WebSocketSession WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public WebSocketSession WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static WebSocketSession FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new WebSocketSession()
+                .WithWebSocketSessionId(!data.Keys.Contains("webSocketSessionId") || data["webSocketSessionId"] == null ? null : data["webSocketSessionId"].ToString())
+                .WithConnectionId(!data.Keys.Contains("connectionId") || data["connectionId"] == null ? null : data["connectionId"].ToString())
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["webSocketSessionId"] = WebSocketSessionId,
+                ["connectionId"] = ConnectionId,
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.connectionId != null)
-            {
+            if (WebSocketSessionId != null) {
+                writer.WritePropertyName("webSocketSessionId");
+                writer.Write(WebSocketSessionId.ToString());
+            }
+            if (ConnectionId != null) {
                 writer.WritePropertyName("connectionId");
-                writer.Write(this.connectionId);
+                writer.Write(ConnectionId.ToString());
             }
-            if(this.apiId != null)
-            {
-                writer.WritePropertyName("apiId");
-                writer.Write(this.apiId);
-            }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.namespaceName != null)
-            {
+            if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
-                writer.Write(this.namespaceName);
+                writer.Write(NamespaceName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static WebSocketSession FromDict(JsonData data)
-        {
-            return new WebSocketSession()
-                .WithConnectionId(data.Keys.Contains("connectionId") && data["connectionId"] != null ? data["connectionId"].ToString() : null)
-                .WithApiId(data.Keys.Contains("apiId") && data["apiId"] != null ? data["apiId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithNamespaceName(data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as WebSocketSession;
             var diff = 0;
-            if (connectionId == null && connectionId == other.connectionId)
+            if (WebSocketSessionId == null && WebSocketSessionId == other.WebSocketSessionId)
             {
                 // null and null
             }
             else
             {
-                diff += connectionId.CompareTo(other.connectionId);
+                diff += WebSocketSessionId.CompareTo(other.WebSocketSessionId);
             }
-            if (apiId == null && apiId == other.apiId)
+            if (ConnectionId == null && ConnectionId == other.ConnectionId)
             {
                 // null and null
             }
             else
             {
-                diff += apiId.CompareTo(other.apiId);
+                diff += ConnectionId.CompareTo(other.ConnectionId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (NamespaceName == null && NamespaceName == other.NamespaceName)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += NamespaceName.CompareTo(other.NamespaceName);
             }
-            if (namespaceName == null && namespaceName == other.namespaceName)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceName.CompareTo(other.namespaceName);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (userId == null && userId == other.userId)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["connectionId"] = connectionId;
-            data["apiId"] = apiId;
-            data["ownerId"] = ownerId;
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

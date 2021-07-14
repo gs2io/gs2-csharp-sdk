@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Stamina.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,51 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Stamina.Result
 {
 	[Preserve]
-	public class SetMaxValueByStatusResult
+	[System.Serializable]
+	public class SetMaxValueByStatusResult : IResult
 	{
-        /** スタミナ */
-        public Stamina item { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
 
-        /** スタミナモデル */
-        public StaminaModel staminaModel { set; get; }
+        public SetMaxValueByStatusResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
+            this.Item = item;
+            return this;
+        }
 
+        public SetMaxValueByStatusResult WithStaminaModel(Gs2.Gs2Stamina.Model.StaminaModel staminaModel) {
+            this.StaminaModel = staminaModel;
+            return this;
+        }
 
     	[Preserve]
-        public static SetMaxValueByStatusResult FromDict(JsonData data)
+        public static SetMaxValueByStatusResult FromJson(JsonData data)
         {
-            return new SetMaxValueByStatusResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Stamina.Model.Stamina.FromDict(data["item"]) : null,
-                staminaModel = data.Keys.Contains("staminaModel") && data["staminaModel"] != null ? Gs2.Gs2Stamina.Model.StaminaModel.FromDict(data["staminaModel"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new SetMaxValueByStatusResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
+                .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["staminaModel"] = StaminaModel?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (StaminaModel != null) {
+                StaminaModel.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

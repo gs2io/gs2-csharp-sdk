@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Lottery.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Lottery.Result
 {
 	[Preserve]
-	public class ResetBoxResult
+	[System.Serializable]
+	public class ResetBoxResult : IResult
 	{
 
     	[Preserve]
-        public static ResetBoxResult FromDict(JsonData data)
+        public static ResetBoxResult FromJson(JsonData data)
         {
-            return new ResetBoxResult {
+            if (data == null) {
+                return null;
+            }
+            return new ResetBoxResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

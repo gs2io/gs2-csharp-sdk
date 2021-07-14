@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2News.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,53 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2News.Result
 {
 	[Preserve]
-	public class PrepareUpdateCurrentNewsMasterResult
+	[System.Serializable]
+	public class PrepareUpdateCurrentNewsMasterResult : IResult
 	{
-        /** アップロード後に結果を反映する際に使用するトークン */
-        public string uploadToken { set; get; }
+        public string UploadToken { set; get; }
+        public string TemplateUploadUrl { set; get; }
 
-        /** テンプレートアップロード処理の実行に使用するURL */
-        public string templateUploadUrl { set; get; }
+        public PrepareUpdateCurrentNewsMasterResult WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
+            return this;
+        }
 
+        public PrepareUpdateCurrentNewsMasterResult WithTemplateUploadUrl(string templateUploadUrl) {
+            this.TemplateUploadUrl = templateUploadUrl;
+            return this;
+        }
 
     	[Preserve]
-        public static PrepareUpdateCurrentNewsMasterResult FromDict(JsonData data)
+        public static PrepareUpdateCurrentNewsMasterResult FromJson(JsonData data)
         {
-            return new PrepareUpdateCurrentNewsMasterResult {
-                uploadToken = data.Keys.Contains("uploadToken") && data["uploadToken"] != null ? data["uploadToken"].ToString() : null,
-                templateUploadUrl = data.Keys.Contains("templateUploadUrl") && data["templateUploadUrl"] != null ? data["templateUploadUrl"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareUpdateCurrentNewsMasterResult()
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
+                .WithTemplateUploadUrl(!data.Keys.Contains("templateUploadUrl") || data["templateUploadUrl"] == null ? null : data["templateUploadUrl"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["uploadToken"] = UploadToken,
+                ["templateUploadUrl"] = TemplateUploadUrl,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
+            }
+            if (TemplateUploadUrl != null) {
+                writer.WritePropertyName("templateUploadUrl");
+                writer.Write(TemplateUploadUrl.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

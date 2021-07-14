@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Identifier.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,65 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Identifier.Result
 {
 	[Preserve]
-	public class LoginResult
+	[System.Serializable]
+	public class LoginResult : IResult
 	{
-        /** プロジェクトトークン */
-        public string accessToken { set; get; }
+        public string AccessToken { set; get; }
+        public string TokenType { set; get; }
+        public int? ExpiresIn { set; get; }
 
-        /** Bearer */
-        public string tokenType { set; get; }
+        public LoginResult WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
+            return this;
+        }
 
-        /** 有効期間(秒) */
-        public int? expiresIn { set; get; }
+        public LoginResult WithTokenType(string tokenType) {
+            this.TokenType = tokenType;
+            return this;
+        }
 
+        public LoginResult WithExpiresIn(int? expiresIn) {
+            this.ExpiresIn = expiresIn;
+            return this;
+        }
 
     	[Preserve]
-        public static LoginResult FromDict(JsonData data)
+        public static LoginResult FromJson(JsonData data)
         {
-            return new LoginResult {
-                accessToken = data.Keys.Contains("accessToken") && data["accessToken"] != null ? data["accessToken"].ToString() : null,
-                tokenType = data.Keys.Contains("tokenType") && data["tokenType"] != null ? data["tokenType"].ToString() : null,
-                expiresIn = data.Keys.Contains("expiresIn") && data["expiresIn"] != null ? (int?)int.Parse(data["expiresIn"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new LoginResult()
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithTokenType(!data.Keys.Contains("tokenType") || data["tokenType"] == null ? null : data["tokenType"].ToString())
+                .WithExpiresIn(!data.Keys.Contains("expiresIn") || data["expiresIn"] == null ? null : (int?)int.Parse(data["expiresIn"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accessToken"] = AccessToken,
+                ["tokenType"] = TokenType,
+                ["expiresIn"] = ExpiresIn,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (TokenType != null) {
+                writer.WritePropertyName("tokenType");
+                writer.Write(TokenType.ToString());
+            }
+            if (ExpiresIn != null) {
+                writer.WritePropertyName("expiresIn");
+                writer.Write(int.Parse(ExpiresIn.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

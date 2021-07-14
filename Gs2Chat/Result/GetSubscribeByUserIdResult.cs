@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Chat.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Chat.Result
 {
 	[Preserve]
-	public class GetSubscribeByUserIdResult
+	[System.Serializable]
+	public class GetSubscribeByUserIdResult : IResult
 	{
-        /** 購読 */
-        public Subscribe item { set; get; }
+        public Gs2.Gs2Chat.Model.Subscribe Item { set; get; }
 
+        public GetSubscribeByUserIdResult WithItem(Gs2.Gs2Chat.Model.Subscribe item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetSubscribeByUserIdResult FromDict(JsonData data)
+        public static GetSubscribeByUserIdResult FromJson(JsonData data)
         {
-            return new GetSubscribeByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Chat.Model.Subscribe.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetSubscribeByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Chat.Model.Subscribe.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

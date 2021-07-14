@@ -28,90 +28,74 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class CreateEntryModelMasterRequest : Gs2Request<CreateEntryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateEntryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** エントリーモデル名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * エントリーモデル名を設定
-         *
-         * @param name エントリーモデル名
-         * @return this
-         */
         public CreateEntryModelMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** エントリーモデルマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * エントリーモデルマスターの説明を設定
-         *
-         * @param description エントリーモデルマスターの説明
-         * @return this
-         */
         public CreateEntryModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** エントリーモデルのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * エントリーモデルのメタデータを設定
-         *
-         * @param metadata エントリーモデルのメタデータ
-         * @return this
-         */
         public CreateEntryModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateEntryModelMasterRequest FromDict(JsonData data)
+        public static CreateEntryModelMasterRequest FromJson(JsonData data)
         {
-            return new CreateEntryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateEntryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

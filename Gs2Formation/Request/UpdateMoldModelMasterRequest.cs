@@ -28,144 +28,110 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateMoldModelMasterRequest : Gs2Request<UpdateMoldModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MoldName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string FormModelName { set; get; }
+        public int? InitialMaxCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォームの保存領域名 */
-		[UnityEngine.SerializeField]
-        public string moldName;
-
-        /**
-         * フォームの保存領域名を設定
-         *
-         * @param moldName フォームの保存領域名
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithMoldName(string moldName) {
-            this.moldName = moldName;
+            this.MoldName = moldName;
             return this;
         }
 
-
-        /** フォームの保存領域マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * フォームの保存領域マスターの説明を設定
-         *
-         * @param description フォームの保存領域マスターの説明
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** フォームの保存領域のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * フォームの保存領域のメタデータを設定
-         *
-         * @param metadata フォームの保存領域のメタデータ
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** フォーム名 */
-		[UnityEngine.SerializeField]
-        public string formModelName;
-
-        /**
-         * フォーム名を設定
-         *
-         * @param formModelName フォーム名
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithFormModelName(string formModelName) {
-            this.formModelName = formModelName;
+            this.FormModelName = formModelName;
             return this;
         }
 
-
-        /** フォームを保存できる初期キャパシティ */
-		[UnityEngine.SerializeField]
-        public int? initialMaxCapacity;
-
-        /**
-         * フォームを保存できる初期キャパシティを設定
-         *
-         * @param initialMaxCapacity フォームを保存できる初期キャパシティ
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithInitialMaxCapacity(int? initialMaxCapacity) {
-            this.initialMaxCapacity = initialMaxCapacity;
+            this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
 
-
-        /** フォームを保存できるキャパシティ */
-		[UnityEngine.SerializeField]
-        public int? maxCapacity;
-
-        /**
-         * フォームを保存できるキャパシティを設定
-         *
-         * @param maxCapacity フォームを保存できるキャパシティ
-         * @return this
-         */
         public UpdateMoldModelMasterRequest WithMaxCapacity(int? maxCapacity) {
-            this.maxCapacity = maxCapacity;
+            this.MaxCapacity = maxCapacity;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateMoldModelMasterRequest FromDict(JsonData data)
+        public static UpdateMoldModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateMoldModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                moldName = data.Keys.Contains("moldName") && data["moldName"] != null ? data["moldName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                formModelName = data.Keys.Contains("formModelName") && data["formModelName"] != null ? data["formModelName"].ToString(): null,
-                initialMaxCapacity = data.Keys.Contains("initialMaxCapacity") && data["initialMaxCapacity"] != null ? (int?)int.Parse(data["initialMaxCapacity"].ToString()) : null,
-                maxCapacity = data.Keys.Contains("maxCapacity") && data["maxCapacity"] != null ? (int?)int.Parse(data["maxCapacity"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateMoldModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithInitialMaxCapacity(!data.Keys.Contains("initialMaxCapacity") || data["initialMaxCapacity"] == null ? null : (int?)int.Parse(data["initialMaxCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["moldName"] = MoldName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["formModelName"] = FormModelName,
+                ["initialMaxCapacity"] = InitialMaxCapacity,
+                ["maxCapacity"] = MaxCapacity,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["moldName"] = moldName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["formModelName"] = formModelName;
-            data["initialMaxCapacity"] = initialMaxCapacity;
-            data["maxCapacity"] = maxCapacity;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MoldName != null) {
+                writer.WritePropertyName("moldName");
+                writer.Write(MoldName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (FormModelName != null) {
+                writer.WritePropertyName("formModelName");
+                writer.Write(FormModelName.ToString());
+            }
+            if (InitialMaxCapacity != null) {
+                writer.WritePropertyName("initialMaxCapacity");
+                writer.Write(int.Parse(InitialMaxCapacity.ToString()));
+            }
+            if (MaxCapacity != null) {
+                writer.WritePropertyName("maxCapacity");
+                writer.Write(int.Parse(MaxCapacity.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

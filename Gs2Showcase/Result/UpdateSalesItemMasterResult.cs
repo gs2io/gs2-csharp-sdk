@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Showcase.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Showcase.Result
 {
 	[Preserve]
-	public class UpdateSalesItemMasterResult
+	[System.Serializable]
+	public class UpdateSalesItemMasterResult : IResult
 	{
-        /** 更新した商品マスター */
-        public SalesItemMaster item { set; get; }
+        public Gs2.Gs2Showcase.Model.SalesItemMaster Item { set; get; }
 
+        public UpdateSalesItemMasterResult WithItem(Gs2.Gs2Showcase.Model.SalesItemMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateSalesItemMasterResult FromDict(JsonData data)
+        public static UpdateSalesItemMasterResult FromJson(JsonData data)
         {
-            return new UpdateSalesItemMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Showcase.Model.SalesItemMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateSalesItemMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.SalesItemMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

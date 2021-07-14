@@ -23,178 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class DisplayItemMaster : IComparable
 	{
+        public string DisplayItemId { set; get; }
+        public string Type { set; get; }
+        public string SalesItemName { set; get; }
+        public string SalesItemGroupName { set; get; }
+        public string SalesPeriodEventId { set; get; }
 
-        /** 陳列商品ID */
-        public string displayItemId { set; get; }
-
-        /**
-         * 陳列商品IDを設定
-         *
-         * @param displayItemId 陳列商品ID
-         * @return this
-         */
         public DisplayItemMaster WithDisplayItemId(string displayItemId) {
-            this.displayItemId = displayItemId;
+            this.DisplayItemId = displayItemId;
             return this;
         }
 
-        /** 種類 */
-        public string type { set; get; }
-
-        /**
-         * 種類を設定
-         *
-         * @param type 種類
-         * @return this
-         */
         public DisplayItemMaster WithType(string type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** 陳列する商品の名前 */
-        public string salesItemName { set; get; }
-
-        /**
-         * 陳列する商品の名前を設定
-         *
-         * @param salesItemName 陳列する商品の名前
-         * @return this
-         */
         public DisplayItemMaster WithSalesItemName(string salesItemName) {
-            this.salesItemName = salesItemName;
+            this.SalesItemName = salesItemName;
             return this;
         }
 
-        /** 陳列する商品グループの名前 */
-        public string salesItemGroupName { set; get; }
-
-        /**
-         * 陳列する商品グループの名前を設定
-         *
-         * @param salesItemGroupName 陳列する商品グループの名前
-         * @return this
-         */
         public DisplayItemMaster WithSalesItemGroupName(string salesItemGroupName) {
-            this.salesItemGroupName = salesItemGroupName;
+            this.SalesItemGroupName = salesItemGroupName;
             return this;
         }
 
-        /** 販売期間とするイベントマスター のGRN */
-        public string salesPeriodEventId { set; get; }
-
-        /**
-         * 販売期間とするイベントマスター のGRNを設定
-         *
-         * @param salesPeriodEventId 販売期間とするイベントマスター のGRN
-         * @return this
-         */
         public DisplayItemMaster WithSalesPeriodEventId(string salesPeriodEventId) {
-            this.salesPeriodEventId = salesPeriodEventId;
+            this.SalesPeriodEventId = salesPeriodEventId;
             return this;
+        }
+
+    	[Preserve]
+        public static DisplayItemMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DisplayItemMaster()
+                .WithDisplayItemId(!data.Keys.Contains("displayItemId") || data["displayItemId"] == null ? null : data["displayItemId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithSalesItemName(!data.Keys.Contains("salesItemName") || data["salesItemName"] == null ? null : data["salesItemName"].ToString())
+                .WithSalesItemGroupName(!data.Keys.Contains("salesItemGroupName") || data["salesItemGroupName"] == null ? null : data["salesItemGroupName"].ToString())
+                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["displayItemId"] = DisplayItemId,
+                ["type"] = Type,
+                ["salesItemName"] = SalesItemName,
+                ["salesItemGroupName"] = SalesItemGroupName,
+                ["salesPeriodEventId"] = SalesPeriodEventId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.displayItemId != null)
-            {
+            if (DisplayItemId != null) {
                 writer.WritePropertyName("displayItemId");
-                writer.Write(this.displayItemId);
+                writer.Write(DisplayItemId.ToString());
             }
-            if(this.type != null)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type);
+                writer.Write(Type.ToString());
             }
-            if(this.salesItemName != null)
-            {
+            if (SalesItemName != null) {
                 writer.WritePropertyName("salesItemName");
-                writer.Write(this.salesItemName);
+                writer.Write(SalesItemName.ToString());
             }
-            if(this.salesItemGroupName != null)
-            {
+            if (SalesItemGroupName != null) {
                 writer.WritePropertyName("salesItemGroupName");
-                writer.Write(this.salesItemGroupName);
+                writer.Write(SalesItemGroupName.ToString());
             }
-            if(this.salesPeriodEventId != null)
-            {
+            if (SalesPeriodEventId != null) {
                 writer.WritePropertyName("salesPeriodEventId");
-                writer.Write(this.salesPeriodEventId);
+                writer.Write(SalesPeriodEventId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static DisplayItemMaster FromDict(JsonData data)
-        {
-            return new DisplayItemMaster()
-                .WithDisplayItemId(data.Keys.Contains("displayItemId") && data["displayItemId"] != null ? data["displayItemId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? data["type"].ToString() : null)
-                .WithSalesItemName(data.Keys.Contains("salesItemName") && data["salesItemName"] != null ? data["salesItemName"].ToString() : null)
-                .WithSalesItemGroupName(data.Keys.Contains("salesItemGroupName") && data["salesItemGroupName"] != null ? data["salesItemGroupName"].ToString() : null)
-                .WithSalesPeriodEventId(data.Keys.Contains("salesPeriodEventId") && data["salesPeriodEventId"] != null ? data["salesPeriodEventId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DisplayItemMaster;
             var diff = 0;
-            if (displayItemId == null && displayItemId == other.displayItemId)
+            if (DisplayItemId == null && DisplayItemId == other.DisplayItemId)
             {
                 // null and null
             }
             else
             {
-                diff += displayItemId.CompareTo(other.displayItemId);
+                diff += DisplayItemId.CompareTo(other.DisplayItemId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += type.CompareTo(other.type);
+                diff += Type.CompareTo(other.Type);
             }
-            if (salesItemName == null && salesItemName == other.salesItemName)
+            if (SalesItemName == null && SalesItemName == other.SalesItemName)
             {
                 // null and null
             }
             else
             {
-                diff += salesItemName.CompareTo(other.salesItemName);
+                diff += SalesItemName.CompareTo(other.SalesItemName);
             }
-            if (salesItemGroupName == null && salesItemGroupName == other.salesItemGroupName)
+            if (SalesItemGroupName == null && SalesItemGroupName == other.SalesItemGroupName)
             {
                 // null and null
             }
             else
             {
-                diff += salesItemGroupName.CompareTo(other.salesItemGroupName);
+                diff += SalesItemGroupName.CompareTo(other.SalesItemGroupName);
             }
-            if (salesPeriodEventId == null && salesPeriodEventId == other.salesPeriodEventId)
+            if (SalesPeriodEventId == null && SalesPeriodEventId == other.SalesPeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += salesPeriodEventId.CompareTo(other.salesPeriodEventId);
+                diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["displayItemId"] = displayItemId;
-            data["type"] = type;
-            data["salesItemName"] = salesItemName;
-            data["salesItemGroupName"] = salesItemGroupName;
-            data["salesPeriodEventId"] = salesPeriodEventId;
-            return data;
-        }
-	}
+    }
 }

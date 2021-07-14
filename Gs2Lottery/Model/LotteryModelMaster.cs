@@ -23,371 +23,237 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class LotteryModelMaster : IComparable
 	{
+        public string LotteryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string Mode { set; get; }
+        public string Method { set; get; }
+        public string PrizeTableName { set; get; }
+        public string ChoicePrizeTableScriptId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 抽選の種類マスター */
-        public string lotteryModelId { set; get; }
-
-        /**
-         * 抽選の種類マスターを設定
-         *
-         * @param lotteryModelId 抽選の種類マスター
-         * @return this
-         */
         public LotteryModelMaster WithLotteryModelId(string lotteryModelId) {
-            this.lotteryModelId = lotteryModelId;
+            this.LotteryModelId = lotteryModelId;
             return this;
         }
 
-        /** 抽選モデルの種類名 */
-        public string name { set; get; }
-
-        /**
-         * 抽選モデルの種類名を設定
-         *
-         * @param name 抽選モデルの種類名
-         * @return this
-         */
         public LotteryModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 抽選モデルの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 抽選モデルの種類のメタデータを設定
-         *
-         * @param metadata 抽選モデルの種類のメタデータ
-         * @return this
-         */
         public LotteryModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 抽選の種類マスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * 抽選の種類マスターの説明を設定
-         *
-         * @param description 抽選の種類マスターの説明
-         * @return this
-         */
         public LotteryModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 抽選モード */
-        public string mode { set; get; }
-
-        /**
-         * 抽選モードを設定
-         *
-         * @param mode 抽選モード
-         * @return this
-         */
         public LotteryModelMaster WithMode(string mode) {
-            this.mode = mode;
+            this.Mode = mode;
             return this;
         }
 
-        /** 抽選方法 */
-        public string method { set; get; }
-
-        /**
-         * 抽選方法を設定
-         *
-         * @param method 抽選方法
-         * @return this
-         */
         public LotteryModelMaster WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-        /** 景品テーブルの名前 */
-        public string prizeTableName { set; get; }
-
-        /**
-         * 景品テーブルの名前を設定
-         *
-         * @param prizeTableName 景品テーブルの名前
-         * @return this
-         */
         public LotteryModelMaster WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
 
-        /** 抽選テーブルを確定するスクリプト のGRN */
-        public string choicePrizeTableScriptId { set; get; }
-
-        /**
-         * 抽選テーブルを確定するスクリプト のGRNを設定
-         *
-         * @param choicePrizeTableScriptId 抽選テーブルを確定するスクリプト のGRN
-         * @return this
-         */
         public LotteryModelMaster WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.choicePrizeTableScriptId = choicePrizeTableScriptId;
+            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public LotteryModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public LotteryModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static LotteryModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new LotteryModelMaster()
+                .WithLotteryModelId(!data.Keys.Contains("lotteryModelId") || data["lotteryModelId"] == null ? null : data["lotteryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["lotteryModelId"] = LotteryModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["mode"] = Mode,
+                ["method"] = Method,
+                ["prizeTableName"] = PrizeTableName,
+                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.lotteryModelId != null)
-            {
+            if (LotteryModelId != null) {
                 writer.WritePropertyName("lotteryModelId");
-                writer.Write(this.lotteryModelId);
+                writer.Write(LotteryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.mode != null)
-            {
+            if (Mode != null) {
                 writer.WritePropertyName("mode");
-                writer.Write(this.mode);
+                writer.Write(Mode.ToString());
             }
-            if(this.method != null)
-            {
+            if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(this.method);
+                writer.Write(Method.ToString());
             }
-            if(this.prizeTableName != null)
-            {
+            if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
-                writer.Write(this.prizeTableName);
+                writer.Write(PrizeTableName.ToString());
             }
-            if(this.choicePrizeTableScriptId != null)
-            {
+            if (ChoicePrizeTableScriptId != null) {
                 writer.WritePropertyName("choicePrizeTableScriptId");
-                writer.Write(this.choicePrizeTableScriptId);
+                writer.Write(ChoicePrizeTableScriptId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetLotteryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["lotteryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["lotteryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lottery:(?<namespaceName>.*):lotteryModel:(?<lotteryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static LotteryModelMaster FromDict(JsonData data)
-        {
-            return new LotteryModelMaster()
-                .WithLotteryModelId(data.Keys.Contains("lotteryModelId") && data["lotteryModelId"] != null ? data["lotteryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMode(data.Keys.Contains("mode") && data["mode"] != null ? data["mode"].ToString() : null)
-                .WithMethod(data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString() : null)
-                .WithPrizeTableName(data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString() : null)
-                .WithChoicePrizeTableScriptId(data.Keys.Contains("choicePrizeTableScriptId") && data["choicePrizeTableScriptId"] != null ? data["choicePrizeTableScriptId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as LotteryModelMaster;
             var diff = 0;
-            if (lotteryModelId == null && lotteryModelId == other.lotteryModelId)
+            if (LotteryModelId == null && LotteryModelId == other.LotteryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += lotteryModelId.CompareTo(other.lotteryModelId);
+                diff += LotteryModelId.CompareTo(other.LotteryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (mode == null && mode == other.mode)
+            if (Mode == null && Mode == other.Mode)
             {
                 // null and null
             }
             else
             {
-                diff += mode.CompareTo(other.mode);
+                diff += Mode.CompareTo(other.Mode);
             }
-            if (method == null && method == other.method)
+            if (Method == null && Method == other.Method)
             {
                 // null and null
             }
             else
             {
-                diff += method.CompareTo(other.method);
+                diff += Method.CompareTo(other.Method);
             }
-            if (prizeTableName == null && prizeTableName == other.prizeTableName)
+            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {
                 // null and null
             }
             else
             {
-                diff += prizeTableName.CompareTo(other.prizeTableName);
+                diff += PrizeTableName.CompareTo(other.PrizeTableName);
             }
-            if (choicePrizeTableScriptId == null && choicePrizeTableScriptId == other.choicePrizeTableScriptId)
+            if (ChoicePrizeTableScriptId == null && ChoicePrizeTableScriptId == other.ChoicePrizeTableScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += choicePrizeTableScriptId.CompareTo(other.choicePrizeTableScriptId);
+                diff += ChoicePrizeTableScriptId.CompareTo(other.ChoicePrizeTableScriptId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["lotteryModelId"] = lotteryModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["mode"] = mode;
-            data["method"] = method;
-            data["prizeTableName"] = prizeTableName;
-            data["choicePrizeTableScriptId"] = choicePrizeTableScriptId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

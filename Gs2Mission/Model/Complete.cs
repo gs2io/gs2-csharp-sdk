@@ -23,322 +23,211 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class Complete : IComparable
 	{
+        public string CompleteId { set; get; }
+        public string UserId { set; get; }
+        public string MissionGroupName { set; get; }
+        public string[] CompletedMissionTaskNames { set; get; }
+        public string[] ReceivedMissionTaskNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 達成状況 */
-        public string completeId { set; get; }
-
-        /**
-         * 達成状況を設定
-         *
-         * @param completeId 達成状況
-         * @return this
-         */
         public Complete WithCompleteId(string completeId) {
-            this.completeId = completeId;
+            this.CompleteId = completeId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Complete WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ミッショングループ名 */
-        public string missionGroupName { set; get; }
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public Complete WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-        /** 達成済みのタスク名リスト */
-        public List<string> completedMissionTaskNames { set; get; }
-
-        /**
-         * 達成済みのタスク名リストを設定
-         *
-         * @param completedMissionTaskNames 達成済みのタスク名リスト
-         * @return this
-         */
-        public Complete WithCompletedMissionTaskNames(List<string> completedMissionTaskNames) {
-            this.completedMissionTaskNames = completedMissionTaskNames;
+        public Complete WithCompletedMissionTaskNames(string[] completedMissionTaskNames) {
+            this.CompletedMissionTaskNames = completedMissionTaskNames;
             return this;
         }
 
-        /** 報酬の受け取り済みのタスク名リスト */
-        public List<string> receivedMissionTaskNames { set; get; }
-
-        /**
-         * 報酬の受け取り済みのタスク名リストを設定
-         *
-         * @param receivedMissionTaskNames 報酬の受け取り済みのタスク名リスト
-         * @return this
-         */
-        public Complete WithReceivedMissionTaskNames(List<string> receivedMissionTaskNames) {
-            this.receivedMissionTaskNames = receivedMissionTaskNames;
+        public Complete WithReceivedMissionTaskNames(string[] receivedMissionTaskNames) {
+            this.ReceivedMissionTaskNames = receivedMissionTaskNames;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Complete WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Complete WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Complete FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Complete()
+                .WithCompleteId(!data.Keys.Contains("completeId") || data["completeId"] == null ? null : data["completeId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithCompletedMissionTaskNames(!data.Keys.Contains("completedMissionTaskNames") || data["completedMissionTaskNames"] == null ? new string[]{} : data["completedMissionTaskNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithReceivedMissionTaskNames(!data.Keys.Contains("receivedMissionTaskNames") || data["receivedMissionTaskNames"] == null ? new string[]{} : data["receivedMissionTaskNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["completeId"] = CompleteId,
+                ["userId"] = UserId,
+                ["missionGroupName"] = MissionGroupName,
+                ["completedMissionTaskNames"] = new JsonData(CompletedMissionTaskNames == null ? new JsonData[]{} :
+                        CompletedMissionTaskNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["receivedMissionTaskNames"] = new JsonData(ReceivedMissionTaskNames == null ? new JsonData[]{} :
+                        ReceivedMissionTaskNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.completeId != null)
-            {
+            if (CompleteId != null) {
                 writer.WritePropertyName("completeId");
-                writer.Write(this.completeId);
+                writer.Write(CompleteId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.missionGroupName != null)
-            {
+            if (MissionGroupName != null) {
                 writer.WritePropertyName("missionGroupName");
-                writer.Write(this.missionGroupName);
+                writer.Write(MissionGroupName.ToString());
             }
-            if(this.completedMissionTaskNames != null)
-            {
+            if (CompletedMissionTaskNames != null) {
                 writer.WritePropertyName("completedMissionTaskNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.completedMissionTaskNames)
+                foreach (var completedMissionTaskName in CompletedMissionTaskNames)
                 {
-                    writer.Write(item);
+                    if (completedMissionTaskName != null) {
+                        writer.Write(completedMissionTaskName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.receivedMissionTaskNames != null)
-            {
+            if (ReceivedMissionTaskNames != null) {
                 writer.WritePropertyName("receivedMissionTaskNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.receivedMissionTaskNames)
+                foreach (var receivedMissionTaskName in ReceivedMissionTaskNames)
                 {
-                    writer.Write(item);
+                    if (receivedMissionTaskName != null) {
+                        writer.Write(receivedMissionTaskName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMissionGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):user:(?<userId>.*):group:(?<missionGroupName>.*):complete");
-        if (!match.Groups["missionGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["missionGroupName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):user:(?<userId>.*):group:(?<missionGroupName>.*):complete");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):user:(?<userId>.*):group:(?<missionGroupName>.*):complete");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):user:(?<userId>.*):group:(?<missionGroupName>.*):complete");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):user:(?<userId>.*):group:(?<missionGroupName>.*):complete");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Complete FromDict(JsonData data)
-        {
-            return new Complete()
-                .WithCompleteId(data.Keys.Contains("completeId") && data["completeId"] != null ? data["completeId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithMissionGroupName(data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString() : null)
-                .WithCompletedMissionTaskNames(data.Keys.Contains("completedMissionTaskNames") && data["completedMissionTaskNames"] != null ? data["completedMissionTaskNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithReceivedMissionTaskNames(data.Keys.Contains("receivedMissionTaskNames") && data["receivedMissionTaskNames"] != null ? data["receivedMissionTaskNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Complete;
             var diff = 0;
-            if (completeId == null && completeId == other.completeId)
+            if (CompleteId == null && CompleteId == other.CompleteId)
             {
                 // null and null
             }
             else
             {
-                diff += completeId.CompareTo(other.completeId);
+                diff += CompleteId.CompareTo(other.CompleteId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (missionGroupName == null && missionGroupName == other.missionGroupName)
+            if (MissionGroupName == null && MissionGroupName == other.MissionGroupName)
             {
                 // null and null
             }
             else
             {
-                diff += missionGroupName.CompareTo(other.missionGroupName);
+                diff += MissionGroupName.CompareTo(other.MissionGroupName);
             }
-            if (completedMissionTaskNames == null && completedMissionTaskNames == other.completedMissionTaskNames)
+            if (CompletedMissionTaskNames == null && CompletedMissionTaskNames == other.CompletedMissionTaskNames)
             {
                 // null and null
             }
             else
             {
-                diff += completedMissionTaskNames.Count - other.completedMissionTaskNames.Count;
-                for (var i = 0; i < completedMissionTaskNames.Count; i++)
+                diff += CompletedMissionTaskNames.Length - other.CompletedMissionTaskNames.Length;
+                for (var i = 0; i < CompletedMissionTaskNames.Length; i++)
                 {
-                    diff += completedMissionTaskNames[i].CompareTo(other.completedMissionTaskNames[i]);
+                    diff += CompletedMissionTaskNames[i].CompareTo(other.CompletedMissionTaskNames[i]);
                 }
             }
-            if (receivedMissionTaskNames == null && receivedMissionTaskNames == other.receivedMissionTaskNames)
+            if (ReceivedMissionTaskNames == null && ReceivedMissionTaskNames == other.ReceivedMissionTaskNames)
             {
                 // null and null
             }
             else
             {
-                diff += receivedMissionTaskNames.Count - other.receivedMissionTaskNames.Count;
-                for (var i = 0; i < receivedMissionTaskNames.Count; i++)
+                diff += ReceivedMissionTaskNames.Length - other.ReceivedMissionTaskNames.Length;
+                for (var i = 0; i < ReceivedMissionTaskNames.Length; i++)
                 {
-                    diff += receivedMissionTaskNames[i].CompareTo(other.receivedMissionTaskNames[i]);
+                    diff += ReceivedMissionTaskNames[i].CompareTo(other.ReceivedMissionTaskNames[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["completeId"] = completeId;
-            data["userId"] = userId;
-            data["missionGroupName"] = missionGroupName;
-            data["completedMissionTaskNames"] = new JsonData(completedMissionTaskNames);
-            data["receivedMissionTaskNames"] = new JsonData(receivedMissionTaskNames);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

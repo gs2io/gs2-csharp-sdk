@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,63 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class RunStampSheetExpressResult
+	[System.Serializable]
+	public class RunStampSheetExpressResult : IResult
 	{
-        /** スタンプタスクの実行結果 */
-        public List<string> taskResults { set; get; }
+        public string[] TaskResults { set; get; }
+        public string SheetResult { set; get; }
 
-        /** スタンプシートの実行結果レスポンス内容 */
-        public string sheetResult { set; get; }
+        public RunStampSheetExpressResult WithTaskResults(string[] taskResults) {
+            this.TaskResults = taskResults;
+            return this;
+        }
 
+        public RunStampSheetExpressResult WithSheetResult(string sheetResult) {
+            this.SheetResult = sheetResult;
+            return this;
+        }
 
     	[Preserve]
-        public static RunStampSheetExpressResult FromDict(JsonData data)
+        public static RunStampSheetExpressResult FromJson(JsonData data)
         {
-            return new RunStampSheetExpressResult {
-                taskResults = data.Keys.Contains("taskResults") && data["taskResults"] != null ? data["taskResults"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                sheetResult = data.Keys.Contains("sheetResult") && data["sheetResult"] != null ? data["sheetResult"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new RunStampSheetExpressResult()
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["taskResults"] = new JsonData(TaskResults == null ? new JsonData[]{} :
+                        TaskResults.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["sheetResult"] = SheetResult,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var taskResult in TaskResults)
+            {
+                if (taskResult != null) {
+                    writer.Write(taskResult.ToString());
+                }
+            }
+            writer.WriteArrayEnd();
+            if (SheetResult != null) {
+                writer.WritePropertyName("sheetResult");
+                writer.Write(SheetResult.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

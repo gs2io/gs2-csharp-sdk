@@ -28,104 +28,74 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareReUploadRequest : Gs2Request<PrepareReUploadRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DataObjectName { set; get; }
+        public string AccessToken { set; get; }
+        public string ContentType { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PrepareReUploadRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データの名前 */
-		[UnityEngine.SerializeField]
-        public string dataObjectName;
-
-        /**
-         * データの名前を設定
-         *
-         * @param dataObjectName データの名前
-         * @return this
-         */
         public PrepareReUploadRequest WithDataObjectName(string dataObjectName) {
-            this.dataObjectName = dataObjectName;
+            this.DataObjectName = dataObjectName;
             return this;
         }
 
-
-        /** アップロードするデータの MIME-Type */
-		[UnityEngine.SerializeField]
-        public string contentType;
-
-        /**
-         * アップロードするデータの MIME-Typeを設定
-         *
-         * @param contentType アップロードするデータの MIME-Type
-         * @return this
-         */
-        public PrepareReUploadRequest WithContentType(string contentType) {
-            this.contentType = contentType;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PrepareReUploadRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public PrepareReUploadRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public PrepareReUploadRequest WithContentType(string contentType) {
+            this.ContentType = contentType;
             return this;
         }
 
     	[Preserve]
-        public static PrepareReUploadRequest FromDict(JsonData data)
+        public static PrepareReUploadRequest FromJson(JsonData data)
         {
-            return new PrepareReUploadRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                dataObjectName = data.Keys.Contains("dataObjectName") && data["dataObjectName"] != null ? data["dataObjectName"].ToString(): null,
-                contentType = data.Keys.Contains("contentType") && data["contentType"] != null ? data["contentType"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareReUploadRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithContentType(!data.Keys.Contains("contentType") || data["contentType"] == null ? null : data["contentType"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["dataObjectName"] = DataObjectName,
+                ["accessToken"] = AccessToken,
+                ["contentType"] = ContentType,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["dataObjectName"] = dataObjectName;
-            data["contentType"] = contentType;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DataObjectName != null) {
+                writer.WritePropertyName("dataObjectName");
+                writer.Write(DataObjectName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (ContentType != null) {
+                writer.WritePropertyName("contentType");
+                writer.Write(ContentType.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

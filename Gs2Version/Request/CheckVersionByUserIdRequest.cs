@@ -28,94 +28,73 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class CheckVersionByUserIdRequest : Gs2Request<CheckVersionByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Version.Model.TargetVersion[] TargetVersions { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CheckVersionByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public CheckVersionByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 加算するリソース */
-		[UnityEngine.SerializeField]
-        public List<TargetVersion> targetVersions;
-
-        /**
-         * 加算するリソースを設定
-         *
-         * @param targetVersions 加算するリソース
-         * @return this
-         */
-        public CheckVersionByUserIdRequest WithTargetVersions(List<TargetVersion> targetVersions) {
-            this.targetVersions = targetVersions;
+        public CheckVersionByUserIdRequest WithTargetVersions(Gs2.Gs2Version.Model.TargetVersion[] targetVersions) {
+            this.TargetVersions = targetVersions;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CheckVersionByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static CheckVersionByUserIdRequest FromDict(JsonData data)
+        public static CheckVersionByUserIdRequest FromJson(JsonData data)
         {
-            return new CheckVersionByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                targetVersions = data.Keys.Contains("targetVersions") && data["targetVersions"] != null ? data["targetVersions"].Cast<JsonData>().Select(value =>
-                    {
-                        return TargetVersion.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CheckVersionByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetVersions(!data.Keys.Contains("targetVersions") || data["targetVersions"] == null ? new Gs2.Gs2Version.Model.TargetVersion[]{} : data["targetVersions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Version.Model.TargetVersion.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["targetVersions"] = new JsonData(TargetVersions == null ? new JsonData[]{} :
+                        TargetVersions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["targetVersions"] = new JsonData(targetVersions.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var targetVersion in TargetVersions)
+            {
+                if (targetVersion != null) {
+                    targetVersion.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

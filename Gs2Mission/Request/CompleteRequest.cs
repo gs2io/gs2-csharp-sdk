@@ -28,126 +28,97 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CompleteRequest : Gs2Request<CompleteRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MissionGroupName { set; get; }
+        public string MissionTaskName { set; get; }
+        public string AccessToken { set; get; }
+        public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CompleteRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ミッショングループ名 */
-		[UnityEngine.SerializeField]
-        public string missionGroupName;
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public CompleteRequest WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-
-        /** タスク名 */
-		[UnityEngine.SerializeField]
-        public string missionTaskName;
-
-        /**
-         * タスク名を設定
-         *
-         * @param missionTaskName タスク名
-         * @return this
-         */
         public CompleteRequest WithMissionTaskName(string missionTaskName) {
-            this.missionTaskName = missionTaskName;
+            this.MissionTaskName = missionTaskName;
             return this;
         }
 
-
-        /** スタンプシートの変数に適用する設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * スタンプシートの変数に適用する設定値を設定
-         *
-         * @param config スタンプシートの変数に適用する設定値
-         * @return this
-         */
-        public CompleteRequest WithConfig(List<Config> config) {
-            this.config = config;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CompleteRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public CompleteRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public CompleteRequest WithConfig(Gs2.Gs2Mission.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
 
     	[Preserve]
-        public static CompleteRequest FromDict(JsonData data)
+        public static CompleteRequest FromJson(JsonData data)
         {
-            return new CompleteRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                missionGroupName = data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString(): null,
-                missionTaskName = data.Keys.Contains("missionTaskName") && data["missionTaskName"] != null ? data["missionTaskName"].ToString(): null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CompleteRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithMissionTaskName(!data.Keys.Contains("missionTaskName") || data["missionTaskName"] == null ? null : data["missionTaskName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Mission.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["missionGroupName"] = MissionGroupName,
+                ["missionTaskName"] = MissionTaskName,
+                ["accessToken"] = AccessToken,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["missionGroupName"] = missionGroupName;
-            data["missionTaskName"] = missionTaskName;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MissionGroupName != null) {
+                writer.WritePropertyName("missionGroupName");
+                writer.Write(MissionGroupName.ToString());
+            }
+            if (MissionTaskName != null) {
+                writer.WritePropertyName("missionTaskName");
+                writer.Write(MissionTaskName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

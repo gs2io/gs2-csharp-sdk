@@ -28,72 +28,61 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class UpdateStackFromGitHubRequest : Gs2Request<UpdateStackFromGitHubRequest>
 	{
+        public string StackName { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public UpdateStackFromGitHubRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
-        /** スタックの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * スタックの説明を設定
-         *
-         * @param description スタックの説明
-         * @return this
-         */
         public UpdateStackFromGitHubRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** GitHubからソースコードをチェックアウトしてくる設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Deploy.Model.GitHubCheckoutSetting checkoutSetting;
-
-        /**
-         * GitHubからソースコードをチェックアウトしてくる設定を設定
-         *
-         * @param checkoutSetting GitHubからソースコードをチェックアウトしてくる設定
-         * @return this
-         */
-        public UpdateStackFromGitHubRequest WithCheckoutSetting(global::Gs2.Gs2Deploy.Model.GitHubCheckoutSetting checkoutSetting) {
-            this.checkoutSetting = checkoutSetting;
+        public UpdateStackFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Deploy.Model.GitHubCheckoutSetting checkoutSetting) {
+            this.CheckoutSetting = checkoutSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateStackFromGitHubRequest FromDict(JsonData data)
+        public static UpdateStackFromGitHubRequest FromJson(JsonData data)
         {
-            return new UpdateStackFromGitHubRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                checkoutSetting = data.Keys.Contains("checkoutSetting") && data["checkoutSetting"] != null ? global::Gs2.Gs2Deploy.Model.GitHubCheckoutSetting.FromDict(data["checkoutSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateStackFromGitHubRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Deploy.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
+                ["description"] = Description,
+                ["checkoutSetting"] = CheckoutSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            data["description"] = description;
-            data["checkoutSetting"] = checkoutSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (CheckoutSetting != null) {
+                CheckoutSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

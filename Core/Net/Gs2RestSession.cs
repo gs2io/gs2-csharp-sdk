@@ -45,7 +45,7 @@ namespace Gs2.Core.Net
             /** 有効期間(秒) */
             public int? expires_in;
 
-            public static LoginResult FromDict(JsonData data)
+            public static LoginResult FromJson(JsonData data)
             {
                 if (data == null)
                 {
@@ -78,7 +78,7 @@ namespace Gs2.Core.Net
                 {
                     try
                     {
-                        accessToken = LoginResult.FromDict(JsonMapper.ToObject(gs2RestResponse.Message)).access_token;
+                        accessToken = LoginResult.FromJson(JsonMapper.ToObject(gs2RestResponse.Message)).access_token;
                     }
                     catch (System.Exception)
                     {

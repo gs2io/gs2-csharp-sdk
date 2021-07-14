@@ -28,54 +28,50 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DeleteProjectRequest : Gs2Request<DeleteProjectRequest>
 	{
+        public string AccountToken { set; get; }
+        public string ProjectName { set; get; }
 
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public DeleteProjectRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
 
-
-        /** プロジェクト名 */
-		[UnityEngine.SerializeField]
-        public string projectName;
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public DeleteProjectRequest WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteProjectRequest FromDict(JsonData data)
+        public static DeleteProjectRequest FromJson(JsonData data)
         {
-            return new DeleteProjectRequest {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
-                projectName = data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteProjectRequest()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
+                ["projectName"] = ProjectName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountToken"] = accountToken;
-            data["projectName"] = projectName;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            if (ProjectName != null) {
+                writer.WritePropertyName("projectName");
+                writer.Write(ProjectName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

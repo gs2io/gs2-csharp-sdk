@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class PutResultResult
+	[System.Serializable]
+	public class PutResultResult : IResult
 	{
-        /** 更新後の{model_name}の一覧 */
-        public List<Rating> items { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Rating[] Items { set; get; }
 
+        public PutResultResult WithItems(Gs2.Gs2Matchmaking.Model.Rating[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static PutResultResult FromDict(JsonData data)
+        public static PutResultResult FromJson(JsonData data)
         {
-            return new PutResultResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.Rating.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new PutResultResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Matchmaking.Model.Rating[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.Rating.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

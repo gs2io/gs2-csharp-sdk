@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Datastore.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Datastore.Result
 {
 	[Preserve]
-	public class GetDataObjectHistoryResult
+	[System.Serializable]
+	public class GetDataObjectHistoryResult : IResult
 	{
-        /** データオブジェクト履歴 */
-        public DataObjectHistory item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObjectHistory Item { set; get; }
 
+        public GetDataObjectHistoryResult WithItem(Gs2.Gs2Datastore.Model.DataObjectHistory item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetDataObjectHistoryResult FromDict(JsonData data)
+        public static GetDataObjectHistoryResult FromJson(JsonData data)
         {
-            return new GetDataObjectHistoryResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Datastore.Model.DataObjectHistory.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetDataObjectHistoryResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObjectHistory.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

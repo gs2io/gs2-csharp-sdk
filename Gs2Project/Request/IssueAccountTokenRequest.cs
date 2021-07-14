@@ -28,36 +28,38 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class IssueAccountTokenRequest : Gs2Request<IssueAccountTokenRequest>
 	{
+        public string AccountName { set; get; }
 
-        /** GS2アカウントの名前 */
-		[UnityEngine.SerializeField]
-        public string accountName;
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param accountName GS2アカウントの名前
-         * @return this
-         */
         public IssueAccountTokenRequest WithAccountName(string accountName) {
-            this.accountName = accountName;
+            this.AccountName = accountName;
             return this;
         }
 
-
     	[Preserve]
-        public static IssueAccountTokenRequest FromDict(JsonData data)
+        public static IssueAccountTokenRequest FromJson(JsonData data)
         {
-            return new IssueAccountTokenRequest {
-                accountName = data.Keys.Contains("accountName") && data["accountName"] != null ? data["accountName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new IssueAccountTokenRequest()
+                .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountName"] = AccountName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountName"] = accountName;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountName != null) {
+                writer.WritePropertyName("accountName");
+                writer.Write(AccountName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

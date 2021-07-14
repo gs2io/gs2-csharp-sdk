@@ -23,355 +23,235 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class MissionGroupModel : IComparable
 	{
+        public string MissionGroupId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Mission.Model.MissionTaskModel[] Tasks { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
+        public string CompleteNotificationNamespaceId { set; get; }
 
-        /** ミッショングループ */
-        public string missionGroupId { set; get; }
-
-        /**
-         * ミッショングループを設定
-         *
-         * @param missionGroupId ミッショングループ
-         * @return this
-         */
         public MissionGroupModel WithMissionGroupId(string missionGroupId) {
-            this.missionGroupId = missionGroupId;
+            this.MissionGroupId = missionGroupId;
             return this;
         }
 
-        /** グループ名 */
-        public string name { set; get; }
-
-        /**
-         * グループ名を設定
-         *
-         * @param name グループ名
-         * @return this
-         */
         public MissionGroupModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public MissionGroupModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** タスクリスト */
-        public List<MissionTaskModel> tasks { set; get; }
-
-        /**
-         * タスクリストを設定
-         *
-         * @param tasks タスクリスト
-         * @return this
-         */
-        public MissionGroupModel WithTasks(List<MissionTaskModel> tasks) {
-            this.tasks = tasks;
+        public MissionGroupModel WithTasks(Gs2.Gs2Mission.Model.MissionTaskModel[] tasks) {
+            this.Tasks = tasks;
             return this;
         }
 
-        /** リセットタイミング */
-        public string resetType { set; get; }
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public MissionGroupModel WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-        /** リセットをする日にち */
-        public int? resetDayOfMonth { set; get; }
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public MissionGroupModel WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-        /** リセットする曜日 */
-        public string resetDayOfWeek { set; get; }
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public MissionGroupModel WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-        /** リセット時刻 */
-        public int? resetHour { set; get; }
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public MissionGroupModel WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
         }
 
-        /** ミッションを達成したときの通知先ネームスペース のGRN */
-        public string completeNotificationNamespaceId { set; get; }
-
-        /**
-         * ミッションを達成したときの通知先ネームスペース のGRNを設定
-         *
-         * @param completeNotificationNamespaceId ミッションを達成したときの通知先ネームスペース のGRN
-         * @return this
-         */
         public MissionGroupModel WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
-            this.completeNotificationNamespaceId = completeNotificationNamespaceId;
+            this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;
+        }
+
+    	[Preserve]
+        public static MissionGroupModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new MissionGroupModel()
+                .WithMissionGroupId(!data.Keys.Contains("missionGroupId") || data["missionGroupId"] == null ? null : data["missionGroupId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null ? new Gs2.Gs2Mission.Model.MissionTaskModel[]{} : data["tasks"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.MissionTaskModel.FromJson(v);
+                }).ToArray())
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()))
+                .WithCompleteNotificationNamespaceId(!data.Keys.Contains("completeNotificationNamespaceId") || data["completeNotificationNamespaceId"] == null ? null : data["completeNotificationNamespaceId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["missionGroupId"] = MissionGroupId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["tasks"] = new JsonData(Tasks == null ? new JsonData[]{} :
+                        Tasks.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
+                ["completeNotificationNamespaceId"] = CompleteNotificationNamespaceId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.missionGroupId != null)
-            {
+            if (MissionGroupId != null) {
                 writer.WritePropertyName("missionGroupId");
-                writer.Write(this.missionGroupId);
+                writer.Write(MissionGroupId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.tasks != null)
-            {
+            if (Tasks != null) {
                 writer.WritePropertyName("tasks");
                 writer.WriteArrayStart();
-                foreach(var item in this.tasks)
+                foreach (var task in Tasks)
                 {
-                    item.WriteJson(writer);
+                    if (task != null) {
+                        task.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.resetType != null)
-            {
+            if (ResetType != null) {
                 writer.WritePropertyName("resetType");
-                writer.Write(this.resetType);
+                writer.Write(ResetType.ToString());
             }
-            if(this.resetDayOfMonth.HasValue)
-            {
+            if (ResetDayOfMonth != null) {
                 writer.WritePropertyName("resetDayOfMonth");
-                writer.Write(this.resetDayOfMonth.Value);
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
             }
-            if(this.resetDayOfWeek != null)
-            {
+            if (ResetDayOfWeek != null) {
                 writer.WritePropertyName("resetDayOfWeek");
-                writer.Write(this.resetDayOfWeek);
+                writer.Write(ResetDayOfWeek.ToString());
             }
-            if(this.resetHour.HasValue)
-            {
+            if (ResetHour != null) {
                 writer.WritePropertyName("resetHour");
-                writer.Write(this.resetHour.Value);
+                writer.Write(int.Parse(ResetHour.ToString()));
             }
-            if(this.completeNotificationNamespaceId != null)
-            {
+            if (CompleteNotificationNamespaceId != null) {
                 writer.WritePropertyName("completeNotificationNamespaceId");
-                writer.Write(this.completeNotificationNamespaceId);
+                writer.Write(CompleteNotificationNamespaceId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetMissionGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["missionGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["missionGroupName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):group:(?<missionGroupName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static MissionGroupModel FromDict(JsonData data)
-        {
-            return new MissionGroupModel()
-                .WithMissionGroupId(data.Keys.Contains("missionGroupId") && data["missionGroupId"] != null ? data["missionGroupId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithTasks(data.Keys.Contains("tasks") && data["tasks"] != null ? data["tasks"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Mission.Model.MissionTaskModel.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithResetType(data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString() : null)
-                .WithResetDayOfMonth(data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null)
-                .WithResetDayOfWeek(data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString() : null)
-                .WithResetHour(data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null)
-                .WithCompleteNotificationNamespaceId(data.Keys.Contains("completeNotificationNamespaceId") && data["completeNotificationNamespaceId"] != null ? data["completeNotificationNamespaceId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as MissionGroupModel;
             var diff = 0;
-            if (missionGroupId == null && missionGroupId == other.missionGroupId)
+            if (MissionGroupId == null && MissionGroupId == other.MissionGroupId)
             {
                 // null and null
             }
             else
             {
-                diff += missionGroupId.CompareTo(other.missionGroupId);
+                diff += MissionGroupId.CompareTo(other.MissionGroupId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (tasks == null && tasks == other.tasks)
+            if (Tasks == null && Tasks == other.Tasks)
             {
                 // null and null
             }
             else
             {
-                diff += tasks.Count - other.tasks.Count;
-                for (var i = 0; i < tasks.Count; i++)
+                diff += Tasks.Length - other.Tasks.Length;
+                for (var i = 0; i < Tasks.Length; i++)
                 {
-                    diff += tasks[i].CompareTo(other.tasks[i]);
+                    diff += Tasks[i].CompareTo(other.Tasks[i]);
                 }
             }
-            if (resetType == null && resetType == other.resetType)
+            if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
             }
             else
             {
-                diff += resetType.CompareTo(other.resetType);
+                diff += ResetType.CompareTo(other.ResetType);
             }
-            if (resetDayOfMonth == null && resetDayOfMonth == other.resetDayOfMonth)
+            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetDayOfMonth - other.resetDayOfMonth);
+                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
             }
-            if (resetDayOfWeek == null && resetDayOfWeek == other.resetDayOfWeek)
+            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += resetDayOfWeek.CompareTo(other.resetDayOfWeek);
+                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
             }
-            if (resetHour == null && resetHour == other.resetHour)
+            if (ResetHour == null && ResetHour == other.ResetHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetHour - other.resetHour);
+                diff += (int)(ResetHour - other.ResetHour);
             }
-            if (completeNotificationNamespaceId == null && completeNotificationNamespaceId == other.completeNotificationNamespaceId)
+            if (CompleteNotificationNamespaceId == null && CompleteNotificationNamespaceId == other.CompleteNotificationNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += completeNotificationNamespaceId.CompareTo(other.completeNotificationNamespaceId);
+                diff += CompleteNotificationNamespaceId.CompareTo(other.CompleteNotificationNamespaceId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["missionGroupId"] = missionGroupId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["tasks"] = new JsonData(tasks.Select(item => item.ToDict()));
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            data["completeNotificationNamespaceId"] = completeNotificationNamespaceId;
-            return data;
-        }
-	}
+    }
 }

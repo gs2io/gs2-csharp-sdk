@@ -23,446 +23,277 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
+        public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** ミッションを達成したときに実行するスクリプト */
-        public Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript { set; get; }
-
-        /**
-         * ミッションを達成したときに実行するスクリプトを設定
-         *
-         * @param missionCompleteScript ミッションを達成したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
-            this.missionCompleteScript = missionCompleteScript;
+            this.MissionCompleteScript = missionCompleteScript;
             return this;
         }
 
-        /** カウンターを上昇したときに実行するスクリプト */
-        public Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript { set; get; }
-
-        /**
-         * カウンターを上昇したときに実行するスクリプトを設定
-         *
-         * @param counterIncrementScript カウンターを上昇したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithCounterIncrementScript(Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
-            this.counterIncrementScript = counterIncrementScript;
+            this.CounterIncrementScript = counterIncrementScript;
             return this;
         }
 
-        /** 報酬を受け取ったときに実行するスクリプト */
-        public Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript { set; get; }
-
-        /**
-         * 報酬を受け取ったときに実行するスクリプトを設定
-         *
-         * @param receiveRewardsScript 報酬を受け取ったときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
-            this.receiveRewardsScript = receiveRewardsScript;
+            this.ReceiveRewardsScript = receiveRewardsScript;
             return this;
         }
 
-        /** 報酬付与処理をジョブとして追加するキューネームスペース のGRN */
-        public string queueNamespaceId { set; get; }
-
-        /**
-         * 報酬付与処理をジョブとして追加するキューネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 報酬付与処理をジョブとして追加するキューネームスペース のGRN
-         * @return this
-         */
         public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-        /** 報酬付与処理のスタンプシートで使用する暗号鍵GRN */
-        public string keyId { set; get; }
-
-        /**
-         * 報酬付与処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 報酬付与処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public Namespace WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-        /** ミッションのタスクを達成したときのプッシュ通知 */
-        public Gs2.Gs2Mission.Model.NotificationSetting completeNotification { set; get; }
-
-        /**
-         * ミッションのタスクを達成したときのプッシュ通知を設定
-         *
-         * @param completeNotification ミッションのタスクを達成したときのプッシュ通知
-         * @return this
-         */
         public Namespace WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
-            this.completeNotification = completeNotification;
+            this.CompleteNotification = completeNotification;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Mission.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMissionCompleteScript(!data.Keys.Contains("missionCompleteScript") || data["missionCompleteScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["missionCompleteScript"]))
+                .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
+                .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Mission.Model.NotificationSetting.FromJson(data["completeNotification"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["missionCompleteScript"] = MissionCompleteScript?.ToJson(),
+                ["counterIncrementScript"] = CounterIncrementScript?.ToJson(),
+                ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["completeNotification"] = CompleteNotification?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.missionCompleteScript != null)
-            {
+            if (MissionCompleteScript != null) {
                 writer.WritePropertyName("missionCompleteScript");
-                this.missionCompleteScript.WriteJson(writer);
+                MissionCompleteScript.WriteJson(writer);
             }
-            if(this.counterIncrementScript != null)
-            {
+            if (CounterIncrementScript != null) {
                 writer.WritePropertyName("counterIncrementScript");
-                this.counterIncrementScript.WriteJson(writer);
+                CounterIncrementScript.WriteJson(writer);
             }
-            if(this.receiveRewardsScript != null)
-            {
+            if (ReceiveRewardsScript != null) {
                 writer.WritePropertyName("receiveRewardsScript");
-                this.receiveRewardsScript.WriteJson(writer);
+                ReceiveRewardsScript.WriteJson(writer);
             }
-            if(this.queueNamespaceId != null)
-            {
+            if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
-                writer.Write(this.queueNamespaceId);
+                writer.Write(QueueNamespaceId.ToString());
             }
-            if(this.keyId != null)
-            {
+            if (KeyId != null) {
                 writer.WritePropertyName("keyId");
-                writer.Write(this.keyId);
+                writer.Write(KeyId.ToString());
             }
-            if(this.completeNotification != null)
-            {
+            if (CompleteNotification != null) {
                 writer.WritePropertyName("completeNotification");
-                this.completeNotification.WriteJson(writer);
+                CompleteNotification.WriteJson(writer);
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMissionCompleteScript(data.Keys.Contains("missionCompleteScript") && data["missionCompleteScript"] != null ? Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["missionCompleteScript"]) : null)
-                .WithCounterIncrementScript(data.Keys.Contains("counterIncrementScript") && data["counterIncrementScript"] != null ? Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["counterIncrementScript"]) : null)
-                .WithReceiveRewardsScript(data.Keys.Contains("receiveRewardsScript") && data["receiveRewardsScript"] != null ? Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["receiveRewardsScript"]) : null)
-                .WithQueueNamespaceId(data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString() : null)
-                .WithKeyId(data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString() : null)
-                .WithCompleteNotification(data.Keys.Contains("completeNotification") && data["completeNotification"] != null ? Gs2.Gs2Mission.Model.NotificationSetting.FromDict(data["completeNotification"]) : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Mission.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (MissionCompleteScript == null && MissionCompleteScript == other.MissionCompleteScript)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += MissionCompleteScript.CompareTo(other.MissionCompleteScript);
             }
-            if (missionCompleteScript == null && missionCompleteScript == other.missionCompleteScript)
+            if (CounterIncrementScript == null && CounterIncrementScript == other.CounterIncrementScript)
             {
                 // null and null
             }
             else
             {
-                diff += missionCompleteScript.CompareTo(other.missionCompleteScript);
+                diff += CounterIncrementScript.CompareTo(other.CounterIncrementScript);
             }
-            if (counterIncrementScript == null && counterIncrementScript == other.counterIncrementScript)
+            if (ReceiveRewardsScript == null && ReceiveRewardsScript == other.ReceiveRewardsScript)
             {
                 // null and null
             }
             else
             {
-                diff += counterIncrementScript.CompareTo(other.counterIncrementScript);
+                diff += ReceiveRewardsScript.CompareTo(other.ReceiveRewardsScript);
             }
-            if (receiveRewardsScript == null && receiveRewardsScript == other.receiveRewardsScript)
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += receiveRewardsScript.CompareTo(other.receiveRewardsScript);
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
             }
-            if (queueNamespaceId == null && queueNamespaceId == other.queueNamespaceId)
+            if (KeyId == null && KeyId == other.KeyId)
             {
                 // null and null
             }
             else
             {
-                diff += queueNamespaceId.CompareTo(other.queueNamespaceId);
+                diff += KeyId.CompareTo(other.KeyId);
             }
-            if (keyId == null && keyId == other.keyId)
+            if (CompleteNotification == null && CompleteNotification == other.CompleteNotification)
             {
                 // null and null
             }
             else
             {
-                diff += keyId.CompareTo(other.keyId);
+                diff += CompleteNotification.CompareTo(other.CompleteNotification);
             }
-            if (completeNotification == null && completeNotification == other.completeNotification)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += completeNotification.CompareTo(other.completeNotification);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["missionCompleteScript"] = missionCompleteScript.ToDict();
-            data["counterIncrementScript"] = counterIncrementScript.ToDict();
-            data["receiveRewardsScript"] = receiveRewardsScript.ToDict();
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["completeNotification"] = completeNotification.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

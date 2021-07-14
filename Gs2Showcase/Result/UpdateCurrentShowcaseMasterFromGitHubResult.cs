@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Showcase.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Showcase.Result
 {
 	[Preserve]
-	public class UpdateCurrentShowcaseMasterFromGitHubResult
+	[System.Serializable]
+	public class UpdateCurrentShowcaseMasterFromGitHubResult : IResult
 	{
-        /** 更新した現在有効な陳列棚マスター */
-        public CurrentShowcaseMaster item { set; get; }
+        public Gs2.Gs2Showcase.Model.CurrentShowcaseMaster Item { set; get; }
 
+        public UpdateCurrentShowcaseMasterFromGitHubResult WithItem(Gs2.Gs2Showcase.Model.CurrentShowcaseMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateCurrentShowcaseMasterFromGitHubResult FromDict(JsonData data)
+        public static UpdateCurrentShowcaseMasterFromGitHubResult FromJson(JsonData data)
         {
-            return new UpdateCurrentShowcaseMasterFromGitHubResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Showcase.Model.CurrentShowcaseMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateCurrentShowcaseMasterFromGitHubResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.CurrentShowcaseMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

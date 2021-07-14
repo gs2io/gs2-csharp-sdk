@@ -23,292 +23,175 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Formation.Model
 {
+
 	[Preserve]
 	public class Form : IComparable
 	{
+        public string FormId { set; get; }
+        public string Name { set; get; }
+        public int? Index { set; get; }
+        public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** フォーム */
-        public string formId { set; get; }
-
-        /**
-         * フォームを設定
-         *
-         * @param formId フォーム
-         * @return this
-         */
         public Form WithFormId(string formId) {
-            this.formId = formId;
+            this.FormId = formId;
             return this;
         }
 
-        /** フォームの保存領域の名前 */
-        public string name { set; get; }
-
-        /**
-         * フォームの保存領域の名前を設定
-         *
-         * @param name フォームの保存領域の名前
-         * @return this
-         */
         public Form WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 保存領域のインデックス */
-        public int? index { set; get; }
-
-        /**
-         * 保存領域のインデックスを設定
-         *
-         * @param index 保存領域のインデックス
-         * @return this
-         */
         public Form WithIndex(int? index) {
-            this.index = index;
+            this.Index = index;
             return this;
         }
 
-        /** スロットリスト */
-        public List<Slot> slots { set; get; }
-
-        /**
-         * スロットリストを設定
-         *
-         * @param slots スロットリスト
-         * @return this
-         */
-        public Form WithSlots(List<Slot> slots) {
-            this.slots = slots;
+        public Form WithSlots(Gs2.Gs2Formation.Model.Slot[] slots) {
+            this.Slots = slots;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Form WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Form WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Form FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Form()
+                .WithFormId(!data.Keys.Contains("formId") || data["formId"] == null ? null : data["formId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()))
+                .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.Slot[]{} : data["slots"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.Slot.FromJson(v);
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["formId"] = FormId,
+                ["name"] = Name,
+                ["index"] = Index,
+                ["slots"] = new JsonData(Slots == null ? new JsonData[]{} :
+                        Slots.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.formId != null)
-            {
+            if (FormId != null) {
                 writer.WritePropertyName("formId");
-                writer.Write(this.formId);
+                writer.Write(FormId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.index.HasValue)
-            {
+            if (Index != null) {
                 writer.WritePropertyName("index");
-                writer.Write(this.index.Value);
+                writer.Write(int.Parse(Index.ToString()));
             }
-            if(this.slots != null)
-            {
+            if (Slots != null) {
                 writer.WritePropertyName("slots");
                 writer.WriteArrayStart();
-                foreach(var item in this.slots)
+                foreach (var slot in Slots)
                 {
-                    item.WriteJson(writer);
+                    if (slot != null) {
+                        slot.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetIndexFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["index"].Success)
-        {
-            return null;
-        }
-        return match.Groups["index"].Value;
-    }
-
-    public static string GetMoldNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["moldName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["moldName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):formation:(?<namespaceName>.*):user:(?<userId>.*):mold:(?<moldName>.*):form:(?<index>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Form FromDict(JsonData data)
-        {
-            return new Form()
-                .WithFormId(data.Keys.Contains("formId") && data["formId"] != null ? data["formId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithIndex(data.Keys.Contains("index") && data["index"] != null ? (int?)int.Parse(data["index"].ToString()) : null)
-                .WithSlots(data.Keys.Contains("slots") && data["slots"] != null ? data["slots"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Formation.Model.Slot.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Form;
             var diff = 0;
-            if (formId == null && formId == other.formId)
+            if (FormId == null && FormId == other.FormId)
             {
                 // null and null
             }
             else
             {
-                diff += formId.CompareTo(other.formId);
+                diff += FormId.CompareTo(other.FormId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (index == null && index == other.index)
+            if (Index == null && Index == other.Index)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(index - other.index);
+                diff += (int)(Index - other.Index);
             }
-            if (slots == null && slots == other.slots)
+            if (Slots == null && Slots == other.Slots)
             {
                 // null and null
             }
             else
             {
-                diff += slots.Count - other.slots.Count;
-                for (var i = 0; i < slots.Count; i++)
+                diff += Slots.Length - other.Slots.Length;
+                for (var i = 0; i < Slots.Length; i++)
                 {
-                    diff += slots[i].CompareTo(other.slots[i]);
+                    diff += Slots[i].CompareTo(other.Slots[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["formId"] = formId;
-            data["name"] = name;
-            data["index"] = index;
-            data["slots"] = new JsonData(slots.Select(item => item.ToDict()));
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

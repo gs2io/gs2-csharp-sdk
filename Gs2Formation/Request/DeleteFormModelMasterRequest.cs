@@ -28,54 +28,50 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DeleteFormModelMasterRequest : Gs2Request<DeleteFormModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string FormModelName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteFormModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フォーム名 */
-		[UnityEngine.SerializeField]
-        public string formModelName;
-
-        /**
-         * フォーム名を設定
-         *
-         * @param formModelName フォーム名
-         * @return this
-         */
         public DeleteFormModelMasterRequest WithFormModelName(string formModelName) {
-            this.formModelName = formModelName;
+            this.FormModelName = formModelName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteFormModelMasterRequest FromDict(JsonData data)
+        public static DeleteFormModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteFormModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                formModelName = data.Keys.Contains("formModelName") && data["formModelName"] != null ? data["formModelName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteFormModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["formModelName"] = FormModelName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["formModelName"] = formModelName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (FormModelName != null) {
+                writer.WritePropertyName("formModelName");
+                writer.Write(FormModelName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

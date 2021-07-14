@@ -28,108 +28,72 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Stamina.Model.ScriptSetting OverflowTriggerScript { set; get; }
+        public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 説明文 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** スタミナオーバーフロー上限に当たって回復できなかったスタミナを通知する スクリプト のGRN */
-		[UnityEngine.SerializeField]
-        public string overflowTriggerScriptId;
-
-        /**
-         * スタミナオーバーフロー上限に当たって回復できなかったスタミナを通知する スクリプト のGRNを設定
-         *
-         * @param overflowTriggerScriptId スタミナオーバーフロー上限に当たって回復できなかったスタミナを通知する スクリプト のGRN
-         * @return this
-         */
-        public UpdateNamespaceRequest WithOverflowTriggerScriptId(string overflowTriggerScriptId) {
-            this.overflowTriggerScriptId = overflowTriggerScriptId;
+        public UpdateNamespaceRequest WithOverflowTriggerScript(Gs2.Gs2Stamina.Model.ScriptSetting overflowTriggerScript) {
+            this.OverflowTriggerScript = overflowTriggerScript;
             return this;
         }
 
-
-        /** スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string overflowTriggerNamespaceId;
-
-        /**
-         * スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRNを設定
-         *
-         * @param overflowTriggerNamespaceId スタミナオーバーフロー上限に当たって回復できなかったスタミナを追加する ネームスペース のGRN
-         * @return this
-         */
-        public UpdateNamespaceRequest WithOverflowTriggerNamespaceId(string overflowTriggerNamespaceId) {
-            this.overflowTriggerNamespaceId = overflowTriggerNamespaceId;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Stamina.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Stamina.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Stamina.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
-            return this;
-        }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                overflowTriggerScriptId = data.Keys.Contains("overflowTriggerScriptId") && data["overflowTriggerScriptId"] != null ? data["overflowTriggerScriptId"].ToString(): null,
-                overflowTriggerNamespaceId = data.Keys.Contains("overflowTriggerNamespaceId") && data["overflowTriggerNamespaceId"] != null ? data["overflowTriggerNamespaceId"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Stamina.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : Gs2.Gs2Stamina.Model.ScriptSetting.FromJson(data["overflowTriggerScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Stamina.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["overflowTriggerScript"] = OverflowTriggerScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["overflowTriggerScriptId"] = overflowTriggerScriptId;
-            data["overflowTriggerNamespaceId"] = overflowTriggerNamespaceId;
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (OverflowTriggerScript != null) {
+                OverflowTriggerScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

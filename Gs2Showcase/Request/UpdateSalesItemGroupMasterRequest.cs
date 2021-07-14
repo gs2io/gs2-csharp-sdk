@@ -28,112 +28,94 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateSalesItemGroupMasterRequest : Gs2Request<UpdateSalesItemGroupMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string SalesItemGroupName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string[] SalesItemNames { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateSalesItemGroupMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string salesItemGroupName;
-
-        /**
-         * 商品名を設定
-         *
-         * @param salesItemGroupName 商品名
-         * @return this
-         */
         public UpdateSalesItemGroupMasterRequest WithSalesItemGroupName(string salesItemGroupName) {
-            this.salesItemGroupName = salesItemGroupName;
+            this.SalesItemGroupName = salesItemGroupName;
             return this;
         }
 
-
-        /** 商品グループマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 商品グループマスターの説明を設定
-         *
-         * @param description 商品グループマスターの説明
-         * @return this
-         */
         public UpdateSalesItemGroupMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 商品のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public UpdateSalesItemGroupMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 商品グループに含める商品リスト */
-		[UnityEngine.SerializeField]
-        public List<string> salesItemNames;
-
-        /**
-         * 商品グループに含める商品リストを設定
-         *
-         * @param salesItemNames 商品グループに含める商品リスト
-         * @return this
-         */
-        public UpdateSalesItemGroupMasterRequest WithSalesItemNames(List<string> salesItemNames) {
-            this.salesItemNames = salesItemNames;
+        public UpdateSalesItemGroupMasterRequest WithSalesItemNames(string[] salesItemNames) {
+            this.SalesItemNames = salesItemNames;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateSalesItemGroupMasterRequest FromDict(JsonData data)
+        public static UpdateSalesItemGroupMasterRequest FromJson(JsonData data)
         {
-            return new UpdateSalesItemGroupMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                salesItemGroupName = data.Keys.Contains("salesItemGroupName") && data["salesItemGroupName"] != null ? data["salesItemGroupName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                salesItemNames = data.Keys.Contains("salesItemNames") && data["salesItemNames"] != null ? data["salesItemNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateSalesItemGroupMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithSalesItemGroupName(!data.Keys.Contains("salesItemGroupName") || data["salesItemGroupName"] == null ? null : data["salesItemGroupName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSalesItemNames(!data.Keys.Contains("salesItemNames") || data["salesItemNames"] == null ? new string[]{} : data["salesItemNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["salesItemGroupName"] = SalesItemGroupName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["salesItemNames"] = new JsonData(SalesItemNames == null ? new JsonData[]{} :
+                        SalesItemNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["salesItemGroupName"] = salesItemGroupName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["salesItemNames"] = new JsonData(salesItemNames);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (SalesItemGroupName != null) {
+                writer.WritePropertyName("salesItemGroupName");
+                writer.Write(SalesItemGroupName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var salesItemName in SalesItemNames)
+            {
+                writer.Write(salesItemName.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

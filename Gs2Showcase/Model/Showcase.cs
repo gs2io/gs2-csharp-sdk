@@ -23,239 +23,155 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class Showcase : IComparable
 	{
+        public string ShowcaseId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string SalesPeriodEventId { set; get; }
+        public Gs2.Gs2Showcase.Model.DisplayItem[] DisplayItems { set; get; }
 
-        /** 陳列棚 */
-        public string showcaseId { set; get; }
-
-        /**
-         * 陳列棚を設定
-         *
-         * @param showcaseId 陳列棚
-         * @return this
-         */
         public Showcase WithShowcaseId(string showcaseId) {
-            this.showcaseId = showcaseId;
+            this.ShowcaseId = showcaseId;
             return this;
         }
 
-        /** 商品名 */
-        public string name { set; get; }
-
-        /**
-         * 商品名を設定
-         *
-         * @param name 商品名
-         * @return this
-         */
         public Showcase WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 商品のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public Showcase WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 販売期間とするイベントマスター のGRN */
-        public string salesPeriodEventId { set; get; }
-
-        /**
-         * 販売期間とするイベントマスター のGRNを設定
-         *
-         * @param salesPeriodEventId 販売期間とするイベントマスター のGRN
-         * @return this
-         */
         public Showcase WithSalesPeriodEventId(string salesPeriodEventId) {
-            this.salesPeriodEventId = salesPeriodEventId;
+            this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
 
-        /** インベントリに格納可能なアイテムモデル一覧 */
-        public List<DisplayItem> displayItems { set; get; }
-
-        /**
-         * インベントリに格納可能なアイテムモデル一覧を設定
-         *
-         * @param displayItems インベントリに格納可能なアイテムモデル一覧
-         * @return this
-         */
-        public Showcase WithDisplayItems(List<DisplayItem> displayItems) {
-            this.displayItems = displayItems;
+        public Showcase WithDisplayItems(Gs2.Gs2Showcase.Model.DisplayItem[] displayItems) {
+            this.DisplayItems = displayItems;
             return this;
+        }
+
+    	[Preserve]
+        public static Showcase FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Showcase()
+                .WithShowcaseId(!data.Keys.Contains("showcaseId") || data["showcaseId"] == null ? null : data["showcaseId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString())
+                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null ? new Gs2.Gs2Showcase.Model.DisplayItem[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.DisplayItem.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["showcaseId"] = ShowcaseId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["salesPeriodEventId"] = SalesPeriodEventId,
+                ["displayItems"] = new JsonData(DisplayItems == null ? new JsonData[]{} :
+                        DisplayItems.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.showcaseId != null)
-            {
+            if (ShowcaseId != null) {
                 writer.WritePropertyName("showcaseId");
-                writer.Write(this.showcaseId);
+                writer.Write(ShowcaseId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.salesPeriodEventId != null)
-            {
+            if (SalesPeriodEventId != null) {
                 writer.WritePropertyName("salesPeriodEventId");
-                writer.Write(this.salesPeriodEventId);
+                writer.Write(SalesPeriodEventId.ToString());
             }
-            if(this.displayItems != null)
-            {
+            if (DisplayItems != null) {
                 writer.WritePropertyName("displayItems");
                 writer.WriteArrayStart();
-                foreach(var item in this.displayItems)
+                foreach (var displayItem in DisplayItems)
                 {
-                    item.WriteJson(writer);
+                    if (displayItem != null) {
+                        displayItem.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetShowcaseNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):showcase:(?<showcaseName>.*)");
-        if (!match.Groups["showcaseName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["showcaseName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):showcase:(?<showcaseName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):showcase:(?<showcaseName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):showcase:(?<namespaceName>.*):showcase:(?<showcaseName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Showcase FromDict(JsonData data)
-        {
-            return new Showcase()
-                .WithShowcaseId(data.Keys.Contains("showcaseId") && data["showcaseId"] != null ? data["showcaseId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithSalesPeriodEventId(data.Keys.Contains("salesPeriodEventId") && data["salesPeriodEventId"] != null ? data["salesPeriodEventId"].ToString() : null)
-                .WithDisplayItems(data.Keys.Contains("displayItems") && data["displayItems"] != null ? data["displayItems"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Showcase.Model.DisplayItem.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as Showcase;
             var diff = 0;
-            if (showcaseId == null && showcaseId == other.showcaseId)
+            if (ShowcaseId == null && ShowcaseId == other.ShowcaseId)
             {
                 // null and null
             }
             else
             {
-                diff += showcaseId.CompareTo(other.showcaseId);
+                diff += ShowcaseId.CompareTo(other.ShowcaseId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (salesPeriodEventId == null && salesPeriodEventId == other.salesPeriodEventId)
+            if (SalesPeriodEventId == null && SalesPeriodEventId == other.SalesPeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += salesPeriodEventId.CompareTo(other.salesPeriodEventId);
+                diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
             }
-            if (displayItems == null && displayItems == other.displayItems)
+            if (DisplayItems == null && DisplayItems == other.DisplayItems)
             {
                 // null and null
             }
             else
             {
-                diff += displayItems.Count - other.displayItems.Count;
-                for (var i = 0; i < displayItems.Count; i++)
+                diff += DisplayItems.Length - other.DisplayItems.Length;
+                for (var i = 0; i < DisplayItems.Length; i++)
                 {
-                    diff += displayItems[i].CompareTo(other.displayItems[i]);
+                    diff += DisplayItems[i].CompareTo(other.DisplayItems[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["showcaseId"] = showcaseId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["salesPeriodEventId"] = salesPeriodEventId;
-            data["displayItems"] = new JsonData(displayItems.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

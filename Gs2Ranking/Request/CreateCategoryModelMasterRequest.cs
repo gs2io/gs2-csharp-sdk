@@ -28,288 +28,206 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class CreateCategoryModelMasterRequest : Gs2Request<CreateCategoryModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? MinimumValue { set; get; }
+        public long? MaximumValue { set; get; }
+        public string OrderDirection { set; get; }
+        public string Scope { set; get; }
+        public bool? UniqueByUserId { set; get; }
+        public int? CalculateFixedTimingHour { set; get; }
+        public int? CalculateFixedTimingMinute { set; get; }
+        public int? CalculateIntervalMinutes { set; get; }
+        public string EntryPeriodEventId { set; get; }
+        public string AccessPeriodEventId { set; get; }
+        public string Generation { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリモデル名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * カテゴリモデル名を設定
-         *
-         * @param name カテゴリモデル名
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** カテゴリマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * カテゴリマスターの説明を設定
-         *
-         * @param description カテゴリマスターの説明
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** カテゴリマスターのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * カテゴリマスターのメタデータを設定
-         *
-         * @param metadata カテゴリマスターのメタデータ
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** スコアの最小値 */
-		[UnityEngine.SerializeField]
-        public long? minimumValue;
-
-        /**
-         * スコアの最小値を設定
-         *
-         * @param minimumValue スコアの最小値
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithMinimumValue(long? minimumValue) {
-            this.minimumValue = minimumValue;
+            this.MinimumValue = minimumValue;
             return this;
         }
 
-
-        /** スコアの最大値 */
-		[UnityEngine.SerializeField]
-        public long? maximumValue;
-
-        /**
-         * スコアの最大値を設定
-         *
-         * @param maximumValue スコアの最大値
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithMaximumValue(long? maximumValue) {
-            this.maximumValue = maximumValue;
+            this.MaximumValue = maximumValue;
             return this;
         }
 
-
-        /** スコアのソート方向 */
-		[UnityEngine.SerializeField]
-        public string orderDirection;
-
-        /**
-         * スコアのソート方向を設定
-         *
-         * @param orderDirection スコアのソート方向
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithOrderDirection(string orderDirection) {
-            this.orderDirection = orderDirection;
+            this.OrderDirection = orderDirection;
             return this;
         }
 
-
-        /** ランキングの種類 */
-		[UnityEngine.SerializeField]
-        public string scope;
-
-        /**
-         * ランキングの種類を設定
-         *
-         * @param scope ランキングの種類
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithScope(string scope) {
-            this.scope = scope;
+            this.Scope = scope;
             return this;
         }
 
-
-        /** ユーザID毎にスコアを1つしか登録されないようにする */
-		[UnityEngine.SerializeField]
-        public bool? uniqueByUserId;
-
-        /**
-         * ユーザID毎にスコアを1つしか登録されないようにするを設定
-         *
-         * @param uniqueByUserId ユーザID毎にスコアを1つしか登録されないようにする
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
-            this.uniqueByUserId = uniqueByUserId;
+            this.UniqueByUserId = uniqueByUserId;
             return this;
         }
 
-
-        /** スコアの固定集計開始時刻(時) */
-		[UnityEngine.SerializeField]
-        public int? calculateFixedTimingHour;
-
-        /**
-         * スコアの固定集計開始時刻(時)を設定
-         *
-         * @param calculateFixedTimingHour スコアの固定集計開始時刻(時)
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
-            this.calculateFixedTimingHour = calculateFixedTimingHour;
+            this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
 
-
-        /** スコアの固定集計開始時刻(分) */
-		[UnityEngine.SerializeField]
-        public int? calculateFixedTimingMinute;
-
-        /**
-         * スコアの固定集計開始時刻(分)を設定
-         *
-         * @param calculateFixedTimingMinute スコアの固定集計開始時刻(分)
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
-            this.calculateFixedTimingMinute = calculateFixedTimingMinute;
+            this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
 
-
-        /** スコアの集計間隔(分) */
-		[UnityEngine.SerializeField]
-        public int? calculateIntervalMinutes;
-
-        /**
-         * スコアの集計間隔(分)を設定
-         *
-         * @param calculateIntervalMinutes スコアの集計間隔(分)
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
-            this.calculateIntervalMinutes = calculateIntervalMinutes;
+            this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
 
-
-        /** スコアの登録可能期間とするイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string entryPeriodEventId;
-
-        /**
-         * スコアの登録可能期間とするイベントマスター のGRNを設定
-         *
-         * @param entryPeriodEventId スコアの登録可能期間とするイベントマスター のGRN
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
-            this.entryPeriodEventId = entryPeriodEventId;
+            this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
 
-
-        /** アクセス可能期間とするイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string accessPeriodEventId;
-
-        /**
-         * アクセス可能期間とするイベントマスター のGRNを設定
-         *
-         * @param accessPeriodEventId アクセス可能期間とするイベントマスター のGRN
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithAccessPeriodEventId(string accessPeriodEventId) {
-            this.accessPeriodEventId = accessPeriodEventId;
+            this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
 
-
-        /** ランキングの世代 */
-		[UnityEngine.SerializeField]
-        public string generation;
-
-        /**
-         * ランキングの世代を設定
-         *
-         * @param generation ランキングの世代
-         * @return this
-         */
         public CreateCategoryModelMasterRequest WithGeneration(string generation) {
-            this.generation = generation;
+            this.Generation = generation;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateCategoryModelMasterRequest FromDict(JsonData data)
+        public static CreateCategoryModelMasterRequest FromJson(JsonData data)
         {
-            return new CreateCategoryModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                minimumValue = data.Keys.Contains("minimumValue") && data["minimumValue"] != null ? (long?)long.Parse(data["minimumValue"].ToString()) : null,
-                maximumValue = data.Keys.Contains("maximumValue") && data["maximumValue"] != null ? (long?)long.Parse(data["maximumValue"].ToString()) : null,
-                orderDirection = data.Keys.Contains("orderDirection") && data["orderDirection"] != null ? data["orderDirection"].ToString(): null,
-                scope = data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString(): null,
-                uniqueByUserId = data.Keys.Contains("uniqueByUserId") && data["uniqueByUserId"] != null ? (bool?)bool.Parse(data["uniqueByUserId"].ToString()) : null,
-                calculateFixedTimingHour = data.Keys.Contains("calculateFixedTimingHour") && data["calculateFixedTimingHour"] != null ? (int?)int.Parse(data["calculateFixedTimingHour"].ToString()) : null,
-                calculateFixedTimingMinute = data.Keys.Contains("calculateFixedTimingMinute") && data["calculateFixedTimingMinute"] != null ? (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()) : null,
-                calculateIntervalMinutes = data.Keys.Contains("calculateIntervalMinutes") && data["calculateIntervalMinutes"] != null ? (int?)int.Parse(data["calculateIntervalMinutes"].ToString()) : null,
-                entryPeriodEventId = data.Keys.Contains("entryPeriodEventId") && data["entryPeriodEventId"] != null ? data["entryPeriodEventId"].ToString(): null,
-                accessPeriodEventId = data.Keys.Contains("accessPeriodEventId") && data["accessPeriodEventId"] != null ? data["accessPeriodEventId"].ToString(): null,
-                generation = data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateCategoryModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithMinimumValue(!data.Keys.Contains("minimumValue") || data["minimumValue"] == null ? null : (long?)long.Parse(data["minimumValue"].ToString()))
+                .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : (long?)long.Parse(data["maximumValue"].ToString()))
+                .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
+                .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)int.Parse(data["calculateFixedTimingHour"].ToString()))
+                .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()))
+                .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
+                .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
+                .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["minimumValue"] = MinimumValue,
+                ["maximumValue"] = MaximumValue,
+                ["orderDirection"] = OrderDirection,
+                ["scope"] = Scope,
+                ["uniqueByUserId"] = UniqueByUserId,
+                ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
+                ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
+                ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
+                ["entryPeriodEventId"] = EntryPeriodEventId,
+                ["accessPeriodEventId"] = AccessPeriodEventId,
+                ["generation"] = Generation,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["minimumValue"] = minimumValue;
-            data["maximumValue"] = maximumValue;
-            data["orderDirection"] = orderDirection;
-            data["scope"] = scope;
-            data["uniqueByUserId"] = uniqueByUserId;
-            data["calculateFixedTimingHour"] = calculateFixedTimingHour;
-            data["calculateFixedTimingMinute"] = calculateFixedTimingMinute;
-            data["calculateIntervalMinutes"] = calculateIntervalMinutes;
-            data["entryPeriodEventId"] = entryPeriodEventId;
-            data["accessPeriodEventId"] = accessPeriodEventId;
-            data["generation"] = generation;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (MinimumValue != null) {
+                writer.WritePropertyName("minimumValue");
+                writer.Write(long.Parse(MinimumValue.ToString()));
+            }
+            if (MaximumValue != null) {
+                writer.WritePropertyName("maximumValue");
+                writer.Write(long.Parse(MaximumValue.ToString()));
+            }
+            if (OrderDirection != null) {
+                writer.WritePropertyName("orderDirection");
+                writer.Write(OrderDirection.ToString());
+            }
+            if (Scope != null) {
+                writer.WritePropertyName("scope");
+                writer.Write(Scope.ToString());
+            }
+            if (UniqueByUserId != null) {
+                writer.WritePropertyName("uniqueByUserId");
+                writer.Write(bool.Parse(UniqueByUserId.ToString()));
+            }
+            if (CalculateFixedTimingHour != null) {
+                writer.WritePropertyName("calculateFixedTimingHour");
+                writer.Write(int.Parse(CalculateFixedTimingHour.ToString()));
+            }
+            if (CalculateFixedTimingMinute != null) {
+                writer.WritePropertyName("calculateFixedTimingMinute");
+                writer.Write(int.Parse(CalculateFixedTimingMinute.ToString()));
+            }
+            if (CalculateIntervalMinutes != null) {
+                writer.WritePropertyName("calculateIntervalMinutes");
+                writer.Write(int.Parse(CalculateIntervalMinutes.ToString()));
+            }
+            if (EntryPeriodEventId != null) {
+                writer.WritePropertyName("entryPeriodEventId");
+                writer.Write(EntryPeriodEventId.ToString());
+            }
+            if (AccessPeriodEventId != null) {
+                writer.WritePropertyName("accessPeriodEventId");
+                writer.Write(AccessPeriodEventId.ToString());
+            }
+            if (Generation != null) {
+                writer.WritePropertyName("generation");
+                writer.Write(Generation.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

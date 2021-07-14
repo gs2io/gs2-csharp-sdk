@@ -28,198 +28,134 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class QueryAccessLogRequest : Gs2Request<QueryAccessLogRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public long? Begin { set; get; }
+        public long? End { set; get; }
+        public bool? LongTerm { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public QueryAccessLogRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** マイクロサービスの種類 */
-		[UnityEngine.SerializeField]
-        public string service;
-
-        /**
-         * マイクロサービスの種類を設定
-         *
-         * @param service マイクロサービスの種類
-         * @return this
-         */
         public QueryAccessLogRequest WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-
-        /** マイクロサービスのメソッド */
-		[UnityEngine.SerializeField]
-        public string method;
-
-        /**
-         * マイクロサービスのメソッドを設定
-         *
-         * @param method マイクロサービスのメソッド
-         * @return this
-         */
         public QueryAccessLogRequest WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public QueryAccessLogRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 検索範囲開始日時 */
-		[UnityEngine.SerializeField]
-        public long? begin;
-
-        /**
-         * 検索範囲開始日時を設定
-         *
-         * @param begin 検索範囲開始日時
-         * @return this
-         */
         public QueryAccessLogRequest WithBegin(long? begin) {
-            this.begin = begin;
+            this.Begin = begin;
             return this;
         }
 
-
-        /** 検索範囲終了日時 */
-		[UnityEngine.SerializeField]
-        public long? end;
-
-        /**
-         * 検索範囲終了日時を設定
-         *
-         * @param end 検索範囲終了日時
-         * @return this
-         */
         public QueryAccessLogRequest WithEnd(long? end) {
-            this.end = end;
+            this.End = end;
             return this;
         }
 
-
-        /** 7日より長い期間のログを検索対象とするか */
-		[UnityEngine.SerializeField]
-        public bool? longTerm;
-
-        /**
-         * 7日より長い期間のログを検索対象とするかを設定
-         *
-         * @param longTerm 7日より長い期間のログを検索対象とするか
-         * @return this
-         */
         public QueryAccessLogRequest WithLongTerm(bool? longTerm) {
-            this.longTerm = longTerm;
+            this.LongTerm = longTerm;
             return this;
         }
 
-
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
         public QueryAccessLogRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
+            this.PageToken = pageToken;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public QueryAccessLogRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public QueryAccessLogRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public QueryAccessLogRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static QueryAccessLogRequest FromDict(JsonData data)
+        public static QueryAccessLogRequest FromJson(JsonData data)
         {
-            return new QueryAccessLogRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                service = data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString(): null,
-                method = data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                begin = data.Keys.Contains("begin") && data["begin"] != null ? (long?)long.Parse(data["begin"].ToString()) : null,
-                end = data.Keys.Contains("end") && data["end"] != null ? (long?)long.Parse(data["end"].ToString()) : null,
-                longTerm = data.Keys.Contains("longTerm") && data["longTerm"] != null ? (bool?)bool.Parse(data["longTerm"].ToString()) : null,
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new QueryAccessLogRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)long.Parse(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)long.Parse(data["end"].ToString()))
+                .WithLongTerm(!data.Keys.Contains("longTerm") || data["longTerm"] == null ? null : (bool?)bool.Parse(data["longTerm"].ToString()))
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["service"] = Service,
+                ["method"] = Method,
+                ["userId"] = UserId,
+                ["begin"] = Begin,
+                ["end"] = End,
+                ["longTerm"] = LongTerm,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["service"] = service;
-            data["method"] = method;
-            data["userId"] = userId;
-            data["begin"] = begin;
-            data["end"] = end;
-            data["longTerm"] = longTerm;
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Service != null) {
+                writer.WritePropertyName("service");
+                writer.Write(Service.ToString());
+            }
+            if (Method != null) {
+                writer.WritePropertyName("method");
+                writer.Write(Method.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Begin != null) {
+                writer.WritePropertyName("begin");
+                writer.Write(long.Parse(Begin.ToString()));
+            }
+            if (End != null) {
+                writer.WritePropertyName("end");
+                writer.Write(long.Parse(End.ToString()));
+            }
+            if (LongTerm != null) {
+                writer.WritePropertyName("longTerm");
+                writer.Write(bool.Parse(LongTerm.ToString()));
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

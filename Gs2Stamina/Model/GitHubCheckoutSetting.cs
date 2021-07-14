@@ -23,236 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Stamina.Model
 {
+
 	[Preserve]
 	public class GitHubCheckoutSetting : IComparable
 	{
+        public string ApiKeyId { set; get; }
+        public string RepositoryName { set; get; }
+        public string SourcePath { set; get; }
+        public string ReferenceType { set; get; }
+        public string CommitHash { set; get; }
+        public string BranchName { set; get; }
+        public string TagName { set; get; }
 
-        /** リソースの取得に使用するGitHub のAPIキー のGRN */
-        public string apiKeyId { set; get; }
-
-        /**
-         * リソースの取得に使用するGitHub のAPIキー のGRNを設定
-         *
-         * @param apiKeyId リソースの取得に使用するGitHub のAPIキー のGRN
-         * @return this
-         */
         public GitHubCheckoutSetting WithApiKeyId(string apiKeyId) {
-            this.apiKeyId = apiKeyId;
+            this.ApiKeyId = apiKeyId;
             return this;
         }
 
-        /** リポジトリ名 */
-        public string repositoryName { set; get; }
-
-        /**
-         * リポジトリ名を設定
-         *
-         * @param repositoryName リポジトリ名
-         * @return this
-         */
         public GitHubCheckoutSetting WithRepositoryName(string repositoryName) {
-            this.repositoryName = repositoryName;
+            this.RepositoryName = repositoryName;
             return this;
         }
 
-        /** ソースコードのファイルパス */
-        public string sourcePath { set; get; }
-
-        /**
-         * ソースコードのファイルパスを設定
-         *
-         * @param sourcePath ソースコードのファイルパス
-         * @return this
-         */
         public GitHubCheckoutSetting WithSourcePath(string sourcePath) {
-            this.sourcePath = sourcePath;
+            this.SourcePath = sourcePath;
             return this;
         }
 
-        /** コードの取得元 */
-        public string referenceType { set; get; }
-
-        /**
-         * コードの取得元を設定
-         *
-         * @param referenceType コードの取得元
-         * @return this
-         */
         public GitHubCheckoutSetting WithReferenceType(string referenceType) {
-            this.referenceType = referenceType;
+            this.ReferenceType = referenceType;
             return this;
         }
 
-        /** コミットハッシュ */
-        public string commitHash { set; get; }
-
-        /**
-         * コミットハッシュを設定
-         *
-         * @param commitHash コミットハッシュ
-         * @return this
-         */
         public GitHubCheckoutSetting WithCommitHash(string commitHash) {
-            this.commitHash = commitHash;
+            this.CommitHash = commitHash;
             return this;
         }
 
-        /** ブランチ名 */
-        public string branchName { set; get; }
-
-        /**
-         * ブランチ名を設定
-         *
-         * @param branchName ブランチ名
-         * @return this
-         */
         public GitHubCheckoutSetting WithBranchName(string branchName) {
-            this.branchName = branchName;
+            this.BranchName = branchName;
             return this;
         }
 
-        /** タグ名 */
-        public string tagName { set; get; }
-
-        /**
-         * タグ名を設定
-         *
-         * @param tagName タグ名
-         * @return this
-         */
         public GitHubCheckoutSetting WithTagName(string tagName) {
-            this.tagName = tagName;
+            this.TagName = tagName;
             return this;
+        }
+
+    	[Preserve]
+        public static GitHubCheckoutSetting FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new GitHubCheckoutSetting()
+                .WithApiKeyId(!data.Keys.Contains("apiKeyId") || data["apiKeyId"] == null ? null : data["apiKeyId"].ToString())
+                .WithRepositoryName(!data.Keys.Contains("repositoryName") || data["repositoryName"] == null ? null : data["repositoryName"].ToString())
+                .WithSourcePath(!data.Keys.Contains("sourcePath") || data["sourcePath"] == null ? null : data["sourcePath"].ToString())
+                .WithReferenceType(!data.Keys.Contains("referenceType") || data["referenceType"] == null ? null : data["referenceType"].ToString())
+                .WithCommitHash(!data.Keys.Contains("commitHash") || data["commitHash"] == null ? null : data["commitHash"].ToString())
+                .WithBranchName(!data.Keys.Contains("branchName") || data["branchName"] == null ? null : data["branchName"].ToString())
+                .WithTagName(!data.Keys.Contains("tagName") || data["tagName"] == null ? null : data["tagName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["apiKeyId"] = ApiKeyId,
+                ["repositoryName"] = RepositoryName,
+                ["sourcePath"] = SourcePath,
+                ["referenceType"] = ReferenceType,
+                ["commitHash"] = CommitHash,
+                ["branchName"] = BranchName,
+                ["tagName"] = TagName,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.apiKeyId != null)
-            {
+            if (ApiKeyId != null) {
                 writer.WritePropertyName("apiKeyId");
-                writer.Write(this.apiKeyId);
+                writer.Write(ApiKeyId.ToString());
             }
-            if(this.repositoryName != null)
-            {
+            if (RepositoryName != null) {
                 writer.WritePropertyName("repositoryName");
-                writer.Write(this.repositoryName);
+                writer.Write(RepositoryName.ToString());
             }
-            if(this.sourcePath != null)
-            {
+            if (SourcePath != null) {
                 writer.WritePropertyName("sourcePath");
-                writer.Write(this.sourcePath);
+                writer.Write(SourcePath.ToString());
             }
-            if(this.referenceType != null)
-            {
+            if (ReferenceType != null) {
                 writer.WritePropertyName("referenceType");
-                writer.Write(this.referenceType);
+                writer.Write(ReferenceType.ToString());
             }
-            if(this.commitHash != null)
-            {
+            if (CommitHash != null) {
                 writer.WritePropertyName("commitHash");
-                writer.Write(this.commitHash);
+                writer.Write(CommitHash.ToString());
             }
-            if(this.branchName != null)
-            {
+            if (BranchName != null) {
                 writer.WritePropertyName("branchName");
-                writer.Write(this.branchName);
+                writer.Write(BranchName.ToString());
             }
-            if(this.tagName != null)
-            {
+            if (TagName != null) {
                 writer.WritePropertyName("tagName");
-                writer.Write(this.tagName);
+                writer.Write(TagName.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static GitHubCheckoutSetting FromDict(JsonData data)
-        {
-            return new GitHubCheckoutSetting()
-                .WithApiKeyId(data.Keys.Contains("apiKeyId") && data["apiKeyId"] != null ? data["apiKeyId"].ToString() : null)
-                .WithRepositoryName(data.Keys.Contains("repositoryName") && data["repositoryName"] != null ? data["repositoryName"].ToString() : null)
-                .WithSourcePath(data.Keys.Contains("sourcePath") && data["sourcePath"] != null ? data["sourcePath"].ToString() : null)
-                .WithReferenceType(data.Keys.Contains("referenceType") && data["referenceType"] != null ? data["referenceType"].ToString() : null)
-                .WithCommitHash(data.Keys.Contains("commitHash") && data["commitHash"] != null ? data["commitHash"].ToString() : null)
-                .WithBranchName(data.Keys.Contains("branchName") && data["branchName"] != null ? data["branchName"].ToString() : null)
-                .WithTagName(data.Keys.Contains("tagName") && data["tagName"] != null ? data["tagName"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as GitHubCheckoutSetting;
             var diff = 0;
-            if (apiKeyId == null && apiKeyId == other.apiKeyId)
+            if (ApiKeyId == null && ApiKeyId == other.ApiKeyId)
             {
                 // null and null
             }
             else
             {
-                diff += apiKeyId.CompareTo(other.apiKeyId);
+                diff += ApiKeyId.CompareTo(other.ApiKeyId);
             }
-            if (repositoryName == null && repositoryName == other.repositoryName)
+            if (RepositoryName == null && RepositoryName == other.RepositoryName)
             {
                 // null and null
             }
             else
             {
-                diff += repositoryName.CompareTo(other.repositoryName);
+                diff += RepositoryName.CompareTo(other.RepositoryName);
             }
-            if (sourcePath == null && sourcePath == other.sourcePath)
+            if (SourcePath == null && SourcePath == other.SourcePath)
             {
                 // null and null
             }
             else
             {
-                diff += sourcePath.CompareTo(other.sourcePath);
+                diff += SourcePath.CompareTo(other.SourcePath);
             }
-            if (referenceType == null && referenceType == other.referenceType)
+            if (ReferenceType == null && ReferenceType == other.ReferenceType)
             {
                 // null and null
             }
             else
             {
-                diff += referenceType.CompareTo(other.referenceType);
+                diff += ReferenceType.CompareTo(other.ReferenceType);
             }
-            if (commitHash == null && commitHash == other.commitHash)
+            if (CommitHash == null && CommitHash == other.CommitHash)
             {
                 // null and null
             }
             else
             {
-                diff += commitHash.CompareTo(other.commitHash);
+                diff += CommitHash.CompareTo(other.CommitHash);
             }
-            if (branchName == null && branchName == other.branchName)
+            if (BranchName == null && BranchName == other.BranchName)
             {
                 // null and null
             }
             else
             {
-                diff += branchName.CompareTo(other.branchName);
+                diff += BranchName.CompareTo(other.BranchName);
             }
-            if (tagName == null && tagName == other.tagName)
+            if (TagName == null && TagName == other.TagName)
             {
                 // null and null
             }
             else
             {
-                diff += tagName.CompareTo(other.tagName);
+                diff += TagName.CompareTo(other.TagName);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["apiKeyId"] = apiKeyId;
-            data["repositoryName"] = repositoryName;
-            data["sourcePath"] = sourcePath;
-            data["referenceType"] = referenceType;
-            data["commitHash"] = commitHash;
-            data["branchName"] = branchName;
-            data["tagName"] = tagName;
-            return data;
-        }
-	}
+    }
 }

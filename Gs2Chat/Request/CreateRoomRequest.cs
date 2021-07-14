@@ -28,144 +28,106 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class CreateRoomRequest : Gs2Request<CreateRoomRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Password { set; get; }
+        public string[] WhiteListUserIds { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateRoomRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param name ルーム名
-         * @return this
-         */
-        public CreateRoomRequest WithName(string name) {
-            this.name = name;
-            return this;
-        }
-
-
-        /** メタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
-        public CreateRoomRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
-            return this;
-        }
-
-
-        /** メッセージを投稿するために必要となるパスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * メッセージを投稿するために必要となるパスワードを設定
-         *
-         * @param password メッセージを投稿するために必要となるパスワード
-         * @return this
-         */
-        public CreateRoomRequest WithPassword(string password) {
-            this.password = password;
-            return this;
-        }
-
-
-        /** ルームに参加可能なユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> whiteListUserIds;
-
-        /**
-         * ルームに参加可能なユーザIDリストを設定
-         *
-         * @param whiteListUserIds ルームに参加可能なユーザIDリスト
-         * @return this
-         */
-        public CreateRoomRequest WithWhiteListUserIds(List<string> whiteListUserIds) {
-            this.whiteListUserIds = whiteListUserIds;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public CreateRoomRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public CreateRoomRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public CreateRoomRequest WithName(string name) {
+            this.Name = name;
+            return this;
+        }
+
+        public CreateRoomRequest WithMetadata(string metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
+        public CreateRoomRequest WithPassword(string password) {
+            this.Password = password;
+            return this;
+        }
+
+        public CreateRoomRequest WithWhiteListUserIds(string[] whiteListUserIds) {
+            this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
 
     	[Preserve]
-        public static CreateRoomRequest FromDict(JsonData data)
+        public static CreateRoomRequest FromJson(JsonData data)
         {
-            return new CreateRoomRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
-                whiteListUserIds = data.Keys.Contains("whiteListUserIds") && data["whiteListUserIds"] != null ? data["whiteListUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateRoomRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["password"] = Password,
+                ["whiteListUserIds"] = new JsonData(WhiteListUserIds == null ? new JsonData[]{} :
+                        WhiteListUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["password"] = password;
-            data["whiteListUserIds"] = new JsonData(whiteListUserIds);
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var whiteListUserId in WhiteListUserIds)
+            {
+                writer.Write(whiteListUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

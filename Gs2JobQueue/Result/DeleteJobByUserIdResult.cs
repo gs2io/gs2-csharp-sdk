@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2JobQueue.Result
 {
 	[Preserve]
-	public class DeleteJobByUserIdResult
+	[System.Serializable]
+	public class DeleteJobByUserIdResult : IResult
 	{
-        /** ジョブ */
-        public Job item { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
 
+        public DeleteJobByUserIdResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteJobByUserIdResult FromDict(JsonData data)
+        public static DeleteJobByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteJobByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2JobQueue.Model.Job.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteJobByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2JobQueue.Model.Job.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

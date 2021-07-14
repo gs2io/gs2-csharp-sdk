@@ -28,112 +28,94 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateThresholdMasterRequest : Gs2Request<UpdateThresholdMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ThresholdName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long[] Values { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateThresholdMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ランクアップ閾値名 */
-		[UnityEngine.SerializeField]
-        public string thresholdName;
-
-        /**
-         * ランクアップ閾値名を設定
-         *
-         * @param thresholdName ランクアップ閾値名
-         * @return this
-         */
         public UpdateThresholdMasterRequest WithThresholdName(string thresholdName) {
-            this.thresholdName = thresholdName;
+            this.ThresholdName = thresholdName;
             return this;
         }
 
-
-        /** ランクアップ閾値マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ランクアップ閾値マスターの説明を設定
-         *
-         * @param description ランクアップ閾値マスターの説明
-         * @return this
-         */
         public UpdateThresholdMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ランクアップ閾値のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * ランクアップ閾値のメタデータを設定
-         *
-         * @param metadata ランクアップ閾値のメタデータ
-         * @return this
-         */
         public UpdateThresholdMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** ランクアップ経験値閾値リスト */
-		[UnityEngine.SerializeField]
-        public List<long?> values;
-
-        /**
-         * ランクアップ経験値閾値リストを設定
-         *
-         * @param values ランクアップ経験値閾値リスト
-         * @return this
-         */
-        public UpdateThresholdMasterRequest WithValues(List<long?> values) {
-            this.values = values;
+        public UpdateThresholdMasterRequest WithValues(long[] values) {
+            this.Values = values;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateThresholdMasterRequest FromDict(JsonData data)
+        public static UpdateThresholdMasterRequest FromJson(JsonData data)
         {
-            return new UpdateThresholdMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                thresholdName = data.Keys.Contains("thresholdName") && data["thresholdName"] != null ? data["thresholdName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                values = data.Keys.Contains("values") && data["values"] != null ? data["values"].Cast<JsonData>().Select(value =>
-                    {
-                        return (long?)long.Parse(value.ToString());
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateThresholdMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithThresholdName(!data.Keys.Contains("thresholdName") || data["thresholdName"] == null ? null : data["thresholdName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
+                    return long.Parse(v.ToString());
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["thresholdName"] = ThresholdName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                        Values.Select(v => {
+                            return new JsonData((long?)long.Parse(v.ToString()));
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["thresholdName"] = thresholdName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["values"] = new JsonData(values);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ThresholdName != null) {
+                writer.WritePropertyName("thresholdName");
+                writer.Write(ThresholdName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var value in Values)
+            {
+                writer.Write(long.Parse(value.ToString()));
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,90 +28,74 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateAccountRequest : Gs2Request<CreateAccountRequest>
 	{
+        public string Email { set; get; }
+        public string FullName { set; get; }
+        public string CompanyName { set; get; }
+        public string Password { set; get; }
 
-        /** メールアドレス */
-		[UnityEngine.SerializeField]
-        public string email;
-
-        /**
-         * メールアドレスを設定
-         *
-         * @param email メールアドレス
-         * @return this
-         */
         public CreateAccountRequest WithEmail(string email) {
-            this.email = email;
+            this.Email = email;
             return this;
         }
 
-
-        /** フルネーム */
-		[UnityEngine.SerializeField]
-        public string fullName;
-
-        /**
-         * フルネームを設定
-         *
-         * @param fullName フルネーム
-         * @return this
-         */
         public CreateAccountRequest WithFullName(string fullName) {
-            this.fullName = fullName;
+            this.FullName = fullName;
             return this;
         }
 
-
-        /** 会社名 */
-		[UnityEngine.SerializeField]
-        public string companyName;
-
-        /**
-         * 会社名を設定
-         *
-         * @param companyName 会社名
-         * @return this
-         */
         public CreateAccountRequest WithCompanyName(string companyName) {
-            this.companyName = companyName;
+            this.CompanyName = companyName;
             return this;
         }
 
-
-        /** パスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public CreateAccountRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateAccountRequest FromDict(JsonData data)
+        public static CreateAccountRequest FromJson(JsonData data)
         {
-            return new CreateAccountRequest {
-                email = data.Keys.Contains("email") && data["email"] != null ? data["email"].ToString(): null,
-                fullName = data.Keys.Contains("fullName") && data["fullName"] != null ? data["fullName"].ToString(): null,
-                companyName = data.Keys.Contains("companyName") && data["companyName"] != null ? data["companyName"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateAccountRequest()
+                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
+                .WithFullName(!data.Keys.Contains("fullName") || data["fullName"] == null ? null : data["fullName"].ToString())
+                .WithCompanyName(!data.Keys.Contains("companyName") || data["companyName"] == null ? null : data["companyName"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["email"] = Email,
+                ["fullName"] = FullName,
+                ["companyName"] = CompanyName,
+                ["password"] = Password,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["email"] = email;
-            data["fullName"] = fullName;
-            data["companyName"] = companyName;
-            data["password"] = password;
-            return data;
+            writer.WriteObjectStart();
+            if (Email != null) {
+                writer.WritePropertyName("email");
+                writer.Write(Email.ToString());
+            }
+            if (FullName != null) {
+                writer.WritePropertyName("fullName");
+                writer.Write(FullName.ToString());
+            }
+            if (CompanyName != null) {
+                writer.WritePropertyName("companyName");
+                writer.Write(CompanyName.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

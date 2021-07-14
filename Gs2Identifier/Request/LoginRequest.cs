@@ -28,54 +28,50 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class LoginRequest : Gs2Request<LoginRequest>
 	{
+        public string ClientId { set; get; }
+        public string ClientSecret { set; get; }
 
-        /** クライアントID */
-		[UnityEngine.SerializeField]
-        public string clientId;
-
-        /**
-         * クライアントIDを設定
-         *
-         * @param clientId クライアントID
-         * @return this
-         */
         public LoginRequest WithClientId(string clientId) {
-            this.clientId = clientId;
+            this.ClientId = clientId;
             return this;
         }
 
-
-        /** クライアントシークレット */
-		[UnityEngine.SerializeField]
-        public string clientSecret;
-
-        /**
-         * クライアントシークレットを設定
-         *
-         * @param clientSecret クライアントシークレット
-         * @return this
-         */
         public LoginRequest WithClientSecret(string clientSecret) {
-            this.clientSecret = clientSecret;
+            this.ClientSecret = clientSecret;
             return this;
         }
-
 
     	[Preserve]
-        public static LoginRequest FromDict(JsonData data)
+        public static LoginRequest FromJson(JsonData data)
         {
-            return new LoginRequest {
-                clientId = data.Keys.Contains("clientId") && data["clientId"] != null ? data["clientId"].ToString(): null,
-                clientSecret = data.Keys.Contains("clientSecret") && data["clientSecret"] != null ? data["clientSecret"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new LoginRequest()
+                .WithClientId(!data.Keys.Contains("clientId") || data["clientId"] == null ? null : data["clientId"].ToString())
+                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["clientId"] = ClientId,
+                ["clientSecret"] = ClientSecret,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["clientId"] = clientId;
-            data["clientSecret"] = clientSecret;
-            return data;
+            writer.WriteObjectStart();
+            if (ClientId != null) {
+                writer.WritePropertyName("clientId");
+                writer.Write(ClientId.ToString());
+            }
+            if (ClientSecret != null) {
+                writer.WritePropertyName("clientSecret");
+                writer.Write(ClientSecret.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

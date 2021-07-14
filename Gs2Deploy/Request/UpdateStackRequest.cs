@@ -28,72 +28,62 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class UpdateStackRequest : Gs2Request<UpdateStackRequest>
 	{
+        public string StackName { set; get; }
+        public string Description { set; get; }
+        public string Template { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public UpdateStackRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
-        /** スタックの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * スタックの説明を設定
-         *
-         * @param description スタックの説明
-         * @return this
-         */
         public UpdateStackRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** テンプレートデータ */
-		[UnityEngine.SerializeField]
-        public string template;
-
-        /**
-         * テンプレートデータを設定
-         *
-         * @param template テンプレートデータ
-         * @return this
-         */
         public UpdateStackRequest WithTemplate(string template) {
-            this.template = template;
+            this.Template = template;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateStackRequest FromDict(JsonData data)
+        public static UpdateStackRequest FromJson(JsonData data)
         {
-            return new UpdateStackRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                template = data.Keys.Contains("template") && data["template"] != null ? data["template"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateStackRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
+                ["description"] = Description,
+                ["template"] = Template,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            data["description"] = description;
-            data["template"] = template;
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Template != null) {
+                writer.WritePropertyName("template");
+                writer.Write(Template.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Distributor.Result
 {
 	[Preserve]
-	public class DescribeDistributorModelsResult
+	[System.Serializable]
+	public class DescribeDistributorModelsResult : IResult
 	{
-        /** 配信設定のリスト */
-        public List<DistributorModel> items { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributorModel[] Items { set; get; }
 
+        public DescribeDistributorModelsResult WithItems(Gs2.Gs2Distributor.Model.DistributorModel[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeDistributorModelsResult FromDict(JsonData data)
+        public static DescribeDistributorModelsResult FromJson(JsonData data)
         {
-            return new DescribeDistributorModelsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Distributor.Model.DistributorModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeDistributorModelsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Distributor.Model.DistributorModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Distributor.Model.DistributorModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

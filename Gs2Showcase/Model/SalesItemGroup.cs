@@ -23,133 +23,115 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Showcase.Model
 {
+
 	[Preserve]
 	public class SalesItemGroup : IComparable
 	{
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Showcase.Model.SalesItem[] SalesItems { set; get; }
 
-        /** 商品グループ名 */
-        public string name { set; get; }
-
-        /**
-         * 商品グループ名を設定
-         *
-         * @param name 商品グループ名
-         * @return this
-         */
         public SalesItemGroup WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public SalesItemGroup WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 商品リスト */
-        public List<SalesItem> salesItems { set; get; }
-
-        /**
-         * 商品リストを設定
-         *
-         * @param salesItems 商品リスト
-         * @return this
-         */
-        public SalesItemGroup WithSalesItems(List<SalesItem> salesItems) {
-            this.salesItems = salesItems;
+        public SalesItemGroup WithSalesItems(Gs2.Gs2Showcase.Model.SalesItem[] salesItems) {
+            this.SalesItems = salesItems;
             return this;
+        }
+
+    	[Preserve]
+        public static SalesItemGroup FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SalesItemGroup()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithSalesItems(!data.Keys.Contains("salesItems") || data["salesItems"] == null ? new Gs2.Gs2Showcase.Model.SalesItem[]{} : data["salesItems"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.SalesItem.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["salesItems"] = new JsonData(SalesItems == null ? new JsonData[]{} :
+                        SalesItems.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.salesItems != null)
-            {
+            if (SalesItems != null) {
                 writer.WritePropertyName("salesItems");
                 writer.WriteArrayStart();
-                foreach(var item in this.salesItems)
+                foreach (var salesItem in SalesItems)
                 {
-                    item.WriteJson(writer);
+                    if (salesItem != null) {
+                        salesItem.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static SalesItemGroup FromDict(JsonData data)
-        {
-            return new SalesItemGroup()
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithSalesItems(data.Keys.Contains("salesItems") && data["salesItems"] != null ? data["salesItems"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Showcase.Model.SalesItem.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as SalesItemGroup;
             var diff = 0;
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (salesItems == null && salesItems == other.salesItems)
+            if (SalesItems == null && SalesItems == other.SalesItems)
             {
                 // null and null
             }
             else
             {
-                diff += salesItems.Count - other.salesItems.Count;
-                for (var i = 0; i < salesItems.Count; i++)
+                diff += SalesItems.Length - other.SalesItems.Length;
+                for (var i = 0; i < SalesItems.Length; i++)
                 {
-                    diff += salesItems[i].CompareTo(other.salesItems[i]);
+                    diff += SalesItems[i].CompareTo(other.SalesItems[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["salesItems"] = new JsonData(salesItems.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

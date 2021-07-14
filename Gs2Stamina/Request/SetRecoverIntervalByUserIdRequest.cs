@@ -28,108 +28,74 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class SetRecoverIntervalByUserIdRequest : Gs2Request<SetRecoverIntervalByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string StaminaName { set; get; }
+        public string UserId { set; get; }
+        public int? RecoverIntervalMinutes { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetRecoverIntervalByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スタミナの種類名 */
-		[UnityEngine.SerializeField]
-        public string staminaName;
-
-        /**
-         * スタミナの種類名を設定
-         *
-         * @param staminaName スタミナの種類名
-         * @return this
-         */
         public SetRecoverIntervalByUserIdRequest WithStaminaName(string staminaName) {
-            this.staminaName = staminaName;
+            this.StaminaName = staminaName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public SetRecoverIntervalByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** スタミナの回復間隔(分) */
-		[UnityEngine.SerializeField]
-        public int? recoverIntervalMinutes;
-
-        /**
-         * スタミナの回復間隔(分)を設定
-         *
-         * @param recoverIntervalMinutes スタミナの回復間隔(分)
-         * @return this
-         */
         public SetRecoverIntervalByUserIdRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
-            this.recoverIntervalMinutes = recoverIntervalMinutes;
+            this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetRecoverIntervalByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static SetRecoverIntervalByUserIdRequest FromDict(JsonData data)
+        public static SetRecoverIntervalByUserIdRequest FromJson(JsonData data)
         {
-            return new SetRecoverIntervalByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                staminaName = data.Keys.Contains("staminaName") && data["staminaName"] != null ? data["staminaName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                recoverIntervalMinutes = data.Keys.Contains("recoverIntervalMinutes") && data["recoverIntervalMinutes"] != null ? (int?)int.Parse(data["recoverIntervalMinutes"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetRecoverIntervalByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["staminaName"] = StaminaName,
+                ["userId"] = UserId,
+                ["recoverIntervalMinutes"] = RecoverIntervalMinutes,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["staminaName"] = staminaName;
-            data["userId"] = userId;
-            data["recoverIntervalMinutes"] = recoverIntervalMinutes;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (StaminaName != null) {
+                writer.WritePropertyName("staminaName");
+                writer.Write(StaminaName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (RecoverIntervalMinutes != null) {
+                writer.WritePropertyName("recoverIntervalMinutes");
+                writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

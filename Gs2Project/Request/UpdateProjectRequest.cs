@@ -28,162 +28,122 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateProjectRequest : Gs2Request<UpdateProjectRequest>
 	{
+        public string AccountToken { set; get; }
+        public string ProjectName { set; get; }
+        public string Description { set; get; }
+        public string Plan { set; get; }
+        public string BillingMethodName { set; get; }
+        public string EnableEventBridge { set; get; }
+        public string EventBridgeAwsAccountId { set; get; }
+        public string EventBridgeAwsRegion { set; get; }
 
-        /** GS2アカウントトークン */
-		[UnityEngine.SerializeField]
-        public string accountToken;
-
-        /**
-         * GS2アカウントトークンを設定
-         *
-         * @param accountToken GS2アカウントトークン
-         * @return this
-         */
         public UpdateProjectRequest WithAccountToken(string accountToken) {
-            this.accountToken = accountToken;
+            this.AccountToken = accountToken;
             return this;
         }
 
-
-        /** プロジェクト名 */
-		[UnityEngine.SerializeField]
-        public string projectName;
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param projectName プロジェクト名
-         * @return this
-         */
         public UpdateProjectRequest WithProjectName(string projectName) {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
             return this;
         }
 
-
-        /** プロジェクトの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * プロジェクトの説明を設定
-         *
-         * @param description プロジェクトの説明
-         * @return this
-         */
         public UpdateProjectRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 契約プラン */
-		[UnityEngine.SerializeField]
-        public string plan;
-
-        /**
-         * 契約プランを設定
-         *
-         * @param plan 契約プラン
-         * @return this
-         */
         public UpdateProjectRequest WithPlan(string plan) {
-            this.plan = plan;
+            this.Plan = plan;
             return this;
         }
 
-
-        /** 支払い方法名 */
-		[UnityEngine.SerializeField]
-        public string billingMethodName;
-
-        /**
-         * 支払い方法名を設定
-         *
-         * @param billingMethodName 支払い方法名
-         * @return this
-         */
         public UpdateProjectRequest WithBillingMethodName(string billingMethodName) {
-            this.billingMethodName = billingMethodName;
+            this.BillingMethodName = billingMethodName;
             return this;
         }
 
-
-        /** AWS EventBridge の設定 */
-		[UnityEngine.SerializeField]
-        public string enableEventBridge;
-
-        /**
-         * AWS EventBridge の設定を設定
-         *
-         * @param enableEventBridge AWS EventBridge の設定
-         * @return this
-         */
         public UpdateProjectRequest WithEnableEventBridge(string enableEventBridge) {
-            this.enableEventBridge = enableEventBridge;
+            this.EnableEventBridge = enableEventBridge;
             return this;
         }
 
-
-        /** 通知に使用するAWSアカウントのID */
-		[UnityEngine.SerializeField]
-        public string eventBridgeAwsAccountId;
-
-        /**
-         * 通知に使用するAWSアカウントのIDを設定
-         *
-         * @param eventBridgeAwsAccountId 通知に使用するAWSアカウントのID
-         * @return this
-         */
         public UpdateProjectRequest WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
-            this.eventBridgeAwsAccountId = eventBridgeAwsAccountId;
+            this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
 
-
-        /** 通知に使用するAWSリージョン */
-		[UnityEngine.SerializeField]
-        public string eventBridgeAwsRegion;
-
-        /**
-         * 通知に使用するAWSリージョンを設定
-         *
-         * @param eventBridgeAwsRegion 通知に使用するAWSリージョン
-         * @return this
-         */
         public UpdateProjectRequest WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
-            this.eventBridgeAwsRegion = eventBridgeAwsRegion;
+            this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateProjectRequest FromDict(JsonData data)
+        public static UpdateProjectRequest FromJson(JsonData data)
         {
-            return new UpdateProjectRequest {
-                accountToken = data.Keys.Contains("accountToken") && data["accountToken"] != null ? data["accountToken"].ToString(): null,
-                projectName = data.Keys.Contains("projectName") && data["projectName"] != null ? data["projectName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                plan = data.Keys.Contains("plan") && data["plan"] != null ? data["plan"].ToString(): null,
-                billingMethodName = data.Keys.Contains("billingMethodName") && data["billingMethodName"] != null ? data["billingMethodName"].ToString(): null,
-                enableEventBridge = data.Keys.Contains("enableEventBridge") && data["enableEventBridge"] != null ? data["enableEventBridge"].ToString(): null,
-                eventBridgeAwsAccountId = data.Keys.Contains("eventBridgeAwsAccountId") && data["eventBridgeAwsAccountId"] != null ? data["eventBridgeAwsAccountId"].ToString(): null,
-                eventBridgeAwsRegion = data.Keys.Contains("eventBridgeAwsRegion") && data["eventBridgeAwsRegion"] != null ? data["eventBridgeAwsRegion"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateProjectRequest()
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPlan(!data.Keys.Contains("plan") || data["plan"] == null ? null : data["plan"].ToString())
+                .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())
+                .WithEnableEventBridge(!data.Keys.Contains("enableEventBridge") || data["enableEventBridge"] == null ? null : data["enableEventBridge"].ToString())
+                .WithEventBridgeAwsAccountId(!data.Keys.Contains("eventBridgeAwsAccountId") || data["eventBridgeAwsAccountId"] == null ? null : data["eventBridgeAwsAccountId"].ToString())
+                .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountToken"] = AccountToken,
+                ["projectName"] = ProjectName,
+                ["description"] = Description,
+                ["plan"] = Plan,
+                ["billingMethodName"] = BillingMethodName,
+                ["enableEventBridge"] = EnableEventBridge,
+                ["eventBridgeAwsAccountId"] = EventBridgeAwsAccountId,
+                ["eventBridgeAwsRegion"] = EventBridgeAwsRegion,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["accountToken"] = accountToken;
-            data["projectName"] = projectName;
-            data["description"] = description;
-            data["plan"] = plan;
-            data["billingMethodName"] = billingMethodName;
-            data["enableEventBridge"] = enableEventBridge;
-            data["eventBridgeAwsAccountId"] = eventBridgeAwsAccountId;
-            data["eventBridgeAwsRegion"] = eventBridgeAwsRegion;
-            return data;
+            writer.WriteObjectStart();
+            if (AccountToken != null) {
+                writer.WritePropertyName("accountToken");
+                writer.Write(AccountToken.ToString());
+            }
+            if (ProjectName != null) {
+                writer.WritePropertyName("projectName");
+                writer.Write(ProjectName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Plan != null) {
+                writer.WritePropertyName("plan");
+                writer.Write(Plan.ToString());
+            }
+            if (BillingMethodName != null) {
+                writer.WritePropertyName("billingMethodName");
+                writer.Write(BillingMethodName.ToString());
+            }
+            if (EnableEventBridge != null) {
+                writer.WritePropertyName("enableEventBridge");
+                writer.Write(EnableEventBridge.ToString());
+            }
+            if (EventBridgeAwsAccountId != null) {
+                writer.WritePropertyName("eventBridgeAwsAccountId");
+                writer.Write(EventBridgeAwsAccountId.ToString());
+            }
+            if (EventBridgeAwsRegion != null) {
+                writer.WritePropertyName("eventBridgeAwsRegion");
+                writer.Write(EventBridgeAwsRegion.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

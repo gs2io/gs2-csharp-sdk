@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Showcase.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Showcase.Result
 {
 	[Preserve]
-	public class GetShowcaseResult
+	[System.Serializable]
+	public class GetShowcaseResult : IResult
 	{
-        /** 陳列棚 */
-        public Showcase item { set; get; }
+        public Gs2.Gs2Showcase.Model.Showcase Item { set; get; }
 
+        public GetShowcaseResult WithItem(Gs2.Gs2Showcase.Model.Showcase item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetShowcaseResult FromDict(JsonData data)
+        public static GetShowcaseResult FromJson(JsonData data)
         {
-            return new GetShowcaseResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Showcase.Model.Showcase.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetShowcaseResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.Showcase.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

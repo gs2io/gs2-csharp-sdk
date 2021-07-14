@@ -23,133 +23,114 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Identifier.Model
 {
+
 	[Preserve]
 	public class AttachSecurityPolicy : IComparable
 	{
+        public string UserId { set; get; }
+        public string[] SecurityPolicyIds { set; get; }
+        public long? AttachedAt { set; get; }
 
-        /** ユーザ のGRN */
-        public string userId { set; get; }
-
-        /**
-         * ユーザ のGRNを設定
-         *
-         * @param userId ユーザ のGRN
-         * @return this
-         */
         public AttachSecurityPolicy WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** セキュリティポリシー のGRNのリスト */
-        public List<string> securityPolicyIds { set; get; }
-
-        /**
-         * セキュリティポリシー のGRNのリストを設定
-         *
-         * @param securityPolicyIds セキュリティポリシー のGRNのリスト
-         * @return this
-         */
-        public AttachSecurityPolicy WithSecurityPolicyIds(List<string> securityPolicyIds) {
-            this.securityPolicyIds = securityPolicyIds;
+        public AttachSecurityPolicy WithSecurityPolicyIds(string[] securityPolicyIds) {
+            this.SecurityPolicyIds = securityPolicyIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? attachedAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param attachedAt 作成日時
-         * @return this
-         */
         public AttachSecurityPolicy WithAttachedAt(long? attachedAt) {
-            this.attachedAt = attachedAt;
+            this.AttachedAt = attachedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static AttachSecurityPolicy FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AttachSecurityPolicy()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSecurityPolicyIds(!data.Keys.Contains("securityPolicyIds") || data["securityPolicyIds"] == null ? new string[]{} : data["securityPolicyIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : (long?)long.Parse(data["attachedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["securityPolicyIds"] = new JsonData(SecurityPolicyIds == null ? new JsonData[]{} :
+                        SecurityPolicyIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["attachedAt"] = AttachedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.securityPolicyIds != null)
-            {
+            if (SecurityPolicyIds != null) {
                 writer.WritePropertyName("securityPolicyIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.securityPolicyIds)
+                foreach (var securityPolicyId in SecurityPolicyIds)
                 {
-                    writer.Write(item);
+                    if (securityPolicyId != null) {
+                        writer.Write(securityPolicyId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.attachedAt.HasValue)
-            {
+            if (AttachedAt != null) {
                 writer.WritePropertyName("attachedAt");
-                writer.Write(this.attachedAt.Value);
+                writer.Write(long.Parse(AttachedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static AttachSecurityPolicy FromDict(JsonData data)
-        {
-            return new AttachSecurityPolicy()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithSecurityPolicyIds(data.Keys.Contains("securityPolicyIds") && data["securityPolicyIds"] != null ? data["securityPolicyIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithAttachedAt(data.Keys.Contains("attachedAt") && data["attachedAt"] != null ? (long?)long.Parse(data["attachedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AttachSecurityPolicy;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (securityPolicyIds == null && securityPolicyIds == other.securityPolicyIds)
+            if (SecurityPolicyIds == null && SecurityPolicyIds == other.SecurityPolicyIds)
             {
                 // null and null
             }
             else
             {
-                diff += securityPolicyIds.Count - other.securityPolicyIds.Count;
-                for (var i = 0; i < securityPolicyIds.Count; i++)
+                diff += SecurityPolicyIds.Length - other.SecurityPolicyIds.Length;
+                for (var i = 0; i < SecurityPolicyIds.Length; i++)
                 {
-                    diff += securityPolicyIds[i].CompareTo(other.securityPolicyIds[i]);
+                    diff += SecurityPolicyIds[i].CompareTo(other.SecurityPolicyIds[i]);
                 }
             }
-            if (attachedAt == null && attachedAt == other.attachedAt)
+            if (AttachedAt == null && AttachedAt == other.AttachedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(attachedAt - other.attachedAt);
+                diff += (int)(AttachedAt - other.AttachedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["securityPolicyIds"] = new JsonData(securityPolicyIds);
-            data["attachedAt"] = attachedAt;
-            return data;
-        }
-	}
+    }
 }

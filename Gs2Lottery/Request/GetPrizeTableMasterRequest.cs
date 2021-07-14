@@ -28,54 +28,50 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class GetPrizeTableMasterRequest : Gs2Request<GetPrizeTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string PrizeTableName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetPrizeTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 排出確率テーブル名 */
-		[UnityEngine.SerializeField]
-        public string prizeTableName;
-
-        /**
-         * 排出確率テーブル名を設定
-         *
-         * @param prizeTableName 排出確率テーブル名
-         * @return this
-         */
         public GetPrizeTableMasterRequest WithPrizeTableName(string prizeTableName) {
-            this.prizeTableName = prizeTableName;
+            this.PrizeTableName = prizeTableName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetPrizeTableMasterRequest FromDict(JsonData data)
+        public static GetPrizeTableMasterRequest FromJson(JsonData data)
         {
-            return new GetPrizeTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                prizeTableName = data.Keys.Contains("prizeTableName") && data["prizeTableName"] != null ? data["prizeTableName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetPrizeTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["prizeTableName"] = PrizeTableName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["prizeTableName"] = prizeTableName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (PrizeTableName != null) {
+                writer.WritePropertyName("prizeTableName");
+                writer.Write(PrizeTableName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class DebugInvokeRequest : Gs2Request<DebugInvokeRequest>
 	{
+        public string Script { set; get; }
+        public string Args { set; get; }
 
-        /** スクリプト */
-		[UnityEngine.SerializeField]
-        public string script;
-
-        /**
-         * スクリプトを設定
-         *
-         * @param script スクリプト
-         * @return this
-         */
         public DebugInvokeRequest WithScript(string script) {
-            this.script = script;
+            this.Script = script;
             return this;
         }
 
-
-        /** None */
-		[UnityEngine.SerializeField]
-        public string args;
-
-        /**
-         * Noneを設定
-         *
-         * @param args None
-         * @return this
-         */
         public DebugInvokeRequest WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
         }
-
 
     	[Preserve]
-        public static DebugInvokeRequest FromDict(JsonData data)
+        public static DebugInvokeRequest FromJson(JsonData data)
         {
-            return new DebugInvokeRequest {
-                script = data.Keys.Contains("script") && data["script"] != null ? data["script"].ToString(): null,
-                args = data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DebugInvokeRequest()
+                .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["script"] = Script,
+                ["args"] = Args,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["script"] = script;
-            data["args"] = args;
-            return data;
+            writer.WriteObjectStart();
+            if (Script != null) {
+                writer.WritePropertyName("script");
+                writer.Write(Script.ToString());
+            }
+            if (Args != null) {
+                writer.WritePropertyName("args");
+                writer.Write(Args.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

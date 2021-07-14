@@ -23,238 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Schedule.Model
 {
+
 	[Preserve]
 	public class Trigger : IComparable
 	{
+        public string TriggerId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? ExpiresAt { set; get; }
 
-        /** トリガー */
-        public string triggerId { set; get; }
-
-        /**
-         * トリガーを設定
-         *
-         * @param triggerId トリガー
-         * @return this
-         */
         public Trigger WithTriggerId(string triggerId) {
-            this.triggerId = triggerId;
+            this.TriggerId = triggerId;
             return this;
         }
 
-        /** トリガーの名前 */
-        public string name { set; get; }
-
-        /**
-         * トリガーの名前を設定
-         *
-         * @param name トリガーの名前
-         * @return this
-         */
         public Trigger WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Trigger WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Trigger WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** トリガーの有効期限 */
-        public long? expiresAt { set; get; }
-
-        /**
-         * トリガーの有効期限を設定
-         *
-         * @param expiresAt トリガーの有効期限
-         * @return this
-         */
         public Trigger WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Trigger FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Trigger()
+                .WithTriggerId(!data.Keys.Contains("triggerId") || data["triggerId"] == null ? null : data["triggerId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["triggerId"] = TriggerId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["createdAt"] = CreatedAt,
+                ["expiresAt"] = ExpiresAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.triggerId != null)
-            {
+            if (TriggerId != null) {
                 writer.WritePropertyName("triggerId");
-                writer.Write(this.triggerId);
+                writer.Write(TriggerId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.expiresAt.HasValue)
-            {
+            if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
-                writer.Write(this.expiresAt.Value);
+                writer.Write(long.Parse(ExpiresAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetTriggerNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):user:(?<userId>.*):trigger:(?<triggerName>.*)");
-        if (!match.Groups["triggerName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["triggerName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):user:(?<userId>.*):trigger:(?<triggerName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):user:(?<userId>.*):trigger:(?<triggerName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):user:(?<userId>.*):trigger:(?<triggerName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):schedule:(?<namespaceName>.*):user:(?<userId>.*):trigger:(?<triggerName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Trigger FromDict(JsonData data)
-        {
-            return new Trigger()
-                .WithTriggerId(data.Keys.Contains("triggerId") && data["triggerId"] != null ? data["triggerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithExpiresAt(data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Trigger;
             var diff = 0;
-            if (triggerId == null && triggerId == other.triggerId)
+            if (TriggerId == null && TriggerId == other.TriggerId)
             {
                 // null and null
             }
             else
             {
-                diff += triggerId.CompareTo(other.triggerId);
+                diff += TriggerId.CompareTo(other.TriggerId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (expiresAt == null && expiresAt == other.expiresAt)
+            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(expiresAt - other.expiresAt);
+                diff += (int)(ExpiresAt - other.ExpiresAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["triggerId"] = triggerId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["createdAt"] = createdAt;
-            data["expiresAt"] = expiresAt;
-            return data;
-        }
-	}
+    }
 }

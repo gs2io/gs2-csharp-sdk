@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Matchmaking.Result
 {
 	[Preserve]
-	public class GetCurrentRatingModelMasterResult
+	[System.Serializable]
+	public class GetCurrentRatingModelMasterResult : IResult
 	{
-        /** 現在有効なレーティングマスター */
-        public CurrentRatingModelMaster item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster Item { set; get; }
 
+        public GetCurrentRatingModelMasterResult WithItem(Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetCurrentRatingModelMasterResult FromDict(JsonData data)
+        public static GetCurrentRatingModelMasterResult FromJson(JsonData data)
         {
-            return new GetCurrentRatingModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentRatingModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

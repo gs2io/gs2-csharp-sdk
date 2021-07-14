@@ -28,162 +28,122 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateExperienceModelMasterRequest : Gs2Request<UpdateExperienceModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ExperienceName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? DefaultExperience { set; get; }
+        public long? DefaultRankCap { set; get; }
+        public long? MaxRankCap { set; get; }
+        public string RankThresholdName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 経験値の種類名 */
-		[UnityEngine.SerializeField]
-        public string experienceName;
-
-        /**
-         * 経験値の種類名を設定
-         *
-         * @param experienceName 経験値の種類名
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithExperienceName(string experienceName) {
-            this.experienceName = experienceName;
+            this.ExperienceName = experienceName;
             return this;
         }
 
-
-        /** 経験値の種類マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 経験値の種類マスターの説明を設定
-         *
-         * @param description 経験値の種類マスターの説明
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 経験値の種類のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 経験値の種類のメタデータを設定
-         *
-         * @param metadata 経験値の種類のメタデータ
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 経験値の初期値 */
-		[UnityEngine.SerializeField]
-        public long? defaultExperience;
-
-        /**
-         * 経験値の初期値を設定
-         *
-         * @param defaultExperience 経験値の初期値
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithDefaultExperience(long? defaultExperience) {
-            this.defaultExperience = defaultExperience;
+            this.DefaultExperience = defaultExperience;
             return this;
         }
 
-
-        /** ランクキャップの初期値 */
-		[UnityEngine.SerializeField]
-        public long? defaultRankCap;
-
-        /**
-         * ランクキャップの初期値を設定
-         *
-         * @param defaultRankCap ランクキャップの初期値
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithDefaultRankCap(long? defaultRankCap) {
-            this.defaultRankCap = defaultRankCap;
+            this.DefaultRankCap = defaultRankCap;
             return this;
         }
 
-
-        /** ランクキャップの最大値 */
-		[UnityEngine.SerializeField]
-        public long? maxRankCap;
-
-        /**
-         * ランクキャップの最大値を設定
-         *
-         * @param maxRankCap ランクキャップの最大値
-         * @return this
-         */
         public UpdateExperienceModelMasterRequest WithMaxRankCap(long? maxRankCap) {
-            this.maxRankCap = maxRankCap;
+            this.MaxRankCap = maxRankCap;
             return this;
         }
 
-
-        /** ランク計算に用いる */
-		[UnityEngine.SerializeField]
-        public string rankThresholdId;
-
-        /**
-         * ランク計算に用いるを設定
-         *
-         * @param rankThresholdId ランク計算に用いる
-         * @return this
-         */
-        public UpdateExperienceModelMasterRequest WithRankThresholdId(string rankThresholdId) {
-            this.rankThresholdId = rankThresholdId;
+        public UpdateExperienceModelMasterRequest WithRankThresholdName(string rankThresholdName) {
+            this.RankThresholdName = rankThresholdName;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateExperienceModelMasterRequest FromDict(JsonData data)
+        public static UpdateExperienceModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateExperienceModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                experienceName = data.Keys.Contains("experienceName") && data["experienceName"] != null ? data["experienceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                defaultExperience = data.Keys.Contains("defaultExperience") && data["defaultExperience"] != null ? (long?)long.Parse(data["defaultExperience"].ToString()) : null,
-                defaultRankCap = data.Keys.Contains("defaultRankCap") && data["defaultRankCap"] != null ? (long?)long.Parse(data["defaultRankCap"].ToString()) : null,
-                maxRankCap = data.Keys.Contains("maxRankCap") && data["maxRankCap"] != null ? (long?)long.Parse(data["maxRankCap"].ToString()) : null,
-                rankThresholdId = data.Keys.Contains("rankThresholdId") && data["rankThresholdId"] != null ? data["rankThresholdId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateExperienceModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDefaultExperience(!data.Keys.Contains("defaultExperience") || data["defaultExperience"] == null ? null : (long?)long.Parse(data["defaultExperience"].ToString()))
+                .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)long.Parse(data["defaultRankCap"].ToString()))
+                .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)long.Parse(data["maxRankCap"].ToString()))
+                .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["experienceName"] = ExperienceName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["defaultExperience"] = DefaultExperience,
+                ["defaultRankCap"] = DefaultRankCap,
+                ["maxRankCap"] = MaxRankCap,
+                ["rankThresholdName"] = RankThresholdName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["experienceName"] = experienceName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["defaultExperience"] = defaultExperience;
-            data["defaultRankCap"] = defaultRankCap;
-            data["maxRankCap"] = maxRankCap;
-            data["rankThresholdId"] = rankThresholdId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ExperienceName != null) {
+                writer.WritePropertyName("experienceName");
+                writer.Write(ExperienceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (DefaultExperience != null) {
+                writer.WritePropertyName("defaultExperience");
+                writer.Write(long.Parse(DefaultExperience.ToString()));
+            }
+            if (DefaultRankCap != null) {
+                writer.WritePropertyName("defaultRankCap");
+                writer.Write(long.Parse(DefaultRankCap.ToString()));
+            }
+            if (MaxRankCap != null) {
+                writer.WritePropertyName("maxRankCap");
+                writer.Write(long.Parse(MaxRankCap.ToString()));
+            }
+            if (RankThresholdName != null) {
+                writer.WritePropertyName("rankThresholdName");
+                writer.Write(RankThresholdName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

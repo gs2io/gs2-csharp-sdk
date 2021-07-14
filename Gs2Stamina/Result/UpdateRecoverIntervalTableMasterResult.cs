@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Stamina.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Stamina.Result
 {
 	[Preserve]
-	public class UpdateRecoverIntervalTableMasterResult
+	[System.Serializable]
+	public class UpdateRecoverIntervalTableMasterResult : IResult
 	{
-        /** 更新したスタミナ回復間隔テーブルマスター */
-        public RecoverIntervalTableMaster item { set; get; }
+        public Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster Item { set; get; }
 
+        public UpdateRecoverIntervalTableMasterResult WithItem(Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateRecoverIntervalTableMasterResult FromDict(JsonData data)
+        public static UpdateRecoverIntervalTableMasterResult FromJson(JsonData data)
         {
-            return new UpdateRecoverIntervalTableMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateRecoverIntervalTableMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

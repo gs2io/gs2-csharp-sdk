@@ -28,7 +28,7 @@ namespace Gs2.Core.Model
                 
         public string payload;
 
-        public static NotificationMessage FromDict(JsonData data)
+        public static NotificationMessage FromJson(JsonData data)
         {
             return new NotificationMessage
             {

@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class SignedBallot : IComparable
 	{
+        public string Body { set; get; }
+        public string Signature { set; get; }
 
-        /** 投票用紙の署名対象のデータ */
-        public string body { set; get; }
-
-        /**
-         * 投票用紙の署名対象のデータを設定
-         *
-         * @param body 投票用紙の署名対象のデータ
-         * @return this
-         */
         public SignedBallot WithBody(string body) {
-            this.body = body;
+            this.Body = body;
             return this;
         }
 
-        /** 投票用紙の署名 */
-        public string signature { set; get; }
-
-        /**
-         * 投票用紙の署名を設定
-         *
-         * @param signature 投票用紙の署名
-         * @return this
-         */
         public SignedBallot WithSignature(string signature) {
-            this.signature = signature;
+            this.Signature = signature;
             return this;
+        }
+
+    	[Preserve]
+        public static SignedBallot FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SignedBallot()
+                .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["body"] = Body,
+                ["signature"] = Signature,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.body != null)
-            {
+            if (Body != null) {
                 writer.WritePropertyName("body");
-                writer.Write(this.body);
+                writer.Write(Body.ToString());
             }
-            if(this.signature != null)
-            {
+            if (Signature != null) {
                 writer.WritePropertyName("signature");
-                writer.Write(this.signature);
+                writer.Write(Signature.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static SignedBallot FromDict(JsonData data)
-        {
-            return new SignedBallot()
-                .WithBody(data.Keys.Contains("body") && data["body"] != null ? data["body"].ToString() : null)
-                .WithSignature(data.Keys.Contains("signature") && data["signature"] != null ? data["signature"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SignedBallot;
             var diff = 0;
-            if (body == null && body == other.body)
+            if (Body == null && Body == other.Body)
             {
                 // null and null
             }
             else
             {
-                diff += body.CompareTo(other.body);
+                diff += Body.CompareTo(other.Body);
             }
-            if (signature == null && signature == other.signature)
+            if (Signature == null && Signature == other.Signature)
             {
                 // null and null
             }
             else
             {
-                diff += signature.CompareTo(other.signature);
+                diff += Signature.CompareTo(other.Signature);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["body"] = body;
-            data["signature"] = signature;
-            return data;
-        }
-	}
+    }
 }

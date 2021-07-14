@@ -28,122 +28,86 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class WithdrawRequest : Gs2Request<WithdrawRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public int? Slot { set; get; }
+        public int? Count { set; get; }
+        public bool? PaidOnly { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public WithdrawRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? slot;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param slot スロット番号
-         * @return this
-         */
-        public WithdrawRequest WithSlot(int? slot) {
-            this.slot = slot;
-            return this;
-        }
-
-
-        /** 消費する課金通貨の数量 */
-		[UnityEngine.SerializeField]
-        public int? count;
-
-        /**
-         * 消費する課金通貨の数量を設定
-         *
-         * @param count 消費する課金通貨の数量
-         * @return this
-         */
-        public WithdrawRequest WithCount(int? count) {
-            this.count = count;
-            return this;
-        }
-
-
-        /** 有償課金通貨のみを対象とするか */
-		[UnityEngine.SerializeField]
-        public bool? paidOnly;
-
-        /**
-         * 有償課金通貨のみを対象とするかを設定
-         *
-         * @param paidOnly 有償課金通貨のみを対象とするか
-         * @return this
-         */
-        public WithdrawRequest WithPaidOnly(bool? paidOnly) {
-            this.paidOnly = paidOnly;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public WithdrawRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public WithdrawRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public WithdrawRequest WithSlot(int? slot) {
+            this.Slot = slot;
+            return this;
+        }
+
+        public WithdrawRequest WithCount(int? count) {
+            this.Count = count;
+            return this;
+        }
+
+        public WithdrawRequest WithPaidOnly(bool? paidOnly) {
+            this.PaidOnly = paidOnly;
             return this;
         }
 
     	[Preserve]
-        public static WithdrawRequest FromDict(JsonData data)
+        public static WithdrawRequest FromJson(JsonData data)
         {
-            return new WithdrawRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                slot = data.Keys.Contains("slot") && data["slot"] != null ? (int?)int.Parse(data["slot"].ToString()) : null,
-                count = data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null,
-                paidOnly = data.Keys.Contains("paidOnly") && data["paidOnly"] != null ? (bool?)bool.Parse(data["paidOnly"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new WithdrawRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithPaidOnly(!data.Keys.Contains("paidOnly") || data["paidOnly"] == null ? null : (bool?)bool.Parse(data["paidOnly"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["slot"] = Slot,
+                ["count"] = Count,
+                ["paidOnly"] = PaidOnly,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["slot"] = slot;
-            data["count"] = count;
-            data["paidOnly"] = paidOnly;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Slot != null) {
+                writer.WritePropertyName("slot");
+                writer.Write(int.Parse(Slot.ToString()));
+            }
+            if (Count != null) {
+                writer.WritePropertyName("count");
+                writer.Write(int.Parse(Count.ToString()));
+            }
+            if (PaidOnly != null) {
+                writer.WritePropertyName("paidOnly");
+                writer.Write(bool.Parse(PaidOnly.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

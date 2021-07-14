@@ -23,260 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Identifier.Model
 {
+
 	[Preserve]
 	public class SecurityPolicy : IComparable
 	{
+        public string SecurityPolicyId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Policy { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** セキュリティポリシー */
-        public string securityPolicyId { set; get; }
-
-        /**
-         * セキュリティポリシーを設定
-         *
-         * @param securityPolicyId セキュリティポリシー
-         * @return this
-         */
         public SecurityPolicy WithSecurityPolicyId(string securityPolicyId) {
-            this.securityPolicyId = securityPolicyId;
+            this.SecurityPolicyId = securityPolicyId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public SecurityPolicy WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** セキュリティポリシー名 */
-        public string name { set; get; }
-
-        /**
-         * セキュリティポリシー名を設定
-         *
-         * @param name セキュリティポリシー名
-         * @return this
-         */
         public SecurityPolicy WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** セキュリティポリシーの説明 */
-        public string description { set; get; }
-
-        /**
-         * セキュリティポリシーの説明を設定
-         *
-         * @param description セキュリティポリシーの説明
-         * @return this
-         */
         public SecurityPolicy WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** ポリシードキュメント */
-        public string policy { set; get; }
-
-        /**
-         * ポリシードキュメントを設定
-         *
-         * @param policy ポリシードキュメント
-         * @return this
-         */
         public SecurityPolicy WithPolicy(string policy) {
-            this.policy = policy;
+            this.Policy = policy;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public SecurityPolicy WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public SecurityPolicy WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static SecurityPolicy FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SecurityPolicy()
+                .WithSecurityPolicyId(!data.Keys.Contains("securityPolicyId") || data["securityPolicyId"] == null ? null : data["securityPolicyId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPolicy(!data.Keys.Contains("policy") || data["policy"] == null ? null : data["policy"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["securityPolicyId"] = SecurityPolicyId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["policy"] = Policy,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.securityPolicyId != null)
-            {
+            if (SecurityPolicyId != null) {
                 writer.WritePropertyName("securityPolicyId");
-                writer.Write(this.securityPolicyId);
+                writer.Write(SecurityPolicyId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.policy != null)
-            {
+            if (Policy != null) {
                 writer.WritePropertyName("policy");
-                writer.Write(this.policy);
+                writer.Write(Policy.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetSecurityPolicyNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2::(?<ownerId>.*):identifier:securityPolicy:(?<securityPolicyName>.*)");
-        if (!match.Groups["securityPolicyName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["securityPolicyName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2::(?<ownerId>.*):identifier:securityPolicy:(?<securityPolicyName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    	[Preserve]
-        public static SecurityPolicy FromDict(JsonData data)
-        {
-            return new SecurityPolicy()
-                .WithSecurityPolicyId(data.Keys.Contains("securityPolicyId") && data["securityPolicyId"] != null ? data["securityPolicyId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithPolicy(data.Keys.Contains("policy") && data["policy"] != null ? data["policy"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SecurityPolicy;
             var diff = 0;
-            if (securityPolicyId == null && securityPolicyId == other.securityPolicyId)
+            if (SecurityPolicyId == null && SecurityPolicyId == other.SecurityPolicyId)
             {
                 // null and null
             }
             else
             {
-                diff += securityPolicyId.CompareTo(other.securityPolicyId);
+                diff += SecurityPolicyId.CompareTo(other.SecurityPolicyId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (Policy == null && Policy == other.Policy)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Policy.CompareTo(other.Policy);
             }
-            if (policy == null && policy == other.policy)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += policy.CompareTo(other.policy);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["securityPolicyId"] = securityPolicyId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["policy"] = policy;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

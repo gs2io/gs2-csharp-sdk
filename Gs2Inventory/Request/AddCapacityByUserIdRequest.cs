@@ -28,108 +28,74 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AddCapacityByUserIdRequest : Gs2Request<AddCapacityByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string UserId { set; get; }
+        public int? AddCapacityValue { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public AddCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリモデル名 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリモデル名を設定
-         *
-         * @param inventoryName インベントリモデル名
-         * @return this
-         */
         public AddCapacityByUserIdRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AddCapacityByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** 加算するキャパシティサイズ */
-		[UnityEngine.SerializeField]
-        public int? addCapacityValue;
-
-        /**
-         * 加算するキャパシティサイズを設定
-         *
-         * @param addCapacityValue 加算するキャパシティサイズ
-         * @return this
-         */
         public AddCapacityByUserIdRequest WithAddCapacityValue(int? addCapacityValue) {
-            this.addCapacityValue = addCapacityValue;
+            this.AddCapacityValue = addCapacityValue;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public AddCapacityByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static AddCapacityByUserIdRequest FromDict(JsonData data)
+        public static AddCapacityByUserIdRequest FromJson(JsonData data)
         {
-            return new AddCapacityByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                addCapacityValue = data.Keys.Contains("addCapacityValue") && data["addCapacityValue"] != null ? (int?)int.Parse(data["addCapacityValue"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new AddCapacityByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAddCapacityValue(!data.Keys.Contains("addCapacityValue") || data["addCapacityValue"] == null ? null : (int?)int.Parse(data["addCapacityValue"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["userId"] = UserId,
+                ["addCapacityValue"] = AddCapacityValue,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["userId"] = userId;
-            data["addCapacityValue"] = addCapacityValue;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (AddCapacityValue != null) {
+                writer.WritePropertyName("addCapacityValue");
+                writer.Write(int.Parse(AddCapacityValue.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

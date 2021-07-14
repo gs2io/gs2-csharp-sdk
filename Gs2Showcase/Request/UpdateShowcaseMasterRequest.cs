@@ -28,130 +28,109 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateShowcaseMasterRequest : Gs2Request<UpdateShowcaseMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string ShowcaseName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; }
+        public string SalesPeriodEventId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateShowcaseMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 陳列棚名 */
-		[UnityEngine.SerializeField]
-        public string showcaseName;
-
-        /**
-         * 陳列棚名を設定
-         *
-         * @param showcaseName 陳列棚名
-         * @return this
-         */
         public UpdateShowcaseMasterRequest WithShowcaseName(string showcaseName) {
-            this.showcaseName = showcaseName;
+            this.ShowcaseName = showcaseName;
             return this;
         }
 
-
-        /** 陳列棚マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 陳列棚マスターの説明を設定
-         *
-         * @param description 陳列棚マスターの説明
-         * @return this
-         */
         public UpdateShowcaseMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 商品のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 商品のメタデータを設定
-         *
-         * @param metadata 商品のメタデータ
-         * @return this
-         */
         public UpdateShowcaseMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 陳列する商品モデル一覧 */
-		[UnityEngine.SerializeField]
-        public List<DisplayItemMaster> displayItems;
-
-        /**
-         * 陳列する商品モデル一覧を設定
-         *
-         * @param displayItems 陳列する商品モデル一覧
-         * @return this
-         */
-        public UpdateShowcaseMasterRequest WithDisplayItems(List<DisplayItemMaster> displayItems) {
-            this.displayItems = displayItems;
+        public UpdateShowcaseMasterRequest WithDisplayItems(Gs2.Gs2Showcase.Model.DisplayItemMaster[] displayItems) {
+            this.DisplayItems = displayItems;
             return this;
         }
 
-
-        /** 販売期間とするイベントマスター のGRN */
-		[UnityEngine.SerializeField]
-        public string salesPeriodEventId;
-
-        /**
-         * 販売期間とするイベントマスター のGRNを設定
-         *
-         * @param salesPeriodEventId 販売期間とするイベントマスター のGRN
-         * @return this
-         */
         public UpdateShowcaseMasterRequest WithSalesPeriodEventId(string salesPeriodEventId) {
-            this.salesPeriodEventId = salesPeriodEventId;
+            this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateShowcaseMasterRequest FromDict(JsonData data)
+        public static UpdateShowcaseMasterRequest FromJson(JsonData data)
         {
-            return new UpdateShowcaseMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                showcaseName = data.Keys.Contains("showcaseName") && data["showcaseName"] != null ? data["showcaseName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                displayItems = data.Keys.Contains("displayItems") && data["displayItems"] != null ? data["displayItems"].Cast<JsonData>().Select(value =>
-                    {
-                        return DisplayItemMaster.FromDict(value);
-                    }
-                ).ToList() : null,
-                salesPeriodEventId = data.Keys.Contains("salesPeriodEventId") && data["salesPeriodEventId"] != null ? data["salesPeriodEventId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateShowcaseMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null ? new Gs2.Gs2Showcase.Model.DisplayItemMaster[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.DisplayItemMaster.FromJson(v);
+                }).ToArray())
+                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["showcaseName"] = ShowcaseName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["displayItems"] = new JsonData(DisplayItems == null ? new JsonData[]{} :
+                        DisplayItems.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["salesPeriodEventId"] = SalesPeriodEventId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["showcaseName"] = showcaseName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["displayItems"] = new JsonData(displayItems.Select(item => item.ToDict()));
-            data["salesPeriodEventId"] = salesPeriodEventId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (ShowcaseName != null) {
+                writer.WritePropertyName("showcaseName");
+                writer.Write(ShowcaseName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var displayItem in DisplayItems)
+            {
+                if (displayItem != null) {
+                    displayItem.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (SalesPeriodEventId != null) {
+                writer.WritePropertyName("salesPeriodEventId");
+                writer.Write(SalesPeriodEventId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

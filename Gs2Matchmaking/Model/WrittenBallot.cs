@@ -23,104 +23,95 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class WrittenBallot : IComparable
 	{
+        public Gs2.Gs2Matchmaking.Model.Ballot Ballot { set; get; }
+        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
 
-        /** 投票用紙 */
-        public Gs2.Gs2Matchmaking.Model.Ballot ballot { set; get; }
-
-        /**
-         * 投票用紙を設定
-         *
-         * @param ballot 投票用紙
-         * @return this
-         */
         public WrittenBallot WithBallot(Gs2.Gs2Matchmaking.Model.Ballot ballot) {
-            this.ballot = ballot;
+            this.Ballot = ballot;
             return this;
         }
 
-        /** 投票内容。対戦結果のリスト */
-        public List<GameResult> gameResults { set; get; }
-
-        /**
-         * 投票内容。対戦結果のリストを設定
-         *
-         * @param gameResults 投票内容。対戦結果のリスト
-         * @return this
-         */
-        public WrittenBallot WithGameResults(List<GameResult> gameResults) {
-            this.gameResults = gameResults;
+        public WrittenBallot WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
+            this.GameResults = gameResults;
             return this;
+        }
+
+    	[Preserve]
+        public static WrittenBallot FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new WrittenBallot()
+                .WithBallot(!data.Keys.Contains("ballot") || data["ballot"] == null ? null : Gs2.Gs2Matchmaking.Model.Ballot.FromJson(data["ballot"]))
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.GameResult.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["ballot"] = Ballot?.ToJson(),
+                ["gameResults"] = new JsonData(GameResults == null ? new JsonData[]{} :
+                        GameResults.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ballot != null)
-            {
+            if (Ballot != null) {
                 writer.WritePropertyName("ballot");
-                this.ballot.WriteJson(writer);
+                Ballot.WriteJson(writer);
             }
-            if(this.gameResults != null)
-            {
+            if (GameResults != null) {
                 writer.WritePropertyName("gameResults");
                 writer.WriteArrayStart();
-                foreach(var item in this.gameResults)
+                foreach (var gameResult in GameResults)
                 {
-                    item.WriteJson(writer);
+                    if (gameResult != null) {
+                        gameResult.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static WrittenBallot FromDict(JsonData data)
-        {
-            return new WrittenBallot()
-                .WithBallot(data.Keys.Contains("ballot") && data["ballot"] != null ? Gs2.Gs2Matchmaking.Model.Ballot.FromDict(data["ballot"]) : null)
-                .WithGameResults(data.Keys.Contains("gameResults") && data["gameResults"] != null ? data["gameResults"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.GameResult.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as WrittenBallot;
             var diff = 0;
-            if (ballot == null && ballot == other.ballot)
+            if (Ballot == null && Ballot == other.Ballot)
             {
                 // null and null
             }
             else
             {
-                diff += ballot.CompareTo(other.ballot);
+                diff += Ballot.CompareTo(other.Ballot);
             }
-            if (gameResults == null && gameResults == other.gameResults)
+            if (GameResults == null && GameResults == other.GameResults)
             {
                 // null and null
             }
             else
             {
-                diff += gameResults.Count - other.gameResults.Count;
-                for (var i = 0; i < gameResults.Count; i++)
+                diff += GameResults.Length - other.GameResults.Length;
+                for (var i = 0; i < GameResults.Length; i++)
                 {
-                    diff += gameResults[i].CompareTo(other.gameResults[i]);
+                    diff += GameResults[i].CompareTo(other.GameResults[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ballot"] = ballot.ToDict();
-            data["gameResults"] = new JsonData(gameResults.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

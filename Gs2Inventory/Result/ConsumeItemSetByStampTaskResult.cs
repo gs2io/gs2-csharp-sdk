@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
@@ -24,34 +25,86 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inventory.Result
 {
 	[Preserve]
-	public class ConsumeItemSetByStampTaskResult
+	[System.Serializable]
+	public class ConsumeItemSetByStampTaskResult : IResult
 	{
-        /** 消費後の有効期限ごとのアイテム所持数量のリスト */
-        public List<ItemSet> items { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
+        public string NewContextStack { set; get; }
 
-        /** アイテムモデル */
-        public ItemModel itemModel { set; get; }
+        public ConsumeItemSetByStampTaskResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
+            this.Items = items;
+            return this;
+        }
 
-        /** インベントリ */
-        public Inventory inventory { set; get; }
+        public ConsumeItemSetByStampTaskResult WithItemModel(Gs2.Gs2Inventory.Model.ItemModel itemModel) {
+            this.ItemModel = itemModel;
+            return this;
+        }
 
-        /** スタンプタスクの実行結果を記録したコンテキスト */
-        public string newContextStack { set; get; }
+        public ConsumeItemSetByStampTaskResult WithInventory(Gs2.Gs2Inventory.Model.Inventory inventory) {
+            this.Inventory = inventory;
+            return this;
+        }
 
+        public ConsumeItemSetByStampTaskResult WithNewContextStack(string newContextStack) {
+            this.NewContextStack = newContextStack;
+            return this;
+        }
 
     	[Preserve]
-        public static ConsumeItemSetByStampTaskResult FromDict(JsonData data)
+        public static ConsumeItemSetByStampTaskResult FromJson(JsonData data)
         {
-            return new ConsumeItemSetByStampTaskResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Inventory.Model.ItemSet.FromDict(value);
-                    }
-                ).ToList() : null,
-                itemModel = data.Keys.Contains("itemModel") && data["itemModel"] != null ? Gs2.Gs2Inventory.Model.ItemModel.FromDict(data["itemModel"]) : null,
-                inventory = data.Keys.Contains("inventory") && data["inventory"] != null ? Gs2.Gs2Inventory.Model.Inventory.FromDict(data["inventory"]) : null,
-                newContextStack = data.Keys.Contains("newContextStack") && data["newContextStack"] != null ? data["newContextStack"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new ConsumeItemSetByStampTaskResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Inventory.Model.ItemSet[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.ItemSet.FromJson(v);
+                }).ToArray())
+                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
+                .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["itemModel"] = ItemModel?.ToJson(),
+                ["inventory"] = Inventory?.ToJson(),
+                ["newContextStack"] = NewContextStack,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ItemModel != null) {
+                ItemModel.WriteJson(writer);
+            }
+            if (Inventory != null) {
+                Inventory.WriteJson(writer);
+            }
+            if (NewContextStack != null) {
+                writer.WritePropertyName("newContextStack");
+                writer.Write(NewContextStack.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

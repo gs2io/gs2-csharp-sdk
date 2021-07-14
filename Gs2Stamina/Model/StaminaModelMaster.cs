@@ -23,487 +23,317 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Stamina.Model
 {
+
 	[Preserve]
 	public class StaminaModelMaster : IComparable
 	{
+        public string StaminaModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public int? RecoverIntervalMinutes { set; get; }
+        public int? RecoverValue { set; get; }
+        public int? InitialCapacity { set; get; }
+        public bool? IsOverflow { set; get; }
+        public int? MaxCapacity { set; get; }
+        public string MaxStaminaTableName { set; get; }
+        public string RecoverIntervalTableName { set; get; }
+        public string RecoverValueTableName { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** スタミナモデルマスター */
-        public string staminaModelId { set; get; }
-
-        /**
-         * スタミナモデルマスターを設定
-         *
-         * @param staminaModelId スタミナモデルマスター
-         * @return this
-         */
         public StaminaModelMaster WithStaminaModelId(string staminaModelId) {
-            this.staminaModelId = staminaModelId;
+            this.StaminaModelId = staminaModelId;
             return this;
         }
 
-        /** スタミナの種類名 */
-        public string name { set; get; }
-
-        /**
-         * スタミナの種類名を設定
-         *
-         * @param name スタミナの種類名
-         * @return this
-         */
         public StaminaModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** スタミナの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * スタミナの種類のメタデータを設定
-         *
-         * @param metadata スタミナの種類のメタデータ
-         * @return this
-         */
         public StaminaModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** スタミナモデルマスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * スタミナモデルマスターの説明を設定
-         *
-         * @param description スタミナモデルマスターの説明
-         * @return this
-         */
         public StaminaModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** スタミナを回復する速度(分) */
-        public int? recoverIntervalMinutes { set; get; }
-
-        /**
-         * スタミナを回復する速度(分)を設定
-         *
-         * @param recoverIntervalMinutes スタミナを回復する速度(分)
-         * @return this
-         */
         public StaminaModelMaster WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
-            this.recoverIntervalMinutes = recoverIntervalMinutes;
+            this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
 
-        /** 時間経過後に回復する量 */
-        public int? recoverValue { set; get; }
-
-        /**
-         * 時間経過後に回復する量を設定
-         *
-         * @param recoverValue 時間経過後に回復する量
-         * @return this
-         */
         public StaminaModelMaster WithRecoverValue(int? recoverValue) {
-            this.recoverValue = recoverValue;
+            this.RecoverValue = recoverValue;
             return this;
         }
 
-        /** スタミナの最大値の初期値 */
-        public int? initialCapacity { set; get; }
-
-        /**
-         * スタミナの最大値の初期値を設定
-         *
-         * @param initialCapacity スタミナの最大値の初期値
-         * @return this
-         */
         public StaminaModelMaster WithInitialCapacity(int? initialCapacity) {
-            this.initialCapacity = initialCapacity;
+            this.InitialCapacity = initialCapacity;
             return this;
         }
 
-        /** 最大値を超えて回復するか */
-        public bool? isOverflow { set; get; }
-
-        /**
-         * 最大値を超えて回復するかを設定
-         *
-         * @param isOverflow 最大値を超えて回復するか
-         * @return this
-         */
         public StaminaModelMaster WithIsOverflow(bool? isOverflow) {
-            this.isOverflow = isOverflow;
+            this.IsOverflow = isOverflow;
             return this;
         }
 
-        /** 溢れた状況での最大値 */
-        public int? maxCapacity { set; get; }
-
-        /**
-         * 溢れた状況での最大値を設定
-         *
-         * @param maxCapacity 溢れた状況での最大値
-         * @return this
-         */
         public StaminaModelMaster WithMaxCapacity(int? maxCapacity) {
-            this.maxCapacity = maxCapacity;
+            this.MaxCapacity = maxCapacity;
             return this;
         }
 
-        /** GS2-Experience のランクによって最大スタミナ値を決定するスタミナ最大値テーブル名 */
-        public string maxStaminaTableName { set; get; }
-
-        /**
-         * GS2-Experience のランクによって最大スタミナ値を決定するスタミナ最大値テーブル名を設定
-         *
-         * @param maxStaminaTableName GS2-Experience のランクによって最大スタミナ値を決定するスタミナ最大値テーブル名
-         * @return this
-         */
         public StaminaModelMaster WithMaxStaminaTableName(string maxStaminaTableName) {
-            this.maxStaminaTableName = maxStaminaTableName;
+            this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
 
-        /** GS2-Experience のランクによってスタミナの回復間隔を決定する回復間隔テーブル名 */
-        public string recoverIntervalTableName { set; get; }
-
-        /**
-         * GS2-Experience のランクによってスタミナの回復間隔を決定する回復間隔テーブル名を設定
-         *
-         * @param recoverIntervalTableName GS2-Experience のランクによってスタミナの回復間隔を決定する回復間隔テーブル名
-         * @return this
-         */
         public StaminaModelMaster WithRecoverIntervalTableName(string recoverIntervalTableName) {
-            this.recoverIntervalTableName = recoverIntervalTableName;
+            this.RecoverIntervalTableName = recoverIntervalTableName;
             return this;
         }
 
-        /** GS2-Experience のランクによってスタミナの回復量を決定する回復量テーブル名 */
-        public string recoverValueTableName { set; get; }
-
-        /**
-         * GS2-Experience のランクによってスタミナの回復量を決定する回復量テーブル名を設定
-         *
-         * @param recoverValueTableName GS2-Experience のランクによってスタミナの回復量を決定する回復量テーブル名
-         * @return this
-         */
         public StaminaModelMaster WithRecoverValueTableName(string recoverValueTableName) {
-            this.recoverValueTableName = recoverValueTableName;
+            this.RecoverValueTableName = recoverValueTableName;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public StaminaModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public StaminaModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static StaminaModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new StaminaModelMaster()
+                .WithStaminaModelId(!data.Keys.Contains("staminaModelId") || data["staminaModelId"] == null ? null : data["staminaModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()))
+                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)int.Parse(data["recoverValue"].ToString()))
+                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
+                .WithIsOverflow(!data.Keys.Contains("isOverflow") || data["isOverflow"] == null ? null : (bool?)bool.Parse(data["isOverflow"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
+                .WithMaxStaminaTableName(!data.Keys.Contains("maxStaminaTableName") || data["maxStaminaTableName"] == null ? null : data["maxStaminaTableName"].ToString())
+                .WithRecoverIntervalTableName(!data.Keys.Contains("recoverIntervalTableName") || data["recoverIntervalTableName"] == null ? null : data["recoverIntervalTableName"].ToString())
+                .WithRecoverValueTableName(!data.Keys.Contains("recoverValueTableName") || data["recoverValueTableName"] == null ? null : data["recoverValueTableName"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["staminaModelId"] = StaminaModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["recoverIntervalMinutes"] = RecoverIntervalMinutes,
+                ["recoverValue"] = RecoverValue,
+                ["initialCapacity"] = InitialCapacity,
+                ["isOverflow"] = IsOverflow,
+                ["maxCapacity"] = MaxCapacity,
+                ["maxStaminaTableName"] = MaxStaminaTableName,
+                ["recoverIntervalTableName"] = RecoverIntervalTableName,
+                ["recoverValueTableName"] = RecoverValueTableName,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.staminaModelId != null)
-            {
+            if (StaminaModelId != null) {
                 writer.WritePropertyName("staminaModelId");
-                writer.Write(this.staminaModelId);
+                writer.Write(StaminaModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.recoverIntervalMinutes.HasValue)
-            {
+            if (RecoverIntervalMinutes != null) {
                 writer.WritePropertyName("recoverIntervalMinutes");
-                writer.Write(this.recoverIntervalMinutes.Value);
+                writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
             }
-            if(this.recoverValue.HasValue)
-            {
+            if (RecoverValue != null) {
                 writer.WritePropertyName("recoverValue");
-                writer.Write(this.recoverValue.Value);
+                writer.Write(int.Parse(RecoverValue.ToString()));
             }
-            if(this.initialCapacity.HasValue)
-            {
+            if (InitialCapacity != null) {
                 writer.WritePropertyName("initialCapacity");
-                writer.Write(this.initialCapacity.Value);
+                writer.Write(int.Parse(InitialCapacity.ToString()));
             }
-            if(this.isOverflow.HasValue)
-            {
+            if (IsOverflow != null) {
                 writer.WritePropertyName("isOverflow");
-                writer.Write(this.isOverflow.Value);
+                writer.Write(bool.Parse(IsOverflow.ToString()));
             }
-            if(this.maxCapacity.HasValue)
-            {
+            if (MaxCapacity != null) {
                 writer.WritePropertyName("maxCapacity");
-                writer.Write(this.maxCapacity.Value);
+                writer.Write(int.Parse(MaxCapacity.ToString()));
             }
-            if(this.maxStaminaTableName != null)
-            {
+            if (MaxStaminaTableName != null) {
                 writer.WritePropertyName("maxStaminaTableName");
-                writer.Write(this.maxStaminaTableName);
+                writer.Write(MaxStaminaTableName.ToString());
             }
-            if(this.recoverIntervalTableName != null)
-            {
+            if (RecoverIntervalTableName != null) {
                 writer.WritePropertyName("recoverIntervalTableName");
-                writer.Write(this.recoverIntervalTableName);
+                writer.Write(RecoverIntervalTableName.ToString());
             }
-            if(this.recoverValueTableName != null)
-            {
+            if (RecoverValueTableName != null) {
                 writer.WritePropertyName("recoverValueTableName");
-                writer.Write(this.recoverValueTableName);
+                writer.Write(RecoverValueTableName.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetStaminaNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):model:(?<staminaName>.*)");
-        if (!match.Groups["staminaName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["staminaName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):model:(?<staminaName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):model:(?<staminaName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):stamina:(?<namespaceName>.*):model:(?<staminaName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static StaminaModelMaster FromDict(JsonData data)
-        {
-            return new StaminaModelMaster()
-                .WithStaminaModelId(data.Keys.Contains("staminaModelId") && data["staminaModelId"] != null ? data["staminaModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithRecoverIntervalMinutes(data.Keys.Contains("recoverIntervalMinutes") && data["recoverIntervalMinutes"] != null ? (int?)int.Parse(data["recoverIntervalMinutes"].ToString()) : null)
-                .WithRecoverValue(data.Keys.Contains("recoverValue") && data["recoverValue"] != null ? (int?)int.Parse(data["recoverValue"].ToString()) : null)
-                .WithInitialCapacity(data.Keys.Contains("initialCapacity") && data["initialCapacity"] != null ? (int?)int.Parse(data["initialCapacity"].ToString()) : null)
-                .WithIsOverflow(data.Keys.Contains("isOverflow") && data["isOverflow"] != null ? (bool?)bool.Parse(data["isOverflow"].ToString()) : null)
-                .WithMaxCapacity(data.Keys.Contains("maxCapacity") && data["maxCapacity"] != null ? (int?)int.Parse(data["maxCapacity"].ToString()) : null)
-                .WithMaxStaminaTableName(data.Keys.Contains("maxStaminaTableName") && data["maxStaminaTableName"] != null ? data["maxStaminaTableName"].ToString() : null)
-                .WithRecoverIntervalTableName(data.Keys.Contains("recoverIntervalTableName") && data["recoverIntervalTableName"] != null ? data["recoverIntervalTableName"].ToString() : null)
-                .WithRecoverValueTableName(data.Keys.Contains("recoverValueTableName") && data["recoverValueTableName"] != null ? data["recoverValueTableName"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as StaminaModelMaster;
             var diff = 0;
-            if (staminaModelId == null && staminaModelId == other.staminaModelId)
+            if (StaminaModelId == null && StaminaModelId == other.StaminaModelId)
             {
                 // null and null
             }
             else
             {
-                diff += staminaModelId.CompareTo(other.staminaModelId);
+                diff += StaminaModelId.CompareTo(other.StaminaModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (recoverIntervalMinutes == null && recoverIntervalMinutes == other.recoverIntervalMinutes)
+            if (RecoverIntervalMinutes == null && RecoverIntervalMinutes == other.RecoverIntervalMinutes)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(recoverIntervalMinutes - other.recoverIntervalMinutes);
+                diff += (int)(RecoverIntervalMinutes - other.RecoverIntervalMinutes);
             }
-            if (recoverValue == null && recoverValue == other.recoverValue)
+            if (RecoverValue == null && RecoverValue == other.RecoverValue)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(recoverValue - other.recoverValue);
+                diff += (int)(RecoverValue - other.RecoverValue);
             }
-            if (initialCapacity == null && initialCapacity == other.initialCapacity)
+            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(initialCapacity - other.initialCapacity);
+                diff += (int)(InitialCapacity - other.InitialCapacity);
             }
-            if (isOverflow == null && isOverflow == other.isOverflow)
+            if (IsOverflow == null && IsOverflow == other.IsOverflow)
             {
                 // null and null
             }
             else
             {
-                diff += isOverflow == other.isOverflow ? 0 : 1;
+                diff += IsOverflow == other.IsOverflow ? 0 : 1;
             }
-            if (maxCapacity == null && maxCapacity == other.maxCapacity)
+            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxCapacity - other.maxCapacity);
+                diff += (int)(MaxCapacity - other.MaxCapacity);
             }
-            if (maxStaminaTableName == null && maxStaminaTableName == other.maxStaminaTableName)
+            if (MaxStaminaTableName == null && MaxStaminaTableName == other.MaxStaminaTableName)
             {
                 // null and null
             }
             else
             {
-                diff += maxStaminaTableName.CompareTo(other.maxStaminaTableName);
+                diff += MaxStaminaTableName.CompareTo(other.MaxStaminaTableName);
             }
-            if (recoverIntervalTableName == null && recoverIntervalTableName == other.recoverIntervalTableName)
+            if (RecoverIntervalTableName == null && RecoverIntervalTableName == other.RecoverIntervalTableName)
             {
                 // null and null
             }
             else
             {
-                diff += recoverIntervalTableName.CompareTo(other.recoverIntervalTableName);
+                diff += RecoverIntervalTableName.CompareTo(other.RecoverIntervalTableName);
             }
-            if (recoverValueTableName == null && recoverValueTableName == other.recoverValueTableName)
+            if (RecoverValueTableName == null && RecoverValueTableName == other.RecoverValueTableName)
             {
                 // null and null
             }
             else
             {
-                diff += recoverValueTableName.CompareTo(other.recoverValueTableName);
+                diff += RecoverValueTableName.CompareTo(other.RecoverValueTableName);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["staminaModelId"] = staminaModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["recoverIntervalMinutes"] = recoverIntervalMinutes;
-            data["recoverValue"] = recoverValue;
-            data["initialCapacity"] = initialCapacity;
-            data["isOverflow"] = isOverflow;
-            data["maxCapacity"] = maxCapacity;
-            data["maxStaminaTableName"] = maxStaminaTableName;
-            data["recoverIntervalTableName"] = recoverIntervalTableName;
-            data["recoverValueTableName"] = recoverValueTableName;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

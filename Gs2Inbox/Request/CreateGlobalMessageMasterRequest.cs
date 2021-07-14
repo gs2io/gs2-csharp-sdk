@@ -28,130 +28,108 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class CreateGlobalMessageMasterRequest : Gs2Request<CreateGlobalMessageMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+        public long? ExpiresAt { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public CreateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 全ユーザに向けたメッセージ名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * 全ユーザに向けたメッセージ名を設定
-         *
-         * @param name 全ユーザに向けたメッセージ名
-         * @return this
-         */
         public CreateGlobalMessageMasterRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** 全ユーザに向けたメッセージの内容に相当するメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 全ユーザに向けたメッセージの内容に相当するメタデータを設定
-         *
-         * @param metadata 全ユーザに向けたメッセージの内容に相当するメタデータ
-         * @return this
-         */
         public CreateGlobalMessageMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 開封時に実行する入手アクション */
-		[UnityEngine.SerializeField]
-        public List<AcquireAction> readAcquireActions;
-
-        /**
-         * 開封時に実行する入手アクションを設定
-         *
-         * @param readAcquireActions 開封時に実行する入手アクション
-         * @return this
-         */
-        public CreateGlobalMessageMasterRequest WithReadAcquireActions(List<AcquireAction> readAcquireActions) {
-            this.readAcquireActions = readAcquireActions;
+        public CreateGlobalMessageMasterRequest WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+            this.ReadAcquireActions = readAcquireActions;
             return this;
         }
 
-
-        /** メッセージを受信したあとメッセージが削除されるまでの期間 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Inbox.Model.TimeSpan expiresTimeSpan;
-
-        /**
-         * メッセージを受信したあとメッセージが削除されるまでの期間を設定
-         *
-         * @param expiresTimeSpan メッセージを受信したあとメッセージが削除されるまでの期間
-         * @return this
-         */
-        public CreateGlobalMessageMasterRequest WithExpiresTimeSpan(global::Gs2.Gs2Inbox.Model.TimeSpan expiresTimeSpan) {
-            this.expiresTimeSpan = expiresTimeSpan;
+        public CreateGlobalMessageMasterRequest WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
+            this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
 
-
-        /** 全ユーザに向けたメッセージの受信期限 */
-		[UnityEngine.SerializeField]
-        public long? expiresAt;
-
-        /**
-         * 全ユーザに向けたメッセージの受信期限を設定
-         *
-         * @param expiresAt 全ユーザに向けたメッセージの受信期限
-         * @return this
-         */
         public CreateGlobalMessageMasterRequest WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateGlobalMessageMasterRequest FromDict(JsonData data)
+        public static CreateGlobalMessageMasterRequest FromJson(JsonData data)
         {
-            return new CreateGlobalMessageMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                readAcquireActions = data.Keys.Contains("readAcquireActions") && data["readAcquireActions"] != null ? data["readAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null,
-                expiresTimeSpan = data.Keys.Contains("expiresTimeSpan") && data["expiresTimeSpan"] != null ? global::Gs2.Gs2Inbox.Model.TimeSpan.FromDict(data["expiresTimeSpan"]) : null,
-                expiresAt = data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateGlobalMessageMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["readAcquireActions"] = new JsonData(ReadAcquireActions == null ? new JsonData[]{} :
+                        ReadAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
+                ["expiresAt"] = ExpiresAt,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["readAcquireActions"] = new JsonData(readAcquireActions.Select(item => item.ToDict()));
-            data["expiresTimeSpan"] = expiresTimeSpan.ToDict();
-            data["expiresAt"] = expiresAt;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var readAcquireAction in ReadAcquireActions)
+            {
+                if (readAcquireAction != null) {
+                    readAcquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (ExpiresTimeSpan != null) {
+                ExpiresTimeSpan.WriteJson(writer);
+            }
+            if (ExpiresAt != null) {
+                writer.WritePropertyName("expiresAt");
+                writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

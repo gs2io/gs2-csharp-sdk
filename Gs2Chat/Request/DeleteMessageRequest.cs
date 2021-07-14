@@ -28,72 +28,62 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DeleteMessageRequest : Gs2Request<DeleteMessageRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public string MessageName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteMessageRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public DeleteMessageRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-
-        /** メッセージ名 */
-		[UnityEngine.SerializeField]
-        public string messageName;
-
-        /**
-         * メッセージ名を設定
-         *
-         * @param messageName メッセージ名
-         * @return this
-         */
         public DeleteMessageRequest WithMessageName(string messageName) {
-            this.messageName = messageName;
+            this.MessageName = messageName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteMessageRequest FromDict(JsonData data)
+        public static DeleteMessageRequest FromJson(JsonData data)
         {
-            return new DeleteMessageRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
-                messageName = data.Keys.Contains("messageName") && data["messageName"] != null ? data["messageName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMessageRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
+                ["messageName"] = MessageName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            data["messageName"] = messageName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            if (MessageName != null) {
+                writer.WritePropertyName("messageName");
+                writer.Write(MessageName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

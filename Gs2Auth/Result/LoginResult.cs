@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,65 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Auth.Result
 {
 	[Preserve]
-	public class LoginResult
+	[System.Serializable]
+	public class LoginResult : IResult
 	{
-        /** アクセストークン */
-        public string token { set; get; }
+        public string Token { set; get; }
+        public string UserId { set; get; }
+        public long? Expire { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
+        public LoginResult WithToken(string token) {
+            this.Token = token;
+            return this;
+        }
 
-        /** 有効期限 */
-        public long? expire { set; get; }
+        public LoginResult WithUserId(string userId) {
+            this.UserId = userId;
+            return this;
+        }
 
+        public LoginResult WithExpire(long? expire) {
+            this.Expire = expire;
+            return this;
+        }
 
     	[Preserve]
-        public static LoginResult FromDict(JsonData data)
+        public static LoginResult FromJson(JsonData data)
         {
-            return new LoginResult {
-                token = data.Keys.Contains("token") && data["token"] != null ? data["token"].ToString() : null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null,
-                expire = data.Keys.Contains("expire") && data["expire"] != null ? (long?)long.Parse(data["expire"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new LoginResult()
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["token"] = Token,
+                ["userId"] = UserId,
+                ["expire"] = Expire,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Token != null) {
+                writer.WritePropertyName("token");
+                writer.Write(Token.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Expire != null) {
+                writer.WritePropertyName("expire");
+                writer.Write(long.Parse(Expire.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

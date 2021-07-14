@@ -23,371 +23,237 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Experience.Model
 {
+
 	[Preserve]
 	public class ExperienceModelMaster : IComparable
 	{
+        public string ExperienceModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? DefaultExperience { set; get; }
+        public long? DefaultRankCap { set; get; }
+        public long? MaxRankCap { set; get; }
+        public string RankThresholdName { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 経験値の種類マスター */
-        public string experienceModelId { set; get; }
-
-        /**
-         * 経験値の種類マスターを設定
-         *
-         * @param experienceModelId 経験値の種類マスター
-         * @return this
-         */
         public ExperienceModelMaster WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-        /** 経験値の種類名 */
-        public string name { set; get; }
-
-        /**
-         * 経験値の種類名を設定
-         *
-         * @param name 経験値の種類名
-         * @return this
-         */
         public ExperienceModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 経験値の種類マスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * 経験値の種類マスターの説明を設定
-         *
-         * @param description 経験値の種類マスターの説明
-         * @return this
-         */
         public ExperienceModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 経験値の種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 経験値の種類のメタデータを設定
-         *
-         * @param metadata 経験値の種類のメタデータ
-         * @return this
-         */
         public ExperienceModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 経験値の初期値 */
-        public long? defaultExperience { set; get; }
-
-        /**
-         * 経験値の初期値を設定
-         *
-         * @param defaultExperience 経験値の初期値
-         * @return this
-         */
         public ExperienceModelMaster WithDefaultExperience(long? defaultExperience) {
-            this.defaultExperience = defaultExperience;
+            this.DefaultExperience = defaultExperience;
             return this;
         }
 
-        /** ランクキャップの初期値 */
-        public long? defaultRankCap { set; get; }
-
-        /**
-         * ランクキャップの初期値を設定
-         *
-         * @param defaultRankCap ランクキャップの初期値
-         * @return this
-         */
         public ExperienceModelMaster WithDefaultRankCap(long? defaultRankCap) {
-            this.defaultRankCap = defaultRankCap;
+            this.DefaultRankCap = defaultRankCap;
             return this;
         }
 
-        /** ランクキャップの最大値 */
-        public long? maxRankCap { set; get; }
-
-        /**
-         * ランクキャップの最大値を設定
-         *
-         * @param maxRankCap ランクキャップの最大値
-         * @return this
-         */
         public ExperienceModelMaster WithMaxRankCap(long? maxRankCap) {
-            this.maxRankCap = maxRankCap;
+            this.MaxRankCap = maxRankCap;
             return this;
         }
 
-        /** ランク計算に用いる */
-        public string rankThresholdId { set; get; }
-
-        /**
-         * ランク計算に用いるを設定
-         *
-         * @param rankThresholdId ランク計算に用いる
-         * @return this
-         */
-        public ExperienceModelMaster WithRankThresholdId(string rankThresholdId) {
-            this.rankThresholdId = rankThresholdId;
+        public ExperienceModelMaster WithRankThresholdName(string rankThresholdName) {
+            this.RankThresholdName = rankThresholdName;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public ExperienceModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public ExperienceModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static ExperienceModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ExperienceModelMaster()
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDefaultExperience(!data.Keys.Contains("defaultExperience") || data["defaultExperience"] == null ? null : (long?)long.Parse(data["defaultExperience"].ToString()))
+                .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)long.Parse(data["defaultRankCap"].ToString()))
+                .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)long.Parse(data["maxRankCap"].ToString()))
+                .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["experienceModelId"] = ExperienceModelId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["defaultExperience"] = DefaultExperience,
+                ["defaultRankCap"] = DefaultRankCap,
+                ["maxRankCap"] = MaxRankCap,
+                ["rankThresholdName"] = RankThresholdName,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.experienceModelId != null)
-            {
+            if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
-                writer.Write(this.experienceModelId);
+                writer.Write(ExperienceModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.defaultExperience.HasValue)
-            {
+            if (DefaultExperience != null) {
                 writer.WritePropertyName("defaultExperience");
-                writer.Write(this.defaultExperience.Value);
+                writer.Write(long.Parse(DefaultExperience.ToString()));
             }
-            if(this.defaultRankCap.HasValue)
-            {
+            if (DefaultRankCap != null) {
                 writer.WritePropertyName("defaultRankCap");
-                writer.Write(this.defaultRankCap.Value);
+                writer.Write(long.Parse(DefaultRankCap.ToString()));
             }
-            if(this.maxRankCap.HasValue)
-            {
+            if (MaxRankCap != null) {
                 writer.WritePropertyName("maxRankCap");
-                writer.Write(this.maxRankCap.Value);
+                writer.Write(long.Parse(MaxRankCap.ToString()));
             }
-            if(this.rankThresholdId != null)
-            {
-                writer.WritePropertyName("rankThresholdId");
-                writer.Write(this.rankThresholdId);
+            if (RankThresholdName != null) {
+                writer.WritePropertyName("rankThresholdName");
+                writer.Write(RankThresholdName.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetExperienceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):model:(?<experienceName>.*)");
-        if (!match.Groups["experienceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["experienceName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):model:(?<experienceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):model:(?<experienceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):experience:(?<namespaceName>.*):model:(?<experienceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static ExperienceModelMaster FromDict(JsonData data)
-        {
-            return new ExperienceModelMaster()
-                .WithExperienceModelId(data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDefaultExperience(data.Keys.Contains("defaultExperience") && data["defaultExperience"] != null ? (long?)long.Parse(data["defaultExperience"].ToString()) : null)
-                .WithDefaultRankCap(data.Keys.Contains("defaultRankCap") && data["defaultRankCap"] != null ? (long?)long.Parse(data["defaultRankCap"].ToString()) : null)
-                .WithMaxRankCap(data.Keys.Contains("maxRankCap") && data["maxRankCap"] != null ? (long?)long.Parse(data["maxRankCap"].ToString()) : null)
-                .WithRankThresholdId(data.Keys.Contains("rankThresholdId") && data["rankThresholdId"] != null ? data["rankThresholdId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ExperienceModelMaster;
             var diff = 0;
-            if (experienceModelId == null && experienceModelId == other.experienceModelId)
+            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
             {
                 // null and null
             }
             else
             {
-                diff += experienceModelId.CompareTo(other.experienceModelId);
+                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (defaultExperience == null && defaultExperience == other.defaultExperience)
+            if (DefaultExperience == null && DefaultExperience == other.DefaultExperience)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(defaultExperience - other.defaultExperience);
+                diff += (int)(DefaultExperience - other.DefaultExperience);
             }
-            if (defaultRankCap == null && defaultRankCap == other.defaultRankCap)
+            if (DefaultRankCap == null && DefaultRankCap == other.DefaultRankCap)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(defaultRankCap - other.defaultRankCap);
+                diff += (int)(DefaultRankCap - other.DefaultRankCap);
             }
-            if (maxRankCap == null && maxRankCap == other.maxRankCap)
+            if (MaxRankCap == null && MaxRankCap == other.MaxRankCap)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxRankCap - other.maxRankCap);
+                diff += (int)(MaxRankCap - other.MaxRankCap);
             }
-            if (rankThresholdId == null && rankThresholdId == other.rankThresholdId)
+            if (RankThresholdName == null && RankThresholdName == other.RankThresholdName)
             {
                 // null and null
             }
             else
             {
-                diff += rankThresholdId.CompareTo(other.rankThresholdId);
+                diff += RankThresholdName.CompareTo(other.RankThresholdName);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["experienceModelId"] = experienceModelId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["defaultExperience"] = defaultExperience;
-            data["defaultRankCap"] = defaultRankCap;
-            data["maxRankCap"] = maxRankCap;
-            data["rankThresholdId"] = rankThresholdId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

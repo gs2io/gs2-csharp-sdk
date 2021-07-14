@@ -28,140 +28,98 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeRankingsRequest : Gs2Request<DescribeRankingsRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
+        public string AccessToken { set; get; }
+        public long? StartIndex { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeRankingsRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public DescribeRankingsRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-
-        /** ランキングの取得を開始するインデックス */
-		[UnityEngine.SerializeField]
-        public long? startIndex;
-
-        /**
-         * ランキングの取得を開始するインデックスを設定
-         *
-         * @param startIndex ランキングの取得を開始するインデックス
-         * @return this
-         */
-        public DescribeRankingsRequest WithStartIndex(long? startIndex) {
-            this.startIndex = startIndex;
-            return this;
-        }
-
-
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
-        public DescribeRankingsRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
-            return this;
-        }
-
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeRankingsRequest WithLimit(long? limit) {
-            this.limit = limit;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public DescribeRankingsRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public DescribeRankingsRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public DescribeRankingsRequest WithStartIndex(long? startIndex) {
+            this.StartIndex = startIndex;
+            return this;
+        }
+
+        public DescribeRankingsRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
+            return this;
+        }
+
+        public DescribeRankingsRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
     	[Preserve]
-        public static DescribeRankingsRequest FromDict(JsonData data)
+        public static DescribeRankingsRequest FromJson(JsonData data)
         {
-            return new DescribeRankingsRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
-                startIndex = data.Keys.Contains("startIndex") && data["startIndex"] != null ? (long?)long.Parse(data["startIndex"].ToString()) : null,
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeRankingsRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithStartIndex(!data.Keys.Contains("startIndex") || data["startIndex"] == null ? null : (long?)long.Parse(data["startIndex"].ToString()))
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
+                ["accessToken"] = AccessToken,
+                ["startIndex"] = StartIndex,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            data["startIndex"] = startIndex;
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (StartIndex != null) {
+                writer.WritePropertyName("startIndex");
+                writer.Write(long.Parse(StartIndex.ToString()));
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

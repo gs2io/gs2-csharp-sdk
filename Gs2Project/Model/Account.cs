@@ -23,335 +23,217 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Project.Model
 {
+
 	[Preserve]
 	public class Account : IComparable
 	{
+        public string AccountId { set; get; }
+        public string OwnerId { set; get; }
+        public string Name { set; get; }
+        public string Email { set; get; }
+        public string FullName { set; get; }
+        public string CompanyName { set; get; }
+        public string Status { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** GS2アカウント */
-        public string accountId { set; get; }
-
-        /**
-         * GS2アカウントを設定
-         *
-         * @param accountId GS2アカウント
-         * @return this
-         */
         public Account WithAccountId(string accountId) {
-            this.accountId = accountId;
+            this.AccountId = accountId;
             return this;
         }
 
-        /** None */
-        public string ownerId { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param ownerId None
-         * @return this
-         */
         public Account WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
+            this.OwnerId = ownerId;
             return this;
         }
 
-        /** GS2アカウントの名前 */
-        public string name { set; get; }
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param name GS2アカウントの名前
-         * @return this
-         */
         public Account WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メールアドレス */
-        public string email { set; get; }
-
-        /**
-         * メールアドレスを設定
-         *
-         * @param email メールアドレス
-         * @return this
-         */
         public Account WithEmail(string email) {
-            this.email = email;
+            this.Email = email;
             return this;
         }
 
-        /** フルネーム */
-        public string fullName { set; get; }
-
-        /**
-         * フルネームを設定
-         *
-         * @param fullName フルネーム
-         * @return this
-         */
         public Account WithFullName(string fullName) {
-            this.fullName = fullName;
+            this.FullName = fullName;
             return this;
         }
 
-        /** 会社名 */
-        public string companyName { set; get; }
-
-        /**
-         * 会社名を設定
-         *
-         * @param companyName 会社名
-         * @return this
-         */
         public Account WithCompanyName(string companyName) {
-            this.companyName = companyName;
+            this.CompanyName = companyName;
             return this;
         }
 
-        /** パスワード */
-        public string password { set; get; }
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
-        public Account WithPassword(string password) {
-            this.password = password;
-            return this;
-        }
-
-        /** ステータス */
-        public string status { set; get; }
-
-        /**
-         * ステータスを設定
-         *
-         * @param status ステータス
-         * @return this
-         */
         public Account WithStatus(string status) {
-            this.status = status;
+            this.Status = status;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Account WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Account WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Account FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Account()
+                .WithAccountId(!data.Keys.Contains("accountId") || data["accountId"] == null ? null : data["accountId"].ToString())
+                .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
+                .WithFullName(!data.Keys.Contains("fullName") || data["fullName"] == null ? null : data["fullName"].ToString())
+                .WithCompanyName(!data.Keys.Contains("companyName") || data["companyName"] == null ? null : data["companyName"].ToString())
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["accountId"] = AccountId,
+                ["ownerId"] = OwnerId,
+                ["name"] = Name,
+                ["email"] = Email,
+                ["fullName"] = FullName,
+                ["companyName"] = CompanyName,
+                ["status"] = Status,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.accountId != null)
-            {
+            if (AccountId != null) {
                 writer.WritePropertyName("accountId");
-                writer.Write(this.accountId);
+                writer.Write(AccountId.ToString());
             }
-            if(this.ownerId != null)
-            {
+            if (OwnerId != null) {
                 writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
+                writer.Write(OwnerId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.email != null)
-            {
+            if (Email != null) {
                 writer.WritePropertyName("email");
-                writer.Write(this.email);
+                writer.Write(Email.ToString());
             }
-            if(this.fullName != null)
-            {
+            if (FullName != null) {
                 writer.WritePropertyName("fullName");
-                writer.Write(this.fullName);
+                writer.Write(FullName.ToString());
             }
-            if(this.companyName != null)
-            {
+            if (CompanyName != null) {
                 writer.WritePropertyName("companyName");
-                writer.Write(this.companyName);
+                writer.Write(CompanyName.ToString());
             }
-            if(this.password != null)
-            {
-                writer.WritePropertyName("password");
-                writer.Write(this.password);
-            }
-            if(this.status != null)
-            {
+            if (Status != null) {
                 writer.WritePropertyName("status");
-                writer.Write(this.status);
+                writer.Write(Status.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetAccountNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*)");
-        if (!match.Groups["accountName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["accountName"].Value;
-    }
-
-    	[Preserve]
-        public static Account FromDict(JsonData data)
-        {
-            return new Account()
-                .WithAccountId(data.Keys.Contains("accountId") && data["accountId"] != null ? data["accountId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithEmail(data.Keys.Contains("email") && data["email"] != null ? data["email"].ToString() : null)
-                .WithFullName(data.Keys.Contains("fullName") && data["fullName"] != null ? data["fullName"].ToString() : null)
-                .WithCompanyName(data.Keys.Contains("companyName") && data["companyName"] != null ? data["companyName"].ToString() : null)
-                .WithPassword(data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString() : null)
-                .WithStatus(data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Account;
             var diff = 0;
-            if (accountId == null && accountId == other.accountId)
+            if (AccountId == null && AccountId == other.AccountId)
             {
                 // null and null
             }
             else
             {
-                diff += accountId.CompareTo(other.accountId);
+                diff += AccountId.CompareTo(other.AccountId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (OwnerId == null && OwnerId == other.OwnerId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += OwnerId.CompareTo(other.OwnerId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (email == null && email == other.email)
+            if (Email == null && Email == other.Email)
             {
                 // null and null
             }
             else
             {
-                diff += email.CompareTo(other.email);
+                diff += Email.CompareTo(other.Email);
             }
-            if (fullName == null && fullName == other.fullName)
+            if (FullName == null && FullName == other.FullName)
             {
                 // null and null
             }
             else
             {
-                diff += fullName.CompareTo(other.fullName);
+                diff += FullName.CompareTo(other.FullName);
             }
-            if (companyName == null && companyName == other.companyName)
+            if (CompanyName == null && CompanyName == other.CompanyName)
             {
                 // null and null
             }
             else
             {
-                diff += companyName.CompareTo(other.companyName);
+                diff += CompanyName.CompareTo(other.CompanyName);
             }
-            if (password == null && password == other.password)
+            if (Status == null && Status == other.Status)
             {
                 // null and null
             }
             else
             {
-                diff += password.CompareTo(other.password);
+                diff += Status.CompareTo(other.Status);
             }
-            if (status == null && status == other.status)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += status.CompareTo(other.status);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["accountId"] = accountId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["email"] = email;
-            data["fullName"] = fullName;
-            data["companyName"] = companyName;
-            data["password"] = password;
-            data["status"] = status;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

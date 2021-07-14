@@ -28,54 +28,50 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DescribeNamespacesRequest : Gs2Request<DescribeNamespacesRequest>
 	{
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
-        /** データの取得を開始する位置を指定するトークン */
-		[UnityEngine.SerializeField]
-        public string pageToken;
-
-        /**
-         * データの取得を開始する位置を指定するトークンを設定
-         *
-         * @param pageToken データの取得を開始する位置を指定するトークン
-         * @return this
-         */
         public DescribeNamespacesRequest WithPageToken(string pageToken) {
-            this.pageToken = pageToken;
+            this.PageToken = pageToken;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeNamespacesRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public DescribeNamespacesRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeNamespacesRequest FromDict(JsonData data)
+        public static DescribeNamespacesRequest FromJson(JsonData data)
         {
-            return new DescribeNamespacesRequest {
-                pageToken = data.Keys.Contains("pageToken") && data["pageToken"] != null ? data["pageToken"].ToString(): null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeNamespacesRequest()
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["pageToken"] = pageToken;
-            data["limit"] = limit;
-            return data;
+            writer.WriteObjectStart();
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

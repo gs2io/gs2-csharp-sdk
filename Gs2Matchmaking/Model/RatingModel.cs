@@ -23,197 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class RatingModel : IComparable
 	{
+        public string RatingModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? Volatility { set; get; }
 
-        /** レーティングモデル */
-        public string ratingModelId { set; get; }
-
-        /**
-         * レーティングモデルを設定
-         *
-         * @param ratingModelId レーティングモデル
-         * @return this
-         */
         public RatingModel WithRatingModelId(string ratingModelId) {
-            this.ratingModelId = ratingModelId;
+            this.RatingModelId = ratingModelId;
             return this;
         }
 
-        /** レーティングの種類名 */
-        public string name { set; get; }
-
-        /**
-         * レーティングの種類名を設定
-         *
-         * @param name レーティングの種類名
-         * @return this
-         */
         public RatingModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** レーティングの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * レーティングの種類のメタデータを設定
-         *
-         * @param metadata レーティングの種類のメタデータ
-         * @return this
-         */
         public RatingModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** レート値の変動の大きさ */
-        public int? volatility { set; get; }
-
-        /**
-         * レート値の変動の大きさを設定
-         *
-         * @param volatility レート値の変動の大きさ
-         * @return this
-         */
         public RatingModel WithVolatility(int? volatility) {
-            this.volatility = volatility;
+            this.Volatility = volatility;
             return this;
+        }
+
+    	[Preserve]
+        public static RatingModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new RatingModel()
+                .WithRatingModelId(!data.Keys.Contains("ratingModelId") || data["ratingModelId"] == null ? null : data["ratingModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["ratingModelId"] = RatingModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["volatility"] = Volatility,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ratingModelId != null)
-            {
+            if (RatingModelId != null) {
                 writer.WritePropertyName("ratingModelId");
-                writer.Write(this.ratingModelId);
+                writer.Write(RatingModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.volatility.HasValue)
-            {
+            if (Volatility != null) {
                 writer.WritePropertyName("volatility");
-                writer.Write(this.volatility.Value);
+                writer.Write(int.Parse(Volatility.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRatingNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["ratingName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ratingName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):model:(?<ratingName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static RatingModel FromDict(JsonData data)
-        {
-            return new RatingModel()
-                .WithRatingModelId(data.Keys.Contains("ratingModelId") && data["ratingModelId"] != null ? data["ratingModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithVolatility(data.Keys.Contains("volatility") && data["volatility"] != null ? (int?)int.Parse(data["volatility"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as RatingModel;
             var diff = 0;
-            if (ratingModelId == null && ratingModelId == other.ratingModelId)
+            if (RatingModelId == null && RatingModelId == other.RatingModelId)
             {
                 // null and null
             }
             else
             {
-                diff += ratingModelId.CompareTo(other.ratingModelId);
+                diff += RatingModelId.CompareTo(other.RatingModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (volatility == null && volatility == other.volatility)
+            if (Volatility == null && Volatility == other.Volatility)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(volatility - other.volatility);
+                diff += (int)(Volatility - other.Volatility);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ratingModelId"] = ratingModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["volatility"] = volatility;
-            return data;
-        }
-	}
+    }
 }

@@ -23,377 +23,268 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class QuestModel : IComparable
 	{
+        public string QuestModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
+        public string[] PremiseQuestNames { set; get; }
 
-        /** クエストモデル */
-        public string questModelId { set; get; }
-
-        /**
-         * クエストモデルを設定
-         *
-         * @param questModelId クエストモデル
-         * @return this
-         */
         public QuestModel WithQuestModelId(string questModelId) {
-            this.questModelId = questModelId;
+            this.QuestModelId = questModelId;
             return this;
         }
 
-        /** クエストモデル名 */
-        public string name { set; get; }
-
-        /**
-         * クエストモデル名を設定
-         *
-         * @param name クエストモデル名
-         * @return this
-         */
         public QuestModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** クエストモデルのメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * クエストモデルのメタデータを設定
-         *
-         * @param metadata クエストモデルのメタデータ
-         * @return this
-         */
         public QuestModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** クエストの内容 */
-        public List<Contents> contents { set; get; }
-
-        /**
-         * クエストの内容を設定
-         *
-         * @param contents クエストの内容
-         * @return this
-         */
-        public QuestModel WithContents(List<Contents> contents) {
-            this.contents = contents;
+        public QuestModel WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
+            this.Contents = contents;
             return this;
         }
 
-        /** 挑戦可能な期間を指定するイベントマスター のGRN */
-        public string challengePeriodEventId { set; get; }
-
-        /**
-         * 挑戦可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId 挑戦可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public QuestModel WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
 
-        /** クエストの参加料 */
-        public List<ConsumeAction> consumeActions { set; get; }
-
-        /**
-         * クエストの参加料を設定
-         *
-         * @param consumeActions クエストの参加料
-         * @return this
-         */
-        public QuestModel WithConsumeActions(List<ConsumeAction> consumeActions) {
-            this.consumeActions = consumeActions;
+        public QuestModel WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
+            this.ConsumeActions = consumeActions;
             return this;
         }
 
-        /** クエスト失敗時の報酬 */
-        public List<AcquireAction> failedAcquireActions { set; get; }
-
-        /**
-         * クエスト失敗時の報酬を設定
-         *
-         * @param failedAcquireActions クエスト失敗時の報酬
-         * @return this
-         */
-        public QuestModel WithFailedAcquireActions(List<AcquireAction> failedAcquireActions) {
-            this.failedAcquireActions = failedAcquireActions;
+        public QuestModel WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
+            this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
 
-        /** クエストに挑戦するためにクリアしておく必要のあるクエスト名 */
-        public List<string> premiseQuestNames { set; get; }
-
-        /**
-         * クエストに挑戦するためにクリアしておく必要のあるクエスト名を設定
-         *
-         * @param premiseQuestNames クエストに挑戦するためにクリアしておく必要のあるクエスト名
-         * @return this
-         */
-        public QuestModel WithPremiseQuestNames(List<string> premiseQuestNames) {
-            this.premiseQuestNames = premiseQuestNames;
+        public QuestModel WithPremiseQuestNames(string[] premiseQuestNames) {
+            this.PremiseQuestNames = premiseQuestNames;
             return this;
+        }
+
+    	[Preserve]
+        public static QuestModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new QuestModel()
+                .WithQuestModelId(!data.Keys.Contains("questModelId") || data["questModelId"] == null ? null : data["questModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithContents(!data.Keys.Contains("contents") || data["contents"] == null ? new Gs2.Gs2Quest.Model.Contents[]{} : data["contents"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Contents.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Quest.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
+                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithPremiseQuestNames(!data.Keys.Contains("premiseQuestNames") || data["premiseQuestNames"] == null ? new string[]{} : data["premiseQuestNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["questModelId"] = QuestModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["contents"] = new JsonData(Contents == null ? new JsonData[]{} :
+                        Contents.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
+                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                        ConsumeActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["failedAcquireActions"] = new JsonData(FailedAcquireActions == null ? new JsonData[]{} :
+                        FailedAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["premiseQuestNames"] = new JsonData(PremiseQuestNames == null ? new JsonData[]{} :
+                        PremiseQuestNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.questModelId != null)
-            {
+            if (QuestModelId != null) {
                 writer.WritePropertyName("questModelId");
-                writer.Write(this.questModelId);
+                writer.Write(QuestModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.contents != null)
-            {
+            if (Contents != null) {
                 writer.WritePropertyName("contents");
                 writer.WriteArrayStart();
-                foreach(var item in this.contents)
+                foreach (var content in Contents)
                 {
-                    item.WriteJson(writer);
+                    if (content != null) {
+                        content.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.challengePeriodEventId != null)
-            {
+            if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
-                writer.Write(this.challengePeriodEventId);
+                writer.Write(ChallengePeriodEventId.ToString());
             }
-            if(this.consumeActions != null)
-            {
+            if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.consumeActions)
+                foreach (var consumeAction in ConsumeActions)
                 {
-                    item.WriteJson(writer);
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.failedAcquireActions != null)
-            {
+            if (FailedAcquireActions != null) {
                 writer.WritePropertyName("failedAcquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.failedAcquireActions)
+                foreach (var failedAcquireAction in FailedAcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (failedAcquireAction != null) {
+                        failedAcquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.premiseQuestNames != null)
-            {
+            if (PremiseQuestNames != null) {
                 writer.WritePropertyName("premiseQuestNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.premiseQuestNames)
+                foreach (var premiseQuestName in PremiseQuestNames)
                 {
-                    writer.Write(item);
+                    if (premiseQuestName != null) {
+                        writer.Write(premiseQuestName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetQuestNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*):quest:(?<questName>.*)");
-        if (!match.Groups["questName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["questName"].Value;
-    }
-
-    public static string GetQuestGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*):quest:(?<questName>.*)");
-        if (!match.Groups["questGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["questGroupName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*):quest:(?<questName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*):quest:(?<questName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):group:(?<questGroupName>.*):quest:(?<questName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static QuestModel FromDict(JsonData data)
-        {
-            return new QuestModel()
-                .WithQuestModelId(data.Keys.Contains("questModelId") && data["questModelId"] != null ? data["questModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithContents(data.Keys.Contains("contents") && data["contents"] != null ? data["contents"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.Contents.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithChallengePeriodEventId(data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString() : null)
-                .WithConsumeActions(data.Keys.Contains("consumeActions") && data["consumeActions"] != null ? data["consumeActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.ConsumeAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithFailedAcquireActions(data.Keys.Contains("failedAcquireActions") && data["failedAcquireActions"] != null ? data["failedAcquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Quest.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithPremiseQuestNames(data.Keys.Contains("premiseQuestNames") && data["premiseQuestNames"] != null ? data["premiseQuestNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as QuestModel;
             var diff = 0;
-            if (questModelId == null && questModelId == other.questModelId)
+            if (QuestModelId == null && QuestModelId == other.QuestModelId)
             {
                 // null and null
             }
             else
             {
-                diff += questModelId.CompareTo(other.questModelId);
+                diff += QuestModelId.CompareTo(other.QuestModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (contents == null && contents == other.contents)
+            if (Contents == null && Contents == other.Contents)
             {
                 // null and null
             }
             else
             {
-                diff += contents.Count - other.contents.Count;
-                for (var i = 0; i < contents.Count; i++)
+                diff += Contents.Length - other.Contents.Length;
+                for (var i = 0; i < Contents.Length; i++)
                 {
-                    diff += contents[i].CompareTo(other.contents[i]);
+                    diff += Contents[i].CompareTo(other.Contents[i]);
                 }
             }
-            if (challengePeriodEventId == null && challengePeriodEventId == other.challengePeriodEventId)
+            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += challengePeriodEventId.CompareTo(other.challengePeriodEventId);
+                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
             }
-            if (consumeActions == null && consumeActions == other.consumeActions)
+            if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
                 // null and null
             }
             else
             {
-                diff += consumeActions.Count - other.consumeActions.Count;
-                for (var i = 0; i < consumeActions.Count; i++)
+                diff += ConsumeActions.Length - other.ConsumeActions.Length;
+                for (var i = 0; i < ConsumeActions.Length; i++)
                 {
-                    diff += consumeActions[i].CompareTo(other.consumeActions[i]);
+                    diff += ConsumeActions[i].CompareTo(other.ConsumeActions[i]);
                 }
             }
-            if (failedAcquireActions == null && failedAcquireActions == other.failedAcquireActions)
+            if (FailedAcquireActions == null && FailedAcquireActions == other.FailedAcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += failedAcquireActions.Count - other.failedAcquireActions.Count;
-                for (var i = 0; i < failedAcquireActions.Count; i++)
+                diff += FailedAcquireActions.Length - other.FailedAcquireActions.Length;
+                for (var i = 0; i < FailedAcquireActions.Length; i++)
                 {
-                    diff += failedAcquireActions[i].CompareTo(other.failedAcquireActions[i]);
+                    diff += FailedAcquireActions[i].CompareTo(other.FailedAcquireActions[i]);
                 }
             }
-            if (premiseQuestNames == null && premiseQuestNames == other.premiseQuestNames)
+            if (PremiseQuestNames == null && PremiseQuestNames == other.PremiseQuestNames)
             {
                 // null and null
             }
             else
             {
-                diff += premiseQuestNames.Count - other.premiseQuestNames.Count;
-                for (var i = 0; i < premiseQuestNames.Count; i++)
+                diff += PremiseQuestNames.Length - other.PremiseQuestNames.Length;
+                for (var i = 0; i < PremiseQuestNames.Length; i++)
                 {
-                    diff += premiseQuestNames[i].CompareTo(other.premiseQuestNames[i]);
+                    diff += PremiseQuestNames[i].CompareTo(other.PremiseQuestNames[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["questModelId"] = questModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["contents"] = new JsonData(contents.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            data["consumeActions"] = new JsonData(consumeActions.Select(item => item.ToDict()));
-            data["failedAcquireActions"] = new JsonData(failedAcquireActions.Select(item => item.ToDict()));
-            data["premiseQuestNames"] = new JsonData(premiseQuestNames);
-            return data;
-        }
-	}
+    }
 }

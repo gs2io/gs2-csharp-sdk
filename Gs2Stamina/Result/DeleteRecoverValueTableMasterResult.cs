@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Stamina.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Stamina.Result
 {
 	[Preserve]
-	public class DeleteRecoverValueTableMasterResult
+	[System.Serializable]
+	public class DeleteRecoverValueTableMasterResult : IResult
 	{
-        /** 削除したスタミナ回復量テーブルマスター */
-        public RecoverValueTableMaster item { set; get; }
+        public Gs2.Gs2Stamina.Model.RecoverValueTableMaster Item { set; get; }
 
+        public DeleteRecoverValueTableMasterResult WithItem(Gs2.Gs2Stamina.Model.RecoverValueTableMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteRecoverValueTableMasterResult FromDict(JsonData data)
+        public static DeleteRecoverValueTableMasterResult FromJson(JsonData data)
         {
-            return new DeleteRecoverValueTableMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Stamina.Model.RecoverValueTableMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteRecoverValueTableMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.RecoverValueTableMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

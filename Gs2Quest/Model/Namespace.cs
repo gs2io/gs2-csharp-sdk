@@ -23,446 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting StartQuestScript { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; }
+        public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** クエストを分類するカテゴリー */
-        public string namespaceId { set; get; }
-
-        /**
-         * クエストを分類するカテゴリーを設定
-         *
-         * @param namespaceId クエストを分類するカテゴリー
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** カテゴリ名 */
-        public string name { set; get; }
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param name カテゴリ名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** クエスト開始したときに実行するスクリプト */
-        public Gs2.Gs2Quest.Model.ScriptSetting startQuestScript { set; get; }
-
-        /**
-         * クエスト開始したときに実行するスクリプトを設定
-         *
-         * @param startQuestScript クエスト開始したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
-            this.startQuestScript = startQuestScript;
+            this.StartQuestScript = startQuestScript;
             return this;
         }
 
-        /** クエストクリアしたときに実行するスクリプト */
-        public Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript { set; get; }
-
-        /**
-         * クエストクリアしたときに実行するスクリプトを設定
-         *
-         * @param completeQuestScript クエストクリアしたときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithCompleteQuestScript(Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
-            this.completeQuestScript = completeQuestScript;
+            this.CompleteQuestScript = completeQuestScript;
             return this;
         }
 
-        /** クエスト失敗したときに実行するスクリプト */
-        public Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript { set; get; }
-
-        /**
-         * クエスト失敗したときに実行するスクリプトを設定
-         *
-         * @param failedQuestScript クエスト失敗したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithFailedQuestScript(Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
-            this.failedQuestScript = failedQuestScript;
+            this.FailedQuestScript = failedQuestScript;
             return this;
         }
 
-        /** 報酬付与処理をジョブとして追加するキューのネームスペース のGRN */
-        public string queueNamespaceId { set; get; }
-
-        /**
-         * 報酬付与処理をジョブとして追加するキューのネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 報酬付与処理をジョブとして追加するキューのネームスペース のGRN
-         * @return this
-         */
         public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-        /** 報酬付与処理のスタンプシートで使用する暗号鍵GRN */
-        public string keyId { set; get; }
-
-        /**
-         * 報酬付与処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 報酬付与処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public Namespace WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Quest.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** None */
-        public string status { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param status None
-         * @return this
-         */
-        public Namespace WithStatus(string status) {
-            this.status = status;
-            return this;
-        }
-
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithStartQuestScript(!data.Keys.Contains("startQuestScript") || data["startQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["startQuestScript"]))
+                .WithCompleteQuestScript(!data.Keys.Contains("completeQuestScript") || data["completeQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["completeQuestScript"]))
+                .WithFailedQuestScript(!data.Keys.Contains("failedQuestScript") || data["failedQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["failedQuestScript"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Quest.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["startQuestScript"] = StartQuestScript?.ToJson(),
+                ["completeQuestScript"] = CompleteQuestScript?.ToJson(),
+                ["failedQuestScript"] = FailedQuestScript?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.startQuestScript != null)
-            {
+            if (StartQuestScript != null) {
                 writer.WritePropertyName("startQuestScript");
-                this.startQuestScript.WriteJson(writer);
+                StartQuestScript.WriteJson(writer);
             }
-            if(this.completeQuestScript != null)
-            {
+            if (CompleteQuestScript != null) {
                 writer.WritePropertyName("completeQuestScript");
-                this.completeQuestScript.WriteJson(writer);
+                CompleteQuestScript.WriteJson(writer);
             }
-            if(this.failedQuestScript != null)
-            {
+            if (FailedQuestScript != null) {
                 writer.WritePropertyName("failedQuestScript");
-                this.failedQuestScript.WriteJson(writer);
+                FailedQuestScript.WriteJson(writer);
             }
-            if(this.queueNamespaceId != null)
-            {
+            if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
-                writer.Write(this.queueNamespaceId);
+                writer.Write(QueueNamespaceId.ToString());
             }
-            if(this.keyId != null)
-            {
+            if (KeyId != null) {
                 writer.WritePropertyName("keyId");
-                writer.Write(this.keyId);
+                writer.Write(KeyId.ToString());
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.status != null)
-            {
-                writer.WritePropertyName("status");
-                writer.Write(this.status);
-            }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithStartQuestScript(data.Keys.Contains("startQuestScript") && data["startQuestScript"] != null ? Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["startQuestScript"]) : null)
-                .WithCompleteQuestScript(data.Keys.Contains("completeQuestScript") && data["completeQuestScript"] != null ? Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["completeQuestScript"]) : null)
-                .WithFailedQuestScript(data.Keys.Contains("failedQuestScript") && data["failedQuestScript"] != null ? Gs2.Gs2Quest.Model.ScriptSetting.FromDict(data["failedQuestScript"]) : null)
-                .WithQueueNamespaceId(data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString() : null)
-                .WithKeyId(data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString() : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Quest.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithStatus(data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (StartQuestScript == null && StartQuestScript == other.StartQuestScript)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += StartQuestScript.CompareTo(other.StartQuestScript);
             }
-            if (startQuestScript == null && startQuestScript == other.startQuestScript)
+            if (CompleteQuestScript == null && CompleteQuestScript == other.CompleteQuestScript)
             {
                 // null and null
             }
             else
             {
-                diff += startQuestScript.CompareTo(other.startQuestScript);
+                diff += CompleteQuestScript.CompareTo(other.CompleteQuestScript);
             }
-            if (completeQuestScript == null && completeQuestScript == other.completeQuestScript)
+            if (FailedQuestScript == null && FailedQuestScript == other.FailedQuestScript)
             {
                 // null and null
             }
             else
             {
-                diff += completeQuestScript.CompareTo(other.completeQuestScript);
+                diff += FailedQuestScript.CompareTo(other.FailedQuestScript);
             }
-            if (failedQuestScript == null && failedQuestScript == other.failedQuestScript)
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += failedQuestScript.CompareTo(other.failedQuestScript);
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
             }
-            if (queueNamespaceId == null && queueNamespaceId == other.queueNamespaceId)
+            if (KeyId == null && KeyId == other.KeyId)
             {
                 // null and null
             }
             else
             {
-                diff += queueNamespaceId.CompareTo(other.queueNamespaceId);
+                diff += KeyId.CompareTo(other.KeyId);
             }
-            if (keyId == null && keyId == other.keyId)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += keyId.CompareTo(other.keyId);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (status == null && status == other.status)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += status.CompareTo(other.status);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["startQuestScript"] = startQuestScript.ToDict();
-            data["completeQuestScript"] = completeQuestScript.ToDict();
-            data["failedQuestScript"] = failedQuestScript.ToDict();
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["logSetting"] = logSetting.ToDict();
-            data["status"] = status;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

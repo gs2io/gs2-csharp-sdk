@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class FriendUser : IComparable
 	{
+        public string UserId { set; get; }
+        public string PublicProfile { set; get; }
+        public string FriendProfile { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public FriendUser WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 公開されるプロフィール */
-        public string publicProfile { set; get; }
-
-        /**
-         * 公開されるプロフィールを設定
-         *
-         * @param publicProfile 公開されるプロフィール
-         * @return this
-         */
         public FriendUser WithPublicProfile(string publicProfile) {
-            this.publicProfile = publicProfile;
+            this.PublicProfile = publicProfile;
             return this;
         }
 
-        /** フレンド向けに公開されるプロフィール */
-        public string friendProfile { set; get; }
-
-        /**
-         * フレンド向けに公開されるプロフィールを設定
-         *
-         * @param friendProfile フレンド向けに公開されるプロフィール
-         * @return this
-         */
         public FriendUser WithFriendProfile(string friendProfile) {
-            this.friendProfile = friendProfile;
+            this.FriendProfile = friendProfile;
             return this;
+        }
+
+    	[Preserve]
+        public static FriendUser FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new FriendUser()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString())
+                .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["publicProfile"] = PublicProfile,
+                ["friendProfile"] = FriendProfile,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.publicProfile != null)
-            {
+            if (PublicProfile != null) {
                 writer.WritePropertyName("publicProfile");
-                writer.Write(this.publicProfile);
+                writer.Write(PublicProfile.ToString());
             }
-            if(this.friendProfile != null)
-            {
+            if (FriendProfile != null) {
                 writer.WritePropertyName("friendProfile");
-                writer.Write(this.friendProfile);
+                writer.Write(FriendProfile.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static FriendUser FromDict(JsonData data)
-        {
-            return new FriendUser()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPublicProfile(data.Keys.Contains("publicProfile") && data["publicProfile"] != null ? data["publicProfile"].ToString() : null)
-                .WithFriendProfile(data.Keys.Contains("friendProfile") && data["friendProfile"] != null ? data["friendProfile"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as FriendUser;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (publicProfile == null && publicProfile == other.publicProfile)
+            if (PublicProfile == null && PublicProfile == other.PublicProfile)
             {
                 // null and null
             }
             else
             {
-                diff += publicProfile.CompareTo(other.publicProfile);
+                diff += PublicProfile.CompareTo(other.PublicProfile);
             }
-            if (friendProfile == null && friendProfile == other.friendProfile)
+            if (FriendProfile == null && FriendProfile == other.FriendProfile)
             {
                 // null and null
             }
             else
             {
-                diff += friendProfile.CompareTo(other.friendProfile);
+                diff += FriendProfile.CompareTo(other.FriendProfile);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["publicProfile"] = publicProfile;
-            data["friendProfile"] = friendProfile;
-            return data;
-        }
-	}
+    }
 }

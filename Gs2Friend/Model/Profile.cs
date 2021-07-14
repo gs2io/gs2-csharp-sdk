@@ -23,284 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class Profile : IComparable
 	{
+        public string ProfileId { set; get; }
+        public string UserId { set; get; }
+        public string PublicProfile { set; get; }
+        public string FollowerProfile { set; get; }
+        public string FriendProfile { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** プロフィール */
-        public string profileId { set; get; }
-
-        /**
-         * プロフィールを設定
-         *
-         * @param profileId プロフィール
-         * @return this
-         */
         public Profile WithProfileId(string profileId) {
-            this.profileId = profileId;
+            this.ProfileId = profileId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Profile WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 公開されるプロフィール */
-        public string publicProfile { set; get; }
-
-        /**
-         * 公開されるプロフィールを設定
-         *
-         * @param publicProfile 公開されるプロフィール
-         * @return this
-         */
         public Profile WithPublicProfile(string publicProfile) {
-            this.publicProfile = publicProfile;
+            this.PublicProfile = publicProfile;
             return this;
         }
 
-        /** フォロワー向けに公開されるプロフィール */
-        public string followerProfile { set; get; }
-
-        /**
-         * フォロワー向けに公開されるプロフィールを設定
-         *
-         * @param followerProfile フォロワー向けに公開されるプロフィール
-         * @return this
-         */
         public Profile WithFollowerProfile(string followerProfile) {
-            this.followerProfile = followerProfile;
+            this.FollowerProfile = followerProfile;
             return this;
         }
 
-        /** フレンド向けに公開されるプロフィール */
-        public string friendProfile { set; get; }
-
-        /**
-         * フレンド向けに公開されるプロフィールを設定
-         *
-         * @param friendProfile フレンド向けに公開されるプロフィール
-         * @return this
-         */
         public Profile WithFriendProfile(string friendProfile) {
-            this.friendProfile = friendProfile;
+            this.FriendProfile = friendProfile;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Profile WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Profile WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Profile FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Profile()
+                .WithProfileId(!data.Keys.Contains("profileId") || data["profileId"] == null ? null : data["profileId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString())
+                .WithFollowerProfile(!data.Keys.Contains("followerProfile") || data["followerProfile"] == null ? null : data["followerProfile"].ToString())
+                .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["profileId"] = ProfileId,
+                ["userId"] = UserId,
+                ["publicProfile"] = PublicProfile,
+                ["followerProfile"] = FollowerProfile,
+                ["friendProfile"] = FriendProfile,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.profileId != null)
-            {
+            if (ProfileId != null) {
                 writer.WritePropertyName("profileId");
-                writer.Write(this.profileId);
+                writer.Write(ProfileId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.publicProfile != null)
-            {
+            if (PublicProfile != null) {
                 writer.WritePropertyName("publicProfile");
-                writer.Write(this.publicProfile);
+                writer.Write(PublicProfile.ToString());
             }
-            if(this.followerProfile != null)
-            {
+            if (FollowerProfile != null) {
                 writer.WritePropertyName("followerProfile");
-                writer.Write(this.followerProfile);
+                writer.Write(FollowerProfile.ToString());
             }
-            if(this.friendProfile != null)
-            {
+            if (FriendProfile != null) {
                 writer.WritePropertyName("friendProfile");
-                writer.Write(this.friendProfile);
+                writer.Write(FriendProfile.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):profile");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):profile");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):profile");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*):user:(?<userId>.*):profile");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Profile FromDict(JsonData data)
-        {
-            return new Profile()
-                .WithProfileId(data.Keys.Contains("profileId") && data["profileId"] != null ? data["profileId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPublicProfile(data.Keys.Contains("publicProfile") && data["publicProfile"] != null ? data["publicProfile"].ToString() : null)
-                .WithFollowerProfile(data.Keys.Contains("followerProfile") && data["followerProfile"] != null ? data["followerProfile"].ToString() : null)
-                .WithFriendProfile(data.Keys.Contains("friendProfile") && data["friendProfile"] != null ? data["friendProfile"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Profile;
             var diff = 0;
-            if (profileId == null && profileId == other.profileId)
+            if (ProfileId == null && ProfileId == other.ProfileId)
             {
                 // null and null
             }
             else
             {
-                diff += profileId.CompareTo(other.profileId);
+                diff += ProfileId.CompareTo(other.ProfileId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (publicProfile == null && publicProfile == other.publicProfile)
+            if (PublicProfile == null && PublicProfile == other.PublicProfile)
             {
                 // null and null
             }
             else
             {
-                diff += publicProfile.CompareTo(other.publicProfile);
+                diff += PublicProfile.CompareTo(other.PublicProfile);
             }
-            if (followerProfile == null && followerProfile == other.followerProfile)
+            if (FollowerProfile == null && FollowerProfile == other.FollowerProfile)
             {
                 // null and null
             }
             else
             {
-                diff += followerProfile.CompareTo(other.followerProfile);
+                diff += FollowerProfile.CompareTo(other.FollowerProfile);
             }
-            if (friendProfile == null && friendProfile == other.friendProfile)
+            if (FriendProfile == null && FriendProfile == other.FriendProfile)
             {
                 // null and null
             }
             else
             {
-                diff += friendProfile.CompareTo(other.friendProfile);
+                diff += FriendProfile.CompareTo(other.FriendProfile);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["profileId"] = profileId;
-            data["userId"] = userId;
-            data["publicProfile"] = publicProfile;
-            data["followerProfile"] = followerProfile;
-            data["friendProfile"] = friendProfile;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

@@ -23,284 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Key.Model
 {
+
 	[Preserve]
 	public class GitHubApiKey : IComparable
 	{
+        public string ApiKeyId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string EncryptionKeyName { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** GitHub のAPIキー */
-        public string apiKeyId { set; get; }
-
-        /**
-         * GitHub のAPIキーを設定
-         *
-         * @param apiKeyId GitHub のAPIキー
-         * @return this
-         */
         public GitHubApiKey WithApiKeyId(string apiKeyId) {
-            this.apiKeyId = apiKeyId;
+            this.ApiKeyId = apiKeyId;
             return this;
         }
 
-        /** GitHub APIキー名 */
-        public string name { set; get; }
-
-        /**
-         * GitHub APIキー名を設定
-         *
-         * @param name GitHub APIキー名
-         * @return this
-         */
         public GitHubApiKey WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 説明文 */
-        public string description { set; get; }
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public GitHubApiKey WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** APIキー */
-        public string apiKey { set; get; }
-
-        /**
-         * APIキーを設定
-         *
-         * @param apiKey APIキー
-         * @return this
-         */
-        public GitHubApiKey WithApiKey(string apiKey) {
-            this.apiKey = apiKey;
-            return this;
-        }
-
-        /** APIキーの暗号化に使用する暗号鍵名 */
-        public string encryptionKeyName { set; get; }
-
-        /**
-         * APIキーの暗号化に使用する暗号鍵名を設定
-         *
-         * @param encryptionKeyName APIキーの暗号化に使用する暗号鍵名
-         * @return this
-         */
         public GitHubApiKey WithEncryptionKeyName(string encryptionKeyName) {
-            this.encryptionKeyName = encryptionKeyName;
+            this.EncryptionKeyName = encryptionKeyName;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public GitHubApiKey WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public GitHubApiKey WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static GitHubApiKey FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new GitHubApiKey()
+                .WithApiKeyId(!data.Keys.Contains("apiKeyId") || data["apiKeyId"] == null ? null : data["apiKeyId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithEncryptionKeyName(!data.Keys.Contains("encryptionKeyName") || data["encryptionKeyName"] == null ? null : data["encryptionKeyName"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["apiKeyId"] = ApiKeyId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["encryptionKeyName"] = EncryptionKeyName,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.apiKeyId != null)
-            {
+            if (ApiKeyId != null) {
                 writer.WritePropertyName("apiKeyId");
-                writer.Write(this.apiKeyId);
+                writer.Write(ApiKeyId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.apiKey != null)
-            {
-                writer.WritePropertyName("apiKey");
-                writer.Write(this.apiKey);
-            }
-            if(this.encryptionKeyName != null)
-            {
+            if (EncryptionKeyName != null) {
                 writer.WritePropertyName("encryptionKeyName");
-                writer.Write(this.encryptionKeyName);
+                writer.Write(EncryptionKeyName.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetApiKeyNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):key:(?<namespaceName>.*):github:(?<apiKeyName>.*)");
-        if (!match.Groups["apiKeyName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["apiKeyName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):key:(?<namespaceName>.*):github:(?<apiKeyName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):key:(?<namespaceName>.*):github:(?<apiKeyName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):key:(?<namespaceName>.*):github:(?<apiKeyName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static GitHubApiKey FromDict(JsonData data)
-        {
-            return new GitHubApiKey()
-                .WithApiKeyId(data.Keys.Contains("apiKeyId") && data["apiKeyId"] != null ? data["apiKeyId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithApiKey(data.Keys.Contains("apiKey") && data["apiKey"] != null ? data["apiKey"].ToString() : null)
-                .WithEncryptionKeyName(data.Keys.Contains("encryptionKeyName") && data["encryptionKeyName"] != null ? data["encryptionKeyName"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as GitHubApiKey;
             var diff = 0;
-            if (apiKeyId == null && apiKeyId == other.apiKeyId)
+            if (ApiKeyId == null && ApiKeyId == other.ApiKeyId)
             {
                 // null and null
             }
             else
             {
-                diff += apiKeyId.CompareTo(other.apiKeyId);
+                diff += ApiKeyId.CompareTo(other.ApiKeyId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (apiKey == null && apiKey == other.apiKey)
+            if (EncryptionKeyName == null && EncryptionKeyName == other.EncryptionKeyName)
             {
                 // null and null
             }
             else
             {
-                diff += apiKey.CompareTo(other.apiKey);
+                diff += EncryptionKeyName.CompareTo(other.EncryptionKeyName);
             }
-            if (encryptionKeyName == null && encryptionKeyName == other.encryptionKeyName)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += encryptionKeyName.CompareTo(other.encryptionKeyName);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["apiKeyId"] = apiKeyId;
-            data["name"] = name;
-            data["description"] = description;
-            data["apiKey"] = apiKey;
-            data["encryptionKeyName"] = encryptionKeyName;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

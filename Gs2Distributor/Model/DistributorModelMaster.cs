@@ -23,326 +23,214 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Distributor.Model
 {
+
 	[Preserve]
 	public class DistributorModelMaster : IComparable
 	{
+        public string DistributorModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string InboxNamespaceId { set; get; }
+        public string[] WhiteListTargetIds { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 配信設定マスター */
-        public string distributorModelId { set; get; }
-
-        /**
-         * 配信設定マスターを設定
-         *
-         * @param distributorModelId 配信設定マスター
-         * @return this
-         */
         public DistributorModelMaster WithDistributorModelId(string distributorModelId) {
-            this.distributorModelId = distributorModelId;
+            this.DistributorModelId = distributorModelId;
             return this;
         }
 
-        /** 配信設定名 */
-        public string name { set; get; }
-
-        /**
-         * 配信設定名を設定
-         *
-         * @param name 配信設定名
-         * @return this
-         */
         public DistributorModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 配信設定マスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * 配信設定マスターの説明を設定
-         *
-         * @param description 配信設定マスターの説明
-         * @return this
-         */
         public DistributorModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 配信設定のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 配信設定のメタデータを設定
-         *
-         * @param metadata 配信設定のメタデータ
-         * @return this
-         */
         public DistributorModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRN */
-        public string inboxNamespaceId { set; get; }
-
-        /**
-         * 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRNを設定
-         *
-         * @param inboxNamespaceId 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRN
-         * @return this
-         */
         public DistributorModelMaster WithInboxNamespaceId(string inboxNamespaceId) {
-            this.inboxNamespaceId = inboxNamespaceId;
+            this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
 
-        /** ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリスト */
-        public List<string> whiteListTargetIds { set; get; }
-
-        /**
-         * ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリストを設定
-         *
-         * @param whiteListTargetIds ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリスト
-         * @return this
-         */
-        public DistributorModelMaster WithWhiteListTargetIds(List<string> whiteListTargetIds) {
-            this.whiteListTargetIds = whiteListTargetIds;
+        public DistributorModelMaster WithWhiteListTargetIds(string[] whiteListTargetIds) {
+            this.WhiteListTargetIds = whiteListTargetIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public DistributorModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public DistributorModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static DistributorModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DistributorModelMaster()
+                .WithDistributorModelId(!data.Keys.Contains("distributorModelId") || data["distributorModelId"] == null ? null : data["distributorModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInboxNamespaceId(!data.Keys.Contains("inboxNamespaceId") || data["inboxNamespaceId"] == null ? null : data["inboxNamespaceId"].ToString())
+                .WithWhiteListTargetIds(!data.Keys.Contains("whiteListTargetIds") || data["whiteListTargetIds"] == null ? new string[]{} : data["whiteListTargetIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["distributorModelId"] = DistributorModelId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["inboxNamespaceId"] = InboxNamespaceId,
+                ["whiteListTargetIds"] = new JsonData(WhiteListTargetIds == null ? new JsonData[]{} :
+                        WhiteListTargetIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.distributorModelId != null)
-            {
+            if (DistributorModelId != null) {
                 writer.WritePropertyName("distributorModelId");
-                writer.Write(this.distributorModelId);
+                writer.Write(DistributorModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.inboxNamespaceId != null)
-            {
+            if (InboxNamespaceId != null) {
                 writer.WritePropertyName("inboxNamespaceId");
-                writer.Write(this.inboxNamespaceId);
+                writer.Write(InboxNamespaceId.ToString());
             }
-            if(this.whiteListTargetIds != null)
-            {
+            if (WhiteListTargetIds != null) {
                 writer.WritePropertyName("whiteListTargetIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.whiteListTargetIds)
+                foreach (var whiteListTargetId in WhiteListTargetIds)
                 {
-                    writer.Write(item);
+                    if (whiteListTargetId != null) {
+                        writer.Write(whiteListTargetId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetDistributorNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):distributor:(?<namespaceName>.*):model:(?<distributorName>.*)");
-        if (!match.Groups["distributorName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["distributorName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):distributor:(?<namespaceName>.*):model:(?<distributorName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):distributor:(?<namespaceName>.*):model:(?<distributorName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):distributor:(?<namespaceName>.*):model:(?<distributorName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static DistributorModelMaster FromDict(JsonData data)
-        {
-            return new DistributorModelMaster()
-                .WithDistributorModelId(data.Keys.Contains("distributorModelId") && data["distributorModelId"] != null ? data["distributorModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithInboxNamespaceId(data.Keys.Contains("inboxNamespaceId") && data["inboxNamespaceId"] != null ? data["inboxNamespaceId"].ToString() : null)
-                .WithWhiteListTargetIds(data.Keys.Contains("whiteListTargetIds") && data["whiteListTargetIds"] != null ? data["whiteListTargetIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DistributorModelMaster;
             var diff = 0;
-            if (distributorModelId == null && distributorModelId == other.distributorModelId)
+            if (DistributorModelId == null && DistributorModelId == other.DistributorModelId)
             {
                 // null and null
             }
             else
             {
-                diff += distributorModelId.CompareTo(other.distributorModelId);
+                diff += DistributorModelId.CompareTo(other.DistributorModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (inboxNamespaceId == null && inboxNamespaceId == other.inboxNamespaceId)
+            if (InboxNamespaceId == null && InboxNamespaceId == other.InboxNamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += inboxNamespaceId.CompareTo(other.inboxNamespaceId);
+                diff += InboxNamespaceId.CompareTo(other.InboxNamespaceId);
             }
-            if (whiteListTargetIds == null && whiteListTargetIds == other.whiteListTargetIds)
+            if (WhiteListTargetIds == null && WhiteListTargetIds == other.WhiteListTargetIds)
             {
                 // null and null
             }
             else
             {
-                diff += whiteListTargetIds.Count - other.whiteListTargetIds.Count;
-                for (var i = 0; i < whiteListTargetIds.Count; i++)
+                diff += WhiteListTargetIds.Length - other.WhiteListTargetIds.Length;
+                for (var i = 0; i < WhiteListTargetIds.Length; i++)
                 {
-                    diff += whiteListTargetIds[i].CompareTo(other.whiteListTargetIds[i]);
+                    diff += WhiteListTargetIds[i].CompareTo(other.WhiteListTargetIds[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["distributorModelId"] = distributorModelId;
-            data["name"] = name;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["inboxNamespaceId"] = inboxNamespaceId;
-            data["whiteListTargetIds"] = new JsonData(whiteListTargetIds);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

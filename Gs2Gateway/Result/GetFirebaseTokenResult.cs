@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Gateway.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Gateway.Result
 {
 	[Preserve]
-	public class GetFirebaseTokenResult
+	[System.Serializable]
+	public class GetFirebaseTokenResult : IResult
 	{
-        /** 取得したFirebaseデバイストークン */
-        public FirebaseToken item { set; get; }
+        public Gs2.Gs2Gateway.Model.FirebaseToken Item { set; get; }
 
+        public GetFirebaseTokenResult WithItem(Gs2.Gs2Gateway.Model.FirebaseToken item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetFirebaseTokenResult FromDict(JsonData data)
+        public static GetFirebaseTokenResult FromJson(JsonData data)
         {
-            return new GetFirebaseTokenResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Gateway.Model.FirebaseToken.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetFirebaseTokenResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Gateway.Model.FirebaseToken.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Quest.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Quest.Result
 {
 	[Preserve]
-	public class GetQuestGroupModelMasterResult
+	[System.Serializable]
+	public class GetQuestGroupModelMasterResult : IResult
 	{
-        /** クエストグループマスター */
-        public QuestGroupModelMaster item { set; get; }
+        public Gs2.Gs2Quest.Model.QuestGroupModelMaster Item { set; get; }
 
+        public GetQuestGroupModelMasterResult WithItem(Gs2.Gs2Quest.Model.QuestGroupModelMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetQuestGroupModelMasterResult FromDict(JsonData data)
+        public static GetQuestGroupModelMasterResult FromJson(JsonData data)
         {
-            return new GetQuestGroupModelMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Quest.Model.QuestGroupModelMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetQuestGroupModelMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Quest.Model.QuestGroupModelMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

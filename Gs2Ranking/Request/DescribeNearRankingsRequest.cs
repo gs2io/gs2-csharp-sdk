@@ -28,72 +28,62 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeNearRankingsRequest : Gs2Request<DescribeNearRankingsRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string CategoryName { set; get; }
+        public long? Score { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeNearRankingsRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string categoryName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public DescribeNearRankingsRequest WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-
-        /** スコア */
-		[UnityEngine.SerializeField]
-        public long? score;
-
-        /**
-         * スコアを設定
-         *
-         * @param score スコア
-         * @return this
-         */
         public DescribeNearRankingsRequest WithScore(long? score) {
-            this.score = score;
+            this.Score = score;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeNearRankingsRequest FromDict(JsonData data)
+        public static DescribeNearRankingsRequest FromJson(JsonData data)
         {
-            return new DescribeNearRankingsRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                categoryName = data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString(): null,
-                score = data.Keys.Contains("score") && data["score"] != null ? (long?)long.Parse(data["score"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeNearRankingsRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["categoryName"] = CategoryName,
+                ["score"] = Score,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["categoryName"] = categoryName;
-            data["score"] = score;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
+            }
+            if (Score != null) {
+                writer.WritePropertyName("score");
+                writer.Write(long.Parse(Score.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

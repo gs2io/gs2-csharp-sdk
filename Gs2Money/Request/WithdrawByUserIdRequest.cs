@@ -28,126 +28,86 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class WithdrawByUserIdRequest : Gs2Request<WithdrawByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public int? Slot { set; get; }
+        public int? Count { set; get; }
+        public bool? PaidOnly { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public WithdrawByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public WithdrawByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** スロット番号 */
-		[UnityEngine.SerializeField]
-        public int? slot;
-
-        /**
-         * スロット番号を設定
-         *
-         * @param slot スロット番号
-         * @return this
-         */
         public WithdrawByUserIdRequest WithSlot(int? slot) {
-            this.slot = slot;
+            this.Slot = slot;
             return this;
         }
 
-
-        /** 消費する課金通貨の数量 */
-		[UnityEngine.SerializeField]
-        public int? count;
-
-        /**
-         * 消費する課金通貨の数量を設定
-         *
-         * @param count 消費する課金通貨の数量
-         * @return this
-         */
         public WithdrawByUserIdRequest WithCount(int? count) {
-            this.count = count;
+            this.Count = count;
             return this;
         }
 
-
-        /** 有償課金通貨のみを対象とするか */
-		[UnityEngine.SerializeField]
-        public bool? paidOnly;
-
-        /**
-         * 有償課金通貨のみを対象とするかを設定
-         *
-         * @param paidOnly 有償課金通貨のみを対象とするか
-         * @return this
-         */
         public WithdrawByUserIdRequest WithPaidOnly(bool? paidOnly) {
-            this.paidOnly = paidOnly;
+            this.PaidOnly = paidOnly;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public WithdrawByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static WithdrawByUserIdRequest FromDict(JsonData data)
+        public static WithdrawByUserIdRequest FromJson(JsonData data)
         {
-            return new WithdrawByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                slot = data.Keys.Contains("slot") && data["slot"] != null ? (int?)int.Parse(data["slot"].ToString()) : null,
-                count = data.Keys.Contains("count") && data["count"] != null ? (int?)int.Parse(data["count"].ToString()) : null,
-                paidOnly = data.Keys.Contains("paidOnly") && data["paidOnly"] != null ? (bool?)bool.Parse(data["paidOnly"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new WithdrawByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithPaidOnly(!data.Keys.Contains("paidOnly") || data["paidOnly"] == null ? null : (bool?)bool.Parse(data["paidOnly"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["slot"] = Slot,
+                ["count"] = Count,
+                ["paidOnly"] = PaidOnly,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["slot"] = slot;
-            data["count"] = count;
-            data["paidOnly"] = paidOnly;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Slot != null) {
+                writer.WritePropertyName("slot");
+                writer.Write(int.Parse(Slot.ToString()));
+            }
+            if (Count != null) {
+                writer.WritePropertyName("count");
+                writer.Write(int.Parse(Count.ToString()));
+            }
+            if (PaidOnly != null) {
+                writer.WritePropertyName("paidOnly");
+                writer.Write(bool.Parse(PaidOnly.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

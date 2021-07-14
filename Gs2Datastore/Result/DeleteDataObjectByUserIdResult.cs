@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Datastore.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Datastore.Result
 {
 	[Preserve]
-	public class DeleteDataObjectByUserIdResult
+	[System.Serializable]
+	public class DeleteDataObjectByUserIdResult : IResult
 	{
-        /** データオブジェクト */
-        public DataObject item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
 
+        public DeleteDataObjectByUserIdResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static DeleteDataObjectByUserIdResult FromDict(JsonData data)
+        public static DeleteDataObjectByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteDataObjectByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Datastore.Model.DataObject.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteDataObjectByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

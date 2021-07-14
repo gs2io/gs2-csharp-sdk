@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Lottery.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Lottery.Result
 {
 	[Preserve]
-	public class GetCurrentLotteryMasterResult
+	[System.Serializable]
+	public class GetCurrentLotteryMasterResult : IResult
 	{
-        /** 現在有効な抽選設定 */
-        public CurrentLotteryMaster item { set; get; }
+        public Gs2.Gs2Lottery.Model.CurrentLotteryMaster Item { set; get; }
 
+        public GetCurrentLotteryMasterResult WithItem(Gs2.Gs2Lottery.Model.CurrentLotteryMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetCurrentLotteryMasterResult FromDict(JsonData data)
+        public static GetCurrentLotteryMasterResult FromJson(JsonData data)
         {
-            return new GetCurrentLotteryMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Lottery.Model.CurrentLotteryMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentLotteryMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Lottery.Model.CurrentLotteryMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

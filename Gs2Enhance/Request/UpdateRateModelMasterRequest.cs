@@ -28,206 +28,165 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class UpdateRateModelMasterRequest : Gs2Request<UpdateRateModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RateName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string TargetInventoryModelId { set; get; }
+        public string AcquireExperienceSuffix { set; get; }
+        public string MaterialInventoryModelId { set; get; }
+        public string[] AcquireExperienceHierarchy { set; get; }
+        public string ExperienceModelId { set; get; }
+        public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 強化レート名 */
-		[UnityEngine.SerializeField]
-        public string rateName;
-
-        /**
-         * 強化レート名を設定
-         *
-         * @param rateName 強化レート名
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithRateName(string rateName) {
-            this.rateName = rateName;
+            this.RateName = rateName;
             return this;
         }
 
-
-        /** 強化レートマスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 強化レートマスターの説明を設定
-         *
-         * @param description 強化レートマスターの説明
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 強化レートのメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 強化レートのメタデータを設定
-         *
-         * @param metadata 強化レートのメタデータ
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 強化対象に使用できるインベントリモデル のGRN */
-		[UnityEngine.SerializeField]
-        public string targetInventoryModelId;
-
-        /**
-         * 強化対象に使用できるインベントリモデル のGRNを設定
-         *
-         * @param targetInventoryModelId 強化対象に使用できるインベントリモデル のGRN
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithTargetInventoryModelId(string targetInventoryModelId) {
-            this.targetInventoryModelId = targetInventoryModelId;
+            this.TargetInventoryModelId = targetInventoryModelId;
             return this;
         }
 
-
-        /** GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックス */
-		[UnityEngine.SerializeField]
-        public string acquireExperienceSuffix;
-
-        /**
-         * GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックスを設定
-         *
-         * @param acquireExperienceSuffix GS2-Experience で入手した経験値を格納する プロパティID に付与するサフィックス
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithAcquireExperienceSuffix(string acquireExperienceSuffix) {
-            this.acquireExperienceSuffix = acquireExperienceSuffix;
+            this.AcquireExperienceSuffix = acquireExperienceSuffix;
             return this;
         }
 
-
-        /** 強化素材に使用できるインベントリモデル のGRN */
-		[UnityEngine.SerializeField]
-        public string materialInventoryModelId;
-
-        /**
-         * 強化素材に使用できるインベントリモデル のGRNを設定
-         *
-         * @param materialInventoryModelId 強化素材に使用できるインベントリモデル のGRN
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithMaterialInventoryModelId(string materialInventoryModelId) {
-            this.materialInventoryModelId = materialInventoryModelId;
+            this.MaterialInventoryModelId = materialInventoryModelId;
             return this;
         }
 
-
-        /** 入手経験値を格納しているメタデータのJSON階層 */
-		[UnityEngine.SerializeField]
-        public List<string> acquireExperienceHierarchy;
-
-        /**
-         * 入手経験値を格納しているメタデータのJSON階層を設定
-         *
-         * @param acquireExperienceHierarchy 入手経験値を格納しているメタデータのJSON階層
-         * @return this
-         */
-        public UpdateRateModelMasterRequest WithAcquireExperienceHierarchy(List<string> acquireExperienceHierarchy) {
-            this.acquireExperienceHierarchy = acquireExperienceHierarchy;
+        public UpdateRateModelMasterRequest WithAcquireExperienceHierarchy(string[] acquireExperienceHierarchy) {
+            this.AcquireExperienceHierarchy = acquireExperienceHierarchy;
             return this;
         }
 
-
-        /** 獲得できる経験値の種類マスター のGRN */
-		[UnityEngine.SerializeField]
-        public string experienceModelId;
-
-        /**
-         * 獲得できる経験値の種類マスター のGRNを設定
-         *
-         * @param experienceModelId 獲得できる経験値の種類マスター のGRN
-         * @return this
-         */
         public UpdateRateModelMasterRequest WithExperienceModelId(string experienceModelId) {
-            this.experienceModelId = experienceModelId;
+            this.ExperienceModelId = experienceModelId;
             return this;
         }
 
-
-        /** 経験値獲得量ボーナス */
-		[UnityEngine.SerializeField]
-        public List<BonusRate> bonusRates;
-
-        /**
-         * 経験値獲得量ボーナスを設定
-         *
-         * @param bonusRates 経験値獲得量ボーナス
-         * @return this
-         */
-        public UpdateRateModelMasterRequest WithBonusRates(List<BonusRate> bonusRates) {
-            this.bonusRates = bonusRates;
+        public UpdateRateModelMasterRequest WithBonusRates(Gs2.Gs2Enhance.Model.BonusRate[] bonusRates) {
+            this.BonusRates = bonusRates;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateRateModelMasterRequest FromDict(JsonData data)
+        public static UpdateRateModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateRateModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                rateName = data.Keys.Contains("rateName") && data["rateName"] != null ? data["rateName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                targetInventoryModelId = data.Keys.Contains("targetInventoryModelId") && data["targetInventoryModelId"] != null ? data["targetInventoryModelId"].ToString(): null,
-                acquireExperienceSuffix = data.Keys.Contains("acquireExperienceSuffix") && data["acquireExperienceSuffix"] != null ? data["acquireExperienceSuffix"].ToString(): null,
-                materialInventoryModelId = data.Keys.Contains("materialInventoryModelId") && data["materialInventoryModelId"] != null ? data["materialInventoryModelId"].ToString(): null,
-                acquireExperienceHierarchy = data.Keys.Contains("acquireExperienceHierarchy") && data["acquireExperienceHierarchy"] != null ? data["acquireExperienceHierarchy"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                experienceModelId = data.Keys.Contains("experienceModelId") && data["experienceModelId"] != null ? data["experienceModelId"].ToString(): null,
-                bonusRates = data.Keys.Contains("bonusRates") && data["bonusRates"] != null ? data["bonusRates"].Cast<JsonData>().Select(value =>
-                    {
-                        return BonusRate.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateRateModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
+                .WithAcquireExperienceSuffix(!data.Keys.Contains("acquireExperienceSuffix") || data["acquireExperienceSuffix"] == null ? null : data["acquireExperienceSuffix"].ToString())
+                .WithMaterialInventoryModelId(!data.Keys.Contains("materialInventoryModelId") || data["materialInventoryModelId"] == null ? null : data["materialInventoryModelId"].ToString())
+                .WithAcquireExperienceHierarchy(!data.Keys.Contains("acquireExperienceHierarchy") || data["acquireExperienceHierarchy"] == null ? new string[]{} : data["acquireExperienceHierarchy"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithBonusRates(!data.Keys.Contains("bonusRates") || data["bonusRates"] == null ? new Gs2.Gs2Enhance.Model.BonusRate[]{} : data["bonusRates"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Enhance.Model.BonusRate.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["rateName"] = RateName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["targetInventoryModelId"] = TargetInventoryModelId,
+                ["acquireExperienceSuffix"] = AcquireExperienceSuffix,
+                ["materialInventoryModelId"] = MaterialInventoryModelId,
+                ["acquireExperienceHierarchy"] = new JsonData(AcquireExperienceHierarchy == null ? new JsonData[]{} :
+                        AcquireExperienceHierarchy.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["experienceModelId"] = ExperienceModelId,
+                ["bonusRates"] = new JsonData(BonusRates == null ? new JsonData[]{} :
+                        BonusRates.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["rateName"] = rateName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["targetInventoryModelId"] = targetInventoryModelId;
-            data["acquireExperienceSuffix"] = acquireExperienceSuffix;
-            data["materialInventoryModelId"] = materialInventoryModelId;
-            data["acquireExperienceHierarchy"] = new JsonData(acquireExperienceHierarchy);
-            data["experienceModelId"] = experienceModelId;
-            data["bonusRates"] = new JsonData(bonusRates.Select(item => item.ToDict()));
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RateName != null) {
+                writer.WritePropertyName("rateName");
+                writer.Write(RateName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (TargetInventoryModelId != null) {
+                writer.WritePropertyName("targetInventoryModelId");
+                writer.Write(TargetInventoryModelId.ToString());
+            }
+            if (AcquireExperienceSuffix != null) {
+                writer.WritePropertyName("acquireExperienceSuffix");
+                writer.Write(AcquireExperienceSuffix.ToString());
+            }
+            if (MaterialInventoryModelId != null) {
+                writer.WritePropertyName("materialInventoryModelId");
+                writer.Write(MaterialInventoryModelId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
+            {
+                writer.Write(acquireExperienceHierarch.ToString());
+            }
+            writer.WriteArrayEnd();
+            if (ExperienceModelId != null) {
+                writer.WritePropertyName("experienceModelId");
+                writer.Write(ExperienceModelId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var bonusRate in BonusRates)
+            {
+                if (bonusRate != null) {
+                    bonusRate.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

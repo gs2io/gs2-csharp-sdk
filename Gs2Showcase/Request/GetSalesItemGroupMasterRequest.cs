@@ -28,54 +28,50 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class GetSalesItemGroupMasterRequest : Gs2Request<GetSalesItemGroupMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string SalesItemGroupName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetSalesItemGroupMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 商品名 */
-		[UnityEngine.SerializeField]
-        public string salesItemGroupName;
-
-        /**
-         * 商品名を設定
-         *
-         * @param salesItemGroupName 商品名
-         * @return this
-         */
         public GetSalesItemGroupMasterRequest WithSalesItemGroupName(string salesItemGroupName) {
-            this.salesItemGroupName = salesItemGroupName;
+            this.SalesItemGroupName = salesItemGroupName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetSalesItemGroupMasterRequest FromDict(JsonData data)
+        public static GetSalesItemGroupMasterRequest FromJson(JsonData data)
         {
-            return new GetSalesItemGroupMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                salesItemGroupName = data.Keys.Contains("salesItemGroupName") && data["salesItemGroupName"] != null ? data["salesItemGroupName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetSalesItemGroupMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithSalesItemGroupName(!data.Keys.Contains("salesItemGroupName") || data["salesItemGroupName"] == null ? null : data["salesItemGroupName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["salesItemGroupName"] = SalesItemGroupName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["salesItemGroupName"] = salesItemGroupName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (SalesItemGroupName != null) {
+                writer.WritePropertyName("salesItemGroupName");
+                writer.Write(SalesItemGroupName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

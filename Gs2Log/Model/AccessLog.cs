@@ -23,236 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Log.Model
 {
+
 	[Preserve]
 	public class AccessLog : IComparable
 	{
+        public long? Timestamp { set; get; }
+        public string RequestId { set; get; }
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public string Request { set; get; }
+        public string Result { set; get; }
 
-        /** 日時 */
-        public long? timestamp { set; get; }
-
-        /**
-         * 日時を設定
-         *
-         * @param timestamp 日時
-         * @return this
-         */
         public AccessLog WithTimestamp(long? timestamp) {
-            this.timestamp = timestamp;
+            this.Timestamp = timestamp;
             return this;
         }
 
-        /** リクエストID */
-        public string requestId { set; get; }
-
-        /**
-         * リクエストIDを設定
-         *
-         * @param requestId リクエストID
-         * @return this
-         */
         public AccessLog WithRequestId(string requestId) {
-            this.requestId = requestId;
+            this.RequestId = requestId;
             return this;
         }
 
-        /** マイクロサービスの種類 */
-        public string service { set; get; }
-
-        /**
-         * マイクロサービスの種類を設定
-         *
-         * @param service マイクロサービスの種類
-         * @return this
-         */
         public AccessLog WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-        /** マイクロサービスのメソッド */
-        public string method { set; get; }
-
-        /**
-         * マイクロサービスのメソッドを設定
-         *
-         * @param method マイクロサービスのメソッド
-         * @return this
-         */
         public AccessLog WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public AccessLog WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** リクエストパラメータ */
-        public string request { set; get; }
-
-        /**
-         * リクエストパラメータを設定
-         *
-         * @param request リクエストパラメータ
-         * @return this
-         */
         public AccessLog WithRequest(string request) {
-            this.request = request;
+            this.Request = request;
             return this;
         }
 
-        /** 応答内容 */
-        public string result { set; get; }
-
-        /**
-         * 応答内容を設定
-         *
-         * @param result 応答内容
-         * @return this
-         */
         public AccessLog WithResult(string result) {
-            this.result = result;
+            this.Result = result;
             return this;
+        }
+
+    	[Preserve]
+        public static AccessLog FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new AccessLog()
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()))
+                .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString())
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["timestamp"] = Timestamp,
+                ["requestId"] = RequestId,
+                ["service"] = Service,
+                ["method"] = Method,
+                ["userId"] = UserId,
+                ["request"] = Request,
+                ["result"] = Result,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.timestamp.HasValue)
-            {
+            if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(this.timestamp.Value);
+                writer.Write(long.Parse(Timestamp.ToString()));
             }
-            if(this.requestId != null)
-            {
+            if (RequestId != null) {
                 writer.WritePropertyName("requestId");
-                writer.Write(this.requestId);
+                writer.Write(RequestId.ToString());
             }
-            if(this.service != null)
-            {
+            if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(this.service);
+                writer.Write(Service.ToString());
             }
-            if(this.method != null)
-            {
+            if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(this.method);
+                writer.Write(Method.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.request != null)
-            {
+            if (Request != null) {
                 writer.WritePropertyName("request");
-                writer.Write(this.request);
+                writer.Write(Request.ToString());
             }
-            if(this.result != null)
-            {
+            if (Result != null) {
                 writer.WritePropertyName("result");
-                writer.Write(this.result);
+                writer.Write(Result.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static AccessLog FromDict(JsonData data)
-        {
-            return new AccessLog()
-                .WithTimestamp(data.Keys.Contains("timestamp") && data["timestamp"] != null ? (long?)long.Parse(data["timestamp"].ToString()) : null)
-                .WithRequestId(data.Keys.Contains("requestId") && data["requestId"] != null ? data["requestId"].ToString() : null)
-                .WithService(data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString() : null)
-                .WithMethod(data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithRequest(data.Keys.Contains("request") && data["request"] != null ? data["request"].ToString() : null)
-                .WithResult(data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as AccessLog;
             var diff = 0;
-            if (timestamp == null && timestamp == other.timestamp)
+            if (Timestamp == null && Timestamp == other.Timestamp)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(timestamp - other.timestamp);
+                diff += (int)(Timestamp - other.Timestamp);
             }
-            if (requestId == null && requestId == other.requestId)
+            if (RequestId == null && RequestId == other.RequestId)
             {
                 // null and null
             }
             else
             {
-                diff += requestId.CompareTo(other.requestId);
+                diff += RequestId.CompareTo(other.RequestId);
             }
-            if (service == null && service == other.service)
+            if (Service == null && Service == other.Service)
             {
                 // null and null
             }
             else
             {
-                diff += service.CompareTo(other.service);
+                diff += Service.CompareTo(other.Service);
             }
-            if (method == null && method == other.method)
+            if (Method == null && Method == other.Method)
             {
                 // null and null
             }
             else
             {
-                diff += method.CompareTo(other.method);
+                diff += Method.CompareTo(other.Method);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (request == null && request == other.request)
+            if (Request == null && Request == other.Request)
             {
                 // null and null
             }
             else
             {
-                diff += request.CompareTo(other.request);
+                diff += Request.CompareTo(other.Request);
             }
-            if (result == null && result == other.result)
+            if (Result == null && Result == other.Result)
             {
                 // null and null
             }
             else
             {
-                diff += result.CompareTo(other.result);
+                diff += Result.CompareTo(other.Result);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["timestamp"] = timestamp;
-            data["requestId"] = requestId;
-            data["service"] = service;
-            data["method"] = method;
-            data["userId"] = userId;
-            data["request"] = request;
-            data["result"] = result;
-            return data;
-        }
-	}
+    }
 }

@@ -28,144 +28,98 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetReferenceOfByUserIdRequest : Gs2Request<GetReferenceOfByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string InventoryName { set; get; }
+        public string UserId { set; get; }
+        public string ItemName { set; get; }
+        public string ItemSetName { set; get; }
+        public string ReferenceOf { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** インベントリの名前 */
-		[UnityEngine.SerializeField]
-        public string inventoryName;
-
-        /**
-         * インベントリの名前を設定
-         *
-         * @param inventoryName インベントリの名前
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithInventoryName(string inventoryName) {
-            this.inventoryName = inventoryName;
+            this.InventoryName = inventoryName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** アイテムマスターの名前 */
-		[UnityEngine.SerializeField]
-        public string itemName;
-
-        /**
-         * アイテムマスターの名前を設定
-         *
-         * @param itemName アイテムマスターの名前
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithItemName(string itemName) {
-            this.itemName = itemName;
+            this.ItemName = itemName;
             return this;
         }
 
-
-        /** アイテムセットを識別する名前 */
-		[UnityEngine.SerializeField]
-        public string itemSetName;
-
-        /**
-         * アイテムセットを識別する名前を設定
-         *
-         * @param itemSetName アイテムセットを識別する名前
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithItemSetName(string itemSetName) {
-            this.itemSetName = itemSetName;
+            this.ItemSetName = itemSetName;
             return this;
         }
 
-
-        /** この所持品の参照元 */
-		[UnityEngine.SerializeField]
-        public string referenceOf;
-
-        /**
-         * この所持品の参照元を設定
-         *
-         * @param referenceOf この所持品の参照元
-         * @return this
-         */
         public GetReferenceOfByUserIdRequest WithReferenceOf(string referenceOf) {
-            this.referenceOf = referenceOf;
+            this.ReferenceOf = referenceOf;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public GetReferenceOfByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static GetReferenceOfByUserIdRequest FromDict(JsonData data)
+        public static GetReferenceOfByUserIdRequest FromJson(JsonData data)
         {
-            return new GetReferenceOfByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                inventoryName = data.Keys.Contains("inventoryName") && data["inventoryName"] != null ? data["inventoryName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                itemName = data.Keys.Contains("itemName") && data["itemName"] != null ? data["itemName"].ToString(): null,
-                itemSetName = data.Keys.Contains("itemSetName") && data["itemSetName"] != null ? data["itemSetName"].ToString(): null,
-                referenceOf = data.Keys.Contains("referenceOf") && data["referenceOf"] != null ? data["referenceOf"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetReferenceOfByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
+                .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
+                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? null : data["referenceOf"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["inventoryName"] = InventoryName,
+                ["userId"] = UserId,
+                ["itemName"] = ItemName,
+                ["itemSetName"] = ItemSetName,
+                ["referenceOf"] = ReferenceOf,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["inventoryName"] = inventoryName;
-            data["userId"] = userId;
-            data["itemName"] = itemName;
-            data["itemSetName"] = itemSetName;
-            data["referenceOf"] = referenceOf;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (InventoryName != null) {
+                writer.WritePropertyName("inventoryName");
+                writer.Write(InventoryName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (ItemName != null) {
+                writer.WritePropertyName("itemName");
+                writer.Write(ItemName.ToString());
+            }
+            if (ItemSetName != null) {
+                writer.WritePropertyName("itemSetName");
+                writer.Write(ItemSetName.ToString());
+            }
+            if (ReferenceOf != null) {
+                writer.WritePropertyName("referenceOf");
+                writer.Write(ReferenceOf.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

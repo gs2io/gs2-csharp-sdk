@@ -28,36 +28,38 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DeleteUserRequest : Gs2Request<DeleteUserRequest>
 	{
+        public string UserName { set; get; }
 
-        /** ユーザー名 */
-		[UnityEngine.SerializeField]
-        public string userName;
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public DeleteUserRequest WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-
     	[Preserve]
-        public static DeleteUserRequest FromDict(JsonData data)
+        public static DeleteUserRequest FromJson(JsonData data)
         {
-            return new DeleteUserRequest {
-                userName = data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteUserRequest()
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userName"] = UserName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["userName"] = userName;
-            return data;
+            writer.WriteObjectStart();
+            if (UserName != null) {
+                writer.WritePropertyName("userName");
+                writer.Write(UserName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,326 +23,215 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Mission.Model
 {
+
 	[Preserve]
 	public class CounterModelMaster : IComparable
 	{
+        public string CounterId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** カウンターの種類マスター */
-        public string counterId { set; get; }
-
-        /**
-         * カウンターの種類マスターを設定
-         *
-         * @param counterId カウンターの種類マスター
-         * @return this
-         */
         public CounterModelMaster WithCounterId(string counterId) {
-            this.counterId = counterId;
+            this.CounterId = counterId;
             return this;
         }
 
-        /** カウンター名 */
-        public string name { set; get; }
-
-        /**
-         * カウンター名を設定
-         *
-         * @param name カウンター名
-         * @return this
-         */
         public CounterModelMaster WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public CounterModelMaster WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** カウンターの種類マスターの説明 */
-        public string description { set; get; }
-
-        /**
-         * カウンターの種類マスターの説明を設定
-         *
-         * @param description カウンターの種類マスターの説明
-         * @return this
-         */
         public CounterModelMaster WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** カウンターのリセットタイミング */
-        public List<CounterScopeModel> scopes { set; get; }
-
-        /**
-         * カウンターのリセットタイミングを設定
-         *
-         * @param scopes カウンターのリセットタイミング
-         * @return this
-         */
-        public CounterModelMaster WithScopes(List<CounterScopeModel> scopes) {
-            this.scopes = scopes;
+        public CounterModelMaster WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
+            this.Scopes = scopes;
             return this;
         }
 
-        /** カウントアップ可能な期間を指定するイベントマスター のGRN */
-        public string challengePeriodEventId { set; get; }
-
-        /**
-         * カウントアップ可能な期間を指定するイベントマスター のGRNを設定
-         *
-         * @param challengePeriodEventId カウントアップ可能な期間を指定するイベントマスター のGRN
-         * @return this
-         */
         public CounterModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
-            this.challengePeriodEventId = challengePeriodEventId;
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public CounterModelMaster WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public CounterModelMaster WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static CounterModelMaster FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CounterModelMaster()
+                .WithCounterId(!data.Keys.Contains("counterId") || data["counterId"] == null ? null : data["counterId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null ? new Gs2.Gs2Mission.Model.CounterScopeModel[]{} : data["scopes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.CounterScopeModel.FromJson(v);
+                }).ToArray())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["counterId"] = CounterId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["description"] = Description,
+                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                        Scopes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.counterId != null)
-            {
+            if (CounterId != null) {
                 writer.WritePropertyName("counterId");
-                writer.Write(this.counterId);
+                writer.Write(CounterId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.scopes != null)
-            {
+            if (Scopes != null) {
                 writer.WritePropertyName("scopes");
                 writer.WriteArrayStart();
-                foreach(var item in this.scopes)
+                foreach (var scope in Scopes)
                 {
-                    item.WriteJson(writer);
+                    if (scope != null) {
+                        scope.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.challengePeriodEventId != null)
-            {
+            if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
-                writer.Write(this.challengePeriodEventId);
+                writer.Write(ChallengePeriodEventId.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetCounterNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["counterName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["counterName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):mission:(?<namespaceName>.*):counter:(?<counterName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static CounterModelMaster FromDict(JsonData data)
-        {
-            return new CounterModelMaster()
-                .WithCounterId(data.Keys.Contains("counterId") && data["counterId"] != null ? data["counterId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithScopes(data.Keys.Contains("scopes") && data["scopes"] != null ? data["scopes"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Mission.Model.CounterScopeModel.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithChallengePeriodEventId(data.Keys.Contains("challengePeriodEventId") && data["challengePeriodEventId"] != null ? data["challengePeriodEventId"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CounterModelMaster;
             var diff = 0;
-            if (counterId == null && counterId == other.counterId)
+            if (CounterId == null && CounterId == other.CounterId)
             {
                 // null and null
             }
             else
             {
-                diff += counterId.CompareTo(other.counterId);
+                diff += CounterId.CompareTo(other.CounterId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (scopes == null && scopes == other.scopes)
+            if (Scopes == null && Scopes == other.Scopes)
             {
                 // null and null
             }
             else
             {
-                diff += scopes.Count - other.scopes.Count;
-                for (var i = 0; i < scopes.Count; i++)
+                diff += Scopes.Length - other.Scopes.Length;
+                for (var i = 0; i < Scopes.Length; i++)
                 {
-                    diff += scopes[i].CompareTo(other.scopes[i]);
+                    diff += Scopes[i].CompareTo(other.Scopes[i]);
                 }
             }
-            if (challengePeriodEventId == null && challengePeriodEventId == other.challengePeriodEventId)
+            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
             {
                 // null and null
             }
             else
             {
-                diff += challengePeriodEventId.CompareTo(other.challengePeriodEventId);
+                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["counterId"] = counterId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["description"] = description;
-            data["scopes"] = new JsonData(scopes.Select(item => item.ToDict()));
-            data["challengePeriodEventId"] = challengePeriodEventId;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

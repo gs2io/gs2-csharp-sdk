@@ -23,296 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lock.Model
 {
+
 	[Preserve]
 	public class Mutex : IComparable
 	{
+        public string MutexId { set; get; }
+        public string UserId { set; get; }
+        public string PropertyId { set; get; }
+        public string TransactionId { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** ミューテックス */
-        public string mutexId { set; get; }
-
-        /**
-         * ミューテックスを設定
-         *
-         * @param mutexId ミューテックス
-         * @return this
-         */
         public Mutex WithMutexId(string mutexId) {
-            this.mutexId = mutexId;
+            this.MutexId = mutexId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Mutex WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** プロパティID */
-        public string propertyId { set; get; }
-
-        /**
-         * プロパティIDを設定
-         *
-         * @param propertyId プロパティID
-         * @return this
-         */
         public Mutex WithPropertyId(string propertyId) {
-            this.propertyId = propertyId;
+            this.PropertyId = propertyId;
             return this;
         }
 
-        /** ロックを取得したトランザクションID */
-        public string transactionId { set; get; }
-
-        /**
-         * ロックを取得したトランザクションIDを設定
-         *
-         * @param transactionId ロックを取得したトランザクションID
-         * @return this
-         */
         public Mutex WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
+            this.TransactionId = transactionId;
             return this;
         }
 
-        /** 参照回数 */
-        public int? referenceCount { set; get; }
-
-        /**
-         * 参照回数を設定
-         *
-         * @param referenceCount 参照回数
-         * @return this
-         */
-        public Mutex WithReferenceCount(int? referenceCount) {
-            this.referenceCount = referenceCount;
-            return this;
-        }
-
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Mutex WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** ロックの有効期限 */
-        public long? ttlAt { set; get; }
+    	[Preserve]
+        public static Mutex FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Mutex()
+                .WithMutexId(!data.Keys.Contains("mutexId") || data["mutexId"] == null ? null : data["mutexId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
 
-        /**
-         * ロックの有効期限を設定
-         *
-         * @param ttlAt ロックの有効期限
-         * @return this
-         */
-        public Mutex WithTtlAt(long? ttlAt) {
-            this.ttlAt = ttlAt;
-            return this;
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["mutexId"] = MutexId,
+                ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
+                ["transactionId"] = TransactionId,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.mutexId != null)
-            {
+            if (MutexId != null) {
                 writer.WritePropertyName("mutexId");
-                writer.Write(this.mutexId);
+                writer.Write(MutexId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.propertyId != null)
-            {
+            if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
-                writer.Write(this.propertyId);
+                writer.Write(PropertyId.ToString());
             }
-            if(this.transactionId != null)
-            {
+            if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
-                writer.Write(this.transactionId);
+                writer.Write(TransactionId.ToString());
             }
-            if(this.referenceCount.HasValue)
-            {
-                writer.WritePropertyName("referenceCount");
-                writer.Write(this.referenceCount.Value);
-            }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
-            }
-            if(this.ttlAt.HasValue)
-            {
-                writer.WritePropertyName("ttlAt");
-                writer.Write(this.ttlAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetPropertyIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lock:(?<namespaceName>.*):user:(?<userId>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["propertyId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["propertyId"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lock:(?<namespaceName>.*):user:(?<userId>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lock:(?<namespaceName>.*):user:(?<userId>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lock:(?<namespaceName>.*):user:(?<userId>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):lock:(?<namespaceName>.*):user:(?<userId>.*):property:(?<propertyId>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Mutex FromDict(JsonData data)
-        {
-            return new Mutex()
-                .WithMutexId(data.Keys.Contains("mutexId") && data["mutexId"] != null ? data["mutexId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithPropertyId(data.Keys.Contains("propertyId") && data["propertyId"] != null ? data["propertyId"].ToString() : null)
-                .WithTransactionId(data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString() : null)
-                .WithReferenceCount(data.Keys.Contains("referenceCount") && data["referenceCount"] != null ? (int?)int.Parse(data["referenceCount"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithTtlAt(data.Keys.Contains("ttlAt") && data["ttlAt"] != null ? (long?)long.Parse(data["ttlAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Mutex;
             var diff = 0;
-            if (mutexId == null && mutexId == other.mutexId)
+            if (MutexId == null && MutexId == other.MutexId)
             {
                 // null and null
             }
             else
             {
-                diff += mutexId.CompareTo(other.mutexId);
+                diff += MutexId.CompareTo(other.MutexId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (propertyId == null && propertyId == other.propertyId)
+            if (PropertyId == null && PropertyId == other.PropertyId)
             {
                 // null and null
             }
             else
             {
-                diff += propertyId.CompareTo(other.propertyId);
+                diff += PropertyId.CompareTo(other.PropertyId);
             }
-            if (transactionId == null && transactionId == other.transactionId)
+            if (TransactionId == null && TransactionId == other.TransactionId)
             {
                 // null and null
             }
             else
             {
-                diff += transactionId.CompareTo(other.transactionId);
+                diff += TransactionId.CompareTo(other.TransactionId);
             }
-            if (referenceCount == null && referenceCount == other.referenceCount)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(referenceCount - other.referenceCount);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (ttlAt == null && ttlAt == other.ttlAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ttlAt - other.ttlAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["mutexId"] = mutexId;
-            data["userId"] = userId;
-            data["propertyId"] = propertyId;
-            data["transactionId"] = transactionId;
-            data["referenceCount"] = referenceCount;
-            data["createdAt"] = createdAt;
-            data["ttlAt"] = ttlAt;
-            return data;
-        }
-	}
+    }
 }

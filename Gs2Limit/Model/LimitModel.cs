@@ -23,284 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Limit.Model
 {
+
 	[Preserve]
 	public class LimitModel : IComparable
 	{
+        public string LimitModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
 
-        /** 回数制限の種類 */
-        public string limitModelId { set; get; }
-
-        /**
-         * 回数制限の種類を設定
-         *
-         * @param limitModelId 回数制限の種類
-         * @return this
-         */
         public LimitModel WithLimitModelId(string limitModelId) {
-            this.limitModelId = limitModelId;
+            this.LimitModelId = limitModelId;
             return this;
         }
 
-        /** 回数制限の種類名 */
-        public string name { set; get; }
-
-        /**
-         * 回数制限の種類名を設定
-         *
-         * @param name 回数制限の種類名
-         * @return this
-         */
         public LimitModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 回数制限の種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * 回数制限の種類のメタデータを設定
-         *
-         * @param metadata 回数制限の種類のメタデータ
-         * @return this
-         */
         public LimitModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** リセットタイミング */
-        public string resetType { set; get; }
-
-        /**
-         * リセットタイミングを設定
-         *
-         * @param resetType リセットタイミング
-         * @return this
-         */
         public LimitModel WithResetType(string resetType) {
-            this.resetType = resetType;
+            this.ResetType = resetType;
             return this;
         }
 
-        /** リセットをする日にち */
-        public int? resetDayOfMonth { set; get; }
-
-        /**
-         * リセットをする日にちを設定
-         *
-         * @param resetDayOfMonth リセットをする日にち
-         * @return this
-         */
         public LimitModel WithResetDayOfMonth(int? resetDayOfMonth) {
-            this.resetDayOfMonth = resetDayOfMonth;
+            this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
 
-        /** リセットする曜日 */
-        public string resetDayOfWeek { set; get; }
-
-        /**
-         * リセットする曜日を設定
-         *
-         * @param resetDayOfWeek リセットする曜日
-         * @return this
-         */
         public LimitModel WithResetDayOfWeek(string resetDayOfWeek) {
-            this.resetDayOfWeek = resetDayOfWeek;
+            this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
 
-        /** リセット時刻 */
-        public int? resetHour { set; get; }
-
-        /**
-         * リセット時刻を設定
-         *
-         * @param resetHour リセット時刻
-         * @return this
-         */
         public LimitModel WithResetHour(int? resetHour) {
-            this.resetHour = resetHour;
+            this.ResetHour = resetHour;
             return this;
+        }
+
+    	[Preserve]
+        public static LimitModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new LimitModel()
+                .WithLimitModelId(!data.Keys.Contains("limitModelId") || data["limitModelId"] == null ? null : data["limitModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)int.Parse(data["resetDayOfMonth"].ToString()))
+                .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)int.Parse(data["resetHour"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["limitModelId"] = LimitModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["resetType"] = ResetType,
+                ["resetDayOfMonth"] = ResetDayOfMonth,
+                ["resetDayOfWeek"] = ResetDayOfWeek,
+                ["resetHour"] = ResetHour,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.limitModelId != null)
-            {
+            if (LimitModelId != null) {
                 writer.WritePropertyName("limitModelId");
-                writer.Write(this.limitModelId);
+                writer.Write(LimitModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.resetType != null)
-            {
+            if (ResetType != null) {
                 writer.WritePropertyName("resetType");
-                writer.Write(this.resetType);
+                writer.Write(ResetType.ToString());
             }
-            if(this.resetDayOfMonth.HasValue)
-            {
+            if (ResetDayOfMonth != null) {
                 writer.WritePropertyName("resetDayOfMonth");
-                writer.Write(this.resetDayOfMonth.Value);
+                writer.Write(int.Parse(ResetDayOfMonth.ToString()));
             }
-            if(this.resetDayOfWeek != null)
-            {
+            if (ResetDayOfWeek != null) {
                 writer.WritePropertyName("resetDayOfWeek");
-                writer.Write(this.resetDayOfWeek);
+                writer.Write(ResetDayOfWeek.ToString());
             }
-            if(this.resetHour.HasValue)
-            {
+            if (ResetHour != null) {
                 writer.WritePropertyName("resetHour");
-                writer.Write(this.resetHour.Value);
+                writer.Write(int.Parse(ResetHour.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetLimitNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):limit:(?<limitName>.*)");
-        if (!match.Groups["limitName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["limitName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):limit:(?<limitName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):limit:(?<limitName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):limit:(?<namespaceName>.*):limit:(?<limitName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static LimitModel FromDict(JsonData data)
-        {
-            return new LimitModel()
-                .WithLimitModelId(data.Keys.Contains("limitModelId") && data["limitModelId"] != null ? data["limitModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithResetType(data.Keys.Contains("resetType") && data["resetType"] != null ? data["resetType"].ToString() : null)
-                .WithResetDayOfMonth(data.Keys.Contains("resetDayOfMonth") && data["resetDayOfMonth"] != null ? (int?)int.Parse(data["resetDayOfMonth"].ToString()) : null)
-                .WithResetDayOfWeek(data.Keys.Contains("resetDayOfWeek") && data["resetDayOfWeek"] != null ? data["resetDayOfWeek"].ToString() : null)
-                .WithResetHour(data.Keys.Contains("resetHour") && data["resetHour"] != null ? (int?)int.Parse(data["resetHour"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as LimitModel;
             var diff = 0;
-            if (limitModelId == null && limitModelId == other.limitModelId)
+            if (LimitModelId == null && LimitModelId == other.LimitModelId)
             {
                 // null and null
             }
             else
             {
-                diff += limitModelId.CompareTo(other.limitModelId);
+                diff += LimitModelId.CompareTo(other.LimitModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (resetType == null && resetType == other.resetType)
+            if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
             }
             else
             {
-                diff += resetType.CompareTo(other.resetType);
+                diff += ResetType.CompareTo(other.ResetType);
             }
-            if (resetDayOfMonth == null && resetDayOfMonth == other.resetDayOfMonth)
+            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetDayOfMonth - other.resetDayOfMonth);
+                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
             }
-            if (resetDayOfWeek == null && resetDayOfWeek == other.resetDayOfWeek)
+            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
             {
                 // null and null
             }
             else
             {
-                diff += resetDayOfWeek.CompareTo(other.resetDayOfWeek);
+                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
             }
-            if (resetHour == null && resetHour == other.resetHour)
+            if (ResetHour == null && ResetHour == other.ResetHour)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(resetHour - other.resetHour);
+                diff += (int)(ResetHour - other.ResetHour);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["limitModelId"] = limitModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["resetType"] = resetType;
-            data["resetDayOfMonth"] = resetDayOfMonth;
-            data["resetDayOfWeek"] = resetDayOfWeek;
-            data["resetHour"] = resetHour;
-            return data;
-        }
-	}
+    }
 }

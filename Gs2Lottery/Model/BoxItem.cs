@@ -23,133 +23,115 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Lottery.Model
 {
+
 	[Preserve]
 	public class BoxItem : IComparable
 	{
+        public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public int? Remaining { set; get; }
+        public int? Initial { set; get; }
 
-        /** 入手アクションのリスト */
-        public List<AcquireAction> acquireActions { set; get; }
-
-        /**
-         * 入手アクションのリストを設定
-         *
-         * @param acquireActions 入手アクションのリスト
-         * @return this
-         */
-        public BoxItem WithAcquireActions(List<AcquireAction> acquireActions) {
-            this.acquireActions = acquireActions;
+        public BoxItem WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
             return this;
         }
 
-        /** 残り数量 */
-        public int? remaining { set; get; }
-
-        /**
-         * 残り数量を設定
-         *
-         * @param remaining 残り数量
-         * @return this
-         */
         public BoxItem WithRemaining(int? remaining) {
-            this.remaining = remaining;
+            this.Remaining = remaining;
             return this;
         }
 
-        /** 初期数量 */
-        public int? initial { set; get; }
-
-        /**
-         * 初期数量を設定
-         *
-         * @param initial 初期数量
-         * @return this
-         */
         public BoxItem WithInitial(int? initial) {
-            this.initial = initial;
+            this.Initial = initial;
             return this;
+        }
+
+    	[Preserve]
+        public static BoxItem FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new BoxItem()
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)int.Parse(data["remaining"].ToString()))
+                .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : (int?)int.Parse(data["initial"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                        AcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["remaining"] = Remaining,
+                ["initial"] = Initial,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.acquireActions != null)
-            {
+            if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
                 writer.WriteArrayStart();
-                foreach(var item in this.acquireActions)
+                foreach (var acquireAction in AcquireActions)
                 {
-                    item.WriteJson(writer);
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.remaining.HasValue)
-            {
+            if (Remaining != null) {
                 writer.WritePropertyName("remaining");
-                writer.Write(this.remaining.Value);
+                writer.Write(int.Parse(Remaining.ToString()));
             }
-            if(this.initial.HasValue)
-            {
+            if (Initial != null) {
                 writer.WritePropertyName("initial");
-                writer.Write(this.initial.Value);
+                writer.Write(int.Parse(Initial.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static BoxItem FromDict(JsonData data)
-        {
-            return new BoxItem()
-                .WithAcquireActions(data.Keys.Contains("acquireActions") && data["acquireActions"] != null ? data["acquireActions"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Lottery.Model.AcquireAction.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithRemaining(data.Keys.Contains("remaining") && data["remaining"] != null ? (int?)int.Parse(data["remaining"].ToString()) : null)
-                .WithInitial(data.Keys.Contains("initial") && data["initial"] != null ? (int?)int.Parse(data["initial"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as BoxItem;
             var diff = 0;
-            if (acquireActions == null && acquireActions == other.acquireActions)
+            if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
                 // null and null
             }
             else
             {
-                diff += acquireActions.Count - other.acquireActions.Count;
-                for (var i = 0; i < acquireActions.Count; i++)
+                diff += AcquireActions.Length - other.AcquireActions.Length;
+                for (var i = 0; i < AcquireActions.Length; i++)
                 {
-                    diff += acquireActions[i].CompareTo(other.acquireActions[i]);
+                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
                 }
             }
-            if (remaining == null && remaining == other.remaining)
+            if (Remaining == null && Remaining == other.Remaining)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(remaining - other.remaining);
+                diff += (int)(Remaining - other.Remaining);
             }
-            if (initial == null && initial == other.initial)
+            if (Initial == null && Initial == other.Initial)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(initial - other.initial);
+                diff += (int)(Initial - other.Initial);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["acquireActions"] = new JsonData(acquireActions.Select(item => item.ToDict()));
-            data["remaining"] = remaining;
-            data["initial"] = initial;
-            return data;
-        }
-	}
+    }
 }

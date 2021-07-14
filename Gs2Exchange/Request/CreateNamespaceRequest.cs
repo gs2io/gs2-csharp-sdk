@@ -28,144 +28,109 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public bool? EnableAwaitExchange { set; get; }
+        public bool? EnableDirectExchange { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 交換結果の受け取りに待ち時間の発生する交換機能を利用するか */
-		[UnityEngine.SerializeField]
-        public bool? enableAwaitExchange;
-
-        /**
-         * 交換結果の受け取りに待ち時間の発生する交換機能を利用するかを設定
-         *
-         * @param enableAwaitExchange 交換結果の受け取りに待ち時間の発生する交換機能を利用するか
-         * @return this
-         */
         public CreateNamespaceRequest WithEnableAwaitExchange(bool? enableAwaitExchange) {
-            this.enableAwaitExchange = enableAwaitExchange;
+            this.EnableAwaitExchange = enableAwaitExchange;
             return this;
         }
 
-
-        /** 直接交換APIの呼び出しを許可する。許可しない場合はスタンプシート経由でしか交換できない */
-		[UnityEngine.SerializeField]
-        public bool? enableDirectExchange;
-
-        /**
-         * 直接交換APIの呼び出しを許可する。許可しない場合はスタンプシート経由でしか交換できないを設定
-         *
-         * @param enableDirectExchange 直接交換APIの呼び出しを許可する。許可しない場合はスタンプシート経由でしか交換できない
-         * @return this
-         */
         public CreateNamespaceRequest WithEnableDirectExchange(bool? enableDirectExchange) {
-            this.enableDirectExchange = enableDirectExchange;
+            this.EnableDirectExchange = enableDirectExchange;
             return this;
         }
 
-
-        /** 交換処理をジョブとして追加するキューのネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string queueNamespaceId;
-
-        /**
-         * 交換処理をジョブとして追加するキューのネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 交換処理をジョブとして追加するキューのネームスペース のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-
-        /** 交換処理のスタンプシートで使用する暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 交換処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 交換処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Exchange.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Exchange.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                enableAwaitExchange = data.Keys.Contains("enableAwaitExchange") && data["enableAwaitExchange"] != null ? (bool?)bool.Parse(data["enableAwaitExchange"].ToString()) : null,
-                enableDirectExchange = data.Keys.Contains("enableDirectExchange") && data["enableDirectExchange"] != null ? (bool?)bool.Parse(data["enableDirectExchange"].ToString()) : null,
-                queueNamespaceId = data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Exchange.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithEnableAwaitExchange(!data.Keys.Contains("enableAwaitExchange") || data["enableAwaitExchange"] == null ? null : (bool?)bool.Parse(data["enableAwaitExchange"].ToString()))
+                .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["enableAwaitExchange"] = EnableAwaitExchange,
+                ["enableDirectExchange"] = EnableDirectExchange,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["enableAwaitExchange"] = enableAwaitExchange;
-            data["enableDirectExchange"] = enableDirectExchange;
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (EnableAwaitExchange != null) {
+                writer.WritePropertyName("enableAwaitExchange");
+                writer.Write(bool.Parse(EnableAwaitExchange.ToString()));
+            }
+            if (EnableDirectExchange != null) {
+                writer.WritePropertyName("enableDirectExchange");
+                writer.Write(bool.Parse(EnableDirectExchange.ToString()));
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

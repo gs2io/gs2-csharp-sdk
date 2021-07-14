@@ -23,381 +23,270 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class Gathering : IComparable
 	{
+        public string GatheringId { set; get; }
+        public string Name { set; get; }
+        public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
+        public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
+        public string[] AllowUserIds { set; get; }
+        public string Metadata { set; get; }
+        public long? ExpiresAt { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ギャザリング */
-        public string gatheringId { set; get; }
-
-        /**
-         * ギャザリングを設定
-         *
-         * @param gatheringId ギャザリング
-         * @return this
-         */
         public Gathering WithGatheringId(string gatheringId) {
-            this.gatheringId = gatheringId;
+            this.GatheringId = gatheringId;
             return this;
         }
 
-        /** ギャザリング名 */
-        public string name { set; get; }
-
-        /**
-         * ギャザリング名を設定
-         *
-         * @param name ギャザリング名
-         * @return this
-         */
         public Gathering WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 募集条件 */
-        public List<AttributeRange> attributeRanges { set; get; }
-
-        /**
-         * 募集条件を設定
-         *
-         * @param attributeRanges 募集条件
-         * @return this
-         */
-        public Gathering WithAttributeRanges(List<AttributeRange> attributeRanges) {
-            this.attributeRanges = attributeRanges;
+        public Gathering WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
+            this.AttributeRanges = attributeRanges;
             return this;
         }
 
-        /** 参加者 */
-        public List<CapacityOfRole> capacityOfRoles { set; get; }
-
-        /**
-         * 参加者を設定
-         *
-         * @param capacityOfRoles 参加者
-         * @return this
-         */
-        public Gathering WithCapacityOfRoles(List<CapacityOfRole> capacityOfRoles) {
-            this.capacityOfRoles = capacityOfRoles;
+        public Gathering WithCapacityOfRoles(Gs2.Gs2Matchmaking.Model.CapacityOfRole[] capacityOfRoles) {
+            this.CapacityOfRoles = capacityOfRoles;
             return this;
         }
 
-        /** 参加を許可するユーザIDリスト */
-        public List<string> allowUserIds { set; get; }
-
-        /**
-         * 参加を許可するユーザIDリストを設定
-         *
-         * @param allowUserIds 参加を許可するユーザIDリスト
-         * @return this
-         */
-        public Gathering WithAllowUserIds(List<string> allowUserIds) {
-            this.allowUserIds = allowUserIds;
+        public Gathering WithAllowUserIds(string[] allowUserIds) {
+            this.AllowUserIds = allowUserIds;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Gathering WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** ギャザリングの有効期限 */
-        public long? expiresAt { set; get; }
-
-        /**
-         * ギャザリングの有効期限を設定
-         *
-         * @param expiresAt ギャザリングの有効期限
-         * @return this
-         */
         public Gathering WithExpiresAt(long? expiresAt) {
-            this.expiresAt = expiresAt;
+            this.ExpiresAt = expiresAt;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Gathering WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Gathering WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Gathering FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Gathering()
+                .WithGatheringId(!data.Keys.Contains("gatheringId") || data["gatheringId"] == null ? null : data["gatheringId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithAttributeRanges(!data.Keys.Contains("attributeRanges") || data["attributeRanges"] == null ? new Gs2.Gs2Matchmaking.Model.AttributeRange[]{} : data["attributeRanges"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.AttributeRange.FromJson(v);
+                }).ToArray())
+                .WithCapacityOfRoles(!data.Keys.Contains("capacityOfRoles") || data["capacityOfRoles"] == null ? new Gs2.Gs2Matchmaking.Model.CapacityOfRole[]{} : data["capacityOfRoles"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.CapacityOfRole.FromJson(v);
+                }).ToArray())
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["gatheringId"] = GatheringId,
+                ["name"] = Name,
+                ["attributeRanges"] = new JsonData(AttributeRanges == null ? new JsonData[]{} :
+                        AttributeRanges.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["capacityOfRoles"] = new JsonData(CapacityOfRoles == null ? new JsonData[]{} :
+                        CapacityOfRoles.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                        AllowUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["metadata"] = Metadata,
+                ["expiresAt"] = ExpiresAt,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.gatheringId != null)
-            {
+            if (GatheringId != null) {
                 writer.WritePropertyName("gatheringId");
-                writer.Write(this.gatheringId);
+                writer.Write(GatheringId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.attributeRanges != null)
-            {
+            if (AttributeRanges != null) {
                 writer.WritePropertyName("attributeRanges");
                 writer.WriteArrayStart();
-                foreach(var item in this.attributeRanges)
+                foreach (var attributeRange in AttributeRanges)
                 {
-                    item.WriteJson(writer);
+                    if (attributeRange != null) {
+                        attributeRange.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.capacityOfRoles != null)
-            {
+            if (CapacityOfRoles != null) {
                 writer.WritePropertyName("capacityOfRoles");
                 writer.WriteArrayStart();
-                foreach(var item in this.capacityOfRoles)
+                foreach (var capacityOfRole in CapacityOfRoles)
                 {
-                    item.WriteJson(writer);
+                    if (capacityOfRole != null) {
+                        capacityOfRole.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.allowUserIds != null)
-            {
+            if (AllowUserIds != null) {
                 writer.WritePropertyName("allowUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.allowUserIds)
+                foreach (var allowUserId in AllowUserIds)
                 {
-                    writer.Write(item);
+                    if (allowUserId != null) {
+                        writer.Write(allowUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.expiresAt.HasValue)
-            {
+            if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
-                writer.Write(this.expiresAt.Value);
+                writer.Write(long.Parse(ExpiresAt.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetGatheringNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):gathering:(?<gatheringName>.*)");
-        if (!match.Groups["gatheringName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["gatheringName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):gathering:(?<gatheringName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):gathering:(?<gatheringName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):matchmaking:(?<namespaceName>.*):gathering:(?<gatheringName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Gathering FromDict(JsonData data)
-        {
-            return new Gathering()
-                .WithGatheringId(data.Keys.Contains("gatheringId") && data["gatheringId"] != null ? data["gatheringId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithAttributeRanges(data.Keys.Contains("attributeRanges") && data["attributeRanges"] != null ? data["attributeRanges"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.AttributeRange.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithCapacityOfRoles(data.Keys.Contains("capacityOfRoles") && data["capacityOfRoles"] != null ? data["capacityOfRoles"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.CapacityOfRole.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithAllowUserIds(data.Keys.Contains("allowUserIds") && data["allowUserIds"] != null ? data["allowUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithExpiresAt(data.Keys.Contains("expiresAt") && data["expiresAt"] != null ? (long?)long.Parse(data["expiresAt"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Gathering;
             var diff = 0;
-            if (gatheringId == null && gatheringId == other.gatheringId)
+            if (GatheringId == null && GatheringId == other.GatheringId)
             {
                 // null and null
             }
             else
             {
-                diff += gatheringId.CompareTo(other.gatheringId);
+                diff += GatheringId.CompareTo(other.GatheringId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (attributeRanges == null && attributeRanges == other.attributeRanges)
+            if (AttributeRanges == null && AttributeRanges == other.AttributeRanges)
             {
                 // null and null
             }
             else
             {
-                diff += attributeRanges.Count - other.attributeRanges.Count;
-                for (var i = 0; i < attributeRanges.Count; i++)
+                diff += AttributeRanges.Length - other.AttributeRanges.Length;
+                for (var i = 0; i < AttributeRanges.Length; i++)
                 {
-                    diff += attributeRanges[i].CompareTo(other.attributeRanges[i]);
+                    diff += AttributeRanges[i].CompareTo(other.AttributeRanges[i]);
                 }
             }
-            if (capacityOfRoles == null && capacityOfRoles == other.capacityOfRoles)
+            if (CapacityOfRoles == null && CapacityOfRoles == other.CapacityOfRoles)
             {
                 // null and null
             }
             else
             {
-                diff += capacityOfRoles.Count - other.capacityOfRoles.Count;
-                for (var i = 0; i < capacityOfRoles.Count; i++)
+                diff += CapacityOfRoles.Length - other.CapacityOfRoles.Length;
+                for (var i = 0; i < CapacityOfRoles.Length; i++)
                 {
-                    diff += capacityOfRoles[i].CompareTo(other.capacityOfRoles[i]);
+                    diff += CapacityOfRoles[i].CompareTo(other.CapacityOfRoles[i]);
                 }
             }
-            if (allowUserIds == null && allowUserIds == other.allowUserIds)
+            if (AllowUserIds == null && AllowUserIds == other.AllowUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += allowUserIds.Count - other.allowUserIds.Count;
-                for (var i = 0; i < allowUserIds.Count; i++)
+                diff += AllowUserIds.Length - other.AllowUserIds.Length;
+                for (var i = 0; i < AllowUserIds.Length; i++)
                 {
-                    diff += allowUserIds[i].CompareTo(other.allowUserIds[i]);
+                    diff += AllowUserIds[i].CompareTo(other.AllowUserIds[i]);
                 }
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (expiresAt == null && expiresAt == other.expiresAt)
+            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(expiresAt - other.expiresAt);
+                diff += (int)(ExpiresAt - other.ExpiresAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["gatheringId"] = gatheringId;
-            data["name"] = name;
-            data["attributeRanges"] = new JsonData(attributeRanges.Select(item => item.ToDict()));
-            data["capacityOfRoles"] = new JsonData(capacityOfRoles.Select(item => item.ToDict()));
-            data["allowUserIds"] = new JsonData(allowUserIds);
-            data["metadata"] = metadata;
-            data["expiresAt"] = expiresAt;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

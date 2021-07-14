@@ -28,166 +28,118 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareUploadByUserIdRequest : Gs2Request<PrepareUploadByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
+        public string ContentType { set; get; }
+        public string Scope { set; get; }
+        public string[] AllowUserIds { set; get; }
+        public bool? UpdateIfExists { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** データの名前 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * データの名前を設定
-         *
-         * @param name データの名前
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** アップロードするデータの MIME-Type */
-		[UnityEngine.SerializeField]
-        public string contentType;
-
-        /**
-         * アップロードするデータの MIME-Typeを設定
-         *
-         * @param contentType アップロードするデータの MIME-Type
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithContentType(string contentType) {
-            this.contentType = contentType;
+            this.ContentType = contentType;
             return this;
         }
 
-
-        /** ファイルのアクセス権 */
-		[UnityEngine.SerializeField]
-        public string scope;
-
-        /**
-         * ファイルのアクセス権を設定
-         *
-         * @param scope ファイルのアクセス権
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithScope(string scope) {
-            this.scope = scope;
+            this.Scope = scope;
             return this;
         }
 
-
-        /** 公開するユーザIDリスト */
-		[UnityEngine.SerializeField]
-        public List<string> allowUserIds;
-
-        /**
-         * 公開するユーザIDリストを設定
-         *
-         * @param allowUserIds 公開するユーザIDリスト
-         * @return this
-         */
-        public PrepareUploadByUserIdRequest WithAllowUserIds(List<string> allowUserIds) {
-            this.allowUserIds = allowUserIds;
+        public PrepareUploadByUserIdRequest WithAllowUserIds(string[] allowUserIds) {
+            this.AllowUserIds = allowUserIds;
             return this;
         }
 
-
-        /** 既にデータが存在する場合にエラーとするか、データを更新するか */
-		[UnityEngine.SerializeField]
-        public bool? updateIfExists;
-
-        /**
-         * 既にデータが存在する場合にエラーとするか、データを更新するかを設定
-         *
-         * @param updateIfExists 既にデータが存在する場合にエラーとするか、データを更新するか
-         * @return this
-         */
         public PrepareUploadByUserIdRequest WithUpdateIfExists(bool? updateIfExists) {
-            this.updateIfExists = updateIfExists;
+            this.UpdateIfExists = updateIfExists;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public PrepareUploadByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static PrepareUploadByUserIdRequest FromDict(JsonData data)
+        public static PrepareUploadByUserIdRequest FromJson(JsonData data)
         {
-            return new PrepareUploadByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                contentType = data.Keys.Contains("contentType") && data["contentType"] != null ? data["contentType"].ToString(): null,
-                scope = data.Keys.Contains("scope") && data["scope"] != null ? data["scope"].ToString(): null,
-                allowUserIds = data.Keys.Contains("allowUserIds") && data["allowUserIds"] != null ? data["allowUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
-                updateIfExists = data.Keys.Contains("updateIfExists") && data["updateIfExists"] != null ? (bool?)bool.Parse(data["updateIfExists"].ToString()) : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new PrepareUploadByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithContentType(!data.Keys.Contains("contentType") || data["contentType"] == null ? null : data["contentType"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithUpdateIfExists(!data.Keys.Contains("updateIfExists") || data["updateIfExists"] == null ? null : (bool?)bool.Parse(data["updateIfExists"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["name"] = Name,
+                ["contentType"] = ContentType,
+                ["scope"] = Scope,
+                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                        AllowUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["updateIfExists"] = UpdateIfExists,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["name"] = name;
-            data["contentType"] = contentType;
-            data["scope"] = scope;
-            data["allowUserIds"] = new JsonData(allowUserIds);
-            data["updateIfExists"] = updateIfExists;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (ContentType != null) {
+                writer.WritePropertyName("contentType");
+                writer.Write(ContentType.ToString());
+            }
+            if (Scope != null) {
+                writer.WritePropertyName("scope");
+                writer.Write(Scope.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var allowUserId in AllowUserIds)
+            {
+                writer.Write(allowUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            if (UpdateIfExists != null) {
+                writer.WritePropertyName("updateIfExists");
+                writer.Write(bool.Parse(UpdateIfExists.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

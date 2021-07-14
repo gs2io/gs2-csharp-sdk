@@ -23,250 +23,137 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Datastore.Model
 {
+
 	[Preserve]
 	public class DataObjectHistory : IComparable
 	{
+        public string DataObjectHistoryId { set; get; }
+        public string DataObjectName { set; get; }
+        public string Generation { set; get; }
+        public long? ContentLength { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** データオブジェクト履歴 */
-        public string dataObjectHistoryId { set; get; }
-
-        /**
-         * データオブジェクト履歴を設定
-         *
-         * @param dataObjectHistoryId データオブジェクト履歴
-         * @return this
-         */
         public DataObjectHistory WithDataObjectHistoryId(string dataObjectHistoryId) {
-            this.dataObjectHistoryId = dataObjectHistoryId;
+            this.DataObjectHistoryId = dataObjectHistoryId;
             return this;
         }
 
-        /** データオブジェクト名 */
-        public string dataObjectName { set; get; }
-
-        /**
-         * データオブジェクト名を設定
-         *
-         * @param dataObjectName データオブジェクト名
-         * @return this
-         */
         public DataObjectHistory WithDataObjectName(string dataObjectName) {
-            this.dataObjectName = dataObjectName;
+            this.DataObjectName = dataObjectName;
             return this;
         }
 
-        /** 世代ID */
-        public string generation { set; get; }
-
-        /**
-         * 世代IDを設定
-         *
-         * @param generation 世代ID
-         * @return this
-         */
         public DataObjectHistory WithGeneration(string generation) {
-            this.generation = generation;
+            this.Generation = generation;
             return this;
         }
 
-        /** データサイズ */
-        public long? contentLength { set; get; }
-
-        /**
-         * データサイズを設定
-         *
-         * @param contentLength データサイズ
-         * @return this
-         */
         public DataObjectHistory WithContentLength(long? contentLength) {
-            this.contentLength = contentLength;
+            this.ContentLength = contentLength;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public DataObjectHistory WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static DataObjectHistory FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new DataObjectHistory()
+                .WithDataObjectHistoryId(!data.Keys.Contains("dataObjectHistoryId") || data["dataObjectHistoryId"] == null ? null : data["dataObjectHistoryId"].ToString())
+                .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
+                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)long.Parse(data["contentLength"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["dataObjectHistoryId"] = DataObjectHistoryId,
+                ["dataObjectName"] = DataObjectName,
+                ["generation"] = Generation,
+                ["contentLength"] = ContentLength,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.dataObjectHistoryId != null)
-            {
+            if (DataObjectHistoryId != null) {
                 writer.WritePropertyName("dataObjectHistoryId");
-                writer.Write(this.dataObjectHistoryId);
+                writer.Write(DataObjectHistoryId.ToString());
             }
-            if(this.dataObjectName != null)
-            {
+            if (DataObjectName != null) {
                 writer.WritePropertyName("dataObjectName");
-                writer.Write(this.dataObjectName);
+                writer.Write(DataObjectName.ToString());
             }
-            if(this.generation != null)
-            {
+            if (Generation != null) {
                 writer.WritePropertyName("generation");
-                writer.Write(this.generation);
+                writer.Write(Generation.ToString());
             }
-            if(this.contentLength.HasValue)
-            {
+            if (ContentLength != null) {
                 writer.WritePropertyName("contentLength");
-                writer.Write(this.contentLength.Value);
+                writer.Write(long.Parse(ContentLength.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetGenerationFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["generation"].Success)
-        {
-            return null;
-        }
-        return match.Groups["generation"].Value;
-    }
-
-    public static string GetDataObjectNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["dataObjectName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["dataObjectName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):datastore:(?<namespaceName>.*):user:(?<userId>.*):data:(?<dataObjectName>.*):history:(?<generation>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static DataObjectHistory FromDict(JsonData data)
-        {
-            return new DataObjectHistory()
-                .WithDataObjectHistoryId(data.Keys.Contains("dataObjectHistoryId") && data["dataObjectHistoryId"] != null ? data["dataObjectHistoryId"].ToString() : null)
-                .WithDataObjectName(data.Keys.Contains("dataObjectName") && data["dataObjectName"] != null ? data["dataObjectName"].ToString() : null)
-                .WithGeneration(data.Keys.Contains("generation") && data["generation"] != null ? data["generation"].ToString() : null)
-                .WithContentLength(data.Keys.Contains("contentLength") && data["contentLength"] != null ? (long?)long.Parse(data["contentLength"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as DataObjectHistory;
             var diff = 0;
-            if (dataObjectHistoryId == null && dataObjectHistoryId == other.dataObjectHistoryId)
+            if (DataObjectHistoryId == null && DataObjectHistoryId == other.DataObjectHistoryId)
             {
                 // null and null
             }
             else
             {
-                diff += dataObjectHistoryId.CompareTo(other.dataObjectHistoryId);
+                diff += DataObjectHistoryId.CompareTo(other.DataObjectHistoryId);
             }
-            if (dataObjectName == null && dataObjectName == other.dataObjectName)
+            if (DataObjectName == null && DataObjectName == other.DataObjectName)
             {
                 // null and null
             }
             else
             {
-                diff += dataObjectName.CompareTo(other.dataObjectName);
+                diff += DataObjectName.CompareTo(other.DataObjectName);
             }
-            if (generation == null && generation == other.generation)
+            if (Generation == null && Generation == other.Generation)
             {
                 // null and null
             }
             else
             {
-                diff += generation.CompareTo(other.generation);
+                diff += Generation.CompareTo(other.Generation);
             }
-            if (contentLength == null && contentLength == other.contentLength)
+            if (ContentLength == null && ContentLength == other.ContentLength)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(contentLength - other.contentLength);
+                diff += (int)(ContentLength - other.ContentLength);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["dataObjectHistoryId"] = dataObjectHistoryId;
-            data["dataObjectName"] = dataObjectName;
-            data["generation"] = generation;
-            data["contentLength"] = contentLength;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class GetRawEventRequest : Gs2Request<GetRawEventRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string EventName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetRawEventRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** イベントの種類名 */
-		[UnityEngine.SerializeField]
-        public string eventName;
-
-        /**
-         * イベントの種類名を設定
-         *
-         * @param eventName イベントの種類名
-         * @return this
-         */
         public GetRawEventRequest WithEventName(string eventName) {
-            this.eventName = eventName;
+            this.EventName = eventName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetRawEventRequest FromDict(JsonData data)
+        public static GetRawEventRequest FromJson(JsonData data)
         {
-            return new GetRawEventRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                eventName = data.Keys.Contains("eventName") && data["eventName"] != null ? data["eventName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetRawEventRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["eventName"] = EventName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["eventName"] = eventName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (EventName != null) {
+                writer.WritePropertyName("eventName");
+                writer.Write(EventName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

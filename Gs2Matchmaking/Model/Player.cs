@@ -23,175 +23,152 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class Player : IComparable
 	{
+        public string UserId { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Attribute[] Attributes { set; get; }
+        public string RoleName { set; get; }
+        public string[] DenyUserIds { set; get; }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Player WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 属性値のリスト */
-        public List<Attribute_> attributes { set; get; }
-
-        /**
-         * 属性値のリストを設定
-         *
-         * @param attributes 属性値のリスト
-         * @return this
-         */
-        public Player WithAttributes(List<Attribute_> attributes) {
-            this.attributes = attributes;
+        public Player WithAttributes(Gs2.Gs2Matchmaking.Model.Attribute[] attributes) {
+            this.Attributes = attributes;
             return this;
         }
 
-        /** ロール名 */
-        public string roleName { set; get; }
-
-        /**
-         * ロール名を設定
-         *
-         * @param roleName ロール名
-         * @return this
-         */
         public Player WithRoleName(string roleName) {
-            this.roleName = roleName;
+            this.RoleName = roleName;
             return this;
         }
 
-        /** 参加を拒否するユーザIDリスト */
-        public List<string> denyUserIds { set; get; }
-
-        /**
-         * 参加を拒否するユーザIDリストを設定
-         *
-         * @param denyUserIds 参加を拒否するユーザIDリスト
-         * @return this
-         */
-        public Player WithDenyUserIds(List<string> denyUserIds) {
-            this.denyUserIds = denyUserIds;
+        public Player WithDenyUserIds(string[] denyUserIds) {
+            this.DenyUserIds = denyUserIds;
             return this;
+        }
+
+    	[Preserve]
+        public static Player FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Player()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAttributes(!data.Keys.Contains("attributes") || data["attributes"] == null ? new Gs2.Gs2Matchmaking.Model.Attribute[]{} : data["attributes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.Attribute.FromJson(v);
+                }).ToArray())
+                .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
+                .WithDenyUserIds(!data.Keys.Contains("denyUserIds") || data["denyUserIds"] == null ? new string[]{} : data["denyUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["attributes"] = new JsonData(Attributes == null ? new JsonData[]{} :
+                        Attributes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["roleName"] = RoleName,
+                ["denyUserIds"] = new JsonData(DenyUserIds == null ? new JsonData[]{} :
+                        DenyUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.attributes != null)
-            {
+            if (Attributes != null) {
                 writer.WritePropertyName("attributes");
                 writer.WriteArrayStart();
-                foreach(var item in this.attributes)
+                foreach (var attribute in Attributes)
                 {
-                    item.WriteJson(writer);
+                    if (attribute != null) {
+                        attribute.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.roleName != null)
-            {
+            if (RoleName != null) {
                 writer.WritePropertyName("roleName");
-                writer.Write(this.roleName);
+                writer.Write(RoleName.ToString());
             }
-            if(this.denyUserIds != null)
-            {
+            if (DenyUserIds != null) {
                 writer.WritePropertyName("denyUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.denyUserIds)
+                foreach (var denyUserId in DenyUserIds)
                 {
-                    writer.Write(item);
+                    if (denyUserId != null) {
+                        writer.Write(denyUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    	[Preserve]
-        public static Player FromDict(JsonData data)
-        {
-            return new Player()
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithAttributes(data.Keys.Contains("attributes") && data["attributes"] != null ? data["attributes"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Matchmaking.Model.Attribute_.FromDict(value);
-                    }
-                ).ToList() : null)
-                .WithRoleName(data.Keys.Contains("roleName") && data["roleName"] != null ? data["roleName"].ToString() : null)
-                .WithDenyUserIds(data.Keys.Contains("denyUserIds") && data["denyUserIds"] != null ? data["denyUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as Player;
             var diff = 0;
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (attributes == null && attributes == other.attributes)
+            if (Attributes == null && Attributes == other.Attributes)
             {
                 // null and null
             }
             else
             {
-                diff += attributes.Count - other.attributes.Count;
-                for (var i = 0; i < attributes.Count; i++)
+                diff += Attributes.Length - other.Attributes.Length;
+                for (var i = 0; i < Attributes.Length; i++)
                 {
-                    diff += attributes[i].CompareTo(other.attributes[i]);
+                    diff += Attributes[i].CompareTo(other.Attributes[i]);
                 }
             }
-            if (roleName == null && roleName == other.roleName)
+            if (RoleName == null && RoleName == other.RoleName)
             {
                 // null and null
             }
             else
             {
-                diff += roleName.CompareTo(other.roleName);
+                diff += RoleName.CompareTo(other.RoleName);
             }
-            if (denyUserIds == null && denyUserIds == other.denyUserIds)
+            if (DenyUserIds == null && DenyUserIds == other.DenyUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += denyUserIds.Count - other.denyUserIds.Count;
-                for (var i = 0; i < denyUserIds.Count; i++)
+                diff += DenyUserIds.Length - other.DenyUserIds.Length;
+                for (var i = 0; i < DenyUserIds.Length; i++)
                 {
-                    diff += denyUserIds[i].CompareTo(other.denyUserIds[i]);
+                    diff += DenyUserIds[i].CompareTo(other.DenyUserIds[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["userId"] = userId;
-            data["attributes"] = new JsonData(attributes.Select(item => item.ToDict()));
-            data["roleName"] = roleName;
-            data["denyUserIds"] = new JsonData(denyUserIds);
-            return data;
-        }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Limit.Model;
 using Gs2.Util.LitJson;
@@ -24,22 +25,52 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Limit.Result
 {
 	[Preserve]
-	public class DescribeLimitModelsResult
+	[System.Serializable]
+	public class DescribeLimitModelsResult : IResult
 	{
-        /** 回数制限の種類のリスト */
-        public List<LimitModel> items { set; get; }
+        public Gs2.Gs2Limit.Model.LimitModel[] Items { set; get; }
 
+        public DescribeLimitModelsResult WithItems(Gs2.Gs2Limit.Model.LimitModel[] items) {
+            this.Items = items;
+            return this;
+        }
 
     	[Preserve]
-        public static DescribeLimitModelsResult FromDict(JsonData data)
+        public static DescribeLimitModelsResult FromJson(JsonData data)
         {
-            return new DescribeLimitModelsResult {
-                items = data.Keys.Contains("items") && data["items"] != null ? data["items"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Limit.Model.LimitModel.FromDict(value);
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeLimitModelsResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Limit.Model.LimitModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Limit.Model.LimitModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                        Items.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteArrayStart();
+            foreach (var item in Items)
+            {
+                if (item != null) {
+                    item.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
+        }
+    }
 }

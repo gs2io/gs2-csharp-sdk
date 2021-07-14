@@ -28,180 +28,129 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; }
+        public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
+        public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
+        public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string name;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public CreateNamespaceRequest WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public CreateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** ミッションを達成したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript;
-
-        /**
-         * ミッションを達成したときに実行するスクリプトを設定
-         *
-         * @param missionCompleteScript ミッションを達成したときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithMissionCompleteScript(global::Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
-            this.missionCompleteScript = missionCompleteScript;
+        public CreateNamespaceRequest WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
+            this.MissionCompleteScript = missionCompleteScript;
             return this;
         }
 
-
-        /** カウンターを上昇したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript;
-
-        /**
-         * カウンターを上昇したときに実行するスクリプトを設定
-         *
-         * @param counterIncrementScript カウンターを上昇したときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithCounterIncrementScript(global::Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
-            this.counterIncrementScript = counterIncrementScript;
+        public CreateNamespaceRequest WithCounterIncrementScript(Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
+            this.CounterIncrementScript = counterIncrementScript;
             return this;
         }
 
-
-        /** 報酬を受け取ったときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript;
-
-        /**
-         * 報酬を受け取ったときに実行するスクリプトを設定
-         *
-         * @param receiveRewardsScript 報酬を受け取ったときに実行するスクリプト
-         * @return this
-         */
-        public CreateNamespaceRequest WithReceiveRewardsScript(global::Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
-            this.receiveRewardsScript = receiveRewardsScript;
+        public CreateNamespaceRequest WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
+            this.ReceiveRewardsScript = receiveRewardsScript;
             return this;
         }
 
-
-        /** 報酬付与処理をジョブとして追加するキューネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string queueNamespaceId;
-
-        /**
-         * 報酬付与処理をジョブとして追加するキューネームスペース のGRNを設定
-         *
-         * @param queueNamespaceId 報酬付与処理をジョブとして追加するキューネームスペース のGRN
-         * @return this
-         */
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.queueNamespaceId = queueNamespaceId;
+            this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
 
-
-        /** 報酬付与処理のスタンプシートで使用する暗号鍵GRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 報酬付与処理のスタンプシートで使用する暗号鍵GRNを設定
-         *
-         * @param keyId 報酬付与処理のスタンプシートで使用する暗号鍵GRN
-         * @return this
-         */
         public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
 
-
-        /** ミッションのタスクを達成したときのプッシュ通知 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Mission.Model.NotificationSetting completeNotification;
-
-        /**
-         * ミッションのタスクを達成したときのプッシュ通知を設定
-         *
-         * @param completeNotification ミッションのタスクを達成したときのプッシュ通知
-         * @return this
-         */
-        public CreateNamespaceRequest WithCompleteNotification(global::Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
-            this.completeNotification = completeNotification;
+        public CreateNamespaceRequest WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
+            this.CompleteNotification = completeNotification;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Mission.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public CreateNamespaceRequest WithLogSetting(global::Gs2.Gs2Mission.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static CreateNamespaceRequest FromDict(JsonData data)
+        public static CreateNamespaceRequest FromJson(JsonData data)
         {
-            return new CreateNamespaceRequest {
-                name = data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                missionCompleteScript = data.Keys.Contains("missionCompleteScript") && data["missionCompleteScript"] != null ? global::Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["missionCompleteScript"]) : null,
-                counterIncrementScript = data.Keys.Contains("counterIncrementScript") && data["counterIncrementScript"] != null ? global::Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["counterIncrementScript"]) : null,
-                receiveRewardsScript = data.Keys.Contains("receiveRewardsScript") && data["receiveRewardsScript"] != null ? global::Gs2.Gs2Mission.Model.ScriptSetting.FromDict(data["receiveRewardsScript"]) : null,
-                queueNamespaceId = data.Keys.Contains("queueNamespaceId") && data["queueNamespaceId"] != null ? data["queueNamespaceId"].ToString(): null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
-                completeNotification = data.Keys.Contains("completeNotification") && data["completeNotification"] != null ? global::Gs2.Gs2Mission.Model.NotificationSetting.FromDict(data["completeNotification"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Mission.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateNamespaceRequest()
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMissionCompleteScript(!data.Keys.Contains("missionCompleteScript") || data["missionCompleteScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["missionCompleteScript"]))
+                .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
+                .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Mission.Model.NotificationSetting.FromJson(data["completeNotification"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["name"] = Name,
+                ["description"] = Description,
+                ["missionCompleteScript"] = MissionCompleteScript?.ToJson(),
+                ["counterIncrementScript"] = CounterIncrementScript?.ToJson(),
+                ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
+                ["completeNotification"] = CompleteNotification?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["name"] = name;
-            data["description"] = description;
-            data["missionCompleteScript"] = missionCompleteScript.ToDict();
-            data["counterIncrementScript"] = counterIncrementScript.ToDict();
-            data["receiveRewardsScript"] = receiveRewardsScript.ToDict();
-            data["queueNamespaceId"] = queueNamespaceId;
-            data["keyId"] = keyId;
-            data["completeNotification"] = completeNotification.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (MissionCompleteScript != null) {
+                MissionCompleteScript.WriteJson(writer);
+            }
+            if (CounterIncrementScript != null) {
+                CounterIncrementScript.WriteJson(writer);
+            }
+            if (ReceiveRewardsScript != null) {
+                ReceiveRewardsScript.WriteJson(writer);
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (CompleteNotification != null) {
+                CompleteNotification.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

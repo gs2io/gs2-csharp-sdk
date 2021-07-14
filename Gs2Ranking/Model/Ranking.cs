@@ -23,207 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class Ranking : IComparable
 	{
+        public long? Rank { set; get; }
+        public long? Index { set; get; }
+        public string UserId { set; get; }
+        public long? Score { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** 順位 */
-        public long? rank { set; get; }
-
-        /**
-         * 順位を設定
-         *
-         * @param rank 順位
-         * @return this
-         */
         public Ranking WithRank(long? rank) {
-            this.rank = rank;
+            this.Rank = rank;
             return this;
         }
 
-        /** 1位からのインデックス */
-        public long? index { set; get; }
-
-        /**
-         * 1位からのインデックスを設定
-         *
-         * @param index 1位からのインデックス
-         * @return this
-         */
         public Ranking WithIndex(long? index) {
-            this.index = index;
+            this.Index = index;
             return this;
         }
 
-        /** ユーザID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザIDを設定
-         *
-         * @param userId ユーザID
-         * @return this
-         */
         public Ranking WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** スコア */
-        public long? score { set; get; }
-
-        /**
-         * スコアを設定
-         *
-         * @param score スコア
-         * @return this
-         */
         public Ranking WithScore(long? score) {
-            this.score = score;
+            this.Score = score;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Ranking WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Ranking WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Ranking FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Ranking()
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (long?)long.Parse(data["rank"].ToString()))
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (long?)long.Parse(data["index"].ToString()))
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["rank"] = Rank,
+                ["index"] = Index,
+                ["userId"] = UserId,
+                ["score"] = Score,
+                ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.rank.HasValue)
-            {
+            if (Rank != null) {
                 writer.WritePropertyName("rank");
-                writer.Write(this.rank.Value);
+                writer.Write(long.Parse(Rank.ToString()));
             }
-            if(this.index.HasValue)
-            {
+            if (Index != null) {
                 writer.WritePropertyName("index");
-                writer.Write(this.index.Value);
+                writer.Write(long.Parse(Index.ToString()));
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.score.HasValue)
-            {
+            if (Score != null) {
                 writer.WritePropertyName("score");
-                writer.Write(this.score.Value);
+                writer.Write(long.Parse(Score.ToString()));
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Ranking FromDict(JsonData data)
-        {
-            return new Ranking()
-                .WithRank(data.Keys.Contains("rank") && data["rank"] != null ? (long?)long.Parse(data["rank"].ToString()) : null)
-                .WithIndex(data.Keys.Contains("index") && data["index"] != null ? (long?)long.Parse(data["index"].ToString()) : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithScore(data.Keys.Contains("score") && data["score"] != null ? (long?)long.Parse(data["score"].ToString()) : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Ranking;
             var diff = 0;
-            if (rank == null && rank == other.rank)
+            if (Rank == null && Rank == other.Rank)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rank - other.rank);
+                diff += (int)(Rank - other.Rank);
             }
-            if (index == null && index == other.index)
+            if (Index == null && Index == other.Index)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(index - other.index);
+                diff += (int)(Index - other.Index);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (score == null && score == other.score)
+            if (Score == null && Score == other.Score)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(score - other.score);
+                diff += (int)(Score - other.Score);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["rank"] = rank;
-            data["index"] = index;
-            data["userId"] = userId;
-            data["score"] = score;
-            data["metadata"] = metadata;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

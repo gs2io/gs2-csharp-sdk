@@ -28,54 +28,50 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class RestoreDataObjectRequest : Gs2Request<RestoreDataObjectRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DataObjectId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public RestoreDataObjectRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** データオブジェクト */
-		[UnityEngine.SerializeField]
-        public string dataObjectId;
-
-        /**
-         * データオブジェクトを設定
-         *
-         * @param dataObjectId データオブジェクト
-         * @return this
-         */
         public RestoreDataObjectRequest WithDataObjectId(string dataObjectId) {
-            this.dataObjectId = dataObjectId;
+            this.DataObjectId = dataObjectId;
             return this;
         }
-
 
     	[Preserve]
-        public static RestoreDataObjectRequest FromDict(JsonData data)
+        public static RestoreDataObjectRequest FromJson(JsonData data)
         {
-            return new RestoreDataObjectRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                dataObjectId = data.Keys.Contains("dataObjectId") && data["dataObjectId"] != null ? data["dataObjectId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new RestoreDataObjectRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDataObjectId(!data.Keys.Contains("dataObjectId") || data["dataObjectId"] == null ? null : data["dataObjectId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["dataObjectId"] = DataObjectId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["dataObjectId"] = dataObjectId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DataObjectId != null) {
+                writer.WritePropertyName("dataObjectId");
+                writer.Write(DataObjectId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

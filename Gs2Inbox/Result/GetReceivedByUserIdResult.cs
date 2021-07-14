@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Inbox.Result
 {
 	[Preserve]
-	public class GetReceivedByUserIdResult
+	[System.Serializable]
+	public class GetReceivedByUserIdResult : IResult
 	{
-        /** 受信済みグローバルメッセージ名 */
-        public Received item { set; get; }
+        public Gs2.Gs2Inbox.Model.Received Item { set; get; }
 
+        public GetReceivedByUserIdResult WithItem(Gs2.Gs2Inbox.Model.Received item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetReceivedByUserIdResult FromDict(JsonData data)
+        public static GetReceivedByUserIdResult FromJson(JsonData data)
         {
-            return new GetReceivedByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Inbox.Model.Received.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetReceivedByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inbox.Model.Received.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

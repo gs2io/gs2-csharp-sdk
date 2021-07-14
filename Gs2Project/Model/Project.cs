@@ -23,376 +23,257 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Project.Model
 {
+
 	[Preserve]
 	public class Project : IComparable
 	{
+        public string ProjectId { set; get; }
+        public string AccountName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Plan { set; get; }
+        public string BillingMethodName { set; get; }
+        public string EnableEventBridge { set; get; }
+        public string EventBridgeAwsAccountId { set; get; }
+        public string EventBridgeAwsRegion { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** プロジェクト */
-        public string projectId { set; get; }
-
-        /**
-         * プロジェクトを設定
-         *
-         * @param projectId プロジェクト
-         * @return this
-         */
         public Project WithProjectId(string projectId) {
-            this.projectId = projectId;
+            this.ProjectId = projectId;
             return this;
         }
 
-        /** GS2アカウントの名前 */
-        public string accountName { set; get; }
-
-        /**
-         * GS2アカウントの名前を設定
-         *
-         * @param accountName GS2アカウントの名前
-         * @return this
-         */
         public Project WithAccountName(string accountName) {
-            this.accountName = accountName;
+            this.AccountName = accountName;
             return this;
         }
 
-        /** プロジェクト名 */
-        public string name { set; get; }
-
-        /**
-         * プロジェクト名を設定
-         *
-         * @param name プロジェクト名
-         * @return this
-         */
         public Project WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** プロジェクトの説明 */
-        public string description { set; get; }
-
-        /**
-         * プロジェクトの説明を設定
-         *
-         * @param description プロジェクトの説明
-         * @return this
-         */
         public Project WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** 契約プラン */
-        public string plan { set; get; }
-
-        /**
-         * 契約プランを設定
-         *
-         * @param plan 契約プラン
-         * @return this
-         */
         public Project WithPlan(string plan) {
-            this.plan = plan;
+            this.Plan = plan;
             return this;
         }
 
-        /** 支払い方法名 */
-        public string billingMethodName { set; get; }
-
-        /**
-         * 支払い方法名を設定
-         *
-         * @param billingMethodName 支払い方法名
-         * @return this
-         */
         public Project WithBillingMethodName(string billingMethodName) {
-            this.billingMethodName = billingMethodName;
+            this.BillingMethodName = billingMethodName;
             return this;
         }
 
-        /** AWS EventBridge の設定 */
-        public string enableEventBridge { set; get; }
-
-        /**
-         * AWS EventBridge の設定を設定
-         *
-         * @param enableEventBridge AWS EventBridge の設定
-         * @return this
-         */
         public Project WithEnableEventBridge(string enableEventBridge) {
-            this.enableEventBridge = enableEventBridge;
+            this.EnableEventBridge = enableEventBridge;
             return this;
         }
 
-        /** 通知に使用するAWSアカウントのID */
-        public string eventBridgeAwsAccountId { set; get; }
-
-        /**
-         * 通知に使用するAWSアカウントのIDを設定
-         *
-         * @param eventBridgeAwsAccountId 通知に使用するAWSアカウントのID
-         * @return this
-         */
         public Project WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
-            this.eventBridgeAwsAccountId = eventBridgeAwsAccountId;
+            this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
 
-        /** 通知に使用するAWSリージョン */
-        public string eventBridgeAwsRegion { set; get; }
-
-        /**
-         * 通知に使用するAWSリージョンを設定
-         *
-         * @param eventBridgeAwsRegion 通知に使用するAWSリージョン
-         * @return this
-         */
         public Project WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
-            this.eventBridgeAwsRegion = eventBridgeAwsRegion;
+            this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Project WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Project WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Project FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Project()
+                .WithProjectId(!data.Keys.Contains("projectId") || data["projectId"] == null ? null : data["projectId"].ToString())
+                .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPlan(!data.Keys.Contains("plan") || data["plan"] == null ? null : data["plan"].ToString())
+                .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())
+                .WithEnableEventBridge(!data.Keys.Contains("enableEventBridge") || data["enableEventBridge"] == null ? null : data["enableEventBridge"].ToString())
+                .WithEventBridgeAwsAccountId(!data.Keys.Contains("eventBridgeAwsAccountId") || data["eventBridgeAwsAccountId"] == null ? null : data["eventBridgeAwsAccountId"].ToString())
+                .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["projectId"] = ProjectId,
+                ["accountName"] = AccountName,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["plan"] = Plan,
+                ["billingMethodName"] = BillingMethodName,
+                ["enableEventBridge"] = EnableEventBridge,
+                ["eventBridgeAwsAccountId"] = EventBridgeAwsAccountId,
+                ["eventBridgeAwsRegion"] = EventBridgeAwsRegion,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.projectId != null)
-            {
+            if (ProjectId != null) {
                 writer.WritePropertyName("projectId");
-                writer.Write(this.projectId);
+                writer.Write(ProjectId.ToString());
             }
-            if(this.accountName != null)
-            {
+            if (AccountName != null) {
                 writer.WritePropertyName("accountName");
-                writer.Write(this.accountName);
+                writer.Write(AccountName.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.plan != null)
-            {
+            if (Plan != null) {
                 writer.WritePropertyName("plan");
-                writer.Write(this.plan);
+                writer.Write(Plan.ToString());
             }
-            if(this.billingMethodName != null)
-            {
+            if (BillingMethodName != null) {
                 writer.WritePropertyName("billingMethodName");
-                writer.Write(this.billingMethodName);
+                writer.Write(BillingMethodName.ToString());
             }
-            if(this.enableEventBridge != null)
-            {
+            if (EnableEventBridge != null) {
                 writer.WritePropertyName("enableEventBridge");
-                writer.Write(this.enableEventBridge);
+                writer.Write(EnableEventBridge.ToString());
             }
-            if(this.eventBridgeAwsAccountId != null)
-            {
+            if (EventBridgeAwsAccountId != null) {
                 writer.WritePropertyName("eventBridgeAwsAccountId");
-                writer.Write(this.eventBridgeAwsAccountId);
+                writer.Write(EventBridgeAwsAccountId.ToString());
             }
-            if(this.eventBridgeAwsRegion != null)
-            {
+            if (EventBridgeAwsRegion != null) {
                 writer.WritePropertyName("eventBridgeAwsRegion");
-                writer.Write(this.eventBridgeAwsRegion);
+                writer.Write(EventBridgeAwsRegion.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetProjectNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):project:(?<projectName>.*)");
-        if (!match.Groups["projectName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["projectName"].Value;
-    }
-
-    public static string GetAccountNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:::gs2:account:(?<accountName>.*):project:(?<projectName>.*)");
-        if (!match.Groups["accountName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["accountName"].Value;
-    }
-
-    	[Preserve]
-        public static Project FromDict(JsonData data)
-        {
-            return new Project()
-                .WithProjectId(data.Keys.Contains("projectId") && data["projectId"] != null ? data["projectId"].ToString() : null)
-                .WithAccountName(data.Keys.Contains("accountName") && data["accountName"] != null ? data["accountName"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithPlan(data.Keys.Contains("plan") && data["plan"] != null ? data["plan"].ToString() : null)
-                .WithBillingMethodName(data.Keys.Contains("billingMethodName") && data["billingMethodName"] != null ? data["billingMethodName"].ToString() : null)
-                .WithEnableEventBridge(data.Keys.Contains("enableEventBridge") && data["enableEventBridge"] != null ? data["enableEventBridge"].ToString() : null)
-                .WithEventBridgeAwsAccountId(data.Keys.Contains("eventBridgeAwsAccountId") && data["eventBridgeAwsAccountId"] != null ? data["eventBridgeAwsAccountId"].ToString() : null)
-                .WithEventBridgeAwsRegion(data.Keys.Contains("eventBridgeAwsRegion") && data["eventBridgeAwsRegion"] != null ? data["eventBridgeAwsRegion"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Project;
             var diff = 0;
-            if (projectId == null && projectId == other.projectId)
+            if (ProjectId == null && ProjectId == other.ProjectId)
             {
                 // null and null
             }
             else
             {
-                diff += projectId.CompareTo(other.projectId);
+                diff += ProjectId.CompareTo(other.ProjectId);
             }
-            if (accountName == null && accountName == other.accountName)
+            if (AccountName == null && AccountName == other.AccountName)
             {
                 // null and null
             }
             else
             {
-                diff += accountName.CompareTo(other.accountName);
+                diff += AccountName.CompareTo(other.AccountName);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (description == null && description == other.description)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += Description.CompareTo(other.Description);
             }
-            if (plan == null && plan == other.plan)
+            if (Plan == null && Plan == other.Plan)
             {
                 // null and null
             }
             else
             {
-                diff += plan.CompareTo(other.plan);
+                diff += Plan.CompareTo(other.Plan);
             }
-            if (billingMethodName == null && billingMethodName == other.billingMethodName)
+            if (BillingMethodName == null && BillingMethodName == other.BillingMethodName)
             {
                 // null and null
             }
             else
             {
-                diff += billingMethodName.CompareTo(other.billingMethodName);
+                diff += BillingMethodName.CompareTo(other.BillingMethodName);
             }
-            if (enableEventBridge == null && enableEventBridge == other.enableEventBridge)
+            if (EnableEventBridge == null && EnableEventBridge == other.EnableEventBridge)
             {
                 // null and null
             }
             else
             {
-                diff += enableEventBridge.CompareTo(other.enableEventBridge);
+                diff += EnableEventBridge.CompareTo(other.EnableEventBridge);
             }
-            if (eventBridgeAwsAccountId == null && eventBridgeAwsAccountId == other.eventBridgeAwsAccountId)
+            if (EventBridgeAwsAccountId == null && EventBridgeAwsAccountId == other.EventBridgeAwsAccountId)
             {
                 // null and null
             }
             else
             {
-                diff += eventBridgeAwsAccountId.CompareTo(other.eventBridgeAwsAccountId);
+                diff += EventBridgeAwsAccountId.CompareTo(other.EventBridgeAwsAccountId);
             }
-            if (eventBridgeAwsRegion == null && eventBridgeAwsRegion == other.eventBridgeAwsRegion)
+            if (EventBridgeAwsRegion == null && EventBridgeAwsRegion == other.EventBridgeAwsRegion)
             {
                 // null and null
             }
             else
             {
-                diff += eventBridgeAwsRegion.CompareTo(other.eventBridgeAwsRegion);
+                diff += EventBridgeAwsRegion.CompareTo(other.EventBridgeAwsRegion);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["projectId"] = projectId;
-            data["accountName"] = accountName;
-            data["name"] = name;
-            data["description"] = description;
-            data["plan"] = plan;
-            data["billingMethodName"] = billingMethodName;
-            data["enableEventBridge"] = enableEventBridge;
-            data["eventBridgeAwsAccountId"] = eventBridgeAwsAccountId;
-            data["eventBridgeAwsRegion"] = eventBridgeAwsRegion;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

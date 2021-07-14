@@ -28,7 +28,7 @@ namespace Gs2.Core.Exception
 		}
 		
 		// ReSharper disable once InconsistentNaming
-		public NoInternetConnectionException(List<RequestError> errors) : base(errors: errors)
+		public NoInternetConnectionException(RequestError[] errors) : base(errors: errors)
 		{
 			
 		}

@@ -23,214 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Datastore.Model
 {
+
 	[Preserve]
 	public class ResponseCache : IComparable
 	{
+        public string Region { set; get; }
+        public string ResponseCacheId { set; get; }
+        public string RequestHash { set; get; }
+        public string Result { set; get; }
 
-        /** None */
-        public string region { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param region None
-         * @return this
-         */
         public ResponseCache WithRegion(string region) {
-            this.region = region;
+            this.Region = region;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public ResponseCache WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** レスポンスキャッシュ のGRN */
-        public string responseCacheId { set; get; }
-
-        /**
-         * レスポンスキャッシュ のGRNを設定
-         *
-         * @param responseCacheId レスポンスキャッシュ のGRN
-         * @return this
-         */
         public ResponseCache WithResponseCacheId(string responseCacheId) {
-            this.responseCacheId = responseCacheId;
+            this.ResponseCacheId = responseCacheId;
             return this;
         }
 
-        /** None */
-        public string requestHash { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param requestHash None
-         * @return this
-         */
         public ResponseCache WithRequestHash(string requestHash) {
-            this.requestHash = requestHash;
+            this.RequestHash = requestHash;
             return this;
         }
 
-        /** APIの応答内容 */
-        public string result { set; get; }
-
-        /**
-         * APIの応答内容を設定
-         *
-         * @param result APIの応答内容
-         * @return this
-         */
         public ResponseCache WithResult(string result) {
-            this.result = result;
+            this.Result = result;
             return this;
+        }
+
+    	[Preserve]
+        public static ResponseCache FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ResponseCache()
+                .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
+                .WithResponseCacheId(!data.Keys.Contains("responseCacheId") || data["responseCacheId"] == null ? null : data["responseCacheId"].ToString())
+                .WithRequestHash(!data.Keys.Contains("requestHash") || data["requestHash"] == null ? null : data["requestHash"].ToString())
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["region"] = Region,
+                ["responseCacheId"] = ResponseCacheId,
+                ["requestHash"] = RequestHash,
+                ["result"] = Result,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.region != null)
-            {
+            if (Region != null) {
                 writer.WritePropertyName("region");
-                writer.Write(this.region);
+                writer.Write(Region.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.responseCacheId != null)
-            {
+            if (ResponseCacheId != null) {
                 writer.WritePropertyName("responseCacheId");
-                writer.Write(this.responseCacheId);
+                writer.Write(ResponseCacheId.ToString());
             }
-            if(this.requestHash != null)
-            {
+            if (RequestHash != null) {
                 writer.WritePropertyName("requestHash");
-                writer.Write(this.requestHash);
+                writer.Write(RequestHash.ToString());
             }
-            if(this.result != null)
-            {
+            if (Result != null) {
                 writer.WritePropertyName("result");
-                writer.Write(this.result);
+                writer.Write(Result.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRequestHashFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):hash:(?<requestHash>.*)");
-        if (!match.Groups["requestHash"].Success)
-        {
-            return null;
-        }
-        return match.Groups["requestHash"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):hash:(?<requestHash>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):hash:(?<requestHash>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static ResponseCache FromDict(JsonData data)
-        {
-            return new ResponseCache()
-                .WithRegion(data.Keys.Contains("region") && data["region"] != null ? data["region"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithResponseCacheId(data.Keys.Contains("responseCacheId") && data["responseCacheId"] != null ? data["responseCacheId"].ToString() : null)
-                .WithRequestHash(data.Keys.Contains("requestHash") && data["requestHash"] != null ? data["requestHash"].ToString() : null)
-                .WithResult(data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ResponseCache;
             var diff = 0;
-            if (region == null && region == other.region)
+            if (Region == null && Region == other.Region)
             {
                 // null and null
             }
             else
             {
-                diff += region.CompareTo(other.region);
+                diff += Region.CompareTo(other.Region);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (ResponseCacheId == null && ResponseCacheId == other.ResponseCacheId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += ResponseCacheId.CompareTo(other.ResponseCacheId);
             }
-            if (responseCacheId == null && responseCacheId == other.responseCacheId)
+            if (RequestHash == null && RequestHash == other.RequestHash)
             {
                 // null and null
             }
             else
             {
-                diff += responseCacheId.CompareTo(other.responseCacheId);
+                diff += RequestHash.CompareTo(other.RequestHash);
             }
-            if (requestHash == null && requestHash == other.requestHash)
+            if (Result == null && Result == other.Result)
             {
                 // null and null
             }
             else
             {
-                diff += requestHash.CompareTo(other.requestHash);
-            }
-            if (result == null && result == other.result)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += result.CompareTo(other.result);
+                diff += Result.CompareTo(other.Result);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["region"] = region;
-            data["ownerId"] = ownerId;
-            data["responseCacheId"] = responseCacheId;
-            data["requestHash"] = requestHash;
-            data["result"] = result;
-            return data;
-        }
-	}
+    }
 }

@@ -23,239 +23,154 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inbox.Model
 {
+
 	[Preserve]
 	public class Received : IComparable
 	{
+        public string ReceivedId { set; get; }
+        public string UserId { set; get; }
+        public string[] ReceivedGlobalMessageNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** 受信済みグローバルメッセージ名 */
-        public string receivedId { set; get; }
-
-        /**
-         * 受信済みグローバルメッセージ名を設定
-         *
-         * @param receivedId 受信済みグローバルメッセージ名
-         * @return this
-         */
         public Received WithReceivedId(string receivedId) {
-            this.receivedId = receivedId;
+            this.ReceivedId = receivedId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Received WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 受信したグローバルメッセージ名 */
-        public List<string> receivedGlobalMessageNames { set; get; }
-
-        /**
-         * 受信したグローバルメッセージ名を設定
-         *
-         * @param receivedGlobalMessageNames 受信したグローバルメッセージ名
-         * @return this
-         */
-        public Received WithReceivedGlobalMessageNames(List<string> receivedGlobalMessageNames) {
-            this.receivedGlobalMessageNames = receivedGlobalMessageNames;
+        public Received WithReceivedGlobalMessageNames(string[] receivedGlobalMessageNames) {
+            this.ReceivedGlobalMessageNames = receivedGlobalMessageNames;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Received WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Received WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Received FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Received()
+                .WithReceivedId(!data.Keys.Contains("receivedId") || data["receivedId"] == null ? null : data["receivedId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null ? new string[]{} : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["receivedId"] = ReceivedId,
+                ["userId"] = UserId,
+                ["receivedGlobalMessageNames"] = new JsonData(ReceivedGlobalMessageNames == null ? new JsonData[]{} :
+                        ReceivedGlobalMessageNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.receivedId != null)
-            {
+            if (ReceivedId != null) {
                 writer.WritePropertyName("receivedId");
-                writer.Write(this.receivedId);
+                writer.Write(ReceivedId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.receivedGlobalMessageNames != null)
-            {
+            if (ReceivedGlobalMessageNames != null) {
                 writer.WritePropertyName("receivedGlobalMessageNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.receivedGlobalMessageNames)
+                foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
                 {
-                    writer.Write(item);
+                    if (receivedGlobalMessageName != null) {
+                        writer.Write(receivedGlobalMessageName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):received");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):received");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):received");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inbox:(?<namespaceName>.*):user:(?<userId>.*):received");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Received FromDict(JsonData data)
-        {
-            return new Received()
-                .WithReceivedId(data.Keys.Contains("receivedId") && data["receivedId"] != null ? data["receivedId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithReceivedGlobalMessageNames(data.Keys.Contains("receivedGlobalMessageNames") && data["receivedGlobalMessageNames"] != null ? data["receivedGlobalMessageNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Received;
             var diff = 0;
-            if (receivedId == null && receivedId == other.receivedId)
+            if (ReceivedId == null && ReceivedId == other.ReceivedId)
             {
                 // null and null
             }
             else
             {
-                diff += receivedId.CompareTo(other.receivedId);
+                diff += ReceivedId.CompareTo(other.ReceivedId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (receivedGlobalMessageNames == null && receivedGlobalMessageNames == other.receivedGlobalMessageNames)
+            if (ReceivedGlobalMessageNames == null && ReceivedGlobalMessageNames == other.ReceivedGlobalMessageNames)
             {
                 // null and null
             }
             else
             {
-                diff += receivedGlobalMessageNames.Count - other.receivedGlobalMessageNames.Count;
-                for (var i = 0; i < receivedGlobalMessageNames.Count; i++)
+                diff += ReceivedGlobalMessageNames.Length - other.ReceivedGlobalMessageNames.Length;
+                for (var i = 0; i < ReceivedGlobalMessageNames.Length; i++)
                 {
-                    diff += receivedGlobalMessageNames[i].CompareTo(other.receivedGlobalMessageNames[i]);
+                    diff += ReceivedGlobalMessageNames[i].CompareTo(other.ReceivedGlobalMessageNames[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["receivedId"] = receivedId;
-            data["userId"] = userId;
-            data["receivedGlobalMessageNames"] = new JsonData(receivedGlobalMessageNames);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

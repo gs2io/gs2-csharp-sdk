@@ -23,267 +23,157 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Account.Model
 {
+
 	[Preserve]
 	public class TakeOver : IComparable
 	{
+        public string TakeOverId { set; get; }
+        public string UserId { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public string Password { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** 引き継ぎ設定 */
-        public string takeOverId { set; get; }
-
-        /**
-         * 引き継ぎ設定を設定
-         *
-         * @param takeOverId 引き継ぎ設定
-         * @return this
-         */
         public TakeOver WithTakeOverId(string takeOverId) {
-            this.takeOverId = takeOverId;
+            this.TakeOverId = takeOverId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public TakeOver WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** スロット番号 */
-        public int? type { set; get; }
-
-        /**
-         * スロット番号を設定
-         *
-         * @param type スロット番号
-         * @return this
-         */
         public TakeOver WithType(int? type) {
-            this.type = type;
+            this.Type = type;
             return this;
         }
 
-        /** 引き継ぎ用ユーザーID */
-        public string userIdentifier { set; get; }
-
-        /**
-         * 引き継ぎ用ユーザーIDを設定
-         *
-         * @param userIdentifier 引き継ぎ用ユーザーID
-         * @return this
-         */
         public TakeOver WithUserIdentifier(string userIdentifier) {
-            this.userIdentifier = userIdentifier;
+            this.UserIdentifier = userIdentifier;
             return this;
         }
 
-        /** パスワード */
-        public string password { set; get; }
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
         public TakeOver WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public TakeOver WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static TakeOver FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new TakeOver()
+                .WithTakeOverId(!data.Keys.Contains("takeOverId") || data["takeOverId"] == null ? null : data["takeOverId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()))
+                .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["takeOverId"] = TakeOverId,
+                ["userId"] = UserId,
+                ["type"] = Type,
+                ["userIdentifier"] = UserIdentifier,
+                ["password"] = Password,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.takeOverId != null)
-            {
+            if (TakeOverId != null) {
                 writer.WritePropertyName("takeOverId");
-                writer.Write(this.takeOverId);
+                writer.Write(TakeOverId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.type.HasValue)
-            {
+            if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(this.type.Value);
+                writer.Write(int.Parse(Type.ToString()));
             }
-            if(this.userIdentifier != null)
-            {
+            if (UserIdentifier != null) {
                 writer.WritePropertyName("userIdentifier");
-                writer.Write(this.userIdentifier);
+                writer.Write(UserIdentifier.ToString());
             }
-            if(this.password != null)
-            {
+            if (Password != null) {
                 writer.WritePropertyName("password");
-                writer.Write(this.password);
+                writer.Write(Password.ToString());
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetUserIdentifierFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):takeover:type:(?<type>.*):userIdentifier:(?<userIdentifier>.*)");
-        if (!match.Groups["userIdentifier"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userIdentifier"].Value;
-    }
-
-    public static string GetTypeFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):takeover:type:(?<type>.*):userIdentifier:(?<userIdentifier>.*)");
-        if (!match.Groups["type"].Success)
-        {
-            return null;
-        }
-        return match.Groups["type"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):takeover:type:(?<type>.*):userIdentifier:(?<userIdentifier>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):takeover:type:(?<type>.*):userIdentifier:(?<userIdentifier>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):account:(?<namespaceName>.*):takeover:type:(?<type>.*):userIdentifier:(?<userIdentifier>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static TakeOver FromDict(JsonData data)
-        {
-            return new TakeOver()
-                .WithTakeOverId(data.Keys.Contains("takeOverId") && data["takeOverId"] != null ? data["takeOverId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithType(data.Keys.Contains("type") && data["type"] != null ? (int?)int.Parse(data["type"].ToString()) : null)
-                .WithUserIdentifier(data.Keys.Contains("userIdentifier") && data["userIdentifier"] != null ? data["userIdentifier"].ToString() : null)
-                .WithPassword(data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as TakeOver;
             var diff = 0;
-            if (takeOverId == null && takeOverId == other.takeOverId)
+            if (TakeOverId == null && TakeOverId == other.TakeOverId)
             {
                 // null and null
             }
             else
             {
-                diff += takeOverId.CompareTo(other.takeOverId);
+                diff += TakeOverId.CompareTo(other.TakeOverId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (type == null && type == other.type)
+            if (Type == null && Type == other.Type)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(type - other.type);
+                diff += (int)(Type - other.Type);
             }
-            if (userIdentifier == null && userIdentifier == other.userIdentifier)
+            if (UserIdentifier == null && UserIdentifier == other.UserIdentifier)
             {
                 // null and null
             }
             else
             {
-                diff += userIdentifier.CompareTo(other.userIdentifier);
+                diff += UserIdentifier.CompareTo(other.UserIdentifier);
             }
-            if (password == null && password == other.password)
+            if (Password == null && Password == other.Password)
             {
                 // null and null
             }
             else
             {
-                diff += password.CompareTo(other.password);
+                diff += Password.CompareTo(other.Password);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["takeOverId"] = takeOverId;
-            data["userId"] = userId;
-            data["type"] = type;
-            data["userIdentifier"] = userIdentifier;
-            data["password"] = password;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

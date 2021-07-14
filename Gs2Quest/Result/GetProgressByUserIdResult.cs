@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Quest.Model;
 using Gs2.Util.LitJson;
@@ -24,26 +25,62 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Quest.Result
 {
 	[Preserve]
-	public class GetProgressByUserIdResult
+	[System.Serializable]
+	public class GetProgressByUserIdResult : IResult
 	{
-        /** クエスト挑戦 */
-        public Progress item { set; get; }
+        public Gs2.Gs2Quest.Model.Progress Item { set; get; }
+        public Gs2.Gs2Quest.Model.QuestGroupModel QuestGroup { set; get; }
+        public Gs2.Gs2Quest.Model.QuestModel Quest { set; get; }
 
-        /** クエストグループ */
-        public QuestGroupModel questGroup { set; get; }
+        public GetProgressByUserIdResult WithItem(Gs2.Gs2Quest.Model.Progress item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** クエストモデル */
-        public QuestModel quest { set; get; }
+        public GetProgressByUserIdResult WithQuestGroup(Gs2.Gs2Quest.Model.QuestGroupModel questGroup) {
+            this.QuestGroup = questGroup;
+            return this;
+        }
 
+        public GetProgressByUserIdResult WithQuest(Gs2.Gs2Quest.Model.QuestModel quest) {
+            this.Quest = quest;
+            return this;
+        }
 
     	[Preserve]
-        public static GetProgressByUserIdResult FromDict(JsonData data)
+        public static GetProgressByUserIdResult FromJson(JsonData data)
         {
-            return new GetProgressByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Quest.Model.Progress.FromDict(data["item"]) : null,
-                questGroup = data.Keys.Contains("questGroup") && data["questGroup"] != null ? Gs2.Gs2Quest.Model.QuestGroupModel.FromDict(data["questGroup"]) : null,
-                quest = data.Keys.Contains("quest") && data["quest"] != null ? Gs2.Gs2Quest.Model.QuestModel.FromDict(data["quest"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetProgressByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Quest.Model.Progress.FromJson(data["item"]))
+                .WithQuestGroup(!data.Keys.Contains("questGroup") || data["questGroup"] == null ? null : Gs2.Gs2Quest.Model.QuestGroupModel.FromJson(data["questGroup"]))
+                .WithQuest(!data.Keys.Contains("quest") || data["quest"] == null ? null : Gs2.Gs2Quest.Model.QuestModel.FromJson(data["quest"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["questGroup"] = QuestGroup?.ToJson(),
+                ["quest"] = Quest?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (QuestGroup != null) {
+                QuestGroup.WriteJson(writer);
+            }
+            if (Quest != null) {
+                Quest.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

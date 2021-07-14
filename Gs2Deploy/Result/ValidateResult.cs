@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Deploy.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Deploy.Result
 {
 	[Preserve]
-	public class ValidateResult
+	[System.Serializable]
+	public class ValidateResult : IResult
 	{
 
     	[Preserve]
-        public static ValidateResult FromDict(JsonData data)
+        public static ValidateResult FromJson(JsonData data)
         {
-            return new ValidateResult {
+            if (data == null) {
+                return null;
+            }
+            return new ValidateResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

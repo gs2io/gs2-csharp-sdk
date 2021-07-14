@@ -28,112 +28,97 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class VoteRequest : Gs2Request<VoteRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string BallotBody { set; get; }
+        public string BallotSignature { set; get; }
+        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
+        public string KeyId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public VoteRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 投票用紙の署名対象のデータ */
-		[UnityEngine.SerializeField]
-        public string ballotBody;
-
-        /**
-         * 投票用紙の署名対象のデータを設定
-         *
-         * @param ballotBody 投票用紙の署名対象のデータ
-         * @return this
-         */
         public VoteRequest WithBallotBody(string ballotBody) {
-            this.ballotBody = ballotBody;
+            this.BallotBody = ballotBody;
             return this;
         }
 
-
-        /** 投票用紙の署名 */
-		[UnityEngine.SerializeField]
-        public string ballotSignature;
-
-        /**
-         * 投票用紙の署名を設定
-         *
-         * @param ballotSignature 投票用紙の署名
-         * @return this
-         */
         public VoteRequest WithBallotSignature(string ballotSignature) {
-            this.ballotSignature = ballotSignature;
+            this.BallotSignature = ballotSignature;
             return this;
         }
 
-
-        /** 投票内容。対戦を行ったプレイヤーグループ1に所属するユーザIDのリスト */
-		[UnityEngine.SerializeField]
-        public List<GameResult> gameResults;
-
-        /**
-         * 投票内容。対戦を行ったプレイヤーグループ1に所属するユーザIDのリストを設定
-         *
-         * @param gameResults 投票内容。対戦を行ったプレイヤーグループ1に所属するユーザIDのリスト
-         * @return this
-         */
-        public VoteRequest WithGameResults(List<GameResult> gameResults) {
-            this.gameResults = gameResults;
+        public VoteRequest WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
+            this.GameResults = gameResults;
             return this;
         }
 
-
-        /** 投票用紙の署名検証に使用する暗号鍵 のGRN */
-		[UnityEngine.SerializeField]
-        public string keyId;
-
-        /**
-         * 投票用紙の署名検証に使用する暗号鍵 のGRNを設定
-         *
-         * @param keyId 投票用紙の署名検証に使用する暗号鍵 のGRN
-         * @return this
-         */
         public VoteRequest WithKeyId(string keyId) {
-            this.keyId = keyId;
+            this.KeyId = keyId;
             return this;
         }
-
 
     	[Preserve]
-        public static VoteRequest FromDict(JsonData data)
+        public static VoteRequest FromJson(JsonData data)
         {
-            return new VoteRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                ballotBody = data.Keys.Contains("ballotBody") && data["ballotBody"] != null ? data["ballotBody"].ToString(): null,
-                ballotSignature = data.Keys.Contains("ballotSignature") && data["ballotSignature"] != null ? data["ballotSignature"].ToString(): null,
-                gameResults = data.Keys.Contains("gameResults") && data["gameResults"] != null ? data["gameResults"].Cast<JsonData>().Select(value =>
-                    {
-                        return GameResult.FromDict(value);
-                    }
-                ).ToList() : null,
-                keyId = data.Keys.Contains("keyId") && data["keyId"] != null ? data["keyId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new VoteRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithBallotBody(!data.Keys.Contains("ballotBody") || data["ballotBody"] == null ? null : data["ballotBody"].ToString())
+                .WithBallotSignature(!data.Keys.Contains("ballotSignature") || data["ballotSignature"] == null ? null : data["ballotSignature"].ToString())
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.GameResult.FromJson(v);
+                }).ToArray())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["ballotBody"] = BallotBody,
+                ["ballotSignature"] = BallotSignature,
+                ["gameResults"] = new JsonData(GameResults == null ? new JsonData[]{} :
+                        GameResults.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["keyId"] = KeyId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["ballotBody"] = ballotBody;
-            data["ballotSignature"] = ballotSignature;
-            data["gameResults"] = new JsonData(gameResults.Select(item => item.ToDict()));
-            data["keyId"] = keyId;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (BallotBody != null) {
+                writer.WritePropertyName("ballotBody");
+                writer.Write(BallotBody.ToString());
+            }
+            if (BallotSignature != null) {
+                writer.WritePropertyName("ballotSignature");
+                writer.Write(BallotSignature.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var gameResult in GameResults)
+            {
+                if (gameResult != null) {
+                    gameResult.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

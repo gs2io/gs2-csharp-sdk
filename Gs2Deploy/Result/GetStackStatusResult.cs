@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Deploy.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Deploy.Result
 {
 	[Preserve]
-	public class GetStackStatusResult
+	[System.Serializable]
+	public class GetStackStatusResult : IResult
 	{
-        /** None */
-        public string status { set; get; }
+        public string Status { set; get; }
 
+        public GetStackStatusResult WithStatus(string status) {
+            this.Status = status;
+            return this;
+        }
 
     	[Preserve]
-        public static GetStackStatusResult FromDict(JsonData data)
+        public static GetStackStatusResult FromJson(JsonData data)
         {
-            return new GetStackStatusResult {
-                status = data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetStackStatusResult()
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["status"] = Status,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Status != null) {
+                writer.WritePropertyName("status");
+                writer.Write(Status.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

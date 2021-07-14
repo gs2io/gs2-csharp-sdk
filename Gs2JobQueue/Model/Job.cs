@@ -23,383 +23,237 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2JobQueue.Model
 {
+
 	[Preserve]
 	public class Job : IComparable
 	{
+        public string JobId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
+        public int? CurrentRetryCount { set; get; }
+        public int? MaxTryCount { set; get; }
+        public double? Index { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ジョブ */
-        public string jobId { set; get; }
-
-        /**
-         * ジョブを設定
-         *
-         * @param jobId ジョブ
-         * @return this
-         */
         public Job WithJobId(string jobId) {
-            this.jobId = jobId;
+            this.JobId = jobId;
             return this;
         }
 
-        /** ジョブの名前 */
-        public string name { set; get; }
-
-        /**
-         * ジョブの名前を設定
-         *
-         * @param name ジョブの名前
-         * @return this
-         */
         public Job WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public Job WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ジョブの実行に使用するスクリプト のGRN */
-        public string scriptId { set; get; }
-
-        /**
-         * ジョブの実行に使用するスクリプト のGRNを設定
-         *
-         * @param scriptId ジョブの実行に使用するスクリプト のGRN
-         * @return this
-         */
         public Job WithScriptId(string scriptId) {
-            this.scriptId = scriptId;
+            this.ScriptId = scriptId;
             return this;
         }
 
-        /** 引数 */
-        public string args { set; get; }
-
-        /**
-         * 引数を設定
-         *
-         * @param args 引数
-         * @return this
-         */
         public Job WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
         }
 
-        /** 現在のリトライ回数 */
-        public int? currentRetryCount { set; get; }
-
-        /**
-         * 現在のリトライ回数を設定
-         *
-         * @param currentRetryCount 現在のリトライ回数
-         * @return this
-         */
         public Job WithCurrentRetryCount(int? currentRetryCount) {
-            this.currentRetryCount = currentRetryCount;
+            this.CurrentRetryCount = currentRetryCount;
             return this;
         }
 
-        /** 最大試行回数 */
-        public int? maxTryCount { set; get; }
-
-        /**
-         * 最大試行回数を設定
-         *
-         * @param maxTryCount 最大試行回数
-         * @return this
-         */
         public Job WithMaxTryCount(int? maxTryCount) {
-            this.maxTryCount = maxTryCount;
+            this.MaxTryCount = maxTryCount;
             return this;
         }
 
-        /** ソート用インデックス(現在時刻(ミリ秒).登録時のインデックス) */
-        public double? index { set; get; }
-
-        /**
-         * ソート用インデックス(現在時刻(ミリ秒).登録時のインデックス)を設定
-         *
-         * @param index ソート用インデックス(現在時刻(ミリ秒).登録時のインデックス)
-         * @return this
-         */
         public Job WithIndex(double? index) {
-            this.index = index;
+            this.Index = index;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Job WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Job WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Job FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Job()
+                .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithCurrentRetryCount(!data.Keys.Contains("currentRetryCount") || data["currentRetryCount"] == null ? null : (int?)int.Parse(data["currentRetryCount"].ToString()))
+                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)int.Parse(data["maxTryCount"].ToString()))
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (double?)double.Parse(data["index"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["jobId"] = JobId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["scriptId"] = ScriptId,
+                ["args"] = Args,
+                ["currentRetryCount"] = CurrentRetryCount,
+                ["maxTryCount"] = MaxTryCount,
+                ["index"] = Index,
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.jobId != null)
-            {
+            if (JobId != null) {
                 writer.WritePropertyName("jobId");
-                writer.Write(this.jobId);
+                writer.Write(JobId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.scriptId != null)
-            {
+            if (ScriptId != null) {
                 writer.WritePropertyName("scriptId");
-                writer.Write(this.scriptId);
+                writer.Write(ScriptId.ToString());
             }
-            if(this.args != null)
-            {
+            if (Args != null) {
                 writer.WritePropertyName("args");
-                writer.Write(this.args);
+                writer.Write(Args.ToString());
             }
-            if(this.currentRetryCount.HasValue)
-            {
+            if (CurrentRetryCount != null) {
                 writer.WritePropertyName("currentRetryCount");
-                writer.Write(this.currentRetryCount.Value);
+                writer.Write(int.Parse(CurrentRetryCount.ToString()));
             }
-            if(this.maxTryCount.HasValue)
-            {
+            if (MaxTryCount != null) {
                 writer.WritePropertyName("maxTryCount");
-                writer.Write(this.maxTryCount.Value);
+                writer.Write(int.Parse(MaxTryCount.ToString()));
             }
-            if(this.index.HasValue)
-            {
+            if (Index != null) {
                 writer.WritePropertyName("index");
-                writer.Write(this.index.Value);
+                writer.Write(double.Parse(Index.ToString()));
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetJobNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):job:(?<jobName>.*)");
-        if (!match.Groups["jobName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["jobName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):job:(?<jobName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):job:(?<jobName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):job:(?<jobName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):queue:(?<namespaceName>.*):user:(?<userId>.*):job:(?<jobName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Job FromDict(JsonData data)
-        {
-            return new Job()
-                .WithJobId(data.Keys.Contains("jobId") && data["jobId"] != null ? data["jobId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithScriptId(data.Keys.Contains("scriptId") && data["scriptId"] != null ? data["scriptId"].ToString() : null)
-                .WithArgs(data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString() : null)
-                .WithCurrentRetryCount(data.Keys.Contains("currentRetryCount") && data["currentRetryCount"] != null ? (int?)int.Parse(data["currentRetryCount"].ToString()) : null)
-                .WithMaxTryCount(data.Keys.Contains("maxTryCount") && data["maxTryCount"] != null ? (int?)int.Parse(data["maxTryCount"].ToString()) : null)
-                .WithIndex(data.Keys.Contains("index") && data["index"] != null ? (double?)double.Parse(data["index"].ToString()) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Job;
             var diff = 0;
-            if (jobId == null && jobId == other.jobId)
+            if (JobId == null && JobId == other.JobId)
             {
                 // null and null
             }
             else
             {
-                diff += jobId.CompareTo(other.jobId);
+                diff += JobId.CompareTo(other.JobId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (scriptId == null && scriptId == other.scriptId)
+            if (ScriptId == null && ScriptId == other.ScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += scriptId.CompareTo(other.scriptId);
+                diff += ScriptId.CompareTo(other.ScriptId);
             }
-            if (args == null && args == other.args)
+            if (Args == null && Args == other.Args)
             {
                 // null and null
             }
             else
             {
-                diff += args.CompareTo(other.args);
+                diff += Args.CompareTo(other.Args);
             }
-            if (currentRetryCount == null && currentRetryCount == other.currentRetryCount)
+            if (CurrentRetryCount == null && CurrentRetryCount == other.CurrentRetryCount)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(currentRetryCount - other.currentRetryCount);
+                diff += (int)(CurrentRetryCount - other.CurrentRetryCount);
             }
-            if (maxTryCount == null && maxTryCount == other.maxTryCount)
+            if (MaxTryCount == null && MaxTryCount == other.MaxTryCount)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxTryCount - other.maxTryCount);
+                diff += (int)(MaxTryCount - other.MaxTryCount);
             }
-            if (index == null && index == other.index)
+            if (Index == null && Index == other.Index)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(index - other.index);
+                diff += (int)(Index - other.Index);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["jobId"] = jobId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["scriptId"] = scriptId;
-            data["args"] = args;
-            data["currentRetryCount"] = currentRetryCount;
-            data["maxTryCount"] = maxTryCount;
-            data["index"] = index;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

@@ -28,130 +28,106 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class UpdateDistributorModelMasterRequest : Gs2Request<UpdateDistributorModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string DistributorName { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string InboxNamespaceId { set; get; }
+        public string[] WhiteListTargetIds { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public UpdateDistributorModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 配信設定名 */
-		[UnityEngine.SerializeField]
-        public string distributorName;
-
-        /**
-         * 配信設定名を設定
-         *
-         * @param distributorName 配信設定名
-         * @return this
-         */
         public UpdateDistributorModelMasterRequest WithDistributorName(string distributorName) {
-            this.distributorName = distributorName;
+            this.DistributorName = distributorName;
             return this;
         }
 
-
-        /** 配信設定マスターの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * 配信設定マスターの説明を設定
-         *
-         * @param description 配信設定マスターの説明
-         * @return this
-         */
         public UpdateDistributorModelMasterRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 配信設定のメタデータ */
-		[UnityEngine.SerializeField]
-        public string metadata;
-
-        /**
-         * 配信設定のメタデータを設定
-         *
-         * @param metadata 配信設定のメタデータ
-         * @return this
-         */
         public UpdateDistributorModelMasterRequest WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-
-        /** 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRN */
-		[UnityEngine.SerializeField]
-        public string inboxNamespaceId;
-
-        /**
-         * 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRNを設定
-         *
-         * @param inboxNamespaceId 所持品がキャパシティをオーバーしたときに転送するプレゼントボックスのネームスペース のGRN
-         * @return this
-         */
         public UpdateDistributorModelMasterRequest WithInboxNamespaceId(string inboxNamespaceId) {
-            this.inboxNamespaceId = inboxNamespaceId;
+            this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
 
-
-        /** ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリスト */
-		[UnityEngine.SerializeField]
-        public List<string> whiteListTargetIds;
-
-        /**
-         * ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリストを設定
-         *
-         * @param whiteListTargetIds ディストリビューターを通して処理出来る対象のリソースGRNのホワイトリスト
-         * @return this
-         */
-        public UpdateDistributorModelMasterRequest WithWhiteListTargetIds(List<string> whiteListTargetIds) {
-            this.whiteListTargetIds = whiteListTargetIds;
+        public UpdateDistributorModelMasterRequest WithWhiteListTargetIds(string[] whiteListTargetIds) {
+            this.WhiteListTargetIds = whiteListTargetIds;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateDistributorModelMasterRequest FromDict(JsonData data)
+        public static UpdateDistributorModelMasterRequest FromJson(JsonData data)
         {
-            return new UpdateDistributorModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                distributorName = data.Keys.Contains("distributorName") && data["distributorName"] != null ? data["distributorName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString(): null,
-                inboxNamespaceId = data.Keys.Contains("inboxNamespaceId") && data["inboxNamespaceId"] != null ? data["inboxNamespaceId"].ToString(): null,
-                whiteListTargetIds = data.Keys.Contains("whiteListTargetIds") && data["whiteListTargetIds"] != null ? data["whiteListTargetIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateDistributorModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDistributorName(!data.Keys.Contains("distributorName") || data["distributorName"] == null ? null : data["distributorName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInboxNamespaceId(!data.Keys.Contains("inboxNamespaceId") || data["inboxNamespaceId"] == null ? null : data["inboxNamespaceId"].ToString())
+                .WithWhiteListTargetIds(!data.Keys.Contains("whiteListTargetIds") || data["whiteListTargetIds"] == null ? new string[]{} : data["whiteListTargetIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["distributorName"] = DistributorName,
+                ["description"] = Description,
+                ["metadata"] = Metadata,
+                ["inboxNamespaceId"] = InboxNamespaceId,
+                ["whiteListTargetIds"] = new JsonData(WhiteListTargetIds == null ? new JsonData[]{} :
+                        WhiteListTargetIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["distributorName"] = distributorName;
-            data["description"] = description;
-            data["metadata"] = metadata;
-            data["inboxNamespaceId"] = inboxNamespaceId;
-            data["whiteListTargetIds"] = new JsonData(whiteListTargetIds);
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (DistributorName != null) {
+                writer.WritePropertyName("distributorName");
+                writer.Write(DistributorName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
+            if (InboxNamespaceId != null) {
+                writer.WritePropertyName("inboxNamespaceId");
+                writer.Write(InboxNamespaceId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var whiteListTargetId in WhiteListTargetIds)
+            {
+                writer.Write(whiteListTargetId.ToString());
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

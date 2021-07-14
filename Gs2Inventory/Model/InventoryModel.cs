@@ -23,297 +23,195 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Inventory.Model
 {
+
 	[Preserve]
 	public class InventoryModel : IComparable
 	{
+        public string InventoryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? InitialCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
+        public bool? ProtectReferencedItem { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel[] ItemModels { set; get; }
 
-        /** インベントリモデル */
-        public string inventoryModelId { set; get; }
-
-        /**
-         * インベントリモデルを設定
-         *
-         * @param inventoryModelId インベントリモデル
-         * @return this
-         */
         public InventoryModel WithInventoryModelId(string inventoryModelId) {
-            this.inventoryModelId = inventoryModelId;
+            this.InventoryModelId = inventoryModelId;
             return this;
         }
 
-        /** インベントリの種類名 */
-        public string name { set; get; }
-
-        /**
-         * インベントリの種類名を設定
-         *
-         * @param name インベントリの種類名
-         * @return this
-         */
         public InventoryModel WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** インベントリの種類のメタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * インベントリの種類のメタデータを設定
-         *
-         * @param metadata インベントリの種類のメタデータ
-         * @return this
-         */
         public InventoryModel WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** インベントリの初期サイズ */
-        public int? initialCapacity { set; get; }
-
-        /**
-         * インベントリの初期サイズを設定
-         *
-         * @param initialCapacity インベントリの初期サイズ
-         * @return this
-         */
         public InventoryModel WithInitialCapacity(int? initialCapacity) {
-            this.initialCapacity = initialCapacity;
+            this.InitialCapacity = initialCapacity;
             return this;
         }
 
-        /** インベントリの最大サイズ */
-        public int? maxCapacity { set; get; }
-
-        /**
-         * インベントリの最大サイズを設定
-         *
-         * @param maxCapacity インベントリの最大サイズ
-         * @return this
-         */
         public InventoryModel WithMaxCapacity(int? maxCapacity) {
-            this.maxCapacity = maxCapacity;
+            this.MaxCapacity = maxCapacity;
             return this;
         }
 
-        /** 参照元が登録されているアイテムセットは削除できなくする */
-        public bool? protectReferencedItem { set; get; }
-
-        /**
-         * 参照元が登録されているアイテムセットは削除できなくするを設定
-         *
-         * @param protectReferencedItem 参照元が登録されているアイテムセットは削除できなくする
-         * @return this
-         */
         public InventoryModel WithProtectReferencedItem(bool? protectReferencedItem) {
-            this.protectReferencedItem = protectReferencedItem;
+            this.ProtectReferencedItem = protectReferencedItem;
             return this;
         }
 
-        /** インベントリに格納可能なアイテムモデル一覧 */
-        public List<ItemModel> itemModels { set; get; }
-
-        /**
-         * インベントリに格納可能なアイテムモデル一覧を設定
-         *
-         * @param itemModels インベントリに格納可能なアイテムモデル一覧
-         * @return this
-         */
-        public InventoryModel WithItemModels(List<ItemModel> itemModels) {
-            this.itemModels = itemModels;
+        public InventoryModel WithItemModels(Gs2.Gs2Inventory.Model.ItemModel[] itemModels) {
+            this.ItemModels = itemModels;
             return this;
+        }
+
+    	[Preserve]
+        public static InventoryModel FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new InventoryModel()
+                .WithInventoryModelId(!data.Keys.Contains("inventoryModelId") || data["inventoryModelId"] == null ? null : data["inventoryModelId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
+                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()))
+                .WithItemModels(!data.Keys.Contains("itemModels") || data["itemModels"] == null ? new Gs2.Gs2Inventory.Model.ItemModel[]{} : data["itemModels"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.ItemModel.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["inventoryModelId"] = InventoryModelId,
+                ["name"] = Name,
+                ["metadata"] = Metadata,
+                ["initialCapacity"] = InitialCapacity,
+                ["maxCapacity"] = MaxCapacity,
+                ["protectReferencedItem"] = ProtectReferencedItem,
+                ["itemModels"] = new JsonData(ItemModels == null ? new JsonData[]{} :
+                        ItemModels.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.inventoryModelId != null)
-            {
+            if (InventoryModelId != null) {
                 writer.WritePropertyName("inventoryModelId");
-                writer.Write(this.inventoryModelId);
+                writer.Write(InventoryModelId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.initialCapacity.HasValue)
-            {
+            if (InitialCapacity != null) {
                 writer.WritePropertyName("initialCapacity");
-                writer.Write(this.initialCapacity.Value);
+                writer.Write(int.Parse(InitialCapacity.ToString()));
             }
-            if(this.maxCapacity.HasValue)
-            {
+            if (MaxCapacity != null) {
                 writer.WritePropertyName("maxCapacity");
-                writer.Write(this.maxCapacity.Value);
+                writer.Write(int.Parse(MaxCapacity.ToString()));
             }
-            if(this.protectReferencedItem.HasValue)
-            {
+            if (ProtectReferencedItem != null) {
                 writer.WritePropertyName("protectReferencedItem");
-                writer.Write(this.protectReferencedItem.Value);
+                writer.Write(bool.Parse(ProtectReferencedItem.ToString()));
             }
-            if(this.itemModels != null)
-            {
+            if (ItemModels != null) {
                 writer.WritePropertyName("itemModels");
                 writer.WriteArrayStart();
-                foreach(var item in this.itemModels)
+                foreach (var itemModel in ItemModels)
                 {
-                    item.WriteJson(writer);
+                    if (itemModel != null) {
+                        itemModel.WriteJson(writer);
+                    }
                 }
                 writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
 
-    public static string GetInventoryNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["inventoryName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["inventoryName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):inventory:(?<namespaceName>.*):model:(?<inventoryName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static InventoryModel FromDict(JsonData data)
-        {
-            return new InventoryModel()
-                .WithInventoryModelId(data.Keys.Contains("inventoryModelId") && data["inventoryModelId"] != null ? data["inventoryModelId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithInitialCapacity(data.Keys.Contains("initialCapacity") && data["initialCapacity"] != null ? (int?)int.Parse(data["initialCapacity"].ToString()) : null)
-                .WithMaxCapacity(data.Keys.Contains("maxCapacity") && data["maxCapacity"] != null ? (int?)int.Parse(data["maxCapacity"].ToString()) : null)
-                .WithProtectReferencedItem(data.Keys.Contains("protectReferencedItem") && data["protectReferencedItem"] != null ? (bool?)bool.Parse(data["protectReferencedItem"].ToString()) : null)
-                .WithItemModels(data.Keys.Contains("itemModels") && data["itemModels"] != null ? data["itemModels"].Cast<JsonData>().Select(value =>
-                    {
-                        return Gs2.Gs2Inventory.Model.ItemModel.FromDict(value);
-                    }
-                ).ToList() : null);
-        }
-
         public int CompareTo(object obj)
         {
             var other = obj as InventoryModel;
             var diff = 0;
-            if (inventoryModelId == null && inventoryModelId == other.inventoryModelId)
+            if (InventoryModelId == null && InventoryModelId == other.InventoryModelId)
             {
                 // null and null
             }
             else
             {
-                diff += inventoryModelId.CompareTo(other.inventoryModelId);
+                diff += InventoryModelId.CompareTo(other.InventoryModelId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (initialCapacity == null && initialCapacity == other.initialCapacity)
+            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(initialCapacity - other.initialCapacity);
+                diff += (int)(InitialCapacity - other.InitialCapacity);
             }
-            if (maxCapacity == null && maxCapacity == other.maxCapacity)
+            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(maxCapacity - other.maxCapacity);
+                diff += (int)(MaxCapacity - other.MaxCapacity);
             }
-            if (protectReferencedItem == null && protectReferencedItem == other.protectReferencedItem)
+            if (ProtectReferencedItem == null && ProtectReferencedItem == other.ProtectReferencedItem)
             {
                 // null and null
             }
             else
             {
-                diff += protectReferencedItem == other.protectReferencedItem ? 0 : 1;
+                diff += ProtectReferencedItem == other.ProtectReferencedItem ? 0 : 1;
             }
-            if (itemModels == null && itemModels == other.itemModels)
+            if (ItemModels == null && ItemModels == other.ItemModels)
             {
                 // null and null
             }
             else
             {
-                diff += itemModels.Count - other.itemModels.Count;
-                for (var i = 0; i < itemModels.Count; i++)
+                diff += ItemModels.Length - other.ItemModels.Length;
+                for (var i = 0; i < ItemModels.Length; i++)
                 {
-                    diff += itemModels[i].CompareTo(other.itemModels[i]);
+                    diff += ItemModels[i].CompareTo(other.ItemModels[i]);
                 }
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["inventoryModelId"] = inventoryModelId;
-            data["name"] = name;
-            data["metadata"] = metadata;
-            data["initialCapacity"] = initialCapacity;
-            data["maxCapacity"] = maxCapacity;
-            data["protectReferencedItem"] = protectReferencedItem;
-            data["itemModels"] = new JsonData(itemModels.Select(item => item.ToDict()));
-            return data;
-        }
-	}
+    }
 }

@@ -28,90 +28,62 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class RejectRequestByUserIdRequest : Gs2Request<RejectRequestByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string FromUserId { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public RejectRequestByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** フレンドリクエストを受け取ったユーザID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * フレンドリクエストを受け取ったユーザIDを設定
-         *
-         * @param userId フレンドリクエストを受け取ったユーザID
-         * @return this
-         */
         public RejectRequestByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** フレンドリクエストを送信したユーザID */
-		[UnityEngine.SerializeField]
-        public string fromUserId;
-
-        /**
-         * フレンドリクエストを送信したユーザIDを設定
-         *
-         * @param fromUserId フレンドリクエストを送信したユーザID
-         * @return this
-         */
         public RejectRequestByUserIdRequest WithFromUserId(string fromUserId) {
-            this.fromUserId = fromUserId;
+            this.FromUserId = fromUserId;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public RejectRequestByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static RejectRequestByUserIdRequest FromDict(JsonData data)
+        public static RejectRequestByUserIdRequest FromJson(JsonData data)
         {
-            return new RejectRequestByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                fromUserId = data.Keys.Contains("fromUserId") && data["fromUserId"] != null ? data["fromUserId"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new RejectRequestByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["fromUserId"] = FromUserId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["fromUserId"] = fromUserId;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (FromUserId != null) {
+                writer.WritePropertyName("fromUserId");
+                writer.Write(FromUserId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

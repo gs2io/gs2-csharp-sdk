@@ -23,280 +23,174 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Quest.Model
 {
+
 	[Preserve]
 	public class CompletedQuestList : IComparable
 	{
+        public string CompletedQuestListId { set; get; }
+        public string UserId { set; get; }
+        public string QuestGroupName { set; get; }
+        public string[] CompleteQuestNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** クエスト進行 */
-        public string completedQuestListId { set; get; }
-
-        /**
-         * クエスト進行を設定
-         *
-         * @param completedQuestListId クエスト進行
-         * @return this
-         */
         public CompletedQuestList WithCompletedQuestListId(string completedQuestListId) {
-            this.completedQuestListId = completedQuestListId;
+            this.CompletedQuestListId = completedQuestListId;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public CompletedQuestList WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** クエストグループ名 */
-        public string questGroupName { set; get; }
-
-        /**
-         * クエストグループ名を設定
-         *
-         * @param questGroupName クエストグループ名
-         * @return this
-         */
         public CompletedQuestList WithQuestGroupName(string questGroupName) {
-            this.questGroupName = questGroupName;
+            this.QuestGroupName = questGroupName;
             return this;
         }
 
-        /** 攻略済みのクエスト名一覧のリスト */
-        public List<string> completeQuestNames { set; get; }
-
-        /**
-         * 攻略済みのクエスト名一覧のリストを設定
-         *
-         * @param completeQuestNames 攻略済みのクエスト名一覧のリスト
-         * @return this
-         */
-        public CompletedQuestList WithCompleteQuestNames(List<string> completeQuestNames) {
-            this.completeQuestNames = completeQuestNames;
+        public CompletedQuestList WithCompleteQuestNames(string[] completeQuestNames) {
+            this.CompleteQuestNames = completeQuestNames;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public CompletedQuestList WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public CompletedQuestList WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static CompletedQuestList FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CompletedQuestList()
+                .WithCompletedQuestListId(!data.Keys.Contains("completedQuestListId") || data["completedQuestListId"] == null ? null : data["completedQuestListId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithCompleteQuestNames(!data.Keys.Contains("completeQuestNames") || data["completeQuestNames"] == null ? new string[]{} : data["completeQuestNames"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["completedQuestListId"] = CompletedQuestListId,
+                ["userId"] = UserId,
+                ["questGroupName"] = QuestGroupName,
+                ["completeQuestNames"] = new JsonData(CompleteQuestNames == null ? new JsonData[]{} :
+                        CompleteQuestNames.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.completedQuestListId != null)
-            {
+            if (CompletedQuestListId != null) {
                 writer.WritePropertyName("completedQuestListId");
-                writer.Write(this.completedQuestListId);
+                writer.Write(CompletedQuestListId.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.questGroupName != null)
-            {
+            if (QuestGroupName != null) {
                 writer.WritePropertyName("questGroupName");
-                writer.Write(this.questGroupName);
+                writer.Write(QuestGroupName.ToString());
             }
-            if(this.completeQuestNames != null)
-            {
+            if (CompleteQuestNames != null) {
                 writer.WritePropertyName("completeQuestNames");
                 writer.WriteArrayStart();
-                foreach(var item in this.completeQuestNames)
+                foreach (var completeQuestName in CompleteQuestNames)
                 {
-                    writer.Write(item);
+                    if (completeQuestName != null) {
+                        writer.Write(completeQuestName.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetQuestGroupNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):completed:group:(?<questGroupName>.*)");
-        if (!match.Groups["questGroupName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["questGroupName"].Value;
-    }
-
-    public static string GetUserIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):completed:group:(?<questGroupName>.*)");
-        if (!match.Groups["userId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["userId"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):completed:group:(?<questGroupName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):completed:group:(?<questGroupName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):quest:(?<namespaceName>.*):user:(?<userId>.*):completed:group:(?<questGroupName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static CompletedQuestList FromDict(JsonData data)
-        {
-            return new CompletedQuestList()
-                .WithCompletedQuestListId(data.Keys.Contains("completedQuestListId") && data["completedQuestListId"] != null ? data["completedQuestListId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithQuestGroupName(data.Keys.Contains("questGroupName") && data["questGroupName"] != null ? data["questGroupName"].ToString() : null)
-                .WithCompleteQuestNames(data.Keys.Contains("completeQuestNames") && data["completeQuestNames"] != null ? data["completeQuestNames"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as CompletedQuestList;
             var diff = 0;
-            if (completedQuestListId == null && completedQuestListId == other.completedQuestListId)
+            if (CompletedQuestListId == null && CompletedQuestListId == other.CompletedQuestListId)
             {
                 // null and null
             }
             else
             {
-                diff += completedQuestListId.CompareTo(other.completedQuestListId);
+                diff += CompletedQuestListId.CompareTo(other.CompletedQuestListId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (questGroupName == null && questGroupName == other.questGroupName)
+            if (QuestGroupName == null && QuestGroupName == other.QuestGroupName)
             {
                 // null and null
             }
             else
             {
-                diff += questGroupName.CompareTo(other.questGroupName);
+                diff += QuestGroupName.CompareTo(other.QuestGroupName);
             }
-            if (completeQuestNames == null && completeQuestNames == other.completeQuestNames)
+            if (CompleteQuestNames == null && CompleteQuestNames == other.CompleteQuestNames)
             {
                 // null and null
             }
             else
             {
-                diff += completeQuestNames.Count - other.completeQuestNames.Count;
-                for (var i = 0; i < completeQuestNames.Count; i++)
+                diff += CompleteQuestNames.Length - other.CompleteQuestNames.Length;
+                for (var i = 0; i < CompleteQuestNames.Length; i++)
                 {
-                    diff += completeQuestNames[i].CompareTo(other.completeQuestNames[i]);
+                    diff += CompleteQuestNames[i].CompareTo(other.CompleteQuestNames[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["completedQuestListId"] = completedQuestListId;
-            data["userId"] = userId;
-            data["questGroupName"] = questGroupName;
-            data["completeQuestNames"] = new JsonData(completeQuestNames);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

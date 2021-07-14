@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Formation.Model;
 using Gs2.Util.LitJson;
@@ -24,30 +25,75 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Formation.Result
 {
 	[Preserve]
-	public class AcquireActionsToFormPropertiesResult
+	[System.Serializable]
+	public class AcquireActionsToFormPropertiesResult : IResult
 	{
-        /** フォーム */
-        public Form item { set; get; }
+        public Gs2.Gs2Formation.Model.Form Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Mold { set; get; }
+        public string StampSheet { set; get; }
+        public string StampSheetEncryptionKeyId { set; get; }
 
-        /** 保存したフォーム */
-        public Mold mold { set; get; }
+        public AcquireActionsToFormPropertiesResult WithItem(Gs2.Gs2Formation.Model.Form item) {
+            this.Item = item;
+            return this;
+        }
 
-        /** スタンプシート */
-        public string stampSheet { set; get; }
+        public AcquireActionsToFormPropertiesResult WithMold(Gs2.Gs2Formation.Model.Mold mold) {
+            this.Mold = mold;
+            return this;
+        }
 
-        /** スタンプシートの署名計算に使用した暗号鍵GRN */
-        public string stampSheetEncryptionKeyId { set; get; }
+        public AcquireActionsToFormPropertiesResult WithStampSheet(string stampSheet) {
+            this.StampSheet = stampSheet;
+            return this;
+        }
 
+        public AcquireActionsToFormPropertiesResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
+            this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
+            return this;
+        }
 
     	[Preserve]
-        public static AcquireActionsToFormPropertiesResult FromDict(JsonData data)
+        public static AcquireActionsToFormPropertiesResult FromJson(JsonData data)
         {
-            return new AcquireActionsToFormPropertiesResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Formation.Model.Form.FromDict(data["item"]) : null,
-                mold = data.Keys.Contains("mold") && data["mold"] != null ? Gs2.Gs2Formation.Model.Mold.FromDict(data["mold"]) : null,
-                stampSheet = data.Keys.Contains("stampSheet") && data["stampSheet"] != null ? data["stampSheet"].ToString() : null,
-                stampSheetEncryptionKeyId = data.Keys.Contains("stampSheetEncryptionKeyId") && data["stampSheetEncryptionKeyId"] != null ? data["stampSheetEncryptionKeyId"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new AcquireActionsToFormPropertiesResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Form.FromJson(data["item"]))
+                .WithMold(!data.Keys.Contains("mold") || data["mold"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["mold"]))
+                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
+                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["mold"] = Mold?.ToJson(),
+                ["stampSheet"] = StampSheet,
+                ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (Mold != null) {
+                Mold.WriteJson(writer);
+            }
+            if (StampSheet != null) {
+                writer.WritePropertyName("stampSheet");
+                writer.Write(StampSheet.ToString());
+            }
+            if (StampSheetEncryptionKeyId != null) {
+                writer.WritePropertyName("stampSheetEncryptionKeyId");
+                writer.Write(StampSheetEncryptionKeyId.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -23,178 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Identifier.Model
 {
+
 	[Preserve]
 	public class Password : IComparable
 	{
+        public string UserId { set; get; }
+        public string UserName { set; get; }
+        public long? CreatedAt { set; get; }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Password WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ユーザ */
-        public string userId { set; get; }
-
-        /**
-         * ユーザを設定
-         *
-         * @param userId ユーザ
-         * @return this
-         */
         public Password WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** ユーザー名 */
-        public string userName { set; get; }
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public Password WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-        /** パスワード */
-        public string password { set; get; }
-
-        /**
-         * パスワードを設定
-         *
-         * @param password パスワード
-         * @return this
-         */
-        public Password WithPassword(string password) {
-            this.password = password;
-            return this;
-        }
-
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Password WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Password FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Password()
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userId"] = UserId,
+                ["userName"] = UserName,
+                ["createdAt"] = CreatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.userName != null)
-            {
+            if (UserName != null) {
                 writer.WritePropertyName("userName");
-                writer.Write(this.userName);
+                writer.Write(UserName.ToString());
             }
-            if(this.password != null)
-            {
-                writer.WritePropertyName("password");
-                writer.Write(this.password);
-            }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Password FromDict(JsonData data)
-        {
-            return new Password()
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithUserName(data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString() : null)
-                .WithPassword(data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Password;
             var diff = 0;
-            if (ownerId == null && ownerId == other.ownerId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (userId == null && userId == other.userId)
+            if (UserName == null && UserName == other.UserName)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserName.CompareTo(other.UserName);
             }
-            if (userName == null && userName == other.userName)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += userName.CompareTo(other.userName);
-            }
-            if (password == null && password == other.password)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += password.CompareTo(other.password);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["ownerId"] = ownerId;
-            data["userId"] = userId;
-            data["userName"] = userName;
-            data["password"] = password;
-            data["createdAt"] = createdAt;
-            return data;
-        }
-	}
+    }
 }

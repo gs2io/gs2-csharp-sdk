@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Quest.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Quest.Result
 {
 	[Preserve]
-	public class GetNamespaceStatusResult
+	[System.Serializable]
+	public class GetNamespaceStatusResult : IResult
 	{
-        /** None */
-        public string status { set; get; }
+        public string Status { set; get; }
 
+        public GetNamespaceStatusResult WithStatus(string status) {
+            this.Status = status;
+            return this;
+        }
 
     	[Preserve]
-        public static GetNamespaceStatusResult FromDict(JsonData data)
+        public static GetNamespaceStatusResult FromJson(JsonData data)
         {
-            return new GetNamespaceStatusResult {
-                status = data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetNamespaceStatusResult()
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["status"] = Status,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Status != null) {
+                writer.WritePropertyName("status");
+                writer.Write(Status.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

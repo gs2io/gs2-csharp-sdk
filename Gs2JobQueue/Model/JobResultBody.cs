@@ -23,149 +23,117 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2JobQueue.Model
 {
+
 	[Preserve]
 	public class JobResultBody : IComparable
 	{
+        public int? TryNumber { set; get; }
+        public int? StatusCode { set; get; }
+        public string Result { set; get; }
+        public long? TryAt { set; get; }
 
-        /** 試行回数 */
-        public int? tryNumber { set; get; }
-
-        /**
-         * 試行回数を設定
-         *
-         * @param tryNumber 試行回数
-         * @return this
-         */
         public JobResultBody WithTryNumber(int? tryNumber) {
-            this.tryNumber = tryNumber;
+            this.TryNumber = tryNumber;
             return this;
         }
 
-        /** ステータスコード */
-        public int? statusCode { set; get; }
-
-        /**
-         * ステータスコードを設定
-         *
-         * @param statusCode ステータスコード
-         * @return this
-         */
         public JobResultBody WithStatusCode(int? statusCode) {
-            this.statusCode = statusCode;
+            this.StatusCode = statusCode;
             return this;
         }
 
-        /** レスポンスの内容 */
-        public string result { set; get; }
-
-        /**
-         * レスポンスの内容を設定
-         *
-         * @param result レスポンスの内容
-         * @return this
-         */
         public JobResultBody WithResult(string result) {
-            this.result = result;
+            this.Result = result;
             return this;
         }
 
-        /** 実行日時 */
-        public long? tryAt { set; get; }
-
-        /**
-         * 実行日時を設定
-         *
-         * @param tryAt 実行日時
-         * @return this
-         */
         public JobResultBody WithTryAt(long? tryAt) {
-            this.tryAt = tryAt;
+            this.TryAt = tryAt;
             return this;
+        }
+
+    	[Preserve]
+        public static JobResultBody FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new JobResultBody()
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)int.Parse(data["tryNumber"].ToString()))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)int.Parse(data["statusCode"].ToString()))
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
+                .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : (long?)long.Parse(data["tryAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["tryNumber"] = TryNumber,
+                ["statusCode"] = StatusCode,
+                ["result"] = Result,
+                ["tryAt"] = TryAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.tryNumber.HasValue)
-            {
+            if (TryNumber != null) {
                 writer.WritePropertyName("tryNumber");
-                writer.Write(this.tryNumber.Value);
+                writer.Write(int.Parse(TryNumber.ToString()));
             }
-            if(this.statusCode.HasValue)
-            {
+            if (StatusCode != null) {
                 writer.WritePropertyName("statusCode");
-                writer.Write(this.statusCode.Value);
+                writer.Write(int.Parse(StatusCode.ToString()));
             }
-            if(this.result != null)
-            {
+            if (Result != null) {
                 writer.WritePropertyName("result");
-                writer.Write(this.result);
+                writer.Write(Result.ToString());
             }
-            if(this.tryAt.HasValue)
-            {
+            if (TryAt != null) {
                 writer.WritePropertyName("tryAt");
-                writer.Write(this.tryAt.Value);
+                writer.Write(long.Parse(TryAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static JobResultBody FromDict(JsonData data)
-        {
-            return new JobResultBody()
-                .WithTryNumber(data.Keys.Contains("tryNumber") && data["tryNumber"] != null ? (int?)int.Parse(data["tryNumber"].ToString()) : null)
-                .WithStatusCode(data.Keys.Contains("statusCode") && data["statusCode"] != null ? (int?)int.Parse(data["statusCode"].ToString()) : null)
-                .WithResult(data.Keys.Contains("result") && data["result"] != null ? data["result"].ToString() : null)
-                .WithTryAt(data.Keys.Contains("tryAt") && data["tryAt"] != null ? (long?)long.Parse(data["tryAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as JobResultBody;
             var diff = 0;
-            if (tryNumber == null && tryNumber == other.tryNumber)
+            if (TryNumber == null && TryNumber == other.TryNumber)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(tryNumber - other.tryNumber);
+                diff += (int)(TryNumber - other.TryNumber);
             }
-            if (statusCode == null && statusCode == other.statusCode)
+            if (StatusCode == null && StatusCode == other.StatusCode)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(statusCode - other.statusCode);
+                diff += (int)(StatusCode - other.StatusCode);
             }
-            if (result == null && result == other.result)
+            if (Result == null && Result == other.Result)
             {
                 // null and null
             }
             else
             {
-                diff += result.CompareTo(other.result);
+                diff += Result.CompareTo(other.Result);
             }
-            if (tryAt == null && tryAt == other.tryAt)
+            if (TryAt == null && TryAt == other.TryAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(tryAt - other.tryAt);
+                diff += (int)(TryAt - other.TryAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["tryNumber"] = tryNumber;
-            data["statusCode"] = statusCode;
-            data["result"] = result;
-            data["tryAt"] = tryAt;
-            return data;
-        }
-	}
+    }
 }

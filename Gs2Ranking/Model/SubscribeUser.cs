@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Ranking.Model
 {
+
 	[Preserve]
 	public class SubscribeUser : IComparable
 	{
+        public string CategoryName { set; get; }
+        public string UserId { set; get; }
+        public string TargetUserId { set; get; }
 
-        /** カテゴリ名 */
-        public string categoryName { set; get; }
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param categoryName カテゴリ名
-         * @return this
-         */
         public SubscribeUser WithCategoryName(string categoryName) {
-            this.categoryName = categoryName;
+            this.CategoryName = categoryName;
             return this;
         }
 
-        /** 購読するユーザID */
-        public string userId { set; get; }
-
-        /**
-         * 購読するユーザIDを設定
-         *
-         * @param userId 購読するユーザID
-         * @return this
-         */
         public SubscribeUser WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 購読されるユーザID */
-        public string targetUserId { set; get; }
-
-        /**
-         * 購読されるユーザIDを設定
-         *
-         * @param targetUserId 購読されるユーザID
-         * @return this
-         */
         public SubscribeUser WithTargetUserId(string targetUserId) {
-            this.targetUserId = targetUserId;
+            this.TargetUserId = targetUserId;
             return this;
+        }
+
+    	[Preserve]
+        public static SubscribeUser FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new SubscribeUser()
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["categoryName"] = CategoryName,
+                ["userId"] = UserId,
+                ["targetUserId"] = TargetUserId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.categoryName != null)
-            {
+            if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
-                writer.Write(this.categoryName);
+                writer.Write(CategoryName.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.targetUserId != null)
-            {
+            if (TargetUserId != null) {
                 writer.WritePropertyName("targetUserId");
-                writer.Write(this.targetUserId);
+                writer.Write(TargetUserId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static SubscribeUser FromDict(JsonData data)
-        {
-            return new SubscribeUser()
-                .WithCategoryName(data.Keys.Contains("categoryName") && data["categoryName"] != null ? data["categoryName"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithTargetUserId(data.Keys.Contains("targetUserId") && data["targetUserId"] != null ? data["targetUserId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as SubscribeUser;
             var diff = 0;
-            if (categoryName == null && categoryName == other.categoryName)
+            if (CategoryName == null && CategoryName == other.CategoryName)
             {
                 // null and null
             }
             else
             {
-                diff += categoryName.CompareTo(other.categoryName);
+                diff += CategoryName.CompareTo(other.CategoryName);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (targetUserId == null && targetUserId == other.targetUserId)
+            if (TargetUserId == null && TargetUserId == other.TargetUserId)
             {
                 // null and null
             }
             else
             {
-                diff += targetUserId.CompareTo(other.targetUserId);
+                diff += TargetUserId.CompareTo(other.TargetUserId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["categoryName"] = categoryName;
-            data["userId"] = userId;
-            data["targetUserId"] = targetUserId;
-            return data;
-        }
-	}
+    }
 }

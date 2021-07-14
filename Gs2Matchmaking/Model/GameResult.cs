@@ -23,91 +23,77 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Matchmaking.Model
 {
+
 	[Preserve]
 	public class GameResult : IComparable
 	{
+        public int? Rank { set; get; }
+        public string UserId { set; get; }
 
-        /** 順位 */
-        public int? rank { set; get; }
-
-        /**
-         * 順位を設定
-         *
-         * @param rank 順位
-         * @return this
-         */
         public GameResult WithRank(int? rank) {
-            this.rank = rank;
+            this.Rank = rank;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public GameResult WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
+        }
+
+    	[Preserve]
+        public static GameResult FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new GameResult()
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (int?)int.Parse(data["rank"].ToString()))
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["rank"] = Rank,
+                ["userId"] = UserId,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.rank.HasValue)
-            {
+            if (Rank != null) {
                 writer.WritePropertyName("rank");
-                writer.Write(this.rank.Value);
+                writer.Write(int.Parse(Rank.ToString()));
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static GameResult FromDict(JsonData data)
-        {
-            return new GameResult()
-                .WithRank(data.Keys.Contains("rank") && data["rank"] != null ? (int?)int.Parse(data["rank"].ToString()) : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as GameResult;
             var diff = 0;
-            if (rank == null && rank == other.rank)
+            if (Rank == null && Rank == other.Rank)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(rank - other.rank);
+                diff += (int)(Rank - other.Rank);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["rank"] = rank;
-            data["userId"] = userId;
-            return data;
-        }
-	}
+    }
 }

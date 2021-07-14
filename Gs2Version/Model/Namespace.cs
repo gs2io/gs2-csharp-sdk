@@ -23,359 +23,217 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string AssumeUserId { set; get; }
+        public Gs2.Gs2Version.Model.ScriptSetting AcceptVersionScript { set; get; }
+        public string CheckVersionTriggerScriptId { set; get; }
+        public Gs2.Gs2Version.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** 説明文 */
-        public string description { set; get; }
-
-        /**
-         * 説明文を設定
-         *
-         * @param description 説明文
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** バージョンチェック通過後に改めて発行するプロジェクトトークンの権限判定に使用する ユーザ のGRN */
-        public string assumeUserId { set; get; }
-
-        /**
-         * バージョンチェック通過後に改めて発行するプロジェクトトークンの権限判定に使用する ユーザ のGRNを設定
-         *
-         * @param assumeUserId バージョンチェック通過後に改めて発行するプロジェクトトークンの権限判定に使用する ユーザ のGRN
-         * @return this
-         */
         public Namespace WithAssumeUserId(string assumeUserId) {
-            this.assumeUserId = assumeUserId;
+            this.AssumeUserId = assumeUserId;
             return this;
         }
 
-        /** バージョンを承認したときに実行するスクリプト */
-        public Gs2.Gs2Version.Model.ScriptSetting acceptVersionScript { set; get; }
-
-        /**
-         * バージョンを承認したときに実行するスクリプトを設定
-         *
-         * @param acceptVersionScript バージョンを承認したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithAcceptVersionScript(Gs2.Gs2Version.Model.ScriptSetting acceptVersionScript) {
-            this.acceptVersionScript = acceptVersionScript;
+            this.AcceptVersionScript = acceptVersionScript;
             return this;
         }
 
-        /** バージョンチェック時 に実行されるスクリプト のGRN */
-        public string checkVersionTriggerScriptId { set; get; }
-
-        /**
-         * バージョンチェック時 に実行されるスクリプト のGRNを設定
-         *
-         * @param checkVersionTriggerScriptId バージョンチェック時 に実行されるスクリプト のGRN
-         * @return this
-         */
         public Namespace WithCheckVersionTriggerScriptId(string checkVersionTriggerScriptId) {
-            this.checkVersionTriggerScriptId = checkVersionTriggerScriptId;
+            this.CheckVersionTriggerScriptId = checkVersionTriggerScriptId;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Version.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Version.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
+                .WithAcceptVersionScript(!data.Keys.Contains("acceptVersionScript") || data["acceptVersionScript"] == null ? null : Gs2.Gs2Version.Model.ScriptSetting.FromJson(data["acceptVersionScript"]))
+                .WithCheckVersionTriggerScriptId(!data.Keys.Contains("checkVersionTriggerScriptId") || data["checkVersionTriggerScriptId"] == null ? null : data["checkVersionTriggerScriptId"].ToString())
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Version.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["assumeUserId"] = AssumeUserId,
+                ["acceptVersionScript"] = AcceptVersionScript?.ToJson(),
+                ["checkVersionTriggerScriptId"] = CheckVersionTriggerScriptId,
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.assumeUserId != null)
-            {
+            if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
-                writer.Write(this.assumeUserId);
+                writer.Write(AssumeUserId.ToString());
             }
-            if(this.acceptVersionScript != null)
-            {
+            if (AcceptVersionScript != null) {
                 writer.WritePropertyName("acceptVersionScript");
-                this.acceptVersionScript.WriteJson(writer);
+                AcceptVersionScript.WriteJson(writer);
             }
-            if(this.checkVersionTriggerScriptId != null)
-            {
+            if (CheckVersionTriggerScriptId != null) {
                 writer.WritePropertyName("checkVersionTriggerScriptId");
-                writer.Write(this.checkVersionTriggerScriptId);
+                writer.Write(CheckVersionTriggerScriptId.ToString());
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):version:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithAssumeUserId(data.Keys.Contains("assumeUserId") && data["assumeUserId"] != null ? data["assumeUserId"].ToString() : null)
-                .WithAcceptVersionScript(data.Keys.Contains("acceptVersionScript") && data["acceptVersionScript"] != null ? Gs2.Gs2Version.Model.ScriptSetting.FromDict(data["acceptVersionScript"]) : null)
-                .WithCheckVersionTriggerScriptId(data.Keys.Contains("checkVersionTriggerScriptId") && data["checkVersionTriggerScriptId"] != null ? data["checkVersionTriggerScriptId"].ToString() : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Version.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (AssumeUserId == null && AssumeUserId == other.AssumeUserId)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += AssumeUserId.CompareTo(other.AssumeUserId);
             }
-            if (assumeUserId == null && assumeUserId == other.assumeUserId)
+            if (AcceptVersionScript == null && AcceptVersionScript == other.AcceptVersionScript)
             {
                 // null and null
             }
             else
             {
-                diff += assumeUserId.CompareTo(other.assumeUserId);
+                diff += AcceptVersionScript.CompareTo(other.AcceptVersionScript);
             }
-            if (acceptVersionScript == null && acceptVersionScript == other.acceptVersionScript)
+            if (CheckVersionTriggerScriptId == null && CheckVersionTriggerScriptId == other.CheckVersionTriggerScriptId)
             {
                 // null and null
             }
             else
             {
-                diff += acceptVersionScript.CompareTo(other.acceptVersionScript);
+                diff += CheckVersionTriggerScriptId.CompareTo(other.CheckVersionTriggerScriptId);
             }
-            if (checkVersionTriggerScriptId == null && checkVersionTriggerScriptId == other.checkVersionTriggerScriptId)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += checkVersionTriggerScriptId.CompareTo(other.checkVersionTriggerScriptId);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["assumeUserId"] = assumeUserId;
-            data["acceptVersionScript"] = acceptVersionScript.ToDict();
-            data["checkVersionTriggerScriptId"] = checkVersionTriggerScriptId;
-            data["logSetting"] = logSetting.ToDict();
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

@@ -23,326 +23,214 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Realtime.Model
 {
+
 	[Preserve]
 	public class Room : IComparable
 	{
+        public string RoomId { set; get; }
+        public string Name { set; get; }
+        public string IpAddress { set; get; }
+        public int? Port { set; get; }
+        public string EncryptionKey { set; get; }
+        public string[] NotificationUserIds { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ルーム */
-        public string roomId { set; get; }
-
-        /**
-         * ルームを設定
-         *
-         * @param roomId ルーム
-         * @return this
-         */
         public Room WithRoomId(string roomId) {
-            this.roomId = roomId;
+            this.RoomId = roomId;
             return this;
         }
 
-        /** ルーム名 */
-        public string name { set; get; }
-
-        /**
-         * ルーム名を設定
-         *
-         * @param name ルーム名
-         * @return this
-         */
         public Room WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** IPアドレス */
-        public string ipAddress { set; get; }
-
-        /**
-         * IPアドレスを設定
-         *
-         * @param ipAddress IPアドレス
-         * @return this
-         */
         public Room WithIpAddress(string ipAddress) {
-            this.ipAddress = ipAddress;
+            this.IpAddress = ipAddress;
             return this;
         }
 
-        /** 待受ポート */
-        public int? port { set; get; }
-
-        /**
-         * 待受ポートを設定
-         *
-         * @param port 待受ポート
-         * @return this
-         */
         public Room WithPort(int? port) {
-            this.port = port;
+            this.Port = port;
             return this;
         }
 
-        /** 暗号鍵 */
-        public string encryptionKey { set; get; }
-
-        /**
-         * 暗号鍵を設定
-         *
-         * @param encryptionKey 暗号鍵
-         * @return this
-         */
         public Room WithEncryptionKey(string encryptionKey) {
-            this.encryptionKey = encryptionKey;
+            this.EncryptionKey = encryptionKey;
             return this;
         }
 
-        /** ルームの作成が終わったときに通知を受けるユーザIDリスト */
-        public List<string> notificationUserIds { set; get; }
-
-        /**
-         * ルームの作成が終わったときに通知を受けるユーザIDリストを設定
-         *
-         * @param notificationUserIds ルームの作成が終わったときに通知を受けるユーザIDリスト
-         * @return this
-         */
-        public Room WithNotificationUserIds(List<string> notificationUserIds) {
-            this.notificationUserIds = notificationUserIds;
+        public Room WithNotificationUserIds(string[] notificationUserIds) {
+            this.NotificationUserIds = notificationUserIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Room WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Room WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Room FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Room()
+                .WithRoomId(!data.Keys.Contains("roomId") || data["roomId"] == null ? null : data["roomId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithIpAddress(!data.Keys.Contains("ipAddress") || data["ipAddress"] == null ? null : data["ipAddress"].ToString())
+                .WithPort(!data.Keys.Contains("port") || data["port"] == null ? null : (int?)int.Parse(data["port"].ToString()))
+                .WithEncryptionKey(!data.Keys.Contains("encryptionKey") || data["encryptionKey"] == null ? null : data["encryptionKey"].ToString())
+                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null ? new string[]{} : data["notificationUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["roomId"] = RoomId,
+                ["name"] = Name,
+                ["ipAddress"] = IpAddress,
+                ["port"] = Port,
+                ["encryptionKey"] = EncryptionKey,
+                ["notificationUserIds"] = new JsonData(NotificationUserIds == null ? new JsonData[]{} :
+                        NotificationUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.roomId != null)
-            {
+            if (RoomId != null) {
                 writer.WritePropertyName("roomId");
-                writer.Write(this.roomId);
+                writer.Write(RoomId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.ipAddress != null)
-            {
+            if (IpAddress != null) {
                 writer.WritePropertyName("ipAddress");
-                writer.Write(this.ipAddress);
+                writer.Write(IpAddress.ToString());
             }
-            if(this.port.HasValue)
-            {
+            if (Port != null) {
                 writer.WritePropertyName("port");
-                writer.Write(this.port.Value);
+                writer.Write(int.Parse(Port.ToString()));
             }
-            if(this.encryptionKey != null)
-            {
+            if (EncryptionKey != null) {
                 writer.WritePropertyName("encryptionKey");
-                writer.Write(this.encryptionKey);
+                writer.Write(EncryptionKey.ToString());
             }
-            if(this.notificationUserIds != null)
-            {
+            if (NotificationUserIds != null) {
                 writer.WritePropertyName("notificationUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.notificationUserIds)
+                foreach (var notificationUserId in NotificationUserIds)
                 {
-                    writer.Write(item);
+                    if (notificationUserId != null) {
+                        writer.Write(notificationUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRoomNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):realtime:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["roomName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["roomName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):realtime:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):realtime:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):realtime:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Room FromDict(JsonData data)
-        {
-            return new Room()
-                .WithRoomId(data.Keys.Contains("roomId") && data["roomId"] != null ? data["roomId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithIpAddress(data.Keys.Contains("ipAddress") && data["ipAddress"] != null ? data["ipAddress"].ToString() : null)
-                .WithPort(data.Keys.Contains("port") && data["port"] != null ? (int?)int.Parse(data["port"].ToString()) : null)
-                .WithEncryptionKey(data.Keys.Contains("encryptionKey") && data["encryptionKey"] != null ? data["encryptionKey"].ToString() : null)
-                .WithNotificationUserIds(data.Keys.Contains("notificationUserIds") && data["notificationUserIds"] != null ? data["notificationUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Room;
             var diff = 0;
-            if (roomId == null && roomId == other.roomId)
+            if (RoomId == null && RoomId == other.RoomId)
             {
                 // null and null
             }
             else
             {
-                diff += roomId.CompareTo(other.roomId);
+                diff += RoomId.CompareTo(other.RoomId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (ipAddress == null && ipAddress == other.ipAddress)
+            if (IpAddress == null && IpAddress == other.IpAddress)
             {
                 // null and null
             }
             else
             {
-                diff += ipAddress.CompareTo(other.ipAddress);
+                diff += IpAddress.CompareTo(other.IpAddress);
             }
-            if (port == null && port == other.port)
+            if (Port == null && Port == other.Port)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(port - other.port);
+                diff += (int)(Port - other.Port);
             }
-            if (encryptionKey == null && encryptionKey == other.encryptionKey)
+            if (EncryptionKey == null && EncryptionKey == other.EncryptionKey)
             {
                 // null and null
             }
             else
             {
-                diff += encryptionKey.CompareTo(other.encryptionKey);
+                diff += EncryptionKey.CompareTo(other.EncryptionKey);
             }
-            if (notificationUserIds == null && notificationUserIds == other.notificationUserIds)
+            if (NotificationUserIds == null && NotificationUserIds == other.NotificationUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += notificationUserIds.Count - other.notificationUserIds.Count;
-                for (var i = 0; i < notificationUserIds.Count; i++)
+                diff += NotificationUserIds.Length - other.NotificationUserIds.Length;
+                for (var i = 0; i < NotificationUserIds.Length; i++)
                 {
-                    diff += notificationUserIds[i].CompareTo(other.notificationUserIds[i]);
+                    diff += NotificationUserIds[i].CompareTo(other.NotificationUserIds[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["roomId"] = roomId;
-            data["name"] = name;
-            data["ipAddress"] = ipAddress;
-            data["port"] = port;
-            data["encryptionKey"] = encryptionKey;
-            data["notificationUserIds"] = new JsonData(notificationUserIds);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

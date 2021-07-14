@@ -28,36 +28,38 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class GetCurrentLimitMasterRequest : Gs2Request<GetCurrentLimitMasterRequest>
 	{
+        public string NamespaceName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetCurrentLimitMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
     	[Preserve]
-        public static GetCurrentLimitMasterRequest FromDict(JsonData data)
+        public static GetCurrentLimitMasterRequest FromJson(JsonData data)
         {
-            return new GetCurrentLimitMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetCurrentLimitMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -28,36 +28,38 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class DeleteStackEntityRequest : Gs2Request<DeleteStackEntityRequest>
 	{
+        public string StackName { set; get; }
 
-        /** スタック名 */
-		[UnityEngine.SerializeField]
-        public string stackName;
-
-        /**
-         * スタック名を設定
-         *
-         * @param stackName スタック名
-         * @return this
-         */
         public DeleteStackEntityRequest WithStackName(string stackName) {
-            this.stackName = stackName;
+            this.StackName = stackName;
             return this;
         }
 
-
     	[Preserve]
-        public static DeleteStackEntityRequest FromDict(JsonData data)
+        public static DeleteStackEntityRequest FromJson(JsonData data)
         {
-            return new DeleteStackEntityRequest {
-                stackName = data.Keys.Contains("stackName") && data["stackName"] != null ? data["stackName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteStackEntityRequest()
+                .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["stackName"] = StackName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["stackName"] = stackName;
-            return data;
+            writer.WriteObjectStart();
+            if (StackName != null) {
+                writer.WritePropertyName("stackName");
+                writer.Write(StackName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

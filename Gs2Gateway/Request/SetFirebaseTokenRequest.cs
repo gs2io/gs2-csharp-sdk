@@ -28,86 +28,62 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class SetFirebaseTokenRequest : Gs2Request<SetFirebaseTokenRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string AccessToken { set; get; }
+        public string Token { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public SetFirebaseTokenRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** Firebase Cloud Messaging のデバイストークン */
-		[UnityEngine.SerializeField]
-        public string token;
-
-        /**
-         * Firebase Cloud Messaging のデバイストークンを設定
-         *
-         * @param token Firebase Cloud Messaging のデバイストークン
-         * @return this
-         */
-        public SetFirebaseTokenRequest WithToken(string token) {
-            this.token = token;
-            return this;
-        }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public SetFirebaseTokenRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
-
-        /** アクセストークン */
-        public string accessToken { set; get; }
-
-        /**
-         * アクセストークンを設定
-         *
-         * @param accessToken アクセストークン
-         * @return this
-         */
         public SetFirebaseTokenRequest WithAccessToken(string accessToken) {
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
+            return this;
+        }
+
+        public SetFirebaseTokenRequest WithToken(string token) {
+            this.Token = token;
             return this;
         }
 
     	[Preserve]
-        public static SetFirebaseTokenRequest FromDict(JsonData data)
+        public static SetFirebaseTokenRequest FromJson(JsonData data)
         {
-            return new SetFirebaseTokenRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                token = data.Keys.Contains("token") && data["token"] != null ? data["token"].ToString(): null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new SetFirebaseTokenRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["accessToken"] = AccessToken,
+                ["token"] = Token,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["token"] = token;
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
+            if (Token != null) {
+                writer.WritePropertyName("token");
+                writer.Write(Token.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

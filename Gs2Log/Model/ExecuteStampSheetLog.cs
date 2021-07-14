@@ -23,236 +23,177 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Log.Model
 {
+
 	[Preserve]
 	public class ExecuteStampSheetLog : IComparable
 	{
+        public long? Timestamp { set; get; }
+        public string TransactionId { set; get; }
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public string Action { set; get; }
+        public string Args { set; get; }
 
-        /** 日時 */
-        public long? timestamp { set; get; }
-
-        /**
-         * 日時を設定
-         *
-         * @param timestamp 日時
-         * @return this
-         */
         public ExecuteStampSheetLog WithTimestamp(long? timestamp) {
-            this.timestamp = timestamp;
+            this.Timestamp = timestamp;
             return this;
         }
 
-        /** トランザクションID */
-        public string transactionId { set; get; }
-
-        /**
-         * トランザクションIDを設定
-         *
-         * @param transactionId トランザクションID
-         * @return this
-         */
         public ExecuteStampSheetLog WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
+            this.TransactionId = transactionId;
             return this;
         }
 
-        /** マイクロサービスの種類 */
-        public string service { set; get; }
-
-        /**
-         * マイクロサービスの種類を設定
-         *
-         * @param service マイクロサービスの種類
-         * @return this
-         */
         public ExecuteStampSheetLog WithService(string service) {
-            this.service = service;
+            this.Service = service;
             return this;
         }
 
-        /** マイクロサービスのメソッド */
-        public string method { set; get; }
-
-        /**
-         * マイクロサービスのメソッドを設定
-         *
-         * @param method マイクロサービスのメソッド
-         * @return this
-         */
         public ExecuteStampSheetLog WithMethod(string method) {
-            this.method = method;
+            this.Method = method;
             return this;
         }
 
-        /** ユーザーID */
-        public string userId { set; get; }
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public ExecuteStampSheetLog WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** 報酬アクション */
-        public string action { set; get; }
-
-        /**
-         * 報酬アクションを設定
-         *
-         * @param action 報酬アクション
-         * @return this
-         */
         public ExecuteStampSheetLog WithAction(string action) {
-            this.action = action;
+            this.Action = action;
             return this;
         }
 
-        /** 引数 */
-        public string args { set; get; }
-
-        /**
-         * 引数を設定
-         *
-         * @param args 引数
-         * @return this
-         */
         public ExecuteStampSheetLog WithArgs(string args) {
-            this.args = args;
+            this.Args = args;
             return this;
+        }
+
+    	[Preserve]
+        public static ExecuteStampSheetLog FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ExecuteStampSheetLog()
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()))
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["timestamp"] = Timestamp,
+                ["transactionId"] = TransactionId,
+                ["service"] = Service,
+                ["method"] = Method,
+                ["userId"] = UserId,
+                ["action"] = Action,
+                ["args"] = Args,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.timestamp.HasValue)
-            {
+            if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(this.timestamp.Value);
+                writer.Write(long.Parse(Timestamp.ToString()));
             }
-            if(this.transactionId != null)
-            {
+            if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
-                writer.Write(this.transactionId);
+                writer.Write(TransactionId.ToString());
             }
-            if(this.service != null)
-            {
+            if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(this.service);
+                writer.Write(Service.ToString());
             }
-            if(this.method != null)
-            {
+            if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(this.method);
+                writer.Write(Method.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.action != null)
-            {
+            if (Action != null) {
                 writer.WritePropertyName("action");
-                writer.Write(this.action);
+                writer.Write(Action.ToString());
             }
-            if(this.args != null)
-            {
+            if (Args != null) {
                 writer.WritePropertyName("args");
-                writer.Write(this.args);
+                writer.Write(Args.ToString());
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static ExecuteStampSheetLog FromDict(JsonData data)
-        {
-            return new ExecuteStampSheetLog()
-                .WithTimestamp(data.Keys.Contains("timestamp") && data["timestamp"] != null ? (long?)long.Parse(data["timestamp"].ToString()) : null)
-                .WithTransactionId(data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString() : null)
-                .WithService(data.Keys.Contains("service") && data["service"] != null ? data["service"].ToString() : null)
-                .WithMethod(data.Keys.Contains("method") && data["method"] != null ? data["method"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithAction(data.Keys.Contains("action") && data["action"] != null ? data["action"].ToString() : null)
-                .WithArgs(data.Keys.Contains("args") && data["args"] != null ? data["args"].ToString() : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as ExecuteStampSheetLog;
             var diff = 0;
-            if (timestamp == null && timestamp == other.timestamp)
+            if (Timestamp == null && Timestamp == other.Timestamp)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(timestamp - other.timestamp);
+                diff += (int)(Timestamp - other.Timestamp);
             }
-            if (transactionId == null && transactionId == other.transactionId)
+            if (TransactionId == null && TransactionId == other.TransactionId)
             {
                 // null and null
             }
             else
             {
-                diff += transactionId.CompareTo(other.transactionId);
+                diff += TransactionId.CompareTo(other.TransactionId);
             }
-            if (service == null && service == other.service)
+            if (Service == null && Service == other.Service)
             {
                 // null and null
             }
             else
             {
-                diff += service.CompareTo(other.service);
+                diff += Service.CompareTo(other.Service);
             }
-            if (method == null && method == other.method)
+            if (Method == null && Method == other.Method)
             {
                 // null and null
             }
             else
             {
-                diff += method.CompareTo(other.method);
+                diff += Method.CompareTo(other.Method);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (action == null && action == other.action)
+            if (Action == null && Action == other.Action)
             {
                 // null and null
             }
             else
             {
-                diff += action.CompareTo(other.action);
+                diff += Action.CompareTo(other.Action);
             }
-            if (args == null && args == other.args)
+            if (Args == null && Args == other.Args)
             {
                 // null and null
             }
             else
             {
-                diff += args.CompareTo(other.args);
+                diff += Args.CompareTo(other.Args);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["timestamp"] = timestamp;
-            data["transactionId"] = transactionId;
-            data["service"] = service;
-            data["method"] = method;
-            data["userId"] = userId;
-            data["action"] = action;
-            data["args"] = args;
-            return data;
-        }
-	}
+    }
 }

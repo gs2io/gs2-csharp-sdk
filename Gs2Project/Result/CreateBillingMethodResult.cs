@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class CreateBillingMethodResult
+	[System.Serializable]
+	public class CreateBillingMethodResult : IResult
 	{
-        /** 作成した支払い方法 */
-        public BillingMethod item { set; get; }
+        public Gs2.Gs2Project.Model.BillingMethod Item { set; get; }
 
+        public CreateBillingMethodResult WithItem(Gs2.Gs2Project.Model.BillingMethod item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static CreateBillingMethodResult FromDict(JsonData data)
+        public static CreateBillingMethodResult FromJson(JsonData data)
         {
-            return new CreateBillingMethodResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Project.Model.BillingMethod.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new CreateBillingMethodResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.BillingMethod.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

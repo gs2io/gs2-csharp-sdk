@@ -23,620 +23,377 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Friend.Model
 {
+
 	[Preserve]
 	public class Namespace : IComparable
 	{
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting CancelRequestScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting AcceptRequestScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting RejectRequestScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting DeleteFriendScript { set; get; }
+        public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; }
+        public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; }
+        public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; }
+        public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; }
+        public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ネームスペース */
-        public string namespaceId { set; get; }
-
-        /**
-         * ネームスペースを設定
-         *
-         * @param namespaceId ネームスペース
-         * @return this
-         */
         public Namespace WithNamespaceId(string namespaceId) {
-            this.namespaceId = namespaceId;
+            this.NamespaceId = namespaceId;
             return this;
         }
 
-        /** オーナーID */
-        public string ownerId { set; get; }
-
-        /**
-         * オーナーIDを設定
-         *
-         * @param ownerId オーナーID
-         * @return this
-         */
-        public Namespace WithOwnerId(string ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        /** ネームスペース名 */
-        public string name { set; get; }
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param name ネームスペース名
-         * @return this
-         */
         public Namespace WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ネームスペースの説明 */
-        public string description { set; get; }
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public Namespace WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-        /** フォローされたときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting followScript { set; get; }
-
-        /**
-         * フォローされたときに実行するスクリプトを設定
-         *
-         * @param followScript フォローされたときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithFollowScript(Gs2.Gs2Friend.Model.ScriptSetting followScript) {
-            this.followScript = followScript;
+            this.FollowScript = followScript;
             return this;
         }
 
-        /** アンフォローされたときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting unfollowScript { set; get; }
-
-        /**
-         * アンフォローされたときに実行するスクリプトを設定
-         *
-         * @param unfollowScript アンフォローされたときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithUnfollowScript(Gs2.Gs2Friend.Model.ScriptSetting unfollowScript) {
-            this.unfollowScript = unfollowScript;
+            this.UnfollowScript = unfollowScript;
             return this;
         }
 
-        /** フレンドリクエストを発行したときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting sendRequestScript { set; get; }
-
-        /**
-         * フレンドリクエストを発行したときに実行するスクリプトを設定
-         *
-         * @param sendRequestScript フレンドリクエストを発行したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithSendRequestScript(Gs2.Gs2Friend.Model.ScriptSetting sendRequestScript) {
-            this.sendRequestScript = sendRequestScript;
+            this.SendRequestScript = sendRequestScript;
             return this;
         }
 
-        /** フレンドリクエストをキャンセルしたときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting cancelRequestScript { set; get; }
-
-        /**
-         * フレンドリクエストをキャンセルしたときに実行するスクリプトを設定
-         *
-         * @param cancelRequestScript フレンドリクエストをキャンセルしたときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithCancelRequestScript(Gs2.Gs2Friend.Model.ScriptSetting cancelRequestScript) {
-            this.cancelRequestScript = cancelRequestScript;
+            this.CancelRequestScript = cancelRequestScript;
             return this;
         }
 
-        /** フレンドリクエストを承諾したときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting acceptRequestScript { set; get; }
-
-        /**
-         * フレンドリクエストを承諾したときに実行するスクリプトを設定
-         *
-         * @param acceptRequestScript フレンドリクエストを承諾したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithAcceptRequestScript(Gs2.Gs2Friend.Model.ScriptSetting acceptRequestScript) {
-            this.acceptRequestScript = acceptRequestScript;
+            this.AcceptRequestScript = acceptRequestScript;
             return this;
         }
 
-        /** フレンドリクエストを拒否したときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting rejectRequestScript { set; get; }
-
-        /**
-         * フレンドリクエストを拒否したときに実行するスクリプトを設定
-         *
-         * @param rejectRequestScript フレンドリクエストを拒否したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithRejectRequestScript(Gs2.Gs2Friend.Model.ScriptSetting rejectRequestScript) {
-            this.rejectRequestScript = rejectRequestScript;
+            this.RejectRequestScript = rejectRequestScript;
             return this;
         }
 
-        /** フレンドを削除したときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting deleteFriendScript { set; get; }
-
-        /**
-         * フレンドを削除したときに実行するスクリプトを設定
-         *
-         * @param deleteFriendScript フレンドを削除したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithDeleteFriendScript(Gs2.Gs2Friend.Model.ScriptSetting deleteFriendScript) {
-            this.deleteFriendScript = deleteFriendScript;
+            this.DeleteFriendScript = deleteFriendScript;
             return this;
         }
 
-        /** プロフィールを更新したときに実行するスクリプト */
-        public Gs2.Gs2Friend.Model.ScriptSetting updateProfileScript { set; get; }
-
-        /**
-         * プロフィールを更新したときに実行するスクリプトを設定
-         *
-         * @param updateProfileScript プロフィールを更新したときに実行するスクリプト
-         * @return this
-         */
         public Namespace WithUpdateProfileScript(Gs2.Gs2Friend.Model.ScriptSetting updateProfileScript) {
-            this.updateProfileScript = updateProfileScript;
+            this.UpdateProfileScript = updateProfileScript;
             return this;
         }
 
-        /** フォローされたときのプッシュ通知 */
-        public Gs2.Gs2Friend.Model.NotificationSetting followNotification { set; get; }
-
-        /**
-         * フォローされたときのプッシュ通知を設定
-         *
-         * @param followNotification フォローされたときのプッシュ通知
-         * @return this
-         */
         public Namespace WithFollowNotification(Gs2.Gs2Friend.Model.NotificationSetting followNotification) {
-            this.followNotification = followNotification;
+            this.FollowNotification = followNotification;
             return this;
         }
 
-        /** フレンドリクエストが届いたときのプッシュ通知 */
-        public Gs2.Gs2Friend.Model.NotificationSetting receiveRequestNotification { set; get; }
-
-        /**
-         * フレンドリクエストが届いたときのプッシュ通知を設定
-         *
-         * @param receiveRequestNotification フレンドリクエストが届いたときのプッシュ通知
-         * @return this
-         */
         public Namespace WithReceiveRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting receiveRequestNotification) {
-            this.receiveRequestNotification = receiveRequestNotification;
+            this.ReceiveRequestNotification = receiveRequestNotification;
             return this;
         }
 
-        /** フレンドリクエストが承認されたときのプッシュ通知 */
-        public Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification { set; get; }
-
-        /**
-         * フレンドリクエストが承認されたときのプッシュ通知を設定
-         *
-         * @param acceptRequestNotification フレンドリクエストが承認されたときのプッシュ通知
-         * @return this
-         */
         public Namespace WithAcceptRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification) {
-            this.acceptRequestNotification = acceptRequestNotification;
+            this.AcceptRequestNotification = acceptRequestNotification;
             return this;
         }
 
-        /** ログの出力設定 */
-        public Gs2.Gs2Friend.Model.LogSetting logSetting { set; get; }
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
         public Namespace WithLogSetting(Gs2.Gs2Friend.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+            this.LogSetting = logSetting;
             return this;
         }
 
-        /** None */
-        public string status { set; get; }
-
-        /**
-         * Noneを設定
-         *
-         * @param status None
-         * @return this
-         */
-        public Namespace WithStatus(string status) {
-            this.status = status;
-            return this;
-        }
-
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Namespace WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Namespace WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Namespace FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Namespace()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithFollowScript(!data.Keys.Contains("followScript") || data["followScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["followScript"]))
+                .WithUnfollowScript(!data.Keys.Contains("unfollowScript") || data["unfollowScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["unfollowScript"]))
+                .WithSendRequestScript(!data.Keys.Contains("sendRequestScript") || data["sendRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["sendRequestScript"]))
+                .WithCancelRequestScript(!data.Keys.Contains("cancelRequestScript") || data["cancelRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["cancelRequestScript"]))
+                .WithAcceptRequestScript(!data.Keys.Contains("acceptRequestScript") || data["acceptRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["acceptRequestScript"]))
+                .WithRejectRequestScript(!data.Keys.Contains("rejectRequestScript") || data["rejectRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["rejectRequestScript"]))
+                .WithDeleteFriendScript(!data.Keys.Contains("deleteFriendScript") || data["deleteFriendScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["deleteFriendScript"]))
+                .WithUpdateProfileScript(!data.Keys.Contains("updateProfileScript") || data["updateProfileScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["updateProfileScript"]))
+                .WithFollowNotification(!data.Keys.Contains("followNotification") || data["followNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["followNotification"]))
+                .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
+                .WithAcceptRequestNotification(!data.Keys.Contains("acceptRequestNotification") || data["acceptRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["acceptRequestNotification"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Friend.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["name"] = Name,
+                ["description"] = Description,
+                ["followScript"] = FollowScript?.ToJson(),
+                ["unfollowScript"] = UnfollowScript?.ToJson(),
+                ["sendRequestScript"] = SendRequestScript?.ToJson(),
+                ["cancelRequestScript"] = CancelRequestScript?.ToJson(),
+                ["acceptRequestScript"] = AcceptRequestScript?.ToJson(),
+                ["rejectRequestScript"] = RejectRequestScript?.ToJson(),
+                ["deleteFriendScript"] = DeleteFriendScript?.ToJson(),
+                ["updateProfileScript"] = UpdateProfileScript?.ToJson(),
+                ["followNotification"] = FollowNotification?.ToJson(),
+                ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
+                ["acceptRequestNotification"] = AcceptRequestNotification?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.namespaceId != null)
-            {
+            if (NamespaceId != null) {
                 writer.WritePropertyName("namespaceId");
-                writer.Write(this.namespaceId);
+                writer.Write(NamespaceId.ToString());
             }
-            if(this.ownerId != null)
-            {
-                writer.WritePropertyName("ownerId");
-                writer.Write(this.ownerId);
-            }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.description != null)
-            {
+            if (Description != null) {
                 writer.WritePropertyName("description");
-                writer.Write(this.description);
+                writer.Write(Description.ToString());
             }
-            if(this.followScript != null)
-            {
+            if (FollowScript != null) {
                 writer.WritePropertyName("followScript");
-                this.followScript.WriteJson(writer);
+                FollowScript.WriteJson(writer);
             }
-            if(this.unfollowScript != null)
-            {
+            if (UnfollowScript != null) {
                 writer.WritePropertyName("unfollowScript");
-                this.unfollowScript.WriteJson(writer);
+                UnfollowScript.WriteJson(writer);
             }
-            if(this.sendRequestScript != null)
-            {
+            if (SendRequestScript != null) {
                 writer.WritePropertyName("sendRequestScript");
-                this.sendRequestScript.WriteJson(writer);
+                SendRequestScript.WriteJson(writer);
             }
-            if(this.cancelRequestScript != null)
-            {
+            if (CancelRequestScript != null) {
                 writer.WritePropertyName("cancelRequestScript");
-                this.cancelRequestScript.WriteJson(writer);
+                CancelRequestScript.WriteJson(writer);
             }
-            if(this.acceptRequestScript != null)
-            {
+            if (AcceptRequestScript != null) {
                 writer.WritePropertyName("acceptRequestScript");
-                this.acceptRequestScript.WriteJson(writer);
+                AcceptRequestScript.WriteJson(writer);
             }
-            if(this.rejectRequestScript != null)
-            {
+            if (RejectRequestScript != null) {
                 writer.WritePropertyName("rejectRequestScript");
-                this.rejectRequestScript.WriteJson(writer);
+                RejectRequestScript.WriteJson(writer);
             }
-            if(this.deleteFriendScript != null)
-            {
+            if (DeleteFriendScript != null) {
                 writer.WritePropertyName("deleteFriendScript");
-                this.deleteFriendScript.WriteJson(writer);
+                DeleteFriendScript.WriteJson(writer);
             }
-            if(this.updateProfileScript != null)
-            {
+            if (UpdateProfileScript != null) {
                 writer.WritePropertyName("updateProfileScript");
-                this.updateProfileScript.WriteJson(writer);
+                UpdateProfileScript.WriteJson(writer);
             }
-            if(this.followNotification != null)
-            {
+            if (FollowNotification != null) {
                 writer.WritePropertyName("followNotification");
-                this.followNotification.WriteJson(writer);
+                FollowNotification.WriteJson(writer);
             }
-            if(this.receiveRequestNotification != null)
-            {
+            if (ReceiveRequestNotification != null) {
                 writer.WritePropertyName("receiveRequestNotification");
-                this.receiveRequestNotification.WriteJson(writer);
+                ReceiveRequestNotification.WriteJson(writer);
             }
-            if(this.acceptRequestNotification != null)
-            {
+            if (AcceptRequestNotification != null) {
                 writer.WritePropertyName("acceptRequestNotification");
-                this.acceptRequestNotification.WriteJson(writer);
+                AcceptRequestNotification.WriteJson(writer);
             }
-            if(this.logSetting != null)
-            {
+            if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
-                this.logSetting.WriteJson(writer);
+                LogSetting.WriteJson(writer);
             }
-            if(this.status != null)
-            {
-                writer.WritePropertyName("status");
-                writer.Write(this.status);
-            }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):friend:(?<namespaceName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Namespace FromDict(JsonData data)
-        {
-            return new Namespace()
-                .WithNamespaceId(data.Keys.Contains("namespaceId") && data["namespaceId"] != null ? data["namespaceId"].ToString() : null)
-                .WithOwnerId(data.Keys.Contains("ownerId") && data["ownerId"] != null ? data["ownerId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithDescription(data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString() : null)
-                .WithFollowScript(data.Keys.Contains("followScript") && data["followScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["followScript"]) : null)
-                .WithUnfollowScript(data.Keys.Contains("unfollowScript") && data["unfollowScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["unfollowScript"]) : null)
-                .WithSendRequestScript(data.Keys.Contains("sendRequestScript") && data["sendRequestScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["sendRequestScript"]) : null)
-                .WithCancelRequestScript(data.Keys.Contains("cancelRequestScript") && data["cancelRequestScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["cancelRequestScript"]) : null)
-                .WithAcceptRequestScript(data.Keys.Contains("acceptRequestScript") && data["acceptRequestScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["acceptRequestScript"]) : null)
-                .WithRejectRequestScript(data.Keys.Contains("rejectRequestScript") && data["rejectRequestScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["rejectRequestScript"]) : null)
-                .WithDeleteFriendScript(data.Keys.Contains("deleteFriendScript") && data["deleteFriendScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["deleteFriendScript"]) : null)
-                .WithUpdateProfileScript(data.Keys.Contains("updateProfileScript") && data["updateProfileScript"] != null ? Gs2.Gs2Friend.Model.ScriptSetting.FromDict(data["updateProfileScript"]) : null)
-                .WithFollowNotification(data.Keys.Contains("followNotification") && data["followNotification"] != null ? Gs2.Gs2Friend.Model.NotificationSetting.FromDict(data["followNotification"]) : null)
-                .WithReceiveRequestNotification(data.Keys.Contains("receiveRequestNotification") && data["receiveRequestNotification"] != null ? Gs2.Gs2Friend.Model.NotificationSetting.FromDict(data["receiveRequestNotification"]) : null)
-                .WithAcceptRequestNotification(data.Keys.Contains("acceptRequestNotification") && data["acceptRequestNotification"] != null ? Gs2.Gs2Friend.Model.NotificationSetting.FromDict(data["acceptRequestNotification"]) : null)
-                .WithLogSetting(data.Keys.Contains("logSetting") && data["logSetting"] != null ? Gs2.Gs2Friend.Model.LogSetting.FromDict(data["logSetting"]) : null)
-                .WithStatus(data.Keys.Contains("status") && data["status"] != null ? data["status"].ToString() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
             var diff = 0;
-            if (namespaceId == null && namespaceId == other.namespaceId)
+            if (NamespaceId == null && NamespaceId == other.NamespaceId)
             {
                 // null and null
             }
             else
             {
-                diff += namespaceId.CompareTo(other.namespaceId);
+                diff += NamespaceId.CompareTo(other.NamespaceId);
             }
-            if (ownerId == null && ownerId == other.ownerId)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += ownerId.CompareTo(other.ownerId);
+                diff += Name.CompareTo(other.Name);
             }
-            if (name == null && name == other.name)
+            if (Description == null && Description == other.Description)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Description.CompareTo(other.Description);
             }
-            if (description == null && description == other.description)
+            if (FollowScript == null && FollowScript == other.FollowScript)
             {
                 // null and null
             }
             else
             {
-                diff += description.CompareTo(other.description);
+                diff += FollowScript.CompareTo(other.FollowScript);
             }
-            if (followScript == null && followScript == other.followScript)
+            if (UnfollowScript == null && UnfollowScript == other.UnfollowScript)
             {
                 // null and null
             }
             else
             {
-                diff += followScript.CompareTo(other.followScript);
+                diff += UnfollowScript.CompareTo(other.UnfollowScript);
             }
-            if (unfollowScript == null && unfollowScript == other.unfollowScript)
+            if (SendRequestScript == null && SendRequestScript == other.SendRequestScript)
             {
                 // null and null
             }
             else
             {
-                diff += unfollowScript.CompareTo(other.unfollowScript);
+                diff += SendRequestScript.CompareTo(other.SendRequestScript);
             }
-            if (sendRequestScript == null && sendRequestScript == other.sendRequestScript)
+            if (CancelRequestScript == null && CancelRequestScript == other.CancelRequestScript)
             {
                 // null and null
             }
             else
             {
-                diff += sendRequestScript.CompareTo(other.sendRequestScript);
+                diff += CancelRequestScript.CompareTo(other.CancelRequestScript);
             }
-            if (cancelRequestScript == null && cancelRequestScript == other.cancelRequestScript)
+            if (AcceptRequestScript == null && AcceptRequestScript == other.AcceptRequestScript)
             {
                 // null and null
             }
             else
             {
-                diff += cancelRequestScript.CompareTo(other.cancelRequestScript);
+                diff += AcceptRequestScript.CompareTo(other.AcceptRequestScript);
             }
-            if (acceptRequestScript == null && acceptRequestScript == other.acceptRequestScript)
+            if (RejectRequestScript == null && RejectRequestScript == other.RejectRequestScript)
             {
                 // null and null
             }
             else
             {
-                diff += acceptRequestScript.CompareTo(other.acceptRequestScript);
+                diff += RejectRequestScript.CompareTo(other.RejectRequestScript);
             }
-            if (rejectRequestScript == null && rejectRequestScript == other.rejectRequestScript)
+            if (DeleteFriendScript == null && DeleteFriendScript == other.DeleteFriendScript)
             {
                 // null and null
             }
             else
             {
-                diff += rejectRequestScript.CompareTo(other.rejectRequestScript);
+                diff += DeleteFriendScript.CompareTo(other.DeleteFriendScript);
             }
-            if (deleteFriendScript == null && deleteFriendScript == other.deleteFriendScript)
+            if (UpdateProfileScript == null && UpdateProfileScript == other.UpdateProfileScript)
             {
                 // null and null
             }
             else
             {
-                diff += deleteFriendScript.CompareTo(other.deleteFriendScript);
+                diff += UpdateProfileScript.CompareTo(other.UpdateProfileScript);
             }
-            if (updateProfileScript == null && updateProfileScript == other.updateProfileScript)
+            if (FollowNotification == null && FollowNotification == other.FollowNotification)
             {
                 // null and null
             }
             else
             {
-                diff += updateProfileScript.CompareTo(other.updateProfileScript);
+                diff += FollowNotification.CompareTo(other.FollowNotification);
             }
-            if (followNotification == null && followNotification == other.followNotification)
+            if (ReceiveRequestNotification == null && ReceiveRequestNotification == other.ReceiveRequestNotification)
             {
                 // null and null
             }
             else
             {
-                diff += followNotification.CompareTo(other.followNotification);
+                diff += ReceiveRequestNotification.CompareTo(other.ReceiveRequestNotification);
             }
-            if (receiveRequestNotification == null && receiveRequestNotification == other.receiveRequestNotification)
+            if (AcceptRequestNotification == null && AcceptRequestNotification == other.AcceptRequestNotification)
             {
                 // null and null
             }
             else
             {
-                diff += receiveRequestNotification.CompareTo(other.receiveRequestNotification);
+                diff += AcceptRequestNotification.CompareTo(other.AcceptRequestNotification);
             }
-            if (acceptRequestNotification == null && acceptRequestNotification == other.acceptRequestNotification)
+            if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
             }
             else
             {
-                diff += acceptRequestNotification.CompareTo(other.acceptRequestNotification);
+                diff += LogSetting.CompareTo(other.LogSetting);
             }
-            if (logSetting == null && logSetting == other.logSetting)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += logSetting.CompareTo(other.logSetting);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (status == null && status == other.status)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += status.CompareTo(other.status);
-            }
-            if (createdAt == null && createdAt == other.createdAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(createdAt - other.createdAt);
-            }
-            if (updatedAt == null && updatedAt == other.updatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["namespaceId"] = namespaceId;
-            data["ownerId"] = ownerId;
-            data["name"] = name;
-            data["description"] = description;
-            data["followScript"] = followScript.ToDict();
-            data["unfollowScript"] = unfollowScript.ToDict();
-            data["sendRequestScript"] = sendRequestScript.ToDict();
-            data["cancelRequestScript"] = cancelRequestScript.ToDict();
-            data["acceptRequestScript"] = acceptRequestScript.ToDict();
-            data["rejectRequestScript"] = rejectRequestScript.ToDict();
-            data["deleteFriendScript"] = deleteFriendScript.ToDict();
-            data["updateProfileScript"] = updateProfileScript.ToDict();
-            data["followNotification"] = followNotification.ToDict();
-            data["receiveRequestNotification"] = receiveRequestNotification.ToDict();
-            data["acceptRequestNotification"] = acceptRequestNotification.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            data["status"] = status;
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

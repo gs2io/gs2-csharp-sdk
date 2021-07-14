@@ -28,198 +28,142 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string Description { set; get; }
+        public string Priority { set; get; }
+        public string AppleKey { set; get; }
+        public string GoogleKey { set; get; }
+        public bool? EnableFakeReceipt { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
+        public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
+        public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
 
-        /** ネームスペースの名前 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペースの名前を設定
-         *
-         * @param namespaceName ネームスペースの名前
-         * @return this
-         */
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ネームスペースの説明 */
-		[UnityEngine.SerializeField]
-        public string description;
-
-        /**
-         * ネームスペースの説明を設定
-         *
-         * @param description ネームスペースの説明
-         * @return this
-         */
         public UpdateNamespaceRequest WithDescription(string description) {
-            this.description = description;
+            this.Description = description;
             return this;
         }
 
-
-        /** 消費優先度 */
-		[UnityEngine.SerializeField]
-        public string priority;
-
-        /**
-         * 消費優先度を設定
-         *
-         * @param priority 消費優先度
-         * @return this
-         */
         public UpdateNamespaceRequest WithPriority(string priority) {
-            this.priority = priority;
+            this.Priority = priority;
             return this;
         }
 
-
-        /** Apple AppStore のバンドルID */
-		[UnityEngine.SerializeField]
-        public string appleKey;
-
-        /**
-         * Apple AppStore のバンドルIDを設定
-         *
-         * @param appleKey Apple AppStore のバンドルID
-         * @return this
-         */
         public UpdateNamespaceRequest WithAppleKey(string appleKey) {
-            this.appleKey = appleKey;
+            this.AppleKey = appleKey;
             return this;
         }
 
-
-        /** Google PlayStore の秘密鍵 */
-		[UnityEngine.SerializeField]
-        public string googleKey;
-
-        /**
-         * Google PlayStore の秘密鍵を設定
-         *
-         * @param googleKey Google PlayStore の秘密鍵
-         * @return this
-         */
         public UpdateNamespaceRequest WithGoogleKey(string googleKey) {
-            this.googleKey = googleKey;
+            this.GoogleKey = googleKey;
             return this;
         }
 
-
-        /** UnityEditorが出力する偽のレシートで決済できるようにするか */
-		[UnityEngine.SerializeField]
-        public bool? enableFakeReceipt;
-
-        /**
-         * UnityEditorが出力する偽のレシートで決済できるようにするかを設定
-         *
-         * @param enableFakeReceipt UnityEditorが出力する偽のレシートで決済できるようにするか
-         * @return this
-         */
         public UpdateNamespaceRequest WithEnableFakeReceipt(bool? enableFakeReceipt) {
-            this.enableFakeReceipt = enableFakeReceipt;
+            this.EnableFakeReceipt = enableFakeReceipt;
             return this;
         }
 
-
-        /** ウォレット新規作成したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Money.Model.ScriptSetting createWalletScript;
-
-        /**
-         * ウォレット新規作成したときに実行するスクリプトを設定
-         *
-         * @param createWalletScript ウォレット新規作成したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithCreateWalletScript(global::Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
-            this.createWalletScript = createWalletScript;
+        public UpdateNamespaceRequest WithCreateWalletScript(Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
+            this.CreateWalletScript = createWalletScript;
             return this;
         }
 
-
-        /** ウォレット残高加算したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Money.Model.ScriptSetting depositScript;
-
-        /**
-         * ウォレット残高加算したときに実行するスクリプトを設定
-         *
-         * @param depositScript ウォレット残高加算したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithDepositScript(global::Gs2.Gs2Money.Model.ScriptSetting depositScript) {
-            this.depositScript = depositScript;
+        public UpdateNamespaceRequest WithDepositScript(Gs2.Gs2Money.Model.ScriptSetting depositScript) {
+            this.DepositScript = depositScript;
             return this;
         }
 
-
-        /** ウォレット残高消費したときに実行するスクリプト */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Money.Model.ScriptSetting withdrawScript;
-
-        /**
-         * ウォレット残高消費したときに実行するスクリプトを設定
-         *
-         * @param withdrawScript ウォレット残高消費したときに実行するスクリプト
-         * @return this
-         */
-        public UpdateNamespaceRequest WithWithdrawScript(global::Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
-            this.withdrawScript = withdrawScript;
+        public UpdateNamespaceRequest WithWithdrawScript(Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
+            this.WithdrawScript = withdrawScript;
             return this;
         }
 
-
-        /** ログの出力設定 */
-		[UnityEngine.SerializeField]
-        public global::Gs2.Gs2Money.Model.LogSetting logSetting;
-
-        /**
-         * ログの出力設定を設定
-         *
-         * @param logSetting ログの出力設定
-         * @return this
-         */
-        public UpdateNamespaceRequest WithLogSetting(global::Gs2.Gs2Money.Model.LogSetting logSetting) {
-            this.logSetting = logSetting;
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Money.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
             return this;
         }
-
 
     	[Preserve]
-        public static UpdateNamespaceRequest FromDict(JsonData data)
+        public static UpdateNamespaceRequest FromJson(JsonData data)
         {
-            return new UpdateNamespaceRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                description = data.Keys.Contains("description") && data["description"] != null ? data["description"].ToString(): null,
-                priority = data.Keys.Contains("priority") && data["priority"] != null ? data["priority"].ToString(): null,
-                appleKey = data.Keys.Contains("appleKey") && data["appleKey"] != null ? data["appleKey"].ToString(): null,
-                googleKey = data.Keys.Contains("googleKey") && data["googleKey"] != null ? data["googleKey"].ToString(): null,
-                enableFakeReceipt = data.Keys.Contains("enableFakeReceipt") && data["enableFakeReceipt"] != null ? (bool?)bool.Parse(data["enableFakeReceipt"].ToString()) : null,
-                createWalletScript = data.Keys.Contains("createWalletScript") && data["createWalletScript"] != null ? global::Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["createWalletScript"]) : null,
-                depositScript = data.Keys.Contains("depositScript") && data["depositScript"] != null ? global::Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["depositScript"]) : null,
-                withdrawScript = data.Keys.Contains("withdrawScript") && data["withdrawScript"] != null ? global::Gs2.Gs2Money.Model.ScriptSetting.FromDict(data["withdrawScript"]) : null,
-                logSetting = data.Keys.Contains("logSetting") && data["logSetting"] != null ? global::Gs2.Gs2Money.Model.LogSetting.FromDict(data["logSetting"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateNamespaceRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithPriority(!data.Keys.Contains("priority") || data["priority"] == null ? null : data["priority"].ToString())
+                .WithAppleKey(!data.Keys.Contains("appleKey") || data["appleKey"] == null ? null : data["appleKey"].ToString())
+                .WithGoogleKey(!data.Keys.Contains("googleKey") || data["googleKey"] == null ? null : data["googleKey"].ToString())
+                .WithEnableFakeReceipt(!data.Keys.Contains("enableFakeReceipt") || data["enableFakeReceipt"] == null ? null : (bool?)bool.Parse(data["enableFakeReceipt"].ToString()))
+                .WithCreateWalletScript(!data.Keys.Contains("createWalletScript") || data["createWalletScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["createWalletScript"]))
+                .WithDepositScript(!data.Keys.Contains("depositScript") || data["depositScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["depositScript"]))
+                .WithWithdrawScript(!data.Keys.Contains("withdrawScript") || data["withdrawScript"] == null ? null : Gs2.Gs2Money.Model.ScriptSetting.FromJson(data["withdrawScript"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money.Model.LogSetting.FromJson(data["logSetting"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["description"] = Description,
+                ["priority"] = Priority,
+                ["appleKey"] = AppleKey,
+                ["googleKey"] = GoogleKey,
+                ["enableFakeReceipt"] = EnableFakeReceipt,
+                ["createWalletScript"] = CreateWalletScript?.ToJson(),
+                ["depositScript"] = DepositScript?.ToJson(),
+                ["withdrawScript"] = WithdrawScript?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["description"] = description;
-            data["priority"] = priority;
-            data["appleKey"] = appleKey;
-            data["googleKey"] = googleKey;
-            data["enableFakeReceipt"] = enableFakeReceipt;
-            data["createWalletScript"] = createWalletScript.ToDict();
-            data["depositScript"] = depositScript.ToDict();
-            data["withdrawScript"] = withdrawScript.ToDict();
-            data["logSetting"] = logSetting.ToDict();
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (Priority != null) {
+                writer.WritePropertyName("priority");
+                writer.Write(Priority.ToString());
+            }
+            if (AppleKey != null) {
+                writer.WritePropertyName("appleKey");
+                writer.Write(AppleKey.ToString());
+            }
+            if (GoogleKey != null) {
+                writer.WritePropertyName("googleKey");
+                writer.Write(GoogleKey.ToString());
+            }
+            if (EnableFakeReceipt != null) {
+                writer.WritePropertyName("enableFakeReceipt");
+                writer.Write(bool.Parse(EnableFakeReceipt.ToString()));
+            }
+            if (CreateWalletScript != null) {
+                CreateWalletScript.WriteJson(writer);
+            }
+            if (DepositScript != null) {
+                DepositScript.WriteJson(writer);
+            }
+            if (WithdrawScript != null) {
+                WithdrawScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

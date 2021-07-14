@@ -28,108 +28,86 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DescribeMessagesRequest : Gs2Request<DescribeMessagesRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public string Password { set; get; }
+        public long? StartAt { set; get; }
+        public int? Limit { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DescribeMessagesRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ルーム名 */
-		[UnityEngine.SerializeField]
-        public string roomName;
-
-        /**
-         * ルーム名を設定
-         *
-         * @param roomName ルーム名
-         * @return this
-         */
         public DescribeMessagesRequest WithRoomName(string roomName) {
-            this.roomName = roomName;
+            this.RoomName = roomName;
             return this;
         }
 
-
-        /** メッセージを投稿するために必要となるパスワード */
-		[UnityEngine.SerializeField]
-        public string password;
-
-        /**
-         * メッセージを投稿するために必要となるパスワードを設定
-         *
-         * @param password メッセージを投稿するために必要となるパスワード
-         * @return this
-         */
         public DescribeMessagesRequest WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
 
-
-        /** メッセージの取得を開始する時間 */
-		[UnityEngine.SerializeField]
-        public long? startAt;
-
-        /**
-         * メッセージの取得を開始する時間を設定
-         *
-         * @param startAt メッセージの取得を開始する時間
-         * @return this
-         */
         public DescribeMessagesRequest WithStartAt(long? startAt) {
-            this.startAt = startAt;
+            this.StartAt = startAt;
             return this;
         }
 
-
-        /** データの取得件数 */
-		[UnityEngine.SerializeField]
-        public long? limit;
-
-        /**
-         * データの取得件数を設定
-         *
-         * @param limit データの取得件数
-         * @return this
-         */
-        public DescribeMessagesRequest WithLimit(long? limit) {
-            this.limit = limit;
+        public DescribeMessagesRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
-
 
     	[Preserve]
-        public static DescribeMessagesRequest FromDict(JsonData data)
+        public static DescribeMessagesRequest FromJson(JsonData data)
         {
-            return new DescribeMessagesRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                roomName = data.Keys.Contains("roomName") && data["roomName"] != null ? data["roomName"].ToString(): null,
-                password = data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString(): null,
-                startAt = data.Keys.Contains("startAt") && data["startAt"] != null ? (long?)long.Parse(data["startAt"].ToString()) : null,
-                limit = data.Keys.Contains("limit") && data["limit"] != null ? (long?)long.Parse(data["limit"].ToString()) : null,
+            if (data == null) {
+                return null;
+            }
+            return new DescribeMessagesRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)long.Parse(data["startAt"].ToString()))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["roomName"] = RoomName,
+                ["password"] = Password,
+                ["startAt"] = StartAt,
+                ["limit"] = Limit,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["roomName"] = roomName;
-            data["password"] = password;
-            data["startAt"] = startAt;
-            data["limit"] = limit;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RoomName != null) {
+                writer.WritePropertyName("roomName");
+                writer.Write(RoomName.ToString());
+            }
+            if (Password != null) {
+                writer.WritePropertyName("password");
+                writer.Write(Password.ToString());
+            }
+            if (StartAt != null) {
+                writer.WritePropertyName("startAt");
+                writer.Write(long.Parse(StartAt.ToString()));
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
@@ -24,14 +25,29 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Friend.Result
 {
 	[Preserve]
-	public class DeleteProfileByUserIdResult
+	[System.Serializable]
+	public class DeleteProfileByUserIdResult : IResult
 	{
 
     	[Preserve]
-        public static DeleteProfileByUserIdResult FromDict(JsonData data)
+        public static DeleteProfileByUserIdResult FromJson(JsonData data)
         {
-            return new DeleteProfileByUserIdResult {
+            if (data == null) {
+                return null;
+            }
+            return new DeleteProfileByUserIdResult();
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            writer.WriteObjectEnd();
+        }
+    }
 }

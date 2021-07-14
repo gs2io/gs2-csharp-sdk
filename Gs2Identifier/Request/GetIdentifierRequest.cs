@@ -28,54 +28,50 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class GetIdentifierRequest : Gs2Request<GetIdentifierRequest>
 	{
+        public string UserName { set; get; }
+        public string ClientId { set; get; }
 
-        /** ユーザー名 */
-		[UnityEngine.SerializeField]
-        public string userName;
-
-        /**
-         * ユーザー名を設定
-         *
-         * @param userName ユーザー名
-         * @return this
-         */
         public GetIdentifierRequest WithUserName(string userName) {
-            this.userName = userName;
+            this.UserName = userName;
             return this;
         }
 
-
-        /** クライアントID */
-		[UnityEngine.SerializeField]
-        public string clientId;
-
-        /**
-         * クライアントIDを設定
-         *
-         * @param clientId クライアントID
-         * @return this
-         */
         public GetIdentifierRequest WithClientId(string clientId) {
-            this.clientId = clientId;
+            this.ClientId = clientId;
             return this;
         }
-
 
     	[Preserve]
-        public static GetIdentifierRequest FromDict(JsonData data)
+        public static GetIdentifierRequest FromJson(JsonData data)
         {
-            return new GetIdentifierRequest {
-                userName = data.Keys.Contains("userName") && data["userName"] != null ? data["userName"].ToString(): null,
-                clientId = data.Keys.Contains("clientId") && data["clientId"] != null ? data["clientId"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetIdentifierRequest()
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithClientId(!data.Keys.Contains("clientId") || data["clientId"] == null ? null : data["clientId"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["userName"] = UserName,
+                ["clientId"] = ClientId,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["userName"] = userName;
-            data["clientId"] = clientId;
-            return data;
+            writer.WriteObjectStart();
+            if (UserName != null) {
+                writer.WritePropertyName("userName");
+                writer.Write(UserName.ToString());
+            }
+            if (ClientId != null) {
+                writer.WritePropertyName("clientId");
+                writer.Write(ClientId.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

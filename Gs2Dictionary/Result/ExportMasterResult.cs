@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Dictionary.Result
 {
 	[Preserve]
-	public class ExportMasterResult
+	[System.Serializable]
+	public class ExportMasterResult : IResult
 	{
-        /** 現在有効なエントリー設定 */
-        public CurrentEntryMaster item { set; get; }
+        public Gs2.Gs2Dictionary.Model.CurrentEntryMaster Item { set; get; }
 
+        public ExportMasterResult WithItem(Gs2.Gs2Dictionary.Model.CurrentEntryMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static ExportMasterResult FromDict(JsonData data)
+        public static ExportMasterResult FromJson(JsonData data)
         {
-            return new ExportMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Dictionary.Model.CurrentEntryMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new ExportMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Dictionary.Model.CurrentEntryMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

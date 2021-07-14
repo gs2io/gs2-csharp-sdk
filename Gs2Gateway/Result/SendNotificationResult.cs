@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Gateway.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Gateway.Result
 {
 	[Preserve]
-	public class SendNotificationResult
+	[System.Serializable]
+	public class SendNotificationResult : IResult
 	{
-        /** 通知に使用したプロトコル */
-        public string protocol { set; get; }
+        public string Protocol { set; get; }
 
+        public SendNotificationResult WithProtocol(string protocol) {
+            this.Protocol = protocol;
+            return this;
+        }
 
     	[Preserve]
-        public static SendNotificationResult FromDict(JsonData data)
+        public static SendNotificationResult FromJson(JsonData data)
         {
-            return new SendNotificationResult {
-                protocol = data.Keys.Contains("protocol") && data["protocol"] != null ? data["protocol"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new SendNotificationResult()
+                .WithProtocol(!data.Keys.Contains("protocol") || data["protocol"] == null ? null : data["protocol"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["protocol"] = Protocol,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Protocol != null) {
+                writer.WritePropertyName("protocol");
+                writer.Write(Protocol.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

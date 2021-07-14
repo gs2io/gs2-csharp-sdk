@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Schedule.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Schedule.Result
 {
 	[Preserve]
-	public class GetEventMasterResult
+	[System.Serializable]
+	public class GetEventMasterResult : IResult
 	{
-        /** イベントマスター */
-        public EventMaster item { set; get; }
+        public Gs2.Gs2Schedule.Model.EventMaster Item { set; get; }
 
+        public GetEventMasterResult WithItem(Gs2.Gs2Schedule.Model.EventMaster item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetEventMasterResult FromDict(JsonData data)
+        public static GetEventMasterResult FromJson(JsonData data)
         {
-            return new GetEventMasterResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Schedule.Model.EventMaster.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetEventMasterResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.EventMaster.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

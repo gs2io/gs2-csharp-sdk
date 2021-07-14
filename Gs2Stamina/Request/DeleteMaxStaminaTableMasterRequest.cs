@@ -28,54 +28,50 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DeleteMaxStaminaTableMasterRequest : Gs2Request<DeleteMaxStaminaTableMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MaxStaminaTableName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteMaxStaminaTableMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 最大スタミナ値テーブル名 */
-		[UnityEngine.SerializeField]
-        public string maxStaminaTableName;
-
-        /**
-         * 最大スタミナ値テーブル名を設定
-         *
-         * @param maxStaminaTableName 最大スタミナ値テーブル名
-         * @return this
-         */
         public DeleteMaxStaminaTableMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
-            this.maxStaminaTableName = maxStaminaTableName;
+            this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteMaxStaminaTableMasterRequest FromDict(JsonData data)
+        public static DeleteMaxStaminaTableMasterRequest FromJson(JsonData data)
         {
-            return new DeleteMaxStaminaTableMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                maxStaminaTableName = data.Keys.Contains("maxStaminaTableName") && data["maxStaminaTableName"] != null ? data["maxStaminaTableName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMaxStaminaTableMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMaxStaminaTableName(!data.Keys.Contains("maxStaminaTableName") || data["maxStaminaTableName"] == null ? null : data["maxStaminaTableName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["maxStaminaTableName"] = MaxStaminaTableName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["maxStaminaTableName"] = maxStaminaTableName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MaxStaminaTableName != null) {
+                writer.WritePropertyName("maxStaminaTableName");
+                writer.Write(MaxStaminaTableName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

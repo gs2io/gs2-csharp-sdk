@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Limit.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Limit.Result
 {
 	[Preserve]
-	public class GetLimitModelResult
+	[System.Serializable]
+	public class GetLimitModelResult : IResult
 	{
-        /** 回数制限の種類 */
-        public LimitModel item { set; get; }
+        public Gs2.Gs2Limit.Model.LimitModel Item { set; get; }
 
+        public GetLimitModelResult WithItem(Gs2.Gs2Limit.Model.LimitModel item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static GetLimitModelResult FromDict(JsonData data)
+        public static GetLimitModelResult FromJson(JsonData data)
         {
-            return new GetLimitModelResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Limit.Model.LimitModel.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new GetLimitModelResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Limit.Model.LimitModel.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

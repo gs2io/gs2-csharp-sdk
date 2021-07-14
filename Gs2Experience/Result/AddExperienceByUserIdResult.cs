@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Experience.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Experience.Result
 {
 	[Preserve]
-	public class AddExperienceByUserIdResult
+	[System.Serializable]
+	public class AddExperienceByUserIdResult : IResult
 	{
-        /** 加算後のステータス */
-        public Status item { set; get; }
+        public Gs2.Gs2Experience.Model.Status Item { set; get; }
 
+        public AddExperienceByUserIdResult WithItem(Gs2.Gs2Experience.Model.Status item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static AddExperienceByUserIdResult FromDict(JsonData data)
+        public static AddExperienceByUserIdResult FromJson(JsonData data)
         {
-            return new AddExperienceByUserIdResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Experience.Model.Status.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new AddExperienceByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

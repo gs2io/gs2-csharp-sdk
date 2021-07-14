@@ -28,36 +28,38 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ForgetRequest : Gs2Request<ForgetRequest>
 	{
+        public string Email { set; get; }
 
-        /** メールアドレス */
-		[UnityEngine.SerializeField]
-        public string email;
-
-        /**
-         * メールアドレスを設定
-         *
-         * @param email メールアドレス
-         * @return this
-         */
         public ForgetRequest WithEmail(string email) {
-            this.email = email;
+            this.Email = email;
             return this;
         }
 
-
     	[Preserve]
-        public static ForgetRequest FromDict(JsonData data)
+        public static ForgetRequest FromJson(JsonData data)
         {
-            return new ForgetRequest {
-                email = data.Keys.Contains("email") && data["email"] != null ? data["email"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new ForgetRequest()
+                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["email"] = Email,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["email"] = email;
-            return data;
+            writer.WriteObjectStart();
+            if (Email != null) {
+                writer.WritePropertyName("email");
+                writer.Write(Email.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,120 +23,97 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Version.Model
 {
+
 	[Preserve]
 	public class Version_ : IComparable
 	{
+        public int? Major { set; get; }
+        public int? Minor { set; get; }
+        public int? Micro { set; get; }
 
-        /** メジャーバージョン */
-        public int? major { set; get; }
-
-        /**
-         * メジャーバージョンを設定
-         *
-         * @param major メジャーバージョン
-         * @return this
-         */
         public Version_ WithMajor(int? major) {
-            this.major = major;
+            this.Major = major;
             return this;
         }
 
-        /** マイナーバージョン */
-        public int? minor { set; get; }
-
-        /**
-         * マイナーバージョンを設定
-         *
-         * @param minor マイナーバージョン
-         * @return this
-         */
         public Version_ WithMinor(int? minor) {
-            this.minor = minor;
+            this.Minor = minor;
             return this;
         }
 
-        /** マイクロバージョン */
-        public int? micro { set; get; }
-
-        /**
-         * マイクロバージョンを設定
-         *
-         * @param micro マイクロバージョン
-         * @return this
-         */
         public Version_ WithMicro(int? micro) {
-            this.micro = micro;
+            this.Micro = micro;
             return this;
+        }
+
+    	[Preserve]
+        public static Version_ FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Version_()
+                .WithMajor(!data.Keys.Contains("major") || data["major"] == null ? null : (int?)int.Parse(data["major"].ToString()))
+                .WithMinor(!data.Keys.Contains("minor") || data["minor"] == null ? null : (int?)int.Parse(data["minor"].ToString()))
+                .WithMicro(!data.Keys.Contains("micro") || data["micro"] == null ? null : (int?)int.Parse(data["micro"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["major"] = Major,
+                ["minor"] = Minor,
+                ["micro"] = Micro,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.major.HasValue)
-            {
+            if (Major != null) {
                 writer.WritePropertyName("major");
-                writer.Write(this.major.Value);
+                writer.Write(int.Parse(Major.ToString()));
             }
-            if(this.minor.HasValue)
-            {
+            if (Minor != null) {
                 writer.WritePropertyName("minor");
-                writer.Write(this.minor.Value);
+                writer.Write(int.Parse(Minor.ToString()));
             }
-            if(this.micro.HasValue)
-            {
+            if (Micro != null) {
                 writer.WritePropertyName("micro");
-                writer.Write(this.micro.Value);
+                writer.Write(int.Parse(Micro.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    	[Preserve]
-        public static Version_ FromDict(JsonData data)
-        {
-            return new Version_()
-                .WithMajor(data.Keys.Contains("major") && data["major"] != null ? (int?)int.Parse(data["major"].ToString()) : null)
-                .WithMinor(data.Keys.Contains("minor") && data["minor"] != null ? (int?)int.Parse(data["minor"].ToString()) : null)
-                .WithMicro(data.Keys.Contains("micro") && data["micro"] != null ? (int?)int.Parse(data["micro"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Version_;
             var diff = 0;
-            if (major == null && major == other.major)
+            if (Major == null && Major == other.Major)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(major - other.major);
+                diff += (int)(Major - other.Major);
             }
-            if (minor == null && minor == other.minor)
+            if (Minor == null && Minor == other.Minor)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(minor - other.minor);
+                diff += (int)(Minor - other.Minor);
             }
-            if (micro == null && micro == other.micro)
+            if (Micro == null && Micro == other.Micro)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(micro - other.micro);
+                diff += (int)(Micro - other.Micro);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["major"] = major;
-            data["minor"] = minor;
-            data["micro"] = micro;
-            return data;
-        }
-	}
+    }
 }

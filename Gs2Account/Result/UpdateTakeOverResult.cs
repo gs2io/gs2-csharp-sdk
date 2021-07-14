@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Account.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,40 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Account.Result
 {
 	[Preserve]
-	public class UpdateTakeOverResult
+	[System.Serializable]
+	public class UpdateTakeOverResult : IResult
 	{
-        /** 引き継ぎ設定 */
-        public TakeOver item { set; get; }
+        public Gs2.Gs2Account.Model.TakeOver Item { set; get; }
 
+        public UpdateTakeOverResult WithItem(Gs2.Gs2Account.Model.TakeOver item) {
+            this.Item = item;
+            return this;
+        }
 
     	[Preserve]
-        public static UpdateTakeOverResult FromDict(JsonData data)
+        public static UpdateTakeOverResult FromJson(JsonData data)
         {
-            return new UpdateTakeOverResult {
-                item = data.Keys.Contains("item") && data["item"] != null ? Gs2.Gs2Account.Model.TakeOver.FromDict(data["item"]) : null,
+            if (data == null) {
+                return null;
+            }
+            return new UpdateTakeOverResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Account.Model.TakeOver.FromJson(data["item"]));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }

@@ -28,54 +28,50 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class GetRateModelMasterRequest : Gs2Request<GetRateModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string RateName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public GetRateModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** 交換レート名 */
-		[UnityEngine.SerializeField]
-        public string rateName;
-
-        /**
-         * 交換レート名を設定
-         *
-         * @param rateName 交換レート名
-         * @return this
-         */
         public GetRateModelMasterRequest WithRateName(string rateName) {
-            this.rateName = rateName;
+            this.RateName = rateName;
             return this;
         }
-
 
     	[Preserve]
-        public static GetRateModelMasterRequest FromDict(JsonData data)
+        public static GetRateModelMasterRequest FromJson(JsonData data)
         {
-            return new GetRateModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                rateName = data.Keys.Contains("rateName") && data["rateName"] != null ? data["rateName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new GetRateModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["rateName"] = RateName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["rateName"] = rateName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (RateName != null) {
+                writer.WritePropertyName("rateName");
+                writer.Write(RateName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

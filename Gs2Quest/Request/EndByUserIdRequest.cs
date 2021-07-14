@@ -28,152 +28,120 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class EndByUserIdRequest : Gs2Request<EndByUserIdRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string UserId { set; get; }
+        public string TransactionId { set; get; }
+        public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
+        public bool? IsComplete { set; get; }
+        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
 
-        /** カテゴリ名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * カテゴリ名を設定
-         *
-         * @param namespaceName カテゴリ名
-         * @return this
-         */
         public EndByUserIdRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ユーザーID */
-		[UnityEngine.SerializeField]
-        public string userId;
-
-        /**
-         * ユーザーIDを設定
-         *
-         * @param userId ユーザーID
-         * @return this
-         */
         public EndByUserIdRequest WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-
-        /** トランザクションID */
-		[UnityEngine.SerializeField]
-        public string transactionId;
-
-        /**
-         * トランザクションIDを設定
-         *
-         * @param transactionId トランザクションID
-         * @return this
-         */
         public EndByUserIdRequest WithTransactionId(string transactionId) {
-            this.transactionId = transactionId;
+            this.TransactionId = transactionId;
             return this;
         }
 
-
-        /** 実際にクエストで得た報酬 */
-		[UnityEngine.SerializeField]
-        public List<Reward> rewards;
-
-        /**
-         * 実際にクエストで得た報酬を設定
-         *
-         * @param rewards 実際にクエストで得た報酬
-         * @return this
-         */
-        public EndByUserIdRequest WithRewards(List<Reward> rewards) {
-            this.rewards = rewards;
+        public EndByUserIdRequest WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
+            this.Rewards = rewards;
             return this;
         }
 
-
-        /** クエストをクリアしたか */
-		[UnityEngine.SerializeField]
-        public bool? isComplete;
-
-        /**
-         * クエストをクリアしたかを設定
-         *
-         * @param isComplete クエストをクリアしたか
-         * @return this
-         */
         public EndByUserIdRequest WithIsComplete(bool? isComplete) {
-            this.isComplete = isComplete;
+            this.IsComplete = isComplete;
             return this;
         }
 
-
-        /** スタンプシートの変数に適用する設定値 */
-		[UnityEngine.SerializeField]
-        public List<Config> config;
-
-        /**
-         * スタンプシートの変数に適用する設定値を設定
-         *
-         * @param config スタンプシートの変数に適用する設定値
-         * @return this
-         */
-        public EndByUserIdRequest WithConfig(List<Config> config) {
-            this.config = config;
+        public EndByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
-
-
-        /** 重複実行回避機能に使用するID */
-		[UnityEngine.SerializeField]
-        public string duplicationAvoider;
-
-        /**
-         * 重複実行回避機能に使用するIDを設定
-         *
-         * @param duplicationAvoider 重複実行回避機能に使用するID
-         * @return this
-         */
-        public EndByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.duplicationAvoider = duplicationAvoider;
-            return this;
-        }
-
 
     	[Preserve]
-        public static EndByUserIdRequest FromDict(JsonData data)
+        public static EndByUserIdRequest FromJson(JsonData data)
         {
-            return new EndByUserIdRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                userId = data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString(): null,
-                transactionId = data.Keys.Contains("transactionId") && data["transactionId"] != null ? data["transactionId"].ToString(): null,
-                rewards = data.Keys.Contains("rewards") && data["rewards"] != null ? data["rewards"].Cast<JsonData>().Select(value =>
-                    {
-                        return Reward.FromDict(value);
-                    }
-                ).ToList() : null,
-                isComplete = data.Keys.Contains("isComplete") && data["isComplete"] != null ? (bool?)bool.Parse(data["isComplete"].ToString()) : null,
-                config = data.Keys.Contains("config") && data["config"] != null ? data["config"].Cast<JsonData>().Select(value =>
-                    {
-                        return Config.FromDict(value);
-                    }
-                ).ToList() : null,
-                duplicationAvoider = data.Keys.Contains("duplicationAvoider") && data["duplicationAvoider"] != null ? data["duplicationAvoider"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new EndByUserIdRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null ? new Gs2.Gs2Quest.Model.Reward[]{} : data["rewards"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Reward.FromJson(v);
+                }).ToArray())
+                .WithIsComplete(!data.Keys.Contains("isComplete") || data["isComplete"] == null ? null : (bool?)bool.Parse(data["isComplete"].ToString()))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Quest.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Config.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["userId"] = UserId,
+                ["transactionId"] = TransactionId,
+                ["rewards"] = new JsonData(Rewards == null ? new JsonData[]{} :
+                        Rewards.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
+                ["isComplete"] = IsComplete,
+                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                        Config.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["userId"] = userId;
-            data["transactionId"] = transactionId;
-            data["rewards"] = new JsonData(rewards.Select(item => item.ToDict()));
-            data["isComplete"] = isComplete;
-            data["config"] = new JsonData(config.Select(item => item.ToDict()));
-            data["duplicationAvoider"] = duplicationAvoider;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (TransactionId != null) {
+                writer.WritePropertyName("transactionId");
+                writer.Write(TransactionId.ToString());
+            }
+            writer.WriteArrayStart();
+            foreach (var reward in Rewards)
+            {
+                if (reward != null) {
+                    reward.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            if (IsComplete != null) {
+                writer.WritePropertyName("isComplete");
+                writer.Write(bool.Parse(IsComplete.ToString()));
+            }
+            writer.WriteArrayStart();
+            foreach (var confi in Config)
+            {
+                if (confi != null) {
+                    confi.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

@@ -23,326 +23,214 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Gs2Chat.Model
 {
+
 	[Preserve]
 	public class Room : IComparable
 	{
+        public string RoomId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string Metadata { set; get; }
+        public string Password { set; get; }
+        public string[] WhiteListUserIds { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
 
-        /** ルーム */
-        public string roomId { set; get; }
-
-        /**
-         * ルームを設定
-         *
-         * @param roomId ルーム
-         * @return this
-         */
         public Room WithRoomId(string roomId) {
-            this.roomId = roomId;
+            this.RoomId = roomId;
             return this;
         }
 
-        /** ルーム名 */
-        public string name { set; get; }
-
-        /**
-         * ルーム名を設定
-         *
-         * @param name ルーム名
-         * @return this
-         */
         public Room WithName(string name) {
-            this.name = name;
+            this.Name = name;
             return this;
         }
 
-        /** ルームを作成したユーザID */
-        public string userId { set; get; }
-
-        /**
-         * ルームを作成したユーザIDを設定
-         *
-         * @param userId ルームを作成したユーザID
-         * @return this
-         */
         public Room WithUserId(string userId) {
-            this.userId = userId;
+            this.UserId = userId;
             return this;
         }
 
-        /** メタデータ */
-        public string metadata { set; get; }
-
-        /**
-         * メタデータを設定
-         *
-         * @param metadata メタデータ
-         * @return this
-         */
         public Room WithMetadata(string metadata) {
-            this.metadata = metadata;
+            this.Metadata = metadata;
             return this;
         }
 
-        /** メッセージを投稿するために必要となるパスワード */
-        public string password { set; get; }
-
-        /**
-         * メッセージを投稿するために必要となるパスワードを設定
-         *
-         * @param password メッセージを投稿するために必要となるパスワード
-         * @return this
-         */
         public Room WithPassword(string password) {
-            this.password = password;
+            this.Password = password;
             return this;
         }
 
-        /** ルームに参加可能なユーザIDリスト */
-        public List<string> whiteListUserIds { set; get; }
-
-        /**
-         * ルームに参加可能なユーザIDリストを設定
-         *
-         * @param whiteListUserIds ルームに参加可能なユーザIDリスト
-         * @return this
-         */
-        public Room WithWhiteListUserIds(List<string> whiteListUserIds) {
-            this.whiteListUserIds = whiteListUserIds;
+        public Room WithWhiteListUserIds(string[] whiteListUserIds) {
+            this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
 
-        /** 作成日時 */
-        public long? createdAt { set; get; }
-
-        /**
-         * 作成日時を設定
-         *
-         * @param createdAt 作成日時
-         * @return this
-         */
         public Room WithCreatedAt(long? createdAt) {
-            this.createdAt = createdAt;
+            this.CreatedAt = createdAt;
             return this;
         }
 
-        /** 最終更新日時 */
-        public long? updatedAt { set; get; }
-
-        /**
-         * 最終更新日時を設定
-         *
-         * @param updatedAt 最終更新日時
-         * @return this
-         */
         public Room WithUpdatedAt(long? updatedAt) {
-            this.updatedAt = updatedAt;
+            this.UpdatedAt = updatedAt;
             return this;
+        }
+
+    	[Preserve]
+        public static Room FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new Room()
+                .WithRoomId(!data.Keys.Contains("roomId") || data["roomId"] == null ? null : data["roomId"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["roomId"] = RoomId,
+                ["name"] = Name,
+                ["userId"] = UserId,
+                ["metadata"] = Metadata,
+                ["password"] = Password,
+                ["whiteListUserIds"] = new JsonData(WhiteListUserIds == null ? new JsonData[]{} :
+                        WhiteListUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["createdAt"] = CreatedAt,
+                ["updatedAt"] = UpdatedAt,
+            };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if(this.roomId != null)
-            {
+            if (RoomId != null) {
                 writer.WritePropertyName("roomId");
-                writer.Write(this.roomId);
+                writer.Write(RoomId.ToString());
             }
-            if(this.name != null)
-            {
+            if (Name != null) {
                 writer.WritePropertyName("name");
-                writer.Write(this.name);
+                writer.Write(Name.ToString());
             }
-            if(this.userId != null)
-            {
+            if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(this.userId);
+                writer.Write(UserId.ToString());
             }
-            if(this.metadata != null)
-            {
+            if (Metadata != null) {
                 writer.WritePropertyName("metadata");
-                writer.Write(this.metadata);
+                writer.Write(Metadata.ToString());
             }
-            if(this.password != null)
-            {
+            if (Password != null) {
                 writer.WritePropertyName("password");
-                writer.Write(this.password);
+                writer.Write(Password.ToString());
             }
-            if(this.whiteListUserIds != null)
-            {
+            if (WhiteListUserIds != null) {
                 writer.WritePropertyName("whiteListUserIds");
                 writer.WriteArrayStart();
-                foreach(var item in this.whiteListUserIds)
+                foreach (var whiteListUserId in WhiteListUserIds)
                 {
-                    writer.Write(item);
+                    if (whiteListUserId != null) {
+                        writer.Write(whiteListUserId.ToString());
+                    }
                 }
                 writer.WriteArrayEnd();
             }
-            if(this.createdAt.HasValue)
-            {
+            if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(this.createdAt.Value);
+                writer.Write(long.Parse(CreatedAt.ToString()));
             }
-            if(this.updatedAt.HasValue)
-            {
+            if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(this.updatedAt.Value);
+                writer.Write(long.Parse(UpdatedAt.ToString()));
             }
             writer.WriteObjectEnd();
-        }
-
-    public static string GetRoomNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["roomName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["roomName"].Value;
-    }
-
-    public static string GetNamespaceNameFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["namespaceName"].Success)
-        {
-            return null;
-        }
-        return match.Groups["namespaceName"].Value;
-    }
-
-    public static string GetOwnerIdFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["ownerId"].Success)
-        {
-            return null;
-        }
-        return match.Groups["ownerId"].Value;
-    }
-
-    public static string GetRegionFromGrn(
-        string grn
-    )
-    {
-        var match = Regex.Match(grn, "grn:gs2:(?<region>.*):(?<ownerId>.*):chat:(?<namespaceName>.*):room:(?<roomName>.*)");
-        if (!match.Groups["region"].Success)
-        {
-            return null;
-        }
-        return match.Groups["region"].Value;
-    }
-
-    	[Preserve]
-        public static Room FromDict(JsonData data)
-        {
-            return new Room()
-                .WithRoomId(data.Keys.Contains("roomId") && data["roomId"] != null ? data["roomId"].ToString() : null)
-                .WithName(data.Keys.Contains("name") && data["name"] != null ? data["name"].ToString() : null)
-                .WithUserId(data.Keys.Contains("userId") && data["userId"] != null ? data["userId"].ToString() : null)
-                .WithMetadata(data.Keys.Contains("metadata") && data["metadata"] != null ? data["metadata"].ToString() : null)
-                .WithPassword(data.Keys.Contains("password") && data["password"] != null ? data["password"].ToString() : null)
-                .WithWhiteListUserIds(data.Keys.Contains("whiteListUserIds") && data["whiteListUserIds"] != null ? data["whiteListUserIds"].Cast<JsonData>().Select(value =>
-                    {
-                        return value.ToString();
-                    }
-                ).ToList() : null)
-                .WithCreatedAt(data.Keys.Contains("createdAt") && data["createdAt"] != null ? (long?)long.Parse(data["createdAt"].ToString()) : null)
-                .WithUpdatedAt(data.Keys.Contains("updatedAt") && data["updatedAt"] != null ? (long?)long.Parse(data["updatedAt"].ToString()) : null);
         }
 
         public int CompareTo(object obj)
         {
             var other = obj as Room;
             var diff = 0;
-            if (roomId == null && roomId == other.roomId)
+            if (RoomId == null && RoomId == other.RoomId)
             {
                 // null and null
             }
             else
             {
-                diff += roomId.CompareTo(other.roomId);
+                diff += RoomId.CompareTo(other.RoomId);
             }
-            if (name == null && name == other.name)
+            if (Name == null && Name == other.Name)
             {
                 // null and null
             }
             else
             {
-                diff += name.CompareTo(other.name);
+                diff += Name.CompareTo(other.Name);
             }
-            if (userId == null && userId == other.userId)
+            if (UserId == null && UserId == other.UserId)
             {
                 // null and null
             }
             else
             {
-                diff += userId.CompareTo(other.userId);
+                diff += UserId.CompareTo(other.UserId);
             }
-            if (metadata == null && metadata == other.metadata)
+            if (Metadata == null && Metadata == other.Metadata)
             {
                 // null and null
             }
             else
             {
-                diff += metadata.CompareTo(other.metadata);
+                diff += Metadata.CompareTo(other.Metadata);
             }
-            if (password == null && password == other.password)
+            if (Password == null && Password == other.Password)
             {
                 // null and null
             }
             else
             {
-                diff += password.CompareTo(other.password);
+                diff += Password.CompareTo(other.Password);
             }
-            if (whiteListUserIds == null && whiteListUserIds == other.whiteListUserIds)
+            if (WhiteListUserIds == null && WhiteListUserIds == other.WhiteListUserIds)
             {
                 // null and null
             }
             else
             {
-                diff += whiteListUserIds.Count - other.whiteListUserIds.Count;
-                for (var i = 0; i < whiteListUserIds.Count; i++)
+                diff += WhiteListUserIds.Length - other.WhiteListUserIds.Length;
+                for (var i = 0; i < WhiteListUserIds.Length; i++)
                 {
-                    diff += whiteListUserIds[i].CompareTo(other.whiteListUserIds[i]);
+                    diff += WhiteListUserIds[i].CompareTo(other.WhiteListUserIds[i]);
                 }
             }
-            if (createdAt == null && createdAt == other.createdAt)
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(createdAt - other.createdAt);
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
-            if (updatedAt == null && updatedAt == other.updatedAt)
+            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(updatedAt - other.updatedAt);
+                diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
         }
-
-        public JsonData ToDict()
-        {
-            var data = new JsonData();
-            data["roomId"] = roomId;
-            data["name"] = name;
-            data["userId"] = userId;
-            data["metadata"] = metadata;
-            data["password"] = password;
-            data["whiteListUserIds"] = new JsonData(whiteListUserIds);
-            data["createdAt"] = createdAt;
-            data["updatedAt"] = updatedAt;
-            return data;
-        }
-	}
+    }
 }

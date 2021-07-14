@@ -28,72 +28,62 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DeleteMissionTaskModelMasterRequest : Gs2Request<DeleteMissionTaskModelMasterRequest>
 	{
+        public string NamespaceName { set; get; }
+        public string MissionGroupName { set; get; }
+        public string MissionTaskName { set; get; }
 
-        /** ネームスペース名 */
-		[UnityEngine.SerializeField]
-        public string namespaceName;
-
-        /**
-         * ネームスペース名を設定
-         *
-         * @param namespaceName ネームスペース名
-         * @return this
-         */
         public DeleteMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
-            this.namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             return this;
         }
 
-
-        /** ミッショングループ名 */
-		[UnityEngine.SerializeField]
-        public string missionGroupName;
-
-        /**
-         * ミッショングループ名を設定
-         *
-         * @param missionGroupName ミッショングループ名
-         * @return this
-         */
         public DeleteMissionTaskModelMasterRequest WithMissionGroupName(string missionGroupName) {
-            this.missionGroupName = missionGroupName;
+            this.MissionGroupName = missionGroupName;
             return this;
         }
 
-
-        /** タスク名 */
-		[UnityEngine.SerializeField]
-        public string missionTaskName;
-
-        /**
-         * タスク名を設定
-         *
-         * @param missionTaskName タスク名
-         * @return this
-         */
         public DeleteMissionTaskModelMasterRequest WithMissionTaskName(string missionTaskName) {
-            this.missionTaskName = missionTaskName;
+            this.MissionTaskName = missionTaskName;
             return this;
         }
-
 
     	[Preserve]
-        public static DeleteMissionTaskModelMasterRequest FromDict(JsonData data)
+        public static DeleteMissionTaskModelMasterRequest FromJson(JsonData data)
         {
-            return new DeleteMissionTaskModelMasterRequest {
-                namespaceName = data.Keys.Contains("namespaceName") && data["namespaceName"] != null ? data["namespaceName"].ToString(): null,
-                missionGroupName = data.Keys.Contains("missionGroupName") && data["missionGroupName"] != null ? data["missionGroupName"].ToString(): null,
-                missionTaskName = data.Keys.Contains("missionTaskName") && data["missionTaskName"] != null ? data["missionTaskName"].ToString(): null,
+            if (data == null) {
+                return null;
+            }
+            return new DeleteMissionTaskModelMasterRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithMissionTaskName(!data.Keys.Contains("missionTaskName") || data["missionTaskName"] == null ? null : data["missionTaskName"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceName"] = NamespaceName,
+                ["missionGroupName"] = MissionGroupName,
+                ["missionTaskName"] = MissionTaskName,
             };
         }
 
-        public JsonData ToDict()
+        public void WriteJson(JsonWriter writer)
         {
-            var data = new JsonData();
-            data["namespaceName"] = namespaceName;
-            data["missionGroupName"] = missionGroupName;
-            data["missionTaskName"] = missionTaskName;
-            return data;
+            writer.WriteObjectStart();
+            if (NamespaceName != null) {
+                writer.WritePropertyName("namespaceName");
+                writer.Write(NamespaceName.ToString());
+            }
+            if (MissionGroupName != null) {
+                writer.WritePropertyName("missionGroupName");
+                writer.Write(MissionGroupName.ToString());
+            }
+            if (MissionTaskName != null) {
+                writer.WritePropertyName("missionTaskName");
+                writer.Write(MissionTaskName.ToString());
+            }
+            writer.WriteObjectEnd();
         }
-	}
+    }
 }

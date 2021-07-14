@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Project.Model;
 using Gs2.Util.LitJson;
@@ -24,18 +25,41 @@ using UnityEngine.Scripting;
 namespace Gs2.Gs2Project.Result
 {
 	[Preserve]
-	public class IssuePasswordResult
+	[System.Serializable]
+	public class IssuePasswordResult : IResult
 	{
-        /** 新しいパスワード */
-        public string newPassword { set; get; }
+        public string NewPassword { set; get; }
 
+        public IssuePasswordResult WithNewPassword(string newPassword) {
+            this.NewPassword = newPassword;
+            return this;
+        }
 
     	[Preserve]
-        public static IssuePasswordResult FromDict(JsonData data)
+        public static IssuePasswordResult FromJson(JsonData data)
         {
-            return new IssuePasswordResult {
-                newPassword = data.Keys.Contains("newPassword") && data["newPassword"] != null ? data["newPassword"].ToString() : null,
+            if (data == null) {
+                return null;
+            }
+            return new IssuePasswordResult()
+                .WithNewPassword(!data.Keys.Contains("newPassword") || data["newPassword"] == null ? null : data["newPassword"].ToString());
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["newPassword"] = NewPassword,
             };
         }
-	}
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (NewPassword != null) {
+                writer.WritePropertyName("newPassword");
+                writer.Write(NewPassword.ToString());
+            }
+            writer.WriteObjectEnd();
+        }
+    }
 }
