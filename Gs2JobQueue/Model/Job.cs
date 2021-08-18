@@ -34,7 +34,6 @@ namespace Gs2.Gs2JobQueue.Model
         public string Args { set; get; }
         public int? CurrentRetryCount { set; get; }
         public int? MaxTryCount { set; get; }
-        public double? Index { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
 
@@ -73,11 +72,6 @@ namespace Gs2.Gs2JobQueue.Model
             return this;
         }
 
-        public Job WithIndex(double? index) {
-            this.Index = index;
-            return this;
-        }
-
         public Job WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
@@ -102,7 +96,6 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
                 .WithCurrentRetryCount(!data.Keys.Contains("currentRetryCount") || data["currentRetryCount"] == null ? null : (int?)int.Parse(data["currentRetryCount"].ToString()))
                 .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)int.Parse(data["maxTryCount"].ToString()))
-                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (double?)double.Parse(data["index"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -117,7 +110,6 @@ namespace Gs2.Gs2JobQueue.Model
                 ["args"] = Args,
                 ["currentRetryCount"] = CurrentRetryCount,
                 ["maxTryCount"] = MaxTryCount,
-                ["index"] = Index,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -153,10 +145,6 @@ namespace Gs2.Gs2JobQueue.Model
             if (MaxTryCount != null) {
                 writer.WritePropertyName("maxTryCount");
                 writer.Write(int.Parse(MaxTryCount.ToString()));
-            }
-            if (Index != null) {
-                writer.WritePropertyName("index");
-                writer.Write(double.Parse(Index.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -228,14 +216,6 @@ namespace Gs2.Gs2JobQueue.Model
             else
             {
                 diff += (int)(MaxTryCount - other.MaxTryCount);
-            }
-            if (Index == null && Index == other.Index)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Index - other.Index);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

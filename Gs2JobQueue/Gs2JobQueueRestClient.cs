@@ -590,11 +590,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2JobQueue
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Jobs)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }

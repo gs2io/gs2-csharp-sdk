@@ -1116,6 +1116,82 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Matchmaking
 			return Gs2RestSession.Execute(task);
         }
 
+        private class DoMatchmakingByUserIdTask : Gs2RestSessionTask<Result.DoMatchmakingByUserIdResult>
+        {
+			private readonly Request.DoMatchmakingByUserIdRequest _request;
+
+			public DoMatchmakingByUserIdTask(Request.DoMatchmakingByUserIdRequest request, UnityAction<AsyncResult<Result.DoMatchmakingByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/gathering/do";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+
+                UnityWebRequest.url = url;
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (_request.Player != null)
+                {
+                    jsonWriter.WritePropertyName("player");
+                    _request.Player.WriteJson(jsonWriter);
+                }
+                if (_request.MatchmakingContextToken != null)
+                {
+                    jsonWriter.WritePropertyName("matchmakingContextToken");
+                    jsonWriter.Write(_request.MatchmakingContextToken.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                }
+                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator DoMatchmakingByUserId(
+                Request.DoMatchmakingByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DoMatchmakingByUserIdResult>> callback
+        )
+		{
+			var task = new DoMatchmakingByUserIdTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
         private class GetGatheringTask : Gs2RestSessionTask<Result.GetGatheringResult>
         {
 			private readonly Request.GetGatheringRequest _request;
