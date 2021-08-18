@@ -21,8 +21,9 @@ using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
 using UnityEngine;
-using Gs2.Util.WebSocketSharp;
+using HybridWebSocket;
 using UnityEngine.Scripting;
+using WebSocket = Gs2.Util.WebSocketSharp.WebSocket;
 
 namespace Gs2.Core.Net
 {
@@ -73,13 +74,157 @@ namespace Gs2.Core.Net
         private State _state = State.Idle;
         private Gs2Exception _lastGs2Exception = null;
 
+#if UNITY_WEBGL
+        private HybridWebSocket.WebSocket _webSocket;
+#else
         private WebSocket _webSocket;
+#endif
         private bool _checkCertificateRevocation;
 
+#if UNITY_WEBGL
+        private HybridWebSocket.WebSocket CreateWebSocket()
+#else
         private WebSocket CreateWebSocket()
+#endif
         {
             var url = EndpointHost.Replace("{region}", Region.DisplayName());
 
+#if UNITY_WEBGL
+            var webSocket = WebSocketFactory.CreateInstance(url);
+            
+            webSocket.OnOpen += () =>
+            {
+                _state = State.LoggingIn;
+
+                webSocket.Send(
+                    System.Text.Encoding.UTF8.GetBytes("{" +
+                                                      $"\"client_id\": \"{Credential.ClientId}\"," +
+                                                      $"\"client_secret\": \"{Credential.ClientSecret}\"," +
+                                                      "\"x_gs2\": {" +
+                                                      "\"service\": \"identifier\"," +
+                                                      "\"component\": \"projectToken\"," +
+                                                      "\"function\": \"login\"," +
+                                                      "\"contentType\": \"application/json\"," +
+                                                      $"\"requestId\": \"{Gs2SessionTaskId.LoginId.ToString()}\"" +
+                                                      "}" +
+                                                      "}")
+                );
+            };
+
+            webSocket.OnMessage += (message) =>
+            {
+                var gs2WebSocketResponse = new Gs2WebSocketResponse(System.Text.Encoding.UTF8.GetString(message));
+
+                switch (_state)
+                {
+                    case State.LoggingIn:
+                        if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.LoginId)
+                        {
+                            if (gs2WebSocketResponse.Error == null)
+                            {
+                                LoginResult loginResult = LoginResult.FromJson(gs2WebSocketResponse.Body);
+                                if (loginResult.access_token != null)
+                                {
+                                    _state = State.Available;
+                                    OpenCallback(loginResult.access_token, null);
+                                }
+                                else
+                                {
+                                    _lastGs2Exception = new UnknownException("No project token returned.");
+                                    _state = State.LoginFailed;
+                                    
+                                    webSocket.Close();
+                                }
+                            }
+                            else
+                            {
+                                _lastGs2Exception = gs2WebSocketResponse.Error;
+                                _state = State.LoginFailed;
+
+                                webSocket.Close();
+                            }
+                        }
+                        break;
+
+                    case State.Available:
+                        if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
+                        {
+                            // API 応答以外のメッセージ
+                            OnNotificationMessage?.Invoke(
+                                NotificationMessage.FromJson(gs2WebSocketResponse.Body)
+                            );
+                        }
+                        else
+                        {
+                            OnMessage(gs2WebSocketResponse.Gs2SessionTaskId, gs2WebSocketResponse);
+                        }
+                        break;
+                    
+                    case State.Idle:
+                    case State.Opening:
+                    case State.LoginFailed:
+                        break;
+                }
+            };
+
+            webSocket.OnClose += (closeEventArgs) =>
+            {
+                var state = _state;
+
+                _state = State.Idle;
+
+                switch (state)
+                {
+                    case State.Idle:
+                        // 来ない
+                        break;
+                    
+                    case State.Opening:    // TODO: OnError を通ってからくるか確認
+                    case State.LoggingIn:
+                    case State.LoginFailed:
+                        // Gs2Session としては Available になっていないので closeCallback ではなく openCallback に失敗を伝える
+                        OpenCallback(null, _lastGs2Exception);
+                        break;
+                    
+                    case State.Available:
+                        // 自発的な切断も外部要因による切断もここ
+                        CloseCallback();    // TODO: Cancel にわたすエラーを引数に取る
+                        break;
+                }
+            };
+
+            webSocket.OnError += (errorEventArgs) =>
+            {
+                var gs2Exception = new SessionNotOpenException("Session no longer open.");
+
+                switch (_state)
+                {
+                    case State.Idle:
+                        // 来ない
+                        break;
+                    
+                    case State.Opening:
+                        // この直後に OnClose が呼ばれる
+                        _lastGs2Exception = gs2Exception;
+                        break;
+                    
+                    case State.LoggingIn:
+                        _lastGs2Exception = gs2Exception;
+                        _state = State.LoginFailed;
+                        webSocket.Close();
+                        break;
+                        
+                    case State.LoginFailed:
+                        // 来ないはず
+                        break;
+                    
+                    case State.Available:
+                        // 実行中のタスクのどれが失敗したのかわからないので、全部失敗にする
+                        // TODO
+                        break;
+                }
+            };
+#else
             var webSocket = new WebSocket(url) {SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12, CheckCertificateRevocation = _checkCertificateRevocation}};
 
             webSocket.OnOpen += (sender, eventArgs) =>
@@ -218,6 +363,7 @@ namespace Gs2.Core.Net
                         break;
                 }
             };
+#endif
 
             return webSocket;
         }
@@ -248,7 +394,11 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
+#if UNITY_WEBGL
+            _webSocket.Send(System.Text.Encoding.UTF8.GetBytes(message));
+#else
             _webSocket.SendAsync(message, null);
+#endif
         }
 
         protected override IEnumerator OpenImpl()
@@ -259,7 +409,11 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
+#if UNITY_WEBGL
+            _webSocket.Connect();
+#else
             _webSocket.ConnectAsync();
+#endif
 
             yield break;
         }
@@ -270,7 +424,11 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
+#if UNITY_WEBGL
+            _webSocket.Close();
+#else
             _webSocket.CloseAsync();
+#endif
 
             yield break;
         }
@@ -285,7 +443,11 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
+#if UNITY_WEBGL
+            _webSocket.Close();
+#else
             _webSocket.CloseAsync();
+#endif
 
             yield break;
         }
