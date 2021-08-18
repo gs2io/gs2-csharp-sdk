@@ -25,28 +25,28 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 
 	[Preserve]
-	public class Attribute : IComparable
+	public class Attribute_ : IComparable
 	{
         public string Name { set; get; }
         public int? Value { set; get; }
 
-        public Attribute WithName(string name) {
+        public Attribute_ WithName(string name) {
             this.Name = name;
             return this;
         }
 
-        public Attribute WithValue(int? value) {
+        public Attribute_ WithValue(int? value) {
             this.Value = value;
             return this;
         }
 
     	[Preserve]
-        public static Attribute FromJson(JsonData data)
+        public static Attribute_ FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new Attribute()
+            return new Attribute_()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()));
         }
@@ -75,7 +75,7 @@ namespace Gs2.Gs2Matchmaking.Model
 
         public int CompareTo(object obj)
         {
-            var other = obj as Attribute;
+            var other = obj as Attribute_;
             var diff = 0;
             if (Name == null && Name == other.Name)
             {

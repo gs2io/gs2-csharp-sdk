@@ -28,7 +28,7 @@ namespace Gs2.Gs2Matchmaking.Model
 	public class Player : IComparable
 	{
         public string UserId { set; get; }
-        public Gs2.Gs2Matchmaking.Model.Attribute[] Attributes { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Attribute_[] Attributes { set; get; }
         public string RoleName { set; get; }
         public string[] DenyUserIds { set; get; }
 
@@ -37,7 +37,7 @@ namespace Gs2.Gs2Matchmaking.Model
             return this;
         }
 
-        public Player WithAttributes(Gs2.Gs2Matchmaking.Model.Attribute[] attributes) {
+        public Player WithAttributes(Gs2.Gs2Matchmaking.Model.Attribute_[] attributes) {
             this.Attributes = attributes;
             return this;
         }
@@ -60,8 +60,8 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new Player()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithAttributes(!data.Keys.Contains("attributes") || data["attributes"] == null ? new Gs2.Gs2Matchmaking.Model.Attribute[]{} : data["attributes"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Matchmaking.Model.Attribute.FromJson(v);
+                .WithAttributes(!data.Keys.Contains("attributes") || data["attributes"] == null ? new Gs2.Gs2Matchmaking.Model.Attribute_[]{} : data["attributes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Matchmaking.Model.Attribute_.FromJson(v);
                 }).ToArray())
                 .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
                 .WithDenyUserIds(!data.Keys.Contains("denyUserIds") || data["denyUserIds"] == null ? new string[]{} : data["denyUserIds"].Cast<JsonData>().Select(v => {
