@@ -21,7 +21,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
 using UnityEngine;
-using HybridWebSocket;
+using Gs2.HybridWebSocket;
 using UnityEngine.Scripting;
 using WebSocket = Gs2.Util.WebSocketSharp.WebSocket;
 

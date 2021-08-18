@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using AOT;
 
-namespace HybridWebSocket
+namespace Gs2.HybridWebSocket
 {
 
     /// <summary>
