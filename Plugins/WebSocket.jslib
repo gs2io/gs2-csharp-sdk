@@ -155,21 +155,16 @@ var LibraryWebSocket = {
 			if (webSocketState.onMessage === null)
 				return;
 
-			if (ev.data instanceof ArrayBuffer) {
+            var msg = ev.data;
+            var msgBytes = lengthBytesUTF8(msg) + 1;
+            var msgBuffer = _malloc(msgBytes);
+            stringToUTF8(msg, msgBuffer, msgBytes);
 
-				var dataBuffer = new Uint8Array(ev.data);
-				
-				var buffer = _malloc(dataBuffer.length);
-				HEAPU8.set(dataBuffer, buffer);
-
-				try {
-					Runtime.dynCall('viii', webSocketState.onMessage, [ instanceId, buffer, dataBuffer.length ]);
-				} finally {
-					_free(buffer);
-				}
-
-			}
-
+            try {
+                Runtime.dynCall('vii', webSocketState.onMessage, [ instanceId, msgBuffer ]);
+            } finally {
+                _free(msgBuffer);
+            }
 		};
 
 		instance.ws.onerror = function(ev) {
@@ -180,8 +175,8 @@ var LibraryWebSocket = {
 			if (webSocketState.onError) {
 				
 				var msg = "WebSocket error.";
-				var msgBytes = lengthBytesUTF8(msg);
-				var msgBuffer = _malloc(msgBytes + 1);
+				var msgBytes = lengthBytesUTF8(msg) + 1;
+				var msgBuffer = _malloc(msgBytes);
 				stringToUTF8(msg, msgBuffer, msgBytes);
 
 				try {
@@ -250,7 +245,7 @@ var LibraryWebSocket = {
 	 * @param bufferPtr Pointer to the message buffer
 	 * @param length Length of the message in the buffer
 	 */
-	WebSocketSend: function(instanceId, bufferPtr, length) {
+	WebSocketSend: function(instanceId, dataPtr) {
 	
 		var instance = webSocketState.instances[instanceId];
 		if (!instance) return -1;
@@ -261,7 +256,9 @@ var LibraryWebSocket = {
 		if (instance.ws.readyState !== 1)
 			return -6;
 
-		instance.ws.send(HEAPU8.buffer.slice(bufferPtr, bufferPtr + length));
+		var data = ( dataPtr ? Pointer_stringify(dataPtr) : undefined );
+		
+		instance.ws.send(data);
 
 		return 0;
 

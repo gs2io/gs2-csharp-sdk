@@ -359,6 +359,79 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
 			return Gs2WebSocketSession.Execute(task);
         }
 
+        private class GetRateModelTask : Gs2WebSocketSessionTask<Result.GetRateModelResult>
+        {
+			private readonly Request.GetRateModelRequest _request;
+
+			public GetRateModelTask(Request.GetRateModelRequest request, UnityAction<AsyncResult<Result.GetRateModelResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(_request.NamespaceName.ToString());
+                }
+                if (_request.RateName != null)
+                {
+                    jsonWriter.WritePropertyName("rateName");
+                    jsonWriter.Write(_request.RateName.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("enhance");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("rateModel");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("getRateModel");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator GetRateModel(
+                Request.GetRateModelRequest request,
+                UnityAction<AsyncResult<Result.GetRateModelResult>> callback
+        )
+		{
+			var task = new GetRateModelTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
+
         private class CreateRateModelMasterTask : Gs2WebSocketSessionTask<Result.CreateRateModelMasterResult>
         {
 			private readonly Request.CreateRateModelMasterRequest _request;
@@ -431,11 +504,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.BonusRates)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -631,11 +700,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.BonusRates)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -801,11 +866,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Materials)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -858,6 +919,157 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
         )
 		{
 			var task = new CreateProgressByUserIdTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
+
+        private class GetProgressTask : Gs2WebSocketSessionTask<Result.GetProgressResult>
+        {
+			private readonly Request.GetProgressRequest _request;
+
+			public GetProgressTask(Request.GetProgressRequest request, UnityAction<AsyncResult<Result.GetProgressResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(_request.NamespaceName.ToString());
+                }
+                if (_request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(_request.AccessToken.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+                if (_request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(_request.AccessToken);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("enhance");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("progress");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("getProgress");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator GetProgress(
+                Request.GetProgressRequest request,
+                UnityAction<AsyncResult<Result.GetProgressResult>> callback
+        )
+		{
+			var task = new GetProgressTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
+
+        private class GetProgressByUserIdTask : Gs2WebSocketSessionTask<Result.GetProgressByUserIdResult>
+        {
+			private readonly Request.GetProgressByUserIdRequest _request;
+
+			public GetProgressByUserIdTask(Request.GetProgressByUserIdRequest request, UnityAction<AsyncResult<Result.GetProgressByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(_request.NamespaceName.ToString());
+                }
+                if (_request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(_request.UserId.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("enhance");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("progress");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("getProgressByUserId");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator GetProgressByUserId(
+                Request.GetProgressByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetProgressByUserIdResult>> callback
+        )
+		{
+			var task = new GetProgressByUserIdTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
 

@@ -74,14 +74,14 @@ namespace Gs2.Core.Net
         private State _state = State.Idle;
         private Gs2Exception _lastGs2Exception = null;
 
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
         private HybridWebSocket.WebSocket _webSocket;
 #else
         private WebSocket _webSocket;
 #endif
         private bool _checkCertificateRevocation;
 
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
         private HybridWebSocket.WebSocket CreateWebSocket()
 #else
         private WebSocket CreateWebSocket()
@@ -89,7 +89,7 @@ namespace Gs2.Core.Net
         {
             var url = EndpointHost.Replace("{region}", Region.DisplayName());
 
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             var webSocket = WebSocketFactory.CreateInstance(url);
             
             webSocket.OnOpen += () =>
@@ -97,23 +97,23 @@ namespace Gs2.Core.Net
                 _state = State.LoggingIn;
 
                 webSocket.Send(
-                    System.Text.Encoding.UTF8.GetBytes("{" +
-                                                      $"\"client_id\": \"{Credential.ClientId}\"," +
-                                                      $"\"client_secret\": \"{Credential.ClientSecret}\"," +
-                                                      "\"x_gs2\": {" +
-                                                      "\"service\": \"identifier\"," +
-                                                      "\"component\": \"projectToken\"," +
-                                                      "\"function\": \"login\"," +
-                                                      "\"contentType\": \"application/json\"," +
-                                                      $"\"requestId\": \"{Gs2SessionTaskId.LoginId.ToString()}\"" +
-                                                      "}" +
-                                                      "}")
+                    "{" +
+                    $"\"client_id\": \"{Credential.ClientId}\"," +
+                    $"\"client_secret\": \"{Credential.ClientSecret}\"," +
+                    "\"x_gs2\": {" +
+                    "\"service\": \"identifier\"," +
+                    "\"component\": \"projectToken\"," +
+                    "\"function\": \"login\"," +
+                    "\"contentType\": \"application/json\"," +
+                    $"\"requestId\": \"{Gs2SessionTaskId.LoginId.ToString()}\"" +
+                    "}" +
+                    "}"
                 );
             };
 
             webSocket.OnMessage += (message) =>
             {
-                var gs2WebSocketResponse = new Gs2WebSocketResponse(System.Text.Encoding.UTF8.GetString(message));
+                var gs2WebSocketResponse = new Gs2WebSocketResponse(message);
 
                 switch (_state)
                 {
@@ -394,8 +394,8 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
-#if UNITY_WEBGL
-            _webSocket.Send(System.Text.Encoding.UTF8.GetBytes(message));
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _webSocket.Send(message);
 #else
             _webSocket.SendAsync(message, null);
 #endif
@@ -409,7 +409,7 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             _webSocket.Connect();
 #else
             _webSocket.ConnectAsync();
@@ -424,7 +424,7 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             _webSocket.Close();
 #else
             _webSocket.CloseAsync();
@@ -443,7 +443,7 @@ namespace Gs2.Core.Net
             {
                 _webSocket = CreateWebSocket();
             }
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             _webSocket.Close();
 #else
             _webSocket.CloseAsync();

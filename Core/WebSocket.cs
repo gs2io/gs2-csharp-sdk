@@ -23,7 +23,7 @@ namespace Gs2.HybridWebSocket
     /// <summary>
     /// Handler for message received from WebSocket.
     /// </summary>
-    public delegate void WebSocketMessageEventHandler(byte[] data);
+    public delegate void WebSocketMessageEventHandler(string data);
 
     /// <summary>
     /// Handler for an error event received from WebSocket.
@@ -89,7 +89,7 @@ namespace Gs2.HybridWebSocket
         /// Send binary data over the socket.
         /// </summary>
         /// <param name="data">Payload data.</param>
-        void Send(byte[] data);
+        void Send(string data);
 
         /// <summary>
         /// Return WebSocket connection state.
@@ -244,7 +244,7 @@ namespace Gs2.HybridWebSocket
         public static extern int WebSocketClose(int instanceId, int code, string reason);
 
         [DllImport("__Internal")]
-        public static extern int WebSocketSend(int instanceId, byte[] dataPtr, int dataLength);
+        public static extern int WebSocketSend(int instanceId, string data);
 
         [DllImport("__Internal")]
         public static extern int WebSocketGetState(int instanceId);
@@ -338,10 +338,10 @@ namespace Gs2.HybridWebSocket
         /// Send binary data over the socket.
         /// </summary>
         /// <param name="data">Payload data.</param>
-        public void Send(byte[] data)
+        public void Send(string data)
         {
 
-            int ret = WebSocketSend(this.instanceId, data, data.Length);
+            int ret = WebSocketSend(this.instanceId, data);
 
             if (ret < 0)
                 throw WebSocketHelpers.GetErrorMessageFromCode(ret, null);
@@ -396,7 +396,7 @@ namespace Gs2.HybridWebSocket
         /// Is called by WebSocketFactory
         /// </summary>
         /// <param name="data">Binary data.</param>
-        public void DelegateOnMessageEvent(byte[] data)
+        public void DelegateOnMessageEvent(string data)
         {
 
             this.OnMessage?.Invoke(data);
@@ -480,7 +480,7 @@ namespace Gs2.HybridWebSocket
                 this.ws.OnMessage += (sender, ev) =>
                 {
                     if (ev.RawData != null)
-                        this.OnMessage?.Invoke(ev.RawData);
+                        this.OnMessage?.Invoke(ev.Data);
                 };
 
                 // Bind OnError event
@@ -558,7 +558,7 @@ namespace Gs2.HybridWebSocket
         /// Send binary data over the socket.
         /// </summary>
         /// <param name="data">Payload data.</param>
-        public void Send(byte[] data)
+        public void Send(string data)
         {
 
             // Check state
@@ -618,7 +618,7 @@ namespace Gs2.HybridWebSocket
 
         /* Delegates */
         public delegate void OnOpenCallback(int instanceId);
-        public delegate void OnMessageCallback(int instanceId, System.IntPtr msgPtr, int msgSize);
+        public delegate void OnMessageCallback(int instanceId, System.IntPtr msgPtr);
         public delegate void OnErrorCallback(int instanceId, System.IntPtr errorPtr);
         public delegate void OnCloseCallback(int instanceId, int closeCode);
 
@@ -649,7 +649,6 @@ namespace Gs2.HybridWebSocket
          */
         private static void Initialize()
         {
-
             WebSocketSetOnOpen(DelegateOnOpenEvent);
             WebSocketSetOnMessage(DelegateOnMessageEvent);
             WebSocketSetOnError(DelegateOnErrorEvent);
@@ -666,7 +665,6 @@ namespace Gs2.HybridWebSocket
         /// <param name="instanceId">Instance identifier.</param>
         public static void HandleInstanceDestroy(int instanceId)
         {
-
             instances.Remove(instanceId);
             WebSocketFree(instanceId);
 
@@ -675,7 +673,6 @@ namespace Gs2.HybridWebSocket
         [MonoPInvokeCallback(typeof(OnOpenCallback))]
         public static void DelegateOnOpenEvent(int instanceId)
         {
-
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
@@ -686,16 +683,13 @@ namespace Gs2.HybridWebSocket
         }
 
         [MonoPInvokeCallback(typeof(OnMessageCallback))]
-        public static void DelegateOnMessageEvent(int instanceId, System.IntPtr msgPtr, int msgSize)
+        public static void DelegateOnMessageEvent(int instanceId, System.IntPtr msgPtr)
         {
-
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
             {
-                byte[] msg = new byte[msgSize];
-                Marshal.Copy(msgPtr, msg, 0, msgSize);
-
+                string msg = Marshal.PtrToStringAuto(msgPtr);
                 instanceRef.DelegateOnMessageEvent(msg);
             }
 
@@ -704,7 +698,6 @@ namespace Gs2.HybridWebSocket
         [MonoPInvokeCallback(typeof(OnErrorCallback))]
         public static void DelegateOnErrorEvent(int instanceId, System.IntPtr errorPtr)
         {
-
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
@@ -720,7 +713,6 @@ namespace Gs2.HybridWebSocket
         [MonoPInvokeCallback(typeof(OnCloseCallback))]
         public static void DelegateOnCloseEvent(int instanceId, int closeCode)
         {
-
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
