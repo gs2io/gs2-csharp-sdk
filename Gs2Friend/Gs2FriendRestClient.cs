@@ -539,67 +539,6 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Friend
 			return Gs2RestSession.Execute(task);
         }
 
-        private class DescribeProfilesTask : Gs2RestSessionTask<Result.DescribeProfilesResult>
-        {
-			private readonly Request.DescribeProfilesRequest _request;
-
-			public DescribeProfilesTask(Request.DescribeProfilesRequest request, UnityAction<AsyncResult<Result.DescribeProfilesResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
-            {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
-
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "friend")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
-                    + "/{namespaceName}/profile";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
-                {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
-                }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
-                }
-
-                return Send((Gs2RestSession)gs2Session);
-            }
-        }
-
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
-		public IEnumerator DescribeProfiles(
-                Request.DescribeProfilesRequest request,
-                UnityAction<AsyncResult<Result.DescribeProfilesResult>> callback
-        )
-		{
-			var task = new DescribeProfilesTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
-        }
-
         private class GetProfileTask : Gs2RestSessionTask<Result.GetProfileResult>
         {
 			private readonly Request.GetProfileRequest _request;

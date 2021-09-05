@@ -28,14 +28,8 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class StartResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.Progress Item { set; get; }
         public string StampSheet { set; get; }
         public string StampSheetEncryptionKeyId { set; get; }
-
-        public StartResult WithItem(Gs2.Gs2Quest.Model.Progress item) {
-            this.Item = item;
-            return this;
-        }
 
         public StartResult WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
@@ -54,7 +48,6 @@ namespace Gs2.Gs2Quest.Result
                 return null;
             }
             return new StartResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Quest.Model.Progress.FromJson(data["item"]))
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString());
         }
@@ -62,7 +55,6 @@ namespace Gs2.Gs2Quest.Result
         public JsonData ToJson()
         {
             return new JsonData {
-                ["item"] = Item?.ToJson(),
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
             };
@@ -71,9 +63,6 @@ namespace Gs2.Gs2Quest.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (Item != null) {
-                Item.WriteJson(writer);
-            }
             if (StampSheet != null) {
                 writer.WritePropertyName("stampSheet");
                 writer.Write(StampSheet.ToString());

@@ -32,7 +32,6 @@ namespace Gs2.Gs2Datastore.Model
         public string UserId { set; get; }
         public string Scope { set; get; }
         public string[] AllowUserIds { set; get; }
-        public string Platform { set; get; }
         public string Status { set; get; }
         public string Generation { set; get; }
         public string PreviousGeneration { set; get; }
@@ -61,11 +60,6 @@ namespace Gs2.Gs2Datastore.Model
 
         public DataObject WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
-            return this;
-        }
-
-        public DataObject WithPlatform(string platform) {
-            this.Platform = platform;
             return this;
         }
 
@@ -108,7 +102,6 @@ namespace Gs2.Gs2Datastore.Model
                 .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithPlatform(!data.Keys.Contains("platform") || data["platform"] == null ? null : data["platform"].ToString())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
                 .WithPreviousGeneration(!data.Keys.Contains("previousGeneration") || data["previousGeneration"] == null ? null : data["previousGeneration"].ToString())
@@ -128,7 +121,6 @@ namespace Gs2.Gs2Datastore.Model
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
-                ["platform"] = Platform,
                 ["status"] = Status,
                 ["generation"] = Generation,
                 ["previousGeneration"] = PreviousGeneration,
@@ -166,10 +158,6 @@ namespace Gs2.Gs2Datastore.Model
                     }
                 }
                 writer.WriteArrayEnd();
-            }
-            if (Platform != null) {
-                writer.WritePropertyName("platform");
-                writer.Write(Platform.ToString());
             }
             if (Status != null) {
                 writer.WritePropertyName("status");
@@ -241,14 +229,6 @@ namespace Gs2.Gs2Datastore.Model
                 {
                     diff += AllowUserIds[i].CompareTo(other.AllowUserIds[i]);
                 }
-            }
-            if (Platform == null && Platform == other.Platform)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Platform.CompareTo(other.Platform);
             }
             if (Status == null && Status == other.Status)
             {

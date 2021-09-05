@@ -927,11 +927,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Contents)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -946,11 +942,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.ConsumeActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -960,11 +952,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.FailedAcquireActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1118,11 +1106,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Contents)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1137,11 +1121,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.ConsumeActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1151,11 +1131,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.FailedAcquireActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1998,11 +1974,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Rewards)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -2106,11 +2078,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Rewards)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }

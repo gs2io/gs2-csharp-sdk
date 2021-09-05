@@ -665,11 +665,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.ReadAcquireActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1144,11 +1140,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Config)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1229,11 +1221,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.Config)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1387,6 +1375,79 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
         )
 		{
 			var task = new DeleteMessageByUserIdTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
+        private class SendByStampSheetTask : Gs2RestSessionTask<Result.SendByStampSheetResult>
+        {
+			private readonly Request.SendByStampSheetRequest _request;
+
+			public SendByStampSheetTask(Request.SendByStampSheetRequest request, UnityAction<AsyncResult<Result.SendByStampSheetResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inbox")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/stamp/send";
+
+                UnityWebRequest.url = url;
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (_request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(_request.StampSheet.ToString());
+                }
+                if (_request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(_request.KeyId.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                }
+                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator SendByStampSheet(
+                Request.SendByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SendByStampSheetResult>> callback
+        )
+		{
+			var task = new SendByStampSheetTask(request, callback);
 			if (_certificateHandler != null)
 			{
 				task.UnityWebRequest.certificateHandler = _certificateHandler;
@@ -1819,11 +1880,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.ReadAcquireActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -1970,11 +2027,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Inbox
                     jsonWriter.WriteArrayStart();
                     foreach(var item in _request.ReadAcquireActions)
                     {
-                        if (item == null) {
-                            jsonWriter.Write(null);
-                        } else {
-                            item.WriteJson(jsonWriter);
-                        }
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }

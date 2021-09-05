@@ -1181,6 +1181,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Version
                     + "/{namespaceName}/user/{userId}/acceptVersion";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
 
                 UnityWebRequest.url = url;
 
@@ -1191,11 +1192,6 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Version
                 {
                     jsonWriter.WritePropertyName("versionName");
                     jsonWriter.Write(_request.VersionName.ToString());
-                }
-                if (_request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.UserId.ToString());
                 }
                 if (_request.ContextStack != null)
                 {

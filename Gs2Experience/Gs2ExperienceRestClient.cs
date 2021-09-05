@@ -1874,6 +1874,67 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Experience
 			return Gs2RestSession.Execute(task);
         }
 
+        private class GetStatusWithSignatureByUserIdTask : Gs2RestSessionTask<Result.GetStatusWithSignatureByUserIdResult>
+        {
+			private readonly Request.GetStatusWithSignatureByUserIdRequest _request;
+
+			public GetStatusWithSignatureByUserIdTask(Request.GetStatusWithSignatureByUserIdRequest request, UnityAction<AsyncResult<Result.GetStatusWithSignatureByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/model/{experienceName}/property/{propertyId}/signature";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(_request.ExperienceName) ? _request.ExperienceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(_request.PropertyId) ? _request.PropertyId.ToString() : "null");
+
+                var queryStrings = new List<string> ();
+                if (_request.ContextStack != null)
+                {
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                }
+                if (_request.KeyId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "keyId", UnityWebRequest.EscapeURL(_request.KeyId)));
+                }
+                url += "?" + string.Join("&", queryStrings.ToArray());
+
+                UnityWebRequest.url = url;
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator GetStatusWithSignatureByUserId(
+                Request.GetStatusWithSignatureByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetStatusWithSignatureByUserIdResult>> callback
+        )
+		{
+			var task = new GetStatusWithSignatureByUserIdTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
         private class AddExperienceByUserIdTask : Gs2RestSessionTask<Result.AddExperienceByUserIdResult>
         {
 			private readonly Request.AddExperienceByUserIdRequest _request;

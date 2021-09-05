@@ -18,45 +18,45 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
-using Gs2.Gs2Quest.Model;
+using Gs2.Gs2Inbox.Model;
 using Gs2.Util.LitJson;
 using UnityEngine.Scripting;
 
-namespace Gs2.Gs2Quest.Result
+namespace Gs2.Gs2Inbox.Request
 {
 	[Preserve]
 	[System.Serializable]
-	public class StartByUserIdResult : IResult
+	public class SendByStampSheetRequest : Gs2Request<SendByStampSheetRequest>
 	{
         public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
+        public string KeyId { set; get; }
 
-        public StartByUserIdResult WithStampSheet(string stampSheet) {
+        public SendByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
 
-        public StartByUserIdResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
-            this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
+        public SendByStampSheetRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
     	[Preserve]
-        public static StartByUserIdResult FromJson(JsonData data)
+        public static SendByStampSheetRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new StartByUserIdResult()
+            return new SendByStampSheetRequest()
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
-                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString());
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["stampSheet"] = StampSheet,
-                ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -67,9 +67,9 @@ namespace Gs2.Gs2Quest.Result
                 writer.WritePropertyName("stampSheet");
                 writer.Write(StampSheet.ToString());
             }
-            if (StampSheetEncryptionKeyId != null) {
-                writer.WritePropertyName("stampSheetEncryptionKeyId");
-                writer.Write(StampSheetEncryptionKeyId.ToString());
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }
