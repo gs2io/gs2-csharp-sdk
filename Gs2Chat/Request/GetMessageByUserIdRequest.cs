@@ -26,51 +26,51 @@ namespace Gs2.Gs2Chat.Request
 {
 	[Preserve]
 	[System.Serializable]
-	public class GetMessageRequest : Gs2Request<GetMessageRequest>
+	public class GetMessageByUserIdRequest : Gs2Request<GetMessageByUserIdRequest>
 	{
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
         public string MessageName { set; get; }
         public string Password { set; get; }
-        public string AccessToken { set; get; }
+        public string UserId { set; get; }
 
-        public GetMessageRequest WithNamespaceName(string namespaceName) {
+        public GetMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
 
-        public GetMessageRequest WithRoomName(string roomName) {
+        public GetMessageByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
 
-        public GetMessageRequest WithMessageName(string messageName) {
+        public GetMessageByUserIdRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;
         }
 
-        public GetMessageRequest WithPassword(string password) {
+        public GetMessageByUserIdRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
 
-        public GetMessageRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public GetMessageByUserIdRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
     	[Preserve]
-        public static GetMessageRequest FromJson(JsonData data)
+        public static GetMessageByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetMessageRequest()
+            return new GetMessageByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
         public JsonData ToJson()
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Chat.Request
                 ["roomName"] = RoomName,
                 ["messageName"] = MessageName,
                 ["password"] = Password,
-                ["accessToken"] = AccessToken,
+                ["userId"] = UserId,
             };
         }
 
@@ -103,9 +103,9 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
         }

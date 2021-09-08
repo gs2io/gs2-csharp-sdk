@@ -621,6 +621,16 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                     jsonWriter.WritePropertyName("messageName");
                     jsonWriter.Write(_request.MessageName.ToString());
                 }
+                if (_request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(_request.Password.ToString());
+                }
+                if (_request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(_request.AccessToken.ToString());
+                }
                 if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -630,6 +640,11 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(_request.RequestId);
+                }
+                if (_request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(_request.AccessToken);
                 }
 
                 jsonWriter.WritePropertyName("xGs2ClientId");
@@ -665,6 +680,94 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
         )
 		{
 			var task = new GetMessageTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
+
+        private class GetMessageByUserIdTask : Gs2WebSocketSessionTask<Result.GetMessageByUserIdResult>
+        {
+			private readonly Request.GetMessageByUserIdRequest _request;
+
+			public GetMessageByUserIdTask(Request.GetMessageByUserIdRequest request, UnityAction<AsyncResult<Result.GetMessageByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(_request.NamespaceName.ToString());
+                }
+                if (_request.RoomName != null)
+                {
+                    jsonWriter.WritePropertyName("roomName");
+                    jsonWriter.Write(_request.RoomName.ToString());
+                }
+                if (_request.MessageName != null)
+                {
+                    jsonWriter.WritePropertyName("messageName");
+                    jsonWriter.Write(_request.MessageName.ToString());
+                }
+                if (_request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(_request.Password.ToString());
+                }
+                if (_request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(_request.UserId.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("chat");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("message");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("getMessageByUserId");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator GetMessageByUserId(
+                Request.GetMessageByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetMessageByUserIdResult>> callback
+        )
+		{
+			var task = new GetMessageByUserIdTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
 

@@ -33,6 +33,7 @@ namespace Gs2.Gs2Chat.Request
         public string Metadata { set; get; }
         public string Password { set; get; }
         public string[] WhiteListUserIds { set; get; }
+        public string AccessToken { set; get; }
 
         public UpdateRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,11 @@ namespace Gs2.Gs2Chat.Request
             return this;
         }
 
+        public UpdateRoomRequest WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
+            return this;
+        }
+
     	[Preserve]
         public static UpdateRoomRequest FromJson(JsonData data)
         {
@@ -72,7 +78,8 @@ namespace Gs2.Gs2Chat.Request
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
         }
 
         public JsonData ToJson()
@@ -87,6 +94,7 @@ namespace Gs2.Gs2Chat.Request
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
+                ["accessToken"] = AccessToken,
             };
         }
 
@@ -115,6 +123,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.Write(whiteListUserId.ToString());
             }
             writer.WriteArrayEnd();
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
     }

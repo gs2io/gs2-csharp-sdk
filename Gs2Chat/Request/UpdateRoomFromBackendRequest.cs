@@ -26,51 +26,60 @@ namespace Gs2.Gs2Chat.Request
 {
 	[Preserve]
 	[System.Serializable]
-	public class GetMessageRequest : Gs2Request<GetMessageRequest>
+	public class UpdateRoomFromBackendRequest : Gs2Request<UpdateRoomFromBackendRequest>
 	{
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
-        public string MessageName { set; get; }
+        public string Metadata { set; get; }
         public string Password { set; get; }
-        public string AccessToken { set; get; }
+        public string[] WhiteListUserIds { set; get; }
+        public string UserId { set; get; }
 
-        public GetMessageRequest WithNamespaceName(string namespaceName) {
+        public UpdateRoomFromBackendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
 
-        public GetMessageRequest WithRoomName(string roomName) {
+        public UpdateRoomFromBackendRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
 
-        public GetMessageRequest WithMessageName(string messageName) {
-            this.MessageName = messageName;
+        public UpdateRoomFromBackendRequest WithMetadata(string metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
-        public GetMessageRequest WithPassword(string password) {
+        public UpdateRoomFromBackendRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
 
-        public GetMessageRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public UpdateRoomFromBackendRequest WithWhiteListUserIds(string[] whiteListUserIds) {
+            this.WhiteListUserIds = whiteListUserIds;
+            return this;
+        }
+
+        public UpdateRoomFromBackendRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
     	[Preserve]
-        public static GetMessageRequest FromJson(JsonData data)
+        public static UpdateRoomFromBackendRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetMessageRequest()
+            return new UpdateRoomFromBackendRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
-                .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
         public JsonData ToJson()
@@ -78,9 +87,14 @@ namespace Gs2.Gs2Chat.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
-                ["messageName"] = MessageName,
+                ["metadata"] = Metadata,
                 ["password"] = Password,
-                ["accessToken"] = AccessToken,
+                ["whiteListUserIds"] = new JsonData(WhiteListUserIds == null ? new JsonData[]{} :
+                        WhiteListUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["userId"] = UserId,
             };
         }
 
@@ -95,17 +109,23 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("roomName");
                 writer.Write(RoomName.ToString());
             }
-            if (MessageName != null) {
-                writer.WritePropertyName("messageName");
-                writer.Write(MessageName.ToString());
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
             }
             if (Password != null) {
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            writer.WriteArrayStart();
+            foreach (var whiteListUserId in WhiteListUserIds)
+            {
+                writer.Write(whiteListUserId.ToString());
+            }
+            writer.WriteArrayEnd();
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
         }

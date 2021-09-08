@@ -26,51 +26,58 @@ namespace Gs2.Gs2Chat.Request
 {
 	[Preserve]
 	[System.Serializable]
-	public class GetMessageRequest : Gs2Request<GetMessageRequest>
+	public class DescribeMessagesByUserIdRequest : Gs2Request<DescribeMessagesByUserIdRequest>
 	{
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
-        public string MessageName { set; get; }
         public string Password { set; get; }
-        public string AccessToken { set; get; }
+        public string UserId { set; get; }
+        public long? StartAt { set; get; }
+        public int? Limit { set; get; }
 
-        public GetMessageRequest WithNamespaceName(string namespaceName) {
+        public DescribeMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
 
-        public GetMessageRequest WithRoomName(string roomName) {
+        public DescribeMessagesByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
 
-        public GetMessageRequest WithMessageName(string messageName) {
-            this.MessageName = messageName;
-            return this;
-        }
-
-        public GetMessageRequest WithPassword(string password) {
+        public DescribeMessagesByUserIdRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
 
-        public GetMessageRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public DescribeMessagesByUserIdRequest WithUserId(string userId) {
+            this.UserId = userId;
+            return this;
+        }
+
+        public DescribeMessagesByUserIdRequest WithStartAt(long? startAt) {
+            this.StartAt = startAt;
+            return this;
+        }
+
+        public DescribeMessagesByUserIdRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
     	[Preserve]
-        public static GetMessageRequest FromJson(JsonData data)
+        public static DescribeMessagesByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetMessageRequest()
+            return new DescribeMessagesByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
-                .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)long.Parse(data["startAt"].ToString()))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
         public JsonData ToJson()
@@ -78,9 +85,10 @@ namespace Gs2.Gs2Chat.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
-                ["messageName"] = MessageName,
                 ["password"] = Password,
-                ["accessToken"] = AccessToken,
+                ["userId"] = UserId,
+                ["startAt"] = StartAt,
+                ["limit"] = Limit,
             };
         }
 
@@ -95,17 +103,21 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("roomName");
                 writer.Write(RoomName.ToString());
             }
-            if (MessageName != null) {
-                writer.WritePropertyName("messageName");
-                writer.Write(MessageName.ToString());
-            }
             if (Password != null) {
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
+            if (StartAt != null) {
+                writer.WritePropertyName("startAt");
+                writer.Write(long.Parse(StartAt.ToString()));
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
             }
             writer.WriteObjectEnd();
         }

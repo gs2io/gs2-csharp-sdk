@@ -821,7 +821,7 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "chat")
                     .Replace("{region}", gs2Session.Region.DisplayName())
-                    + "/{namespaceName}/room/{roomName}";
+                    + "/{namespaceName}/room/{roomName}/user";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
                 url = url.Replace("{roomName}", !string.IsNullOrEmpty(_request.RoomName) ? _request.RoomName.ToString() : "null");
@@ -869,6 +869,10 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                 {
                     UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
+                if (_request.AccessToken != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                }
 
                 return Send((Gs2RestSession)gs2Session);
             }
@@ -884,6 +888,97 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
         )
 		{
 			var task = new UpdateRoomTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
+        private class UpdateRoomFromBackendTask : Gs2RestSessionTask<Result.UpdateRoomFromBackendResult>
+        {
+			private readonly Request.UpdateRoomFromBackendRequest _request;
+
+			public UpdateRoomFromBackendTask(Request.UpdateRoomFromBackendRequest request, UnityAction<AsyncResult<Result.UpdateRoomFromBackendResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/room/{roomName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{roomName}", !string.IsNullOrEmpty(_request.RoomName) ? _request.RoomName.ToString() : "null");
+
+                UnityWebRequest.url = url;
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (_request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(_request.Metadata.ToString());
+                }
+                if (_request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(_request.Password.ToString());
+                }
+                if (_request.WhiteListUserIds != null)
+                {
+                    jsonWriter.WritePropertyName("whiteListUserIds");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in _request.WhiteListUserIds)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (_request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(_request.UserId.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                }
+                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator UpdateRoomFromBackend(
+                Request.UpdateRoomFromBackendRequest request,
+                UnityAction<AsyncResult<Result.UpdateRoomFromBackendResult>> callback
+        )
+		{
+			var task = new UpdateRoomFromBackendTask(request, callback);
 			if (_certificateHandler != null)
 			{
 				task.UnityWebRequest.certificateHandler = _certificateHandler;
@@ -1053,6 +1148,10 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                 {
                     UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
                 }
+                if (_request.AccessToken != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                }
 
                 return Send((Gs2RestSession)gs2Session);
             }
@@ -1068,6 +1167,74 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
         )
 		{
 			var task = new DescribeMessagesTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
+        private class DescribeMessagesByUserIdTask : Gs2RestSessionTask<Result.DescribeMessagesByUserIdResult>
+        {
+			private readonly Request.DescribeMessagesByUserIdRequest _request;
+
+			public DescribeMessagesByUserIdTask(Request.DescribeMessagesByUserIdRequest request, UnityAction<AsyncResult<Result.DescribeMessagesByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/room/{roomName}/message/get";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{roomName}", !string.IsNullOrEmpty(_request.RoomName) ? _request.RoomName.ToString() : "null");
+
+                var queryStrings = new List<string> ();
+                if (_request.ContextStack != null)
+                {
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                }
+                if (_request.Password != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "password", UnityWebRequest.EscapeURL(_request.Password)));
+                }
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                }
+                if (_request.StartAt != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "startAt", _request.StartAt));
+                }
+                if (_request.Limit != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                }
+                url += "?" + string.Join("&", queryStrings.ToArray());
+
+                UnityWebRequest.url = url;
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator DescribeMessagesByUserId(
+                Request.DescribeMessagesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeMessagesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeMessagesByUserIdTask(request, callback);
 			if (_certificateHandler != null)
 			{
 				task.UnityWebRequest.certificateHandler = _certificateHandler;
@@ -1269,6 +1436,76 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
                 {
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
+                if (_request.Password != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "password", UnityWebRequest.EscapeURL(_request.Password)));
+                }
+                url += "?" + string.Join("&", queryStrings.ToArray());
+
+                UnityWebRequest.url = url;
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+                if (_request.AccessToken != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator GetMessage(
+                Request.GetMessageRequest request,
+                UnityAction<AsyncResult<Result.GetMessageResult>> callback
+        )
+		{
+			var task = new GetMessageTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
+        private class GetMessageByUserIdTask : Gs2RestSessionTask<Result.GetMessageByUserIdResult>
+        {
+			private readonly Request.GetMessageByUserIdRequest _request;
+
+			public GetMessageByUserIdTask(Request.GetMessageByUserIdRequest request, UnityAction<AsyncResult<Result.GetMessageByUserIdResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/room/{roomName}/message/{messageName}/get";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{roomName}", !string.IsNullOrEmpty(_request.RoomName) ? _request.RoomName.ToString() : "null");
+                url = url.Replace("{messageName}", !string.IsNullOrEmpty(_request.MessageName) ? _request.MessageName.ToString() : "null");
+
+                var queryStrings = new List<string> ();
+                if (_request.ContextStack != null)
+                {
+                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                }
+                if (_request.Password != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "password", UnityWebRequest.EscapeURL(_request.Password)));
+                }
+                if (_request.UserId != null) {
+                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                }
                 url += "?" + string.Join("&", queryStrings.ToArray());
 
                 UnityWebRequest.url = url;
@@ -1286,12 +1523,12 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Chat
 		/// <returns>IEnumerator</returns>
 		/// <param name="callback">コールバックハンドラ</param>
 		/// <param name="request">リクエストパラメータ</param>
-		public IEnumerator GetMessage(
-                Request.GetMessageRequest request,
-                UnityAction<AsyncResult<Result.GetMessageResult>> callback
+		public IEnumerator GetMessageByUserId(
+                Request.GetMessageByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetMessageByUserIdResult>> callback
         )
 		{
-			var task = new GetMessageTask(request, callback);
+			var task = new GetMessageByUserIdTask(request, callback);
 			if (_certificateHandler != null)
 			{
 				task.UnityWebRequest.certificateHandler = _certificateHandler;

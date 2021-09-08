@@ -31,6 +31,7 @@ namespace Gs2.Gs2Chat.Request
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
         public string Password { set; get; }
+        public string AccessToken { set; get; }
         public long? StartAt { set; get; }
         public int? Limit { set; get; }
 
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Chat.Request
 
         public DescribeMessagesRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+
+        public DescribeMessagesRequest WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
             return this;
         }
 
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)long.Parse(data["startAt"].ToString()))
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
@@ -79,6 +86,7 @@ namespace Gs2.Gs2Chat.Request
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
                 ["password"] = Password,
+                ["accessToken"] = AccessToken,
                 ["startAt"] = StartAt,
                 ["limit"] = Limit,
             };
@@ -98,6 +106,10 @@ namespace Gs2.Gs2Chat.Request
             if (Password != null) {
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
+            }
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
             }
             if (StartAt != null) {
                 writer.WritePropertyName("startAt");
