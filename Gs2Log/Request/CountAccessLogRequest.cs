@@ -29,9 +29,9 @@ namespace Gs2.Gs2Log.Request
 	public class CountAccessLogRequest : Gs2Request<CountAccessLogRequest>
 	{
         public string NamespaceName { set; get; }
-        public string Service { set; get; }
-        public string Method { set; get; }
-        public string UserId { set; get; }
+        public bool? Service { set; get; }
+        public bool? Method { set; get; }
+        public bool? UserId { set; get; }
         public long? Begin { set; get; }
         public long? End { set; get; }
         public bool? LongTerm { set; get; }
@@ -43,17 +43,17 @@ namespace Gs2.Gs2Log.Request
             return this;
         }
 
-        public CountAccessLogRequest WithService(string service) {
+        public CountAccessLogRequest WithService(bool? service) {
             this.Service = service;
             return this;
         }
 
-        public CountAccessLogRequest WithMethod(string method) {
+        public CountAccessLogRequest WithMethod(bool? method) {
             this.Method = method;
             return this;
         }
 
-        public CountAccessLogRequest WithUserId(string userId) {
+        public CountAccessLogRequest WithUserId(bool? userId) {
             this.UserId = userId;
             return this;
         }
@@ -91,9 +91,9 @@ namespace Gs2.Gs2Log.Request
             }
             return new CountAccessLogRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
-                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : (bool?)bool.Parse(data["service"].ToString()))
+                .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : (bool?)bool.Parse(data["method"].ToString()))
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (bool?)bool.Parse(data["userId"].ToString()))
                 .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)long.Parse(data["begin"].ToString()))
                 .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)long.Parse(data["end"].ToString()))
                 .WithLongTerm(!data.Keys.Contains("longTerm") || data["longTerm"] == null ? null : (bool?)bool.Parse(data["longTerm"].ToString()))
@@ -125,15 +125,15 @@ namespace Gs2.Gs2Log.Request
             }
             if (Service != null) {
                 writer.WritePropertyName("service");
-                writer.Write(Service.ToString());
+                writer.Write(bool.Parse(Service.ToString()));
             }
             if (Method != null) {
                 writer.WritePropertyName("method");
-                writer.Write(Method.ToString());
+                writer.Write(bool.Parse(Method.ToString()));
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
-                writer.Write(UserId.ToString());
+                writer.Write(bool.Parse(UserId.ToString()));
             }
             if (Begin != null) {
                 writer.WritePropertyName("begin");

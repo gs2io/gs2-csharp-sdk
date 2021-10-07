@@ -604,13 +604,13 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 if (_request.Service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
+                    queryStrings.Add(string.Format("{0}={1}", "service", _request.Service));
                 }
                 if (_request.Method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
+                    queryStrings.Add(string.Format("{0}={1}", "method", _request.Method));
                 }
                 if (_request.UserId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.UserId));
                 }
                 if (_request.Begin != null) {
                     queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
@@ -765,16 +765,16 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 if (_request.Service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
+                    queryStrings.Add(string.Format("{0}={1}", "service", _request.Service));
                 }
                 if (_request.Method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
+                    queryStrings.Add(string.Format("{0}={1}", "method", _request.Method));
                 }
                 if (_request.UserId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.UserId));
                 }
                 if (_request.Action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
+                    queryStrings.Add(string.Format("{0}={1}", "action", _request.Action));
                 }
                 if (_request.Begin != null) {
                     queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
@@ -929,16 +929,16 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 if (_request.Service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
+                    queryStrings.Add(string.Format("{0}={1}", "service", _request.Service));
                 }
                 if (_request.Method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
+                    queryStrings.Add(string.Format("{0}={1}", "method", _request.Method));
                 }
                 if (_request.UserId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.UserId));
                 }
                 if (_request.Action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
+                    queryStrings.Add(string.Format("{0}={1}", "action", _request.Action));
                 }
                 if (_request.Begin != null) {
                     queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
@@ -1093,16 +1093,16 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
                     queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
                 }
                 if (_request.Service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
+                    queryStrings.Add(string.Format("{0}={1}", "service", _request.Service));
                 }
                 if (_request.Method != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "method", UnityWebRequest.EscapeURL(_request.Method)));
+                    queryStrings.Add(string.Format("{0}={1}", "method", _request.Method));
                 }
                 if (_request.UserId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                    queryStrings.Add(string.Format("{0}={1}", "userId", _request.UserId));
                 }
                 if (_request.Action != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "action", UnityWebRequest.EscapeURL(_request.Action)));
+                    queryStrings.Add(string.Format("{0}={1}", "action", _request.Action));
                 }
                 if (_request.Begin != null) {
                     queryStrings.Add(string.Format("{0}={1}", "begin", _request.Begin));
@@ -1142,6 +1142,84 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
         )
 		{
 			var task = new CountExecuteStampTaskLogTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
+        private class PutLogTask : Gs2RestSessionTask<Result.PutLogResult>
+        {
+			private readonly Request.PutLogRequest _request;
+
+			public PutLogTask(Request.PutLogRequest request, UnityAction<AsyncResult<Result.PutLogResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/log/put";
+
+                UnityWebRequest.url = url;
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (_request.LoggingNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("loggingNamespaceId");
+                    jsonWriter.Write(_request.LoggingNamespaceId.ToString());
+                }
+                if (_request.LogCategory != null)
+                {
+                    jsonWriter.WritePropertyName("logCategory");
+                    jsonWriter.Write(_request.LogCategory.ToString());
+                }
+                if (_request.Payload != null)
+                {
+                    jsonWriter.WritePropertyName("payload");
+                    jsonWriter.Write(_request.Payload.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                }
+                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator PutLog(
+                Request.PutLogRequest request,
+                UnityAction<AsyncResult<Result.PutLogResult>> callback
+        )
+		{
+			var task = new PutLogTask(request, callback);
 			if (_certificateHandler != null)
 			{
 				task.UnityWebRequest.certificateHandler = _certificateHandler;

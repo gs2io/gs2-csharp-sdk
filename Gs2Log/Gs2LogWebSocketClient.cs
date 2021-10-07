@@ -398,5 +398,83 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Log
 			var task = new DeleteNamespaceTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
+
+        private class PutLogTask : Gs2WebSocketSessionTask<Result.PutLogResult>
+        {
+			private readonly Request.PutLogRequest _request;
+
+			public PutLogTask(Request.PutLogRequest request, UnityAction<AsyncResult<Result.PutLogResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.LoggingNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("loggingNamespaceId");
+                    jsonWriter.Write(_request.LoggingNamespaceId.ToString());
+                }
+                if (_request.LogCategory != null)
+                {
+                    jsonWriter.WritePropertyName("logCategory");
+                    jsonWriter.Write(_request.LogCategory.ToString());
+                }
+                if (_request.Payload != null)
+                {
+                    jsonWriter.WritePropertyName("payload");
+                    jsonWriter.Write(_request.Payload.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("log");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("log");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("putLog");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator PutLog(
+                Request.PutLogRequest request,
+                UnityAction<AsyncResult<Result.PutLogResult>> callback
+        )
+		{
+			var task = new PutLogTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
 	}
 }

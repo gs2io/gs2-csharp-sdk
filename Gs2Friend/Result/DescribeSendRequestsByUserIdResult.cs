@@ -29,9 +29,15 @@ namespace Gs2.Gs2Friend.Result
 	public class DescribeSendRequestsByUserIdResult : IResult
 	{
         public Gs2.Gs2Friend.Model.FriendRequest[] Items { set; get; }
+        public string NextPageToken { set; get; }
 
         public DescribeSendRequestsByUserIdResult WithItems(Gs2.Gs2Friend.Model.FriendRequest[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DescribeSendRequestsByUserIdResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
             return this;
         }
 
@@ -44,7 +50,8 @@ namespace Gs2.Gs2Friend.Result
             return new DescribeSendRequestsByUserIdResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Friend.Model.FriendRequest[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Friend.Model.FriendRequest.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
         }
 
         public JsonData ToJson()
@@ -56,6 +63,7 @@ namespace Gs2.Gs2Friend.Result
                             return v.ToJson();
                         }).ToArray()
                     ),
+                ["nextPageToken"] = NextPageToken,
             };
         }
 
@@ -70,6 +78,10 @@ namespace Gs2.Gs2Friend.Result
                 }
             }
             writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
     }
