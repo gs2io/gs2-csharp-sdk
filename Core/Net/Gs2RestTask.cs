@@ -19,7 +19,11 @@ namespace Gs2.Core.Net
 
             Callback(
                 new Gs2RestResponse(
+#if UNITY_2020_1_OR_NEWER
                     UnityWebRequest.result != UnityWebRequest.Result.ConnectionError ? UnityWebRequest.downloadHandler.text : UnityWebRequest.error,
+#else
+                    !UnityWebRequest.isNetworkError || UnityWebRequest.isHttpError ? UnityWebRequest.downloadHandler.text : UnityWebRequest.error,
+#endif
                     UnityWebRequest.responseCode
                 )
             );
