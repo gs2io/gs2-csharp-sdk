@@ -31,6 +31,7 @@ namespace Gs2.Gs2Ranking.Model
         public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string[] TargetUserIds { set; get; }
+        public string[] SubscribedUserIds { set; get; }
         public long? CreatedAt { set; get; }
 
         public Subscribe WithSubscribeId(string subscribeId) {
@@ -53,6 +54,11 @@ namespace Gs2.Gs2Ranking.Model
             return this;
         }
 
+        public Subscribe WithSubscribedUserIds(string[] subscribedUserIds) {
+            this.SubscribedUserIds = subscribedUserIds;
+            return this;
+        }
+
         public Subscribe WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
@@ -71,6 +77,9 @@ namespace Gs2.Gs2Ranking.Model
                 .WithTargetUserIds(!data.Keys.Contains("targetUserIds") || data["targetUserIds"] == null ? new string[]{} : data["targetUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithSubscribedUserIds(!data.Keys.Contains("subscribedUserIds") || data["subscribedUserIds"] == null ? new string[]{} : data["subscribedUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
         }
 
@@ -82,6 +91,11 @@ namespace Gs2.Gs2Ranking.Model
                 ["userId"] = UserId,
                 ["targetUserIds"] = new JsonData(TargetUserIds == null ? new JsonData[]{} :
                         TargetUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
+                ["subscribedUserIds"] = new JsonData(SubscribedUserIds == null ? new JsonData[]{} :
+                        SubscribedUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
@@ -111,6 +125,17 @@ namespace Gs2.Gs2Ranking.Model
                 {
                     if (targetUserId != null) {
                         writer.Write(targetUserId.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (SubscribedUserIds != null) {
+                writer.WritePropertyName("subscribedUserIds");
+                writer.WriteArrayStart();
+                foreach (var subscribedUserId in SubscribedUserIds)
+                {
+                    if (subscribedUserId != null) {
+                        writer.Write(subscribedUserId.ToString());
                     }
                 }
                 writer.WriteArrayEnd();
@@ -160,6 +185,18 @@ namespace Gs2.Gs2Ranking.Model
                 for (var i = 0; i < TargetUserIds.Length; i++)
                 {
                     diff += TargetUserIds[i].CompareTo(other.TargetUserIds[i]);
+                }
+            }
+            if (SubscribedUserIds == null && SubscribedUserIds == other.SubscribedUserIds)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SubscribedUserIds.Length - other.SubscribedUserIds.Length;
+                for (var i = 0; i < SubscribedUserIds.Length; i++)
+                {
+                    diff += SubscribedUserIds[i].CompareTo(other.SubscribedUserIds[i]);
                 }
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)

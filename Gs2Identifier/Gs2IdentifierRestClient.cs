@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -1430,12 +1432,12 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Identifier
                 jsonWriter.WriteObjectStart();
                 if (_request.ClientId != null)
                 {
-                    jsonWriter.WritePropertyName("clientId");
+                    jsonWriter.WritePropertyName("client_id");
                     jsonWriter.Write(_request.ClientId.ToString());
                 }
                 if (_request.ClientSecret != null)
                 {
-                    jsonWriter.WritePropertyName("clientSecret");
+                    jsonWriter.WritePropertyName("client_secret");
                     jsonWriter.Write(_request.ClientSecret.ToString());
                 }
                 if (_request.ContextStack != null)

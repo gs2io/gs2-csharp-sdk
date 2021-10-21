@@ -33,6 +33,7 @@ namespace Gs2.Gs2Enhance.Request
         public bool? EnableDirectEnhance { set; get; }
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
+        public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; }
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; }
 
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -60,6 +61,11 @@ namespace Gs2.Gs2Enhance.Request
             return this;
         }
 
+        public UpdateNamespaceRequest WithEnhanceScript(Gs2.Gs2Enhance.Model.ScriptSetting enhanceScript) {
+            this.EnhanceScript = enhanceScript;
+            return this;
+        }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -77,6 +83,7 @@ namespace Gs2.Gs2Enhance.Request
                 .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -88,6 +95,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["enableDirectEnhance"] = EnableDirectEnhance,
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
+                ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -114,6 +122,9 @@ namespace Gs2.Gs2Enhance.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
+            }
+            if (EnhanceScript != null) {
+                EnhanceScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

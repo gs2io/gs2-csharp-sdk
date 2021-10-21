@@ -2197,6 +2197,72 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Ranking
 			return Gs2RestSession.Execute(task);
         }
 
+        private class CalcRankingTask : Gs2RestSessionTask<Result.CalcRankingResult>
+        {
+			private readonly Request.CalcRankingRequest _request;
+
+			public CalcRankingTask(Request.CalcRankingRequest request, UnityAction<AsyncResult<Result.CalcRankingResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "ranking")
+                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    + "/{namespaceName}/category/{categoryName}/calc/ranking";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{categoryName}", !string.IsNullOrEmpty(_request.CategoryName) ? _request.CategoryName.ToString() : "null");
+
+                UnityWebRequest.url = url;
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                }
+                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+
+                if (_request.RequestId != null)
+                {
+                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                }
+
+                return Send((Gs2RestSession)gs2Session);
+            }
+        }
+
+		/// <summary>
+		/// <returns>IEnumerator</returns>
+		/// <param name="callback">コールバックハンドラ</param>
+		/// <param name="request">リクエストパラメータ</param>
+		public IEnumerator CalcRanking(
+                Request.CalcRankingRequest request,
+                UnityAction<AsyncResult<Result.CalcRankingResult>> callback
+        )
+		{
+			var task = new CalcRankingTask(request, callback);
+			if (_certificateHandler != null)
+			{
+				task.UnityWebRequest.certificateHandler = _certificateHandler;
+			}
+			return Gs2RestSession.Execute(task);
+        }
+
         private class ExportMasterTask : Gs2RestSessionTask<Result.ExportMasterResult>
         {
 			private readonly Request.ExportMasterRequest _request;

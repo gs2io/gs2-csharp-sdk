@@ -18,47 +18,35 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
-using Gs2.Gs2Project.Model;
+using Gs2.Gs2Ranking.Model;
 using Gs2.Util.LitJson;
 using UnityEngine.Scripting;
 
-namespace Gs2.Gs2Project.Request
+namespace Gs2.Gs2Ranking.Result
 {
 	[Preserve]
 	[System.Serializable]
-	public class DeleteAccountRequest : Gs2Request<DeleteAccountRequest>
+	public class CalcRankingResult : IResult
 	{
-        public string AccountToken { set; get; }
-
-        public DeleteAccountRequest WithAccountToken(string accountToken) {
-            this.AccountToken = accountToken;
-            return this;
-        }
 
     	[Preserve]
-        public static DeleteAccountRequest FromJson(JsonData data)
+        public static CalcRankingResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DeleteAccountRequest()
-                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString());
+            return new CalcRankingResult();
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
-                ["accountToken"] = AccountToken,
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (AccountToken != null) {
-                writer.WritePropertyName("accountToken");
-                writer.Write(AccountToken.ToString());
-            }
             writer.WriteObjectEnd();
         }
     }

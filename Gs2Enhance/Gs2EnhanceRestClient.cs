@@ -159,6 +159,11 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("keyId");
                     jsonWriter.Write(_request.KeyId.ToString());
                 }
+                if (_request.EnhanceScript != null)
+                {
+                    jsonWriter.WritePropertyName("enhanceScript");
+                    _request.EnhanceScript.WriteJson(jsonWriter);
+                }
                 if (_request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -358,6 +363,11 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("keyId");
                     jsonWriter.Write(_request.KeyId.ToString());
+                }
+                if (_request.EnhanceScript != null)
+                {
+                    jsonWriter.WritePropertyName("enhanceScript");
+                    _request.EnhanceScript.WriteJson(jsonWriter);
                 }
                 if (_request.LogSetting != null)
                 {

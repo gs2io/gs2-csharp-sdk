@@ -1587,5 +1587,78 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Ranking
 			var task = new PutScoreByUserIdTask(request, callback);
 			return Gs2WebSocketSession.Execute(task);
         }
+
+        private class CalcRankingTask : Gs2WebSocketSessionTask<Result.CalcRankingResult>
+        {
+			private readonly Request.CalcRankingRequest _request;
+
+			public CalcRankingTask(Request.CalcRankingRequest request, UnityAction<AsyncResult<Result.CalcRankingResult>> userCallback) : base(userCallback)
+			{
+				_request = request;
+			}
+
+            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (_request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(_request.NamespaceName.ToString());
+                }
+                if (_request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(_request.CategoryName.ToString());
+                }
+                if (_request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(_request.ContextStack.ToString());
+                }
+                if (_request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(_request.RequestId);
+                }
+
+                jsonWriter.WritePropertyName("xGs2ClientId");
+                jsonWriter.Write(gs2Session.Credential.ClientId);
+                jsonWriter.WritePropertyName("xGs2ProjectToken");
+                jsonWriter.Write(gs2Session.ProjectToken);
+
+                jsonWriter.WritePropertyName("x_gs2");
+                jsonWriter.WriteObjectStart();
+                jsonWriter.WritePropertyName("service");
+                jsonWriter.Write("ranking");
+                jsonWriter.WritePropertyName("component");
+                jsonWriter.Write("ranking");
+                jsonWriter.WritePropertyName("function");
+                jsonWriter.Write("calcRanking");
+                jsonWriter.WritePropertyName("contentType");
+                jsonWriter.Write("application/json");
+                jsonWriter.WritePropertyName("requestId");
+                jsonWriter.Write(Gs2SessionTaskId.ToString());
+                jsonWriter.WriteObjectEnd();
+
+                jsonWriter.WriteObjectEnd();
+
+                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
+
+                return new EmptyCoroutine();
+            }
+        }
+
+		public IEnumerator CalcRanking(
+                Request.CalcRankingRequest request,
+                UnityAction<AsyncResult<Result.CalcRankingResult>> callback
+        )
+		{
+			var task = new CalcRankingTask(request, callback);
+			return Gs2WebSocketSession.Execute(task);
+        }
 	}
 }

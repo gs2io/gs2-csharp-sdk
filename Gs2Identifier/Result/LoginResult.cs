@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
@@ -32,18 +34,18 @@ namespace Gs2.Gs2Identifier.Result
         public string TokenType { set; get; }
         public int? ExpiresIn { set; get; }
 
-        public LoginResult WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public LoginResult WithAccessToken(string access_token) {
+            this.AccessToken = access_token;
             return this;
         }
 
-        public LoginResult WithTokenType(string tokenType) {
-            this.TokenType = tokenType;
+        public LoginResult WithTokenType(string token_type) {
+            this.TokenType = token_type;
             return this;
         }
 
-        public LoginResult WithExpiresIn(int? expiresIn) {
-            this.ExpiresIn = expiresIn;
+        public LoginResult WithExpiresIn(int? expires_in) {
+            this.ExpiresIn = expires_in;
             return this;
         }
 
@@ -54,17 +56,17 @@ namespace Gs2.Gs2Identifier.Result
                 return null;
             }
             return new LoginResult()
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithTokenType(!data.Keys.Contains("tokenType") || data["tokenType"] == null ? null : data["tokenType"].ToString())
-                .WithExpiresIn(!data.Keys.Contains("expiresIn") || data["expiresIn"] == null ? null : (int?)int.Parse(data["expiresIn"].ToString()));
+                .WithAccessToken(!data.Keys.Contains("access_token") || data["access_token"] == null ? null : data["access_token"].ToString())
+                .WithTokenType(!data.Keys.Contains("token_type") || data["token_type"] == null ? null : data["token_type"].ToString())
+                .WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)int.Parse(data["expires_in"].ToString()));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
-                ["accessToken"] = AccessToken,
-                ["tokenType"] = TokenType,
-                ["expiresIn"] = ExpiresIn,
+                ["access_token"] = AccessToken,
+                ["token_type"] = TokenType,
+                ["expires_in"] = ExpiresIn,
             };
         }
 
@@ -72,15 +74,15 @@ namespace Gs2.Gs2Identifier.Result
         {
             writer.WriteObjectStart();
             if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
+                writer.WritePropertyName("access_token");
                 writer.Write(AccessToken.ToString());
             }
             if (TokenType != null) {
-                writer.WritePropertyName("tokenType");
+                writer.WritePropertyName("token_type");
                 writer.Write(TokenType.ToString());
             }
             if (ExpiresIn != null) {
-                writer.WritePropertyName("expiresIn");
+                writer.WritePropertyName("expires_in");
                 writer.Write(int.Parse(ExpiresIn.ToString()));
             }
             writer.WriteObjectEnd();

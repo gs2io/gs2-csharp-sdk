@@ -292,6 +292,11 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (_request.AccountToken != null)
+                {
+                    jsonWriter.WritePropertyName("accountToken");
+                    jsonWriter.Write(_request.AccountToken.ToString());
+                }
                 if (_request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

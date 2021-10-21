@@ -33,6 +33,7 @@ namespace Gs2.Gs2Enhance.Model
         public bool? EnableDirectEnhance { set; get; }
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
+        public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; }
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Enhance.Model
             return this;
         }
 
+        public Namespace WithEnhanceScript(Gs2.Gs2Enhance.Model.ScriptSetting enhanceScript) {
+            this.EnhanceScript = enhanceScript;
+            return this;
+        }
+
         public Namespace WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -95,6 +101,7 @@ namespace Gs2.Gs2Enhance.Model
                 .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -109,6 +116,7 @@ namespace Gs2.Gs2Enhance.Model
                 ["enableDirectEnhance"] = EnableDirectEnhance,
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
+                ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -141,6 +149,10 @@ namespace Gs2.Gs2Enhance.Model
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
+            }
+            if (EnhanceScript != null) {
+                writer.WritePropertyName("enhanceScript");
+                EnhanceScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -208,6 +220,14 @@ namespace Gs2.Gs2Enhance.Model
             else
             {
                 diff += KeyId.CompareTo(other.KeyId);
+            }
+            if (EnhanceScript == null && EnhanceScript == other.EnhanceScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnhanceScript.CompareTo(other.EnhanceScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
