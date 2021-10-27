@@ -1,5 +1,4 @@
-﻿using UnityEngine.Networking;
-
+﻿
 namespace Gs2.Core.Model
 {
     public class ProjectTokenGs2Credential : IGs2Credential
@@ -16,15 +15,6 @@ namespace Gs2.Core.Model
         {
             ClientId = clientId;
             ProjectToken = projectToken;
-        }
-
-        public void Authorized(UnityWebRequest request)
-        {
-            request.SetRequestHeader("X-GS2-CLIENT-ID", ClientId);
-            if (ProjectToken != null)
-            {
-                request.SetRequestHeader("Authorization", "Bearer " + ProjectToken);
-            }
         }
     }
 }

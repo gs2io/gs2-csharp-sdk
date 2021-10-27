@@ -44,5 +44,36 @@ namespace Gs2.Core.Exception
 			get { return errors; }
 			set { errors = value; }
 		}
+		
+		public static Gs2Exception ExtractError(string message, long statusCode)
+		{
+			switch (statusCode)
+			{
+				case 0:    // インターネット非接続のときに UnityWebRequest のステータスコードは 0 になる
+					return new NoInternetConnectionException(message);
+				case 200:
+					return null;
+				case 400:
+					return new BadRequestException(message);
+				case 401:
+					return new UnauthorizedException(message);
+				case 402:
+					return new QuotaLimitExceededException(message);
+				case 404:
+					return new NotFoundException(message);
+				case 409:
+					return new ConflictException(message);
+				case 500:
+					return new InternalServerErrorException(message);
+				case 502:
+					return new BadGatewayException(message);
+				case 503:
+					return new ServiceUnavailableException(message);
+				case 504:
+					return new RequestTimeoutException(message);
+				default:
+					return new UnknownException(message);
+			}
+		}
 	}
 }

@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Dictionary.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class CreateEntryModelMasterRequest : Gs2Request<CreateEntryModelMasterRequest>
 	{
@@ -53,7 +58,9 @@ namespace Gs2.Gs2Dictionary.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static CreateEntryModelMasterRequest FromJson(JsonData data)
         {
             if (data == null) {

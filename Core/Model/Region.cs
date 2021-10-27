@@ -16,11 +16,16 @@
 
 using System;
 using System.Linq;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Core.Model
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	public enum Region
 	{
 		/** アジアパシフィック北東1(東京) */

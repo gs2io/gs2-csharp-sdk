@@ -13,17 +13,25 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-using UnityEngine.Events;
-using UnityEngine.Networking;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Project
+using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
+using System.Collections;
+using UnityEngine.Events;
+using UnityEngine.Networking;
+#else
+using System.Threading.Tasks;
+using System.Threading;
+#endif
+
+namespace Gs2.Gs2Project
 {
 	public class Gs2ProjectWebSocketClient : AbstractGs2Client
 	{
@@ -37,1131 +45,1159 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Project
 
 		}
 
-        private class CreateAccountTask : Gs2WebSocketSessionTask<Result.CreateAccountResult>
+
+        private class CreateAccountTask : Gs2WebSocketSessionTask<Request.CreateAccountRequest, Result.CreateAccountResult>
         {
-			private readonly Request.CreateAccountRequest _request;
+	        public CreateAccountTask(IGs2Session session, Request.CreateAccountRequest request) : base(session, request)
+	        {
+	        }
 
-			public CreateAccountTask(Request.CreateAccountRequest request, UnityAction<AsyncResult<Result.CreateAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.CreateAccountRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email.ToString());
                 }
-                if (_request.FullName != null)
+                if (request.FullName != null)
                 {
                     jsonWriter.WritePropertyName("fullName");
-                    jsonWriter.Write(_request.FullName.ToString());
+                    jsonWriter.Write(request.FullName.ToString());
                 }
-                if (_request.CompanyName != null)
+                if (request.CompanyName != null)
                 {
                     jsonWriter.WritePropertyName("companyName");
-                    jsonWriter.Write(_request.CompanyName.ToString());
+                    jsonWriter.Write(request.CompanyName.ToString());
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("account");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("createAccount");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "createAccount",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateAccount(
                 Request.CreateAccountRequest request,
                 UnityAction<AsyncResult<Result.CreateAccountResult>> callback
         )
 		{
-			var task = new CreateAccountTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new CreateAccountTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateAccountResult> CreateAccount(
+            Request.CreateAccountRequest request
+        )
+		{
+		    var task = new CreateAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class VerifyTask : Gs2WebSocketSessionTask<Result.VerifyResult>
+
+        private class VerifyTask : Gs2WebSocketSessionTask<Request.VerifyRequest, Result.VerifyResult>
         {
-			private readonly Request.VerifyRequest _request;
+	        public VerifyTask(IGs2Session session, Request.VerifyRequest request) : base(session, request)
+	        {
+	        }
 
-			public VerifyTask(Request.VerifyRequest request, UnityAction<AsyncResult<Result.VerifyResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.VerifyToken != null)
+                if (request.VerifyToken != null)
                 {
                     jsonWriter.WritePropertyName("verifyToken");
-                    jsonWriter.Write(_request.VerifyToken.ToString());
+                    jsonWriter.Write(request.VerifyToken.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("account");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("verify");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "verify",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Verify(
                 Request.VerifyRequest request,
                 UnityAction<AsyncResult<Result.VerifyResult>> callback
         )
 		{
-			var task = new VerifyTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new VerifyTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.VerifyResult> Verify(
+            Request.VerifyRequest request
+        )
+		{
+		    var task = new VerifyTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateAccountTask : Gs2WebSocketSessionTask<Result.UpdateAccountResult>
+
+        private class UpdateAccountTask : Gs2WebSocketSessionTask<Request.UpdateAccountRequest, Result.UpdateAccountResult>
         {
-			private readonly Request.UpdateAccountRequest _request;
+	        public UpdateAccountTask(IGs2Session session, Request.UpdateAccountRequest request) : base(session, request)
+	        {
+	        }
 
-			public UpdateAccountTask(Request.UpdateAccountRequest request, UnityAction<AsyncResult<Result.UpdateAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateAccountRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email.ToString());
                 }
-                if (_request.FullName != null)
+                if (request.FullName != null)
                 {
                     jsonWriter.WritePropertyName("fullName");
-                    jsonWriter.Write(_request.FullName.ToString());
+                    jsonWriter.Write(request.FullName.ToString());
                 }
-                if (_request.CompanyName != null)
+                if (request.CompanyName != null)
                 {
                     jsonWriter.WritePropertyName("companyName");
-                    jsonWriter.Write(_request.CompanyName.ToString());
+                    jsonWriter.Write(request.CompanyName.ToString());
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password.ToString());
                 }
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("account");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("updateAccount");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "updateAccount",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateAccount(
                 Request.UpdateAccountRequest request,
                 UnityAction<AsyncResult<Result.UpdateAccountResult>> callback
         )
 		{
-			var task = new UpdateAccountTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new UpdateAccountTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateAccountResult> UpdateAccount(
+            Request.UpdateAccountRequest request
+        )
+		{
+		    var task = new UpdateAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteAccountTask : Gs2WebSocketSessionTask<Result.DeleteAccountResult>
+
+        private class DeleteAccountTask : Gs2WebSocketSessionTask<Request.DeleteAccountRequest, Result.DeleteAccountResult>
         {
-			private readonly Request.DeleteAccountRequest _request;
+	        public DeleteAccountTask(IGs2Session session, Request.DeleteAccountRequest request) : base(session, request)
+	        {
+	        }
 
-			public DeleteAccountTask(Request.DeleteAccountRequest request, UnityAction<AsyncResult<Result.DeleteAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteAccountRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("account");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("deleteAccount");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "deleteAccount",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteAccount(
                 Request.DeleteAccountRequest request,
                 UnityAction<AsyncResult<Result.DeleteAccountResult>> callback
         )
 		{
-			var task = new DeleteAccountTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new DeleteAccountTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteAccountResult> DeleteAccount(
+            Request.DeleteAccountRequest request
+        )
+		{
+		    var task = new DeleteAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateProjectTask : Gs2WebSocketSessionTask<Result.CreateProjectResult>
+
+        private class CreateProjectTask : Gs2WebSocketSessionTask<Request.CreateProjectRequest, Result.CreateProjectResult>
         {
-			private readonly Request.CreateProjectRequest _request;
+	        public CreateProjectTask(IGs2Session session, Request.CreateProjectRequest request) : base(session, request)
+	        {
+	        }
 
-			public CreateProjectTask(Request.CreateProjectRequest request, UnityAction<AsyncResult<Result.CreateProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.CreateProjectRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name.ToString());
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description.ToString());
                 }
-                if (_request.Plan != null)
+                if (request.Plan != null)
                 {
                     jsonWriter.WritePropertyName("plan");
-                    jsonWriter.Write(_request.Plan.ToString());
+                    jsonWriter.Write(request.Plan.ToString());
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName.ToString());
                 }
-                if (_request.EnableEventBridge != null)
+                if (request.EnableEventBridge != null)
                 {
                     jsonWriter.WritePropertyName("enableEventBridge");
-                    jsonWriter.Write(_request.EnableEventBridge.ToString());
+                    jsonWriter.Write(request.EnableEventBridge.ToString());
                 }
-                if (_request.EventBridgeAwsAccountId != null)
+                if (request.EventBridgeAwsAccountId != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsAccountId");
-                    jsonWriter.Write(_request.EventBridgeAwsAccountId.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsAccountId.ToString());
                 }
-                if (_request.EventBridgeAwsRegion != null)
+                if (request.EventBridgeAwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsRegion");
-                    jsonWriter.Write(_request.EventBridgeAwsRegion.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsRegion.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("createProject");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "createProject",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateProject(
                 Request.CreateProjectRequest request,
                 UnityAction<AsyncResult<Result.CreateProjectResult>> callback
         )
 		{
-			var task = new CreateProjectTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new CreateProjectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateProjectResult> CreateProject(
+            Request.CreateProjectRequest request
+        )
+		{
+		    var task = new CreateProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTask : Gs2WebSocketSessionTask<Result.GetProjectResult>
+
+        private class GetProjectTask : Gs2WebSocketSessionTask<Request.GetProjectRequest, Result.GetProjectResult>
         {
-			private readonly Request.GetProjectRequest _request;
+	        public GetProjectTask(IGs2Session session, Request.GetProjectRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetProjectTask(Request.GetProjectRequest request, UnityAction<AsyncResult<Result.GetProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetProjectRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ProjectName != null)
+                if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
-                    jsonWriter.Write(_request.ProjectName.ToString());
+                    jsonWriter.Write(request.ProjectName.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getProject");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "getProject",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProject(
                 Request.GetProjectRequest request,
                 UnityAction<AsyncResult<Result.GetProjectResult>> callback
         )
 		{
-			var task = new GetProjectTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetProjectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectResult> GetProject(
+            Request.GetProjectRequest request
+        )
+		{
+		    var task = new GetProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTokenTask : Gs2WebSocketSessionTask<Result.GetProjectTokenResult>
+
+        private class GetProjectTokenTask : Gs2WebSocketSessionTask<Request.GetProjectTokenRequest, Result.GetProjectTokenResult>
         {
-			private readonly Request.GetProjectTokenRequest _request;
+	        public GetProjectTokenTask(IGs2Session session, Request.GetProjectTokenRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetProjectTokenTask(Request.GetProjectTokenRequest request, UnityAction<AsyncResult<Result.GetProjectTokenResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetProjectTokenRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.ProjectName != null)
+                if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
-                    jsonWriter.Write(_request.ProjectName.ToString());
+                    jsonWriter.Write(request.ProjectName.ToString());
                 }
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getProjectToken");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "getProjectToken",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProjectToken(
                 Request.GetProjectTokenRequest request,
                 UnityAction<AsyncResult<Result.GetProjectTokenResult>> callback
         )
 		{
-			var task = new GetProjectTokenTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetProjectTokenTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectTokenResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectTokenResult> GetProjectToken(
+            Request.GetProjectTokenRequest request
+        )
+		{
+		    var task = new GetProjectTokenTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTokenByIdentifierTask : Gs2WebSocketSessionTask<Result.GetProjectTokenByIdentifierResult>
+
+        private class GetProjectTokenByIdentifierTask : Gs2WebSocketSessionTask<Request.GetProjectTokenByIdentifierRequest, Result.GetProjectTokenByIdentifierResult>
         {
-			private readonly Request.GetProjectTokenByIdentifierRequest _request;
+	        public GetProjectTokenByIdentifierTask(IGs2Session session, Request.GetProjectTokenByIdentifierRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetProjectTokenByIdentifierTask(Request.GetProjectTokenByIdentifierRequest request, UnityAction<AsyncResult<Result.GetProjectTokenByIdentifierResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetProjectTokenByIdentifierRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountName != null)
+                if (request.AccountName != null)
                 {
                     jsonWriter.WritePropertyName("accountName");
-                    jsonWriter.Write(_request.AccountName.ToString());
+                    jsonWriter.Write(request.AccountName.ToString());
                 }
-                if (_request.ProjectName != null)
+                if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
-                    jsonWriter.Write(_request.ProjectName.ToString());
+                    jsonWriter.Write(request.ProjectName.ToString());
                 }
-                if (_request.UserName != null)
+                if (request.UserName != null)
                 {
                     jsonWriter.WritePropertyName("userName");
-                    jsonWriter.Write(_request.UserName.ToString());
+                    jsonWriter.Write(request.UserName.ToString());
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getProjectTokenByIdentifier");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "getProjectTokenByIdentifier",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProjectTokenByIdentifier(
                 Request.GetProjectTokenByIdentifierRequest request,
                 UnityAction<AsyncResult<Result.GetProjectTokenByIdentifierResult>> callback
         )
 		{
-			var task = new GetProjectTokenByIdentifierTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetProjectTokenByIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectTokenByIdentifierResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifier(
+            Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+		    var task = new GetProjectTokenByIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateProjectTask : Gs2WebSocketSessionTask<Result.UpdateProjectResult>
+
+        private class UpdateProjectTask : Gs2WebSocketSessionTask<Request.UpdateProjectRequest, Result.UpdateProjectResult>
         {
-			private readonly Request.UpdateProjectRequest _request;
+	        public UpdateProjectTask(IGs2Session session, Request.UpdateProjectRequest request) : base(session, request)
+	        {
+	        }
 
-			public UpdateProjectTask(Request.UpdateProjectRequest request, UnityAction<AsyncResult<Result.UpdateProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateProjectRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ProjectName != null)
+                if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
-                    jsonWriter.Write(_request.ProjectName.ToString());
+                    jsonWriter.Write(request.ProjectName.ToString());
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description.ToString());
                 }
-                if (_request.Plan != null)
+                if (request.Plan != null)
                 {
                     jsonWriter.WritePropertyName("plan");
-                    jsonWriter.Write(_request.Plan.ToString());
+                    jsonWriter.Write(request.Plan.ToString());
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName.ToString());
                 }
-                if (_request.EnableEventBridge != null)
+                if (request.EnableEventBridge != null)
                 {
                     jsonWriter.WritePropertyName("enableEventBridge");
-                    jsonWriter.Write(_request.EnableEventBridge.ToString());
+                    jsonWriter.Write(request.EnableEventBridge.ToString());
                 }
-                if (_request.EventBridgeAwsAccountId != null)
+                if (request.EventBridgeAwsAccountId != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsAccountId");
-                    jsonWriter.Write(_request.EventBridgeAwsAccountId.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsAccountId.ToString());
                 }
-                if (_request.EventBridgeAwsRegion != null)
+                if (request.EventBridgeAwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsRegion");
-                    jsonWriter.Write(_request.EventBridgeAwsRegion.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsRegion.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("updateProject");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "updateProject",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateProject(
                 Request.UpdateProjectRequest request,
                 UnityAction<AsyncResult<Result.UpdateProjectResult>> callback
         )
 		{
-			var task = new UpdateProjectTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new UpdateProjectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateProjectResult> UpdateProject(
+            Request.UpdateProjectRequest request
+        )
+		{
+		    var task = new UpdateProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteProjectTask : Gs2WebSocketSessionTask<Result.DeleteProjectResult>
+
+        private class DeleteProjectTask : Gs2WebSocketSessionTask<Request.DeleteProjectRequest, Result.DeleteProjectResult>
         {
-			private readonly Request.DeleteProjectRequest _request;
+	        public DeleteProjectTask(IGs2Session session, Request.DeleteProjectRequest request) : base(session, request)
+	        {
+	        }
 
-			public DeleteProjectTask(Request.DeleteProjectRequest request, UnityAction<AsyncResult<Result.DeleteProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteProjectRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.ProjectName != null)
+                if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
-                    jsonWriter.Write(_request.ProjectName.ToString());
+                    jsonWriter.Write(request.ProjectName.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("deleteProject");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "project",
+                    "deleteProject",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteProject(
                 Request.DeleteProjectRequest request,
                 UnityAction<AsyncResult<Result.DeleteProjectResult>> callback
         )
 		{
-			var task = new DeleteProjectTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new DeleteProjectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteProjectResult> DeleteProject(
+            Request.DeleteProjectRequest request
+        )
+		{
+		    var task = new DeleteProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateBillingMethodTask : Gs2WebSocketSessionTask<Result.CreateBillingMethodResult>
+
+        private class CreateBillingMethodTask : Gs2WebSocketSessionTask<Request.CreateBillingMethodRequest, Result.CreateBillingMethodResult>
         {
-			private readonly Request.CreateBillingMethodRequest _request;
+	        public CreateBillingMethodTask(IGs2Session session, Request.CreateBillingMethodRequest request) : base(session, request)
+	        {
+	        }
 
-			public CreateBillingMethodTask(Request.CreateBillingMethodRequest request, UnityAction<AsyncResult<Result.CreateBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.CreateBillingMethodRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description.ToString());
                 }
-                if (_request.MethodType != null)
+                if (request.MethodType != null)
                 {
                     jsonWriter.WritePropertyName("methodType");
-                    jsonWriter.Write(_request.MethodType.ToString());
+                    jsonWriter.Write(request.MethodType.ToString());
                 }
-                if (_request.CardCustomerId != null)
+                if (request.CardCustomerId != null)
                 {
                     jsonWriter.WritePropertyName("cardCustomerId");
-                    jsonWriter.Write(_request.CardCustomerId.ToString());
+                    jsonWriter.Write(request.CardCustomerId.ToString());
                 }
-                if (_request.PartnerId != null)
+                if (request.PartnerId != null)
                 {
                     jsonWriter.WritePropertyName("partnerId");
-                    jsonWriter.Write(_request.PartnerId.ToString());
+                    jsonWriter.Write(request.PartnerId.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("billingMethod");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("createBillingMethod");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "billingMethod",
+                    "createBillingMethod",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateBillingMethod(
                 Request.CreateBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.CreateBillingMethodResult>> callback
         )
 		{
-			var task = new CreateBillingMethodTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new CreateBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateBillingMethodResult> CreateBillingMethod(
+            Request.CreateBillingMethodRequest request
+        )
+		{
+		    var task = new CreateBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetBillingMethodTask : Gs2WebSocketSessionTask<Result.GetBillingMethodResult>
+
+        private class GetBillingMethodTask : Gs2WebSocketSessionTask<Request.GetBillingMethodRequest, Result.GetBillingMethodResult>
         {
-			private readonly Request.GetBillingMethodRequest _request;
+	        public GetBillingMethodTask(IGs2Session session, Request.GetBillingMethodRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetBillingMethodTask(Request.GetBillingMethodRequest request, UnityAction<AsyncResult<Result.GetBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetBillingMethodRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("billingMethod");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getBillingMethod");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "billingMethod",
+                    "getBillingMethod",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetBillingMethod(
                 Request.GetBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.GetBillingMethodResult>> callback
         )
 		{
-			var task = new GetBillingMethodTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetBillingMethodResult> GetBillingMethod(
+            Request.GetBillingMethodRequest request
+        )
+		{
+		    var task = new GetBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateBillingMethodTask : Gs2WebSocketSessionTask<Result.UpdateBillingMethodResult>
+
+        private class UpdateBillingMethodTask : Gs2WebSocketSessionTask<Request.UpdateBillingMethodRequest, Result.UpdateBillingMethodResult>
         {
-			private readonly Request.UpdateBillingMethodRequest _request;
+	        public UpdateBillingMethodTask(IGs2Session session, Request.UpdateBillingMethodRequest request) : base(session, request)
+	        {
+	        }
 
-			public UpdateBillingMethodTask(Request.UpdateBillingMethodRequest request, UnityAction<AsyncResult<Result.UpdateBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateBillingMethodRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName.ToString());
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("billingMethod");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("updateBillingMethod");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "billingMethod",
+                    "updateBillingMethod",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateBillingMethod(
                 Request.UpdateBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.UpdateBillingMethodResult>> callback
         )
 		{
-			var task = new UpdateBillingMethodTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new UpdateBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateBillingMethodResult> UpdateBillingMethod(
+            Request.UpdateBillingMethodRequest request
+        )
+		{
+		    var task = new UpdateBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteBillingMethodTask : Gs2WebSocketSessionTask<Result.DeleteBillingMethodResult>
+
+        private class DeleteBillingMethodTask : Gs2WebSocketSessionTask<Request.DeleteBillingMethodRequest, Result.DeleteBillingMethodResult>
         {
-			private readonly Request.DeleteBillingMethodRequest _request;
+	        public DeleteBillingMethodTask(IGs2Session session, Request.DeleteBillingMethodRequest request) : base(session, request)
+	        {
+	        }
 
-			public DeleteBillingMethodTask(Request.DeleteBillingMethodRequest request, UnityAction<AsyncResult<Result.DeleteBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteBillingMethodRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken.ToString());
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("project");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("billingMethod");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("deleteBillingMethod");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "billingMethod",
+                    "deleteBillingMethod",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteBillingMethod(
                 Request.DeleteBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.DeleteBillingMethodResult>> callback
         )
 		{
-			var task = new DeleteBillingMethodTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new DeleteBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteBillingMethodResult> DeleteBillingMethod(
+            Request.DeleteBillingMethodRequest request
+        )
+		{
+		    var task = new DeleteBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Log.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Log.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class CountAccessLogRequest : Gs2Request<CountAccessLogRequest>
 	{
@@ -83,7 +88,9 @@ namespace Gs2.Gs2Log.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static CountAccessLogRequest FromJson(JsonData data)
         {
             if (data == null) {

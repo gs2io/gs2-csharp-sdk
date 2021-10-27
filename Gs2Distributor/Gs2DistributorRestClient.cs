@@ -13,8 +13,15 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+#else
+using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,1733 +30,1999 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Distributor
+using Gs2.Gs2Distributor.Request;
+using Gs2.Gs2Distributor.Result;
+using Gs2.Util.LitJson;
+
+namespace Gs2.Gs2Distributor
 {
 	public class Gs2DistributorRestClient : AbstractGs2Client
 	{
+#if UNITY_2017_1_OR_NEWER
 		private readonly CertificateHandler _certificateHandler;
+#endif
 
 		public static string Endpoint = "distributor";
 
         protected Gs2RestSession Gs2RestSession => (Gs2RestSession) Gs2Session;
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="Gs2RestSession">REST API 用セッション</param>
 		public Gs2DistributorRestClient(Gs2RestSession Gs2RestSession) : base(Gs2RestSession)
 		{
 
 		}
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="gs2RestSession">REST API 用セッション</param>
-		/// <param name="certificateHandler"></param>
+#if UNITY_2017_1_OR_NEWER
 		public Gs2DistributorRestClient(Gs2RestSession gs2RestSession, CertificateHandler certificateHandler) : base(gs2RestSession)
 		{
 			_certificateHandler = certificateHandler;
 		}
+#endif
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<Result.DescribeNamespacesResult>
+
+        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
-			private readonly Request.DescribeNamespacesRequest _request;
-
-			public DescribeNamespacesTask(Request.DescribeNamespacesRequest request, UnityAction<AsyncResult<Result.DescribeNamespacesResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeNamespacesRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
         )
 		{
-			var task = new DescribeNamespacesTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			var task = new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<Result.CreateNamespaceResult>
+
+        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
-			private readonly Request.CreateNamespaceRequest _request;
-
-			public CreateNamespaceTask(Request.CreateNamespaceRequest request, UnityAction<AsyncResult<Result.CreateNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.AssumeUserId != null)
+                if (request.AssumeUserId != null)
                 {
                     jsonWriter.WritePropertyName("assumeUserId");
-                    jsonWriter.Write(_request.AssumeUserId.ToString());
+                    jsonWriter.Write(request.AssumeUserId);
                 }
-                if (_request.LogSetting != null)
+                if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.LogSetting.WriteJson(jsonWriter);
+                    request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
         )
 		{
-			var task = new CreateNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			var task = new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<Result.GetNamespaceStatusResult>
+
+        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
-			private readonly Request.GetNamespaceStatusRequest _request;
-
-			public GetNamespaceStatusTask(Request.GetNamespaceStatusRequest request, UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetNamespaceStatusRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/status";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
         )
 		{
-			var task = new GetNamespaceStatusTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			var task = new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetNamespaceTask : Gs2RestSessionTask<Result.GetNamespaceResult>
+
+        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
-			private readonly Request.GetNamespaceRequest _request;
-
-			public GetNamespaceTask(Request.GetNamespaceRequest request, UnityAction<AsyncResult<Result.GetNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
         )
 		{
-			var task = new GetNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			var task = new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<Result.UpdateNamespaceResult>
+
+        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
-			private readonly Request.UpdateNamespaceRequest _request;
-
-			public UpdateNamespaceTask(Request.UpdateNamespaceRequest request, UnityAction<AsyncResult<Result.UpdateNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.AssumeUserId != null)
+                if (request.AssumeUserId != null)
                 {
                     jsonWriter.WritePropertyName("assumeUserId");
-                    jsonWriter.Write(_request.AssumeUserId.ToString());
+                    jsonWriter.Write(request.AssumeUserId);
                 }
-                if (_request.LogSetting != null)
+                if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.LogSetting.WriteJson(jsonWriter);
+                    request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
         )
 		{
-			var task = new UpdateNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			var task = new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<Result.DeleteNamespaceResult>
+
+        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
-			private readonly Request.DeleteNamespaceRequest _request;
-
-			public DeleteNamespaceTask(Request.DeleteNamespaceRequest request, UnityAction<AsyncResult<Result.DeleteNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
         )
 		{
-			var task = new DeleteNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			var task = new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeDistributorModelMastersTask : Gs2RestSessionTask<Result.DescribeDistributorModelMastersResult>
+
+        private class DescribeDistributorModelMastersTask : Gs2RestSessionTask<DescribeDistributorModelMastersRequest, DescribeDistributorModelMastersResult>
         {
-			private readonly Request.DescribeDistributorModelMastersRequest _request;
-
-			public DescribeDistributorModelMastersTask(Request.DescribeDistributorModelMastersRequest request, UnityAction<AsyncResult<Result.DescribeDistributorModelMastersResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeDistributorModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDistributorModelMastersRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeDistributorModelMastersRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/distributor";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeDistributorModelMasters(
                 Request.DescribeDistributorModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeDistributorModelMastersResult>> callback
         )
 		{
-			var task = new DescribeDistributorModelMastersTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeDistributorModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeDistributorModelMastersResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeDistributorModelMastersResult> DescribeDistributorModelMastersAsync(
+                Request.DescribeDistributorModelMastersRequest request
+        )
+		{
+			var task = new DescribeDistributorModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateDistributorModelMasterTask : Gs2RestSessionTask<Result.CreateDistributorModelMasterResult>
+
+        private class CreateDistributorModelMasterTask : Gs2RestSessionTask<CreateDistributorModelMasterRequest, CreateDistributorModelMasterResult>
         {
-			private readonly Request.CreateDistributorModelMasterRequest _request;
-
-			public CreateDistributorModelMasterTask(Request.CreateDistributorModelMasterRequest request, UnityAction<AsyncResult<Result.CreateDistributorModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateDistributorModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateDistributorModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateDistributorModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/distributor";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.InboxNamespaceId != null)
+                if (request.InboxNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("inboxNamespaceId");
-                    jsonWriter.Write(_request.InboxNamespaceId.ToString());
+                    jsonWriter.Write(request.InboxNamespaceId);
                 }
-                if (_request.WhiteListTargetIds != null)
+                if (request.WhiteListTargetIds != null)
                 {
                     jsonWriter.WritePropertyName("whiteListTargetIds");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.WhiteListTargetIds)
+                    foreach(var item in request.WhiteListTargetIds)
                     {
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateDistributorModelMaster(
                 Request.CreateDistributorModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateDistributorModelMasterResult>> callback
         )
 		{
-			var task = new CreateDistributorModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateDistributorModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateDistributorModelMasterResult> CreateDistributorModelMasterAsync(
+                Request.CreateDistributorModelMasterRequest request
+        )
+		{
+			var task = new CreateDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetDistributorModelMasterTask : Gs2RestSessionTask<Result.GetDistributorModelMasterResult>
+
+        private class GetDistributorModelMasterTask : Gs2RestSessionTask<GetDistributorModelMasterRequest, GetDistributorModelMasterResult>
         {
-			private readonly Request.GetDistributorModelMasterRequest _request;
-
-			public GetDistributorModelMasterTask(Request.GetDistributorModelMasterRequest request, UnityAction<AsyncResult<Result.GetDistributorModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetDistributorModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetDistributorModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetDistributorModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/distributor/{distributorName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(_request.DistributorName) ? _request.DistributorName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(request.DistributorName) ? request.DistributorName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetDistributorModelMaster(
                 Request.GetDistributorModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetDistributorModelMasterResult>> callback
         )
 		{
-			var task = new GetDistributorModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDistributorModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetDistributorModelMasterResult> GetDistributorModelMasterAsync(
+                Request.GetDistributorModelMasterRequest request
+        )
+		{
+			var task = new GetDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateDistributorModelMasterTask : Gs2RestSessionTask<Result.UpdateDistributorModelMasterResult>
+
+        private class UpdateDistributorModelMasterTask : Gs2RestSessionTask<UpdateDistributorModelMasterRequest, UpdateDistributorModelMasterResult>
         {
-			private readonly Request.UpdateDistributorModelMasterRequest _request;
-
-			public UpdateDistributorModelMasterTask(Request.UpdateDistributorModelMasterRequest request, UnityAction<AsyncResult<Result.UpdateDistributorModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateDistributorModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateDistributorModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateDistributorModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/distributor/{distributorName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(_request.DistributorName) ? _request.DistributorName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(request.DistributorName) ? request.DistributorName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.InboxNamespaceId != null)
+                if (request.InboxNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("inboxNamespaceId");
-                    jsonWriter.Write(_request.InboxNamespaceId.ToString());
+                    jsonWriter.Write(request.InboxNamespaceId);
                 }
-                if (_request.WhiteListTargetIds != null)
+                if (request.WhiteListTargetIds != null)
                 {
                     jsonWriter.WritePropertyName("whiteListTargetIds");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.WhiteListTargetIds)
+                    foreach(var item in request.WhiteListTargetIds)
                     {
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateDistributorModelMaster(
                 Request.UpdateDistributorModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateDistributorModelMasterResult>> callback
         )
 		{
-			var task = new UpdateDistributorModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateDistributorModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateDistributorModelMasterResult> UpdateDistributorModelMasterAsync(
+                Request.UpdateDistributorModelMasterRequest request
+        )
+		{
+			var task = new UpdateDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteDistributorModelMasterTask : Gs2RestSessionTask<Result.DeleteDistributorModelMasterResult>
+
+        private class DeleteDistributorModelMasterTask : Gs2RestSessionTask<DeleteDistributorModelMasterRequest, DeleteDistributorModelMasterResult>
         {
-			private readonly Request.DeleteDistributorModelMasterRequest _request;
-
-			public DeleteDistributorModelMasterTask(Request.DeleteDistributorModelMasterRequest request, UnityAction<AsyncResult<Result.DeleteDistributorModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteDistributorModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDistributorModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteDistributorModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/distributor/{distributorName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(_request.DistributorName) ? _request.DistributorName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(request.DistributorName) ? request.DistributorName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteDistributorModelMaster(
                 Request.DeleteDistributorModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteDistributorModelMasterResult>> callback
         )
 		{
-			var task = new DeleteDistributorModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteDistributorModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteDistributorModelMasterResult> DeleteDistributorModelMasterAsync(
+                Request.DeleteDistributorModelMasterRequest request
+        )
+		{
+			var task = new DeleteDistributorModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeDistributorModelsTask : Gs2RestSessionTask<Result.DescribeDistributorModelsResult>
+
+        private class DescribeDistributorModelsTask : Gs2RestSessionTask<DescribeDistributorModelsRequest, DescribeDistributorModelsResult>
         {
-			private readonly Request.DescribeDistributorModelsRequest _request;
-
-			public DescribeDistributorModelsTask(Request.DescribeDistributorModelsRequest request, UnityAction<AsyncResult<Result.DescribeDistributorModelsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeDistributorModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDistributorModelsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeDistributorModelsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distributor";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeDistributorModels(
                 Request.DescribeDistributorModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeDistributorModelsResult>> callback
         )
 		{
-			var task = new DescribeDistributorModelsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeDistributorModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeDistributorModelsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeDistributorModelsResult> DescribeDistributorModelsAsync(
+                Request.DescribeDistributorModelsRequest request
+        )
+		{
+			var task = new DescribeDistributorModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetDistributorModelTask : Gs2RestSessionTask<Result.GetDistributorModelResult>
+
+        private class GetDistributorModelTask : Gs2RestSessionTask<GetDistributorModelRequest, GetDistributorModelResult>
         {
-			private readonly Request.GetDistributorModelRequest _request;
-
-			public GetDistributorModelTask(Request.GetDistributorModelRequest request, UnityAction<AsyncResult<Result.GetDistributorModelResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetDistributorModelTask(IGs2Session session, RestSessionRequestFactory factory, GetDistributorModelRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetDistributorModelRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distributor/{distributorName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(_request.DistributorName) ? _request.DistributorName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(request.DistributorName) ? request.DistributorName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetDistributorModel(
                 Request.GetDistributorModelRequest request,
                 UnityAction<AsyncResult<Result.GetDistributorModelResult>> callback
         )
 		{
-			var task = new GetDistributorModelTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetDistributorModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDistributorModelResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetDistributorModelResult> GetDistributorModelAsync(
+                Request.GetDistributorModelRequest request
+        )
+		{
+			var task = new GetDistributorModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class ExportMasterTask : Gs2RestSessionTask<Result.ExportMasterResult>
+
+        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
-			private readonly Request.ExportMasterRequest _request;
-
-			public ExportMasterTask(Request.ExportMasterRequest request, UnityAction<AsyncResult<Result.ExportMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(ExportMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/export";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator ExportMaster(
                 Request.ExportMasterRequest request,
                 UnityAction<AsyncResult<Result.ExportMasterResult>> callback
         )
 		{
-			var task = new ExportMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetCurrentDistributorMasterTask : Gs2RestSessionTask<Result.GetCurrentDistributorMasterResult>
+
+        private class GetCurrentDistributorMasterTask : Gs2RestSessionTask<GetCurrentDistributorMasterRequest, GetCurrentDistributorMasterResult>
         {
-			private readonly Request.GetCurrentDistributorMasterRequest _request;
-
-			public GetCurrentDistributorMasterTask(Request.GetCurrentDistributorMasterRequest request, UnityAction<AsyncResult<Result.GetCurrentDistributorMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetCurrentDistributorMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentDistributorMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetCurrentDistributorMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetCurrentDistributorMaster(
                 Request.GetCurrentDistributorMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCurrentDistributorMasterResult>> callback
         )
 		{
-			var task = new GetCurrentDistributorMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCurrentDistributorMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetCurrentDistributorMasterResult> GetCurrentDistributorMasterAsync(
+                Request.GetCurrentDistributorMasterRequest request
+        )
+		{
+			var task = new GetCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateCurrentDistributorMasterTask : Gs2RestSessionTask<Result.UpdateCurrentDistributorMasterResult>
+
+        private class UpdateCurrentDistributorMasterTask : Gs2RestSessionTask<UpdateCurrentDistributorMasterRequest, UpdateCurrentDistributorMasterResult>
         {
-			private readonly Request.UpdateCurrentDistributorMasterRequest _request;
-
-			public UpdateCurrentDistributorMasterTask(Request.UpdateCurrentDistributorMasterRequest request, UnityAction<AsyncResult<Result.UpdateCurrentDistributorMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateCurrentDistributorMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentDistributorMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentDistributorMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Settings != null)
+                if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
-                    jsonWriter.Write(_request.Settings.ToString());
+                    jsonWriter.Write(request.Settings);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateCurrentDistributorMaster(
                 Request.UpdateCurrentDistributorMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentDistributorMasterResult>> callback
         )
 		{
-			var task = new UpdateCurrentDistributorMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentDistributorMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateCurrentDistributorMasterResult> UpdateCurrentDistributorMasterAsync(
+                Request.UpdateCurrentDistributorMasterRequest request
+        )
+		{
+			var task = new UpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateCurrentDistributorMasterFromGitHubTask : Gs2RestSessionTask<Result.UpdateCurrentDistributorMasterFromGitHubResult>
+
+        private class UpdateCurrentDistributorMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentDistributorMasterFromGitHubRequest, UpdateCurrentDistributorMasterFromGitHubResult>
         {
-			private readonly Request.UpdateCurrentDistributorMasterFromGitHubRequest _request;
-
-			public UpdateCurrentDistributorMasterFromGitHubTask(Request.UpdateCurrentDistributorMasterFromGitHubRequest request, UnityAction<AsyncResult<Result.UpdateCurrentDistributorMasterFromGitHubResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateCurrentDistributorMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentDistributorMasterFromGitHubRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentDistributorMasterFromGitHubRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/from_git_hub";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.CheckoutSetting != null)
+                if (request.CheckoutSetting != null)
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
-                    _request.CheckoutSetting.WriteJson(jsonWriter);
+                    request.CheckoutSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateCurrentDistributorMasterFromGitHub(
                 Request.UpdateCurrentDistributorMasterFromGitHubRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentDistributorMasterFromGitHubResult>> callback
         )
 		{
-			var task = new UpdateCurrentDistributorMasterFromGitHubTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateCurrentDistributorMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentDistributorMasterFromGitHubResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateCurrentDistributorMasterFromGitHubResult> UpdateCurrentDistributorMasterFromGitHubAsync(
+                Request.UpdateCurrentDistributorMasterFromGitHubRequest request
+        )
+		{
+			var task = new UpdateCurrentDistributorMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DistributeTask : Gs2RestSessionTask<Result.DistributeResult>
+
+        private class DistributeTask : Gs2RestSessionTask<DistributeRequest, DistributeResult>
         {
-			private readonly Request.DistributeRequest _request;
-
-			public DistributeTask(Request.DistributeRequest request, UnityAction<AsyncResult<Result.DistributeResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DistributeTask(IGs2Session session, RestSessionRequestFactory factory, DistributeRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DistributeRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distribute/{distributorName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(_request.DistributorName) ? _request.DistributorName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{distributorName}", !string.IsNullOrEmpty(request.DistributorName) ? request.DistributorName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.UserId != null)
+                if (request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.UserId.ToString());
+                    jsonWriter.Write(request.UserId);
                 }
-                if (_request.DistributeResource != null)
+                if (request.DistributeResource != null)
                 {
                     jsonWriter.WritePropertyName("distributeResource");
-                    _request.DistributeResource.WriteJson(jsonWriter);
+                    request.DistributeResource.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Distribute(
                 Request.DistributeRequest request,
                 UnityAction<AsyncResult<Result.DistributeResult>> callback
         )
 		{
-			var task = new DistributeTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DistributeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DistributeResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DistributeResult> DistributeAsync(
+                Request.DistributeRequest request
+        )
+		{
+			var task = new DistributeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DistributeWithoutOverflowProcessTask : Gs2RestSessionTask<Result.DistributeWithoutOverflowProcessResult>
+
+        private class DistributeWithoutOverflowProcessTask : Gs2RestSessionTask<DistributeWithoutOverflowProcessRequest, DistributeWithoutOverflowProcessResult>
         {
-			private readonly Request.DistributeWithoutOverflowProcessRequest _request;
-
-			public DistributeWithoutOverflowProcessTask(Request.DistributeWithoutOverflowProcessRequest request, UnityAction<AsyncResult<Result.DistributeWithoutOverflowProcessResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DistributeWithoutOverflowProcessTask(IGs2Session session, RestSessionRequestFactory factory, DistributeWithoutOverflowProcessRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DistributeWithoutOverflowProcessRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/distribute";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.UserId != null)
+                if (request.UserId != null)
                 {
                     jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(_request.UserId.ToString());
+                    jsonWriter.Write(request.UserId);
                 }
-                if (_request.DistributeResource != null)
+                if (request.DistributeResource != null)
                 {
                     jsonWriter.WritePropertyName("distributeResource");
-                    _request.DistributeResource.WriteJson(jsonWriter);
+                    request.DistributeResource.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DistributeWithoutOverflowProcess(
                 Request.DistributeWithoutOverflowProcessRequest request,
                 UnityAction<AsyncResult<Result.DistributeWithoutOverflowProcessResult>> callback
         )
 		{
-			var task = new DistributeWithoutOverflowProcessTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DistributeWithoutOverflowProcessTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DistributeWithoutOverflowProcessResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DistributeWithoutOverflowProcessResult> DistributeWithoutOverflowProcessAsync(
+                Request.DistributeWithoutOverflowProcessRequest request
+        )
+		{
+			var task = new DistributeWithoutOverflowProcessTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampTaskTask : Gs2RestSessionTask<Result.RunStampTaskResult>
+
+        private class RunStampTaskTask : Gs2RestSessionTask<RunStampTaskRequest, RunStampTaskResult>
         {
-			private readonly Request.RunStampTaskRequest _request;
-
-			public RunStampTaskTask(Request.RunStampTaskRequest request, UnityAction<AsyncResult<Result.RunStampTaskResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, RunStampTaskRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampTaskRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distribute/stamp/task/run";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampTask != null)
+                if (request.StampTask != null)
                 {
                     jsonWriter.WritePropertyName("stampTask");
-                    jsonWriter.Write(_request.StampTask.ToString());
+                    jsonWriter.Write(request.StampTask);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampTask(
                 Request.RunStampTaskRequest request,
                 UnityAction<AsyncResult<Result.RunStampTaskResult>> callback
         )
 		{
-			var task = new RunStampTaskTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampTaskResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampTaskResult> RunStampTaskAsync(
+                Request.RunStampTaskRequest request
+        )
+		{
+			var task = new RunStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampSheetTask : Gs2RestSessionTask<Result.RunStampSheetResult>
+
+        private class RunStampSheetTask : Gs2RestSessionTask<RunStampSheetRequest, RunStampSheetResult>
         {
-			private readonly Request.RunStampSheetRequest _request;
-
-			public RunStampSheetTask(Request.RunStampSheetRequest request, UnityAction<AsyncResult<Result.RunStampSheetResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, RunStampSheetRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampSheetRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distribute/stamp/sheet/run";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampSheet != null)
+                if (request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.StampSheet.ToString());
+                    jsonWriter.Write(request.StampSheet);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampSheet(
                 Request.RunStampSheetRequest request,
                 UnityAction<AsyncResult<Result.RunStampSheetResult>> callback
         )
 		{
-			var task = new RunStampSheetTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampSheetResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampSheetResult> RunStampSheetAsync(
+                Request.RunStampSheetRequest request
+        )
+		{
+			var task = new RunStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampSheetExpressTask : Gs2RestSessionTask<Result.RunStampSheetExpressResult>
+
+        private class RunStampSheetExpressTask : Gs2RestSessionTask<RunStampSheetExpressRequest, RunStampSheetExpressResult>
         {
-			private readonly Request.RunStampSheetExpressRequest _request;
-
-			public RunStampSheetExpressTask(Request.RunStampSheetExpressRequest request, UnityAction<AsyncResult<Result.RunStampSheetExpressResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampSheetExpressTask(IGs2Session session, RestSessionRequestFactory factory, RunStampSheetExpressRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampSheetExpressRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/distribute/stamp/run";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampSheet != null)
+                if (request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.StampSheet.ToString());
+                    jsonWriter.Write(request.StampSheet);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampSheetExpress(
                 Request.RunStampSheetExpressRequest request,
                 UnityAction<AsyncResult<Result.RunStampSheetExpressResult>> callback
         )
 		{
-			var task = new RunStampSheetExpressTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampSheetExpressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampSheetExpressResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampSheetExpressResult> RunStampSheetExpressAsync(
+                Request.RunStampSheetExpressRequest request
+        )
+		{
+			var task = new RunStampSheetExpressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampTaskWithoutNamespaceTask : Gs2RestSessionTask<Result.RunStampTaskWithoutNamespaceResult>
+
+        private class RunStampTaskWithoutNamespaceTask : Gs2RestSessionTask<RunStampTaskWithoutNamespaceRequest, RunStampTaskWithoutNamespaceResult>
         {
-			private readonly Request.RunStampTaskWithoutNamespaceRequest _request;
-
-			public RunStampTaskWithoutNamespaceTask(Request.RunStampTaskWithoutNamespaceRequest request, UnityAction<AsyncResult<Result.RunStampTaskWithoutNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampTaskWithoutNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, RunStampTaskWithoutNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampTaskWithoutNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/stamp/task/run";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampTask != null)
+                if (request.StampTask != null)
                 {
                     jsonWriter.WritePropertyName("stampTask");
-                    jsonWriter.Write(_request.StampTask.ToString());
+                    jsonWriter.Write(request.StampTask);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampTaskWithoutNamespace(
                 Request.RunStampTaskWithoutNamespaceRequest request,
                 UnityAction<AsyncResult<Result.RunStampTaskWithoutNamespaceResult>> callback
         )
 		{
-			var task = new RunStampTaskWithoutNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampTaskWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampTaskWithoutNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampTaskWithoutNamespaceResult> RunStampTaskWithoutNamespaceAsync(
+                Request.RunStampTaskWithoutNamespaceRequest request
+        )
+		{
+			var task = new RunStampTaskWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampSheetWithoutNamespaceTask : Gs2RestSessionTask<Result.RunStampSheetWithoutNamespaceResult>
+
+        private class RunStampSheetWithoutNamespaceTask : Gs2RestSessionTask<RunStampSheetWithoutNamespaceRequest, RunStampSheetWithoutNamespaceResult>
         {
-			private readonly Request.RunStampSheetWithoutNamespaceRequest _request;
-
-			public RunStampSheetWithoutNamespaceTask(Request.RunStampSheetWithoutNamespaceRequest request, UnityAction<AsyncResult<Result.RunStampSheetWithoutNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampSheetWithoutNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, RunStampSheetWithoutNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampSheetWithoutNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/stamp/sheet/run";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampSheet != null)
+                if (request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.StampSheet.ToString());
+                    jsonWriter.Write(request.StampSheet);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampSheetWithoutNamespace(
                 Request.RunStampSheetWithoutNamespaceRequest request,
                 UnityAction<AsyncResult<Result.RunStampSheetWithoutNamespaceResult>> callback
         )
 		{
-			var task = new RunStampSheetWithoutNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampSheetWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampSheetWithoutNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampSheetWithoutNamespaceResult> RunStampSheetWithoutNamespaceAsync(
+                Request.RunStampSheetWithoutNamespaceRequest request
+        )
+		{
+			var task = new RunStampSheetWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class RunStampSheetExpressWithoutNamespaceTask : Gs2RestSessionTask<Result.RunStampSheetExpressWithoutNamespaceResult>
+
+        private class RunStampSheetExpressWithoutNamespaceTask : Gs2RestSessionTask<RunStampSheetExpressWithoutNamespaceRequest, RunStampSheetExpressWithoutNamespaceResult>
         {
-			private readonly Request.RunStampSheetExpressWithoutNamespaceRequest _request;
-
-			public RunStampSheetExpressWithoutNamespaceTask(Request.RunStampSheetExpressWithoutNamespaceRequest request, UnityAction<AsyncResult<Result.RunStampSheetExpressWithoutNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public RunStampSheetExpressWithoutNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, RunStampSheetExpressWithoutNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(RunStampSheetExpressWithoutNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/stamp/run";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampSheet != null)
+                if (request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.StampSheet.ToString());
+                    jsonWriter.Write(request.StampSheet);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator RunStampSheetExpressWithoutNamespace(
                 Request.RunStampSheetExpressWithoutNamespaceRequest request,
                 UnityAction<AsyncResult<Result.RunStampSheetExpressWithoutNamespaceResult>> callback
         )
 		{
-			var task = new RunStampSheetExpressWithoutNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new RunStampSheetExpressWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunStampSheetExpressWithoutNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.RunStampSheetExpressWithoutNamespaceResult> RunStampSheetExpressWithoutNamespaceAsync(
+                Request.RunStampSheetExpressWithoutNamespaceRequest request
+        )
+		{
+			var task = new RunStampSheetExpressWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

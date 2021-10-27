@@ -13,8 +13,15 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+#else
+using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,1580 +30,1788 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
+using Gs2.Gs2Quest.Request;
+using Gs2.Gs2Quest.Result;
+using Gs2.Util.LitJson;
+
+namespace Gs2.Gs2Quest
 {
 	public class Gs2QuestRestClient : AbstractGs2Client
 	{
+#if UNITY_2017_1_OR_NEWER
 		private readonly CertificateHandler _certificateHandler;
+#endif
 
 		public static string Endpoint = "quest";
 
         protected Gs2RestSession Gs2RestSession => (Gs2RestSession) Gs2Session;
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="Gs2RestSession">REST API 用セッション</param>
 		public Gs2QuestRestClient(Gs2RestSession Gs2RestSession) : base(Gs2RestSession)
 		{
 
 		}
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="gs2RestSession">REST API 用セッション</param>
-		/// <param name="certificateHandler"></param>
+#if UNITY_2017_1_OR_NEWER
 		public Gs2QuestRestClient(Gs2RestSession gs2RestSession, CertificateHandler certificateHandler) : base(gs2RestSession)
 		{
 			_certificateHandler = certificateHandler;
 		}
+#endif
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<Result.DescribeNamespacesResult>
+
+        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
-			private readonly Request.DescribeNamespacesRequest _request;
-
-			public DescribeNamespacesTask(Request.DescribeNamespacesRequest request, UnityAction<AsyncResult<Result.DescribeNamespacesResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeNamespacesRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
         )
 		{
-			var task = new DescribeNamespacesTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			var task = new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<Result.CreateNamespaceResult>
+
+        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
-			private readonly Request.CreateNamespaceRequest _request;
-
-			public CreateNamespaceTask(Request.CreateNamespaceRequest request, UnityAction<AsyncResult<Result.CreateNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.StartQuestScript != null)
+                if (request.StartQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("startQuestScript");
-                    _request.StartQuestScript.WriteJson(jsonWriter);
+                    request.StartQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.CompleteQuestScript != null)
+                if (request.CompleteQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("completeQuestScript");
-                    _request.CompleteQuestScript.WriteJson(jsonWriter);
+                    request.CompleteQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.FailedQuestScript != null)
+                if (request.FailedQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("failedQuestScript");
-                    _request.FailedQuestScript.WriteJson(jsonWriter);
+                    request.FailedQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.QueueNamespaceId != null)
+                if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(_request.QueueNamespaceId.ToString());
+                    jsonWriter.Write(request.QueueNamespaceId);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.LogSetting != null)
+                if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.LogSetting.WriteJson(jsonWriter);
+                    request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
         )
 		{
-			var task = new CreateNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			var task = new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<Result.GetNamespaceStatusResult>
+
+        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
-			private readonly Request.GetNamespaceStatusRequest _request;
-
-			public GetNamespaceStatusTask(Request.GetNamespaceStatusRequest request, UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetNamespaceStatusRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/status";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
         )
 		{
-			var task = new GetNamespaceStatusTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			var task = new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetNamespaceTask : Gs2RestSessionTask<Result.GetNamespaceResult>
+
+        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
-			private readonly Request.GetNamespaceRequest _request;
-
-			public GetNamespaceTask(Request.GetNamespaceRequest request, UnityAction<AsyncResult<Result.GetNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
         )
 		{
-			var task = new GetNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			var task = new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<Result.UpdateNamespaceResult>
+
+        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
-			private readonly Request.UpdateNamespaceRequest _request;
-
-			public UpdateNamespaceTask(Request.UpdateNamespaceRequest request, UnityAction<AsyncResult<Result.UpdateNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.StartQuestScript != null)
+                if (request.StartQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("startQuestScript");
-                    _request.StartQuestScript.WriteJson(jsonWriter);
+                    request.StartQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.CompleteQuestScript != null)
+                if (request.CompleteQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("completeQuestScript");
-                    _request.CompleteQuestScript.WriteJson(jsonWriter);
+                    request.CompleteQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.FailedQuestScript != null)
+                if (request.FailedQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("failedQuestScript");
-                    _request.FailedQuestScript.WriteJson(jsonWriter);
+                    request.FailedQuestScript.WriteJson(jsonWriter);
                 }
-                if (_request.QueueNamespaceId != null)
+                if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(_request.QueueNamespaceId.ToString());
+                    jsonWriter.Write(request.QueueNamespaceId);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.LogSetting != null)
+                if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
-                    _request.LogSetting.WriteJson(jsonWriter);
+                    request.LogSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
         )
 		{
-			var task = new UpdateNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			var task = new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<Result.DeleteNamespaceResult>
+
+        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
-			private readonly Request.DeleteNamespaceRequest _request;
-
-			public DeleteNamespaceTask(Request.DeleteNamespaceRequest request, UnityAction<AsyncResult<Result.DeleteNamespaceResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteNamespaceRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
         )
 		{
-			var task = new DeleteNamespaceTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			var task = new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeQuestGroupModelMastersTask : Gs2RestSessionTask<Result.DescribeQuestGroupModelMastersResult>
+
+        private class DescribeQuestGroupModelMastersTask : Gs2RestSessionTask<DescribeQuestGroupModelMastersRequest, DescribeQuestGroupModelMastersResult>
         {
-			private readonly Request.DescribeQuestGroupModelMastersRequest _request;
-
-			public DescribeQuestGroupModelMastersTask(Request.DescribeQuestGroupModelMastersRequest request, UnityAction<AsyncResult<Result.DescribeQuestGroupModelMastersResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeQuestGroupModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestGroupModelMastersRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeQuestGroupModelMastersRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeQuestGroupModelMasters(
                 Request.DescribeQuestGroupModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeQuestGroupModelMastersResult>> callback
         )
 		{
-			var task = new DescribeQuestGroupModelMastersTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeQuestGroupModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeQuestGroupModelMastersResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeQuestGroupModelMastersResult> DescribeQuestGroupModelMastersAsync(
+                Request.DescribeQuestGroupModelMastersRequest request
+        )
+		{
+			var task = new DescribeQuestGroupModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateQuestGroupModelMasterTask : Gs2RestSessionTask<Result.CreateQuestGroupModelMasterResult>
+
+        private class CreateQuestGroupModelMasterTask : Gs2RestSessionTask<CreateQuestGroupModelMasterRequest, CreateQuestGroupModelMasterResult>
         {
-			private readonly Request.CreateQuestGroupModelMasterRequest _request;
-
-			public CreateQuestGroupModelMasterTask(Request.CreateQuestGroupModelMasterRequest request, UnityAction<AsyncResult<Result.CreateQuestGroupModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateQuestGroupModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.ChallengePeriodEventId != null)
+                if (request.ChallengePeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("challengePeriodEventId");
-                    jsonWriter.Write(_request.ChallengePeriodEventId.ToString());
+                    jsonWriter.Write(request.ChallengePeriodEventId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateQuestGroupModelMaster(
                 Request.CreateQuestGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateQuestGroupModelMasterResult>> callback
         )
 		{
-			var task = new CreateQuestGroupModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateQuestGroupModelMasterResult> CreateQuestGroupModelMasterAsync(
+                Request.CreateQuestGroupModelMasterRequest request
+        )
+		{
+			var task = new CreateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetQuestGroupModelMasterTask : Gs2RestSessionTask<Result.GetQuestGroupModelMasterResult>
+
+        private class GetQuestGroupModelMasterTask : Gs2RestSessionTask<GetQuestGroupModelMasterRequest, GetQuestGroupModelMasterResult>
         {
-			private readonly Request.GetQuestGroupModelMasterRequest _request;
-
-			public GetQuestGroupModelMasterTask(Request.GetQuestGroupModelMasterRequest request, UnityAction<AsyncResult<Result.GetQuestGroupModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetQuestGroupModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetQuestGroupModelMaster(
                 Request.GetQuestGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetQuestGroupModelMasterResult>> callback
         )
 		{
-			var task = new GetQuestGroupModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetQuestGroupModelMasterResult> GetQuestGroupModelMasterAsync(
+                Request.GetQuestGroupModelMasterRequest request
+        )
+		{
+			var task = new GetQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateQuestGroupModelMasterTask : Gs2RestSessionTask<Result.UpdateQuestGroupModelMasterResult>
+
+        private class UpdateQuestGroupModelMasterTask : Gs2RestSessionTask<UpdateQuestGroupModelMasterRequest, UpdateQuestGroupModelMasterResult>
         {
-			private readonly Request.UpdateQuestGroupModelMasterRequest _request;
-
-			public UpdateQuestGroupModelMasterTask(Request.UpdateQuestGroupModelMasterRequest request, UnityAction<AsyncResult<Result.UpdateQuestGroupModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateQuestGroupModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.ChallengePeriodEventId != null)
+                if (request.ChallengePeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("challengePeriodEventId");
-                    jsonWriter.Write(_request.ChallengePeriodEventId.ToString());
+                    jsonWriter.Write(request.ChallengePeriodEventId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateQuestGroupModelMaster(
                 Request.UpdateQuestGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateQuestGroupModelMasterResult>> callback
         )
 		{
-			var task = new UpdateQuestGroupModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateQuestGroupModelMasterResult> UpdateQuestGroupModelMasterAsync(
+                Request.UpdateQuestGroupModelMasterRequest request
+        )
+		{
+			var task = new UpdateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteQuestGroupModelMasterTask : Gs2RestSessionTask<Result.DeleteQuestGroupModelMasterResult>
+
+        private class DeleteQuestGroupModelMasterTask : Gs2RestSessionTask<DeleteQuestGroupModelMasterRequest, DeleteQuestGroupModelMasterResult>
         {
-			private readonly Request.DeleteQuestGroupModelMasterRequest _request;
-
-			public DeleteQuestGroupModelMasterTask(Request.DeleteQuestGroupModelMasterRequest request, UnityAction<AsyncResult<Result.DeleteQuestGroupModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteQuestGroupModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteQuestGroupModelMaster(
                 Request.DeleteQuestGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteQuestGroupModelMasterResult>> callback
         )
 		{
-			var task = new DeleteQuestGroupModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteQuestGroupModelMasterResult> DeleteQuestGroupModelMasterAsync(
+                Request.DeleteQuestGroupModelMasterRequest request
+        )
+		{
+			var task = new DeleteQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeQuestModelMastersTask : Gs2RestSessionTask<Result.DescribeQuestModelMastersResult>
+
+        private class DescribeQuestModelMastersTask : Gs2RestSessionTask<DescribeQuestModelMastersRequest, DescribeQuestModelMastersResult>
         {
-			private readonly Request.DescribeQuestModelMastersRequest _request;
-
-			public DescribeQuestModelMastersTask(Request.DescribeQuestModelMastersRequest request, UnityAction<AsyncResult<Result.DescribeQuestModelMastersResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeQuestModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestModelMastersRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeQuestModelMastersRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}/quest";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeQuestModelMasters(
                 Request.DescribeQuestModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeQuestModelMastersResult>> callback
         )
 		{
-			var task = new DescribeQuestModelMastersTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeQuestModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeQuestModelMastersResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeQuestModelMastersResult> DescribeQuestModelMastersAsync(
+                Request.DescribeQuestModelMastersRequest request
+        )
+		{
+			var task = new DescribeQuestModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateQuestModelMasterTask : Gs2RestSessionTask<Result.CreateQuestModelMasterResult>
+
+        private class CreateQuestModelMasterTask : Gs2RestSessionTask<CreateQuestModelMasterRequest, CreateQuestModelMasterResult>
         {
-			private readonly Request.CreateQuestModelMasterRequest _request;
-
-			public CreateQuestModelMasterTask(Request.CreateQuestModelMasterRequest request, UnityAction<AsyncResult<Result.CreateQuestModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateQuestModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateQuestModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}/quest";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.Contents != null)
+                if (request.Contents != null)
                 {
                     jsonWriter.WritePropertyName("contents");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Contents)
+                    foreach(var item in request.Contents)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ChallengePeriodEventId != null)
+                if (request.ChallengePeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("challengePeriodEventId");
-                    jsonWriter.Write(_request.ChallengePeriodEventId.ToString());
+                    jsonWriter.Write(request.ChallengePeriodEventId);
                 }
-                if (_request.ConsumeActions != null)
+                if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.ConsumeActions)
+                    foreach(var item in request.ConsumeActions)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.FailedAcquireActions != null)
+                if (request.FailedAcquireActions != null)
                 {
                     jsonWriter.WritePropertyName("failedAcquireActions");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.FailedAcquireActions)
+                    foreach(var item in request.FailedAcquireActions)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.PremiseQuestNames != null)
+                if (request.PremiseQuestNames != null)
                 {
                     jsonWriter.WritePropertyName("premiseQuestNames");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.PremiseQuestNames)
+                    foreach(var item in request.PremiseQuestNames)
                     {
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateQuestModelMaster(
                 Request.CreateQuestModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateQuestModelMasterResult>> callback
         )
 		{
-			var task = new CreateQuestModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateQuestModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateQuestModelMasterResult> CreateQuestModelMasterAsync(
+                Request.CreateQuestModelMasterRequest request
+        )
+		{
+			var task = new CreateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetQuestModelMasterTask : Gs2RestSessionTask<Result.GetQuestModelMasterResult>
+
+        private class GetQuestModelMasterTask : Gs2RestSessionTask<GetQuestModelMasterRequest, GetQuestModelMasterResult>
         {
-			private readonly Request.GetQuestModelMasterRequest _request;
-
-			public GetQuestModelMasterTask(Request.GetQuestModelMasterRequest request, UnityAction<AsyncResult<Result.GetQuestModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetQuestModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}/quest/{questName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetQuestModelMaster(
                 Request.GetQuestModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetQuestModelMasterResult>> callback
         )
 		{
-			var task = new GetQuestModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetQuestModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetQuestModelMasterResult> GetQuestModelMasterAsync(
+                Request.GetQuestModelMasterRequest request
+        )
+		{
+			var task = new GetQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateQuestModelMasterTask : Gs2RestSessionTask<Result.UpdateQuestModelMasterResult>
+
+        private class UpdateQuestModelMasterTask : Gs2RestSessionTask<UpdateQuestModelMasterRequest, UpdateQuestModelMasterResult>
         {
-			private readonly Request.UpdateQuestModelMasterRequest _request;
-
-			public UpdateQuestModelMasterTask(Request.UpdateQuestModelMasterRequest request, UnityAction<AsyncResult<Result.UpdateQuestModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateQuestModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateQuestModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}/quest/{questName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Metadata != null)
+                if (request.Metadata != null)
                 {
                     jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(_request.Metadata.ToString());
+                    jsonWriter.Write(request.Metadata);
                 }
-                if (_request.Contents != null)
+                if (request.Contents != null)
                 {
                     jsonWriter.WritePropertyName("contents");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Contents)
+                    foreach(var item in request.Contents)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ChallengePeriodEventId != null)
+                if (request.ChallengePeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("challengePeriodEventId");
-                    jsonWriter.Write(_request.ChallengePeriodEventId.ToString());
+                    jsonWriter.Write(request.ChallengePeriodEventId);
                 }
-                if (_request.ConsumeActions != null)
+                if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.ConsumeActions)
+                    foreach(var item in request.ConsumeActions)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.FailedAcquireActions != null)
+                if (request.FailedAcquireActions != null)
                 {
                     jsonWriter.WritePropertyName("failedAcquireActions");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.FailedAcquireActions)
+                    foreach(var item in request.FailedAcquireActions)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.PremiseQuestNames != null)
+                if (request.PremiseQuestNames != null)
                 {
                     jsonWriter.WritePropertyName("premiseQuestNames");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.PremiseQuestNames)
+                    foreach(var item in request.PremiseQuestNames)
                     {
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateQuestModelMaster(
                 Request.UpdateQuestModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateQuestModelMasterResult>> callback
         )
 		{
-			var task = new UpdateQuestModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateQuestModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateQuestModelMasterResult> UpdateQuestModelMasterAsync(
+                Request.UpdateQuestModelMasterRequest request
+        )
+		{
+			var task = new UpdateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteQuestModelMasterTask : Gs2RestSessionTask<Result.DeleteQuestModelMasterResult>
+
+        private class DeleteQuestModelMasterTask : Gs2RestSessionTask<DeleteQuestModelMasterRequest, DeleteQuestModelMasterResult>
         {
-			private readonly Request.DeleteQuestModelMasterRequest _request;
-
-			public DeleteQuestModelMasterTask(Request.DeleteQuestModelMasterRequest request, UnityAction<AsyncResult<Result.DeleteQuestModelMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteQuestModelMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteQuestModelMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/group/{questGroupName}/quest/{questName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteQuestModelMaster(
                 Request.DeleteQuestModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteQuestModelMasterResult>> callback
         )
 		{
-			var task = new DeleteQuestModelMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteQuestModelMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteQuestModelMasterResult> DeleteQuestModelMasterAsync(
+                Request.DeleteQuestModelMasterRequest request
+        )
+		{
+			var task = new DeleteQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class ExportMasterTask : Gs2RestSessionTask<Result.ExportMasterResult>
+
+        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
-			private readonly Request.ExportMasterRequest _request;
-
-			public ExportMasterTask(Request.ExportMasterRequest request, UnityAction<AsyncResult<Result.ExportMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(ExportMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/export";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator ExportMaster(
                 Request.ExportMasterRequest request,
                 UnityAction<AsyncResult<Result.ExportMasterResult>> callback
         )
 		{
-			var task = new ExportMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetCurrentQuestMasterTask : Gs2RestSessionTask<Result.GetCurrentQuestMasterResult>
+
+        private class GetCurrentQuestMasterTask : Gs2RestSessionTask<GetCurrentQuestMasterRequest, GetCurrentQuestMasterResult>
         {
-			private readonly Request.GetCurrentQuestMasterRequest _request;
-
-			public GetCurrentQuestMasterTask(Request.GetCurrentQuestMasterRequest request, UnityAction<AsyncResult<Result.GetCurrentQuestMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentQuestMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetCurrentQuestMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetCurrentQuestMaster(
                 Request.GetCurrentQuestMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCurrentQuestMasterResult>> callback
         )
 		{
-			var task = new GetCurrentQuestMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCurrentQuestMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetCurrentQuestMasterResult> GetCurrentQuestMasterAsync(
+                Request.GetCurrentQuestMasterRequest request
+        )
+		{
+			var task = new GetCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateCurrentQuestMasterTask : Gs2RestSessionTask<Result.UpdateCurrentQuestMasterResult>
+
+        private class UpdateCurrentQuestMasterTask : Gs2RestSessionTask<UpdateCurrentQuestMasterRequest, UpdateCurrentQuestMasterResult>
         {
-			private readonly Request.UpdateCurrentQuestMasterRequest _request;
-
-			public UpdateCurrentQuestMasterTask(Request.UpdateCurrentQuestMasterRequest request, UnityAction<AsyncResult<Result.UpdateCurrentQuestMasterResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentQuestMasterRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentQuestMasterRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Settings != null)
+                if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
-                    jsonWriter.Write(_request.Settings.ToString());
+                    jsonWriter.Write(request.Settings);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateCurrentQuestMaster(
                 Request.UpdateCurrentQuestMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentQuestMasterResult>> callback
         )
 		{
-			var task = new UpdateCurrentQuestMasterTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentQuestMasterResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateCurrentQuestMasterResult> UpdateCurrentQuestMasterAsync(
+                Request.UpdateCurrentQuestMasterRequest request
+        )
+		{
+			var task = new UpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateCurrentQuestMasterFromGitHubTask : Gs2RestSessionTask<Result.UpdateCurrentQuestMasterFromGitHubResult>
+
+        private class UpdateCurrentQuestMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentQuestMasterFromGitHubRequest, UpdateCurrentQuestMasterFromGitHubResult>
         {
-			private readonly Request.UpdateCurrentQuestMasterFromGitHubRequest _request;
-
-			public UpdateCurrentQuestMasterFromGitHubTask(Request.UpdateCurrentQuestMasterFromGitHubRequest request, UnityAction<AsyncResult<Result.UpdateCurrentQuestMasterFromGitHubResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateCurrentQuestMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentQuestMasterFromGitHubRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentQuestMasterFromGitHubRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/master/from_git_hub";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.CheckoutSetting != null)
+                if (request.CheckoutSetting != null)
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
-                    _request.CheckoutSetting.WriteJson(jsonWriter);
+                    request.CheckoutSetting.WriteJson(jsonWriter);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateCurrentQuestMasterFromGitHub(
                 Request.UpdateCurrentQuestMasterFromGitHubRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentQuestMasterFromGitHubResult>> callback
         )
 		{
-			var task = new UpdateCurrentQuestMasterFromGitHubTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateCurrentQuestMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentQuestMasterFromGitHubResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateCurrentQuestMasterFromGitHubResult> UpdateCurrentQuestMasterFromGitHubAsync(
+                Request.UpdateCurrentQuestMasterFromGitHubRequest request
+        )
+		{
+			var task = new UpdateCurrentQuestMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeProgressesByUserIdTask : Gs2RestSessionTask<Result.DescribeProgressesByUserIdResult>
+
+        private class DescribeProgressesByUserIdTask : Gs2RestSessionTask<DescribeProgressesByUserIdRequest, DescribeProgressesByUserIdResult>
         {
-			private readonly Request.DescribeProgressesByUserIdRequest _request;
-
-			public DescribeProgressesByUserIdTask(Request.DescribeProgressesByUserIdRequest request, UnityAction<AsyncResult<Result.DescribeProgressesByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeProgressesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProgressesByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeProgressesByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.UserId != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "userId", UnityWebRequest.EscapeURL(_request.UserId)));
+                if (request.UserId != null) {
+                    sessionRequest.AddQueryString("userId", $"{request.UserId}");
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeProgressesByUserId(
                 Request.DescribeProgressesByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeProgressesByUserIdResult>> callback
         )
 		{
-			var task = new DescribeProgressesByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeProgressesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeProgressesByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdAsync(
+                Request.DescribeProgressesByUserIdRequest request
+        )
+		{
+			var task = new DescribeProgressesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateProgressByUserIdTask : Gs2RestSessionTask<Result.CreateProgressByUserIdResult>
+
+        private class CreateProgressByUserIdTask : Gs2RestSessionTask<CreateProgressByUserIdRequest, CreateProgressByUserIdResult>
         {
-			private readonly Request.CreateProgressByUserIdRequest _request;
-
-			public CreateProgressByUserIdTask(Request.CreateProgressByUserIdRequest request, UnityAction<AsyncResult<Result.CreateProgressByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreateProgressByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateProgressByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.QuestModelId != null)
+                if (request.QuestModelId != null)
                 {
                     jsonWriter.WritePropertyName("questModelId");
-                    jsonWriter.Write(_request.QuestModelId.ToString());
+                    jsonWriter.Write(request.QuestModelId);
                 }
-                if (_request.Force != null)
+                if (request.Force != null)
                 {
                     jsonWriter.WritePropertyName("force");
-                    jsonWriter.Write(_request.Force.ToString());
+                    jsonWriter.Write(request.Force.ToString());
                 }
-                if (_request.Config != null)
+                if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Config)
+                    foreach(var item in request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -1606,198 +1821,228 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateProgressByUserId(
                 Request.CreateProgressByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CreateProgressByUserIdResult>> callback
         )
 		{
-			var task = new CreateProgressByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateProgressByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateProgressByUserIdResult> CreateProgressByUserIdAsync(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+			var task = new CreateProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProgressTask : Gs2RestSessionTask<Result.GetProgressResult>
+
+        private class GetProgressTask : Gs2RestSessionTask<GetProgressRequest, GetProgressResult>
         {
-			private readonly Request.GetProgressRequest _request;
-
-			public GetProgressTask(Request.GetProgressRequest request, UnityAction<AsyncResult<Result.GetProgressResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetProgressTask(IGs2Session session, RestSessionRequestFactory factory, GetProgressRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetProgressRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
-                }
-                if (_request.AccessToken != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProgress(
                 Request.GetProgressRequest request,
                 UnityAction<AsyncResult<Result.GetProgressResult>> callback
         )
 		{
-			var task = new GetProgressTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProgressResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProgressResult> GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			var task = new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProgressByUserIdTask : Gs2RestSessionTask<Result.GetProgressByUserIdResult>
+
+        private class GetProgressByUserIdTask : Gs2RestSessionTask<GetProgressByUserIdRequest, GetProgressByUserIdResult>
         {
-			private readonly Request.GetProgressByUserIdRequest _request;
-
-			public GetProgressByUserIdTask(Request.GetProgressByUserIdRequest request, UnityAction<AsyncResult<Result.GetProgressByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetProgressByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetProgressByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProgressByUserId(
                 Request.GetProgressByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetProgressByUserIdResult>> callback
         )
 		{
-			var task = new GetProgressByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProgressByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProgressByUserIdResult> GetProgressByUserIdAsync(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+			var task = new GetProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class StartTask : Gs2RestSessionTask<Result.StartResult>
+
+        private class StartTask : Gs2RestSessionTask<StartRequest, StartResult>
         {
-			private readonly Request.StartRequest _request;
-
-			public StartTask(Request.StartRequest request, UnityAction<AsyncResult<Result.StartResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public StartTask(IGs2Session session, RestSessionRequestFactory factory, StartRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(StartRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/progress/group/{questGroupName}/quest/{questName}/start";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Force != null)
+                if (request.Force != null)
                 {
                     jsonWriter.WritePropertyName("force");
-                    jsonWriter.Write(_request.Force.ToString());
+                    jsonWriter.Write(request.Force.ToString());
                 }
-                if (_request.Config != null)
+                if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Config)
+                    foreach(var item in request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -1807,88 +2052,100 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (_request.AccessToken != null)
+                if (request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Start(
                 Request.StartRequest request,
                 UnityAction<AsyncResult<Result.StartResult>> callback
         )
 		{
-			var task = new StartTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new StartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.StartResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.StartResult> StartAsync(
+                Request.StartRequest request
+        )
+		{
+			var task = new StartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class StartByUserIdTask : Gs2RestSessionTask<Result.StartByUserIdResult>
+
+        private class StartByUserIdTask : Gs2RestSessionTask<StartByUserIdRequest, StartByUserIdResult>
         {
-			private readonly Request.StartByUserIdRequest _request;
-
-			public StartByUserIdTask(Request.StartByUserIdRequest request, UnityAction<AsyncResult<Result.StartByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public StartByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, StartByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(StartByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/progress/group/{questGroupName}/quest/{questName}/start";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Force != null)
+                if (request.Force != null)
                 {
                     jsonWriter.WritePropertyName("force");
-                    jsonWriter.Write(_request.Force.ToString());
+                    jsonWriter.Write(request.Force.ToString());
                 }
-                if (_request.Config != null)
+                if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Config)
+                    foreach(var item in request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -1898,96 +2155,108 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator StartByUserId(
                 Request.StartByUserIdRequest request,
                 UnityAction<AsyncResult<Result.StartByUserIdResult>> callback
         )
 		{
-			var task = new StartByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new StartByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.StartByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.StartByUserIdResult> StartByUserIdAsync(
+                Request.StartByUserIdRequest request
+        )
+		{
+			var task = new StartByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class EndTask : Gs2RestSessionTask<Result.EndResult>
+
+        private class EndTask : Gs2RestSessionTask<EndRequest, EndResult>
         {
-			private readonly Request.EndRequest _request;
-
-			public EndTask(Request.EndRequest request, UnityAction<AsyncResult<Result.EndResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public EndTask(IGs2Session session, RestSessionRequestFactory factory, EndRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(EndRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/progress/end";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.TransactionId != null)
+                if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");
-                    jsonWriter.Write(_request.TransactionId.ToString());
+                    jsonWriter.Write(request.TransactionId);
                 }
-                if (_request.Rewards != null)
+                if (request.Rewards != null)
                 {
                     jsonWriter.WritePropertyName("rewards");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Rewards)
+                    foreach(var item in request.Rewards)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.IsComplete != null)
+                if (request.IsComplete != null)
                 {
                     jsonWriter.WritePropertyName("isComplete");
-                    jsonWriter.Write(_request.IsComplete.ToString());
+                    jsonWriter.Write(request.IsComplete.ToString());
                 }
-                if (_request.Config != null)
+                if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Config)
+                    foreach(var item in request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -1997,101 +2266,113 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (_request.AccessToken != null)
+                if (request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator End(
                 Request.EndRequest request,
                 UnityAction<AsyncResult<Result.EndResult>> callback
         )
 		{
-			var task = new EndTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new EndTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EndResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.EndResult> EndAsync(
+                Request.EndRequest request
+        )
+		{
+			var task = new EndTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class EndByUserIdTask : Gs2RestSessionTask<Result.EndByUserIdResult>
+
+        private class EndByUserIdTask : Gs2RestSessionTask<EndByUserIdRequest, EndByUserIdResult>
         {
-			private readonly Request.EndByUserIdRequest _request;
-
-			public EndByUserIdTask(Request.EndByUserIdRequest request, UnityAction<AsyncResult<Result.EndByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public EndByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, EndByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(EndByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/progress/end";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.TransactionId != null)
+                if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");
-                    jsonWriter.Write(_request.TransactionId.ToString());
+                    jsonWriter.Write(request.TransactionId);
                 }
-                if (_request.Rewards != null)
+                if (request.Rewards != null)
                 {
                     jsonWriter.WritePropertyName("rewards");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Rewards)
+                    foreach(var item in request.Rewards)
                     {
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.IsComplete != null)
+                if (request.IsComplete != null)
                 {
                     jsonWriter.WritePropertyName("isComplete");
-                    jsonWriter.Write(_request.IsComplete.ToString());
+                    jsonWriter.Write(request.IsComplete.ToString());
                 }
-                if (_request.Config != null)
+                if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
                     jsonWriter.WriteArrayStart();
-                    foreach(var item in _request.Config)
+                    foreach(var item in request.Config)
                     {
                         if (item == null) {
                             jsonWriter.Write(null);
@@ -2101,830 +2382,969 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator EndByUserId(
                 Request.EndByUserIdRequest request,
                 UnityAction<AsyncResult<Result.EndByUserIdResult>> callback
         )
 		{
-			var task = new EndByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new EndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EndByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.EndByUserIdResult> EndByUserIdAsync(
+                Request.EndByUserIdRequest request
+        )
+		{
+			var task = new EndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteProgressTask : Gs2RestSessionTask<Result.DeleteProgressResult>
+
+        private class DeleteProgressTask : Gs2RestSessionTask<DeleteProgressRequest, DeleteProgressResult>
         {
-			private readonly Request.DeleteProgressRequest _request;
-
-			public DeleteProgressTask(Request.DeleteProgressRequest request, UnityAction<AsyncResult<Result.DeleteProgressResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteProgressTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteProgressRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
-                }
-                if (_request.AccessToken != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteProgress(
                 Request.DeleteProgressRequest request,
                 UnityAction<AsyncResult<Result.DeleteProgressResult>> callback
         )
 		{
-			var task = new DeleteProgressTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteProgressResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteProgressResult> DeleteProgressAsync(
+                Request.DeleteProgressRequest request
+        )
+		{
+			var task = new DeleteProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteProgressByUserIdTask : Gs2RestSessionTask<Result.DeleteProgressByUserIdResult>
+
+        private class DeleteProgressByUserIdTask : Gs2RestSessionTask<DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult>
         {
-			private readonly Request.DeleteProgressByUserIdRequest _request;
-
-			public DeleteProgressByUserIdTask(Request.DeleteProgressByUserIdRequest request, UnityAction<AsyncResult<Result.DeleteProgressByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteProgressByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/progress";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteProgressByUserId(
                 Request.DeleteProgressByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteProgressByUserIdResult>> callback
         )
 		{
-			var task = new DeleteProgressByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteProgressByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdAsync(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+			var task = new DeleteProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateProgressByStampSheetTask : Gs2RestSessionTask<Result.CreateProgressByStampSheetResult>
+
+        private class CreateProgressByStampSheetTask : Gs2RestSessionTask<CreateProgressByStampSheetRequest, CreateProgressByStampSheetResult>
         {
-			private readonly Request.CreateProgressByStampSheetRequest _request;
-
-			public CreateProgressByStampSheetTask(Request.CreateProgressByStampSheetRequest request, UnityAction<AsyncResult<Result.CreateProgressByStampSheetResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateProgressByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, CreateProgressByStampSheetRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateProgressByStampSheetRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/stamp/progress/create";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampSheet != null)
+                if (request.StampSheet != null)
                 {
                     jsonWriter.WritePropertyName("stampSheet");
-                    jsonWriter.Write(_request.StampSheet.ToString());
+                    jsonWriter.Write(request.StampSheet);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateProgressByStampSheet(
                 Request.CreateProgressByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.CreateProgressByStampSheetResult>> callback
         )
 		{
-			var task = new CreateProgressByStampSheetTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateProgressByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateProgressByStampSheetResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetAsync(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+			var task = new CreateProgressByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteProgressByStampTaskTask : Gs2RestSessionTask<Result.DeleteProgressByStampTaskResult>
+
+        private class DeleteProgressByStampTaskTask : Gs2RestSessionTask<DeleteProgressByStampTaskRequest, DeleteProgressByStampTaskResult>
         {
-			private readonly Request.DeleteProgressByStampTaskRequest _request;
-
-			public DeleteProgressByStampTaskTask(Request.DeleteProgressByStampTaskRequest request, UnityAction<AsyncResult<Result.DeleteProgressByStampTaskResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteProgressByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressByStampTaskRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteProgressByStampTaskRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/stamp/progress/delete";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.StampTask != null)
+                if (request.StampTask != null)
                 {
                     jsonWriter.WritePropertyName("stampTask");
-                    jsonWriter.Write(_request.StampTask.ToString());
+                    jsonWriter.Write(request.StampTask);
                 }
-                if (_request.KeyId != null)
+                if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(_request.KeyId.ToString());
+                    jsonWriter.Write(request.KeyId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteProgressByStampTask(
                 Request.DeleteProgressByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.DeleteProgressByStampTaskResult>> callback
         )
 		{
-			var task = new DeleteProgressByStampTaskTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteProgressByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteProgressByStampTaskResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteProgressByStampTaskResult> DeleteProgressByStampTaskAsync(
+                Request.DeleteProgressByStampTaskRequest request
+        )
+		{
+			var task = new DeleteProgressByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeCompletedQuestListsTask : Gs2RestSessionTask<Result.DescribeCompletedQuestListsResult>
+
+        private class DescribeCompletedQuestListsTask : Gs2RestSessionTask<DescribeCompletedQuestListsRequest, DescribeCompletedQuestListsResult>
         {
-			private readonly Request.DescribeCompletedQuestListsRequest _request;
-
-			public DescribeCompletedQuestListsTask(Request.DescribeCompletedQuestListsRequest request, UnityAction<AsyncResult<Result.DescribeCompletedQuestListsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeCompletedQuestListsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCompletedQuestListsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeCompletedQuestListsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/completed";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (_request.AccessToken != null)
+                if (request.AccessToken != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeCompletedQuestLists(
                 Request.DescribeCompletedQuestListsRequest request,
                 UnityAction<AsyncResult<Result.DescribeCompletedQuestListsResult>> callback
         )
 		{
-			var task = new DescribeCompletedQuestListsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeCompletedQuestListsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeCompletedQuestListsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeCompletedQuestListsResult> DescribeCompletedQuestListsAsync(
+                Request.DescribeCompletedQuestListsRequest request
+        )
+		{
+			var task = new DescribeCompletedQuestListsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeCompletedQuestListsByUserIdTask : Gs2RestSessionTask<Result.DescribeCompletedQuestListsByUserIdResult>
+
+        private class DescribeCompletedQuestListsByUserIdTask : Gs2RestSessionTask<DescribeCompletedQuestListsByUserIdRequest, DescribeCompletedQuestListsByUserIdResult>
         {
-			private readonly Request.DescribeCompletedQuestListsByUserIdRequest _request;
-
-			public DescribeCompletedQuestListsByUserIdTask(Request.DescribeCompletedQuestListsByUserIdRequest request, UnityAction<AsyncResult<Result.DescribeCompletedQuestListsByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeCompletedQuestListsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCompletedQuestListsByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeCompletedQuestListsByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/completed";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeCompletedQuestListsByUserId(
                 Request.DescribeCompletedQuestListsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeCompletedQuestListsByUserIdResult>> callback
         )
 		{
-			var task = new DescribeCompletedQuestListsByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeCompletedQuestListsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeCompletedQuestListsByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeCompletedQuestListsByUserIdResult> DescribeCompletedQuestListsByUserIdAsync(
+                Request.DescribeCompletedQuestListsByUserIdRequest request
+        )
+		{
+			var task = new DescribeCompletedQuestListsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetCompletedQuestListTask : Gs2RestSessionTask<Result.GetCompletedQuestListResult>
+
+        private class GetCompletedQuestListTask : Gs2RestSessionTask<GetCompletedQuestListRequest, GetCompletedQuestListResult>
         {
-			private readonly Request.GetCompletedQuestListRequest _request;
-
-			public GetCompletedQuestListTask(Request.GetCompletedQuestListRequest request, UnityAction<AsyncResult<Result.GetCompletedQuestListResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetCompletedQuestListTask(IGs2Session session, RestSessionRequestFactory factory, GetCompletedQuestListRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetCompletedQuestListRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/me/completed/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
-                }
-                if (_request.AccessToken != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-ACCESS-TOKEN", _request.AccessToken);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetCompletedQuestList(
                 Request.GetCompletedQuestListRequest request,
                 UnityAction<AsyncResult<Result.GetCompletedQuestListResult>> callback
         )
 		{
-			var task = new GetCompletedQuestListTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCompletedQuestListResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetCompletedQuestListResult> GetCompletedQuestListAsync(
+                Request.GetCompletedQuestListRequest request
+        )
+		{
+			var task = new GetCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetCompletedQuestListByUserIdTask : Gs2RestSessionTask<Result.GetCompletedQuestListByUserIdResult>
+
+        private class GetCompletedQuestListByUserIdTask : Gs2RestSessionTask<GetCompletedQuestListByUserIdRequest, GetCompletedQuestListByUserIdResult>
         {
-			private readonly Request.GetCompletedQuestListByUserIdRequest _request;
-
-			public GetCompletedQuestListByUserIdTask(Request.GetCompletedQuestListByUserIdRequest request, UnityAction<AsyncResult<Result.GetCompletedQuestListByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetCompletedQuestListByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetCompletedQuestListByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/completed/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetCompletedQuestListByUserId(
                 Request.GetCompletedQuestListByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetCompletedQuestListByUserIdResult>> callback
         )
 		{
-			var task = new GetCompletedQuestListByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCompletedQuestListByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetCompletedQuestListByUserIdResult> GetCompletedQuestListByUserIdAsync(
+                Request.GetCompletedQuestListByUserIdRequest request
+        )
+		{
+			var task = new GetCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteCompletedQuestListByUserIdTask : Gs2RestSessionTask<Result.DeleteCompletedQuestListByUserIdResult>
+
+        private class DeleteCompletedQuestListByUserIdTask : Gs2RestSessionTask<DeleteCompletedQuestListByUserIdRequest, DeleteCompletedQuestListByUserIdResult>
         {
-			private readonly Request.DeleteCompletedQuestListByUserIdRequest _request;
-
-			public DeleteCompletedQuestListByUserIdTask(Request.DeleteCompletedQuestListByUserIdRequest request, UnityAction<AsyncResult<Result.DeleteCompletedQuestListByUserIdResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCompletedQuestListByUserIdRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteCompletedQuestListByUserIdRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/user/{userId}/completed/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(_request.UserId) ? _request.UserId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteCompletedQuestListByUserId(
                 Request.DeleteCompletedQuestListByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteCompletedQuestListByUserIdResult>> callback
         )
 		{
-			var task = new DeleteCompletedQuestListByUserIdTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteCompletedQuestListByUserIdResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteCompletedQuestListByUserIdResult> DeleteCompletedQuestListByUserIdAsync(
+                Request.DeleteCompletedQuestListByUserIdRequest request
+        )
+		{
+			var task = new DeleteCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeQuestGroupModelsTask : Gs2RestSessionTask<Result.DescribeQuestGroupModelsResult>
+
+        private class DescribeQuestGroupModelsTask : Gs2RestSessionTask<DescribeQuestGroupModelsRequest, DescribeQuestGroupModelsResult>
         {
-			private readonly Request.DescribeQuestGroupModelsRequest _request;
-
-			public DescribeQuestGroupModelsTask(Request.DescribeQuestGroupModelsRequest request, UnityAction<AsyncResult<Result.DescribeQuestGroupModelsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeQuestGroupModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestGroupModelsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeQuestGroupModelsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/group";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeQuestGroupModels(
                 Request.DescribeQuestGroupModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeQuestGroupModelsResult>> callback
         )
 		{
-			var task = new DescribeQuestGroupModelsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeQuestGroupModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeQuestGroupModelsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeQuestGroupModelsResult> DescribeQuestGroupModelsAsync(
+                Request.DescribeQuestGroupModelsRequest request
+        )
+		{
+			var task = new DescribeQuestGroupModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetQuestGroupModelTask : Gs2RestSessionTask<Result.GetQuestGroupModelResult>
+
+        private class GetQuestGroupModelTask : Gs2RestSessionTask<GetQuestGroupModelRequest, GetQuestGroupModelResult>
         {
-			private readonly Request.GetQuestGroupModelRequest _request;
-
-			public GetQuestGroupModelTask(Request.GetQuestGroupModelRequest request, UnityAction<AsyncResult<Result.GetQuestGroupModelResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetQuestGroupModelTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestGroupModelRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetQuestGroupModelRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/group/{questGroupName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetQuestGroupModel(
                 Request.GetQuestGroupModelRequest request,
                 UnityAction<AsyncResult<Result.GetQuestGroupModelResult>> callback
         )
 		{
-			var task = new GetQuestGroupModelTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetQuestGroupModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetQuestGroupModelResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetQuestGroupModelResult> GetQuestGroupModelAsync(
+                Request.GetQuestGroupModelRequest request
+        )
+		{
+			var task = new GetQuestGroupModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeQuestModelsTask : Gs2RestSessionTask<Result.DescribeQuestModelsResult>
+
+        private class DescribeQuestModelsTask : Gs2RestSessionTask<DescribeQuestModelsRequest, DescribeQuestModelsResult>
         {
-			private readonly Request.DescribeQuestModelsRequest _request;
-
-			public DescribeQuestModelsTask(Request.DescribeQuestModelsRequest request, UnityAction<AsyncResult<Result.DescribeQuestModelsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeQuestModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestModelsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeQuestModelsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/group/{questGroupName}/quest";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeQuestModels(
                 Request.DescribeQuestModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeQuestModelsResult>> callback
         )
 		{
-			var task = new DescribeQuestModelsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeQuestModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeQuestModelsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeQuestModelsResult> DescribeQuestModelsAsync(
+                Request.DescribeQuestModelsRequest request
+        )
+		{
+			var task = new DescribeQuestModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetQuestModelTask : Gs2RestSessionTask<Result.GetQuestModelResult>
+
+        private class GetQuestModelTask : Gs2RestSessionTask<GetQuestModelRequest, GetQuestModelResult>
         {
-			private readonly Request.GetQuestModelRequest _request;
-
-			public GetQuestModelTask(Request.GetQuestModelRequest request, UnityAction<AsyncResult<Result.GetQuestModelResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetQuestModelTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestModelRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetQuestModelRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "quest")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/{namespaceName}/group/{questGroupName}/quest/{questName}";
 
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(_request.NamespaceName) ? _request.NamespaceName.ToString() : "null");
-                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(_request.QuestGroupName) ? _request.QuestGroupName.ToString() : "null");
-                url = url.Replace("{questName}", !string.IsNullOrEmpty(_request.QuestName) ? _request.QuestName.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetQuestModel(
                 Request.GetQuestModelRequest request,
                 UnityAction<AsyncResult<Result.GetQuestModelResult>> callback
         )
 		{
-			var task = new GetQuestModelTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetQuestModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetQuestModelResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetQuestModelResult> GetQuestModelAsync(
+                Request.GetQuestModelRequest request
+        )
+		{
+			var task = new GetQuestModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

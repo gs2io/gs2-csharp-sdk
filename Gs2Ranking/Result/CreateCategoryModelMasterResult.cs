@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Ranking.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Ranking.Result
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class CreateCategoryModelMasterResult : IResult
 	{
@@ -35,7 +40,9 @@ namespace Gs2.Gs2Ranking.Result
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static CreateCategoryModelMasterResult FromJson(JsonData data)
         {
             if (data == null) {

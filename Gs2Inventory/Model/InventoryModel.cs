@@ -19,12 +19,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Inventory.Model
 {
 
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	public class InventoryModel : IComparable
 	{
         public string InventoryModelId { set; get; }
@@ -33,7 +37,6 @@ namespace Gs2.Gs2Inventory.Model
         public int? InitialCapacity { set; get; }
         public int? MaxCapacity { set; get; }
         public bool? ProtectReferencedItem { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel[] ItemModels { set; get; }
 
         public InventoryModel WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
@@ -65,12 +68,9 @@ namespace Gs2.Gs2Inventory.Model
             return this;
         }
 
-        public InventoryModel WithItemModels(Gs2.Gs2Inventory.Model.ItemModel[] itemModels) {
-            this.ItemModels = itemModels;
-            return this;
-        }
-
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static InventoryModel FromJson(JsonData data)
         {
             if (data == null) {
@@ -82,10 +82,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
                 .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
-                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()))
-                .WithItemModels(!data.Keys.Contains("itemModels") || data["itemModels"] == null ? new Gs2.Gs2Inventory.Model.ItemModel[]{} : data["itemModels"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Inventory.Model.ItemModel.FromJson(v);
-                }).ToArray());
+                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()));
         }
 
         public JsonData ToJson()
@@ -97,12 +94,6 @@ namespace Gs2.Gs2Inventory.Model
                 ["initialCapacity"] = InitialCapacity,
                 ["maxCapacity"] = MaxCapacity,
                 ["protectReferencedItem"] = ProtectReferencedItem,
-                ["itemModels"] = new JsonData(ItemModels == null ? new JsonData[]{} :
-                        ItemModels.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
             };
         }
 
@@ -132,17 +123,6 @@ namespace Gs2.Gs2Inventory.Model
             if (ProtectReferencedItem != null) {
                 writer.WritePropertyName("protectReferencedItem");
                 writer.Write(bool.Parse(ProtectReferencedItem.ToString()));
-            }
-            if (ItemModels != null) {
-                writer.WritePropertyName("itemModels");
-                writer.WriteArrayStart();
-                foreach (var itemModel in ItemModels)
-                {
-                    if (itemModel != null) {
-                        itemModel.WriteJson(writer);
-                    }
-                }
-                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -198,18 +178,6 @@ namespace Gs2.Gs2Inventory.Model
             else
             {
                 diff += ProtectReferencedItem == other.ProtectReferencedItem ? 0 : 1;
-            }
-            if (ItemModels == null && ItemModels == other.ItemModels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ItemModels.Length - other.ItemModels.Length;
-                for (var i = 0; i < ItemModels.Length; i++)
-                {
-                    diff += ItemModels[i].CompareTo(other.ItemModels[i]);
-                }
             }
             return diff;
         }

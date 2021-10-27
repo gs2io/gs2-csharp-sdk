@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Showcase.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Showcase.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class UpdateCurrentShowcaseMasterRequest : Gs2Request<UpdateCurrentShowcaseMasterRequest>
 	{
@@ -41,7 +46,9 @@ namespace Gs2.Gs2Showcase.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static UpdateCurrentShowcaseMasterRequest FromJson(JsonData data)
         {
             if (data == null) {

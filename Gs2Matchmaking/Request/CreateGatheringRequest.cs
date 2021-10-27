@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Matchmaking.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Matchmaking.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class CreateGatheringRequest : Gs2Request<CreateGatheringRequest>
 	{
@@ -71,7 +76,9 @@ namespace Gs2.Gs2Matchmaking.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static CreateGatheringRequest FromJson(JsonData data)
         {
             if (data == null) {

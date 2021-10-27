@@ -13,17 +13,25 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-using UnityEngine.Events;
-using UnityEngine.Networking;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Deploy
+using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
+using System.Collections;
+using UnityEngine.Events;
+using UnityEngine.Networking;
+#else
+using System.Threading.Tasks;
+using System.Threading;
+#endif
+
+namespace Gs2.Gs2Deploy
 {
 	public class Gs2DeployWebSocketClient : AbstractGs2Client
 	{
@@ -37,72 +45,74 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Deploy
 
 		}
 
-        private class ValidateTask : Gs2WebSocketSessionTask<Result.ValidateResult>
+
+        private class ValidateTask : Gs2WebSocketSessionTask<Request.ValidateRequest, Result.ValidateResult>
         {
-			private readonly Request.ValidateRequest _request;
+	        public ValidateTask(IGs2Session session, Request.ValidateRequest request) : base(session, request)
+	        {
+	        }
 
-			public ValidateTask(Request.ValidateRequest request, UnityAction<AsyncResult<Result.ValidateResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.ValidateRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.Template != null)
+                if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
-                    jsonWriter.Write(_request.Template.ToString());
+                    jsonWriter.Write(request.Template.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("deploy");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("stack");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("validate");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "deploy",
+                    "stack",
+                    "validate",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Validate(
                 Request.ValidateRequest request,
                 UnityAction<AsyncResult<Result.ValidateResult>> callback
         )
 		{
-			var task = new ValidateTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new ValidateTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ValidateResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.ValidateResult> Validate(
+            Request.ValidateRequest request
+        )
+		{
+		    var task = new ValidateTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

@@ -20,33 +20,51 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Key.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Key.Result
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class DeleteGitHubApiKeyResult : IResult
 	{
+        public Gs2.Gs2Key.Model.GitHubApiKey Item { set; get; }
 
+        public DeleteGitHubApiKeyResult WithItem(Gs2.Gs2Key.Model.GitHubApiKey item) {
+            this.Item = item;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static DeleteGitHubApiKeyResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DeleteGitHubApiKeyResult();
+            return new DeleteGitHubApiKeyResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Key.Model.GitHubApiKey.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

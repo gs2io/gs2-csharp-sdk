@@ -19,12 +19,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Mission.Model
 {
 
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	public class MissionGroupModel : IComparable
 	{
         public string MissionGroupId { set; get; }
@@ -82,7 +86,9 @@ namespace Gs2.Gs2Mission.Model
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static MissionGroupModel FromJson(JsonData data)
         {
             if (data == null) {

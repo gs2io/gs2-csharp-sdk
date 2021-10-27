@@ -16,7 +16,6 @@
 
 using System;
 using Gs2.Core.Util;
-using UnityEngine.Networking;
 
 namespace Gs2.Core.Model
 {
@@ -35,15 +34,6 @@ namespace Gs2.Core.Model
 		{
 			ClientId = clientId;
 			ClientSecret = clientSecret;
-		}
-
-		public void Authorized(UnityWebRequest request)
-		{
-			request.SetRequestHeader("X-GS2-CLIENT-ID", ClientId);
-			if (ProjectToken != null)
-			{
-				request.SetRequestHeader("Authorization", "Bearer " + ProjectToken);
-			}
 		}
 	}
 }

@@ -19,12 +19,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Project.Model
 {
 
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	public class Billing : IComparable
 	{
         public string BillingId { set; get; }
@@ -106,7 +110,9 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static Billing FromJson(JsonData data)
         {
             if (data == null) {

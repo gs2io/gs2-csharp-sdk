@@ -19,12 +19,16 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Stamina.Model
 {
 
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	public class RecoverIntervalTable : IComparable
 	{
         public string RecoverIntervalTableId { set; get; }
@@ -58,7 +62,9 @@ namespace Gs2.Gs2Stamina.Model
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static RecoverIntervalTable FromJson(JsonData data)
         {
             if (data == null) {

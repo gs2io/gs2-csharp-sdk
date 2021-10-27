@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Gateway.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Gateway.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class DescribeWebSocketSessionsRequest : Gs2Request<DescribeWebSocketSessionsRequest>
 	{
@@ -53,7 +58,9 @@ namespace Gs2.Gs2Gateway.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static DescribeWebSocketSessionsRequest FromJson(JsonData data)
         {
             if (data == null) {

@@ -14,6 +14,8 @@
  * permissions and limitations under the License.
  */
 
+#if false
+
 using System;
 using UnityEngine.Assertions;
 
@@ -87,3 +89,5 @@ namespace Gs2.Core.Util
 		}
 	}
 }
+
+#endif

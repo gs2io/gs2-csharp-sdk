@@ -15,11 +15,16 @@
  */
 
 using System.Collections.Generic;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Core.Model
 {
+#if UNITY_2017_1_OR_NEWER
     [Preserve]
+#endif
     public class StampSheet
     {
         public string ownerId;

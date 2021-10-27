@@ -13,8 +13,15 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+#else
+using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,1594 +30,1830 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Project
+using Gs2.Gs2Project.Request;
+using Gs2.Gs2Project.Result;
+using Gs2.Util.LitJson;
+
+namespace Gs2.Gs2Project
 {
 	public class Gs2ProjectRestClient : AbstractGs2Client
 	{
+#if UNITY_2017_1_OR_NEWER
 		private readonly CertificateHandler _certificateHandler;
+#endif
 
 		public static string Endpoint = "project";
 
         protected Gs2RestSession Gs2RestSession => (Gs2RestSession) Gs2Session;
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="Gs2RestSession">REST API 用セッション</param>
 		public Gs2ProjectRestClient(Gs2RestSession Gs2RestSession) : base(Gs2RestSession)
 		{
 
 		}
 
-		/// <summary>
-		/// コンストラクタ。
-		/// </summary>
-		/// <param name="gs2RestSession">REST API 用セッション</param>
-		/// <param name="certificateHandler"></param>
+#if UNITY_2017_1_OR_NEWER
 		public Gs2ProjectRestClient(Gs2RestSession gs2RestSession, CertificateHandler certificateHandler) : base(gs2RestSession)
 		{
 			_certificateHandler = certificateHandler;
 		}
+#endif
 
-        private class CreateAccountTask : Gs2RestSessionTask<Result.CreateAccountResult>
+
+        private class CreateAccountTask : Gs2RestSessionTask<CreateAccountRequest, CreateAccountResult>
         {
-			private readonly Request.CreateAccountRequest _request;
-
-			public CreateAccountTask(Request.CreateAccountRequest request, UnityAction<AsyncResult<Result.CreateAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateAccountTask(IGs2Session session, RestSessionRequestFactory factory, CreateAccountRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateAccountRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email);
                 }
-                if (_request.FullName != null)
+                if (request.FullName != null)
                 {
                     jsonWriter.WritePropertyName("fullName");
-                    jsonWriter.Write(_request.FullName.ToString());
+                    jsonWriter.Write(request.FullName);
                 }
-                if (_request.CompanyName != null)
+                if (request.CompanyName != null)
                 {
                     jsonWriter.WritePropertyName("companyName");
-                    jsonWriter.Write(_request.CompanyName.ToString());
+                    jsonWriter.Write(request.CompanyName);
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateAccount(
                 Request.CreateAccountRequest request,
                 UnityAction<AsyncResult<Result.CreateAccountResult>> callback
         )
 		{
-			var task = new CreateAccountTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateAccountResult> CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+			var task = new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class VerifyTask : Gs2RestSessionTask<Result.VerifyResult>
+
+        private class VerifyTask : Gs2RestSessionTask<VerifyRequest, VerifyResult>
         {
-			private readonly Request.VerifyRequest _request;
-
-			public VerifyTask(Request.VerifyRequest request, UnityAction<AsyncResult<Result.VerifyResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public VerifyTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(VerifyRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/verify";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.VerifyToken != null)
+                if (request.VerifyToken != null)
                 {
                     jsonWriter.WritePropertyName("verifyToken");
-                    jsonWriter.Write(_request.VerifyToken.ToString());
+                    jsonWriter.Write(request.VerifyToken);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Verify(
                 Request.VerifyRequest request,
                 UnityAction<AsyncResult<Result.VerifyResult>> callback
         )
 		{
-			var task = new VerifyTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new VerifyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.VerifyResult> VerifyAsync(
+                Request.VerifyRequest request
+        )
+		{
+			var task = new VerifyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class SignInTask : Gs2RestSessionTask<Result.SignInResult>
+
+        private class SignInTask : Gs2RestSessionTask<SignInRequest, SignInResult>
         {
-			private readonly Request.SignInRequest _request;
-
-			public SignInTask(Request.SignInRequest request, UnityAction<AsyncResult<Result.SignInResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public SignInTask(IGs2Session session, RestSessionRequestFactory factory, SignInRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(SignInRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/signIn";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email);
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator SignIn(
                 Request.SignInRequest request,
                 UnityAction<AsyncResult<Result.SignInResult>> callback
         )
 		{
-			var task = new SignInTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new SignInTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SignInResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.SignInResult> SignInAsync(
+                Request.SignInRequest request
+        )
+		{
+			var task = new SignInTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class IssueAccountTokenTask : Gs2RestSessionTask<Result.IssueAccountTokenResult>
+
+        private class IssueAccountTokenTask : Gs2RestSessionTask<IssueAccountTokenRequest, IssueAccountTokenResult>
         {
-			private readonly Request.IssueAccountTokenRequest _request;
-
-			public IssueAccountTokenTask(Request.IssueAccountTokenRequest request, UnityAction<AsyncResult<Result.IssueAccountTokenResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public IssueAccountTokenTask(IGs2Session session, RestSessionRequestFactory factory, IssueAccountTokenRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(IssueAccountTokenRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/accountToken";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountName != null)
+                if (request.AccountName != null)
                 {
                     jsonWriter.WritePropertyName("accountName");
-                    jsonWriter.Write(_request.AccountName.ToString());
+                    jsonWriter.Write(request.AccountName);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator IssueAccountToken(
                 Request.IssueAccountTokenRequest request,
                 UnityAction<AsyncResult<Result.IssueAccountTokenResult>> callback
         )
 		{
-			var task = new IssueAccountTokenTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new IssueAccountTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IssueAccountTokenResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.IssueAccountTokenResult> IssueAccountTokenAsync(
+                Request.IssueAccountTokenRequest request
+        )
+		{
+			var task = new IssueAccountTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class ForgetTask : Gs2RestSessionTask<Result.ForgetResult>
+
+        private class ForgetTask : Gs2RestSessionTask<ForgetRequest, ForgetResult>
         {
-			private readonly Request.ForgetRequest _request;
-
-			public ForgetTask(Request.ForgetRequest request, UnityAction<AsyncResult<Result.ForgetResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public ForgetTask(IGs2Session session, RestSessionRequestFactory factory, ForgetRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(ForgetRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/forget";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator Forget(
                 Request.ForgetRequest request,
                 UnityAction<AsyncResult<Result.ForgetResult>> callback
         )
 		{
-			var task = new ForgetTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new ForgetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ForgetResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.ForgetResult> ForgetAsync(
+                Request.ForgetRequest request
+        )
+		{
+			var task = new ForgetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class IssuePasswordTask : Gs2RestSessionTask<Result.IssuePasswordResult>
+
+        private class IssuePasswordTask : Gs2RestSessionTask<IssuePasswordRequest, IssuePasswordResult>
         {
-			private readonly Request.IssuePasswordRequest _request;
-
-			public IssuePasswordTask(Request.IssuePasswordRequest request, UnityAction<AsyncResult<Result.IssuePasswordResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public IssuePasswordTask(IGs2Session session, RestSessionRequestFactory factory, IssuePasswordRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(IssuePasswordRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/password/issue";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.IssuePasswordToken != null)
+                if (request.IssuePasswordToken != null)
                 {
                     jsonWriter.WritePropertyName("issuePasswordToken");
-                    jsonWriter.Write(_request.IssuePasswordToken.ToString());
+                    jsonWriter.Write(request.IssuePasswordToken);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator IssuePassword(
                 Request.IssuePasswordRequest request,
                 UnityAction<AsyncResult<Result.IssuePasswordResult>> callback
         )
 		{
-			var task = new IssuePasswordTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new IssuePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IssuePasswordResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.IssuePasswordResult> IssuePasswordAsync(
+                Request.IssuePasswordRequest request
+        )
+		{
+			var task = new IssuePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateAccountTask : Gs2RestSessionTask<Result.UpdateAccountResult>
+
+        private class UpdateAccountTask : Gs2RestSessionTask<UpdateAccountRequest, UpdateAccountResult>
         {
-			private readonly Request.UpdateAccountRequest _request;
-
-			public UpdateAccountTask(Request.UpdateAccountRequest request, UnityAction<AsyncResult<Result.UpdateAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateAccountTask(IGs2Session session, RestSessionRequestFactory factory, UpdateAccountRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateAccountRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Email != null)
+                if (request.Email != null)
                 {
                     jsonWriter.WritePropertyName("email");
-                    jsonWriter.Write(_request.Email.ToString());
+                    jsonWriter.Write(request.Email);
                 }
-                if (_request.FullName != null)
+                if (request.FullName != null)
                 {
                     jsonWriter.WritePropertyName("fullName");
-                    jsonWriter.Write(_request.FullName.ToString());
+                    jsonWriter.Write(request.FullName);
                 }
-                if (_request.CompanyName != null)
+                if (request.CompanyName != null)
                 {
                     jsonWriter.WritePropertyName("companyName");
-                    jsonWriter.Write(_request.CompanyName.ToString());
+                    jsonWriter.Write(request.CompanyName);
                 }
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password);
                 }
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateAccount(
                 Request.UpdateAccountRequest request,
                 UnityAction<AsyncResult<Result.UpdateAccountResult>> callback
         )
 		{
-			var task = new UpdateAccountTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateAccountResult> UpdateAccountAsync(
+                Request.UpdateAccountRequest request
+        )
+		{
+			var task = new UpdateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteAccountTask : Gs2RestSessionTask<Result.DeleteAccountResult>
+
+        private class DeleteAccountTask : Gs2RestSessionTask<DeleteAccountRequest, DeleteAccountResult>
         {
-			private readonly Request.DeleteAccountRequest _request;
-
-			public DeleteAccountTask(Request.DeleteAccountRequest request, UnityAction<AsyncResult<Result.DeleteAccountResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteAccountTask(IGs2Session session, RestSessionRequestFactory factory, DeleteAccountRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteAccountRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
-                }
-                url += "?" + string.Join("&", queryStrings.ToArray());
-
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
-                {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteAccount(
                 Request.DeleteAccountRequest request,
                 UnityAction<AsyncResult<Result.DeleteAccountResult>> callback
         )
 		{
-			var task = new DeleteAccountTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteAccountResult> DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+			var task = new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeProjectsTask : Gs2RestSessionTask<Result.DescribeProjectsResult>
+
+        private class DescribeProjectsTask : Gs2RestSessionTask<DescribeProjectsRequest, DescribeProjectsResult>
         {
-			private readonly Request.DescribeProjectsRequest _request;
-
-			public DescribeProjectsTask(Request.DescribeProjectsRequest request, UnityAction<AsyncResult<Result.DescribeProjectsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeProjectsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProjectsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeProjectsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/project";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeProjects(
                 Request.DescribeProjectsRequest request,
                 UnityAction<AsyncResult<Result.DescribeProjectsResult>> callback
         )
 		{
-			var task = new DescribeProjectsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeProjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeProjectsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeProjectsResult> DescribeProjectsAsync(
+                Request.DescribeProjectsRequest request
+        )
+		{
+			var task = new DescribeProjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateProjectTask : Gs2RestSessionTask<Result.CreateProjectResult>
+
+        private class CreateProjectTask : Gs2RestSessionTask<CreateProjectRequest, CreateProjectResult>
         {
-			private readonly Request.CreateProjectRequest _request;
-
-			public CreateProjectTask(Request.CreateProjectRequest request, UnityAction<AsyncResult<Result.CreateProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateProjectTask(IGs2Session session, RestSessionRequestFactory factory, CreateProjectRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateProjectRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/project";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Plan != null)
+                if (request.Plan != null)
                 {
                     jsonWriter.WritePropertyName("plan");
-                    jsonWriter.Write(_request.Plan.ToString());
+                    jsonWriter.Write(request.Plan);
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName);
                 }
-                if (_request.EnableEventBridge != null)
+                if (request.EnableEventBridge != null)
                 {
                     jsonWriter.WritePropertyName("enableEventBridge");
-                    jsonWriter.Write(_request.EnableEventBridge.ToString());
+                    jsonWriter.Write(request.EnableEventBridge);
                 }
-                if (_request.EventBridgeAwsAccountId != null)
+                if (request.EventBridgeAwsAccountId != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsAccountId");
-                    jsonWriter.Write(_request.EventBridgeAwsAccountId.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsAccountId);
                 }
-                if (_request.EventBridgeAwsRegion != null)
+                if (request.EventBridgeAwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsRegion");
-                    jsonWriter.Write(_request.EventBridgeAwsRegion.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsRegion);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateProject(
                 Request.CreateProjectRequest request,
                 UnityAction<AsyncResult<Result.CreateProjectResult>> callback
         )
 		{
-			var task = new CreateProjectTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateProjectResult> CreateProjectAsync(
+                Request.CreateProjectRequest request
+        )
+		{
+			var task = new CreateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTask : Gs2RestSessionTask<Result.GetProjectResult>
+
+        private class GetProjectTask : Gs2RestSessionTask<GetProjectRequest, GetProjectResult>
         {
-			private readonly Request.GetProjectRequest _request;
-
-			public GetProjectTask(Request.GetProjectRequest request, UnityAction<AsyncResult<Result.GetProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetProjectTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetProjectRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/project/{projectName}";
 
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProject(
                 Request.GetProjectRequest request,
                 UnityAction<AsyncResult<Result.GetProjectResult>> callback
         )
 		{
-			var task = new GetProjectTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectResult> GetProjectAsync(
+                Request.GetProjectRequest request
+        )
+		{
+			var task = new GetProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTokenTask : Gs2RestSessionTask<Result.GetProjectTokenResult>
+
+        private class GetProjectTokenTask : Gs2RestSessionTask<GetProjectTokenRequest, GetProjectTokenResult>
         {
-			private readonly Request.GetProjectTokenRequest _request;
-
-			public GetProjectTokenTask(Request.GetProjectTokenRequest request, UnityAction<AsyncResult<Result.GetProjectTokenResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetProjectTokenTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectTokenRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetProjectTokenRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/project/{projectName}/projectToken";
 
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProjectToken(
                 Request.GetProjectTokenRequest request,
                 UnityAction<AsyncResult<Result.GetProjectTokenResult>> callback
         )
 		{
-			var task = new GetProjectTokenTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetProjectTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectTokenResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectTokenResult> GetProjectTokenAsync(
+                Request.GetProjectTokenRequest request
+        )
+		{
+			var task = new GetProjectTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetProjectTokenByIdentifierTask : Gs2RestSessionTask<Result.GetProjectTokenByIdentifierResult>
+
+        private class GetProjectTokenByIdentifierTask : Gs2RestSessionTask<GetProjectTokenByIdentifierRequest, GetProjectTokenByIdentifierResult>
         {
-			private readonly Request.GetProjectTokenByIdentifierRequest _request;
-
-			public GetProjectTokenByIdentifierTask(Request.GetProjectTokenByIdentifierRequest request, UnityAction<AsyncResult<Result.GetProjectTokenByIdentifierResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetProjectTokenByIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectTokenByIdentifierRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetProjectTokenByIdentifierRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/{accountName}/project/{projectName}/user/{userName}/projectToken";
 
-                url = url.Replace("{accountName}", !string.IsNullOrEmpty(_request.AccountName) ? _request.AccountName.ToString() : "null");
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
-                url = url.Replace("{userName}", !string.IsNullOrEmpty(_request.UserName) ? _request.UserName.ToString() : "null");
+                url = url.Replace("{accountName}", !string.IsNullOrEmpty(request.AccountName) ? request.AccountName.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.Password != null)
+                if (request.Password != null)
                 {
                     jsonWriter.WritePropertyName("password");
-                    jsonWriter.Write(_request.Password.ToString());
+                    jsonWriter.Write(request.Password);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetProjectTokenByIdentifier(
                 Request.GetProjectTokenByIdentifierRequest request,
                 UnityAction<AsyncResult<Result.GetProjectTokenByIdentifierResult>> callback
         )
 		{
-			var task = new GetProjectTokenByIdentifierTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetProjectTokenByIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProjectTokenByIdentifierResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierAsync(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+			var task = new GetProjectTokenByIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateProjectTask : Gs2RestSessionTask<Result.UpdateProjectResult>
+
+        private class UpdateProjectTask : Gs2RestSessionTask<UpdateProjectRequest, UpdateProjectResult>
         {
-			private readonly Request.UpdateProjectRequest _request;
-
-			public UpdateProjectTask(Request.UpdateProjectRequest request, UnityAction<AsyncResult<Result.UpdateProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateProjectTask(IGs2Session session, RestSessionRequestFactory factory, UpdateProjectRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateProjectRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/project/{projectName}";
 
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.Plan != null)
+                if (request.Plan != null)
                 {
                     jsonWriter.WritePropertyName("plan");
-                    jsonWriter.Write(_request.Plan.ToString());
+                    jsonWriter.Write(request.Plan);
                 }
-                if (_request.BillingMethodName != null)
+                if (request.BillingMethodName != null)
                 {
                     jsonWriter.WritePropertyName("billingMethodName");
-                    jsonWriter.Write(_request.BillingMethodName.ToString());
+                    jsonWriter.Write(request.BillingMethodName);
                 }
-                if (_request.EnableEventBridge != null)
+                if (request.EnableEventBridge != null)
                 {
                     jsonWriter.WritePropertyName("enableEventBridge");
-                    jsonWriter.Write(_request.EnableEventBridge.ToString());
+                    jsonWriter.Write(request.EnableEventBridge);
                 }
-                if (_request.EventBridgeAwsAccountId != null)
+                if (request.EventBridgeAwsAccountId != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsAccountId");
-                    jsonWriter.Write(_request.EventBridgeAwsAccountId.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsAccountId);
                 }
-                if (_request.EventBridgeAwsRegion != null)
+                if (request.EventBridgeAwsRegion != null)
                 {
                     jsonWriter.WritePropertyName("eventBridgeAwsRegion");
-                    jsonWriter.Write(_request.EventBridgeAwsRegion.ToString());
+                    jsonWriter.Write(request.EventBridgeAwsRegion);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateProject(
                 Request.UpdateProjectRequest request,
                 UnityAction<AsyncResult<Result.UpdateProjectResult>> callback
         )
 		{
-			var task = new UpdateProjectTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateProjectResult> UpdateProjectAsync(
+                Request.UpdateProjectRequest request
+        )
+		{
+			var task = new UpdateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteProjectTask : Gs2RestSessionTask<Result.DeleteProjectResult>
+
+        private class DeleteProjectTask : Gs2RestSessionTask<DeleteProjectRequest, DeleteProjectResult>
         {
-			private readonly Request.DeleteProjectRequest _request;
-
-			public DeleteProjectTask(Request.DeleteProjectRequest request, UnityAction<AsyncResult<Result.DeleteProjectResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteProjectTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProjectRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteProjectRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/project/{projectName}";
 
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteProject(
                 Request.DeleteProjectRequest request,
                 UnityAction<AsyncResult<Result.DeleteProjectResult>> callback
         )
 		{
-			var task = new DeleteProjectTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteProjectResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteProjectResult> DeleteProjectAsync(
+                Request.DeleteProjectRequest request
+        )
+		{
+			var task = new DeleteProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeBillingMethodsTask : Gs2RestSessionTask<Result.DescribeBillingMethodsResult>
+
+        private class DescribeBillingMethodsTask : Gs2RestSessionTask<DescribeBillingMethodsRequest, DescribeBillingMethodsResult>
         {
-			private readonly Request.DescribeBillingMethodsRequest _request;
-
-			public DescribeBillingMethodsTask(Request.DescribeBillingMethodsRequest request, UnityAction<AsyncResult<Result.DescribeBillingMethodsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeBillingMethodsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBillingMethodsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeBillingMethodsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billingMethod";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeBillingMethods(
                 Request.DescribeBillingMethodsRequest request,
                 UnityAction<AsyncResult<Result.DescribeBillingMethodsResult>> callback
         )
 		{
-			var task = new DescribeBillingMethodsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeBillingMethodsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBillingMethodsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeBillingMethodsResult> DescribeBillingMethodsAsync(
+                Request.DescribeBillingMethodsRequest request
+        )
+		{
+			var task = new DescribeBillingMethodsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class CreateBillingMethodTask : Gs2RestSessionTask<Result.CreateBillingMethodResult>
+
+        private class CreateBillingMethodTask : Gs2RestSessionTask<CreateBillingMethodRequest, CreateBillingMethodResult>
         {
-			private readonly Request.CreateBillingMethodRequest _request;
-
-			public CreateBillingMethodTask(Request.CreateBillingMethodRequest request, UnityAction<AsyncResult<Result.CreateBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public CreateBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, CreateBillingMethodRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPOST;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(CreateBillingMethodRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billingMethod";
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Post(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.MethodType != null)
+                if (request.MethodType != null)
                 {
                     jsonWriter.WritePropertyName("methodType");
-                    jsonWriter.Write(_request.MethodType.ToString());
+                    jsonWriter.Write(request.MethodType);
                 }
-                if (_request.CardCustomerId != null)
+                if (request.CardCustomerId != null)
                 {
                     jsonWriter.WritePropertyName("cardCustomerId");
-                    jsonWriter.Write(_request.CardCustomerId.ToString());
+                    jsonWriter.Write(request.CardCustomerId);
                 }
-                if (_request.PartnerId != null)
+                if (request.PartnerId != null)
                 {
                     jsonWriter.WritePropertyName("partnerId");
-                    jsonWriter.Write(_request.PartnerId.ToString());
+                    jsonWriter.Write(request.PartnerId);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator CreateBillingMethod(
                 Request.CreateBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.CreateBillingMethodResult>> callback
         )
 		{
-			var task = new CreateBillingMethodTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new CreateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.CreateBillingMethodResult> CreateBillingMethodAsync(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+			var task = new CreateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetBillingMethodTask : Gs2RestSessionTask<Result.GetBillingMethodResult>
+
+        private class GetBillingMethodTask : Gs2RestSessionTask<GetBillingMethodRequest, GetBillingMethodResult>
         {
-			private readonly Request.GetBillingMethodRequest _request;
-
-			public GetBillingMethodTask(Request.GetBillingMethodRequest request, UnityAction<AsyncResult<Result.GetBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public GetBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, GetBillingMethodRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(GetBillingMethodRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billingMethod/{billingMethodName}";
 
-                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(_request.BillingMethodName) ? _request.BillingMethodName.ToString() : "null");
+                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(request.BillingMethodName) ? request.BillingMethodName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetBillingMethod(
                 Request.GetBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.GetBillingMethodResult>> callback
         )
 		{
-			var task = new GetBillingMethodTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new GetBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetBillingMethodResult> GetBillingMethodAsync(
+                Request.GetBillingMethodRequest request
+        )
+		{
+			var task = new GetBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class UpdateBillingMethodTask : Gs2RestSessionTask<Result.UpdateBillingMethodResult>
+
+        private class UpdateBillingMethodTask : Gs2RestSessionTask<UpdateBillingMethodRequest, UpdateBillingMethodResult>
         {
-			private readonly Request.UpdateBillingMethodRequest _request;
-
-			public UpdateBillingMethodTask(Request.UpdateBillingMethodRequest request, UnityAction<AsyncResult<Result.UpdateBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public UpdateBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, UpdateBillingMethodRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbPUT;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(UpdateBillingMethodRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billingMethod/{billingMethodName}";
 
-                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(_request.BillingMethodName) ? _request.BillingMethodName.ToString() : "null");
+                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(request.BillingMethodName) ? request.BillingMethodName.ToString() : "null");
 
-                UnityWebRequest.url = url;
+                var sessionRequest = Factory.Put(url);
 
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (_request.AccountToken != null)
+                if (request.AccountToken != null)
                 {
                     jsonWriter.WritePropertyName("accountToken");
-                    jsonWriter.Write(_request.AccountToken.ToString());
+                    jsonWriter.Write(request.AccountToken);
                 }
-                if (_request.Description != null)
+                if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(_request.Description.ToString());
+                    jsonWriter.Write(request.Description);
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
                 jsonWriter.WriteObjectEnd();
 
                 var body = stringBuilder.ToString();
                 if (!string.IsNullOrEmpty(body))
                 {
-                    UnityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+                    sessionRequest.Body = body;
                 }
-                UnityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                sessionRequest.AddHeader("Content-Type", "application/json");
 
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator UpdateBillingMethod(
                 Request.UpdateBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.UpdateBillingMethodResult>> callback
         )
 		{
-			var task = new UpdateBillingMethodTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new UpdateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.UpdateBillingMethodResult> UpdateBillingMethodAsync(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+			var task = new UpdateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DeleteBillingMethodTask : Gs2RestSessionTask<Result.DeleteBillingMethodResult>
+
+        private class DeleteBillingMethodTask : Gs2RestSessionTask<DeleteBillingMethodRequest, DeleteBillingMethodResult>
         {
-			private readonly Request.DeleteBillingMethodRequest _request;
-
-			public DeleteBillingMethodTask(Request.DeleteBillingMethodRequest request, UnityAction<AsyncResult<Result.DeleteBillingMethodResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DeleteBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBillingMethodRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbDELETE;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DeleteBillingMethodRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billingMethod/{billingMethodName}";
 
-                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(_request.BillingMethodName) ? _request.BillingMethodName.ToString() : "null");
+                url = url.Replace("{billingMethodName}", !string.IsNullOrEmpty(request.BillingMethodName) ? request.BillingMethodName.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DeleteBillingMethod(
                 Request.DeleteBillingMethodRequest request,
                 UnityAction<AsyncResult<Result.DeleteBillingMethodResult>> callback
         )
 		{
-			var task = new DeleteBillingMethodTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DeleteBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBillingMethodResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DeleteBillingMethodResult> DeleteBillingMethodAsync(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+			var task = new DeleteBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeReceiptsTask : Gs2RestSessionTask<Result.DescribeReceiptsResult>
+
+        private class DescribeReceiptsTask : Gs2RestSessionTask<DescribeReceiptsRequest, DescribeReceiptsResult>
         {
-			private readonly Request.DescribeReceiptsRequest _request;
-
-			public DescribeReceiptsTask(Request.DescribeReceiptsRequest request, UnityAction<AsyncResult<Result.DescribeReceiptsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeReceiptsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeReceiptsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeReceiptsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/receipt";
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                if (_request.PageToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "pageToken", UnityWebRequest.EscapeURL(_request.PageToken)));
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
-                if (_request.Limit != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "limit", _request.Limit));
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeReceipts(
                 Request.DescribeReceiptsRequest request,
                 UnityAction<AsyncResult<Result.DescribeReceiptsResult>> callback
         )
 		{
-			var task = new DescribeReceiptsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeReceiptsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeReceiptsResult> DescribeReceiptsAsync(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+			var task = new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class DescribeBillingsTask : Gs2RestSessionTask<Result.DescribeBillingsResult>
+
+        private class DescribeBillingsTask : Gs2RestSessionTask<DescribeBillingsRequest, DescribeBillingsResult>
         {
-			private readonly Request.DescribeBillingsRequest _request;
-
-			public DescribeBillingsTask(Request.DescribeBillingsRequest request, UnityAction<AsyncResult<Result.DescribeBillingsResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            public DescribeBillingsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBillingsRequest request) : base(session, factory, request)
             {
-				UnityWebRequest.method = UnityWebRequest.kHttpVerbGET;
+            }
 
+            protected override IGs2SessionRequest CreateRequest(DescribeBillingsRequest request)
+            {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
-                    .Replace("{region}", gs2Session.Region.DisplayName())
+                    .Replace("{region}", Session.Region.DisplayName())
                     + "/account/me/billing/{projectName}/{year}/{month}";
 
-                url = url.Replace("{projectName}", !string.IsNullOrEmpty(_request.ProjectName) ? _request.ProjectName.ToString() : "null");
-                url = url.Replace("{year}",_request.Year != null ? _request.Year.ToString() : "null");
-                url = url.Replace("{month}",_request.Month != null ? _request.Month.ToString() : "null");
+                url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+                url = url.Replace("{month}",request.Month != null ? request.Month.ToString() : "null");
 
-                var queryStrings = new List<string> ();
-                if (_request.ContextStack != null)
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
                 {
-                    queryStrings.Add(string.Format("{0}={1}", "contextStack", UnityWebRequest.EscapeURL(_request.ContextStack)));
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (_request.AccountToken != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "accountToken", UnityWebRequest.EscapeURL(_request.AccountToken)));
+                if (request.AccountToken != null) {
+                    sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-                if (_request.Region != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "region", UnityWebRequest.EscapeURL(_request.Region)));
+                if (request.Region != null) {
+                    sessionRequest.AddQueryString("region", $"{request.Region}");
                 }
-                if (_request.Service != null) {
-                    queryStrings.Add(string.Format("{0}={1}", "service", UnityWebRequest.EscapeURL(_request.Service)));
+                if (request.Service != null) {
+                    sessionRequest.AddQueryString("service", $"{request.Service}");
                 }
-                url += "?" + string.Join("&", queryStrings.ToArray());
 
-                UnityWebRequest.url = url;
-
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
-                    UnityWebRequest.SetRequestHeader("X-GS2-REQUEST-ID", _request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
 
-                return Send((Gs2RestSession)gs2Session);
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
             }
         }
 
-		/// <summary>
-		/// <returns>IEnumerator</returns>
-		/// <param name="callback">コールバックハンドラ</param>
-		/// <param name="request">リクエストパラメータ</param>
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator DescribeBillings(
                 Request.DescribeBillingsRequest request,
                 UnityAction<AsyncResult<Result.DescribeBillingsResult>> callback
         )
 		{
-			var task = new DescribeBillingsTask(request, callback);
-			if (_certificateHandler != null)
-			{
-				task.UnityWebRequest.certificateHandler = _certificateHandler;
-			}
-			return Gs2RestSession.Execute(task);
+			var task = new DescribeBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBillingsResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.DescribeBillingsResult> DescribeBillingsAsync(
+                Request.DescribeBillingsRequest request
+        )
+		{
+			var task = new DescribeBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

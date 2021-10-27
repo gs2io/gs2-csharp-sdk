@@ -15,26 +15,17 @@
  */
 
 using System;
-using System.Collections;
-using System.Text;
-using System.Threading;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Core.Util;
 using Gs2.Util.LitJson;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Networking;
 
 namespace Gs2.Core
 {
 	public abstract class AbstractGs2Client {
 
 		/** セッション */
-		protected readonly Gs2Session Gs2Session;
+		protected readonly IGs2Session Gs2Session;
 
-		protected AbstractGs2Client(Gs2Session session)
+		protected AbstractGs2Client(IGs2Session session)
 		{
 			Gs2Session = session;
 			JsonMapper.RegisterExporter<float>( (obj, writer) => writer.Write( Convert.ToDouble( obj ) ) );

@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2JobQueue.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class DeleteDeadLetterJobByUserIdRequest : Gs2Request<DeleteDeadLetterJobByUserIdRequest>
 	{
@@ -47,7 +52,9 @@ namespace Gs2.Gs2JobQueue.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static DeleteDeadLetterJobByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {

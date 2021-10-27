@@ -14,8 +14,6 @@
  * permissions and limitations under the License.
  */
 
-using UnityEngine.Networking;
-
 namespace Gs2.Core.Model
 {
 	public interface IGs2Credential
@@ -25,7 +23,5 @@ namespace Gs2.Core.Model
 		string ClientSecret { get; set; }
 		
 		string ProjectToken { get; set; }
-		
-		void Authorized(UnityWebRequest request);
 	}
 }

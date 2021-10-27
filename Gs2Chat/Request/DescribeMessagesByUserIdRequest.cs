@@ -20,11 +20,16 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Chat.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Chat.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class DescribeMessagesByUserIdRequest : Gs2Request<DescribeMessagesByUserIdRequest>
 	{
@@ -65,7 +70,9 @@ namespace Gs2.Gs2Chat.Request
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static DescribeMessagesByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {

@@ -14,9 +14,11 @@
  * permissions and limitations under the License.
  */
 
+using Gs2.Core.Model;
+
 namespace Gs2.Core.Result
 {
-    public class OpenResult
+    public class OpenResult : IResult
     {
         
     }

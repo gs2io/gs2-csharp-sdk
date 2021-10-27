@@ -20,16 +20,23 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Dictionary.Result
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class ResetByUserIdResult : IResult
 	{
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static ResetByUserIdResult FromJson(JsonData data)
         {
             if (data == null) {

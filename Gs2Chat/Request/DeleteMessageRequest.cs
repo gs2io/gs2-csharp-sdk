@@ -20,16 +20,22 @@ using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Chat.Model;
 using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Chat.Request
 {
+#if UNITY_2017_1_OR_NEWER
 	[Preserve]
+#endif
 	[System.Serializable]
 	public class DeleteMessageRequest : Gs2Request<DeleteMessageRequest>
 	{
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
+        public string UserId { set; get; }
         public string MessageName { set; get; }
 
         public DeleteMessageRequest WithNamespaceName(string namespaceName) {
@@ -42,12 +48,19 @@ namespace Gs2.Gs2Chat.Request
             return this;
         }
 
+        public DeleteMessageRequest WithUserId(string userId) {
+            this.UserId = userId;
+            return this;
+        }
+
         public DeleteMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;
         }
 
+#if UNITY_2017_1_OR_NEWER
     	[Preserve]
+#endif
         public static DeleteMessageRequest FromJson(JsonData data)
         {
             if (data == null) {
@@ -56,6 +69,7 @@ namespace Gs2.Gs2Chat.Request
             return new DeleteMessageRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString());
         }
 
@@ -64,6 +78,7 @@ namespace Gs2.Gs2Chat.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
+                ["userId"] = UserId,
                 ["messageName"] = MessageName,
             };
         }
@@ -78,6 +93,10 @@ namespace Gs2.Gs2Chat.Request
             if (RoomName != null) {
                 writer.WritePropertyName("roomName");
                 writer.Write(RoomName.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             if (MessageName != null) {
                 writer.WritePropertyName("messageName");

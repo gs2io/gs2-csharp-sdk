@@ -13,17 +13,25 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-using UnityEngine.Events;
-using UnityEngine.Networking;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Util.LitJson;namespace Gs2.Gs2Watch
+using Gs2.Util.LitJson;
+
+#if UNITY_2017_1_OR_NEWER
+using System.Collections;
+using UnityEngine.Events;
+using UnityEngine.Networking;
+#else
+using System.Threading.Tasks;
+using System.Threading;
+#endif
+
+namespace Gs2.Gs2Watch
 {
 	public class Gs2WatchWebSocketClient : AbstractGs2Client
 	{
@@ -37,160 +45,164 @@ using Gs2.Util.LitJson;namespace Gs2.Gs2Watch
 
 		}
 
-        private class GetCumulativeTask : Gs2WebSocketSessionTask<Result.GetCumulativeResult>
+
+        private class GetCumulativeTask : Gs2WebSocketSessionTask<Request.GetCumulativeRequest, Result.GetCumulativeResult>
         {
-			private readonly Request.GetCumulativeRequest _request;
+	        public GetCumulativeTask(IGs2Session session, Request.GetCumulativeRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetCumulativeTask(Request.GetCumulativeRequest request, UnityAction<AsyncResult<Result.GetCumulativeResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetCumulativeRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.Name != null)
+                if (request.Name != null)
                 {
                     jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(_request.Name.ToString());
+                    jsonWriter.Write(request.Name.ToString());
                 }
-                if (_request.ResourceGrn != null)
+                if (request.ResourceGrn != null)
                 {
                     jsonWriter.WritePropertyName("resourceGrn");
-                    jsonWriter.Write(_request.ResourceGrn.ToString());
+                    jsonWriter.Write(request.ResourceGrn.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("watch");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("cumulative");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getCumulative");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "watch",
+                    "cumulative",
+                    "getCumulative",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetCumulative(
                 Request.GetCumulativeRequest request,
                 UnityAction<AsyncResult<Result.GetCumulativeResult>> callback
         )
 		{
-			var task = new GetCumulativeTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetCumulativeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCumulativeResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetCumulativeResult> GetCumulative(
+            Request.GetCumulativeRequest request
+        )
+		{
+		    var task = new GetCumulativeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 
-        private class GetBillingActivityTask : Gs2WebSocketSessionTask<Result.GetBillingActivityResult>
+
+        private class GetBillingActivityTask : Gs2WebSocketSessionTask<Request.GetBillingActivityRequest, Result.GetBillingActivityResult>
         {
-			private readonly Request.GetBillingActivityRequest _request;
+	        public GetBillingActivityTask(IGs2Session session, Request.GetBillingActivityRequest request) : base(session, request)
+	        {
+	        }
 
-			public GetBillingActivityTask(Request.GetBillingActivityRequest request, UnityAction<AsyncResult<Result.GetBillingActivityResult>> userCallback) : base(userCallback)
-			{
-				_request = request;
-			}
-
-            protected override IEnumerator ExecuteImpl(Gs2Session gs2Session)
+            protected override IGs2SessionRequest CreateRequest(Request.GetBillingActivityRequest request)
             {
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
 
                 jsonWriter.WriteObjectStart();
 
-                if (_request.Year != null)
+                if (request.Year != null)
                 {
                     jsonWriter.WritePropertyName("year");
-                    jsonWriter.Write(_request.Year.ToString());
+                    jsonWriter.Write(request.Year.ToString());
                 }
-                if (_request.Month != null)
+                if (request.Month != null)
                 {
                     jsonWriter.WritePropertyName("month");
-                    jsonWriter.Write(_request.Month.ToString());
+                    jsonWriter.Write(request.Month.ToString());
                 }
-                if (_request.Service != null)
+                if (request.Service != null)
                 {
                     jsonWriter.WritePropertyName("service");
-                    jsonWriter.Write(_request.Service.ToString());
+                    jsonWriter.Write(request.Service.ToString());
                 }
-                if (_request.ActivityType != null)
+                if (request.ActivityType != null)
                 {
                     jsonWriter.WritePropertyName("activityType");
-                    jsonWriter.Write(_request.ActivityType.ToString());
+                    jsonWriter.Write(request.ActivityType.ToString());
                 }
-                if (_request.ContextStack != null)
+                if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(_request.ContextStack.ToString());
+                    jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (_request.RequestId != null)
+                if (request.RequestId != null)
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(_request.RequestId);
+                    jsonWriter.Write(request.RequestId);
                 }
 
-                jsonWriter.WritePropertyName("xGs2ClientId");
-                jsonWriter.Write(gs2Session.Credential.ClientId);
-                jsonWriter.WritePropertyName("xGs2ProjectToken");
-                jsonWriter.Write(gs2Session.ProjectToken);
-
-                jsonWriter.WritePropertyName("x_gs2");
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("service");
-                jsonWriter.Write("watch");
-                jsonWriter.WritePropertyName("component");
-                jsonWriter.Write("billingActivity");
-                jsonWriter.WritePropertyName("function");
-                jsonWriter.Write("getBillingActivity");
-                jsonWriter.WritePropertyName("contentType");
-                jsonWriter.Write("application/json");
-                jsonWriter.WritePropertyName("requestId");
-                jsonWriter.Write(Gs2SessionTaskId.ToString());
-                jsonWriter.WriteObjectEnd();
+                AddHeader(
+                    Session.Credential,
+                    "watch",
+                    "billingActivity",
+                    "getBillingActivity",
+                    jsonWriter
+                );
 
                 jsonWriter.WriteObjectEnd();
 
-                ((Gs2WebSocketSession)gs2Session).Send(stringBuilder.ToString());
-
-                return new EmptyCoroutine();
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
 		public IEnumerator GetBillingActivity(
                 Request.GetBillingActivityRequest request,
                 UnityAction<AsyncResult<Result.GetBillingActivityResult>> callback
         )
 		{
-			var task = new GetBillingActivityTask(request, callback);
-			return Gs2WebSocketSession.Execute(task);
+			var task = new GetBillingActivityTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBillingActivityResult>(task.Result, task.Error));
         }
+#else
+		public async Task<Result.GetBillingActivityResult> GetBillingActivity(
+            Request.GetBillingActivityRequest request
+        )
+		{
+		    var task = new GetBillingActivityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

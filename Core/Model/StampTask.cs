@@ -14,11 +14,15 @@
  * permissions and limitations under the License.
  */
 
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Core.Model
 {
+#if UNITY_2017_1_OR_NEWER
     [Preserve]
+#endif
     public class StampTask
     {
         public string taskId;
