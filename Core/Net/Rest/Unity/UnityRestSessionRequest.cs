@@ -55,6 +55,7 @@ namespace Gs2.Core.Net
 
                 request.SetRequestHeader(item.Key, item.Value);
             }
+            request.SetRequestHeader("Content-Type", "application/json");
 
             if (Method == HttpMethod.Post || Method == HttpMethod.Put)
             {
