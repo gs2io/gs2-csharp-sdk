@@ -68,6 +68,8 @@ namespace Gs2.Core.Net
                 (int) request.responseCode,
                 request.downloadHandler.text
             ));
+
+            request.Dispose();
         }
     }
 }
