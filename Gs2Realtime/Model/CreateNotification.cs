@@ -22,7 +22,7 @@ namespace Gs2.Gs2Realtime.Model
 #endif
 	public class CreateNotification
 	{
-        public string namespaceName { set; get; }
-        public string roomName { set; get; }
+        public string namespaceName;
+        public string roomName;
     }
 }

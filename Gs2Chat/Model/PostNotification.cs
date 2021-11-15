@@ -11,15 +11,21 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Chat.Model
 {
+#if UNITY_2017_1_OR_NEWER
+	[Preserve]
+#endif
 	public class PostNotification
 	{
-        public string namespaceName { set; get; }
-        public string roomName { set; get; }
-        public string userId { set; get; }
-        public int? category { set; get; }
-        public long? createdAt { set; get; }
+        public string namespaceName;
+        public string roomName;
+        public string userId;
+        public int? category;
+        public long? createdAt;
     }
 }
