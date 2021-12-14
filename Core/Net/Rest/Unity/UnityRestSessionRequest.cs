@@ -4,6 +4,9 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 using UnityEngine.Networking;
 
 namespace Gs2.Core.Net
@@ -31,7 +34,47 @@ namespace Gs2.Core.Net
     {
         public override async Task<RestResult> Invoke()
         {
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+            var uri = QueryStrings.Count == 0 ? 
+                Url : 
+                Url + '?' + string.Join("&", QueryStrings.Select(
+                    item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
+            var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
+            var request = new UnityWebRequest(
+                uri,
+                Method.TransformUnity()
+            );
+            request.downloadHandler = new DownloadHandlerBuffer();
+            foreach (var item in Headers)
+            {
+                if ((Method == HttpMethod.Post || Method == HttpMethod.Put) && item.Key.ToLower() == "content-type")
+                {
+                    continue;
+                }
+
+                request.SetRequestHeader(item.Key, item.Value);
+            }
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            if (Method == HttpMethod.Post || Method == HttpMethod.Put)
+            {
+                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
+            }
+
+            await request.SendWebRequest().ToUniTask();
+
+            var result = new RestResult(
+                (int) request.responseCode,
+                request.downloadHandler.text
+            );
+            OnComplete(result);
+
+            request.Dispose();
+
+            return result;
+#else
             throw new NotImplementedException();
+#endif
         }
 
         public override IEnumerator Action()

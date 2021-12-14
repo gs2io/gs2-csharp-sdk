@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Inbox
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -147,8 +150,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -161,7 +197,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -217,8 +253,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -231,7 +300,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -332,8 +401,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -346,7 +448,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -402,8 +504,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -416,247 +551,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class DeleteMessageTask : Gs2WebSocketSessionTask<Request.DeleteMessageRequest, Result.DeleteMessageResult>
-        {
-	        public DeleteMessageTask(IGs2Session session, Request.DeleteMessageRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.DeleteMessageRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("accessToken");
-                    jsonWriter.Write(request.AccessToken.ToString());
-                }
-                if (request.MessageName != null)
-                {
-                    jsonWriter.WritePropertyName("messageName");
-                    jsonWriter.Write(request.MessageName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "inbox",
-                    "message",
-                    "deleteMessage",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteMessage(
-                Request.DeleteMessageRequest request,
-                UnityAction<AsyncResult<Result.DeleteMessageResult>> callback
-        )
-		{
-			var task = new DeleteMessageTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteMessageResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.DeleteMessageResult> DeleteMessage(
-            Request.DeleteMessageRequest request
-        )
-		{
-		    var task = new DeleteMessageTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class DeleteMessageByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteMessageByUserIdRequest, Result.DeleteMessageByUserIdResult>
-        {
-	        public DeleteMessageByUserIdTask(IGs2Session session, Request.DeleteMessageByUserIdRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.DeleteMessageByUserIdRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.MessageName != null)
-                {
-                    jsonWriter.WritePropertyName("messageName");
-                    jsonWriter.Write(request.MessageName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "inbox",
-                    "message",
-                    "deleteMessageByUserId",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteMessageByUserId(
-                Request.DeleteMessageByUserIdRequest request,
-                UnityAction<AsyncResult<Result.DeleteMessageByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteMessageByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteMessageByUserIdResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.DeleteMessageByUserIdResult> DeleteMessageByUserId(
-            Request.DeleteMessageByUserIdRequest request
-        )
-		{
-		    var task = new DeleteMessageByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class DeleteGlobalMessageMasterTask : Gs2WebSocketSessionTask<Request.DeleteGlobalMessageMasterRequest, Result.DeleteGlobalMessageMasterResult>
-        {
-	        public DeleteGlobalMessageMasterTask(IGs2Session session, Request.DeleteGlobalMessageMasterRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.DeleteGlobalMessageMasterRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.GlobalMessageName != null)
-                {
-                    jsonWriter.WritePropertyName("globalMessageName");
-                    jsonWriter.Write(request.GlobalMessageName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "inbox",
-                    "globalMessageMaster",
-                    "deleteGlobalMessageMaster",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteGlobalMessageMaster(
-                Request.DeleteGlobalMessageMasterRequest request,
-                UnityAction<AsyncResult<Result.DeleteGlobalMessageMasterResult>> callback
-        )
-		{
-			var task = new DeleteGlobalMessageMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGlobalMessageMasterResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.DeleteGlobalMessageMasterResult> DeleteGlobalMessageMaster(
-            Request.DeleteGlobalMessageMasterRequest request
-        )
-		{
-		    var task = new DeleteGlobalMessageMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class GetReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.GetReceivedByUserIdRequest, Result.GetReceivedByUserIdResult>
+        public class GetReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.GetReceivedByUserIdRequest, Result.GetReceivedByUserIdResult>
         {
 	        public GetReceivedByUserIdTask(IGs2Session session, Request.GetReceivedByUserIdRequest request) : base(session, request)
 	        {
@@ -717,8 +612,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetReceivedByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetReceivedByUserIdResult> GetReceivedByUserIdFuture(
+                Request.GetReceivedByUserIdRequest request
+        )
+		{
+			return new GetReceivedByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetReceivedByUserIdResult> GetReceivedByUserIdAsync(
+            Request.GetReceivedByUserIdRequest request
+        )
+		{
+		    var task = new GetReceivedByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetReceivedByUserIdTask GetReceivedByUserIdAsync(
+                Request.GetReceivedByUserIdRequest request
+        )
+		{
+			return new GetReceivedByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetReceivedByUserIdResult> GetReceivedByUserId(
+		public async Task<Result.GetReceivedByUserIdResult> GetReceivedByUserIdAsync(
             Request.GetReceivedByUserIdRequest request
         )
 		{
@@ -731,7 +659,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class UpdateReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateReceivedByUserIdRequest, Result.UpdateReceivedByUserIdResult>
+        public class UpdateReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateReceivedByUserIdRequest, Result.UpdateReceivedByUserIdResult>
         {
 	        public UpdateReceivedByUserIdTask(IGs2Session session, Request.UpdateReceivedByUserIdRequest request) : base(session, request)
 	        {
@@ -802,8 +730,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateReceivedByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateReceivedByUserIdResult> UpdateReceivedByUserIdFuture(
+                Request.UpdateReceivedByUserIdRequest request
+        )
+		{
+			return new UpdateReceivedByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateReceivedByUserIdResult> UpdateReceivedByUserIdAsync(
+            Request.UpdateReceivedByUserIdRequest request
+        )
+		{
+		    var task = new UpdateReceivedByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateReceivedByUserIdTask UpdateReceivedByUserIdAsync(
+                Request.UpdateReceivedByUserIdRequest request
+        )
+		{
+			return new UpdateReceivedByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateReceivedByUserIdResult> UpdateReceivedByUserId(
+		public async Task<Result.UpdateReceivedByUserIdResult> UpdateReceivedByUserIdAsync(
             Request.UpdateReceivedByUserIdRequest request
         )
 		{
@@ -816,7 +777,7 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
-        private class DeleteReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteReceivedByUserIdRequest, Result.DeleteReceivedByUserIdResult>
+        public class DeleteReceivedByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteReceivedByUserIdRequest, Result.DeleteReceivedByUserIdResult>
         {
 	        public DeleteReceivedByUserIdTask(IGs2Session session, Request.DeleteReceivedByUserIdRequest request) : base(session, request)
 	        {
@@ -877,8 +838,41 @@ namespace Gs2.Gs2Inbox
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteReceivedByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteReceivedByUserIdResult> DeleteReceivedByUserIdFuture(
+                Request.DeleteReceivedByUserIdRequest request
+        )
+		{
+			return new DeleteReceivedByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteReceivedByUserIdResult> DeleteReceivedByUserIdAsync(
+            Request.DeleteReceivedByUserIdRequest request
+        )
+		{
+		    var task = new DeleteReceivedByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteReceivedByUserIdTask DeleteReceivedByUserIdAsync(
+                Request.DeleteReceivedByUserIdRequest request
+        )
+		{
+			return new DeleteReceivedByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteReceivedByUserIdResult> DeleteReceivedByUserId(
+		public async Task<Result.DeleteReceivedByUserIdResult> DeleteReceivedByUserIdAsync(
             Request.DeleteReceivedByUserIdRequest request
         )
 		{

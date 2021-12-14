@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Deploy
 		}
 
 
-        private class ValidateTask : Gs2WebSocketSessionTask<Request.ValidateRequest, Result.ValidateResult>
+        public class ValidateTask : Gs2WebSocketSessionTask<Request.ValidateRequest, Result.ValidateResult>
         {
 	        public ValidateTask(IGs2Session session, Request.ValidateRequest request) : base(session, request)
 	        {
@@ -102,8 +105,31 @@ namespace Gs2.Gs2Deploy
             yield return task;
             callback.Invoke(new AsyncResult<Result.ValidateResult>(task.Result, task.Error));
         }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ValidateResult> ValidateAsync(
+            Request.ValidateRequest request
+        )
+		{
+		    var task = new ValidateTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ValidateTask ValidateAsync(
+                Request.ValidateRequest request
+        )
+		{
+			return new ValidateTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.ValidateResult> Validate(
+		public async Task<Result.ValidateResult> ValidateAsync(
             Request.ValidateRequest request
         )
 		{

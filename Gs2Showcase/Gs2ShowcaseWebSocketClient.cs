@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Showcase
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -122,8 +125,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -136,7 +172,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -192,8 +228,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -206,7 +275,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -282,8 +351,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -296,7 +398,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -352,8 +454,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -366,7 +501,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class CreateSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.CreateSalesItemGroupMasterRequest, Result.CreateSalesItemGroupMasterResult>
+        public class CreateSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.CreateSalesItemGroupMasterRequest, Result.CreateSalesItemGroupMasterResult>
         {
 	        public CreateSalesItemGroupMasterTask(IGs2Session session, Request.CreateSalesItemGroupMasterRequest request) : base(session, request)
 	        {
@@ -447,8 +582,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateSalesItemGroupMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateSalesItemGroupMasterResult> CreateSalesItemGroupMasterFuture(
+                Request.CreateSalesItemGroupMasterRequest request
+        )
+		{
+			return new CreateSalesItemGroupMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSalesItemGroupMasterResult> CreateSalesItemGroupMasterAsync(
+            Request.CreateSalesItemGroupMasterRequest request
+        )
+		{
+		    var task = new CreateSalesItemGroupMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateSalesItemGroupMasterTask CreateSalesItemGroupMasterAsync(
+                Request.CreateSalesItemGroupMasterRequest request
+        )
+		{
+			return new CreateSalesItemGroupMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateSalesItemGroupMasterResult> CreateSalesItemGroupMaster(
+		public async Task<Result.CreateSalesItemGroupMasterResult> CreateSalesItemGroupMasterAsync(
             Request.CreateSalesItemGroupMasterRequest request
         )
 		{
@@ -461,7 +629,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class GetSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.GetSalesItemGroupMasterRequest, Result.GetSalesItemGroupMasterResult>
+        public class GetSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.GetSalesItemGroupMasterRequest, Result.GetSalesItemGroupMasterResult>
         {
 	        public GetSalesItemGroupMasterTask(IGs2Session session, Request.GetSalesItemGroupMasterRequest request) : base(session, request)
 	        {
@@ -522,8 +690,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetSalesItemGroupMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetSalesItemGroupMasterResult> GetSalesItemGroupMasterFuture(
+                Request.GetSalesItemGroupMasterRequest request
+        )
+		{
+			return new GetSalesItemGroupMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSalesItemGroupMasterResult> GetSalesItemGroupMasterAsync(
+            Request.GetSalesItemGroupMasterRequest request
+        )
+		{
+		    var task = new GetSalesItemGroupMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSalesItemGroupMasterTask GetSalesItemGroupMasterAsync(
+                Request.GetSalesItemGroupMasterRequest request
+        )
+		{
+			return new GetSalesItemGroupMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetSalesItemGroupMasterResult> GetSalesItemGroupMaster(
+		public async Task<Result.GetSalesItemGroupMasterResult> GetSalesItemGroupMasterAsync(
             Request.GetSalesItemGroupMasterRequest request
         )
 		{
@@ -536,7 +737,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class UpdateSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.UpdateSalesItemGroupMasterRequest, Result.UpdateSalesItemGroupMasterResult>
+        public class UpdateSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.UpdateSalesItemGroupMasterRequest, Result.UpdateSalesItemGroupMasterResult>
         {
 	        public UpdateSalesItemGroupMasterTask(IGs2Session session, Request.UpdateSalesItemGroupMasterRequest request) : base(session, request)
 	        {
@@ -617,8 +818,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateSalesItemGroupMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateSalesItemGroupMasterResult> UpdateSalesItemGroupMasterFuture(
+                Request.UpdateSalesItemGroupMasterRequest request
+        )
+		{
+			return new UpdateSalesItemGroupMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSalesItemGroupMasterResult> UpdateSalesItemGroupMasterAsync(
+            Request.UpdateSalesItemGroupMasterRequest request
+        )
+		{
+		    var task = new UpdateSalesItemGroupMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateSalesItemGroupMasterTask UpdateSalesItemGroupMasterAsync(
+                Request.UpdateSalesItemGroupMasterRequest request
+        )
+		{
+			return new UpdateSalesItemGroupMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateSalesItemGroupMasterResult> UpdateSalesItemGroupMaster(
+		public async Task<Result.UpdateSalesItemGroupMasterResult> UpdateSalesItemGroupMasterAsync(
             Request.UpdateSalesItemGroupMasterRequest request
         )
 		{
@@ -631,7 +865,7 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        private class DeleteSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.DeleteSalesItemGroupMasterRequest, Result.DeleteSalesItemGroupMasterResult>
+        public class DeleteSalesItemGroupMasterTask : Gs2WebSocketSessionTask<Request.DeleteSalesItemGroupMasterRequest, Result.DeleteSalesItemGroupMasterResult>
         {
 	        public DeleteSalesItemGroupMasterTask(IGs2Session session, Request.DeleteSalesItemGroupMasterRequest request) : base(session, request)
 	        {
@@ -692,8 +926,41 @@ namespace Gs2.Gs2Showcase
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteSalesItemGroupMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteSalesItemGroupMasterResult> DeleteSalesItemGroupMasterFuture(
+                Request.DeleteSalesItemGroupMasterRequest request
+        )
+		{
+			return new DeleteSalesItemGroupMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSalesItemGroupMasterResult> DeleteSalesItemGroupMasterAsync(
+            Request.DeleteSalesItemGroupMasterRequest request
+        )
+		{
+		    var task = new DeleteSalesItemGroupMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteSalesItemGroupMasterTask DeleteSalesItemGroupMasterAsync(
+                Request.DeleteSalesItemGroupMasterRequest request
+        )
+		{
+			return new DeleteSalesItemGroupMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteSalesItemGroupMasterResult> DeleteSalesItemGroupMaster(
+		public async Task<Result.DeleteSalesItemGroupMasterResult> DeleteSalesItemGroupMasterAsync(
             Request.DeleteSalesItemGroupMasterRequest request
         )
 		{

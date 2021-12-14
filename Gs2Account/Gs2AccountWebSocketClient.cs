@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Account
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -137,8 +140,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -151,7 +187,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -207,8 +243,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -221,7 +290,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -312,8 +381,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -326,7 +428,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -382,8 +484,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -396,7 +531,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateAccountTask : Gs2WebSocketSessionTask<Request.CreateAccountRequest, Result.CreateAccountResult>
+        public class CreateAccountTask : Gs2WebSocketSessionTask<Request.CreateAccountRequest, Result.CreateAccountResult>
         {
 	        public CreateAccountTask(IGs2Session session, Request.CreateAccountRequest request) : base(session, request)
 	        {
@@ -452,8 +587,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateAccountResult> CreateAccountFuture(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateAccountResult> CreateAccountAsync(
+            Request.CreateAccountRequest request
+        )
+		{
+		    var task = new CreateAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateAccountTask CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateAccountResult> CreateAccount(
+		public async Task<Result.CreateAccountResult> CreateAccountAsync(
             Request.CreateAccountRequest request
         )
 		{
@@ -466,7 +634,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTimeOffsetTask : Gs2WebSocketSessionTask<Request.UpdateTimeOffsetRequest, Result.UpdateTimeOffsetResult>
+        public class UpdateTimeOffsetTask : Gs2WebSocketSessionTask<Request.UpdateTimeOffsetRequest, Result.UpdateTimeOffsetResult>
         {
 	        public UpdateTimeOffsetTask(IGs2Session session, Request.UpdateTimeOffsetRequest request) : base(session, request)
 	        {
@@ -532,8 +700,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTimeOffsetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTimeOffsetResult> UpdateTimeOffsetFuture(
+                Request.UpdateTimeOffsetRequest request
+        )
+		{
+			return new UpdateTimeOffsetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTimeOffsetResult> UpdateTimeOffsetAsync(
+            Request.UpdateTimeOffsetRequest request
+        )
+		{
+		    var task = new UpdateTimeOffsetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateTimeOffsetTask UpdateTimeOffsetAsync(
+                Request.UpdateTimeOffsetRequest request
+        )
+		{
+			return new UpdateTimeOffsetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateTimeOffsetResult> UpdateTimeOffset(
+		public async Task<Result.UpdateTimeOffsetResult> UpdateTimeOffsetAsync(
             Request.UpdateTimeOffsetRequest request
         )
 		{
@@ -546,7 +747,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetAccountTask : Gs2WebSocketSessionTask<Request.GetAccountRequest, Result.GetAccountResult>
+        public class GetAccountTask : Gs2WebSocketSessionTask<Request.GetAccountRequest, Result.GetAccountResult>
         {
 	        public GetAccountTask(IGs2Session session, Request.GetAccountRequest request) : base(session, request)
 	        {
@@ -607,8 +808,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAccountResult> GetAccountFuture(
+                Request.GetAccountRequest request
+        )
+		{
+			return new GetAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAccountResult> GetAccountAsync(
+            Request.GetAccountRequest request
+        )
+		{
+		    var task = new GetAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetAccountTask GetAccountAsync(
+                Request.GetAccountRequest request
+        )
+		{
+			return new GetAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetAccountResult> GetAccount(
+		public async Task<Result.GetAccountResult> GetAccountAsync(
             Request.GetAccountRequest request
         )
 		{
@@ -621,7 +855,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteAccountTask : Gs2WebSocketSessionTask<Request.DeleteAccountRequest, Result.DeleteAccountResult>
+        public class DeleteAccountTask : Gs2WebSocketSessionTask<Request.DeleteAccountRequest, Result.DeleteAccountResult>
         {
 	        public DeleteAccountTask(IGs2Session session, Request.DeleteAccountRequest request) : base(session, request)
 	        {
@@ -682,8 +916,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAccountResult> DeleteAccountFuture(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAccountResult> DeleteAccountAsync(
+            Request.DeleteAccountRequest request
+        )
+		{
+		    var task = new DeleteAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteAccountTask DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteAccountResult> DeleteAccount(
+		public async Task<Result.DeleteAccountResult> DeleteAccountAsync(
             Request.DeleteAccountRequest request
         )
 		{
@@ -696,7 +963,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateTakeOverTask : Gs2WebSocketSessionTask<Request.CreateTakeOverRequest, Result.CreateTakeOverResult>
+        public class CreateTakeOverTask : Gs2WebSocketSessionTask<Request.CreateTakeOverRequest, Result.CreateTakeOverResult>
         {
 	        public CreateTakeOverTask(IGs2Session session, Request.CreateTakeOverRequest request) : base(session, request)
 	        {
@@ -777,8 +1044,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateTakeOverResult> CreateTakeOverFuture(
+                Request.CreateTakeOverRequest request
+        )
+		{
+			return new CreateTakeOverTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverResult> CreateTakeOverAsync(
+            Request.CreateTakeOverRequest request
+        )
+		{
+		    var task = new CreateTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateTakeOverTask CreateTakeOverAsync(
+                Request.CreateTakeOverRequest request
+        )
+		{
+			return new CreateTakeOverTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateTakeOverResult> CreateTakeOver(
+		public async Task<Result.CreateTakeOverResult> CreateTakeOverAsync(
             Request.CreateTakeOverRequest request
         )
 		{
@@ -791,7 +1091,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.CreateTakeOverByUserIdRequest, Result.CreateTakeOverByUserIdResult>
+        public class CreateTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.CreateTakeOverByUserIdRequest, Result.CreateTakeOverByUserIdResult>
         {
 	        public CreateTakeOverByUserIdTask(IGs2Session session, Request.CreateTakeOverByUserIdRequest request) : base(session, request)
 	        {
@@ -867,8 +1167,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdFuture(
+                Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdAsync(
+            Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+		    var task = new CreateTakeOverByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateTakeOverByUserIdTask CreateTakeOverByUserIdAsync(
+                Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserId(
+		public async Task<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdAsync(
             Request.CreateTakeOverByUserIdRequest request
         )
 		{
@@ -881,7 +1214,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetTakeOverTask : Gs2WebSocketSessionTask<Request.GetTakeOverRequest, Result.GetTakeOverResult>
+        public class GetTakeOverTask : Gs2WebSocketSessionTask<Request.GetTakeOverRequest, Result.GetTakeOverResult>
         {
 	        public GetTakeOverTask(IGs2Session session, Request.GetTakeOverRequest request) : base(session, request)
 	        {
@@ -952,8 +1285,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTakeOverResult> GetTakeOverFuture(
+                Request.GetTakeOverRequest request
+        )
+		{
+			return new GetTakeOverTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverResult> GetTakeOverAsync(
+            Request.GetTakeOverRequest request
+        )
+		{
+		    var task = new GetTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTakeOverTask GetTakeOverAsync(
+                Request.GetTakeOverRequest request
+        )
+		{
+			return new GetTakeOverTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetTakeOverResult> GetTakeOver(
+		public async Task<Result.GetTakeOverResult> GetTakeOverAsync(
             Request.GetTakeOverRequest request
         )
 		{
@@ -966,7 +1332,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.GetTakeOverByUserIdRequest, Result.GetTakeOverByUserIdResult>
+        public class GetTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.GetTakeOverByUserIdRequest, Result.GetTakeOverByUserIdResult>
         {
 	        public GetTakeOverByUserIdTask(IGs2Session session, Request.GetTakeOverByUserIdRequest request) : base(session, request)
 	        {
@@ -1032,8 +1398,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdFuture(
+                Request.GetTakeOverByUserIdRequest request
+        )
+		{
+			return new GetTakeOverByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdAsync(
+            Request.GetTakeOverByUserIdRequest request
+        )
+		{
+		    var task = new GetTakeOverByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTakeOverByUserIdTask GetTakeOverByUserIdAsync(
+                Request.GetTakeOverByUserIdRequest request
+        )
+		{
+			return new GetTakeOverByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetTakeOverByUserIdResult> GetTakeOverByUserId(
+		public async Task<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdAsync(
             Request.GetTakeOverByUserIdRequest request
         )
 		{
@@ -1046,7 +1445,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTakeOverTask : Gs2WebSocketSessionTask<Request.UpdateTakeOverRequest, Result.UpdateTakeOverResult>
+        public class UpdateTakeOverTask : Gs2WebSocketSessionTask<Request.UpdateTakeOverRequest, Result.UpdateTakeOverResult>
         {
 	        public UpdateTakeOverTask(IGs2Session session, Request.UpdateTakeOverRequest request) : base(session, request)
 	        {
@@ -1127,8 +1526,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTakeOverResult> UpdateTakeOverFuture(
+                Request.UpdateTakeOverRequest request
+        )
+		{
+			return new UpdateTakeOverTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverResult> UpdateTakeOverAsync(
+            Request.UpdateTakeOverRequest request
+        )
+		{
+		    var task = new UpdateTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateTakeOverTask UpdateTakeOverAsync(
+                Request.UpdateTakeOverRequest request
+        )
+		{
+			return new UpdateTakeOverTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateTakeOverResult> UpdateTakeOver(
+		public async Task<Result.UpdateTakeOverResult> UpdateTakeOverAsync(
             Request.UpdateTakeOverRequest request
         )
 		{
@@ -1141,7 +1573,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateTakeOverByUserIdRequest, Result.UpdateTakeOverByUserIdResult>
+        public class UpdateTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateTakeOverByUserIdRequest, Result.UpdateTakeOverByUserIdResult>
         {
 	        public UpdateTakeOverByUserIdTask(IGs2Session session, Request.UpdateTakeOverByUserIdRequest request) : base(session, request)
 	        {
@@ -1217,8 +1649,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdFuture(
+                Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+			return new UpdateTakeOverByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdAsync(
+            Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+		    var task = new UpdateTakeOverByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateTakeOverByUserIdTask UpdateTakeOverByUserIdAsync(
+                Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+			return new UpdateTakeOverByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserId(
+		public async Task<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdAsync(
             Request.UpdateTakeOverByUserIdRequest request
         )
 		{
@@ -1231,7 +1696,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteTakeOverTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverRequest, Result.DeleteTakeOverResult>
+        public class DeleteTakeOverTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverRequest, Result.DeleteTakeOverResult>
         {
 	        public DeleteTakeOverTask(IGs2Session session, Request.DeleteTakeOverRequest request) : base(session, request)
 	        {
@@ -1307,8 +1772,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTakeOverResult> DeleteTakeOverFuture(
+                Request.DeleteTakeOverRequest request
+        )
+		{
+			return new DeleteTakeOverTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverResult> DeleteTakeOverAsync(
+            Request.DeleteTakeOverRequest request
+        )
+		{
+		    var task = new DeleteTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTakeOverTask DeleteTakeOverAsync(
+                Request.DeleteTakeOverRequest request
+        )
+		{
+			return new DeleteTakeOverTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteTakeOverResult> DeleteTakeOver(
+		public async Task<Result.DeleteTakeOverResult> DeleteTakeOverAsync(
             Request.DeleteTakeOverRequest request
         )
 		{
@@ -1321,7 +1819,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteTakeOverByUserIdentifierTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverByUserIdentifierRequest, Result.DeleteTakeOverByUserIdentifierResult>
+        public class DeleteTakeOverByUserIdentifierTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverByUserIdentifierRequest, Result.DeleteTakeOverByUserIdentifierResult>
         {
 	        public DeleteTakeOverByUserIdentifierTask(IGs2Session session, Request.DeleteTakeOverByUserIdentifierRequest request) : base(session, request)
 	        {
@@ -1387,8 +1885,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTakeOverByUserIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierFuture(
+                Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierAsync(
+            Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+		    var task = new DeleteTakeOverByUserIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTakeOverByUserIdentifierTask DeleteTakeOverByUserIdentifierAsync(
+                Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifier(
+		public async Task<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierAsync(
             Request.DeleteTakeOverByUserIdentifierRequest request
         )
 		{
@@ -1401,7 +1932,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DoTakeOverTask : Gs2WebSocketSessionTask<Request.DoTakeOverRequest, Result.DoTakeOverResult>
+        public class DoTakeOverTask : Gs2WebSocketSessionTask<Request.DoTakeOverRequest, Result.DoTakeOverResult>
         {
 	        public DoTakeOverTask(IGs2Session session, Request.DoTakeOverRequest request) : base(session, request)
 	        {
@@ -1472,8 +2003,41 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DoTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DoTakeOverResult> DoTakeOverFuture(
+                Request.DoTakeOverRequest request
+        )
+		{
+			return new DoTakeOverTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoTakeOverResult> DoTakeOverAsync(
+            Request.DoTakeOverRequest request
+        )
+		{
+		    var task = new DoTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DoTakeOverTask DoTakeOverAsync(
+                Request.DoTakeOverRequest request
+        )
+		{
+			return new DoTakeOverTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DoTakeOverResult> DoTakeOver(
+		public async Task<Result.DoTakeOverResult> DoTakeOverAsync(
             Request.DoTakeOverRequest request
         )
 		{

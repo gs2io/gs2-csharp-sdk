@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -202,6 +245,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -217,7 +300,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -266,6 +349,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -281,7 +404,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -330,6 +453,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -345,7 +508,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -417,6 +580,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -432,7 +635,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -481,6 +684,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -496,7 +739,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DescribeKeysTask : Gs2RestSessionTask<DescribeKeysRequest, DescribeKeysResult>
+        public class DescribeKeysTask : Gs2RestSessionTask<DescribeKeysRequest, DescribeKeysResult>
         {
             public DescribeKeysTask(IGs2Session session, RestSessionRequestFactory factory, DescribeKeysRequest request) : base(session, factory, request)
             {
@@ -551,6 +794,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeKeysResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeKeysResult> DescribeKeysFuture(
+                Request.DescribeKeysRequest request
+        )
+		{
+			return new DescribeKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeKeysResult> DescribeKeysAsync(
+                Request.DescribeKeysRequest request
+        )
+		{
+            AsyncResult<Result.DescribeKeysResult> result = null;
+			await DescribeKeys(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeKeysTask DescribeKeysAsync(
+                Request.DescribeKeysRequest request
+        )
+		{
+			return new DescribeKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeKeysResult> DescribeKeysAsync(
                 Request.DescribeKeysRequest request
@@ -566,7 +849,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class CreateKeyTask : Gs2RestSessionTask<CreateKeyRequest, CreateKeyResult>
+        public class CreateKeyTask : Gs2RestSessionTask<CreateKeyRequest, CreateKeyResult>
         {
             public CreateKeyTask(IGs2Session session, RestSessionRequestFactory factory, CreateKeyRequest request) : base(session, factory, request)
             {
@@ -638,6 +921,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateKeyResult> CreateKeyFuture(
+                Request.CreateKeyRequest request
+        )
+		{
+			return new CreateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateKeyResult> CreateKeyAsync(
+                Request.CreateKeyRequest request
+        )
+		{
+            AsyncResult<Result.CreateKeyResult> result = null;
+			await CreateKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateKeyTask CreateKeyAsync(
+                Request.CreateKeyRequest request
+        )
+		{
+			return new CreateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateKeyResult> CreateKeyAsync(
                 Request.CreateKeyRequest request
@@ -653,7 +976,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class UpdateKeyTask : Gs2RestSessionTask<UpdateKeyRequest, UpdateKeyResult>
+        public class UpdateKeyTask : Gs2RestSessionTask<UpdateKeyRequest, UpdateKeyResult>
         {
             public UpdateKeyTask(IGs2Session session, RestSessionRequestFactory factory, UpdateKeyRequest request) : base(session, factory, request)
             {
@@ -721,6 +1044,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateKeyResult> UpdateKeyFuture(
+                Request.UpdateKeyRequest request
+        )
+		{
+			return new UpdateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateKeyResult> UpdateKeyAsync(
+                Request.UpdateKeyRequest request
+        )
+		{
+            AsyncResult<Result.UpdateKeyResult> result = null;
+			await UpdateKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateKeyTask UpdateKeyAsync(
+                Request.UpdateKeyRequest request
+        )
+		{
+			return new UpdateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateKeyResult> UpdateKeyAsync(
                 Request.UpdateKeyRequest request
@@ -736,7 +1099,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class GetKeyTask : Gs2RestSessionTask<GetKeyRequest, GetKeyResult>
+        public class GetKeyTask : Gs2RestSessionTask<GetKeyRequest, GetKeyResult>
         {
             public GetKeyTask(IGs2Session session, RestSessionRequestFactory factory, GetKeyRequest request) : base(session, factory, request)
             {
@@ -786,6 +1149,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetKeyResult> GetKeyFuture(
+                Request.GetKeyRequest request
+        )
+		{
+			return new GetKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetKeyResult> GetKeyAsync(
+                Request.GetKeyRequest request
+        )
+		{
+            AsyncResult<Result.GetKeyResult> result = null;
+			await GetKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetKeyTask GetKeyAsync(
+                Request.GetKeyRequest request
+        )
+		{
+			return new GetKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetKeyResult> GetKeyAsync(
                 Request.GetKeyRequest request
@@ -801,7 +1204,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DeleteKeyTask : Gs2RestSessionTask<DeleteKeyRequest, DeleteKeyResult>
+        public class DeleteKeyTask : Gs2RestSessionTask<DeleteKeyRequest, DeleteKeyResult>
         {
             public DeleteKeyTask(IGs2Session session, RestSessionRequestFactory factory, DeleteKeyRequest request) : base(session, factory, request)
             {
@@ -851,6 +1254,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteKeyResult> DeleteKeyFuture(
+                Request.DeleteKeyRequest request
+        )
+		{
+			return new DeleteKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteKeyResult> DeleteKeyAsync(
+                Request.DeleteKeyRequest request
+        )
+		{
+            AsyncResult<Result.DeleteKeyResult> result = null;
+			await DeleteKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteKeyTask DeleteKeyAsync(
+                Request.DeleteKeyRequest request
+        )
+		{
+			return new DeleteKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteKeyResult> DeleteKeyAsync(
                 Request.DeleteKeyRequest request
@@ -866,7 +1309,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class EncryptTask : Gs2RestSessionTask<EncryptRequest, EncryptResult>
+        public class EncryptTask : Gs2RestSessionTask<EncryptRequest, EncryptResult>
         {
             public EncryptTask(IGs2Session session, RestSessionRequestFactory factory, EncryptRequest request) : base(session, factory, request)
             {
@@ -934,6 +1377,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.EncryptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.EncryptResult> EncryptFuture(
+                Request.EncryptRequest request
+        )
+		{
+			return new EncryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EncryptResult> EncryptAsync(
+                Request.EncryptRequest request
+        )
+		{
+            AsyncResult<Result.EncryptResult> result = null;
+			await Encrypt(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EncryptTask EncryptAsync(
+                Request.EncryptRequest request
+        )
+		{
+			return new EncryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.EncryptResult> EncryptAsync(
                 Request.EncryptRequest request
@@ -949,7 +1432,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DecryptTask : Gs2RestSessionTask<DecryptRequest, DecryptResult>
+        public class DecryptTask : Gs2RestSessionTask<DecryptRequest, DecryptResult>
         {
             public DecryptTask(IGs2Session session, RestSessionRequestFactory factory, DecryptRequest request) : base(session, factory, request)
             {
@@ -1017,6 +1500,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DecryptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DecryptResult> DecryptFuture(
+                Request.DecryptRequest request
+        )
+		{
+			return new DecryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecryptResult> DecryptAsync(
+                Request.DecryptRequest request
+        )
+		{
+            AsyncResult<Result.DecryptResult> result = null;
+			await Decrypt(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecryptTask DecryptAsync(
+                Request.DecryptRequest request
+        )
+		{
+			return new DecryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DecryptResult> DecryptAsync(
                 Request.DecryptRequest request
@@ -1032,7 +1555,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DescribeGitHubApiKeysTask : Gs2RestSessionTask<DescribeGitHubApiKeysRequest, DescribeGitHubApiKeysResult>
+        public class DescribeGitHubApiKeysTask : Gs2RestSessionTask<DescribeGitHubApiKeysRequest, DescribeGitHubApiKeysResult>
         {
             public DescribeGitHubApiKeysTask(IGs2Session session, RestSessionRequestFactory factory, DescribeGitHubApiKeysRequest request) : base(session, factory, request)
             {
@@ -1087,6 +1610,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeGitHubApiKeysResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysFuture(
+                Request.DescribeGitHubApiKeysRequest request
+        )
+		{
+			return new DescribeGitHubApiKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
+                Request.DescribeGitHubApiKeysRequest request
+        )
+		{
+            AsyncResult<Result.DescribeGitHubApiKeysResult> result = null;
+			await DescribeGitHubApiKeys(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeGitHubApiKeysTask DescribeGitHubApiKeysAsync(
+                Request.DescribeGitHubApiKeysRequest request
+        )
+		{
+			return new DescribeGitHubApiKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
                 Request.DescribeGitHubApiKeysRequest request
@@ -1102,7 +1665,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class CreateGitHubApiKeyTask : Gs2RestSessionTask<CreateGitHubApiKeyRequest, CreateGitHubApiKeyResult>
+        public class CreateGitHubApiKeyTask : Gs2RestSessionTask<CreateGitHubApiKeyRequest, CreateGitHubApiKeyResult>
         {
             public CreateGitHubApiKeyTask(IGs2Session session, RestSessionRequestFactory factory, CreateGitHubApiKeyRequest request) : base(session, factory, request)
             {
@@ -1184,6 +1747,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateGitHubApiKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyFuture(
+                Request.CreateGitHubApiKeyRequest request
+        )
+		{
+			return new CreateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
+                Request.CreateGitHubApiKeyRequest request
+        )
+		{
+            AsyncResult<Result.CreateGitHubApiKeyResult> result = null;
+			await CreateGitHubApiKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateGitHubApiKeyTask CreateGitHubApiKeyAsync(
+                Request.CreateGitHubApiKeyRequest request
+        )
+		{
+			return new CreateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
                 Request.CreateGitHubApiKeyRequest request
@@ -1199,7 +1802,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class UpdateGitHubApiKeyTask : Gs2RestSessionTask<UpdateGitHubApiKeyRequest, UpdateGitHubApiKeyResult>
+        public class UpdateGitHubApiKeyTask : Gs2RestSessionTask<UpdateGitHubApiKeyRequest, UpdateGitHubApiKeyResult>
         {
             public UpdateGitHubApiKeyTask(IGs2Session session, RestSessionRequestFactory factory, UpdateGitHubApiKeyRequest request) : base(session, factory, request)
             {
@@ -1277,6 +1880,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateGitHubApiKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyFuture(
+                Request.UpdateGitHubApiKeyRequest request
+        )
+		{
+			return new UpdateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
+                Request.UpdateGitHubApiKeyRequest request
+        )
+		{
+            AsyncResult<Result.UpdateGitHubApiKeyResult> result = null;
+			await UpdateGitHubApiKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateGitHubApiKeyTask UpdateGitHubApiKeyAsync(
+                Request.UpdateGitHubApiKeyRequest request
+        )
+		{
+			return new UpdateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
                 Request.UpdateGitHubApiKeyRequest request
@@ -1292,7 +1935,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class GetGitHubApiKeyTask : Gs2RestSessionTask<GetGitHubApiKeyRequest, GetGitHubApiKeyResult>
+        public class GetGitHubApiKeyTask : Gs2RestSessionTask<GetGitHubApiKeyRequest, GetGitHubApiKeyResult>
         {
             public GetGitHubApiKeyTask(IGs2Session session, RestSessionRequestFactory factory, GetGitHubApiKeyRequest request) : base(session, factory, request)
             {
@@ -1342,6 +1985,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetGitHubApiKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetGitHubApiKeyResult> GetGitHubApiKeyFuture(
+                Request.GetGitHubApiKeyRequest request
+        )
+		{
+			return new GetGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
+                Request.GetGitHubApiKeyRequest request
+        )
+		{
+            AsyncResult<Result.GetGitHubApiKeyResult> result = null;
+			await GetGitHubApiKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetGitHubApiKeyTask GetGitHubApiKeyAsync(
+                Request.GetGitHubApiKeyRequest request
+        )
+		{
+			return new GetGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
                 Request.GetGitHubApiKeyRequest request
@@ -1357,7 +2040,7 @@ namespace Gs2.Gs2Key
 #endif
 
 
-        private class DeleteGitHubApiKeyTask : Gs2RestSessionTask<DeleteGitHubApiKeyRequest, DeleteGitHubApiKeyResult>
+        public class DeleteGitHubApiKeyTask : Gs2RestSessionTask<DeleteGitHubApiKeyRequest, DeleteGitHubApiKeyResult>
         {
             public DeleteGitHubApiKeyTask(IGs2Session session, RestSessionRequestFactory factory, DeleteGitHubApiKeyRequest request) : base(session, factory, request)
             {
@@ -1407,6 +2090,46 @@ namespace Gs2.Gs2Key
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteGitHubApiKeyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyFuture(
+                Request.DeleteGitHubApiKeyRequest request
+        )
+		{
+			return new DeleteGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
+                Request.DeleteGitHubApiKeyRequest request
+        )
+		{
+            AsyncResult<Result.DeleteGitHubApiKeyResult> result = null;
+			await DeleteGitHubApiKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteGitHubApiKeyTask DeleteGitHubApiKeyAsync(
+                Request.DeleteGitHubApiKeyRequest request
+        )
+		{
+			return new DeleteGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
                 Request.DeleteGitHubApiKeyRequest request

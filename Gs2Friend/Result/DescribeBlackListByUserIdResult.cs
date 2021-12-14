@@ -34,9 +34,15 @@ namespace Gs2.Gs2Friend.Result
 	public class DescribeBlackListByUserIdResult : IResult
 	{
         public string[] Items { set; get; }
+        public string NextPageToken { set; get; }
 
         public DescribeBlackListByUserIdResult WithItems(string[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DescribeBlackListByUserIdResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2Friend.Result
             return new DescribeBlackListByUserIdResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new string[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
         }
 
         public JsonData ToJson()
@@ -62,6 +69,7 @@ namespace Gs2.Gs2Friend.Result
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
+                ["nextPageToken"] = NextPageToken,
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Friend.Result
                 }
             }
             writer.WriteArrayEnd();
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
     }

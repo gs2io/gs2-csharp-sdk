@@ -33,6 +33,7 @@ namespace Gs2.Gs2Mission.Model
 	{
         public string ResetType { set; get; }
         public long? Value { set; get; }
+        public long? NextResetAt { set; get; }
         public long? UpdatedAt { set; get; }
 
         public ScopedValue WithResetType(string resetType) {
@@ -42,6 +43,11 @@ namespace Gs2.Gs2Mission.Model
 
         public ScopedValue WithValue(long? value) {
             this.Value = value;
+            return this;
+        }
+
+        public ScopedValue WithNextResetAt(long? nextResetAt) {
+            this.NextResetAt = nextResetAt;
             return this;
         }
 
@@ -61,6 +67,7 @@ namespace Gs2.Gs2Mission.Model
             return new ScopedValue()
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()))
+                .WithNextResetAt(!data.Keys.Contains("nextResetAt") || data["nextResetAt"] == null ? null : (long?)long.Parse(data["nextResetAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
 
@@ -69,6 +76,7 @@ namespace Gs2.Gs2Mission.Model
             return new JsonData {
                 ["resetType"] = ResetType,
                 ["value"] = Value,
+                ["nextResetAt"] = NextResetAt,
                 ["updatedAt"] = UpdatedAt,
             };
         }
@@ -83,6 +91,10 @@ namespace Gs2.Gs2Mission.Model
             if (Value != null) {
                 writer.WritePropertyName("value");
                 writer.Write(long.Parse(Value.ToString()));
+            }
+            if (NextResetAt != null) {
+                writer.WritePropertyName("nextResetAt");
+                writer.Write(long.Parse(NextResetAt.ToString()));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
@@ -110,6 +122,14 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += (int)(Value - other.Value);
+            }
+            if (NextResetAt == null && NextResetAt == other.NextResetAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(NextResetAt - other.NextResetAt);
             }
             if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {

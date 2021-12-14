@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -227,6 +270,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -242,7 +325,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -291,6 +374,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -306,7 +429,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -355,6 +478,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -370,7 +533,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -467,6 +630,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -482,7 +685,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -531,6 +734,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -546,7 +789,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeQuestGroupModelMastersTask : Gs2RestSessionTask<DescribeQuestGroupModelMastersRequest, DescribeQuestGroupModelMastersResult>
+        public class DescribeQuestGroupModelMastersTask : Gs2RestSessionTask<DescribeQuestGroupModelMastersRequest, DescribeQuestGroupModelMastersResult>
         {
             public DescribeQuestGroupModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestGroupModelMastersRequest request) : base(session, factory, request)
             {
@@ -601,6 +844,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeQuestGroupModelMastersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeQuestGroupModelMastersResult> DescribeQuestGroupModelMastersFuture(
+                Request.DescribeQuestGroupModelMastersRequest request
+        )
+		{
+			return new DescribeQuestGroupModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeQuestGroupModelMastersResult> DescribeQuestGroupModelMastersAsync(
+                Request.DescribeQuestGroupModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeQuestGroupModelMastersResult> result = null;
+			await DescribeQuestGroupModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeQuestGroupModelMastersTask DescribeQuestGroupModelMastersAsync(
+                Request.DescribeQuestGroupModelMastersRequest request
+        )
+		{
+			return new DescribeQuestGroupModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeQuestGroupModelMastersResult> DescribeQuestGroupModelMastersAsync(
                 Request.DescribeQuestGroupModelMastersRequest request
@@ -616,7 +899,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class CreateQuestGroupModelMasterTask : Gs2RestSessionTask<CreateQuestGroupModelMasterRequest, CreateQuestGroupModelMasterResult>
+        public class CreateQuestGroupModelMasterTask : Gs2RestSessionTask<CreateQuestGroupModelMasterRequest, CreateQuestGroupModelMasterResult>
         {
             public CreateQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
@@ -698,6 +981,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateQuestGroupModelMasterResult> CreateQuestGroupModelMasterFuture(
+                Request.CreateQuestGroupModelMasterRequest request
+        )
+		{
+			return new CreateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateQuestGroupModelMasterResult> CreateQuestGroupModelMasterAsync(
+                Request.CreateQuestGroupModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateQuestGroupModelMasterResult> result = null;
+			await CreateQuestGroupModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateQuestGroupModelMasterTask CreateQuestGroupModelMasterAsync(
+                Request.CreateQuestGroupModelMasterRequest request
+        )
+		{
+			return new CreateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateQuestGroupModelMasterResult> CreateQuestGroupModelMasterAsync(
                 Request.CreateQuestGroupModelMasterRequest request
@@ -713,7 +1036,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetQuestGroupModelMasterTask : Gs2RestSessionTask<GetQuestGroupModelMasterRequest, GetQuestGroupModelMasterResult>
+        public class GetQuestGroupModelMasterTask : Gs2RestSessionTask<GetQuestGroupModelMasterRequest, GetQuestGroupModelMasterResult>
         {
             public GetQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
@@ -763,6 +1086,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetQuestGroupModelMasterResult> GetQuestGroupModelMasterFuture(
+                Request.GetQuestGroupModelMasterRequest request
+        )
+		{
+			return new GetQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetQuestGroupModelMasterResult> GetQuestGroupModelMasterAsync(
+                Request.GetQuestGroupModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetQuestGroupModelMasterResult> result = null;
+			await GetQuestGroupModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetQuestGroupModelMasterTask GetQuestGroupModelMasterAsync(
+                Request.GetQuestGroupModelMasterRequest request
+        )
+		{
+			return new GetQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetQuestGroupModelMasterResult> GetQuestGroupModelMasterAsync(
                 Request.GetQuestGroupModelMasterRequest request
@@ -778,7 +1141,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class UpdateQuestGroupModelMasterTask : Gs2RestSessionTask<UpdateQuestGroupModelMasterRequest, UpdateQuestGroupModelMasterResult>
+        public class UpdateQuestGroupModelMasterTask : Gs2RestSessionTask<UpdateQuestGroupModelMasterRequest, UpdateQuestGroupModelMasterResult>
         {
             public UpdateQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
@@ -856,6 +1219,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateQuestGroupModelMasterResult> UpdateQuestGroupModelMasterFuture(
+                Request.UpdateQuestGroupModelMasterRequest request
+        )
+		{
+			return new UpdateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateQuestGroupModelMasterResult> UpdateQuestGroupModelMasterAsync(
+                Request.UpdateQuestGroupModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateQuestGroupModelMasterResult> result = null;
+			await UpdateQuestGroupModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateQuestGroupModelMasterTask UpdateQuestGroupModelMasterAsync(
+                Request.UpdateQuestGroupModelMasterRequest request
+        )
+		{
+			return new UpdateQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateQuestGroupModelMasterResult> UpdateQuestGroupModelMasterAsync(
                 Request.UpdateQuestGroupModelMasterRequest request
@@ -871,7 +1274,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteQuestGroupModelMasterTask : Gs2RestSessionTask<DeleteQuestGroupModelMasterRequest, DeleteQuestGroupModelMasterResult>
+        public class DeleteQuestGroupModelMasterTask : Gs2RestSessionTask<DeleteQuestGroupModelMasterRequest, DeleteQuestGroupModelMasterResult>
         {
             public DeleteQuestGroupModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteQuestGroupModelMasterRequest request) : base(session, factory, request)
             {
@@ -921,6 +1324,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteQuestGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteQuestGroupModelMasterResult> DeleteQuestGroupModelMasterFuture(
+                Request.DeleteQuestGroupModelMasterRequest request
+        )
+		{
+			return new DeleteQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteQuestGroupModelMasterResult> DeleteQuestGroupModelMasterAsync(
+                Request.DeleteQuestGroupModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteQuestGroupModelMasterResult> result = null;
+			await DeleteQuestGroupModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteQuestGroupModelMasterTask DeleteQuestGroupModelMasterAsync(
+                Request.DeleteQuestGroupModelMasterRequest request
+        )
+		{
+			return new DeleteQuestGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteQuestGroupModelMasterResult> DeleteQuestGroupModelMasterAsync(
                 Request.DeleteQuestGroupModelMasterRequest request
@@ -936,7 +1379,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeQuestModelMastersTask : Gs2RestSessionTask<DescribeQuestModelMastersRequest, DescribeQuestModelMastersResult>
+        public class DescribeQuestModelMastersTask : Gs2RestSessionTask<DescribeQuestModelMastersRequest, DescribeQuestModelMastersResult>
         {
             public DescribeQuestModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestModelMastersRequest request) : base(session, factory, request)
             {
@@ -992,6 +1435,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeQuestModelMastersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeQuestModelMastersResult> DescribeQuestModelMastersFuture(
+                Request.DescribeQuestModelMastersRequest request
+        )
+		{
+			return new DescribeQuestModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeQuestModelMastersResult> DescribeQuestModelMastersAsync(
+                Request.DescribeQuestModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeQuestModelMastersResult> result = null;
+			await DescribeQuestModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeQuestModelMastersTask DescribeQuestModelMastersAsync(
+                Request.DescribeQuestModelMastersRequest request
+        )
+		{
+			return new DescribeQuestModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeQuestModelMastersResult> DescribeQuestModelMastersAsync(
                 Request.DescribeQuestModelMastersRequest request
@@ -1007,7 +1490,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class CreateQuestModelMasterTask : Gs2RestSessionTask<CreateQuestModelMasterRequest, CreateQuestModelMasterResult>
+        public class CreateQuestModelMasterTask : Gs2RestSessionTask<CreateQuestModelMasterRequest, CreateQuestModelMasterResult>
         {
             public CreateQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateQuestModelMasterRequest request) : base(session, factory, request)
             {
@@ -1130,6 +1613,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateQuestModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateQuestModelMasterResult> CreateQuestModelMasterFuture(
+                Request.CreateQuestModelMasterRequest request
+        )
+		{
+			return new CreateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateQuestModelMasterResult> CreateQuestModelMasterAsync(
+                Request.CreateQuestModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateQuestModelMasterResult> result = null;
+			await CreateQuestModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateQuestModelMasterTask CreateQuestModelMasterAsync(
+                Request.CreateQuestModelMasterRequest request
+        )
+		{
+			return new CreateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateQuestModelMasterResult> CreateQuestModelMasterAsync(
                 Request.CreateQuestModelMasterRequest request
@@ -1145,7 +1668,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetQuestModelMasterTask : Gs2RestSessionTask<GetQuestModelMasterRequest, GetQuestModelMasterResult>
+        public class GetQuestModelMasterTask : Gs2RestSessionTask<GetQuestModelMasterRequest, GetQuestModelMasterResult>
         {
             public GetQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestModelMasterRequest request) : base(session, factory, request)
             {
@@ -1196,6 +1719,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetQuestModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetQuestModelMasterResult> GetQuestModelMasterFuture(
+                Request.GetQuestModelMasterRequest request
+        )
+		{
+			return new GetQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetQuestModelMasterResult> GetQuestModelMasterAsync(
+                Request.GetQuestModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetQuestModelMasterResult> result = null;
+			await GetQuestModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetQuestModelMasterTask GetQuestModelMasterAsync(
+                Request.GetQuestModelMasterRequest request
+        )
+		{
+			return new GetQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetQuestModelMasterResult> GetQuestModelMasterAsync(
                 Request.GetQuestModelMasterRequest request
@@ -1211,7 +1774,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class UpdateQuestModelMasterTask : Gs2RestSessionTask<UpdateQuestModelMasterRequest, UpdateQuestModelMasterResult>
+        public class UpdateQuestModelMasterTask : Gs2RestSessionTask<UpdateQuestModelMasterRequest, UpdateQuestModelMasterResult>
         {
             public UpdateQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateQuestModelMasterRequest request) : base(session, factory, request)
             {
@@ -1330,6 +1893,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateQuestModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateQuestModelMasterResult> UpdateQuestModelMasterFuture(
+                Request.UpdateQuestModelMasterRequest request
+        )
+		{
+			return new UpdateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateQuestModelMasterResult> UpdateQuestModelMasterAsync(
+                Request.UpdateQuestModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateQuestModelMasterResult> result = null;
+			await UpdateQuestModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateQuestModelMasterTask UpdateQuestModelMasterAsync(
+                Request.UpdateQuestModelMasterRequest request
+        )
+		{
+			return new UpdateQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateQuestModelMasterResult> UpdateQuestModelMasterAsync(
                 Request.UpdateQuestModelMasterRequest request
@@ -1345,7 +1948,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteQuestModelMasterTask : Gs2RestSessionTask<DeleteQuestModelMasterRequest, DeleteQuestModelMasterResult>
+        public class DeleteQuestModelMasterTask : Gs2RestSessionTask<DeleteQuestModelMasterRequest, DeleteQuestModelMasterResult>
         {
             public DeleteQuestModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteQuestModelMasterRequest request) : base(session, factory, request)
             {
@@ -1396,6 +1999,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteQuestModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteQuestModelMasterResult> DeleteQuestModelMasterFuture(
+                Request.DeleteQuestModelMasterRequest request
+        )
+		{
+			return new DeleteQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteQuestModelMasterResult> DeleteQuestModelMasterAsync(
+                Request.DeleteQuestModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteQuestModelMasterResult> result = null;
+			await DeleteQuestModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteQuestModelMasterTask DeleteQuestModelMasterAsync(
+                Request.DeleteQuestModelMasterRequest request
+        )
+		{
+			return new DeleteQuestModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteQuestModelMasterResult> DeleteQuestModelMasterAsync(
                 Request.DeleteQuestModelMasterRequest request
@@ -1411,7 +2054,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
@@ -1460,6 +2103,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -1475,7 +2158,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetCurrentQuestMasterTask : Gs2RestSessionTask<GetCurrentQuestMasterRequest, GetCurrentQuestMasterResult>
+        public class GetCurrentQuestMasterTask : Gs2RestSessionTask<GetCurrentQuestMasterRequest, GetCurrentQuestMasterResult>
         {
             public GetCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentQuestMasterRequest request) : base(session, factory, request)
             {
@@ -1524,6 +2207,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCurrentQuestMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCurrentQuestMasterResult> GetCurrentQuestMasterFuture(
+                Request.GetCurrentQuestMasterRequest request
+        )
+		{
+			return new GetCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentQuestMasterResult> GetCurrentQuestMasterAsync(
+                Request.GetCurrentQuestMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentQuestMasterResult> result = null;
+			await GetCurrentQuestMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentQuestMasterTask GetCurrentQuestMasterAsync(
+                Request.GetCurrentQuestMasterRequest request
+        )
+		{
+			return new GetCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCurrentQuestMasterResult> GetCurrentQuestMasterAsync(
                 Request.GetCurrentQuestMasterRequest request
@@ -1539,7 +2262,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class UpdateCurrentQuestMasterTask : Gs2RestSessionTask<UpdateCurrentQuestMasterRequest, UpdateCurrentQuestMasterResult>
+        public class UpdateCurrentQuestMasterTask : Gs2RestSessionTask<UpdateCurrentQuestMasterRequest, UpdateCurrentQuestMasterResult>
         {
             public UpdateCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentQuestMasterRequest request) : base(session, factory, request)
             {
@@ -1606,6 +2329,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentQuestMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentQuestMasterResult> UpdateCurrentQuestMasterFuture(
+                Request.UpdateCurrentQuestMasterRequest request
+        )
+		{
+			return new UpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentQuestMasterResult> UpdateCurrentQuestMasterAsync(
+                Request.UpdateCurrentQuestMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentQuestMasterResult> result = null;
+			await UpdateCurrentQuestMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentQuestMasterTask UpdateCurrentQuestMasterAsync(
+                Request.UpdateCurrentQuestMasterRequest request
+        )
+		{
+			return new UpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentQuestMasterResult> UpdateCurrentQuestMasterAsync(
                 Request.UpdateCurrentQuestMasterRequest request
@@ -1621,7 +2384,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class UpdateCurrentQuestMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentQuestMasterFromGitHubRequest, UpdateCurrentQuestMasterFromGitHubResult>
+        public class UpdateCurrentQuestMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentQuestMasterFromGitHubRequest, UpdateCurrentQuestMasterFromGitHubResult>
         {
             public UpdateCurrentQuestMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentQuestMasterFromGitHubRequest request) : base(session, factory, request)
             {
@@ -1688,6 +2451,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentQuestMasterFromGitHubResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentQuestMasterFromGitHubResult> UpdateCurrentQuestMasterFromGitHubFuture(
+                Request.UpdateCurrentQuestMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentQuestMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentQuestMasterFromGitHubResult> UpdateCurrentQuestMasterFromGitHubAsync(
+                Request.UpdateCurrentQuestMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentQuestMasterFromGitHubResult> result = null;
+			await UpdateCurrentQuestMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentQuestMasterFromGitHubTask UpdateCurrentQuestMasterFromGitHubAsync(
+                Request.UpdateCurrentQuestMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentQuestMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentQuestMasterFromGitHubResult> UpdateCurrentQuestMasterFromGitHubAsync(
                 Request.UpdateCurrentQuestMasterFromGitHubRequest request
@@ -1703,7 +2506,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeProgressesByUserIdTask : Gs2RestSessionTask<DescribeProgressesByUserIdRequest, DescribeProgressesByUserIdResult>
+        public class DescribeProgressesByUserIdTask : Gs2RestSessionTask<DescribeProgressesByUserIdRequest, DescribeProgressesByUserIdResult>
         {
             public DescribeProgressesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProgressesByUserIdRequest request) : base(session, factory, request)
             {
@@ -1761,6 +2564,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeProgressesByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdFuture(
+                Request.DescribeProgressesByUserIdRequest request
+        )
+		{
+			return new DescribeProgressesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdAsync(
+                Request.DescribeProgressesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeProgressesByUserIdResult> result = null;
+			await DescribeProgressesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeProgressesByUserIdTask DescribeProgressesByUserIdAsync(
+                Request.DescribeProgressesByUserIdRequest request
+        )
+		{
+			return new DescribeProgressesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdAsync(
                 Request.DescribeProgressesByUserIdRequest request
@@ -1776,7 +2619,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class CreateProgressByUserIdTask : Gs2RestSessionTask<CreateProgressByUserIdRequest, CreateProgressByUserIdResult>
+        public class CreateProgressByUserIdTask : Gs2RestSessionTask<CreateProgressByUserIdRequest, CreateProgressByUserIdResult>
         {
             public CreateProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreateProgressByUserIdRequest request) : base(session, factory, request)
             {
@@ -1863,6 +2706,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProgressByUserIdResult> CreateProgressByUserIdFuture(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+			return new CreateProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProgressByUserIdResult> CreateProgressByUserIdAsync(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CreateProgressByUserIdResult> result = null;
+			await CreateProgressByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateProgressByUserIdTask CreateProgressByUserIdAsync(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+			return new CreateProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateProgressByUserIdResult> CreateProgressByUserIdAsync(
                 Request.CreateProgressByUserIdRequest request
@@ -1878,7 +2761,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetProgressTask : Gs2RestSessionTask<GetProgressRequest, GetProgressResult>
+        public class GetProgressTask : Gs2RestSessionTask<GetProgressRequest, GetProgressResult>
         {
             public GetProgressTask(IGs2Session session, RestSessionRequestFactory factory, GetProgressRequest request) : base(session, factory, request)
             {
@@ -1931,6 +2814,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProgressResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProgressResult> GetProgressFuture(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressResult> GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+            AsyncResult<Result.GetProgressResult> result = null;
+			await GetProgress(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProgressTask GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetProgressResult> GetProgressAsync(
                 Request.GetProgressRequest request
@@ -1946,7 +2869,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetProgressByUserIdTask : Gs2RestSessionTask<GetProgressByUserIdRequest, GetProgressByUserIdResult>
+        public class GetProgressByUserIdTask : Gs2RestSessionTask<GetProgressByUserIdRequest, GetProgressByUserIdResult>
         {
             public GetProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetProgressByUserIdRequest request) : base(session, factory, request)
             {
@@ -1996,6 +2919,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProgressByUserIdResult> GetProgressByUserIdFuture(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+			return new GetProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressByUserIdResult> GetProgressByUserIdAsync(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetProgressByUserIdResult> result = null;
+			await GetProgressByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProgressByUserIdTask GetProgressByUserIdAsync(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+			return new GetProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetProgressByUserIdResult> GetProgressByUserIdAsync(
                 Request.GetProgressByUserIdRequest request
@@ -2011,7 +2974,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class StartTask : Gs2RestSessionTask<StartRequest, StartResult>
+        public class StartTask : Gs2RestSessionTask<StartRequest, StartResult>
         {
             public StartTask(IGs2Session session, RestSessionRequestFactory factory, StartRequest request) : base(session, factory, request)
             {
@@ -2098,6 +3061,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.StartResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.StartResult> StartFuture(
+                Request.StartRequest request
+        )
+		{
+			return new StartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.StartResult> StartAsync(
+                Request.StartRequest request
+        )
+		{
+            AsyncResult<Result.StartResult> result = null;
+			await Start(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public StartTask StartAsync(
+                Request.StartRequest request
+        )
+		{
+			return new StartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.StartResult> StartAsync(
                 Request.StartRequest request
@@ -2113,7 +3116,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class StartByUserIdTask : Gs2RestSessionTask<StartByUserIdRequest, StartByUserIdResult>
+        public class StartByUserIdTask : Gs2RestSessionTask<StartByUserIdRequest, StartByUserIdResult>
         {
             public StartByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, StartByUserIdRequest request) : base(session, factory, request)
             {
@@ -2197,6 +3200,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.StartByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.StartByUserIdResult> StartByUserIdFuture(
+                Request.StartByUserIdRequest request
+        )
+		{
+			return new StartByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.StartByUserIdResult> StartByUserIdAsync(
+                Request.StartByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.StartByUserIdResult> result = null;
+			await StartByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public StartByUserIdTask StartByUserIdAsync(
+                Request.StartByUserIdRequest request
+        )
+		{
+			return new StartByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.StartByUserIdResult> StartByUserIdAsync(
                 Request.StartByUserIdRequest request
@@ -2212,7 +3255,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class EndTask : Gs2RestSessionTask<EndRequest, EndResult>
+        public class EndTask : Gs2RestSessionTask<EndRequest, EndResult>
         {
             public EndTask(IGs2Session session, RestSessionRequestFactory factory, EndRequest request) : base(session, factory, request)
             {
@@ -2312,6 +3355,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.EndResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.EndResult> EndFuture(
+                Request.EndRequest request
+        )
+		{
+			return new EndTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EndResult> EndAsync(
+                Request.EndRequest request
+        )
+		{
+            AsyncResult<Result.EndResult> result = null;
+			await End(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EndTask EndAsync(
+                Request.EndRequest request
+        )
+		{
+			return new EndTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.EndResult> EndAsync(
                 Request.EndRequest request
@@ -2327,7 +3410,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class EndByUserIdTask : Gs2RestSessionTask<EndByUserIdRequest, EndByUserIdResult>
+        public class EndByUserIdTask : Gs2RestSessionTask<EndByUserIdRequest, EndByUserIdResult>
         {
             public EndByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, EndByUserIdRequest request) : base(session, factory, request)
             {
@@ -2424,6 +3507,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.EndByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.EndByUserIdResult> EndByUserIdFuture(
+                Request.EndByUserIdRequest request
+        )
+		{
+			return new EndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EndByUserIdResult> EndByUserIdAsync(
+                Request.EndByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.EndByUserIdResult> result = null;
+			await EndByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EndByUserIdTask EndByUserIdAsync(
+                Request.EndByUserIdRequest request
+        )
+		{
+			return new EndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.EndByUserIdResult> EndByUserIdAsync(
                 Request.EndByUserIdRequest request
@@ -2439,7 +3562,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteProgressTask : Gs2RestSessionTask<DeleteProgressRequest, DeleteProgressResult>
+        public class DeleteProgressTask : Gs2RestSessionTask<DeleteProgressRequest, DeleteProgressResult>
         {
             public DeleteProgressTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressRequest request) : base(session, factory, request)
             {
@@ -2492,6 +3615,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProgressResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProgressResult> DeleteProgressFuture(
+                Request.DeleteProgressRequest request
+        )
+		{
+			return new DeleteProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProgressResult> DeleteProgressAsync(
+                Request.DeleteProgressRequest request
+        )
+		{
+            AsyncResult<Result.DeleteProgressResult> result = null;
+			await DeleteProgress(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteProgressTask DeleteProgressAsync(
+                Request.DeleteProgressRequest request
+        )
+		{
+			return new DeleteProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteProgressResult> DeleteProgressAsync(
                 Request.DeleteProgressRequest request
@@ -2507,7 +3670,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteProgressByUserIdTask : Gs2RestSessionTask<DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult>
+        public class DeleteProgressByUserIdTask : Gs2RestSessionTask<DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult>
         {
             public DeleteProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressByUserIdRequest request) : base(session, factory, request)
             {
@@ -2557,6 +3720,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdFuture(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+			return new DeleteProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdAsync(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteProgressByUserIdResult> result = null;
+			await DeleteProgressByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteProgressByUserIdTask DeleteProgressByUserIdAsync(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+			return new DeleteProgressByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdAsync(
                 Request.DeleteProgressByUserIdRequest request
@@ -2572,7 +3775,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class CreateProgressByStampSheetTask : Gs2RestSessionTask<CreateProgressByStampSheetRequest, CreateProgressByStampSheetResult>
+        public class CreateProgressByStampSheetTask : Gs2RestSessionTask<CreateProgressByStampSheetRequest, CreateProgressByStampSheetResult>
         {
             public CreateProgressByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, CreateProgressByStampSheetRequest request) : base(session, factory, request)
             {
@@ -2642,6 +3845,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProgressByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetFuture(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+			return new CreateProgressByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetAsync(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.CreateProgressByStampSheetResult> result = null;
+			await CreateProgressByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateProgressByStampSheetTask CreateProgressByStampSheetAsync(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+			return new CreateProgressByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetAsync(
                 Request.CreateProgressByStampSheetRequest request
@@ -2657,7 +3900,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteProgressByStampTaskTask : Gs2RestSessionTask<DeleteProgressByStampTaskRequest, DeleteProgressByStampTaskResult>
+        public class DeleteProgressByStampTaskTask : Gs2RestSessionTask<DeleteProgressByStampTaskRequest, DeleteProgressByStampTaskResult>
         {
             public DeleteProgressByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProgressByStampTaskRequest request) : base(session, factory, request)
             {
@@ -2727,6 +3970,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProgressByStampTaskResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProgressByStampTaskResult> DeleteProgressByStampTaskFuture(
+                Request.DeleteProgressByStampTaskRequest request
+        )
+		{
+			return new DeleteProgressByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProgressByStampTaskResult> DeleteProgressByStampTaskAsync(
+                Request.DeleteProgressByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.DeleteProgressByStampTaskResult> result = null;
+			await DeleteProgressByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteProgressByStampTaskTask DeleteProgressByStampTaskAsync(
+                Request.DeleteProgressByStampTaskRequest request
+        )
+		{
+			return new DeleteProgressByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteProgressByStampTaskResult> DeleteProgressByStampTaskAsync(
                 Request.DeleteProgressByStampTaskRequest request
@@ -2742,7 +4025,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeCompletedQuestListsTask : Gs2RestSessionTask<DescribeCompletedQuestListsRequest, DescribeCompletedQuestListsResult>
+        public class DescribeCompletedQuestListsTask : Gs2RestSessionTask<DescribeCompletedQuestListsRequest, DescribeCompletedQuestListsResult>
         {
             public DescribeCompletedQuestListsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCompletedQuestListsRequest request) : base(session, factory, request)
             {
@@ -2801,6 +4084,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeCompletedQuestListsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeCompletedQuestListsResult> DescribeCompletedQuestListsFuture(
+                Request.DescribeCompletedQuestListsRequest request
+        )
+		{
+			return new DescribeCompletedQuestListsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCompletedQuestListsResult> DescribeCompletedQuestListsAsync(
+                Request.DescribeCompletedQuestListsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCompletedQuestListsResult> result = null;
+			await DescribeCompletedQuestLists(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCompletedQuestListsTask DescribeCompletedQuestListsAsync(
+                Request.DescribeCompletedQuestListsRequest request
+        )
+		{
+			return new DescribeCompletedQuestListsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeCompletedQuestListsResult> DescribeCompletedQuestListsAsync(
                 Request.DescribeCompletedQuestListsRequest request
@@ -2816,7 +4139,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeCompletedQuestListsByUserIdTask : Gs2RestSessionTask<DescribeCompletedQuestListsByUserIdRequest, DescribeCompletedQuestListsByUserIdResult>
+        public class DescribeCompletedQuestListsByUserIdTask : Gs2RestSessionTask<DescribeCompletedQuestListsByUserIdRequest, DescribeCompletedQuestListsByUserIdResult>
         {
             public DescribeCompletedQuestListsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCompletedQuestListsByUserIdRequest request) : base(session, factory, request)
             {
@@ -2872,6 +4195,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeCompletedQuestListsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeCompletedQuestListsByUserIdResult> DescribeCompletedQuestListsByUserIdFuture(
+                Request.DescribeCompletedQuestListsByUserIdRequest request
+        )
+		{
+			return new DescribeCompletedQuestListsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCompletedQuestListsByUserIdResult> DescribeCompletedQuestListsByUserIdAsync(
+                Request.DescribeCompletedQuestListsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCompletedQuestListsByUserIdResult> result = null;
+			await DescribeCompletedQuestListsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCompletedQuestListsByUserIdTask DescribeCompletedQuestListsByUserIdAsync(
+                Request.DescribeCompletedQuestListsByUserIdRequest request
+        )
+		{
+			return new DescribeCompletedQuestListsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeCompletedQuestListsByUserIdResult> DescribeCompletedQuestListsByUserIdAsync(
                 Request.DescribeCompletedQuestListsByUserIdRequest request
@@ -2887,7 +4250,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetCompletedQuestListTask : Gs2RestSessionTask<GetCompletedQuestListRequest, GetCompletedQuestListResult>
+        public class GetCompletedQuestListTask : Gs2RestSessionTask<GetCompletedQuestListRequest, GetCompletedQuestListResult>
         {
             public GetCompletedQuestListTask(IGs2Session session, RestSessionRequestFactory factory, GetCompletedQuestListRequest request) : base(session, factory, request)
             {
@@ -2941,6 +4304,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCompletedQuestListResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCompletedQuestListResult> GetCompletedQuestListFuture(
+                Request.GetCompletedQuestListRequest request
+        )
+		{
+			return new GetCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCompletedQuestListResult> GetCompletedQuestListAsync(
+                Request.GetCompletedQuestListRequest request
+        )
+		{
+            AsyncResult<Result.GetCompletedQuestListResult> result = null;
+			await GetCompletedQuestList(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCompletedQuestListTask GetCompletedQuestListAsync(
+                Request.GetCompletedQuestListRequest request
+        )
+		{
+			return new GetCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCompletedQuestListResult> GetCompletedQuestListAsync(
                 Request.GetCompletedQuestListRequest request
@@ -2956,7 +4359,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetCompletedQuestListByUserIdTask : Gs2RestSessionTask<GetCompletedQuestListByUserIdRequest, GetCompletedQuestListByUserIdResult>
+        public class GetCompletedQuestListByUserIdTask : Gs2RestSessionTask<GetCompletedQuestListByUserIdRequest, GetCompletedQuestListByUserIdResult>
         {
             public GetCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetCompletedQuestListByUserIdRequest request) : base(session, factory, request)
             {
@@ -3007,6 +4410,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCompletedQuestListByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCompletedQuestListByUserIdResult> GetCompletedQuestListByUserIdFuture(
+                Request.GetCompletedQuestListByUserIdRequest request
+        )
+		{
+			return new GetCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCompletedQuestListByUserIdResult> GetCompletedQuestListByUserIdAsync(
+                Request.GetCompletedQuestListByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetCompletedQuestListByUserIdResult> result = null;
+			await GetCompletedQuestListByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCompletedQuestListByUserIdTask GetCompletedQuestListByUserIdAsync(
+                Request.GetCompletedQuestListByUserIdRequest request
+        )
+		{
+			return new GetCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCompletedQuestListByUserIdResult> GetCompletedQuestListByUserIdAsync(
                 Request.GetCompletedQuestListByUserIdRequest request
@@ -3022,7 +4465,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DeleteCompletedQuestListByUserIdTask : Gs2RestSessionTask<DeleteCompletedQuestListByUserIdRequest, DeleteCompletedQuestListByUserIdResult>
+        public class DeleteCompletedQuestListByUserIdTask : Gs2RestSessionTask<DeleteCompletedQuestListByUserIdRequest, DeleteCompletedQuestListByUserIdResult>
         {
             public DeleteCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCompletedQuestListByUserIdRequest request) : base(session, factory, request)
             {
@@ -3073,6 +4516,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteCompletedQuestListByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteCompletedQuestListByUserIdResult> DeleteCompletedQuestListByUserIdFuture(
+                Request.DeleteCompletedQuestListByUserIdRequest request
+        )
+		{
+			return new DeleteCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCompletedQuestListByUserIdResult> DeleteCompletedQuestListByUserIdAsync(
+                Request.DeleteCompletedQuestListByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteCompletedQuestListByUserIdResult> result = null;
+			await DeleteCompletedQuestListByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteCompletedQuestListByUserIdTask DeleteCompletedQuestListByUserIdAsync(
+                Request.DeleteCompletedQuestListByUserIdRequest request
+        )
+		{
+			return new DeleteCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteCompletedQuestListByUserIdResult> DeleteCompletedQuestListByUserIdAsync(
                 Request.DeleteCompletedQuestListByUserIdRequest request
@@ -3088,7 +4571,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeQuestGroupModelsTask : Gs2RestSessionTask<DescribeQuestGroupModelsRequest, DescribeQuestGroupModelsResult>
+        public class DescribeQuestGroupModelsTask : Gs2RestSessionTask<DescribeQuestGroupModelsRequest, DescribeQuestGroupModelsResult>
         {
             public DescribeQuestGroupModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestGroupModelsRequest request) : base(session, factory, request)
             {
@@ -3137,6 +4620,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeQuestGroupModelsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeQuestGroupModelsResult> DescribeQuestGroupModelsFuture(
+                Request.DescribeQuestGroupModelsRequest request
+        )
+		{
+			return new DescribeQuestGroupModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeQuestGroupModelsResult> DescribeQuestGroupModelsAsync(
+                Request.DescribeQuestGroupModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeQuestGroupModelsResult> result = null;
+			await DescribeQuestGroupModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeQuestGroupModelsTask DescribeQuestGroupModelsAsync(
+                Request.DescribeQuestGroupModelsRequest request
+        )
+		{
+			return new DescribeQuestGroupModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeQuestGroupModelsResult> DescribeQuestGroupModelsAsync(
                 Request.DescribeQuestGroupModelsRequest request
@@ -3152,7 +4675,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetQuestGroupModelTask : Gs2RestSessionTask<GetQuestGroupModelRequest, GetQuestGroupModelResult>
+        public class GetQuestGroupModelTask : Gs2RestSessionTask<GetQuestGroupModelRequest, GetQuestGroupModelResult>
         {
             public GetQuestGroupModelTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestGroupModelRequest request) : base(session, factory, request)
             {
@@ -3202,6 +4725,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetQuestGroupModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetQuestGroupModelResult> GetQuestGroupModelFuture(
+                Request.GetQuestGroupModelRequest request
+        )
+		{
+			return new GetQuestGroupModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetQuestGroupModelResult> GetQuestGroupModelAsync(
+                Request.GetQuestGroupModelRequest request
+        )
+		{
+            AsyncResult<Result.GetQuestGroupModelResult> result = null;
+			await GetQuestGroupModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetQuestGroupModelTask GetQuestGroupModelAsync(
+                Request.GetQuestGroupModelRequest request
+        )
+		{
+			return new GetQuestGroupModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetQuestGroupModelResult> GetQuestGroupModelAsync(
                 Request.GetQuestGroupModelRequest request
@@ -3217,7 +4780,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class DescribeQuestModelsTask : Gs2RestSessionTask<DescribeQuestModelsRequest, DescribeQuestModelsResult>
+        public class DescribeQuestModelsTask : Gs2RestSessionTask<DescribeQuestModelsRequest, DescribeQuestModelsResult>
         {
             public DescribeQuestModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeQuestModelsRequest request) : base(session, factory, request)
             {
@@ -3267,6 +4830,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeQuestModelsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeQuestModelsResult> DescribeQuestModelsFuture(
+                Request.DescribeQuestModelsRequest request
+        )
+		{
+			return new DescribeQuestModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeQuestModelsResult> DescribeQuestModelsAsync(
+                Request.DescribeQuestModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeQuestModelsResult> result = null;
+			await DescribeQuestModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeQuestModelsTask DescribeQuestModelsAsync(
+                Request.DescribeQuestModelsRequest request
+        )
+		{
+			return new DescribeQuestModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeQuestModelsResult> DescribeQuestModelsAsync(
                 Request.DescribeQuestModelsRequest request
@@ -3282,7 +4885,7 @@ namespace Gs2.Gs2Quest
 #endif
 
 
-        private class GetQuestModelTask : Gs2RestSessionTask<GetQuestModelRequest, GetQuestModelResult>
+        public class GetQuestModelTask : Gs2RestSessionTask<GetQuestModelRequest, GetQuestModelResult>
         {
             public GetQuestModelTask(IGs2Session session, RestSessionRequestFactory factory, GetQuestModelRequest request) : base(session, factory, request)
             {
@@ -3333,6 +4936,46 @@ namespace Gs2.Gs2Quest
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetQuestModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetQuestModelResult> GetQuestModelFuture(
+                Request.GetQuestModelRequest request
+        )
+		{
+			return new GetQuestModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetQuestModelResult> GetQuestModelAsync(
+                Request.GetQuestModelRequest request
+        )
+		{
+            AsyncResult<Result.GetQuestModelResult> result = null;
+			await GetQuestModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetQuestModelTask GetQuestModelAsync(
+                Request.GetQuestModelRequest request
+        )
+		{
+			return new GetQuestModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetQuestModelResult> GetQuestModelAsync(
                 Request.GetQuestModelRequest request

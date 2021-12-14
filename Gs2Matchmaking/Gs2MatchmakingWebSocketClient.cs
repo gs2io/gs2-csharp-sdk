@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Matchmaking
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -162,8 +165,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -176,7 +212,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -232,8 +268,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -246,7 +315,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -362,8 +431,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -376,7 +478,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -432,8 +534,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -446,7 +581,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class CreateRatingModelMasterTask : Gs2WebSocketSessionTask<Request.CreateRatingModelMasterRequest, Result.CreateRatingModelMasterResult>
+        public class CreateRatingModelMasterTask : Gs2WebSocketSessionTask<Request.CreateRatingModelMasterRequest, Result.CreateRatingModelMasterResult>
         {
 	        public CreateRatingModelMasterTask(IGs2Session session, Request.CreateRatingModelMasterRequest request) : base(session, request)
 	        {
@@ -522,8 +657,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateRatingModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateRatingModelMasterResult> CreateRatingModelMasterFuture(
+                Request.CreateRatingModelMasterRequest request
+        )
+		{
+			return new CreateRatingModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateRatingModelMasterResult> CreateRatingModelMasterAsync(
+            Request.CreateRatingModelMasterRequest request
+        )
+		{
+		    var task = new CreateRatingModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateRatingModelMasterTask CreateRatingModelMasterAsync(
+                Request.CreateRatingModelMasterRequest request
+        )
+		{
+			return new CreateRatingModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateRatingModelMasterResult> CreateRatingModelMaster(
+		public async Task<Result.CreateRatingModelMasterResult> CreateRatingModelMasterAsync(
             Request.CreateRatingModelMasterRequest request
         )
 		{
@@ -536,7 +704,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class GetRatingModelMasterTask : Gs2WebSocketSessionTask<Request.GetRatingModelMasterRequest, Result.GetRatingModelMasterResult>
+        public class GetRatingModelMasterTask : Gs2WebSocketSessionTask<Request.GetRatingModelMasterRequest, Result.GetRatingModelMasterResult>
         {
 	        public GetRatingModelMasterTask(IGs2Session session, Request.GetRatingModelMasterRequest request) : base(session, request)
 	        {
@@ -597,8 +765,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRatingModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRatingModelMasterResult> GetRatingModelMasterFuture(
+                Request.GetRatingModelMasterRequest request
+        )
+		{
+			return new GetRatingModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRatingModelMasterResult> GetRatingModelMasterAsync(
+            Request.GetRatingModelMasterRequest request
+        )
+		{
+		    var task = new GetRatingModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRatingModelMasterTask GetRatingModelMasterAsync(
+                Request.GetRatingModelMasterRequest request
+        )
+		{
+			return new GetRatingModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRatingModelMasterResult> GetRatingModelMaster(
+		public async Task<Result.GetRatingModelMasterResult> GetRatingModelMasterAsync(
             Request.GetRatingModelMasterRequest request
         )
 		{
@@ -611,7 +812,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class UpdateRatingModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateRatingModelMasterRequest, Result.UpdateRatingModelMasterResult>
+        public class UpdateRatingModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateRatingModelMasterRequest, Result.UpdateRatingModelMasterResult>
         {
 	        public UpdateRatingModelMasterTask(IGs2Session session, Request.UpdateRatingModelMasterRequest request) : base(session, request)
 	        {
@@ -687,8 +888,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateRatingModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateRatingModelMasterResult> UpdateRatingModelMasterFuture(
+                Request.UpdateRatingModelMasterRequest request
+        )
+		{
+			return new UpdateRatingModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateRatingModelMasterResult> UpdateRatingModelMasterAsync(
+            Request.UpdateRatingModelMasterRequest request
+        )
+		{
+		    var task = new UpdateRatingModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateRatingModelMasterTask UpdateRatingModelMasterAsync(
+                Request.UpdateRatingModelMasterRequest request
+        )
+		{
+			return new UpdateRatingModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateRatingModelMasterResult> UpdateRatingModelMaster(
+		public async Task<Result.UpdateRatingModelMasterResult> UpdateRatingModelMasterAsync(
             Request.UpdateRatingModelMasterRequest request
         )
 		{
@@ -701,7 +935,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class DeleteRatingModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteRatingModelMasterRequest, Result.DeleteRatingModelMasterResult>
+        public class DeleteRatingModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteRatingModelMasterRequest, Result.DeleteRatingModelMasterResult>
         {
 	        public DeleteRatingModelMasterTask(IGs2Session session, Request.DeleteRatingModelMasterRequest request) : base(session, request)
 	        {
@@ -762,8 +996,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteRatingModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteRatingModelMasterResult> DeleteRatingModelMasterFuture(
+                Request.DeleteRatingModelMasterRequest request
+        )
+		{
+			return new DeleteRatingModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteRatingModelMasterResult> DeleteRatingModelMasterAsync(
+            Request.DeleteRatingModelMasterRequest request
+        )
+		{
+		    var task = new DeleteRatingModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteRatingModelMasterTask DeleteRatingModelMasterAsync(
+                Request.DeleteRatingModelMasterRequest request
+        )
+		{
+			return new DeleteRatingModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteRatingModelMasterResult> DeleteRatingModelMaster(
+		public async Task<Result.DeleteRatingModelMasterResult> DeleteRatingModelMasterAsync(
             Request.DeleteRatingModelMasterRequest request
         )
 		{
@@ -776,7 +1043,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class GetRatingModelTask : Gs2WebSocketSessionTask<Request.GetRatingModelRequest, Result.GetRatingModelResult>
+        public class GetRatingModelTask : Gs2WebSocketSessionTask<Request.GetRatingModelRequest, Result.GetRatingModelResult>
         {
 	        public GetRatingModelTask(IGs2Session session, Request.GetRatingModelRequest request) : base(session, request)
 	        {
@@ -837,8 +1104,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRatingModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRatingModelResult> GetRatingModelFuture(
+                Request.GetRatingModelRequest request
+        )
+		{
+			return new GetRatingModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRatingModelResult> GetRatingModelAsync(
+            Request.GetRatingModelRequest request
+        )
+		{
+		    var task = new GetRatingModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRatingModelTask GetRatingModelAsync(
+                Request.GetRatingModelRequest request
+        )
+		{
+			return new GetRatingModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRatingModelResult> GetRatingModel(
+		public async Task<Result.GetRatingModelResult> GetRatingModelAsync(
             Request.GetRatingModelRequest request
         )
 		{
@@ -851,7 +1151,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class GetRatingTask : Gs2WebSocketSessionTask<Request.GetRatingRequest, Result.GetRatingResult>
+        public class GetRatingTask : Gs2WebSocketSessionTask<Request.GetRatingRequest, Result.GetRatingResult>
         {
 	        public GetRatingTask(IGs2Session session, Request.GetRatingRequest request) : base(session, request)
 	        {
@@ -922,8 +1222,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRatingResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRatingResult> GetRatingFuture(
+                Request.GetRatingRequest request
+        )
+		{
+			return new GetRatingTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRatingResult> GetRatingAsync(
+            Request.GetRatingRequest request
+        )
+		{
+		    var task = new GetRatingTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRatingTask GetRatingAsync(
+                Request.GetRatingRequest request
+        )
+		{
+			return new GetRatingTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRatingResult> GetRating(
+		public async Task<Result.GetRatingResult> GetRatingAsync(
             Request.GetRatingRequest request
         )
 		{
@@ -936,7 +1269,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class GetRatingByUserIdTask : Gs2WebSocketSessionTask<Request.GetRatingByUserIdRequest, Result.GetRatingByUserIdResult>
+        public class GetRatingByUserIdTask : Gs2WebSocketSessionTask<Request.GetRatingByUserIdRequest, Result.GetRatingByUserIdResult>
         {
 	        public GetRatingByUserIdTask(IGs2Session session, Request.GetRatingByUserIdRequest request) : base(session, request)
 	        {
@@ -1002,8 +1335,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRatingByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRatingByUserIdResult> GetRatingByUserIdFuture(
+                Request.GetRatingByUserIdRequest request
+        )
+		{
+			return new GetRatingByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRatingByUserIdResult> GetRatingByUserIdAsync(
+            Request.GetRatingByUserIdRequest request
+        )
+		{
+		    var task = new GetRatingByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRatingByUserIdTask GetRatingByUserIdAsync(
+                Request.GetRatingByUserIdRequest request
+        )
+		{
+			return new GetRatingByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRatingByUserIdResult> GetRatingByUserId(
+		public async Task<Result.GetRatingByUserIdResult> GetRatingByUserIdAsync(
             Request.GetRatingByUserIdRequest request
         )
 		{
@@ -1016,7 +1382,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class DeleteRatingTask : Gs2WebSocketSessionTask<Request.DeleteRatingRequest, Result.DeleteRatingResult>
+        public class DeleteRatingTask : Gs2WebSocketSessionTask<Request.DeleteRatingRequest, Result.DeleteRatingResult>
         {
 	        public DeleteRatingTask(IGs2Session session, Request.DeleteRatingRequest request) : base(session, request)
 	        {
@@ -1082,8 +1448,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteRatingResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteRatingResult> DeleteRatingFuture(
+                Request.DeleteRatingRequest request
+        )
+		{
+			return new DeleteRatingTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteRatingResult> DeleteRatingAsync(
+            Request.DeleteRatingRequest request
+        )
+		{
+		    var task = new DeleteRatingTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteRatingTask DeleteRatingAsync(
+                Request.DeleteRatingRequest request
+        )
+		{
+			return new DeleteRatingTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteRatingResult> DeleteRating(
+		public async Task<Result.DeleteRatingResult> DeleteRatingAsync(
             Request.DeleteRatingRequest request
         )
 		{
@@ -1096,7 +1495,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class VoteTask : Gs2WebSocketSessionTask<Request.VoteRequest, Result.VoteResult>
+        public class VoteTask : Gs2WebSocketSessionTask<Request.VoteRequest, Result.VoteResult>
         {
 	        public VoteTask(IGs2Session session, Request.VoteRequest request) : base(session, request)
 	        {
@@ -1177,8 +1576,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.VoteResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.VoteResult> VoteFuture(
+                Request.VoteRequest request
+        )
+		{
+			return new VoteTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VoteResult> VoteAsync(
+            Request.VoteRequest request
+        )
+		{
+		    var task = new VoteTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VoteTask VoteAsync(
+                Request.VoteRequest request
+        )
+		{
+			return new VoteTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.VoteResult> Vote(
+		public async Task<Result.VoteResult> VoteAsync(
             Request.VoteRequest request
         )
 		{
@@ -1191,7 +1623,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class VoteMultipleTask : Gs2WebSocketSessionTask<Request.VoteMultipleRequest, Result.VoteMultipleResult>
+        public class VoteMultipleTask : Gs2WebSocketSessionTask<Request.VoteMultipleRequest, Result.VoteMultipleResult>
         {
 	        public VoteMultipleTask(IGs2Session session, Request.VoteMultipleRequest request) : base(session, request)
 	        {
@@ -1272,8 +1704,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.VoteMultipleResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.VoteMultipleResult> VoteMultipleFuture(
+                Request.VoteMultipleRequest request
+        )
+		{
+			return new VoteMultipleTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VoteMultipleResult> VoteMultipleAsync(
+            Request.VoteMultipleRequest request
+        )
+		{
+		    var task = new VoteMultipleTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VoteMultipleTask VoteMultipleAsync(
+                Request.VoteMultipleRequest request
+        )
+		{
+			return new VoteMultipleTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.VoteMultipleResult> VoteMultiple(
+		public async Task<Result.VoteMultipleResult> VoteMultipleAsync(
             Request.VoteMultipleRequest request
         )
 		{
@@ -1286,7 +1751,7 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        private class CommitVoteTask : Gs2WebSocketSessionTask<Request.CommitVoteRequest, Result.CommitVoteResult>
+        public class CommitVoteTask : Gs2WebSocketSessionTask<Request.CommitVoteRequest, Result.CommitVoteResult>
         {
 	        public CommitVoteTask(IGs2Session session, Request.CommitVoteRequest request) : base(session, request)
 	        {
@@ -1352,8 +1817,41 @@ namespace Gs2.Gs2Matchmaking
             yield return task;
             callback.Invoke(new AsyncResult<Result.CommitVoteResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CommitVoteResult> CommitVoteFuture(
+                Request.CommitVoteRequest request
+        )
+		{
+			return new CommitVoteTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CommitVoteResult> CommitVoteAsync(
+            Request.CommitVoteRequest request
+        )
+		{
+		    var task = new CommitVoteTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CommitVoteTask CommitVoteAsync(
+                Request.CommitVoteRequest request
+        )
+		{
+			return new CommitVoteTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CommitVoteResult> CommitVote(
+		public async Task<Result.CommitVoteResult> CommitVoteAsync(
             Request.CommitVoteRequest request
         )
 		{

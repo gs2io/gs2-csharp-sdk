@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Mission
 		}
 
 
-        private class CreateCounterModelMasterTask : Gs2WebSocketSessionTask<Request.CreateCounterModelMasterRequest, Result.CreateCounterModelMasterResult>
+        public class CreateCounterModelMasterTask : Gs2WebSocketSessionTask<Request.CreateCounterModelMasterRequest, Result.CreateCounterModelMasterResult>
         {
 	        public CreateCounterModelMasterTask(IGs2Session session, Request.CreateCounterModelMasterRequest request) : base(session, request)
 	        {
@@ -132,8 +135,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateCounterModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateCounterModelMasterResult> CreateCounterModelMasterFuture(
+                Request.CreateCounterModelMasterRequest request
+        )
+		{
+			return new CreateCounterModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
+            Request.CreateCounterModelMasterRequest request
+        )
+		{
+		    var task = new CreateCounterModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateCounterModelMasterTask CreateCounterModelMasterAsync(
+                Request.CreateCounterModelMasterRequest request
+        )
+		{
+			return new CreateCounterModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateCounterModelMasterResult> CreateCounterModelMaster(
+		public async Task<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
             Request.CreateCounterModelMasterRequest request
         )
 		{
@@ -146,7 +182,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class GetCounterModelMasterTask : Gs2WebSocketSessionTask<Request.GetCounterModelMasterRequest, Result.GetCounterModelMasterResult>
+        public class GetCounterModelMasterTask : Gs2WebSocketSessionTask<Request.GetCounterModelMasterRequest, Result.GetCounterModelMasterResult>
         {
 	        public GetCounterModelMasterTask(IGs2Session session, Request.GetCounterModelMasterRequest request) : base(session, request)
 	        {
@@ -207,8 +243,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCounterModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCounterModelMasterResult> GetCounterModelMasterFuture(
+                Request.GetCounterModelMasterRequest request
+        )
+		{
+			return new GetCounterModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
+            Request.GetCounterModelMasterRequest request
+        )
+		{
+		    var task = new GetCounterModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCounterModelMasterTask GetCounterModelMasterAsync(
+                Request.GetCounterModelMasterRequest request
+        )
+		{
+			return new GetCounterModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetCounterModelMasterResult> GetCounterModelMaster(
+		public async Task<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
             Request.GetCounterModelMasterRequest request
         )
 		{
@@ -221,7 +290,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class UpdateCounterModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateCounterModelMasterRequest, Result.UpdateCounterModelMasterResult>
+        public class UpdateCounterModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateCounterModelMasterRequest, Result.UpdateCounterModelMasterResult>
         {
 	        public UpdateCounterModelMasterTask(IGs2Session session, Request.UpdateCounterModelMasterRequest request) : base(session, request)
 	        {
@@ -307,8 +376,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCounterModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterFuture(
+                Request.UpdateCounterModelMasterRequest request
+        )
+		{
+			return new UpdateCounterModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
+            Request.UpdateCounterModelMasterRequest request
+        )
+		{
+		    var task = new UpdateCounterModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateCounterModelMasterTask UpdateCounterModelMasterAsync(
+                Request.UpdateCounterModelMasterRequest request
+        )
+		{
+			return new UpdateCounterModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateCounterModelMasterResult> UpdateCounterModelMaster(
+		public async Task<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
             Request.UpdateCounterModelMasterRequest request
         )
 		{
@@ -321,7 +423,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class DeleteCounterModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteCounterModelMasterRequest, Result.DeleteCounterModelMasterResult>
+        public class DeleteCounterModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteCounterModelMasterRequest, Result.DeleteCounterModelMasterResult>
         {
 	        public DeleteCounterModelMasterTask(IGs2Session session, Request.DeleteCounterModelMasterRequest request) : base(session, request)
 	        {
@@ -382,8 +484,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteCounterModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterFuture(
+                Request.DeleteCounterModelMasterRequest request
+        )
+		{
+			return new DeleteCounterModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
+            Request.DeleteCounterModelMasterRequest request
+        )
+		{
+		    var task = new DeleteCounterModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteCounterModelMasterTask DeleteCounterModelMasterAsync(
+                Request.DeleteCounterModelMasterRequest request
+        )
+		{
+			return new DeleteCounterModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteCounterModelMasterResult> DeleteCounterModelMaster(
+		public async Task<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
             Request.DeleteCounterModelMasterRequest request
         )
 		{
@@ -396,7 +531,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class CreateMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.CreateMissionGroupModelMasterRequest, Result.CreateMissionGroupModelMasterResult>
+        public class CreateMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.CreateMissionGroupModelMasterRequest, Result.CreateMissionGroupModelMasterResult>
         {
 	        public CreateMissionGroupModelMasterTask(IGs2Session session, Request.CreateMissionGroupModelMasterRequest request) : base(session, request)
 	        {
@@ -492,8 +627,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateMissionGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterFuture(
+                Request.CreateMissionGroupModelMasterRequest request
+        )
+		{
+			return new CreateMissionGroupModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
+            Request.CreateMissionGroupModelMasterRequest request
+        )
+		{
+		    var task = new CreateMissionGroupModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateMissionGroupModelMasterTask CreateMissionGroupModelMasterAsync(
+                Request.CreateMissionGroupModelMasterRequest request
+        )
+		{
+			return new CreateMissionGroupModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMaster(
+		public async Task<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
             Request.CreateMissionGroupModelMasterRequest request
         )
 		{
@@ -506,7 +674,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class GetMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.GetMissionGroupModelMasterRequest, Result.GetMissionGroupModelMasterResult>
+        public class GetMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.GetMissionGroupModelMasterRequest, Result.GetMissionGroupModelMasterResult>
         {
 	        public GetMissionGroupModelMasterTask(IGs2Session session, Request.GetMissionGroupModelMasterRequest request) : base(session, request)
 	        {
@@ -567,8 +735,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMissionGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterFuture(
+                Request.GetMissionGroupModelMasterRequest request
+        )
+		{
+			return new GetMissionGroupModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
+            Request.GetMissionGroupModelMasterRequest request
+        )
+		{
+		    var task = new GetMissionGroupModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMissionGroupModelMasterTask GetMissionGroupModelMasterAsync(
+                Request.GetMissionGroupModelMasterRequest request
+        )
+		{
+			return new GetMissionGroupModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMaster(
+		public async Task<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
             Request.GetMissionGroupModelMasterRequest request
         )
 		{
@@ -581,7 +782,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class UpdateMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateMissionGroupModelMasterRequest, Result.UpdateMissionGroupModelMasterResult>
+        public class UpdateMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateMissionGroupModelMasterRequest, Result.UpdateMissionGroupModelMasterResult>
         {
 	        public UpdateMissionGroupModelMasterTask(IGs2Session session, Request.UpdateMissionGroupModelMasterRequest request) : base(session, request)
 	        {
@@ -677,8 +878,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateMissionGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterFuture(
+                Request.UpdateMissionGroupModelMasterRequest request
+        )
+		{
+			return new UpdateMissionGroupModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
+            Request.UpdateMissionGroupModelMasterRequest request
+        )
+		{
+		    var task = new UpdateMissionGroupModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateMissionGroupModelMasterTask UpdateMissionGroupModelMasterAsync(
+                Request.UpdateMissionGroupModelMasterRequest request
+        )
+		{
+			return new UpdateMissionGroupModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMaster(
+		public async Task<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
             Request.UpdateMissionGroupModelMasterRequest request
         )
 		{
@@ -691,7 +925,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class DeleteMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteMissionGroupModelMasterRequest, Result.DeleteMissionGroupModelMasterResult>
+        public class DeleteMissionGroupModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteMissionGroupModelMasterRequest, Result.DeleteMissionGroupModelMasterResult>
         {
 	        public DeleteMissionGroupModelMasterTask(IGs2Session session, Request.DeleteMissionGroupModelMasterRequest request) : base(session, request)
 	        {
@@ -752,8 +986,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteMissionGroupModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterFuture(
+                Request.DeleteMissionGroupModelMasterRequest request
+        )
+		{
+			return new DeleteMissionGroupModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
+            Request.DeleteMissionGroupModelMasterRequest request
+        )
+		{
+		    var task = new DeleteMissionGroupModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteMissionGroupModelMasterTask DeleteMissionGroupModelMasterAsync(
+                Request.DeleteMissionGroupModelMasterRequest request
+        )
+		{
+			return new DeleteMissionGroupModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMaster(
+		public async Task<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
             Request.DeleteMissionGroupModelMasterRequest request
         )
 		{
@@ -766,7 +1033,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -862,8 +1129,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -876,7 +1176,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -932,8 +1232,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -946,7 +1279,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -1042,8 +1375,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -1056,7 +1422,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -1112,8 +1478,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -1126,7 +1525,7 @@ namespace Gs2.Gs2Mission
 #endif
 
 
-        private class GetCounterModelTask : Gs2WebSocketSessionTask<Request.GetCounterModelRequest, Result.GetCounterModelResult>
+        public class GetCounterModelTask : Gs2WebSocketSessionTask<Request.GetCounterModelRequest, Result.GetCounterModelResult>
         {
 	        public GetCounterModelTask(IGs2Session session, Request.GetCounterModelRequest request) : base(session, request)
 	        {
@@ -1187,8 +1586,41 @@ namespace Gs2.Gs2Mission
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCounterModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCounterModelResult> GetCounterModelFuture(
+                Request.GetCounterModelRequest request
+        )
+		{
+			return new GetCounterModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCounterModelResult> GetCounterModelAsync(
+            Request.GetCounterModelRequest request
+        )
+		{
+		    var task = new GetCounterModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCounterModelTask GetCounterModelAsync(
+                Request.GetCounterModelRequest request
+        )
+		{
+			return new GetCounterModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetCounterModelResult> GetCounterModel(
+		public async Task<Result.GetCounterModelResult> GetCounterModelAsync(
             Request.GetCounterModelRequest request
         )
 		{

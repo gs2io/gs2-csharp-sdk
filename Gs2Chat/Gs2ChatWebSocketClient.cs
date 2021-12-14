@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Chat
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -147,8 +150,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -161,7 +197,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -217,8 +253,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -231,7 +300,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -332,8 +401,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -346,7 +448,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -402,8 +504,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -416,7 +551,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class PostTask : Gs2WebSocketSessionTask<Request.PostRequest, Result.PostResult>
+        public class PostTask : Gs2WebSocketSessionTask<Request.PostRequest, Result.PostResult>
         {
 	        public PostTask(IGs2Session session, Request.PostRequest request) : base(session, request)
 	        {
@@ -502,8 +637,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.PostResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PostResult> PostFuture(
+                Request.PostRequest request
+        )
+		{
+			return new PostTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PostResult> PostAsync(
+            Request.PostRequest request
+        )
+		{
+		    var task = new PostTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PostTask PostAsync(
+                Request.PostRequest request
+        )
+		{
+			return new PostTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.PostResult> Post(
+		public async Task<Result.PostResult> PostAsync(
             Request.PostRequest request
         )
 		{
@@ -516,7 +684,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class PostByUserIdTask : Gs2WebSocketSessionTask<Request.PostByUserIdRequest, Result.PostByUserIdResult>
+        public class PostByUserIdTask : Gs2WebSocketSessionTask<Request.PostByUserIdRequest, Result.PostByUserIdResult>
         {
 	        public PostByUserIdTask(IGs2Session session, Request.PostByUserIdRequest request) : base(session, request)
 	        {
@@ -597,8 +765,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.PostByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PostByUserIdResult> PostByUserIdFuture(
+                Request.PostByUserIdRequest request
+        )
+		{
+			return new PostByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PostByUserIdResult> PostByUserIdAsync(
+            Request.PostByUserIdRequest request
+        )
+		{
+		    var task = new PostByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PostByUserIdTask PostByUserIdAsync(
+                Request.PostByUserIdRequest request
+        )
+		{
+			return new PostByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.PostByUserIdResult> PostByUserId(
+		public async Task<Result.PostByUserIdResult> PostByUserIdAsync(
             Request.PostByUserIdRequest request
         )
 		{
@@ -611,7 +812,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class GetMessageTask : Gs2WebSocketSessionTask<Request.GetMessageRequest, Result.GetMessageResult>
+        public class GetMessageTask : Gs2WebSocketSessionTask<Request.GetMessageRequest, Result.GetMessageResult>
         {
 	        public GetMessageTask(IGs2Session session, Request.GetMessageRequest request) : base(session, request)
 	        {
@@ -692,8 +893,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMessageResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMessageResult> GetMessageFuture(
+                Request.GetMessageRequest request
+        )
+		{
+			return new GetMessageTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMessageResult> GetMessageAsync(
+            Request.GetMessageRequest request
+        )
+		{
+		    var task = new GetMessageTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMessageTask GetMessageAsync(
+                Request.GetMessageRequest request
+        )
+		{
+			return new GetMessageTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMessageResult> GetMessage(
+		public async Task<Result.GetMessageResult> GetMessageAsync(
             Request.GetMessageRequest request
         )
 		{
@@ -706,7 +940,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class GetMessageByUserIdTask : Gs2WebSocketSessionTask<Request.GetMessageByUserIdRequest, Result.GetMessageByUserIdResult>
+        public class GetMessageByUserIdTask : Gs2WebSocketSessionTask<Request.GetMessageByUserIdRequest, Result.GetMessageByUserIdResult>
         {
 	        public GetMessageByUserIdTask(IGs2Session session, Request.GetMessageByUserIdRequest request) : base(session, request)
 	        {
@@ -782,8 +1016,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMessageByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMessageByUserIdResult> GetMessageByUserIdFuture(
+                Request.GetMessageByUserIdRequest request
+        )
+		{
+			return new GetMessageByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMessageByUserIdResult> GetMessageByUserIdAsync(
+            Request.GetMessageByUserIdRequest request
+        )
+		{
+		    var task = new GetMessageByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMessageByUserIdTask GetMessageByUserIdAsync(
+                Request.GetMessageByUserIdRequest request
+        )
+		{
+			return new GetMessageByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMessageByUserIdResult> GetMessageByUserId(
+		public async Task<Result.GetMessageByUserIdResult> GetMessageByUserIdAsync(
             Request.GetMessageByUserIdRequest request
         )
 		{
@@ -796,7 +1063,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class DeleteMessageTask : Gs2WebSocketSessionTask<Request.DeleteMessageRequest, Result.DeleteMessageResult>
+        public class DeleteMessageTask : Gs2WebSocketSessionTask<Request.DeleteMessageRequest, Result.DeleteMessageResult>
         {
 	        public DeleteMessageTask(IGs2Session session, Request.DeleteMessageRequest request) : base(session, request)
 	        {
@@ -867,8 +1134,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteMessageResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteMessageResult> DeleteMessageFuture(
+                Request.DeleteMessageRequest request
+        )
+		{
+			return new DeleteMessageTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteMessageResult> DeleteMessageAsync(
+            Request.DeleteMessageRequest request
+        )
+		{
+		    var task = new DeleteMessageTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteMessageTask DeleteMessageAsync(
+                Request.DeleteMessageRequest request
+        )
+		{
+			return new DeleteMessageTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteMessageResult> DeleteMessage(
+		public async Task<Result.DeleteMessageResult> DeleteMessageAsync(
             Request.DeleteMessageRequest request
         )
 		{
@@ -881,7 +1181,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class SubscribeTask : Gs2WebSocketSessionTask<Request.SubscribeRequest, Result.SubscribeResult>
+        public class SubscribeTask : Gs2WebSocketSessionTask<Request.SubscribeRequest, Result.SubscribeResult>
         {
 	        public SubscribeTask(IGs2Session session, Request.SubscribeRequest request) : base(session, request)
 	        {
@@ -962,8 +1262,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.SubscribeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SubscribeResult> SubscribeFuture(
+                Request.SubscribeRequest request
+        )
+		{
+			return new SubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubscribeResult> SubscribeAsync(
+            Request.SubscribeRequest request
+        )
+		{
+		    var task = new SubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubscribeTask SubscribeAsync(
+                Request.SubscribeRequest request
+        )
+		{
+			return new SubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SubscribeResult> Subscribe(
+		public async Task<Result.SubscribeResult> SubscribeAsync(
             Request.SubscribeRequest request
         )
 		{
@@ -976,7 +1309,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class SubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.SubscribeByUserIdRequest, Result.SubscribeByUserIdResult>
+        public class SubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.SubscribeByUserIdRequest, Result.SubscribeByUserIdResult>
         {
 	        public SubscribeByUserIdTask(IGs2Session session, Request.SubscribeByUserIdRequest request) : base(session, request)
 	        {
@@ -1052,8 +1385,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.SubscribeByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SubscribeByUserIdResult> SubscribeByUserIdFuture(
+                Request.SubscribeByUserIdRequest request
+        )
+		{
+			return new SubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubscribeByUserIdResult> SubscribeByUserIdAsync(
+            Request.SubscribeByUserIdRequest request
+        )
+		{
+		    var task = new SubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubscribeByUserIdTask SubscribeByUserIdAsync(
+                Request.SubscribeByUserIdRequest request
+        )
+		{
+			return new SubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SubscribeByUserIdResult> SubscribeByUserId(
+		public async Task<Result.SubscribeByUserIdResult> SubscribeByUserIdAsync(
             Request.SubscribeByUserIdRequest request
         )
 		{
@@ -1066,7 +1432,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class GetSubscribeTask : Gs2WebSocketSessionTask<Request.GetSubscribeRequest, Result.GetSubscribeResult>
+        public class GetSubscribeTask : Gs2WebSocketSessionTask<Request.GetSubscribeRequest, Result.GetSubscribeResult>
         {
 	        public GetSubscribeTask(IGs2Session session, Request.GetSubscribeRequest request) : base(session, request)
 	        {
@@ -1137,8 +1503,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetSubscribeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetSubscribeResult> GetSubscribeFuture(
+                Request.GetSubscribeRequest request
+        )
+		{
+			return new GetSubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscribeResult> GetSubscribeAsync(
+            Request.GetSubscribeRequest request
+        )
+		{
+		    var task = new GetSubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSubscribeTask GetSubscribeAsync(
+                Request.GetSubscribeRequest request
+        )
+		{
+			return new GetSubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetSubscribeResult> GetSubscribe(
+		public async Task<Result.GetSubscribeResult> GetSubscribeAsync(
             Request.GetSubscribeRequest request
         )
 		{
@@ -1151,7 +1550,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class GetSubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.GetSubscribeByUserIdRequest, Result.GetSubscribeByUserIdResult>
+        public class GetSubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.GetSubscribeByUserIdRequest, Result.GetSubscribeByUserIdResult>
         {
 	        public GetSubscribeByUserIdTask(IGs2Session session, Request.GetSubscribeByUserIdRequest request) : base(session, request)
 	        {
@@ -1217,8 +1616,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetSubscribeByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdFuture(
+                Request.GetSubscribeByUserIdRequest request
+        )
+		{
+			return new GetSubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
+            Request.GetSubscribeByUserIdRequest request
+        )
+		{
+		    var task = new GetSubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSubscribeByUserIdTask GetSubscribeByUserIdAsync(
+                Request.GetSubscribeByUserIdRequest request
+        )
+		{
+			return new GetSubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserId(
+		public async Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
             Request.GetSubscribeByUserIdRequest request
         )
 		{
@@ -1231,7 +1663,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class UpdateNotificationTypeTask : Gs2WebSocketSessionTask<Request.UpdateNotificationTypeRequest, Result.UpdateNotificationTypeResult>
+        public class UpdateNotificationTypeTask : Gs2WebSocketSessionTask<Request.UpdateNotificationTypeRequest, Result.UpdateNotificationTypeResult>
         {
 	        public UpdateNotificationTypeTask(IGs2Session session, Request.UpdateNotificationTypeRequest request) : base(session, request)
 	        {
@@ -1312,8 +1744,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNotificationTypeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNotificationTypeResult> UpdateNotificationTypeFuture(
+                Request.UpdateNotificationTypeRequest request
+        )
+		{
+			return new UpdateNotificationTypeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNotificationTypeResult> UpdateNotificationTypeAsync(
+            Request.UpdateNotificationTypeRequest request
+        )
+		{
+		    var task = new UpdateNotificationTypeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNotificationTypeTask UpdateNotificationTypeAsync(
+                Request.UpdateNotificationTypeRequest request
+        )
+		{
+			return new UpdateNotificationTypeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNotificationTypeResult> UpdateNotificationType(
+		public async Task<Result.UpdateNotificationTypeResult> UpdateNotificationTypeAsync(
             Request.UpdateNotificationTypeRequest request
         )
 		{
@@ -1326,7 +1791,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class UpdateNotificationTypeByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateNotificationTypeByUserIdRequest, Result.UpdateNotificationTypeByUserIdResult>
+        public class UpdateNotificationTypeByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateNotificationTypeByUserIdRequest, Result.UpdateNotificationTypeByUserIdResult>
         {
 	        public UpdateNotificationTypeByUserIdTask(IGs2Session session, Request.UpdateNotificationTypeByUserIdRequest request) : base(session, request)
 	        {
@@ -1402,8 +1867,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNotificationTypeByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNotificationTypeByUserIdResult> UpdateNotificationTypeByUserIdFuture(
+                Request.UpdateNotificationTypeByUserIdRequest request
+        )
+		{
+			return new UpdateNotificationTypeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNotificationTypeByUserIdResult> UpdateNotificationTypeByUserIdAsync(
+            Request.UpdateNotificationTypeByUserIdRequest request
+        )
+		{
+		    var task = new UpdateNotificationTypeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNotificationTypeByUserIdTask UpdateNotificationTypeByUserIdAsync(
+                Request.UpdateNotificationTypeByUserIdRequest request
+        )
+		{
+			return new UpdateNotificationTypeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNotificationTypeByUserIdResult> UpdateNotificationTypeByUserId(
+		public async Task<Result.UpdateNotificationTypeByUserIdResult> UpdateNotificationTypeByUserIdAsync(
             Request.UpdateNotificationTypeByUserIdRequest request
         )
 		{
@@ -1416,7 +1914,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class UnsubscribeTask : Gs2WebSocketSessionTask<Request.UnsubscribeRequest, Result.UnsubscribeResult>
+        public class UnsubscribeTask : Gs2WebSocketSessionTask<Request.UnsubscribeRequest, Result.UnsubscribeResult>
         {
 	        public UnsubscribeTask(IGs2Session session, Request.UnsubscribeRequest request) : base(session, request)
 	        {
@@ -1487,8 +1985,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.UnsubscribeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UnsubscribeResult> UnsubscribeFuture(
+                Request.UnsubscribeRequest request
+        )
+		{
+			return new UnsubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnsubscribeResult> UnsubscribeAsync(
+            Request.UnsubscribeRequest request
+        )
+		{
+		    var task = new UnsubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnsubscribeTask UnsubscribeAsync(
+                Request.UnsubscribeRequest request
+        )
+		{
+			return new UnsubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UnsubscribeResult> Unsubscribe(
+		public async Task<Result.UnsubscribeResult> UnsubscribeAsync(
             Request.UnsubscribeRequest request
         )
 		{
@@ -1501,7 +2032,7 @@ namespace Gs2.Gs2Chat
 #endif
 
 
-        private class UnsubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.UnsubscribeByUserIdRequest, Result.UnsubscribeByUserIdResult>
+        public class UnsubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.UnsubscribeByUserIdRequest, Result.UnsubscribeByUserIdResult>
         {
 	        public UnsubscribeByUserIdTask(IGs2Session session, Request.UnsubscribeByUserIdRequest request) : base(session, request)
 	        {
@@ -1567,8 +2098,41 @@ namespace Gs2.Gs2Chat
             yield return task;
             callback.Invoke(new AsyncResult<Result.UnsubscribeByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdFuture(
+                Request.UnsubscribeByUserIdRequest request
+        )
+		{
+			return new UnsubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdAsync(
+            Request.UnsubscribeByUserIdRequest request
+        )
+		{
+		    var task = new UnsubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnsubscribeByUserIdTask UnsubscribeByUserIdAsync(
+                Request.UnsubscribeByUserIdRequest request
+        )
+		{
+			return new UnsubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UnsubscribeByUserIdResult> UnsubscribeByUserId(
+		public async Task<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdAsync(
             Request.UnsubscribeByUserIdRequest request
         )
 		{

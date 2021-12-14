@@ -5,7 +5,6 @@ using Gs2.Core.Model;
 namespace Gs2.Core.Net
 {
     public interface IFuture<TResult> : IEnumerator
-        where TResult : IResult
     {
         TResult Result { set; get; }
         Gs2Exception Error { set; get; }

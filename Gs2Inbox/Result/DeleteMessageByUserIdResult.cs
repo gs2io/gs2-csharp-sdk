@@ -33,6 +33,12 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class DeleteMessageByUserIdResult : IResult
 	{
+        public Gs2.Gs2Inbox.Model.Message Item { set; get; }
+
+        public DeleteMessageByUserIdResult WithItem(Gs2.Gs2Inbox.Model.Message item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Inbox.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteMessageByUserIdResult();
+            return new DeleteMessageByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inbox.Model.Message.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

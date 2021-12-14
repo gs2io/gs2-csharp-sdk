@@ -36,6 +36,7 @@ namespace Gs2.Gs2Mission.Model
         public string MissionGroupName { set; get; }
         public string[] CompletedMissionTaskNames { set; get; }
         public string[] ReceivedMissionTaskNames { set; get; }
+        public long? NextResetAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
 
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Mission.Model
 
         public Complete WithReceivedMissionTaskNames(string[] receivedMissionTaskNames) {
             this.ReceivedMissionTaskNames = receivedMissionTaskNames;
+            return this;
+        }
+
+        public Complete WithNextResetAt(long? nextResetAt) {
+            this.NextResetAt = nextResetAt;
             return this;
         }
 
@@ -92,6 +98,7 @@ namespace Gs2.Gs2Mission.Model
                 .WithReceivedMissionTaskNames(!data.Keys.Contains("receivedMissionTaskNames") || data["receivedMissionTaskNames"] == null ? new string[]{} : data["receivedMissionTaskNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithNextResetAt(!data.Keys.Contains("nextResetAt") || data["nextResetAt"] == null ? null : (long?)long.Parse(data["nextResetAt"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -112,6 +119,7 @@ namespace Gs2.Gs2Mission.Model
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
+                ["nextResetAt"] = NextResetAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -153,6 +161,10 @@ namespace Gs2.Gs2Mission.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (NextResetAt != null) {
+                writer.WritePropertyName("nextResetAt");
+                writer.Write(long.Parse(NextResetAt.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -216,6 +228,14 @@ namespace Gs2.Gs2Mission.Model
                 {
                     diff += ReceivedMissionTaskNames[i].CompareTo(other.ReceivedMissionTaskNames[i]);
                 }
+            }
+            if (NextResetAt == null && NextResetAt == other.NextResetAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(NextResetAt - other.NextResetAt);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

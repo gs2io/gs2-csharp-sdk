@@ -18,6 +18,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -61,7 +64,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DescribeUsersTask : Gs2RestSessionTask<DescribeUsersRequest, DescribeUsersResult>
+        public class DescribeUsersTask : Gs2RestSessionTask<DescribeUsersRequest, DescribeUsersResult>
         {
             public DescribeUsersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUsersRequest request) : base(session, factory, request)
             {
@@ -114,6 +117,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeUsersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeUsersResult> DescribeUsersFuture(
+                Request.DescribeUsersRequest request
+        )
+		{
+			return new DescribeUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeUsersResult> DescribeUsersAsync(
+                Request.DescribeUsersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeUsersResult> result = null;
+			await DescribeUsers(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeUsersTask DescribeUsersAsync(
+                Request.DescribeUsersRequest request
+        )
+		{
+			return new DescribeUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeUsersResult> DescribeUsersAsync(
                 Request.DescribeUsersRequest request
@@ -129,7 +172,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class CreateUserTask : Gs2RestSessionTask<CreateUserRequest, CreateUserResult>
+        public class CreateUserTask : Gs2RestSessionTask<CreateUserRequest, CreateUserResult>
         {
             public CreateUserTask(IGs2Session session, RestSessionRequestFactory factory, CreateUserRequest request) : base(session, factory, request)
             {
@@ -199,6 +242,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateUserResult> CreateUserFuture(
+                Request.CreateUserRequest request
+        )
+		{
+			return new CreateUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateUserResult> CreateUserAsync(
+                Request.CreateUserRequest request
+        )
+		{
+            AsyncResult<Result.CreateUserResult> result = null;
+			await CreateUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateUserTask CreateUserAsync(
+                Request.CreateUserRequest request
+        )
+		{
+			return new CreateUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateUserResult> CreateUserAsync(
                 Request.CreateUserRequest request
@@ -214,7 +297,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class UpdateUserTask : Gs2RestSessionTask<UpdateUserRequest, UpdateUserResult>
+        public class UpdateUserTask : Gs2RestSessionTask<UpdateUserRequest, UpdateUserResult>
         {
             public UpdateUserTask(IGs2Session session, RestSessionRequestFactory factory, UpdateUserRequest request) : base(session, factory, request)
             {
@@ -281,6 +364,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateUserResult> UpdateUserFuture(
+                Request.UpdateUserRequest request
+        )
+		{
+			return new UpdateUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateUserResult> UpdateUserAsync(
+                Request.UpdateUserRequest request
+        )
+		{
+            AsyncResult<Result.UpdateUserResult> result = null;
+			await UpdateUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateUserTask UpdateUserAsync(
+                Request.UpdateUserRequest request
+        )
+		{
+			return new UpdateUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateUserResult> UpdateUserAsync(
                 Request.UpdateUserRequest request
@@ -296,7 +419,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetUserTask : Gs2RestSessionTask<GetUserRequest, GetUserResult>
+        public class GetUserTask : Gs2RestSessionTask<GetUserRequest, GetUserResult>
         {
             public GetUserTask(IGs2Session session, RestSessionRequestFactory factory, GetUserRequest request) : base(session, factory, request)
             {
@@ -345,6 +468,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetUserResult> GetUserFuture(
+                Request.GetUserRequest request
+        )
+		{
+			return new GetUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUserResult> GetUserAsync(
+                Request.GetUserRequest request
+        )
+		{
+            AsyncResult<Result.GetUserResult> result = null;
+			await GetUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetUserTask GetUserAsync(
+                Request.GetUserRequest request
+        )
+		{
+			return new GetUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetUserResult> GetUserAsync(
                 Request.GetUserRequest request
@@ -360,7 +523,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteUserTask : Gs2RestSessionTask<DeleteUserRequest, DeleteUserResult>
+        public class DeleteUserTask : Gs2RestSessionTask<DeleteUserRequest, DeleteUserResult>
         {
             public DeleteUserTask(IGs2Session session, RestSessionRequestFactory factory, DeleteUserRequest request) : base(session, factory, request)
             {
@@ -409,6 +572,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteUserResult> DeleteUserFuture(
+                Request.DeleteUserRequest request
+        )
+		{
+			return new DeleteUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteUserResult> DeleteUserAsync(
+                Request.DeleteUserRequest request
+        )
+		{
+            AsyncResult<Result.DeleteUserResult> result = null;
+			await DeleteUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteUserTask DeleteUserAsync(
+                Request.DeleteUserRequest request
+        )
+		{
+			return new DeleteUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteUserResult> DeleteUserAsync(
                 Request.DeleteUserRequest request
@@ -424,7 +627,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DescribeSecurityPoliciesTask : Gs2RestSessionTask<DescribeSecurityPoliciesRequest, DescribeSecurityPoliciesResult>
+        public class DescribeSecurityPoliciesTask : Gs2RestSessionTask<DescribeSecurityPoliciesRequest, DescribeSecurityPoliciesResult>
         {
             public DescribeSecurityPoliciesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSecurityPoliciesRequest request) : base(session, factory, request)
             {
@@ -477,6 +680,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeSecurityPoliciesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeSecurityPoliciesResult> DescribeSecurityPoliciesFuture(
+                Request.DescribeSecurityPoliciesRequest request
+        )
+		{
+			return new DescribeSecurityPoliciesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSecurityPoliciesResult> DescribeSecurityPoliciesAsync(
+                Request.DescribeSecurityPoliciesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSecurityPoliciesResult> result = null;
+			await DescribeSecurityPolicies(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSecurityPoliciesTask DescribeSecurityPoliciesAsync(
+                Request.DescribeSecurityPoliciesRequest request
+        )
+		{
+			return new DescribeSecurityPoliciesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeSecurityPoliciesResult> DescribeSecurityPoliciesAsync(
                 Request.DescribeSecurityPoliciesRequest request
@@ -492,7 +735,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DescribeCommonSecurityPoliciesTask : Gs2RestSessionTask<DescribeCommonSecurityPoliciesRequest, DescribeCommonSecurityPoliciesResult>
+        public class DescribeCommonSecurityPoliciesTask : Gs2RestSessionTask<DescribeCommonSecurityPoliciesRequest, DescribeCommonSecurityPoliciesResult>
         {
             public DescribeCommonSecurityPoliciesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCommonSecurityPoliciesRequest request) : base(session, factory, request)
             {
@@ -545,6 +788,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeCommonSecurityPoliciesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeCommonSecurityPoliciesResult> DescribeCommonSecurityPoliciesFuture(
+                Request.DescribeCommonSecurityPoliciesRequest request
+        )
+		{
+			return new DescribeCommonSecurityPoliciesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCommonSecurityPoliciesResult> DescribeCommonSecurityPoliciesAsync(
+                Request.DescribeCommonSecurityPoliciesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCommonSecurityPoliciesResult> result = null;
+			await DescribeCommonSecurityPolicies(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCommonSecurityPoliciesTask DescribeCommonSecurityPoliciesAsync(
+                Request.DescribeCommonSecurityPoliciesRequest request
+        )
+		{
+			return new DescribeCommonSecurityPoliciesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeCommonSecurityPoliciesResult> DescribeCommonSecurityPoliciesAsync(
                 Request.DescribeCommonSecurityPoliciesRequest request
@@ -560,7 +843,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class CreateSecurityPolicyTask : Gs2RestSessionTask<CreateSecurityPolicyRequest, CreateSecurityPolicyResult>
+        public class CreateSecurityPolicyTask : Gs2RestSessionTask<CreateSecurityPolicyRequest, CreateSecurityPolicyResult>
         {
             public CreateSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, CreateSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -635,6 +918,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateSecurityPolicyResult> CreateSecurityPolicyFuture(
+                Request.CreateSecurityPolicyRequest request
+        )
+		{
+			return new CreateSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSecurityPolicyResult> CreateSecurityPolicyAsync(
+                Request.CreateSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.CreateSecurityPolicyResult> result = null;
+			await CreateSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateSecurityPolicyTask CreateSecurityPolicyAsync(
+                Request.CreateSecurityPolicyRequest request
+        )
+		{
+			return new CreateSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateSecurityPolicyResult> CreateSecurityPolicyAsync(
                 Request.CreateSecurityPolicyRequest request
@@ -650,7 +973,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class UpdateSecurityPolicyTask : Gs2RestSessionTask<UpdateSecurityPolicyRequest, UpdateSecurityPolicyResult>
+        public class UpdateSecurityPolicyTask : Gs2RestSessionTask<UpdateSecurityPolicyRequest, UpdateSecurityPolicyResult>
         {
             public UpdateSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, UpdateSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -722,6 +1045,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateSecurityPolicyResult> UpdateSecurityPolicyFuture(
+                Request.UpdateSecurityPolicyRequest request
+        )
+		{
+			return new UpdateSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSecurityPolicyResult> UpdateSecurityPolicyAsync(
+                Request.UpdateSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.UpdateSecurityPolicyResult> result = null;
+			await UpdateSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateSecurityPolicyTask UpdateSecurityPolicyAsync(
+                Request.UpdateSecurityPolicyRequest request
+        )
+		{
+			return new UpdateSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateSecurityPolicyResult> UpdateSecurityPolicyAsync(
                 Request.UpdateSecurityPolicyRequest request
@@ -737,7 +1100,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetSecurityPolicyTask : Gs2RestSessionTask<GetSecurityPolicyRequest, GetSecurityPolicyResult>
+        public class GetSecurityPolicyTask : Gs2RestSessionTask<GetSecurityPolicyRequest, GetSecurityPolicyResult>
         {
             public GetSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, GetSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -786,6 +1149,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetSecurityPolicyResult> GetSecurityPolicyFuture(
+                Request.GetSecurityPolicyRequest request
+        )
+		{
+			return new GetSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSecurityPolicyResult> GetSecurityPolicyAsync(
+                Request.GetSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.GetSecurityPolicyResult> result = null;
+			await GetSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSecurityPolicyTask GetSecurityPolicyAsync(
+                Request.GetSecurityPolicyRequest request
+        )
+		{
+			return new GetSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetSecurityPolicyResult> GetSecurityPolicyAsync(
                 Request.GetSecurityPolicyRequest request
@@ -801,7 +1204,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteSecurityPolicyTask : Gs2RestSessionTask<DeleteSecurityPolicyRequest, DeleteSecurityPolicyResult>
+        public class DeleteSecurityPolicyTask : Gs2RestSessionTask<DeleteSecurityPolicyRequest, DeleteSecurityPolicyResult>
         {
             public DeleteSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -850,6 +1253,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteSecurityPolicyResult> DeleteSecurityPolicyFuture(
+                Request.DeleteSecurityPolicyRequest request
+        )
+		{
+			return new DeleteSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSecurityPolicyResult> DeleteSecurityPolicyAsync(
+                Request.DeleteSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSecurityPolicyResult> result = null;
+			await DeleteSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSecurityPolicyTask DeleteSecurityPolicyAsync(
+                Request.DeleteSecurityPolicyRequest request
+        )
+		{
+			return new DeleteSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteSecurityPolicyResult> DeleteSecurityPolicyAsync(
                 Request.DeleteSecurityPolicyRequest request
@@ -865,7 +1308,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DescribeIdentifiersTask : Gs2RestSessionTask<DescribeIdentifiersRequest, DescribeIdentifiersResult>
+        public class DescribeIdentifiersTask : Gs2RestSessionTask<DescribeIdentifiersRequest, DescribeIdentifiersResult>
         {
             public DescribeIdentifiersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeIdentifiersRequest request) : base(session, factory, request)
             {
@@ -920,6 +1363,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeIdentifiersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeIdentifiersResult> DescribeIdentifiersFuture(
+                Request.DescribeIdentifiersRequest request
+        )
+		{
+			return new DescribeIdentifiersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeIdentifiersResult> DescribeIdentifiersAsync(
+                Request.DescribeIdentifiersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeIdentifiersResult> result = null;
+			await DescribeIdentifiers(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeIdentifiersTask DescribeIdentifiersAsync(
+                Request.DescribeIdentifiersRequest request
+        )
+		{
+			return new DescribeIdentifiersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeIdentifiersResult> DescribeIdentifiersAsync(
                 Request.DescribeIdentifiersRequest request
@@ -935,7 +1418,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class CreateIdentifierTask : Gs2RestSessionTask<CreateIdentifierRequest, CreateIdentifierResult>
+        public class CreateIdentifierTask : Gs2RestSessionTask<CreateIdentifierRequest, CreateIdentifierResult>
         {
             public CreateIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, CreateIdentifierRequest request) : base(session, factory, request)
             {
@@ -997,6 +1480,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateIdentifierResult> CreateIdentifierFuture(
+                Request.CreateIdentifierRequest request
+        )
+		{
+			return new CreateIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateIdentifierResult> CreateIdentifierAsync(
+                Request.CreateIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.CreateIdentifierResult> result = null;
+			await CreateIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateIdentifierTask CreateIdentifierAsync(
+                Request.CreateIdentifierRequest request
+        )
+		{
+			return new CreateIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateIdentifierResult> CreateIdentifierAsync(
                 Request.CreateIdentifierRequest request
@@ -1012,7 +1535,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetIdentifierTask : Gs2RestSessionTask<GetIdentifierRequest, GetIdentifierResult>
+        public class GetIdentifierTask : Gs2RestSessionTask<GetIdentifierRequest, GetIdentifierResult>
         {
             public GetIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, GetIdentifierRequest request) : base(session, factory, request)
             {
@@ -1062,6 +1585,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetIdentifierResult> GetIdentifierFuture(
+                Request.GetIdentifierRequest request
+        )
+		{
+			return new GetIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIdentifierResult> GetIdentifierAsync(
+                Request.GetIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.GetIdentifierResult> result = null;
+			await GetIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetIdentifierTask GetIdentifierAsync(
+                Request.GetIdentifierRequest request
+        )
+		{
+			return new GetIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetIdentifierResult> GetIdentifierAsync(
                 Request.GetIdentifierRequest request
@@ -1077,7 +1640,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteIdentifierTask : Gs2RestSessionTask<DeleteIdentifierRequest, DeleteIdentifierResult>
+        public class DeleteIdentifierTask : Gs2RestSessionTask<DeleteIdentifierRequest, DeleteIdentifierResult>
         {
             public DeleteIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, DeleteIdentifierRequest request) : base(session, factory, request)
             {
@@ -1127,6 +1690,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteIdentifierResult> DeleteIdentifierFuture(
+                Request.DeleteIdentifierRequest request
+        )
+		{
+			return new DeleteIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIdentifierResult> DeleteIdentifierAsync(
+                Request.DeleteIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.DeleteIdentifierResult> result = null;
+			await DeleteIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteIdentifierTask DeleteIdentifierAsync(
+                Request.DeleteIdentifierRequest request
+        )
+		{
+			return new DeleteIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteIdentifierResult> DeleteIdentifierAsync(
                 Request.DeleteIdentifierRequest request
@@ -1142,7 +1745,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DescribePasswordsTask : Gs2RestSessionTask<DescribePasswordsRequest, DescribePasswordsResult>
+        public class DescribePasswordsTask : Gs2RestSessionTask<DescribePasswordsRequest, DescribePasswordsResult>
         {
             public DescribePasswordsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePasswordsRequest request) : base(session, factory, request)
             {
@@ -1197,6 +1800,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribePasswordsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribePasswordsResult> DescribePasswordsFuture(
+                Request.DescribePasswordsRequest request
+        )
+		{
+			return new DescribePasswordsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribePasswordsResult> DescribePasswordsAsync(
+                Request.DescribePasswordsRequest request
+        )
+		{
+            AsyncResult<Result.DescribePasswordsResult> result = null;
+			await DescribePasswords(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribePasswordsTask DescribePasswordsAsync(
+                Request.DescribePasswordsRequest request
+        )
+		{
+			return new DescribePasswordsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribePasswordsResult> DescribePasswordsAsync(
                 Request.DescribePasswordsRequest request
@@ -1212,7 +1855,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class CreatePasswordTask : Gs2RestSessionTask<CreatePasswordRequest, CreatePasswordResult>
+        public class CreatePasswordTask : Gs2RestSessionTask<CreatePasswordRequest, CreatePasswordResult>
         {
             public CreatePasswordTask(IGs2Session session, RestSessionRequestFactory factory, CreatePasswordRequest request) : base(session, factory, request)
             {
@@ -1279,6 +1922,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreatePasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreatePasswordResult> CreatePasswordFuture(
+                Request.CreatePasswordRequest request
+        )
+		{
+			return new CreatePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePasswordResult> CreatePasswordAsync(
+                Request.CreatePasswordRequest request
+        )
+		{
+            AsyncResult<Result.CreatePasswordResult> result = null;
+			await CreatePassword(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreatePasswordTask CreatePasswordAsync(
+                Request.CreatePasswordRequest request
+        )
+		{
+			return new CreatePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreatePasswordResult> CreatePasswordAsync(
                 Request.CreatePasswordRequest request
@@ -1294,7 +1977,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetPasswordTask : Gs2RestSessionTask<GetPasswordRequest, GetPasswordResult>
+        public class GetPasswordTask : Gs2RestSessionTask<GetPasswordRequest, GetPasswordResult>
         {
             public GetPasswordTask(IGs2Session session, RestSessionRequestFactory factory, GetPasswordRequest request) : base(session, factory, request)
             {
@@ -1343,6 +2026,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetPasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetPasswordResult> GetPasswordFuture(
+                Request.GetPasswordRequest request
+        )
+		{
+			return new GetPasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPasswordResult> GetPasswordAsync(
+                Request.GetPasswordRequest request
+        )
+		{
+            AsyncResult<Result.GetPasswordResult> result = null;
+			await GetPassword(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetPasswordTask GetPasswordAsync(
+                Request.GetPasswordRequest request
+        )
+		{
+			return new GetPasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetPasswordResult> GetPasswordAsync(
                 Request.GetPasswordRequest request
@@ -1358,7 +2081,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeletePasswordTask : Gs2RestSessionTask<DeletePasswordRequest, DeletePasswordResult>
+        public class DeletePasswordTask : Gs2RestSessionTask<DeletePasswordRequest, DeletePasswordResult>
         {
             public DeletePasswordTask(IGs2Session session, RestSessionRequestFactory factory, DeletePasswordRequest request) : base(session, factory, request)
             {
@@ -1407,6 +2130,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeletePasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeletePasswordResult> DeletePasswordFuture(
+                Request.DeletePasswordRequest request
+        )
+		{
+			return new DeletePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePasswordResult> DeletePasswordAsync(
+                Request.DeletePasswordRequest request
+        )
+		{
+            AsyncResult<Result.DeletePasswordResult> result = null;
+			await DeletePassword(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeletePasswordTask DeletePasswordAsync(
+                Request.DeletePasswordRequest request
+        )
+		{
+			return new DeletePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeletePasswordResult> DeletePasswordAsync(
                 Request.DeletePasswordRequest request
@@ -1422,7 +2185,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetHasSecurityPolicyTask : Gs2RestSessionTask<GetHasSecurityPolicyRequest, GetHasSecurityPolicyResult>
+        public class GetHasSecurityPolicyTask : Gs2RestSessionTask<GetHasSecurityPolicyRequest, GetHasSecurityPolicyResult>
         {
             public GetHasSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, GetHasSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -1471,6 +2234,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetHasSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetHasSecurityPolicyResult> GetHasSecurityPolicyFuture(
+                Request.GetHasSecurityPolicyRequest request
+        )
+		{
+			return new GetHasSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetHasSecurityPolicyResult> GetHasSecurityPolicyAsync(
+                Request.GetHasSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.GetHasSecurityPolicyResult> result = null;
+			await GetHasSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetHasSecurityPolicyTask GetHasSecurityPolicyAsync(
+                Request.GetHasSecurityPolicyRequest request
+        )
+		{
+			return new GetHasSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetHasSecurityPolicyResult> GetHasSecurityPolicyAsync(
                 Request.GetHasSecurityPolicyRequest request
@@ -1486,7 +2289,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class AttachSecurityPolicyTask : Gs2RestSessionTask<AttachSecurityPolicyRequest, AttachSecurityPolicyResult>
+        public class AttachSecurityPolicyTask : Gs2RestSessionTask<AttachSecurityPolicyRequest, AttachSecurityPolicyResult>
         {
             public AttachSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, AttachSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -1553,6 +2356,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.AttachSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AttachSecurityPolicyResult> AttachSecurityPolicyFuture(
+                Request.AttachSecurityPolicyRequest request
+        )
+		{
+			return new AttachSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AttachSecurityPolicyResult> AttachSecurityPolicyAsync(
+                Request.AttachSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.AttachSecurityPolicyResult> result = null;
+			await AttachSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AttachSecurityPolicyTask AttachSecurityPolicyAsync(
+                Request.AttachSecurityPolicyRequest request
+        )
+		{
+			return new AttachSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.AttachSecurityPolicyResult> AttachSecurityPolicyAsync(
                 Request.AttachSecurityPolicyRequest request
@@ -1568,7 +2411,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DetachSecurityPolicyTask : Gs2RestSessionTask<DetachSecurityPolicyRequest, DetachSecurityPolicyResult>
+        public class DetachSecurityPolicyTask : Gs2RestSessionTask<DetachSecurityPolicyRequest, DetachSecurityPolicyResult>
         {
             public DetachSecurityPolicyTask(IGs2Session session, RestSessionRequestFactory factory, DetachSecurityPolicyRequest request) : base(session, factory, request)
             {
@@ -1618,6 +2461,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DetachSecurityPolicyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DetachSecurityPolicyResult> DetachSecurityPolicyFuture(
+                Request.DetachSecurityPolicyRequest request
+        )
+		{
+			return new DetachSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DetachSecurityPolicyResult> DetachSecurityPolicyAsync(
+                Request.DetachSecurityPolicyRequest request
+        )
+		{
+            AsyncResult<Result.DetachSecurityPolicyResult> result = null;
+			await DetachSecurityPolicy(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DetachSecurityPolicyTask DetachSecurityPolicyAsync(
+                Request.DetachSecurityPolicyRequest request
+        )
+		{
+			return new DetachSecurityPolicyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DetachSecurityPolicyResult> DetachSecurityPolicyAsync(
                 Request.DetachSecurityPolicyRequest request
@@ -1633,7 +2516,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class LoginTask : Gs2RestSessionTask<LoginRequest, LoginResult>
+        public class LoginTask : Gs2RestSessionTask<LoginRequest, LoginResult>
         {
             public LoginTask(IGs2Session session, RestSessionRequestFactory factory, LoginRequest request) : base(session, factory, request)
             {
@@ -1703,6 +2586,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.LoginResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LoginResult> LoginFuture(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginResult> LoginAsync(
+                Request.LoginRequest request
+        )
+		{
+            AsyncResult<Result.LoginResult> result = null;
+			await Login(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public LoginTask LoginAsync(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.LoginResult> LoginAsync(
                 Request.LoginRequest request
@@ -1718,7 +2641,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class LoginByUserTask : Gs2RestSessionTask<LoginByUserRequest, LoginByUserResult>
+        public class LoginByUserTask : Gs2RestSessionTask<LoginByUserRequest, LoginByUserResult>
         {
             public LoginByUserTask(IGs2Session session, RestSessionRequestFactory factory, LoginByUserRequest request) : base(session, factory, request)
             {
@@ -1788,6 +2711,46 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.LoginByUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LoginByUserResult> LoginByUserFuture(
+                Request.LoginByUserRequest request
+        )
+		{
+			return new LoginByUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginByUserResult> LoginByUserAsync(
+                Request.LoginByUserRequest request
+        )
+		{
+            AsyncResult<Result.LoginByUserResult> result = null;
+			await LoginByUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public LoginByUserTask LoginByUserAsync(
+                Request.LoginByUserRequest request
+        )
+		{
+			return new LoginByUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.LoginByUserResult> LoginByUserAsync(
                 Request.LoginByUserRequest request

@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -227,6 +270,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -242,7 +325,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -291,6 +374,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -306,7 +429,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -355,6 +478,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -370,7 +533,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -467,6 +630,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -482,7 +685,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -531,6 +734,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -546,7 +789,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DescribeAccountsTask : Gs2RestSessionTask<DescribeAccountsRequest, DescribeAccountsResult>
+        public class DescribeAccountsTask : Gs2RestSessionTask<DescribeAccountsRequest, DescribeAccountsResult>
         {
             public DescribeAccountsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeAccountsRequest request) : base(session, factory, request)
             {
@@ -601,6 +844,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeAccountsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeAccountsResult> DescribeAccountsFuture(
+                Request.DescribeAccountsRequest request
+        )
+		{
+			return new DescribeAccountsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeAccountsResult> DescribeAccountsAsync(
+                Request.DescribeAccountsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeAccountsResult> result = null;
+			await DescribeAccounts(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeAccountsTask DescribeAccountsAsync(
+                Request.DescribeAccountsRequest request
+        )
+		{
+			return new DescribeAccountsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeAccountsResult> DescribeAccountsAsync(
                 Request.DescribeAccountsRequest request
@@ -616,7 +899,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateAccountTask : Gs2RestSessionTask<CreateAccountRequest, CreateAccountResult>
+        public class CreateAccountTask : Gs2RestSessionTask<CreateAccountRequest, CreateAccountResult>
         {
             public CreateAccountTask(IGs2Session session, RestSessionRequestFactory factory, CreateAccountRequest request) : base(session, factory, request)
             {
@@ -678,6 +961,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateAccountResult> CreateAccountFuture(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateAccountResult> CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+            AsyncResult<Result.CreateAccountResult> result = null;
+			await CreateAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateAccountTask CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateAccountResult> CreateAccountAsync(
                 Request.CreateAccountRequest request
@@ -693,7 +1016,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTimeOffsetTask : Gs2RestSessionTask<UpdateTimeOffsetRequest, UpdateTimeOffsetResult>
+        public class UpdateTimeOffsetTask : Gs2RestSessionTask<UpdateTimeOffsetRequest, UpdateTimeOffsetResult>
         {
             public UpdateTimeOffsetTask(IGs2Session session, RestSessionRequestFactory factory, UpdateTimeOffsetRequest request) : base(session, factory, request)
             {
@@ -761,6 +1084,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTimeOffsetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTimeOffsetResult> UpdateTimeOffsetFuture(
+                Request.UpdateTimeOffsetRequest request
+        )
+		{
+			return new UpdateTimeOffsetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTimeOffsetResult> UpdateTimeOffsetAsync(
+                Request.UpdateTimeOffsetRequest request
+        )
+		{
+            AsyncResult<Result.UpdateTimeOffsetResult> result = null;
+			await UpdateTimeOffset(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateTimeOffsetTask UpdateTimeOffsetAsync(
+                Request.UpdateTimeOffsetRequest request
+        )
+		{
+			return new UpdateTimeOffsetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateTimeOffsetResult> UpdateTimeOffsetAsync(
                 Request.UpdateTimeOffsetRequest request
@@ -776,7 +1139,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetAccountTask : Gs2RestSessionTask<GetAccountRequest, GetAccountResult>
+        public class GetAccountTask : Gs2RestSessionTask<GetAccountRequest, GetAccountResult>
         {
             public GetAccountTask(IGs2Session session, RestSessionRequestFactory factory, GetAccountRequest request) : base(session, factory, request)
             {
@@ -826,6 +1189,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAccountResult> GetAccountFuture(
+                Request.GetAccountRequest request
+        )
+		{
+			return new GetAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAccountResult> GetAccountAsync(
+                Request.GetAccountRequest request
+        )
+		{
+            AsyncResult<Result.GetAccountResult> result = null;
+			await GetAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetAccountTask GetAccountAsync(
+                Request.GetAccountRequest request
+        )
+		{
+			return new GetAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetAccountResult> GetAccountAsync(
                 Request.GetAccountRequest request
@@ -841,7 +1244,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteAccountTask : Gs2RestSessionTask<DeleteAccountRequest, DeleteAccountResult>
+        public class DeleteAccountTask : Gs2RestSessionTask<DeleteAccountRequest, DeleteAccountResult>
         {
             public DeleteAccountTask(IGs2Session session, RestSessionRequestFactory factory, DeleteAccountRequest request) : base(session, factory, request)
             {
@@ -891,6 +1294,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAccountResult> DeleteAccountFuture(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAccountResult> DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+            AsyncResult<Result.DeleteAccountResult> result = null;
+			await DeleteAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteAccountTask DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteAccountResult> DeleteAccountAsync(
                 Request.DeleteAccountRequest request
@@ -906,7 +1349,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class AuthenticationTask : Gs2RestSessionTask<AuthenticationRequest, AuthenticationResult>
+        public class AuthenticationTask : Gs2RestSessionTask<AuthenticationRequest, AuthenticationResult>
         {
             public AuthenticationTask(IGs2Session session, RestSessionRequestFactory factory, AuthenticationRequest request) : base(session, factory, request)
             {
@@ -979,6 +1422,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.AuthenticationResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AuthenticationResult> AuthenticationFuture(
+                Request.AuthenticationRequest request
+        )
+		{
+			return new AuthenticationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AuthenticationResult> AuthenticationAsync(
+                Request.AuthenticationRequest request
+        )
+		{
+            AsyncResult<Result.AuthenticationResult> result = null;
+			await Authentication(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AuthenticationTask AuthenticationAsync(
+                Request.AuthenticationRequest request
+        )
+		{
+			return new AuthenticationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.AuthenticationResult> AuthenticationAsync(
                 Request.AuthenticationRequest request
@@ -994,7 +1477,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DescribeTakeOversTask : Gs2RestSessionTask<DescribeTakeOversRequest, DescribeTakeOversResult>
+        public class DescribeTakeOversTask : Gs2RestSessionTask<DescribeTakeOversRequest, DescribeTakeOversResult>
         {
             public DescribeTakeOversTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTakeOversRequest request) : base(session, factory, request)
             {
@@ -1053,6 +1536,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeTakeOversResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeTakeOversResult> DescribeTakeOversFuture(
+                Request.DescribeTakeOversRequest request
+        )
+		{
+			return new DescribeTakeOversTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTakeOversResult> DescribeTakeOversAsync(
+                Request.DescribeTakeOversRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTakeOversResult> result = null;
+			await DescribeTakeOvers(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTakeOversTask DescribeTakeOversAsync(
+                Request.DescribeTakeOversRequest request
+        )
+		{
+			return new DescribeTakeOversTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeTakeOversResult> DescribeTakeOversAsync(
                 Request.DescribeTakeOversRequest request
@@ -1068,7 +1591,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DescribeTakeOversByUserIdTask : Gs2RestSessionTask<DescribeTakeOversByUserIdRequest, DescribeTakeOversByUserIdResult>
+        public class DescribeTakeOversByUserIdTask : Gs2RestSessionTask<DescribeTakeOversByUserIdRequest, DescribeTakeOversByUserIdResult>
         {
             public DescribeTakeOversByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTakeOversByUserIdRequest request) : base(session, factory, request)
             {
@@ -1124,6 +1647,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeTakeOversByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeTakeOversByUserIdResult> DescribeTakeOversByUserIdFuture(
+                Request.DescribeTakeOversByUserIdRequest request
+        )
+		{
+			return new DescribeTakeOversByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTakeOversByUserIdResult> DescribeTakeOversByUserIdAsync(
+                Request.DescribeTakeOversByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTakeOversByUserIdResult> result = null;
+			await DescribeTakeOversByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTakeOversByUserIdTask DescribeTakeOversByUserIdAsync(
+                Request.DescribeTakeOversByUserIdRequest request
+        )
+		{
+			return new DescribeTakeOversByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeTakeOversByUserIdResult> DescribeTakeOversByUserIdAsync(
                 Request.DescribeTakeOversByUserIdRequest request
@@ -1139,7 +1702,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateTakeOverTask : Gs2RestSessionTask<CreateTakeOverRequest, CreateTakeOverResult>
+        public class CreateTakeOverTask : Gs2RestSessionTask<CreateTakeOverRequest, CreateTakeOverResult>
         {
             public CreateTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverRequest request) : base(session, factory, request)
             {
@@ -1220,6 +1783,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateTakeOverResult> CreateTakeOverFuture(
+                Request.CreateTakeOverRequest request
+        )
+		{
+			return new CreateTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverResult> CreateTakeOverAsync(
+                Request.CreateTakeOverRequest request
+        )
+		{
+            AsyncResult<Result.CreateTakeOverResult> result = null;
+			await CreateTakeOver(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateTakeOverTask CreateTakeOverAsync(
+                Request.CreateTakeOverRequest request
+        )
+		{
+			return new CreateTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateTakeOverResult> CreateTakeOverAsync(
                 Request.CreateTakeOverRequest request
@@ -1235,7 +1838,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class CreateTakeOverByUserIdTask : Gs2RestSessionTask<CreateTakeOverByUserIdRequest, CreateTakeOverByUserIdResult>
+        public class CreateTakeOverByUserIdTask : Gs2RestSessionTask<CreateTakeOverByUserIdRequest, CreateTakeOverByUserIdResult>
         {
             public CreateTakeOverByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverByUserIdRequest request) : base(session, factory, request)
             {
@@ -1313,6 +1916,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdFuture(
+                Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdAsync(
+                Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CreateTakeOverByUserIdResult> result = null;
+			await CreateTakeOverByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateTakeOverByUserIdTask CreateTakeOverByUserIdAsync(
+                Request.CreateTakeOverByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateTakeOverByUserIdResult> CreateTakeOverByUserIdAsync(
                 Request.CreateTakeOverByUserIdRequest request
@@ -1328,7 +1971,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetTakeOverTask : Gs2RestSessionTask<GetTakeOverRequest, GetTakeOverResult>
+        public class GetTakeOverTask : Gs2RestSessionTask<GetTakeOverRequest, GetTakeOverResult>
         {
             public GetTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, GetTakeOverRequest request) : base(session, factory, request)
             {
@@ -1382,6 +2025,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTakeOverResult> GetTakeOverFuture(
+                Request.GetTakeOverRequest request
+        )
+		{
+			return new GetTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverResult> GetTakeOverAsync(
+                Request.GetTakeOverRequest request
+        )
+		{
+            AsyncResult<Result.GetTakeOverResult> result = null;
+			await GetTakeOver(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTakeOverTask GetTakeOverAsync(
+                Request.GetTakeOverRequest request
+        )
+		{
+			return new GetTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetTakeOverResult> GetTakeOverAsync(
                 Request.GetTakeOverRequest request
@@ -1397,7 +2080,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class GetTakeOverByUserIdTask : Gs2RestSessionTask<GetTakeOverByUserIdRequest, GetTakeOverByUserIdResult>
+        public class GetTakeOverByUserIdTask : Gs2RestSessionTask<GetTakeOverByUserIdRequest, GetTakeOverByUserIdResult>
         {
             public GetTakeOverByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetTakeOverByUserIdRequest request) : base(session, factory, request)
             {
@@ -1448,6 +2131,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdFuture(
+                Request.GetTakeOverByUserIdRequest request
+        )
+		{
+			return new GetTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdAsync(
+                Request.GetTakeOverByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetTakeOverByUserIdResult> result = null;
+			await GetTakeOverByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTakeOverByUserIdTask GetTakeOverByUserIdAsync(
+                Request.GetTakeOverByUserIdRequest request
+        )
+		{
+			return new GetTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetTakeOverByUserIdResult> GetTakeOverByUserIdAsync(
                 Request.GetTakeOverByUserIdRequest request
@@ -1463,7 +2186,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTakeOverTask : Gs2RestSessionTask<UpdateTakeOverRequest, UpdateTakeOverResult>
+        public class UpdateTakeOverTask : Gs2RestSessionTask<UpdateTakeOverRequest, UpdateTakeOverResult>
         {
             public UpdateTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, UpdateTakeOverRequest request) : base(session, factory, request)
             {
@@ -1540,6 +2263,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTakeOverResult> UpdateTakeOverFuture(
+                Request.UpdateTakeOverRequest request
+        )
+		{
+			return new UpdateTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverResult> UpdateTakeOverAsync(
+                Request.UpdateTakeOverRequest request
+        )
+		{
+            AsyncResult<Result.UpdateTakeOverResult> result = null;
+			await UpdateTakeOver(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateTakeOverTask UpdateTakeOverAsync(
+                Request.UpdateTakeOverRequest request
+        )
+		{
+			return new UpdateTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateTakeOverResult> UpdateTakeOverAsync(
                 Request.UpdateTakeOverRequest request
@@ -1555,7 +2318,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class UpdateTakeOverByUserIdTask : Gs2RestSessionTask<UpdateTakeOverByUserIdRequest, UpdateTakeOverByUserIdResult>
+        public class UpdateTakeOverByUserIdTask : Gs2RestSessionTask<UpdateTakeOverByUserIdRequest, UpdateTakeOverByUserIdResult>
         {
             public UpdateTakeOverByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UpdateTakeOverByUserIdRequest request) : base(session, factory, request)
             {
@@ -1629,6 +2392,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateTakeOverByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdFuture(
+                Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+			return new UpdateTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdAsync(
+                Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UpdateTakeOverByUserIdResult> result = null;
+			await UpdateTakeOverByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateTakeOverByUserIdTask UpdateTakeOverByUserIdAsync(
+                Request.UpdateTakeOverByUserIdRequest request
+        )
+		{
+			return new UpdateTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateTakeOverByUserIdResult> UpdateTakeOverByUserIdAsync(
                 Request.UpdateTakeOverByUserIdRequest request
@@ -1644,7 +2447,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteTakeOverTask : Gs2RestSessionTask<DeleteTakeOverRequest, DeleteTakeOverResult>
+        public class DeleteTakeOverTask : Gs2RestSessionTask<DeleteTakeOverRequest, DeleteTakeOverResult>
         {
             public DeleteTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTakeOverRequest request) : base(session, factory, request)
             {
@@ -1701,6 +2504,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTakeOverResult> DeleteTakeOverFuture(
+                Request.DeleteTakeOverRequest request
+        )
+		{
+			return new DeleteTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverResult> DeleteTakeOverAsync(
+                Request.DeleteTakeOverRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTakeOverResult> result = null;
+			await DeleteTakeOver(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTakeOverTask DeleteTakeOverAsync(
+                Request.DeleteTakeOverRequest request
+        )
+		{
+			return new DeleteTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteTakeOverResult> DeleteTakeOverAsync(
                 Request.DeleteTakeOverRequest request
@@ -1716,7 +2559,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DeleteTakeOverByUserIdentifierTask : Gs2RestSessionTask<DeleteTakeOverByUserIdentifierRequest, DeleteTakeOverByUserIdentifierResult>
+        public class DeleteTakeOverByUserIdentifierTask : Gs2RestSessionTask<DeleteTakeOverByUserIdentifierRequest, DeleteTakeOverByUserIdentifierResult>
         {
             public DeleteTakeOverByUserIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTakeOverByUserIdentifierRequest request) : base(session, factory, request)
             {
@@ -1767,6 +2610,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTakeOverByUserIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierFuture(
+                Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierAsync(
+                Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTakeOverByUserIdentifierResult> result = null;
+			await DeleteTakeOverByUserIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTakeOverByUserIdentifierTask DeleteTakeOverByUserIdentifierAsync(
+                Request.DeleteTakeOverByUserIdentifierRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteTakeOverByUserIdentifierResult> DeleteTakeOverByUserIdentifierAsync(
                 Request.DeleteTakeOverByUserIdentifierRequest request
@@ -1782,7 +2665,7 @@ namespace Gs2.Gs2Account
 #endif
 
 
-        private class DoTakeOverTask : Gs2RestSessionTask<DoTakeOverRequest, DoTakeOverResult>
+        public class DoTakeOverTask : Gs2RestSessionTask<DoTakeOverRequest, DoTakeOverResult>
         {
             public DoTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, DoTakeOverRequest request) : base(session, factory, request)
             {
@@ -1855,6 +2738,46 @@ namespace Gs2.Gs2Account
             yield return task;
             callback.Invoke(new AsyncResult<Result.DoTakeOverResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DoTakeOverResult> DoTakeOverFuture(
+                Request.DoTakeOverRequest request
+        )
+		{
+			return new DoTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoTakeOverResult> DoTakeOverAsync(
+                Request.DoTakeOverRequest request
+        )
+		{
+            AsyncResult<Result.DoTakeOverResult> result = null;
+			await DoTakeOver(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoTakeOverTask DoTakeOverAsync(
+                Request.DoTakeOverRequest request
+        )
+		{
+			return new DoTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DoTakeOverResult> DoTakeOverAsync(
                 Request.DoTakeOverRequest request

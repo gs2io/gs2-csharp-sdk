@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Lottery
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -132,8 +135,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -146,7 +182,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -202,8 +238,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -216,7 +285,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -302,8 +371,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -316,7 +418,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -372,8 +474,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -386,7 +521,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class CreateLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateLotteryModelMasterRequest, Result.CreateLotteryModelMasterResult>
+        public class CreateLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateLotteryModelMasterRequest, Result.CreateLotteryModelMasterResult>
         {
 	        public CreateLotteryModelMasterTask(IGs2Session session, Request.CreateLotteryModelMasterRequest request) : base(session, request)
 	        {
@@ -477,8 +612,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateLotteryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateLotteryModelMasterResult> CreateLotteryModelMasterFuture(
+                Request.CreateLotteryModelMasterRequest request
+        )
+		{
+			return new CreateLotteryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateLotteryModelMasterResult> CreateLotteryModelMasterAsync(
+            Request.CreateLotteryModelMasterRequest request
+        )
+		{
+		    var task = new CreateLotteryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateLotteryModelMasterTask CreateLotteryModelMasterAsync(
+                Request.CreateLotteryModelMasterRequest request
+        )
+		{
+			return new CreateLotteryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateLotteryModelMasterResult> CreateLotteryModelMaster(
+		public async Task<Result.CreateLotteryModelMasterResult> CreateLotteryModelMasterAsync(
             Request.CreateLotteryModelMasterRequest request
         )
 		{
@@ -491,7 +659,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class GetLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.GetLotteryModelMasterRequest, Result.GetLotteryModelMasterResult>
+        public class GetLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.GetLotteryModelMasterRequest, Result.GetLotteryModelMasterResult>
         {
 	        public GetLotteryModelMasterTask(IGs2Session session, Request.GetLotteryModelMasterRequest request) : base(session, request)
 	        {
@@ -552,8 +720,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetLotteryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetLotteryModelMasterResult> GetLotteryModelMasterFuture(
+                Request.GetLotteryModelMasterRequest request
+        )
+		{
+			return new GetLotteryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLotteryModelMasterResult> GetLotteryModelMasterAsync(
+            Request.GetLotteryModelMasterRequest request
+        )
+		{
+		    var task = new GetLotteryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetLotteryModelMasterTask GetLotteryModelMasterAsync(
+                Request.GetLotteryModelMasterRequest request
+        )
+		{
+			return new GetLotteryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetLotteryModelMasterResult> GetLotteryModelMaster(
+		public async Task<Result.GetLotteryModelMasterResult> GetLotteryModelMasterAsync(
             Request.GetLotteryModelMasterRequest request
         )
 		{
@@ -566,7 +767,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class UpdateLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateLotteryModelMasterRequest, Result.UpdateLotteryModelMasterResult>
+        public class UpdateLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateLotteryModelMasterRequest, Result.UpdateLotteryModelMasterResult>
         {
 	        public UpdateLotteryModelMasterTask(IGs2Session session, Request.UpdateLotteryModelMasterRequest request) : base(session, request)
 	        {
@@ -657,8 +858,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateLotteryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateLotteryModelMasterResult> UpdateLotteryModelMasterFuture(
+                Request.UpdateLotteryModelMasterRequest request
+        )
+		{
+			return new UpdateLotteryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateLotteryModelMasterResult> UpdateLotteryModelMasterAsync(
+            Request.UpdateLotteryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateLotteryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateLotteryModelMasterTask UpdateLotteryModelMasterAsync(
+                Request.UpdateLotteryModelMasterRequest request
+        )
+		{
+			return new UpdateLotteryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateLotteryModelMasterResult> UpdateLotteryModelMaster(
+		public async Task<Result.UpdateLotteryModelMasterResult> UpdateLotteryModelMasterAsync(
             Request.UpdateLotteryModelMasterRequest request
         )
 		{
@@ -671,7 +905,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class DeleteLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteLotteryModelMasterRequest, Result.DeleteLotteryModelMasterResult>
+        public class DeleteLotteryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteLotteryModelMasterRequest, Result.DeleteLotteryModelMasterResult>
         {
 	        public DeleteLotteryModelMasterTask(IGs2Session session, Request.DeleteLotteryModelMasterRequest request) : base(session, request)
 	        {
@@ -732,8 +966,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteLotteryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteLotteryModelMasterResult> DeleteLotteryModelMasterFuture(
+                Request.DeleteLotteryModelMasterRequest request
+        )
+		{
+			return new DeleteLotteryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteLotteryModelMasterResult> DeleteLotteryModelMasterAsync(
+            Request.DeleteLotteryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteLotteryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteLotteryModelMasterTask DeleteLotteryModelMasterAsync(
+                Request.DeleteLotteryModelMasterRequest request
+        )
+		{
+			return new DeleteLotteryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteLotteryModelMasterResult> DeleteLotteryModelMaster(
+		public async Task<Result.DeleteLotteryModelMasterResult> DeleteLotteryModelMasterAsync(
             Request.DeleteLotteryModelMasterRequest request
         )
 		{
@@ -746,7 +1013,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class ResetBoxTask : Gs2WebSocketSessionTask<Request.ResetBoxRequest, Result.ResetBoxResult>
+        public class ResetBoxTask : Gs2WebSocketSessionTask<Request.ResetBoxRequest, Result.ResetBoxResult>
         {
 	        public ResetBoxTask(IGs2Session session, Request.ResetBoxRequest request) : base(session, request)
 	        {
@@ -817,8 +1084,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.ResetBoxResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ResetBoxResult> ResetBoxFuture(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxResult> ResetBoxAsync(
+            Request.ResetBoxRequest request
+        )
+		{
+		    var task = new ResetBoxTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetBoxTask ResetBoxAsync(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.ResetBoxResult> ResetBox(
+		public async Task<Result.ResetBoxResult> ResetBoxAsync(
             Request.ResetBoxRequest request
         )
 		{
@@ -831,7 +1131,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class ResetBoxByUserIdTask : Gs2WebSocketSessionTask<Request.ResetBoxByUserIdRequest, Result.ResetBoxByUserIdResult>
+        public class ResetBoxByUserIdTask : Gs2WebSocketSessionTask<Request.ResetBoxByUserIdRequest, Result.ResetBoxByUserIdResult>
         {
 	        public ResetBoxByUserIdTask(IGs2Session session, Request.ResetBoxByUserIdRequest request) : base(session, request)
 	        {
@@ -897,8 +1197,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.ResetBoxByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ResetBoxByUserIdResult> ResetBoxByUserIdFuture(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
+            Request.ResetBoxByUserIdRequest request
+        )
+		{
+		    var task = new ResetBoxByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetBoxByUserIdTask ResetBoxByUserIdAsync(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserId(
+		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
             Request.ResetBoxByUserIdRequest request
         )
 		{
@@ -911,7 +1244,7 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        private class GetLotteryModelTask : Gs2WebSocketSessionTask<Request.GetLotteryModelRequest, Result.GetLotteryModelResult>
+        public class GetLotteryModelTask : Gs2WebSocketSessionTask<Request.GetLotteryModelRequest, Result.GetLotteryModelResult>
         {
 	        public GetLotteryModelTask(IGs2Session session, Request.GetLotteryModelRequest request) : base(session, request)
 	        {
@@ -972,8 +1305,41 @@ namespace Gs2.Gs2Lottery
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetLotteryModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetLotteryModelResult> GetLotteryModelFuture(
+                Request.GetLotteryModelRequest request
+        )
+		{
+			return new GetLotteryModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLotteryModelResult> GetLotteryModelAsync(
+            Request.GetLotteryModelRequest request
+        )
+		{
+		    var task = new GetLotteryModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetLotteryModelTask GetLotteryModelAsync(
+                Request.GetLotteryModelRequest request
+        )
+		{
+			return new GetLotteryModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetLotteryModelResult> GetLotteryModel(
+		public async Task<Result.GetLotteryModelResult> GetLotteryModelAsync(
             Request.GetLotteryModelRequest request
         )
 		{

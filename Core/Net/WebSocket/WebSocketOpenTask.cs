@@ -45,7 +45,11 @@ namespace Gs2.Core.Net
         {
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
+#if UNITY_2017_1_OR_NEWER
+            ((Gs2WebSocketSession)Session).SendNonBlocking(request);
+#else
             Session.SendAsync(request);
+#endif
         }
     }
 }

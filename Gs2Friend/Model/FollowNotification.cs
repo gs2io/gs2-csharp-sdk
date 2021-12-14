@@ -11,18 +11,12 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
-#if UNITY_2017_1_OR_NEWER
-using UnityEngine.Scripting;
-#endif
 
 namespace Gs2.Gs2Friend.Model
 {
-#if UNITY_2017_1_OR_NEWER
-	[Preserve]
-#endif
 	public class FollowNotification
 	{
-        public string namespaceName;
-        public string fromUserId;
+        public string namespaceName { set; get; }
+        public string fromUserId { set; get; }
     }
 }

@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Ranking
 		}
 
 
-        private class GetCategoryModelTask : Gs2WebSocketSessionTask<Request.GetCategoryModelRequest, Result.GetCategoryModelResult>
+        public class GetCategoryModelTask : Gs2WebSocketSessionTask<Request.GetCategoryModelRequest, Result.GetCategoryModelResult>
         {
 	        public GetCategoryModelTask(IGs2Session session, Request.GetCategoryModelRequest request) : base(session, request)
 	        {
@@ -107,8 +110,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCategoryModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCategoryModelResult> GetCategoryModelFuture(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelResult> GetCategoryModelAsync(
+            Request.GetCategoryModelRequest request
+        )
+		{
+		    var task = new GetCategoryModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCategoryModelTask GetCategoryModelAsync(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetCategoryModelResult> GetCategoryModel(
+		public async Task<Result.GetCategoryModelResult> GetCategoryModelAsync(
             Request.GetCategoryModelRequest request
         )
 		{
@@ -121,7 +157,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class CreateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateCategoryModelMasterRequest, Result.CreateCategoryModelMasterResult>
+        public class CreateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateCategoryModelMasterRequest, Result.CreateCategoryModelMasterResult>
         {
 	        public CreateCategoryModelMasterTask(IGs2Session session, Request.CreateCategoryModelMasterRequest request) : base(session, request)
 	        {
@@ -247,8 +283,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateCategoryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterFuture(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
+            Request.CreateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateCategoryModelMasterTask CreateCategoryModelMasterAsync(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateCategoryModelMasterResult> CreateCategoryModelMaster(
+		public async Task<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
             Request.CreateCategoryModelMasterRequest request
         )
 		{
@@ -261,7 +330,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class GetCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.GetCategoryModelMasterRequest, Result.GetCategoryModelMasterResult>
+        public class GetCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.GetCategoryModelMasterRequest, Result.GetCategoryModelMasterResult>
         {
 	        public GetCategoryModelMasterTask(IGs2Session session, Request.GetCategoryModelMasterRequest request) : base(session, request)
 	        {
@@ -322,8 +391,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCategoryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCategoryModelMasterResult> GetCategoryModelMasterFuture(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
+            Request.GetCategoryModelMasterRequest request
+        )
+		{
+		    var task = new GetCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCategoryModelMasterTask GetCategoryModelMasterAsync(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetCategoryModelMasterResult> GetCategoryModelMaster(
+		public async Task<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
             Request.GetCategoryModelMasterRequest request
         )
 		{
@@ -336,7 +438,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class UpdateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateCategoryModelMasterRequest, Result.UpdateCategoryModelMasterResult>
+        public class UpdateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateCategoryModelMasterRequest, Result.UpdateCategoryModelMasterResult>
         {
 	        public UpdateCategoryModelMasterTask(IGs2Session session, Request.UpdateCategoryModelMasterRequest request) : base(session, request)
 	        {
@@ -462,8 +564,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCategoryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterFuture(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
+            Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateCategoryModelMasterTask UpdateCategoryModelMasterAsync(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMaster(
+		public async Task<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
             Request.UpdateCategoryModelMasterRequest request
         )
 		{
@@ -476,7 +611,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class DeleteCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteCategoryModelMasterRequest, Result.DeleteCategoryModelMasterResult>
+        public class DeleteCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteCategoryModelMasterRequest, Result.DeleteCategoryModelMasterResult>
         {
 	        public DeleteCategoryModelMasterTask(IGs2Session session, Request.DeleteCategoryModelMasterRequest request) : base(session, request)
 	        {
@@ -537,8 +672,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteCategoryModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterFuture(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
+            Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteCategoryModelMasterTask DeleteCategoryModelMasterAsync(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMaster(
+		public async Task<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
             Request.DeleteCategoryModelMasterRequest request
         )
 		{
@@ -551,7 +719,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class SubscribeTask : Gs2WebSocketSessionTask<Request.SubscribeRequest, Result.SubscribeResult>
+        public class SubscribeTask : Gs2WebSocketSessionTask<Request.SubscribeRequest, Result.SubscribeResult>
         {
 	        public SubscribeTask(IGs2Session session, Request.SubscribeRequest request) : base(session, request)
 	        {
@@ -627,8 +795,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.SubscribeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SubscribeResult> SubscribeFuture(
+                Request.SubscribeRequest request
+        )
+		{
+			return new SubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubscribeResult> SubscribeAsync(
+            Request.SubscribeRequest request
+        )
+		{
+		    var task = new SubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubscribeTask SubscribeAsync(
+                Request.SubscribeRequest request
+        )
+		{
+			return new SubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SubscribeResult> Subscribe(
+		public async Task<Result.SubscribeResult> SubscribeAsync(
             Request.SubscribeRequest request
         )
 		{
@@ -641,7 +842,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class SubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.SubscribeByUserIdRequest, Result.SubscribeByUserIdResult>
+        public class SubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.SubscribeByUserIdRequest, Result.SubscribeByUserIdResult>
         {
 	        public SubscribeByUserIdTask(IGs2Session session, Request.SubscribeByUserIdRequest request) : base(session, request)
 	        {
@@ -712,8 +913,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.SubscribeByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SubscribeByUserIdResult> SubscribeByUserIdFuture(
+                Request.SubscribeByUserIdRequest request
+        )
+		{
+			return new SubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubscribeByUserIdResult> SubscribeByUserIdAsync(
+            Request.SubscribeByUserIdRequest request
+        )
+		{
+		    var task = new SubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubscribeByUserIdTask SubscribeByUserIdAsync(
+                Request.SubscribeByUserIdRequest request
+        )
+		{
+			return new SubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SubscribeByUserIdResult> SubscribeByUserId(
+		public async Task<Result.SubscribeByUserIdResult> SubscribeByUserIdAsync(
             Request.SubscribeByUserIdRequest request
         )
 		{
@@ -726,357 +960,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class GetSubscribeTask : Gs2WebSocketSessionTask<Request.GetSubscribeRequest, Result.GetSubscribeResult>
-        {
-	        public GetSubscribeTask(IGs2Session session, Request.GetSubscribeRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.GetSubscribeRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.CategoryName != null)
-                {
-                    jsonWriter.WritePropertyName("categoryName");
-                    jsonWriter.Write(request.CategoryName.ToString());
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("accessToken");
-                    jsonWriter.Write(request.AccessToken.ToString());
-                }
-                if (request.TargetUserId != null)
-                {
-                    jsonWriter.WritePropertyName("targetUserId");
-                    jsonWriter.Write(request.TargetUserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "ranking",
-                    "subscribe",
-                    "getSubscribe",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetSubscribe(
-                Request.GetSubscribeRequest request,
-                UnityAction<AsyncResult<Result.GetSubscribeResult>> callback
-        )
-		{
-			var task = new GetSubscribeTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.GetSubscribeResult> GetSubscribe(
-            Request.GetSubscribeRequest request
-        )
-		{
-		    var task = new GetSubscribeTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class GetSubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.GetSubscribeByUserIdRequest, Result.GetSubscribeByUserIdResult>
-        {
-	        public GetSubscribeByUserIdTask(IGs2Session session, Request.GetSubscribeByUserIdRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.GetSubscribeByUserIdRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.CategoryName != null)
-                {
-                    jsonWriter.WritePropertyName("categoryName");
-                    jsonWriter.Write(request.CategoryName.ToString());
-                }
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.TargetUserId != null)
-                {
-                    jsonWriter.WritePropertyName("targetUserId");
-                    jsonWriter.Write(request.TargetUserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "ranking",
-                    "subscribe",
-                    "getSubscribeByUserId",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetSubscribeByUserId(
-                Request.GetSubscribeByUserIdRequest request,
-                UnityAction<AsyncResult<Result.GetSubscribeByUserIdResult>> callback
-        )
-		{
-			var task = new GetSubscribeByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeByUserIdResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserId(
-            Request.GetSubscribeByUserIdRequest request
-        )
-		{
-		    var task = new GetSubscribeByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class UnsubscribeTask : Gs2WebSocketSessionTask<Request.UnsubscribeRequest, Result.UnsubscribeResult>
-        {
-	        public UnsubscribeTask(IGs2Session session, Request.UnsubscribeRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.UnsubscribeRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.CategoryName != null)
-                {
-                    jsonWriter.WritePropertyName("categoryName");
-                    jsonWriter.Write(request.CategoryName.ToString());
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("accessToken");
-                    jsonWriter.Write(request.AccessToken.ToString());
-                }
-                if (request.TargetUserId != null)
-                {
-                    jsonWriter.WritePropertyName("targetUserId");
-                    jsonWriter.Write(request.TargetUserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "ranking",
-                    "subscribe",
-                    "unsubscribe",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator Unsubscribe(
-                Request.UnsubscribeRequest request,
-                UnityAction<AsyncResult<Result.UnsubscribeResult>> callback
-        )
-		{
-			var task = new UnsubscribeTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnsubscribeResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.UnsubscribeResult> Unsubscribe(
-            Request.UnsubscribeRequest request
-        )
-		{
-		    var task = new UnsubscribeTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class UnsubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.UnsubscribeByUserIdRequest, Result.UnsubscribeByUserIdResult>
-        {
-	        public UnsubscribeByUserIdTask(IGs2Session session, Request.UnsubscribeByUserIdRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.UnsubscribeByUserIdRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.CategoryName != null)
-                {
-                    jsonWriter.WritePropertyName("categoryName");
-                    jsonWriter.Write(request.CategoryName.ToString());
-                }
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.TargetUserId != null)
-                {
-                    jsonWriter.WritePropertyName("targetUserId");
-                    jsonWriter.Write(request.TargetUserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "ranking",
-                    "subscribe",
-                    "unsubscribeByUserId",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator UnsubscribeByUserId(
-                Request.UnsubscribeByUserIdRequest request,
-                UnityAction<AsyncResult<Result.UnsubscribeByUserIdResult>> callback
-        )
-		{
-			var task = new UnsubscribeByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnsubscribeByUserIdResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.UnsubscribeByUserIdResult> UnsubscribeByUserId(
-            Request.UnsubscribeByUserIdRequest request
-        )
-		{
-		    var task = new UnsubscribeByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class GetScoreTask : Gs2WebSocketSessionTask<Request.GetScoreRequest, Result.GetScoreResult>
+        public class GetScoreTask : Gs2WebSocketSessionTask<Request.GetScoreRequest, Result.GetScoreResult>
         {
 	        public GetScoreTask(IGs2Session session, Request.GetScoreRequest request) : base(session, request)
 	        {
@@ -1157,8 +1041,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetScoreResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetScoreResult> GetScoreFuture(
+                Request.GetScoreRequest request
+        )
+		{
+			return new GetScoreTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetScoreResult> GetScoreAsync(
+            Request.GetScoreRequest request
+        )
+		{
+		    var task = new GetScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetScoreTask GetScoreAsync(
+                Request.GetScoreRequest request
+        )
+		{
+			return new GetScoreTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetScoreResult> GetScore(
+		public async Task<Result.GetScoreResult> GetScoreAsync(
             Request.GetScoreRequest request
         )
 		{
@@ -1171,7 +1088,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class GetScoreByUserIdTask : Gs2WebSocketSessionTask<Request.GetScoreByUserIdRequest, Result.GetScoreByUserIdResult>
+        public class GetScoreByUserIdTask : Gs2WebSocketSessionTask<Request.GetScoreByUserIdRequest, Result.GetScoreByUserIdResult>
         {
 	        public GetScoreByUserIdTask(IGs2Session session, Request.GetScoreByUserIdRequest request) : base(session, request)
 	        {
@@ -1247,8 +1164,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetScoreByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetScoreByUserIdResult> GetScoreByUserIdFuture(
+                Request.GetScoreByUserIdRequest request
+        )
+		{
+			return new GetScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetScoreByUserIdResult> GetScoreByUserIdAsync(
+            Request.GetScoreByUserIdRequest request
+        )
+		{
+		    var task = new GetScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetScoreByUserIdTask GetScoreByUserIdAsync(
+                Request.GetScoreByUserIdRequest request
+        )
+		{
+			return new GetScoreByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetScoreByUserIdResult> GetScoreByUserId(
+		public async Task<Result.GetScoreByUserIdResult> GetScoreByUserIdAsync(
             Request.GetScoreByUserIdRequest request
         )
 		{
@@ -1261,7 +1211,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class GetRankingTask : Gs2WebSocketSessionTask<Request.GetRankingRequest, Result.GetRankingResult>
+        public class GetRankingTask : Gs2WebSocketSessionTask<Request.GetRankingRequest, Result.GetRankingResult>
         {
 	        public GetRankingTask(IGs2Session session, Request.GetRankingRequest request) : base(session, request)
 	        {
@@ -1342,8 +1292,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRankingResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRankingResult> GetRankingFuture(
+                Request.GetRankingRequest request
+        )
+		{
+			return new GetRankingTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRankingResult> GetRankingAsync(
+            Request.GetRankingRequest request
+        )
+		{
+		    var task = new GetRankingTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRankingTask GetRankingAsync(
+                Request.GetRankingRequest request
+        )
+		{
+			return new GetRankingTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRankingResult> GetRanking(
+		public async Task<Result.GetRankingResult> GetRankingAsync(
             Request.GetRankingRequest request
         )
 		{
@@ -1356,7 +1339,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class GetRankingByUserIdTask : Gs2WebSocketSessionTask<Request.GetRankingByUserIdRequest, Result.GetRankingByUserIdResult>
+        public class GetRankingByUserIdTask : Gs2WebSocketSessionTask<Request.GetRankingByUserIdRequest, Result.GetRankingByUserIdResult>
         {
 	        public GetRankingByUserIdTask(IGs2Session session, Request.GetRankingByUserIdRequest request) : base(session, request)
 	        {
@@ -1432,8 +1415,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRankingByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRankingByUserIdResult> GetRankingByUserIdFuture(
+                Request.GetRankingByUserIdRequest request
+        )
+		{
+			return new GetRankingByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRankingByUserIdResult> GetRankingByUserIdAsync(
+            Request.GetRankingByUserIdRequest request
+        )
+		{
+		    var task = new GetRankingByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRankingByUserIdTask GetRankingByUserIdAsync(
+                Request.GetRankingByUserIdRequest request
+        )
+		{
+			return new GetRankingByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRankingByUserIdResult> GetRankingByUserId(
+		public async Task<Result.GetRankingByUserIdResult> GetRankingByUserIdAsync(
             Request.GetRankingByUserIdRequest request
         )
 		{
@@ -1446,7 +1462,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class PutScoreTask : Gs2WebSocketSessionTask<Request.PutScoreRequest, Result.PutScoreResult>
+        public class PutScoreTask : Gs2WebSocketSessionTask<Request.PutScoreRequest, Result.PutScoreResult>
         {
 	        public PutScoreTask(IGs2Session session, Request.PutScoreRequest request) : base(session, request)
 	        {
@@ -1527,8 +1543,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.PutScoreResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PutScoreResult> PutScoreFuture(
+                Request.PutScoreRequest request
+        )
+		{
+			return new PutScoreTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PutScoreResult> PutScoreAsync(
+            Request.PutScoreRequest request
+        )
+		{
+		    var task = new PutScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PutScoreTask PutScoreAsync(
+                Request.PutScoreRequest request
+        )
+		{
+			return new PutScoreTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.PutScoreResult> PutScore(
+		public async Task<Result.PutScoreResult> PutScoreAsync(
             Request.PutScoreRequest request
         )
 		{
@@ -1541,7 +1590,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class PutScoreByUserIdTask : Gs2WebSocketSessionTask<Request.PutScoreByUserIdRequest, Result.PutScoreByUserIdResult>
+        public class PutScoreByUserIdTask : Gs2WebSocketSessionTask<Request.PutScoreByUserIdRequest, Result.PutScoreByUserIdResult>
         {
 	        public PutScoreByUserIdTask(IGs2Session session, Request.PutScoreByUserIdRequest request) : base(session, request)
 	        {
@@ -1617,8 +1666,41 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.PutScoreByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PutScoreByUserIdResult> PutScoreByUserIdFuture(
+                Request.PutScoreByUserIdRequest request
+        )
+		{
+			return new PutScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PutScoreByUserIdResult> PutScoreByUserIdAsync(
+            Request.PutScoreByUserIdRequest request
+        )
+		{
+		    var task = new PutScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PutScoreByUserIdTask PutScoreByUserIdAsync(
+                Request.PutScoreByUserIdRequest request
+        )
+		{
+			return new PutScoreByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.PutScoreByUserIdResult> PutScoreByUserId(
+		public async Task<Result.PutScoreByUserIdResult> PutScoreByUserIdAsync(
             Request.PutScoreByUserIdRequest request
         )
 		{
@@ -1631,7 +1713,7 @@ namespace Gs2.Gs2Ranking
 #endif
 
 
-        private class CalcRankingTask : Gs2WebSocketSessionTask<Request.CalcRankingRequest, Result.CalcRankingResult>
+        public class CalcRankingTask : Gs2WebSocketSessionTask<Request.CalcRankingRequest, Result.CalcRankingResult>
         {
 	        public CalcRankingTask(IGs2Session session, Request.CalcRankingRequest request) : base(session, request)
 	        {
@@ -1692,12 +1774,527 @@ namespace Gs2.Gs2Ranking
             yield return task;
             callback.Invoke(new AsyncResult<Result.CalcRankingResult>(task.Result, task.Error));
         }
-#else
-		public async Task<Result.CalcRankingResult> CalcRanking(
+
+		public IFuture<Result.CalcRankingResult> CalcRankingFuture(
+                Request.CalcRankingRequest request
+        )
+		{
+			return new CalcRankingTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CalcRankingResult> CalcRankingAsync(
             Request.CalcRankingRequest request
         )
 		{
 		    var task = new CalcRankingTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CalcRankingTask CalcRankingAsync(
+                Request.CalcRankingRequest request
+        )
+		{
+			return new CalcRankingTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CalcRankingResult> CalcRankingAsync(
+            Request.CalcRankingRequest request
+        )
+		{
+		    var task = new CalcRankingTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSubscribeTask : Gs2WebSocketSessionTask<Request.GetSubscribeRequest, Result.GetSubscribeResult>
+        {
+	        public GetSubscribeTask(IGs2Session session, Request.GetSubscribeRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSubscribeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking",
+                    "subscribeUser",
+                    "getSubscribe",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSubscribe(
+                Request.GetSubscribeRequest request,
+                UnityAction<AsyncResult<Result.GetSubscribeResult>> callback
+        )
+		{
+			var task = new GetSubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSubscribeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSubscribeResult> GetSubscribeFuture(
+                Request.GetSubscribeRequest request
+        )
+		{
+			return new GetSubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscribeResult> GetSubscribeAsync(
+            Request.GetSubscribeRequest request
+        )
+		{
+		    var task = new GetSubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSubscribeTask GetSubscribeAsync(
+                Request.GetSubscribeRequest request
+        )
+		{
+			return new GetSubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSubscribeResult> GetSubscribeAsync(
+            Request.GetSubscribeRequest request
+        )
+		{
+		    var task = new GetSubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.GetSubscribeByUserIdRequest, Result.GetSubscribeByUserIdResult>
+        {
+	        public GetSubscribeByUserIdTask(IGs2Session session, Request.GetSubscribeByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSubscribeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking",
+                    "subscribeUser",
+                    "getSubscribeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSubscribeByUserId(
+                Request.GetSubscribeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetSubscribeByUserIdResult>> callback
+        )
+		{
+			var task = new GetSubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSubscribeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdFuture(
+                Request.GetSubscribeByUserIdRequest request
+        )
+		{
+			return new GetSubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
+            Request.GetSubscribeByUserIdRequest request
+        )
+		{
+		    var task = new GetSubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSubscribeByUserIdTask GetSubscribeByUserIdAsync(
+                Request.GetSubscribeByUserIdRequest request
+        )
+		{
+			return new GetSubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
+            Request.GetSubscribeByUserIdRequest request
+        )
+		{
+		    var task = new GetSubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnsubscribeTask : Gs2WebSocketSessionTask<Request.UnsubscribeRequest, Result.UnsubscribeResult>
+        {
+	        public UnsubscribeTask(IGs2Session session, Request.UnsubscribeRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UnsubscribeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking",
+                    "subscribeUser",
+                    "unsubscribe",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Unsubscribe(
+                Request.UnsubscribeRequest request,
+                UnityAction<AsyncResult<Result.UnsubscribeResult>> callback
+        )
+		{
+			var task = new UnsubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnsubscribeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnsubscribeResult> UnsubscribeFuture(
+                Request.UnsubscribeRequest request
+        )
+		{
+			return new UnsubscribeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnsubscribeResult> UnsubscribeAsync(
+            Request.UnsubscribeRequest request
+        )
+		{
+		    var task = new UnsubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnsubscribeTask UnsubscribeAsync(
+                Request.UnsubscribeRequest request
+        )
+		{
+			return new UnsubscribeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnsubscribeResult> UnsubscribeAsync(
+            Request.UnsubscribeRequest request
+        )
+		{
+		    var task = new UnsubscribeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnsubscribeByUserIdTask : Gs2WebSocketSessionTask<Request.UnsubscribeByUserIdRequest, Result.UnsubscribeByUserIdResult>
+        {
+	        public UnsubscribeByUserIdTask(IGs2Session session, Request.UnsubscribeByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UnsubscribeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking",
+                    "subscribeUser",
+                    "unsubscribeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnsubscribeByUserId(
+                Request.UnsubscribeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UnsubscribeByUserIdResult>> callback
+        )
+		{
+			var task = new UnsubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnsubscribeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdFuture(
+                Request.UnsubscribeByUserIdRequest request
+        )
+		{
+			return new UnsubscribeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdAsync(
+            Request.UnsubscribeByUserIdRequest request
+        )
+		{
+		    var task = new UnsubscribeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnsubscribeByUserIdTask UnsubscribeByUserIdAsync(
+                Request.UnsubscribeByUserIdRequest request
+        )
+		{
+			return new UnsubscribeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnsubscribeByUserIdResult> UnsubscribeByUserIdAsync(
+            Request.UnsubscribeByUserIdRequest request
+        )
+		{
+		    var task = new UnsubscribeByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

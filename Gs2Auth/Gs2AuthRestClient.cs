@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Auth
 #endif
 
 
-        private class LoginTask : Gs2RestSessionTask<LoginRequest, LoginResult>
+        public class LoginTask : Gs2RestSessionTask<LoginRequest, LoginResult>
         {
             public LoginTask(IGs2Session session, RestSessionRequestFactory factory, LoginRequest request) : base(session, factory, request)
             {
@@ -129,6 +132,46 @@ namespace Gs2.Gs2Auth
             yield return task;
             callback.Invoke(new AsyncResult<Result.LoginResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LoginResult> LoginFuture(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginResult> LoginAsync(
+                Request.LoginRequest request
+        )
+		{
+            AsyncResult<Result.LoginResult> result = null;
+			await Login(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public LoginTask LoginAsync(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.LoginResult> LoginAsync(
                 Request.LoginRequest request
@@ -144,7 +187,7 @@ namespace Gs2.Gs2Auth
 #endif
 
 
-        private class LoginBySignatureTask : Gs2RestSessionTask<LoginBySignatureRequest, LoginBySignatureResult>
+        public class LoginBySignatureTask : Gs2RestSessionTask<LoginBySignatureRequest, LoginBySignatureResult>
         {
             public LoginBySignatureTask(IGs2Session session, RestSessionRequestFactory factory, LoginBySignatureRequest request) : base(session, factory, request)
             {
@@ -224,6 +267,46 @@ namespace Gs2.Gs2Auth
             yield return task;
             callback.Invoke(new AsyncResult<Result.LoginBySignatureResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LoginBySignatureResult> LoginBySignatureFuture(
+                Request.LoginBySignatureRequest request
+        )
+		{
+			return new LoginBySignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginBySignatureResult> LoginBySignatureAsync(
+                Request.LoginBySignatureRequest request
+        )
+		{
+            AsyncResult<Result.LoginBySignatureResult> result = null;
+			await LoginBySignature(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public LoginBySignatureTask LoginBySignatureAsync(
+                Request.LoginBySignatureRequest request
+        )
+		{
+			return new LoginBySignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.LoginBySignatureResult> LoginBySignatureAsync(
                 Request.LoginBySignatureRequest request

@@ -1,0 +1,66 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Gs2.Core.Domain;
+using Gs2.Core.Model;
+
+namespace Gs2.Core.Exception
+{
+    public class TransactionException : Gs2Exception
+    {
+        private StampSheetDomain _stampSheet;
+        private bool _isWorthRetry;
+
+        public TransactionException(
+            StampSheetDomain stampSheet,
+            Gs2Exception exception
+        ): base(exception.errors) {
+            this._stampSheet = stampSheet;
+            this._isWorthRetry = exception is InternalServerErrorException ||
+                exception is QuotaLimitExceededException ||
+                exception is ServiceUnavailableException ||
+                exception is ConflictException ||
+                exception is RequestTimeoutException ||
+                exception is UnauthorizedException;
+        }
+
+        public bool IsWorthRetry() {
+            return _isWorthRetry;
+        }
+
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public Gs2Future Retry() {
+            IEnumerator Impl(Gs2Future self)
+            {
+                var future = this._stampSheet.Run();
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                }
+            }
+            return new Gs2InlineFuture(Impl);
+        }
+#else
+        public async Task RetryAsync() {
+            await this._stampSheet.RunAsync();
+        }
+#endif
+    }
+}

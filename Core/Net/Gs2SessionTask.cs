@@ -14,8 +14,8 @@ namespace Gs2.Core.Net
         where TResult : IResult
     {
         protected abstract IGs2SessionRequest CreateRequest(TRequest request);
-        public Gs2SessionTaskId TaskId { get; set; }
-        public TRequest Request { get; set; }
+        public new Gs2SessionTaskId TaskId { get; set; }
+        public new TRequest Request { get; set; }
 
         protected IGs2Session Session;
         
@@ -76,8 +76,12 @@ namespace Gs2.Core.Net
             {
                 throw new UserCancelException(new RequestError[0]);
             }
-            
+
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            Session.Send(request);
+#else
             await Session.SendAsync(request);
+#endif
             var begin = DateTime.Now;
             while (!Session.IsCompleted(request))
             {

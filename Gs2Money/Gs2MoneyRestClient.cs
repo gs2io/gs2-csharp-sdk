@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -247,6 +290,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -262,7 +345,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -311,6 +394,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -326,7 +449,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -375,6 +498,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -390,7 +553,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -497,6 +660,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -512,7 +715,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -561,6 +764,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -576,7 +819,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DescribeWalletsTask : Gs2RestSessionTask<DescribeWalletsRequest, DescribeWalletsResult>
+        public class DescribeWalletsTask : Gs2RestSessionTask<DescribeWalletsRequest, DescribeWalletsResult>
         {
             public DescribeWalletsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeWalletsRequest request) : base(session, factory, request)
             {
@@ -635,6 +878,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeWalletsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeWalletsResult> DescribeWalletsFuture(
+                Request.DescribeWalletsRequest request
+        )
+		{
+			return new DescribeWalletsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeWalletsResult> DescribeWalletsAsync(
+                Request.DescribeWalletsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeWalletsResult> result = null;
+			await DescribeWallets(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeWalletsTask DescribeWalletsAsync(
+                Request.DescribeWalletsRequest request
+        )
+		{
+			return new DescribeWalletsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeWalletsResult> DescribeWalletsAsync(
                 Request.DescribeWalletsRequest request
@@ -650,7 +933,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DescribeWalletsByUserIdTask : Gs2RestSessionTask<DescribeWalletsByUserIdRequest, DescribeWalletsByUserIdResult>
+        public class DescribeWalletsByUserIdTask : Gs2RestSessionTask<DescribeWalletsByUserIdRequest, DescribeWalletsByUserIdResult>
         {
             public DescribeWalletsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeWalletsByUserIdRequest request) : base(session, factory, request)
             {
@@ -706,6 +989,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeWalletsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeWalletsByUserIdResult> DescribeWalletsByUserIdFuture(
+                Request.DescribeWalletsByUserIdRequest request
+        )
+		{
+			return new DescribeWalletsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeWalletsByUserIdResult> DescribeWalletsByUserIdAsync(
+                Request.DescribeWalletsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeWalletsByUserIdResult> result = null;
+			await DescribeWalletsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeWalletsByUserIdTask DescribeWalletsByUserIdAsync(
+                Request.DescribeWalletsByUserIdRequest request
+        )
+		{
+			return new DescribeWalletsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeWalletsByUserIdResult> DescribeWalletsByUserIdAsync(
                 Request.DescribeWalletsByUserIdRequest request
@@ -721,7 +1044,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetWalletTask : Gs2RestSessionTask<GetWalletRequest, GetWalletResult>
+        public class GetWalletTask : Gs2RestSessionTask<GetWalletRequest, GetWalletResult>
         {
             public GetWalletTask(IGs2Session session, RestSessionRequestFactory factory, GetWalletRequest request) : base(session, factory, request)
             {
@@ -775,6 +1098,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetWalletResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetWalletResult> GetWalletFuture(
+                Request.GetWalletRequest request
+        )
+		{
+			return new GetWalletTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetWalletResult> GetWalletAsync(
+                Request.GetWalletRequest request
+        )
+		{
+            AsyncResult<Result.GetWalletResult> result = null;
+			await GetWallet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetWalletTask GetWalletAsync(
+                Request.GetWalletRequest request
+        )
+		{
+			return new GetWalletTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetWalletResult> GetWalletAsync(
                 Request.GetWalletRequest request
@@ -790,7 +1153,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetWalletByUserIdTask : Gs2RestSessionTask<GetWalletByUserIdRequest, GetWalletByUserIdResult>
+        public class GetWalletByUserIdTask : Gs2RestSessionTask<GetWalletByUserIdRequest, GetWalletByUserIdResult>
         {
             public GetWalletByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetWalletByUserIdRequest request) : base(session, factory, request)
             {
@@ -841,6 +1204,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetWalletByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetWalletByUserIdResult> GetWalletByUserIdFuture(
+                Request.GetWalletByUserIdRequest request
+        )
+		{
+			return new GetWalletByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetWalletByUserIdResult> GetWalletByUserIdAsync(
+                Request.GetWalletByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetWalletByUserIdResult> result = null;
+			await GetWalletByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetWalletByUserIdTask GetWalletByUserIdAsync(
+                Request.GetWalletByUserIdRequest request
+        )
+		{
+			return new GetWalletByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetWalletByUserIdResult> GetWalletByUserIdAsync(
                 Request.GetWalletByUserIdRequest request
@@ -856,7 +1259,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DepositByUserIdTask : Gs2RestSessionTask<DepositByUserIdRequest, DepositByUserIdResult>
+        public class DepositByUserIdTask : Gs2RestSessionTask<DepositByUserIdRequest, DepositByUserIdResult>
         {
             public DepositByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DepositByUserIdRequest request) : base(session, factory, request)
             {
@@ -930,6 +1333,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DepositByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DepositByUserIdResult> DepositByUserIdFuture(
+                Request.DepositByUserIdRequest request
+        )
+		{
+			return new DepositByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DepositByUserIdResult> DepositByUserIdAsync(
+                Request.DepositByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DepositByUserIdResult> result = null;
+			await DepositByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DepositByUserIdTask DepositByUserIdAsync(
+                Request.DepositByUserIdRequest request
+        )
+		{
+			return new DepositByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DepositByUserIdResult> DepositByUserIdAsync(
                 Request.DepositByUserIdRequest request
@@ -945,7 +1388,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class WithdrawTask : Gs2RestSessionTask<WithdrawRequest, WithdrawResult>
+        public class WithdrawTask : Gs2RestSessionTask<WithdrawRequest, WithdrawResult>
         {
             public WithdrawTask(IGs2Session session, RestSessionRequestFactory factory, WithdrawRequest request) : base(session, factory, request)
             {
@@ -1022,6 +1465,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.WithdrawResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.WithdrawResult> WithdrawFuture(
+                Request.WithdrawRequest request
+        )
+		{
+			return new WithdrawTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WithdrawResult> WithdrawAsync(
+                Request.WithdrawRequest request
+        )
+		{
+            AsyncResult<Result.WithdrawResult> result = null;
+			await Withdraw(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public WithdrawTask WithdrawAsync(
+                Request.WithdrawRequest request
+        )
+		{
+			return new WithdrawTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.WithdrawResult> WithdrawAsync(
                 Request.WithdrawRequest request
@@ -1037,7 +1520,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class WithdrawByUserIdTask : Gs2RestSessionTask<WithdrawByUserIdRequest, WithdrawByUserIdResult>
+        public class WithdrawByUserIdTask : Gs2RestSessionTask<WithdrawByUserIdRequest, WithdrawByUserIdResult>
         {
             public WithdrawByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, WithdrawByUserIdRequest request) : base(session, factory, request)
             {
@@ -1111,6 +1594,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.WithdrawByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.WithdrawByUserIdResult> WithdrawByUserIdFuture(
+                Request.WithdrawByUserIdRequest request
+        )
+		{
+			return new WithdrawByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WithdrawByUserIdResult> WithdrawByUserIdAsync(
+                Request.WithdrawByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.WithdrawByUserIdResult> result = null;
+			await WithdrawByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public WithdrawByUserIdTask WithdrawByUserIdAsync(
+                Request.WithdrawByUserIdRequest request
+        )
+		{
+			return new WithdrawByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.WithdrawByUserIdResult> WithdrawByUserIdAsync(
                 Request.WithdrawByUserIdRequest request
@@ -1126,7 +1649,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DepositByStampSheetTask : Gs2RestSessionTask<DepositByStampSheetRequest, DepositByStampSheetResult>
+        public class DepositByStampSheetTask : Gs2RestSessionTask<DepositByStampSheetRequest, DepositByStampSheetResult>
         {
             public DepositByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, DepositByStampSheetRequest request) : base(session, factory, request)
             {
@@ -1196,6 +1719,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DepositByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DepositByStampSheetResult> DepositByStampSheetFuture(
+                Request.DepositByStampSheetRequest request
+        )
+		{
+			return new DepositByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DepositByStampSheetResult> DepositByStampSheetAsync(
+                Request.DepositByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.DepositByStampSheetResult> result = null;
+			await DepositByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DepositByStampSheetTask DepositByStampSheetAsync(
+                Request.DepositByStampSheetRequest request
+        )
+		{
+			return new DepositByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DepositByStampSheetResult> DepositByStampSheetAsync(
                 Request.DepositByStampSheetRequest request
@@ -1211,7 +1774,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class WithdrawByStampTaskTask : Gs2RestSessionTask<WithdrawByStampTaskRequest, WithdrawByStampTaskResult>
+        public class WithdrawByStampTaskTask : Gs2RestSessionTask<WithdrawByStampTaskRequest, WithdrawByStampTaskResult>
         {
             public WithdrawByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, WithdrawByStampTaskRequest request) : base(session, factory, request)
             {
@@ -1281,6 +1844,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.WithdrawByStampTaskResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.WithdrawByStampTaskResult> WithdrawByStampTaskFuture(
+                Request.WithdrawByStampTaskRequest request
+        )
+		{
+			return new WithdrawByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WithdrawByStampTaskResult> WithdrawByStampTaskAsync(
+                Request.WithdrawByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.WithdrawByStampTaskResult> result = null;
+			await WithdrawByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public WithdrawByStampTaskTask WithdrawByStampTaskAsync(
+                Request.WithdrawByStampTaskRequest request
+        )
+		{
+			return new WithdrawByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.WithdrawByStampTaskResult> WithdrawByStampTaskAsync(
                 Request.WithdrawByStampTaskRequest request
@@ -1296,7 +1899,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DescribeReceiptsTask : Gs2RestSessionTask<DescribeReceiptsRequest, DescribeReceiptsResult>
+        public class DescribeReceiptsTask : Gs2RestSessionTask<DescribeReceiptsRequest, DescribeReceiptsResult>
         {
             public DescribeReceiptsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeReceiptsRequest request) : base(session, factory, request)
             {
@@ -1363,6 +1966,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeReceiptsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeReceiptsResult> DescribeReceiptsFuture(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+			return new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeReceiptsResult> DescribeReceiptsAsync(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeReceiptsResult> result = null;
+			await DescribeReceipts(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeReceiptsTask DescribeReceiptsAsync(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+			return new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeReceiptsResult> DescribeReceiptsAsync(
                 Request.DescribeReceiptsRequest request
@@ -1378,7 +2021,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetByUserIdAndTransactionIdTask : Gs2RestSessionTask<GetByUserIdAndTransactionIdRequest, GetByUserIdAndTransactionIdResult>
+        public class GetByUserIdAndTransactionIdTask : Gs2RestSessionTask<GetByUserIdAndTransactionIdRequest, GetByUserIdAndTransactionIdResult>
         {
             public GetByUserIdAndTransactionIdTask(IGs2Session session, RestSessionRequestFactory factory, GetByUserIdAndTransactionIdRequest request) : base(session, factory, request)
             {
@@ -1429,6 +2072,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetByUserIdAndTransactionIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdFuture(
+                Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+			return new GetByUserIdAndTransactionIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdAsync(
+                Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+            AsyncResult<Result.GetByUserIdAndTransactionIdResult> result = null;
+			await GetByUserIdAndTransactionId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetByUserIdAndTransactionIdTask GetByUserIdAndTransactionIdAsync(
+                Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+			return new GetByUserIdAndTransactionIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdAsync(
                 Request.GetByUserIdAndTransactionIdRequest request
@@ -1444,7 +2127,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class RecordReceiptTask : Gs2RestSessionTask<RecordReceiptRequest, RecordReceiptResult>
+        public class RecordReceiptTask : Gs2RestSessionTask<RecordReceiptRequest, RecordReceiptResult>
         {
             public RecordReceiptTask(IGs2Session session, RestSessionRequestFactory factory, RecordReceiptRequest request) : base(session, factory, request)
             {
@@ -1517,6 +2200,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.RecordReceiptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RecordReceiptResult> RecordReceiptFuture(
+                Request.RecordReceiptRequest request
+        )
+		{
+			return new RecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RecordReceiptResult> RecordReceiptAsync(
+                Request.RecordReceiptRequest request
+        )
+		{
+            AsyncResult<Result.RecordReceiptResult> result = null;
+			await RecordReceipt(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RecordReceiptTask RecordReceiptAsync(
+                Request.RecordReceiptRequest request
+        )
+		{
+			return new RecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.RecordReceiptResult> RecordReceiptAsync(
                 Request.RecordReceiptRequest request
@@ -1532,7 +2255,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class RecordReceiptByStampTaskTask : Gs2RestSessionTask<RecordReceiptByStampTaskRequest, RecordReceiptByStampTaskResult>
+        public class RecordReceiptByStampTaskTask : Gs2RestSessionTask<RecordReceiptByStampTaskRequest, RecordReceiptByStampTaskResult>
         {
             public RecordReceiptByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, RecordReceiptByStampTaskRequest request) : base(session, factory, request)
             {
@@ -1602,6 +2325,46 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.RecordReceiptByStampTaskResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RecordReceiptByStampTaskResult> RecordReceiptByStampTaskFuture(
+                Request.RecordReceiptByStampTaskRequest request
+        )
+		{
+			return new RecordReceiptByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RecordReceiptByStampTaskResult> RecordReceiptByStampTaskAsync(
+                Request.RecordReceiptByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.RecordReceiptByStampTaskResult> result = null;
+			await RecordReceiptByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RecordReceiptByStampTaskTask RecordReceiptByStampTaskAsync(
+                Request.RecordReceiptByStampTaskRequest request
+        )
+		{
+			return new RecordReceiptByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.RecordReceiptByStampTaskResult> RecordReceiptByStampTaskAsync(
                 Request.RecordReceiptByStampTaskRequest request

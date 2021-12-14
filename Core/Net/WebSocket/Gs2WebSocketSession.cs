@@ -9,6 +9,9 @@ using Gs2.Core.Model.Internal;
 using Gs2.Core.Result;
 using Gs2.Util.WebSocketSharp;
 #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 #endif
@@ -22,10 +25,10 @@ namespace Gs2.Core.Net
         public delegate void NotificationHandler(NotificationMessage message);
         public event NotificationHandler OnNotificationMessage;
 
-        private WebSocket _session;
+        internal WebSocket _session;
         public State State;
 
-        private Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
+        internal Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
         private Dictionary<Gs2SessionTaskId, WebSocketResult> _result = new Dictionary<Gs2SessionTaskId, WebSocketResult>();
 
         public IGs2Credential Credential { get; }
@@ -100,7 +103,9 @@ namespace Gs2.Core.Net
                             }
                             else
                             {
+#pragma warning disable 4014
                                 CloseAsync();
+#pragma warning restore 4014
                             }
                         }
                         OnMessage(gs2WebSocketResponse);
@@ -110,7 +115,9 @@ namespace Gs2.Core.Net
             
             _session.OnError += (sender, errorEventArgs) =>
             {
+#pragma warning disable 4014
                 CloseAsync();
+#pragma warning restore 4014
             };
 
             try
@@ -168,7 +175,11 @@ namespace Gs2.Core.Net
             callback.Invoke(new AsyncResult<OpenResult>(result, null));
         }
 
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<OpenResult> OpenAsync()
+#else
         public async Task<OpenResult> OpenAsync()
+#endif
         {
             var result = OpenImpl();
             {
@@ -210,7 +221,20 @@ namespace Gs2.Core.Net
             yield return null;
         }
 
+        public void SendNonBlocking(IGs2SessionRequest request)
+        {
+            if (request is WebSocketSessionRequest sessionRequest)
+            {
+                _inflightRequest[sessionRequest.TaskId] = sessionRequest;
+                _session.Send(sessionRequest?.Body);
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask SendAsync(IGs2SessionRequest request)
+#else
         public async Task SendAsync(IGs2SessionRequest request)
+#endif
         {
             if (request is WebSocketSessionRequest sessionRequest)
             {
@@ -266,7 +290,11 @@ namespace Gs2.Core.Net
             yield return null;
         }
 
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask CloseAsync()
+#else
         public async Task CloseAsync()
+#endif
         {
             if (State == State.Idle)
             {

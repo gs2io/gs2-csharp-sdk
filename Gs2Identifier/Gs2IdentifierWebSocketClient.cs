@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Identifier
 		}
 
 
-        private class CreateUserTask : Gs2WebSocketSessionTask<Request.CreateUserRequest, Result.CreateUserResult>
+        public class CreateUserTask : Gs2WebSocketSessionTask<Request.CreateUserRequest, Result.CreateUserResult>
         {
 	        public CreateUserTask(IGs2Session session, Request.CreateUserRequest request) : base(session, request)
 	        {
@@ -107,8 +110,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateUserResult> CreateUserFuture(
+                Request.CreateUserRequest request
+        )
+		{
+			return new CreateUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateUserResult> CreateUserAsync(
+            Request.CreateUserRequest request
+        )
+		{
+		    var task = new CreateUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateUserTask CreateUserAsync(
+                Request.CreateUserRequest request
+        )
+		{
+			return new CreateUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateUserResult> CreateUser(
+		public async Task<Result.CreateUserResult> CreateUserAsync(
             Request.CreateUserRequest request
         )
 		{
@@ -121,7 +157,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class UpdateUserTask : Gs2WebSocketSessionTask<Request.UpdateUserRequest, Result.UpdateUserResult>
+        public class UpdateUserTask : Gs2WebSocketSessionTask<Request.UpdateUserRequest, Result.UpdateUserResult>
         {
 	        public UpdateUserTask(IGs2Session session, Request.UpdateUserRequest request) : base(session, request)
 	        {
@@ -182,8 +218,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateUserResult> UpdateUserFuture(
+                Request.UpdateUserRequest request
+        )
+		{
+			return new UpdateUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateUserResult> UpdateUserAsync(
+            Request.UpdateUserRequest request
+        )
+		{
+		    var task = new UpdateUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateUserTask UpdateUserAsync(
+                Request.UpdateUserRequest request
+        )
+		{
+			return new UpdateUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateUserResult> UpdateUser(
+		public async Task<Result.UpdateUserResult> UpdateUserAsync(
             Request.UpdateUserRequest request
         )
 		{
@@ -196,7 +265,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetUserTask : Gs2WebSocketSessionTask<Request.GetUserRequest, Result.GetUserResult>
+        public class GetUserTask : Gs2WebSocketSessionTask<Request.GetUserRequest, Result.GetUserResult>
         {
 	        public GetUserTask(IGs2Session session, Request.GetUserRequest request) : base(session, request)
 	        {
@@ -252,8 +321,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetUserResult> GetUserFuture(
+                Request.GetUserRequest request
+        )
+		{
+			return new GetUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUserResult> GetUserAsync(
+            Request.GetUserRequest request
+        )
+		{
+		    var task = new GetUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetUserTask GetUserAsync(
+                Request.GetUserRequest request
+        )
+		{
+			return new GetUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetUserResult> GetUser(
+		public async Task<Result.GetUserResult> GetUserAsync(
             Request.GetUserRequest request
         )
 		{
@@ -266,7 +368,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteUserTask : Gs2WebSocketSessionTask<Request.DeleteUserRequest, Result.DeleteUserResult>
+        public class DeleteUserTask : Gs2WebSocketSessionTask<Request.DeleteUserRequest, Result.DeleteUserResult>
         {
 	        public DeleteUserTask(IGs2Session session, Request.DeleteUserRequest request) : base(session, request)
 	        {
@@ -322,8 +424,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteUserResult> DeleteUserFuture(
+                Request.DeleteUserRequest request
+        )
+		{
+			return new DeleteUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteUserResult> DeleteUserAsync(
+            Request.DeleteUserRequest request
+        )
+		{
+		    var task = new DeleteUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteUserTask DeleteUserAsync(
+                Request.DeleteUserRequest request
+        )
+		{
+			return new DeleteUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteUserResult> DeleteUser(
+		public async Task<Result.DeleteUserResult> DeleteUserAsync(
             Request.DeleteUserRequest request
         )
 		{
@@ -336,77 +471,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteSecurityPolicyTask : Gs2WebSocketSessionTask<Request.DeleteSecurityPolicyRequest, Result.DeleteSecurityPolicyResult>
-        {
-	        public DeleteSecurityPolicyTask(IGs2Session session, Request.DeleteSecurityPolicyRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.DeleteSecurityPolicyRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.SecurityPolicyName != null)
-                {
-                    jsonWriter.WritePropertyName("securityPolicyName");
-                    jsonWriter.Write(request.SecurityPolicyName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "identifier",
-                    "securityPolicy",
-                    "deleteSecurityPolicy",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteSecurityPolicy(
-                Request.DeleteSecurityPolicyRequest request,
-                UnityAction<AsyncResult<Result.DeleteSecurityPolicyResult>> callback
-        )
-		{
-			var task = new DeleteSecurityPolicyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSecurityPolicyResult>(task.Result, task.Error));
-        }
-#else
-		public async Task<Result.DeleteSecurityPolicyResult> DeleteSecurityPolicy(
-            Request.DeleteSecurityPolicyRequest request
-        )
-		{
-		    var task = new DeleteSecurityPolicyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        private class CreateIdentifierTask : Gs2WebSocketSessionTask<Request.CreateIdentifierRequest, Result.CreateIdentifierResult>
+        public class CreateIdentifierTask : Gs2WebSocketSessionTask<Request.CreateIdentifierRequest, Result.CreateIdentifierResult>
         {
 	        public CreateIdentifierTask(IGs2Session session, Request.CreateIdentifierRequest request) : base(session, request)
 	        {
@@ -462,8 +527,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateIdentifierResult> CreateIdentifierFuture(
+                Request.CreateIdentifierRequest request
+        )
+		{
+			return new CreateIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateIdentifierResult> CreateIdentifierAsync(
+            Request.CreateIdentifierRequest request
+        )
+		{
+		    var task = new CreateIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateIdentifierTask CreateIdentifierAsync(
+                Request.CreateIdentifierRequest request
+        )
+		{
+			return new CreateIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateIdentifierResult> CreateIdentifier(
+		public async Task<Result.CreateIdentifierResult> CreateIdentifierAsync(
             Request.CreateIdentifierRequest request
         )
 		{
@@ -476,7 +574,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetIdentifierTask : Gs2WebSocketSessionTask<Request.GetIdentifierRequest, Result.GetIdentifierResult>
+        public class GetIdentifierTask : Gs2WebSocketSessionTask<Request.GetIdentifierRequest, Result.GetIdentifierResult>
         {
 	        public GetIdentifierTask(IGs2Session session, Request.GetIdentifierRequest request) : base(session, request)
 	        {
@@ -537,8 +635,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetIdentifierResult> GetIdentifierFuture(
+                Request.GetIdentifierRequest request
+        )
+		{
+			return new GetIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIdentifierResult> GetIdentifierAsync(
+            Request.GetIdentifierRequest request
+        )
+		{
+		    var task = new GetIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetIdentifierTask GetIdentifierAsync(
+                Request.GetIdentifierRequest request
+        )
+		{
+			return new GetIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetIdentifierResult> GetIdentifier(
+		public async Task<Result.GetIdentifierResult> GetIdentifierAsync(
             Request.GetIdentifierRequest request
         )
 		{
@@ -551,7 +682,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeleteIdentifierTask : Gs2WebSocketSessionTask<Request.DeleteIdentifierRequest, Result.DeleteIdentifierResult>
+        public class DeleteIdentifierTask : Gs2WebSocketSessionTask<Request.DeleteIdentifierRequest, Result.DeleteIdentifierResult>
         {
 	        public DeleteIdentifierTask(IGs2Session session, Request.DeleteIdentifierRequest request) : base(session, request)
 	        {
@@ -612,8 +743,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteIdentifierResult> DeleteIdentifierFuture(
+                Request.DeleteIdentifierRequest request
+        )
+		{
+			return new DeleteIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIdentifierResult> DeleteIdentifierAsync(
+            Request.DeleteIdentifierRequest request
+        )
+		{
+		    var task = new DeleteIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteIdentifierTask DeleteIdentifierAsync(
+                Request.DeleteIdentifierRequest request
+        )
+		{
+			return new DeleteIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteIdentifierResult> DeleteIdentifier(
+		public async Task<Result.DeleteIdentifierResult> DeleteIdentifierAsync(
             Request.DeleteIdentifierRequest request
         )
 		{
@@ -626,7 +790,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class CreatePasswordTask : Gs2WebSocketSessionTask<Request.CreatePasswordRequest, Result.CreatePasswordResult>
+        public class CreatePasswordTask : Gs2WebSocketSessionTask<Request.CreatePasswordRequest, Result.CreatePasswordResult>
         {
 	        public CreatePasswordTask(IGs2Session session, Request.CreatePasswordRequest request) : base(session, request)
 	        {
@@ -687,8 +851,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreatePasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreatePasswordResult> CreatePasswordFuture(
+                Request.CreatePasswordRequest request
+        )
+		{
+			return new CreatePasswordTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePasswordResult> CreatePasswordAsync(
+            Request.CreatePasswordRequest request
+        )
+		{
+		    var task = new CreatePasswordTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreatePasswordTask CreatePasswordAsync(
+                Request.CreatePasswordRequest request
+        )
+		{
+			return new CreatePasswordTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreatePasswordResult> CreatePassword(
+		public async Task<Result.CreatePasswordResult> CreatePasswordAsync(
             Request.CreatePasswordRequest request
         )
 		{
@@ -701,7 +898,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class GetPasswordTask : Gs2WebSocketSessionTask<Request.GetPasswordRequest, Result.GetPasswordResult>
+        public class GetPasswordTask : Gs2WebSocketSessionTask<Request.GetPasswordRequest, Result.GetPasswordResult>
         {
 	        public GetPasswordTask(IGs2Session session, Request.GetPasswordRequest request) : base(session, request)
 	        {
@@ -757,8 +954,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetPasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetPasswordResult> GetPasswordFuture(
+                Request.GetPasswordRequest request
+        )
+		{
+			return new GetPasswordTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPasswordResult> GetPasswordAsync(
+            Request.GetPasswordRequest request
+        )
+		{
+		    var task = new GetPasswordTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPasswordTask GetPasswordAsync(
+                Request.GetPasswordRequest request
+        )
+		{
+			return new GetPasswordTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetPasswordResult> GetPassword(
+		public async Task<Result.GetPasswordResult> GetPasswordAsync(
             Request.GetPasswordRequest request
         )
 		{
@@ -771,7 +1001,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class DeletePasswordTask : Gs2WebSocketSessionTask<Request.DeletePasswordRequest, Result.DeletePasswordResult>
+        public class DeletePasswordTask : Gs2WebSocketSessionTask<Request.DeletePasswordRequest, Result.DeletePasswordResult>
         {
 	        public DeletePasswordTask(IGs2Session session, Request.DeletePasswordRequest request) : base(session, request)
 	        {
@@ -827,8 +1057,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeletePasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeletePasswordResult> DeletePasswordFuture(
+                Request.DeletePasswordRequest request
+        )
+		{
+			return new DeletePasswordTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePasswordResult> DeletePasswordAsync(
+            Request.DeletePasswordRequest request
+        )
+		{
+		    var task = new DeletePasswordTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeletePasswordTask DeletePasswordAsync(
+                Request.DeletePasswordRequest request
+        )
+		{
+			return new DeletePasswordTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeletePasswordResult> DeletePassword(
+		public async Task<Result.DeletePasswordResult> DeletePasswordAsync(
             Request.DeletePasswordRequest request
         )
 		{
@@ -841,7 +1104,7 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
-        private class LoginByUserTask : Gs2WebSocketSessionTask<Request.LoginByUserRequest, Result.LoginByUserResult>
+        public class LoginByUserTask : Gs2WebSocketSessionTask<Request.LoginByUserRequest, Result.LoginByUserResult>
         {
 	        public LoginByUserTask(IGs2Session session, Request.LoginByUserRequest request) : base(session, request)
 	        {
@@ -902,8 +1165,41 @@ namespace Gs2.Gs2Identifier
             yield return task;
             callback.Invoke(new AsyncResult<Result.LoginByUserResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LoginByUserResult> LoginByUserFuture(
+                Request.LoginByUserRequest request
+        )
+		{
+			return new LoginByUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginByUserResult> LoginByUserAsync(
+            Request.LoginByUserRequest request
+        )
+		{
+		    var task = new LoginByUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public LoginByUserTask LoginByUserAsync(
+                Request.LoginByUserRequest request
+        )
+		{
+			return new LoginByUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.LoginByUserResult> LoginByUser(
+		public async Task<Result.LoginByUserResult> LoginByUserAsync(
             Request.LoginByUserRequest request
         )
 		{

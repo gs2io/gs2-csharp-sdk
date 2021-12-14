@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Money
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -157,8 +160,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -171,7 +207,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -227,8 +263,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -241,7 +310,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -342,8 +411,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -356,7 +458,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -412,8 +514,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -426,7 +561,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetWalletTask : Gs2WebSocketSessionTask<Request.GetWalletRequest, Result.GetWalletResult>
+        public class GetWalletTask : Gs2WebSocketSessionTask<Request.GetWalletRequest, Result.GetWalletResult>
         {
 	        public GetWalletTask(IGs2Session session, Request.GetWalletRequest request) : base(session, request)
 	        {
@@ -497,8 +632,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetWalletResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetWalletResult> GetWalletFuture(
+                Request.GetWalletRequest request
+        )
+		{
+			return new GetWalletTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetWalletResult> GetWalletAsync(
+            Request.GetWalletRequest request
+        )
+		{
+		    var task = new GetWalletTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetWalletTask GetWalletAsync(
+                Request.GetWalletRequest request
+        )
+		{
+			return new GetWalletTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetWalletResult> GetWallet(
+		public async Task<Result.GetWalletResult> GetWalletAsync(
             Request.GetWalletRequest request
         )
 		{
@@ -511,7 +679,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetWalletByUserIdTask : Gs2WebSocketSessionTask<Request.GetWalletByUserIdRequest, Result.GetWalletByUserIdResult>
+        public class GetWalletByUserIdTask : Gs2WebSocketSessionTask<Request.GetWalletByUserIdRequest, Result.GetWalletByUserIdResult>
         {
 	        public GetWalletByUserIdTask(IGs2Session session, Request.GetWalletByUserIdRequest request) : base(session, request)
 	        {
@@ -577,8 +745,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetWalletByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetWalletByUserIdResult> GetWalletByUserIdFuture(
+                Request.GetWalletByUserIdRequest request
+        )
+		{
+			return new GetWalletByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetWalletByUserIdResult> GetWalletByUserIdAsync(
+            Request.GetWalletByUserIdRequest request
+        )
+		{
+		    var task = new GetWalletByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetWalletByUserIdTask GetWalletByUserIdAsync(
+                Request.GetWalletByUserIdRequest request
+        )
+		{
+			return new GetWalletByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetWalletByUserIdResult> GetWalletByUserId(
+		public async Task<Result.GetWalletByUserIdResult> GetWalletByUserIdAsync(
             Request.GetWalletByUserIdRequest request
         )
 		{
@@ -591,7 +792,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DepositByUserIdTask : Gs2WebSocketSessionTask<Request.DepositByUserIdRequest, Result.DepositByUserIdResult>
+        public class DepositByUserIdTask : Gs2WebSocketSessionTask<Request.DepositByUserIdRequest, Result.DepositByUserIdResult>
         {
 	        public DepositByUserIdTask(IGs2Session session, Request.DepositByUserIdRequest request) : base(session, request)
 	        {
@@ -667,8 +868,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DepositByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DepositByUserIdResult> DepositByUserIdFuture(
+                Request.DepositByUserIdRequest request
+        )
+		{
+			return new DepositByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DepositByUserIdResult> DepositByUserIdAsync(
+            Request.DepositByUserIdRequest request
+        )
+		{
+		    var task = new DepositByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DepositByUserIdTask DepositByUserIdAsync(
+                Request.DepositByUserIdRequest request
+        )
+		{
+			return new DepositByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DepositByUserIdResult> DepositByUserId(
+		public async Task<Result.DepositByUserIdResult> DepositByUserIdAsync(
             Request.DepositByUserIdRequest request
         )
 		{
@@ -681,7 +915,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class WithdrawTask : Gs2WebSocketSessionTask<Request.WithdrawRequest, Result.WithdrawResult>
+        public class WithdrawTask : Gs2WebSocketSessionTask<Request.WithdrawRequest, Result.WithdrawResult>
         {
 	        public WithdrawTask(IGs2Session session, Request.WithdrawRequest request) : base(session, request)
 	        {
@@ -762,8 +996,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.WithdrawResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.WithdrawResult> WithdrawFuture(
+                Request.WithdrawRequest request
+        )
+		{
+			return new WithdrawTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WithdrawResult> WithdrawAsync(
+            Request.WithdrawRequest request
+        )
+		{
+		    var task = new WithdrawTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public WithdrawTask WithdrawAsync(
+                Request.WithdrawRequest request
+        )
+		{
+			return new WithdrawTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.WithdrawResult> Withdraw(
+		public async Task<Result.WithdrawResult> WithdrawAsync(
             Request.WithdrawRequest request
         )
 		{
@@ -776,7 +1043,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class WithdrawByUserIdTask : Gs2WebSocketSessionTask<Request.WithdrawByUserIdRequest, Result.WithdrawByUserIdResult>
+        public class WithdrawByUserIdTask : Gs2WebSocketSessionTask<Request.WithdrawByUserIdRequest, Result.WithdrawByUserIdResult>
         {
 	        public WithdrawByUserIdTask(IGs2Session session, Request.WithdrawByUserIdRequest request) : base(session, request)
 	        {
@@ -852,8 +1119,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.WithdrawByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.WithdrawByUserIdResult> WithdrawByUserIdFuture(
+                Request.WithdrawByUserIdRequest request
+        )
+		{
+			return new WithdrawByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WithdrawByUserIdResult> WithdrawByUserIdAsync(
+            Request.WithdrawByUserIdRequest request
+        )
+		{
+		    var task = new WithdrawByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public WithdrawByUserIdTask WithdrawByUserIdAsync(
+                Request.WithdrawByUserIdRequest request
+        )
+		{
+			return new WithdrawByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.WithdrawByUserIdResult> WithdrawByUserId(
+		public async Task<Result.WithdrawByUserIdResult> WithdrawByUserIdAsync(
             Request.WithdrawByUserIdRequest request
         )
 		{
@@ -866,7 +1166,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class DepositByStampSheetTask : Gs2WebSocketSessionTask<Request.DepositByStampSheetRequest, Result.DepositByStampSheetResult>
+        public class DepositByStampSheetTask : Gs2WebSocketSessionTask<Request.DepositByStampSheetRequest, Result.DepositByStampSheetResult>
         {
 	        public DepositByStampSheetTask(IGs2Session session, Request.DepositByStampSheetRequest request) : base(session, request)
 	        {
@@ -927,8 +1227,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.DepositByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DepositByStampSheetResult> DepositByStampSheetFuture(
+                Request.DepositByStampSheetRequest request
+        )
+		{
+			return new DepositByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DepositByStampSheetResult> DepositByStampSheetAsync(
+            Request.DepositByStampSheetRequest request
+        )
+		{
+		    var task = new DepositByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DepositByStampSheetTask DepositByStampSheetAsync(
+                Request.DepositByStampSheetRequest request
+        )
+		{
+			return new DepositByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DepositByStampSheetResult> DepositByStampSheet(
+		public async Task<Result.DepositByStampSheetResult> DepositByStampSheetAsync(
             Request.DepositByStampSheetRequest request
         )
 		{
@@ -941,7 +1274,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class GetByUserIdAndTransactionIdTask : Gs2WebSocketSessionTask<Request.GetByUserIdAndTransactionIdRequest, Result.GetByUserIdAndTransactionIdResult>
+        public class GetByUserIdAndTransactionIdTask : Gs2WebSocketSessionTask<Request.GetByUserIdAndTransactionIdRequest, Result.GetByUserIdAndTransactionIdResult>
         {
 	        public GetByUserIdAndTransactionIdTask(IGs2Session session, Request.GetByUserIdAndTransactionIdRequest request) : base(session, request)
 	        {
@@ -1007,8 +1340,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetByUserIdAndTransactionIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdFuture(
+                Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+			return new GetByUserIdAndTransactionIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdAsync(
+            Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+		    var task = new GetByUserIdAndTransactionIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetByUserIdAndTransactionIdTask GetByUserIdAndTransactionIdAsync(
+                Request.GetByUserIdAndTransactionIdRequest request
+        )
+		{
+			return new GetByUserIdAndTransactionIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionId(
+		public async Task<Result.GetByUserIdAndTransactionIdResult> GetByUserIdAndTransactionIdAsync(
             Request.GetByUserIdAndTransactionIdRequest request
         )
 		{
@@ -1021,7 +1387,7 @@ namespace Gs2.Gs2Money
 #endif
 
 
-        private class RecordReceiptTask : Gs2WebSocketSessionTask<Request.RecordReceiptRequest, Result.RecordReceiptResult>
+        public class RecordReceiptTask : Gs2WebSocketSessionTask<Request.RecordReceiptRequest, Result.RecordReceiptResult>
         {
 	        public RecordReceiptTask(IGs2Session session, Request.RecordReceiptRequest request) : base(session, request)
 	        {
@@ -1092,8 +1458,41 @@ namespace Gs2.Gs2Money
             yield return task;
             callback.Invoke(new AsyncResult<Result.RecordReceiptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RecordReceiptResult> RecordReceiptFuture(
+                Request.RecordReceiptRequest request
+        )
+		{
+			return new RecordReceiptTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RecordReceiptResult> RecordReceiptAsync(
+            Request.RecordReceiptRequest request
+        )
+		{
+		    var task = new RecordReceiptTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RecordReceiptTask RecordReceiptAsync(
+                Request.RecordReceiptRequest request
+        )
+		{
+			return new RecordReceiptTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.RecordReceiptResult> RecordReceipt(
+		public async Task<Result.RecordReceiptResult> RecordReceiptAsync(
             Request.RecordReceiptRequest request
         )
 		{

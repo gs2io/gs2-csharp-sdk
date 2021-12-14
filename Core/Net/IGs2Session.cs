@@ -5,6 +5,9 @@ using Gs2.Core.Result;
 
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 #else
 using System;
 #endif
@@ -29,8 +32,16 @@ namespace Gs2.Core.Net
 #endif
         IEnumerator Send(IGs2SessionRequest request);
         
+#if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
+        UniTask<OpenResult> OpenAsync();
+        UniTask SendAsync(IGs2SessionRequest request);
+        UniTask CloseAsync();
+    #endif
+#else
         Task<OpenResult> OpenAsync();
         Task SendAsync(IGs2SessionRequest request);
         Task CloseAsync();
+#endif
     }
 }

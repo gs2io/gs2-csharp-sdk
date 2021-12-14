@@ -33,6 +33,12 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DeleteSecurityPolicyResult : IResult
 	{
+        public Gs2.Gs2Identifier.Model.SecurityPolicy Item { set; get; }
+
+        public DeleteSecurityPolicyResult WithItem(Gs2.Gs2Identifier.Model.SecurityPolicy item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Identifier.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteSecurityPolicyResult();
+            return new DeleteSecurityPolicyResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Identifier.Model.SecurityPolicy.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

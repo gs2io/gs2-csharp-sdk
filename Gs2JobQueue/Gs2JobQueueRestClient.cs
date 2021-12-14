@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -207,6 +250,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -222,7 +305,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -271,6 +354,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -286,7 +409,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -335,6 +458,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -350,7 +513,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -427,6 +590,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -442,7 +645,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -491,6 +694,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -506,7 +749,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DescribeJobsByUserIdTask : Gs2RestSessionTask<DescribeJobsByUserIdRequest, DescribeJobsByUserIdResult>
+        public class DescribeJobsByUserIdTask : Gs2RestSessionTask<DescribeJobsByUserIdRequest, DescribeJobsByUserIdResult>
         {
             public DescribeJobsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeJobsByUserIdRequest request) : base(session, factory, request)
             {
@@ -562,6 +805,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeJobsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeJobsByUserIdResult> DescribeJobsByUserIdFuture(
+                Request.DescribeJobsByUserIdRequest request
+        )
+		{
+			return new DescribeJobsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeJobsByUserIdResult> DescribeJobsByUserIdAsync(
+                Request.DescribeJobsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeJobsByUserIdResult> result = null;
+			await DescribeJobsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeJobsByUserIdTask DescribeJobsByUserIdAsync(
+                Request.DescribeJobsByUserIdRequest request
+        )
+		{
+			return new DescribeJobsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeJobsByUserIdResult> DescribeJobsByUserIdAsync(
                 Request.DescribeJobsByUserIdRequest request
@@ -577,7 +860,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class GetJobByUserIdTask : Gs2RestSessionTask<GetJobByUserIdRequest, GetJobByUserIdResult>
+        public class GetJobByUserIdTask : Gs2RestSessionTask<GetJobByUserIdRequest, GetJobByUserIdResult>
         {
             public GetJobByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetJobByUserIdRequest request) : base(session, factory, request)
             {
@@ -628,6 +911,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetJobByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetJobByUserIdResult> GetJobByUserIdFuture(
+                Request.GetJobByUserIdRequest request
+        )
+		{
+			return new GetJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJobByUserIdResult> GetJobByUserIdAsync(
+                Request.GetJobByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetJobByUserIdResult> result = null;
+			await GetJobByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetJobByUserIdTask GetJobByUserIdAsync(
+                Request.GetJobByUserIdRequest request
+        )
+		{
+			return new GetJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetJobByUserIdResult> GetJobByUserIdAsync(
                 Request.GetJobByUserIdRequest request
@@ -643,7 +966,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class PushByUserIdTask : Gs2RestSessionTask<PushByUserIdRequest, PushByUserIdResult>
+        public class PushByUserIdTask : Gs2RestSessionTask<PushByUserIdRequest, PushByUserIdResult>
         {
             public PushByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PushByUserIdRequest request) : base(session, factory, request)
             {
@@ -716,6 +1039,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.PushByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PushByUserIdResult> PushByUserIdFuture(
+                Request.PushByUserIdRequest request
+        )
+		{
+			return new PushByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PushByUserIdResult> PushByUserIdAsync(
+                Request.PushByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PushByUserIdResult> result = null;
+			await PushByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PushByUserIdTask PushByUserIdAsync(
+                Request.PushByUserIdRequest request
+        )
+		{
+			return new PushByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PushByUserIdResult> PushByUserIdAsync(
                 Request.PushByUserIdRequest request
@@ -731,7 +1094,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class RunTask : Gs2RestSessionTask<RunRequest, RunResult>
+        public class RunTask : Gs2RestSessionTask<RunRequest, RunResult>
         {
             public RunTask(IGs2Session session, RestSessionRequestFactory factory, RunRequest request) : base(session, factory, request)
             {
@@ -797,6 +1160,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.RunResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RunResult> RunFuture(
+                Request.RunRequest request
+        )
+		{
+			return new RunTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RunResult> RunAsync(
+                Request.RunRequest request
+        )
+		{
+            AsyncResult<Result.RunResult> result = null;
+			await Run(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RunTask RunAsync(
+                Request.RunRequest request
+        )
+		{
+			return new RunTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.RunResult> RunAsync(
                 Request.RunRequest request
@@ -812,7 +1215,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class RunByUserIdTask : Gs2RestSessionTask<RunByUserIdRequest, RunByUserIdResult>
+        public class RunByUserIdTask : Gs2RestSessionTask<RunByUserIdRequest, RunByUserIdResult>
         {
             public RunByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, RunByUserIdRequest request) : base(session, factory, request)
             {
@@ -875,6 +1278,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.RunByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RunByUserIdResult> RunByUserIdFuture(
+                Request.RunByUserIdRequest request
+        )
+		{
+			return new RunByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RunByUserIdResult> RunByUserIdAsync(
+                Request.RunByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.RunByUserIdResult> result = null;
+			await RunByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RunByUserIdTask RunByUserIdAsync(
+                Request.RunByUserIdRequest request
+        )
+		{
+			return new RunByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.RunByUserIdResult> RunByUserIdAsync(
                 Request.RunByUserIdRequest request
@@ -890,7 +1333,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DeleteJobByUserIdTask : Gs2RestSessionTask<DeleteJobByUserIdRequest, DeleteJobByUserIdResult>
+        public class DeleteJobByUserIdTask : Gs2RestSessionTask<DeleteJobByUserIdRequest, DeleteJobByUserIdResult>
         {
             public DeleteJobByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteJobByUserIdRequest request) : base(session, factory, request)
             {
@@ -941,6 +1384,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteJobByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteJobByUserIdResult> DeleteJobByUserIdFuture(
+                Request.DeleteJobByUserIdRequest request
+        )
+		{
+			return new DeleteJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteJobByUserIdResult> DeleteJobByUserIdAsync(
+                Request.DeleteJobByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteJobByUserIdResult> result = null;
+			await DeleteJobByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteJobByUserIdTask DeleteJobByUserIdAsync(
+                Request.DeleteJobByUserIdRequest request
+        )
+		{
+			return new DeleteJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteJobByUserIdResult> DeleteJobByUserIdAsync(
                 Request.DeleteJobByUserIdRequest request
@@ -956,7 +1439,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class PushByStampSheetTask : Gs2RestSessionTask<PushByStampSheetRequest, PushByStampSheetResult>
+        public class PushByStampSheetTask : Gs2RestSessionTask<PushByStampSheetRequest, PushByStampSheetResult>
         {
             public PushByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, PushByStampSheetRequest request) : base(session, factory, request)
             {
@@ -1026,6 +1509,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.PushByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PushByStampSheetResult> PushByStampSheetFuture(
+                Request.PushByStampSheetRequest request
+        )
+		{
+			return new PushByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PushByStampSheetResult> PushByStampSheetAsync(
+                Request.PushByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.PushByStampSheetResult> result = null;
+			await PushByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PushByStampSheetTask PushByStampSheetAsync(
+                Request.PushByStampSheetRequest request
+        )
+		{
+			return new PushByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PushByStampSheetResult> PushByStampSheetAsync(
                 Request.PushByStampSheetRequest request
@@ -1041,7 +1564,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DescribeDeadLetterJobsByUserIdTask : Gs2RestSessionTask<DescribeDeadLetterJobsByUserIdRequest, DescribeDeadLetterJobsByUserIdResult>
+        public class DescribeDeadLetterJobsByUserIdTask : Gs2RestSessionTask<DescribeDeadLetterJobsByUserIdRequest, DescribeDeadLetterJobsByUserIdResult>
         {
             public DescribeDeadLetterJobsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDeadLetterJobsByUserIdRequest request) : base(session, factory, request)
             {
@@ -1097,6 +1620,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeDeadLetterJobsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeDeadLetterJobsByUserIdResult> DescribeDeadLetterJobsByUserIdFuture(
+                Request.DescribeDeadLetterJobsByUserIdRequest request
+        )
+		{
+			return new DescribeDeadLetterJobsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDeadLetterJobsByUserIdResult> DescribeDeadLetterJobsByUserIdAsync(
+                Request.DescribeDeadLetterJobsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDeadLetterJobsByUserIdResult> result = null;
+			await DescribeDeadLetterJobsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDeadLetterJobsByUserIdTask DescribeDeadLetterJobsByUserIdAsync(
+                Request.DescribeDeadLetterJobsByUserIdRequest request
+        )
+		{
+			return new DescribeDeadLetterJobsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeDeadLetterJobsByUserIdResult> DescribeDeadLetterJobsByUserIdAsync(
                 Request.DescribeDeadLetterJobsByUserIdRequest request
@@ -1112,7 +1675,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class GetDeadLetterJobByUserIdTask : Gs2RestSessionTask<GetDeadLetterJobByUserIdRequest, GetDeadLetterJobByUserIdResult>
+        public class GetDeadLetterJobByUserIdTask : Gs2RestSessionTask<GetDeadLetterJobByUserIdRequest, GetDeadLetterJobByUserIdResult>
         {
             public GetDeadLetterJobByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetDeadLetterJobByUserIdRequest request) : base(session, factory, request)
             {
@@ -1163,6 +1726,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetDeadLetterJobByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetDeadLetterJobByUserIdResult> GetDeadLetterJobByUserIdFuture(
+                Request.GetDeadLetterJobByUserIdRequest request
+        )
+		{
+			return new GetDeadLetterJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDeadLetterJobByUserIdResult> GetDeadLetterJobByUserIdAsync(
+                Request.GetDeadLetterJobByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetDeadLetterJobByUserIdResult> result = null;
+			await GetDeadLetterJobByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetDeadLetterJobByUserIdTask GetDeadLetterJobByUserIdAsync(
+                Request.GetDeadLetterJobByUserIdRequest request
+        )
+		{
+			return new GetDeadLetterJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetDeadLetterJobByUserIdResult> GetDeadLetterJobByUserIdAsync(
                 Request.GetDeadLetterJobByUserIdRequest request
@@ -1178,7 +1781,7 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
-        private class DeleteDeadLetterJobByUserIdTask : Gs2RestSessionTask<DeleteDeadLetterJobByUserIdRequest, DeleteDeadLetterJobByUserIdResult>
+        public class DeleteDeadLetterJobByUserIdTask : Gs2RestSessionTask<DeleteDeadLetterJobByUserIdRequest, DeleteDeadLetterJobByUserIdResult>
         {
             public DeleteDeadLetterJobByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDeadLetterJobByUserIdRequest request) : base(session, factory, request)
             {
@@ -1229,6 +1832,46 @@ namespace Gs2.Gs2JobQueue
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteDeadLetterJobByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteDeadLetterJobByUserIdResult> DeleteDeadLetterJobByUserIdFuture(
+                Request.DeleteDeadLetterJobByUserIdRequest request
+        )
+		{
+			return new DeleteDeadLetterJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteDeadLetterJobByUserIdResult> DeleteDeadLetterJobByUserIdAsync(
+                Request.DeleteDeadLetterJobByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteDeadLetterJobByUserIdResult> result = null;
+			await DeleteDeadLetterJobByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteDeadLetterJobByUserIdTask DeleteDeadLetterJobByUserIdAsync(
+                Request.DeleteDeadLetterJobByUserIdRequest request
+        )
+		{
+			return new DeleteDeadLetterJobByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteDeadLetterJobByUserIdResult> DeleteDeadLetterJobByUserIdAsync(
                 Request.DeleteDeadLetterJobByUserIdRequest request

@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Schedule
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -112,8 +115,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -126,7 +162,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -182,8 +218,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -196,7 +265,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -262,8 +331,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -276,7 +378,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -332,8 +434,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -346,7 +481,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class CreateEventMasterTask : Gs2WebSocketSessionTask<Request.CreateEventMasterRequest, Result.CreateEventMasterResult>
+        public class CreateEventMasterTask : Gs2WebSocketSessionTask<Request.CreateEventMasterRequest, Result.CreateEventMasterResult>
         {
 	        public CreateEventMasterTask(IGs2Session session, Request.CreateEventMasterRequest request) : base(session, request)
 	        {
@@ -477,8 +612,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateEventMasterResult> CreateEventMasterFuture(
+                Request.CreateEventMasterRequest request
+        )
+		{
+			return new CreateEventMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateEventMasterResult> CreateEventMasterAsync(
+            Request.CreateEventMasterRequest request
+        )
+		{
+		    var task = new CreateEventMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateEventMasterTask CreateEventMasterAsync(
+                Request.CreateEventMasterRequest request
+        )
+		{
+			return new CreateEventMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateEventMasterResult> CreateEventMaster(
+		public async Task<Result.CreateEventMasterResult> CreateEventMasterAsync(
             Request.CreateEventMasterRequest request
         )
 		{
@@ -491,7 +659,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventMasterTask : Gs2WebSocketSessionTask<Request.GetEventMasterRequest, Result.GetEventMasterResult>
+        public class GetEventMasterTask : Gs2WebSocketSessionTask<Request.GetEventMasterRequest, Result.GetEventMasterResult>
         {
 	        public GetEventMasterTask(IGs2Session session, Request.GetEventMasterRequest request) : base(session, request)
 	        {
@@ -552,8 +720,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventMasterResult> GetEventMasterFuture(
+                Request.GetEventMasterRequest request
+        )
+		{
+			return new GetEventMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventMasterResult> GetEventMasterAsync(
+            Request.GetEventMasterRequest request
+        )
+		{
+		    var task = new GetEventMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetEventMasterTask GetEventMasterAsync(
+                Request.GetEventMasterRequest request
+        )
+		{
+			return new GetEventMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetEventMasterResult> GetEventMaster(
+		public async Task<Result.GetEventMasterResult> GetEventMasterAsync(
             Request.GetEventMasterRequest request
         )
 		{
@@ -566,7 +767,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateEventMasterTask : Gs2WebSocketSessionTask<Request.UpdateEventMasterRequest, Result.UpdateEventMasterResult>
+        public class UpdateEventMasterTask : Gs2WebSocketSessionTask<Request.UpdateEventMasterRequest, Result.UpdateEventMasterResult>
         {
 	        public UpdateEventMasterTask(IGs2Session session, Request.UpdateEventMasterRequest request) : base(session, request)
 	        {
@@ -697,8 +898,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateEventMasterResult> UpdateEventMasterFuture(
+                Request.UpdateEventMasterRequest request
+        )
+		{
+			return new UpdateEventMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateEventMasterResult> UpdateEventMasterAsync(
+            Request.UpdateEventMasterRequest request
+        )
+		{
+		    var task = new UpdateEventMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateEventMasterTask UpdateEventMasterAsync(
+                Request.UpdateEventMasterRequest request
+        )
+		{
+			return new UpdateEventMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateEventMasterResult> UpdateEventMaster(
+		public async Task<Result.UpdateEventMasterResult> UpdateEventMasterAsync(
             Request.UpdateEventMasterRequest request
         )
 		{
@@ -711,7 +945,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteEventMasterTask : Gs2WebSocketSessionTask<Request.DeleteEventMasterRequest, Result.DeleteEventMasterResult>
+        public class DeleteEventMasterTask : Gs2WebSocketSessionTask<Request.DeleteEventMasterRequest, Result.DeleteEventMasterResult>
         {
 	        public DeleteEventMasterTask(IGs2Session session, Request.DeleteEventMasterRequest request) : base(session, request)
 	        {
@@ -772,8 +1006,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteEventMasterResult> DeleteEventMasterFuture(
+                Request.DeleteEventMasterRequest request
+        )
+		{
+			return new DeleteEventMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteEventMasterResult> DeleteEventMasterAsync(
+            Request.DeleteEventMasterRequest request
+        )
+		{
+		    var task = new DeleteEventMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteEventMasterTask DeleteEventMasterAsync(
+                Request.DeleteEventMasterRequest request
+        )
+		{
+			return new DeleteEventMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteEventMasterResult> DeleteEventMaster(
+		public async Task<Result.DeleteEventMasterResult> DeleteEventMasterAsync(
             Request.DeleteEventMasterRequest request
         )
 		{
@@ -786,7 +1053,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetTriggerTask : Gs2WebSocketSessionTask<Request.GetTriggerRequest, Result.GetTriggerResult>
+        public class GetTriggerTask : Gs2WebSocketSessionTask<Request.GetTriggerRequest, Result.GetTriggerResult>
         {
 	        public GetTriggerTask(IGs2Session session, Request.GetTriggerRequest request) : base(session, request)
 	        {
@@ -857,8 +1124,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTriggerResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTriggerResult> GetTriggerFuture(
+                Request.GetTriggerRequest request
+        )
+		{
+			return new GetTriggerTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTriggerResult> GetTriggerAsync(
+            Request.GetTriggerRequest request
+        )
+		{
+		    var task = new GetTriggerTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTriggerTask GetTriggerAsync(
+                Request.GetTriggerRequest request
+        )
+		{
+			return new GetTriggerTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetTriggerResult> GetTrigger(
+		public async Task<Result.GetTriggerResult> GetTriggerAsync(
             Request.GetTriggerRequest request
         )
 		{
@@ -871,7 +1171,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.GetTriggerByUserIdRequest, Result.GetTriggerByUserIdResult>
+        public class GetTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.GetTriggerByUserIdRequest, Result.GetTriggerByUserIdResult>
         {
 	        public GetTriggerByUserIdTask(IGs2Session session, Request.GetTriggerByUserIdRequest request) : base(session, request)
 	        {
@@ -937,8 +1237,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTriggerByUserIdResult> GetTriggerByUserIdFuture(
+                Request.GetTriggerByUserIdRequest request
+        )
+		{
+			return new GetTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTriggerByUserIdResult> GetTriggerByUserIdAsync(
+            Request.GetTriggerByUserIdRequest request
+        )
+		{
+		    var task = new GetTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTriggerByUserIdTask GetTriggerByUserIdAsync(
+                Request.GetTriggerByUserIdRequest request
+        )
+		{
+			return new GetTriggerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetTriggerByUserIdResult> GetTriggerByUserId(
+		public async Task<Result.GetTriggerByUserIdResult> GetTriggerByUserIdAsync(
             Request.GetTriggerByUserIdRequest request
         )
 		{
@@ -951,7 +1284,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class TriggerByUserIdTask : Gs2WebSocketSessionTask<Request.TriggerByUserIdRequest, Result.TriggerByUserIdResult>
+        public class TriggerByUserIdTask : Gs2WebSocketSessionTask<Request.TriggerByUserIdRequest, Result.TriggerByUserIdResult>
         {
 	        public TriggerByUserIdTask(IGs2Session session, Request.TriggerByUserIdRequest request) : base(session, request)
 	        {
@@ -1027,8 +1360,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.TriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.TriggerByUserIdResult> TriggerByUserIdFuture(
+                Request.TriggerByUserIdRequest request
+        )
+		{
+			return new TriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TriggerByUserIdResult> TriggerByUserIdAsync(
+            Request.TriggerByUserIdRequest request
+        )
+		{
+		    var task = new TriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public TriggerByUserIdTask TriggerByUserIdAsync(
+                Request.TriggerByUserIdRequest request
+        )
+		{
+			return new TriggerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.TriggerByUserIdResult> TriggerByUserId(
+		public async Task<Result.TriggerByUserIdResult> TriggerByUserIdAsync(
             Request.TriggerByUserIdRequest request
         )
 		{
@@ -1041,7 +1407,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteTriggerTask : Gs2WebSocketSessionTask<Request.DeleteTriggerRequest, Result.DeleteTriggerResult>
+        public class DeleteTriggerTask : Gs2WebSocketSessionTask<Request.DeleteTriggerRequest, Result.DeleteTriggerResult>
         {
 	        public DeleteTriggerTask(IGs2Session session, Request.DeleteTriggerRequest request) : base(session, request)
 	        {
@@ -1112,8 +1478,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTriggerResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTriggerResult> DeleteTriggerFuture(
+                Request.DeleteTriggerRequest request
+        )
+		{
+			return new DeleteTriggerTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTriggerResult> DeleteTriggerAsync(
+            Request.DeleteTriggerRequest request
+        )
+		{
+		    var task = new DeleteTriggerTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTriggerTask DeleteTriggerAsync(
+                Request.DeleteTriggerRequest request
+        )
+		{
+			return new DeleteTriggerTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteTriggerResult> DeleteTrigger(
+		public async Task<Result.DeleteTriggerResult> DeleteTriggerAsync(
             Request.DeleteTriggerRequest request
         )
 		{
@@ -1126,7 +1525,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteTriggerByUserIdRequest, Result.DeleteTriggerByUserIdResult>
+        public class DeleteTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteTriggerByUserIdRequest, Result.DeleteTriggerByUserIdResult>
         {
 	        public DeleteTriggerByUserIdTask(IGs2Session session, Request.DeleteTriggerByUserIdRequest request) : base(session, request)
 	        {
@@ -1192,8 +1591,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdFuture(
+                Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+			return new DeleteTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdAsync(
+            Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+		    var task = new DeleteTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTriggerByUserIdTask DeleteTriggerByUserIdAsync(
+                Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+			return new DeleteTriggerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserId(
+		public async Task<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdAsync(
             Request.DeleteTriggerByUserIdRequest request
         )
 		{
@@ -1206,7 +1638,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventTask : Gs2WebSocketSessionTask<Request.GetEventRequest, Result.GetEventResult>
+        public class GetEventTask : Gs2WebSocketSessionTask<Request.GetEventRequest, Result.GetEventResult>
         {
 	        public GetEventTask(IGs2Session session, Request.GetEventRequest request) : base(session, request)
 	        {
@@ -1277,8 +1709,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventResult> GetEventFuture(
+                Request.GetEventRequest request
+        )
+		{
+			return new GetEventTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventResult> GetEventAsync(
+            Request.GetEventRequest request
+        )
+		{
+		    var task = new GetEventTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetEventTask GetEventAsync(
+                Request.GetEventRequest request
+        )
+		{
+			return new GetEventTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetEventResult> GetEvent(
+		public async Task<Result.GetEventResult> GetEventAsync(
             Request.GetEventRequest request
         )
 		{
@@ -1291,7 +1756,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventByUserIdTask : Gs2WebSocketSessionTask<Request.GetEventByUserIdRequest, Result.GetEventByUserIdResult>
+        public class GetEventByUserIdTask : Gs2WebSocketSessionTask<Request.GetEventByUserIdRequest, Result.GetEventByUserIdResult>
         {
 	        public GetEventByUserIdTask(IGs2Session session, Request.GetEventByUserIdRequest request) : base(session, request)
 	        {
@@ -1357,8 +1822,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventByUserIdResult> GetEventByUserIdFuture(
+                Request.GetEventByUserIdRequest request
+        )
+		{
+			return new GetEventByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventByUserIdResult> GetEventByUserIdAsync(
+            Request.GetEventByUserIdRequest request
+        )
+		{
+		    var task = new GetEventByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetEventByUserIdTask GetEventByUserIdAsync(
+                Request.GetEventByUserIdRequest request
+        )
+		{
+			return new GetEventByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetEventByUserIdResult> GetEventByUserId(
+		public async Task<Result.GetEventByUserIdResult> GetEventByUserIdAsync(
             Request.GetEventByUserIdRequest request
         )
 		{
@@ -1371,7 +1869,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetRawEventTask : Gs2WebSocketSessionTask<Request.GetRawEventRequest, Result.GetRawEventResult>
+        public class GetRawEventTask : Gs2WebSocketSessionTask<Request.GetRawEventRequest, Result.GetRawEventResult>
         {
 	        public GetRawEventTask(IGs2Session session, Request.GetRawEventRequest request) : base(session, request)
 	        {
@@ -1432,8 +1930,41 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRawEventResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRawEventResult> GetRawEventFuture(
+                Request.GetRawEventRequest request
+        )
+		{
+			return new GetRawEventTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRawEventResult> GetRawEventAsync(
+            Request.GetRawEventRequest request
+        )
+		{
+		    var task = new GetRawEventTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRawEventTask GetRawEventAsync(
+                Request.GetRawEventRequest request
+        )
+		{
+			return new GetRawEventTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRawEventResult> GetRawEvent(
+		public async Task<Result.GetRawEventResult> GetRawEventAsync(
             Request.GetRawEventRequest request
         )
 		{

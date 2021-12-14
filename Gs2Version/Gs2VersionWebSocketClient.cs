@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Version
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -127,8 +130,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -141,7 +177,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -197,8 +233,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -211,7 +280,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -292,8 +361,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -306,7 +408,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -362,8 +464,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -376,7 +511,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CreateVersionModelMasterTask : Gs2WebSocketSessionTask<Request.CreateVersionModelMasterRequest, Result.CreateVersionModelMasterResult>
+        public class CreateVersionModelMasterTask : Gs2WebSocketSessionTask<Request.CreateVersionModelMasterRequest, Result.CreateVersionModelMasterResult>
         {
 	        public CreateVersionModelMasterTask(IGs2Session session, Request.CreateVersionModelMasterRequest request) : base(session, request)
 	        {
@@ -477,8 +612,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateVersionModelMasterResult> CreateVersionModelMasterFuture(
+                Request.CreateVersionModelMasterRequest request
+        )
+		{
+			return new CreateVersionModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateVersionModelMasterResult> CreateVersionModelMasterAsync(
+            Request.CreateVersionModelMasterRequest request
+        )
+		{
+		    var task = new CreateVersionModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateVersionModelMasterTask CreateVersionModelMasterAsync(
+                Request.CreateVersionModelMasterRequest request
+        )
+		{
+			return new CreateVersionModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateVersionModelMasterResult> CreateVersionModelMaster(
+		public async Task<Result.CreateVersionModelMasterResult> CreateVersionModelMasterAsync(
             Request.CreateVersionModelMasterRequest request
         )
 		{
@@ -491,7 +659,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetVersionModelMasterTask : Gs2WebSocketSessionTask<Request.GetVersionModelMasterRequest, Result.GetVersionModelMasterResult>
+        public class GetVersionModelMasterTask : Gs2WebSocketSessionTask<Request.GetVersionModelMasterRequest, Result.GetVersionModelMasterResult>
         {
 	        public GetVersionModelMasterTask(IGs2Session session, Request.GetVersionModelMasterRequest request) : base(session, request)
 	        {
@@ -552,8 +720,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetVersionModelMasterResult> GetVersionModelMasterFuture(
+                Request.GetVersionModelMasterRequest request
+        )
+		{
+			return new GetVersionModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetVersionModelMasterResult> GetVersionModelMasterAsync(
+            Request.GetVersionModelMasterRequest request
+        )
+		{
+		    var task = new GetVersionModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetVersionModelMasterTask GetVersionModelMasterAsync(
+                Request.GetVersionModelMasterRequest request
+        )
+		{
+			return new GetVersionModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetVersionModelMasterResult> GetVersionModelMaster(
+		public async Task<Result.GetVersionModelMasterResult> GetVersionModelMasterAsync(
             Request.GetVersionModelMasterRequest request
         )
 		{
@@ -566,7 +767,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateVersionModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateVersionModelMasterRequest, Result.UpdateVersionModelMasterResult>
+        public class UpdateVersionModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateVersionModelMasterRequest, Result.UpdateVersionModelMasterResult>
         {
 	        public UpdateVersionModelMasterTask(IGs2Session session, Request.UpdateVersionModelMasterRequest request) : base(session, request)
 	        {
@@ -667,8 +868,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterFuture(
+                Request.UpdateVersionModelMasterRequest request
+        )
+		{
+			return new UpdateVersionModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterAsync(
+            Request.UpdateVersionModelMasterRequest request
+        )
+		{
+		    var task = new UpdateVersionModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateVersionModelMasterTask UpdateVersionModelMasterAsync(
+                Request.UpdateVersionModelMasterRequest request
+        )
+		{
+			return new UpdateVersionModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateVersionModelMasterResult> UpdateVersionModelMaster(
+		public async Task<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterAsync(
             Request.UpdateVersionModelMasterRequest request
         )
 		{
@@ -681,7 +915,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteVersionModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteVersionModelMasterRequest, Result.DeleteVersionModelMasterResult>
+        public class DeleteVersionModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteVersionModelMasterRequest, Result.DeleteVersionModelMasterResult>
         {
 	        public DeleteVersionModelMasterTask(IGs2Session session, Request.DeleteVersionModelMasterRequest request) : base(session, request)
 	        {
@@ -742,8 +976,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterFuture(
+                Request.DeleteVersionModelMasterRequest request
+        )
+		{
+			return new DeleteVersionModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterAsync(
+            Request.DeleteVersionModelMasterRequest request
+        )
+		{
+		    var task = new DeleteVersionModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteVersionModelMasterTask DeleteVersionModelMasterAsync(
+                Request.DeleteVersionModelMasterRequest request
+        )
+		{
+			return new DeleteVersionModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteVersionModelMasterResult> DeleteVersionModelMaster(
+		public async Task<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterAsync(
             Request.DeleteVersionModelMasterRequest request
         )
 		{
@@ -756,7 +1023,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetVersionModelTask : Gs2WebSocketSessionTask<Request.GetVersionModelRequest, Result.GetVersionModelResult>
+        public class GetVersionModelTask : Gs2WebSocketSessionTask<Request.GetVersionModelRequest, Result.GetVersionModelResult>
         {
 	        public GetVersionModelTask(IGs2Session session, Request.GetVersionModelRequest request) : base(session, request)
 	        {
@@ -817,8 +1084,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetVersionModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetVersionModelResult> GetVersionModelFuture(
+                Request.GetVersionModelRequest request
+        )
+		{
+			return new GetVersionModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetVersionModelResult> GetVersionModelAsync(
+            Request.GetVersionModelRequest request
+        )
+		{
+		    var task = new GetVersionModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetVersionModelTask GetVersionModelAsync(
+                Request.GetVersionModelRequest request
+        )
+		{
+			return new GetVersionModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetVersionModelResult> GetVersionModel(
+		public async Task<Result.GetVersionModelResult> GetVersionModelAsync(
             Request.GetVersionModelRequest request
         )
 		{
@@ -831,7 +1131,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class AcceptTask : Gs2WebSocketSessionTask<Request.AcceptRequest, Result.AcceptResult>
+        public class AcceptTask : Gs2WebSocketSessionTask<Request.AcceptRequest, Result.AcceptResult>
         {
 	        public AcceptTask(IGs2Session session, Request.AcceptRequest request) : base(session, request)
 	        {
@@ -902,8 +1202,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.AcceptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AcceptResult> AcceptFuture(
+                Request.AcceptRequest request
+        )
+		{
+			return new AcceptTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcceptResult> AcceptAsync(
+            Request.AcceptRequest request
+        )
+		{
+		    var task = new AcceptTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcceptTask AcceptAsync(
+                Request.AcceptRequest request
+        )
+		{
+			return new AcceptTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.AcceptResult> Accept(
+		public async Task<Result.AcceptResult> AcceptAsync(
             Request.AcceptRequest request
         )
 		{
@@ -916,7 +1249,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class AcceptByUserIdTask : Gs2WebSocketSessionTask<Request.AcceptByUserIdRequest, Result.AcceptByUserIdResult>
+        public class AcceptByUserIdTask : Gs2WebSocketSessionTask<Request.AcceptByUserIdRequest, Result.AcceptByUserIdResult>
         {
 	        public AcceptByUserIdTask(IGs2Session session, Request.AcceptByUserIdRequest request) : base(session, request)
 	        {
@@ -982,8 +1315,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.AcceptByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AcceptByUserIdResult> AcceptByUserIdFuture(
+                Request.AcceptByUserIdRequest request
+        )
+		{
+			return new AcceptByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcceptByUserIdResult> AcceptByUserIdAsync(
+            Request.AcceptByUserIdRequest request
+        )
+		{
+		    var task = new AcceptByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcceptByUserIdTask AcceptByUserIdAsync(
+                Request.AcceptByUserIdRequest request
+        )
+		{
+			return new AcceptByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.AcceptByUserIdResult> AcceptByUserId(
+		public async Task<Result.AcceptByUserIdResult> AcceptByUserIdAsync(
             Request.AcceptByUserIdRequest request
         )
 		{
@@ -996,7 +1362,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetAcceptVersionTask : Gs2WebSocketSessionTask<Request.GetAcceptVersionRequest, Result.GetAcceptVersionResult>
+        public class GetAcceptVersionTask : Gs2WebSocketSessionTask<Request.GetAcceptVersionRequest, Result.GetAcceptVersionResult>
         {
 	        public GetAcceptVersionTask(IGs2Session session, Request.GetAcceptVersionRequest request) : base(session, request)
 	        {
@@ -1067,8 +1433,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAcceptVersionResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAcceptVersionResult> GetAcceptVersionFuture(
+                Request.GetAcceptVersionRequest request
+        )
+		{
+			return new GetAcceptVersionTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAcceptVersionResult> GetAcceptVersionAsync(
+            Request.GetAcceptVersionRequest request
+        )
+		{
+		    var task = new GetAcceptVersionTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetAcceptVersionTask GetAcceptVersionAsync(
+                Request.GetAcceptVersionRequest request
+        )
+		{
+			return new GetAcceptVersionTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetAcceptVersionResult> GetAcceptVersion(
+		public async Task<Result.GetAcceptVersionResult> GetAcceptVersionAsync(
             Request.GetAcceptVersionRequest request
         )
 		{
@@ -1081,7 +1480,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetAcceptVersionByUserIdTask : Gs2WebSocketSessionTask<Request.GetAcceptVersionByUserIdRequest, Result.GetAcceptVersionByUserIdResult>
+        public class GetAcceptVersionByUserIdTask : Gs2WebSocketSessionTask<Request.GetAcceptVersionByUserIdRequest, Result.GetAcceptVersionByUserIdResult>
         {
 	        public GetAcceptVersionByUserIdTask(IGs2Session session, Request.GetAcceptVersionByUserIdRequest request) : base(session, request)
 	        {
@@ -1147,8 +1546,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAcceptVersionByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdFuture(
+                Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+			return new GetAcceptVersionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdAsync(
+            Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+		    var task = new GetAcceptVersionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetAcceptVersionByUserIdTask GetAcceptVersionByUserIdAsync(
+                Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+			return new GetAcceptVersionByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserId(
+		public async Task<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdAsync(
             Request.GetAcceptVersionByUserIdRequest request
         )
 		{
@@ -1161,7 +1593,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteAcceptVersionTask : Gs2WebSocketSessionTask<Request.DeleteAcceptVersionRequest, Result.DeleteAcceptVersionResult>
+        public class DeleteAcceptVersionTask : Gs2WebSocketSessionTask<Request.DeleteAcceptVersionRequest, Result.DeleteAcceptVersionResult>
         {
 	        public DeleteAcceptVersionTask(IGs2Session session, Request.DeleteAcceptVersionRequest request) : base(session, request)
 	        {
@@ -1232,8 +1664,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAcceptVersionResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAcceptVersionResult> DeleteAcceptVersionFuture(
+                Request.DeleteAcceptVersionRequest request
+        )
+		{
+			return new DeleteAcceptVersionTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAcceptVersionResult> DeleteAcceptVersionAsync(
+            Request.DeleteAcceptVersionRequest request
+        )
+		{
+		    var task = new DeleteAcceptVersionTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteAcceptVersionTask DeleteAcceptVersionAsync(
+                Request.DeleteAcceptVersionRequest request
+        )
+		{
+			return new DeleteAcceptVersionTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteAcceptVersionResult> DeleteAcceptVersion(
+		public async Task<Result.DeleteAcceptVersionResult> DeleteAcceptVersionAsync(
             Request.DeleteAcceptVersionRequest request
         )
 		{
@@ -1246,7 +1711,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteAcceptVersionByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteAcceptVersionByUserIdRequest, Result.DeleteAcceptVersionByUserIdResult>
+        public class DeleteAcceptVersionByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteAcceptVersionByUserIdRequest, Result.DeleteAcceptVersionByUserIdResult>
         {
 	        public DeleteAcceptVersionByUserIdTask(IGs2Session session, Request.DeleteAcceptVersionByUserIdRequest request) : base(session, request)
 	        {
@@ -1312,8 +1777,41 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAcceptVersionByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdFuture(
+                Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+			return new DeleteAcceptVersionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdAsync(
+            Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+		    var task = new DeleteAcceptVersionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteAcceptVersionByUserIdTask DeleteAcceptVersionByUserIdAsync(
+                Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+			return new DeleteAcceptVersionByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserId(
+		public async Task<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdAsync(
             Request.DeleteAcceptVersionByUserIdRequest request
         )
 		{

@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Enhance
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -132,8 +135,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -146,7 +182,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -202,8 +238,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -216,7 +285,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -302,8 +371,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -316,7 +418,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -372,8 +474,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -386,7 +521,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class GetRateModelTask : Gs2WebSocketSessionTask<Request.GetRateModelRequest, Result.GetRateModelResult>
+        public class GetRateModelTask : Gs2WebSocketSessionTask<Request.GetRateModelRequest, Result.GetRateModelResult>
         {
 	        public GetRateModelTask(IGs2Session session, Request.GetRateModelRequest request) : base(session, request)
 	        {
@@ -447,8 +582,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRateModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRateModelResult> GetRateModelFuture(
+                Request.GetRateModelRequest request
+        )
+		{
+			return new GetRateModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRateModelResult> GetRateModelAsync(
+            Request.GetRateModelRequest request
+        )
+		{
+		    var task = new GetRateModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRateModelTask GetRateModelAsync(
+                Request.GetRateModelRequest request
+        )
+		{
+			return new GetRateModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRateModelResult> GetRateModel(
+		public async Task<Result.GetRateModelResult> GetRateModelAsync(
             Request.GetRateModelRequest request
         )
 		{
@@ -461,7 +629,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class CreateRateModelMasterTask : Gs2WebSocketSessionTask<Request.CreateRateModelMasterRequest, Result.CreateRateModelMasterResult>
+        public class CreateRateModelMasterTask : Gs2WebSocketSessionTask<Request.CreateRateModelMasterRequest, Result.CreateRateModelMasterResult>
         {
 	        public CreateRateModelMasterTask(IGs2Session session, Request.CreateRateModelMasterRequest request) : base(session, request)
 	        {
@@ -572,8 +740,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateRateModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateRateModelMasterResult> CreateRateModelMasterFuture(
+                Request.CreateRateModelMasterRequest request
+        )
+		{
+			return new CreateRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateRateModelMasterResult> CreateRateModelMasterAsync(
+            Request.CreateRateModelMasterRequest request
+        )
+		{
+		    var task = new CreateRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateRateModelMasterTask CreateRateModelMasterAsync(
+                Request.CreateRateModelMasterRequest request
+        )
+		{
+			return new CreateRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateRateModelMasterResult> CreateRateModelMaster(
+		public async Task<Result.CreateRateModelMasterResult> CreateRateModelMasterAsync(
             Request.CreateRateModelMasterRequest request
         )
 		{
@@ -586,7 +787,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class GetRateModelMasterTask : Gs2WebSocketSessionTask<Request.GetRateModelMasterRequest, Result.GetRateModelMasterResult>
+        public class GetRateModelMasterTask : Gs2WebSocketSessionTask<Request.GetRateModelMasterRequest, Result.GetRateModelMasterResult>
         {
 	        public GetRateModelMasterTask(IGs2Session session, Request.GetRateModelMasterRequest request) : base(session, request)
 	        {
@@ -647,8 +848,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRateModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRateModelMasterResult> GetRateModelMasterFuture(
+                Request.GetRateModelMasterRequest request
+        )
+		{
+			return new GetRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRateModelMasterResult> GetRateModelMasterAsync(
+            Request.GetRateModelMasterRequest request
+        )
+		{
+		    var task = new GetRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRateModelMasterTask GetRateModelMasterAsync(
+                Request.GetRateModelMasterRequest request
+        )
+		{
+			return new GetRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRateModelMasterResult> GetRateModelMaster(
+		public async Task<Result.GetRateModelMasterResult> GetRateModelMasterAsync(
             Request.GetRateModelMasterRequest request
         )
 		{
@@ -661,7 +895,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class UpdateRateModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateRateModelMasterRequest, Result.UpdateRateModelMasterResult>
+        public class UpdateRateModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateRateModelMasterRequest, Result.UpdateRateModelMasterResult>
         {
 	        public UpdateRateModelMasterTask(IGs2Session session, Request.UpdateRateModelMasterRequest request) : base(session, request)
 	        {
@@ -772,8 +1006,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateRateModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateRateModelMasterResult> UpdateRateModelMasterFuture(
+                Request.UpdateRateModelMasterRequest request
+        )
+		{
+			return new UpdateRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateRateModelMasterResult> UpdateRateModelMasterAsync(
+            Request.UpdateRateModelMasterRequest request
+        )
+		{
+		    var task = new UpdateRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateRateModelMasterTask UpdateRateModelMasterAsync(
+                Request.UpdateRateModelMasterRequest request
+        )
+		{
+			return new UpdateRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateRateModelMasterResult> UpdateRateModelMaster(
+		public async Task<Result.UpdateRateModelMasterResult> UpdateRateModelMasterAsync(
             Request.UpdateRateModelMasterRequest request
         )
 		{
@@ -786,7 +1053,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class DeleteRateModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteRateModelMasterRequest, Result.DeleteRateModelMasterResult>
+        public class DeleteRateModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteRateModelMasterRequest, Result.DeleteRateModelMasterResult>
         {
 	        public DeleteRateModelMasterTask(IGs2Session session, Request.DeleteRateModelMasterRequest request) : base(session, request)
 	        {
@@ -847,8 +1114,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteRateModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteRateModelMasterResult> DeleteRateModelMasterFuture(
+                Request.DeleteRateModelMasterRequest request
+        )
+		{
+			return new DeleteRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteRateModelMasterResult> DeleteRateModelMasterAsync(
+            Request.DeleteRateModelMasterRequest request
+        )
+		{
+		    var task = new DeleteRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteRateModelMasterTask DeleteRateModelMasterAsync(
+                Request.DeleteRateModelMasterRequest request
+        )
+		{
+			return new DeleteRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteRateModelMasterResult> DeleteRateModelMaster(
+		public async Task<Result.DeleteRateModelMasterResult> DeleteRateModelMasterAsync(
             Request.DeleteRateModelMasterRequest request
         )
 		{
@@ -861,7 +1161,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class CreateProgressByUserIdTask : Gs2WebSocketSessionTask<Request.CreateProgressByUserIdRequest, Result.CreateProgressByUserIdResult>
+        public class CreateProgressByUserIdTask : Gs2WebSocketSessionTask<Request.CreateProgressByUserIdRequest, Result.CreateProgressByUserIdResult>
         {
 	        public CreateProgressByUserIdTask(IGs2Session session, Request.CreateProgressByUserIdRequest request) : base(session, request)
 	        {
@@ -947,8 +1247,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProgressByUserIdResult> CreateProgressByUserIdFuture(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+			return new CreateProgressByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProgressByUserIdResult> CreateProgressByUserIdAsync(
+            Request.CreateProgressByUserIdRequest request
+        )
+		{
+		    var task = new CreateProgressByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateProgressByUserIdTask CreateProgressByUserIdAsync(
+                Request.CreateProgressByUserIdRequest request
+        )
+		{
+			return new CreateProgressByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateProgressByUserIdResult> CreateProgressByUserId(
+		public async Task<Result.CreateProgressByUserIdResult> CreateProgressByUserIdAsync(
             Request.CreateProgressByUserIdRequest request
         )
 		{
@@ -961,7 +1294,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class GetProgressTask : Gs2WebSocketSessionTask<Request.GetProgressRequest, Result.GetProgressResult>
+        public class GetProgressTask : Gs2WebSocketSessionTask<Request.GetProgressRequest, Result.GetProgressResult>
         {
 	        public GetProgressTask(IGs2Session session, Request.GetProgressRequest request) : base(session, request)
 	        {
@@ -1027,8 +1360,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProgressResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProgressResult> GetProgressFuture(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressResult> GetProgressAsync(
+            Request.GetProgressRequest request
+        )
+		{
+		    var task = new GetProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProgressTask GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetProgressResult> GetProgress(
+		public async Task<Result.GetProgressResult> GetProgressAsync(
             Request.GetProgressRequest request
         )
 		{
@@ -1041,7 +1407,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class GetProgressByUserIdTask : Gs2WebSocketSessionTask<Request.GetProgressByUserIdRequest, Result.GetProgressByUserIdResult>
+        public class GetProgressByUserIdTask : Gs2WebSocketSessionTask<Request.GetProgressByUserIdRequest, Result.GetProgressByUserIdResult>
         {
 	        public GetProgressByUserIdTask(IGs2Session session, Request.GetProgressByUserIdRequest request) : base(session, request)
 	        {
@@ -1102,8 +1468,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProgressByUserIdResult> GetProgressByUserIdFuture(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+			return new GetProgressByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressByUserIdResult> GetProgressByUserIdAsync(
+            Request.GetProgressByUserIdRequest request
+        )
+		{
+		    var task = new GetProgressByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProgressByUserIdTask GetProgressByUserIdAsync(
+                Request.GetProgressByUserIdRequest request
+        )
+		{
+			return new GetProgressByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetProgressByUserIdResult> GetProgressByUserId(
+		public async Task<Result.GetProgressByUserIdResult> GetProgressByUserIdAsync(
             Request.GetProgressByUserIdRequest request
         )
 		{
@@ -1116,7 +1515,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class DeleteProgressTask : Gs2WebSocketSessionTask<Request.DeleteProgressRequest, Result.DeleteProgressResult>
+        public class DeleteProgressTask : Gs2WebSocketSessionTask<Request.DeleteProgressRequest, Result.DeleteProgressResult>
         {
 	        public DeleteProgressTask(IGs2Session session, Request.DeleteProgressRequest request) : base(session, request)
 	        {
@@ -1182,8 +1581,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProgressResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProgressResult> DeleteProgressFuture(
+                Request.DeleteProgressRequest request
+        )
+		{
+			return new DeleteProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProgressResult> DeleteProgressAsync(
+            Request.DeleteProgressRequest request
+        )
+		{
+		    var task = new DeleteProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteProgressTask DeleteProgressAsync(
+                Request.DeleteProgressRequest request
+        )
+		{
+			return new DeleteProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteProgressResult> DeleteProgress(
+		public async Task<Result.DeleteProgressResult> DeleteProgressAsync(
             Request.DeleteProgressRequest request
         )
 		{
@@ -1196,7 +1628,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class DeleteProgressByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteProgressByUserIdRequest, Result.DeleteProgressByUserIdResult>
+        public class DeleteProgressByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteProgressByUserIdRequest, Result.DeleteProgressByUserIdResult>
         {
 	        public DeleteProgressByUserIdTask(IGs2Session session, Request.DeleteProgressByUserIdRequest request) : base(session, request)
 	        {
@@ -1257,8 +1689,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProgressByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdFuture(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+			return new DeleteProgressByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdAsync(
+            Request.DeleteProgressByUserIdRequest request
+        )
+		{
+		    var task = new DeleteProgressByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteProgressByUserIdTask DeleteProgressByUserIdAsync(
+                Request.DeleteProgressByUserIdRequest request
+        )
+		{
+			return new DeleteProgressByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteProgressByUserIdResult> DeleteProgressByUserId(
+		public async Task<Result.DeleteProgressByUserIdResult> DeleteProgressByUserIdAsync(
             Request.DeleteProgressByUserIdRequest request
         )
 		{
@@ -1271,7 +1736,7 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        private class CreateProgressByStampSheetTask : Gs2WebSocketSessionTask<Request.CreateProgressByStampSheetRequest, Result.CreateProgressByStampSheetResult>
+        public class CreateProgressByStampSheetTask : Gs2WebSocketSessionTask<Request.CreateProgressByStampSheetRequest, Result.CreateProgressByStampSheetResult>
         {
 	        public CreateProgressByStampSheetTask(IGs2Session session, Request.CreateProgressByStampSheetRequest request) : base(session, request)
 	        {
@@ -1332,8 +1797,41 @@ namespace Gs2.Gs2Enhance
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProgressByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetFuture(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+			return new CreateProgressByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetAsync(
+            Request.CreateProgressByStampSheetRequest request
+        )
+		{
+		    var task = new CreateProgressByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateProgressByStampSheetTask CreateProgressByStampSheetAsync(
+                Request.CreateProgressByStampSheetRequest request
+        )
+		{
+			return new CreateProgressByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheet(
+		public async Task<Result.CreateProgressByStampSheetResult> CreateProgressByStampSheetAsync(
             Request.CreateProgressByStampSheetRequest request
         )
 		{

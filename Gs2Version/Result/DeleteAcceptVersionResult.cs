@@ -33,6 +33,12 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class DeleteAcceptVersionResult : IResult
 	{
+        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; }
+
+        public DeleteAcceptVersionResult WithItem(Gs2.Gs2Version.Model.AcceptVersion item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Version.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteAcceptVersionResult();
+            return new DeleteAcceptVersionResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Version.Model.AcceptVersion.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

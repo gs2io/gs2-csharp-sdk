@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -237,6 +280,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -252,7 +335,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -301,6 +384,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -316,7 +439,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -365,6 +488,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -380,7 +543,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -487,6 +650,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -502,7 +705,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -551,6 +754,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -566,7 +809,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class QueryAccessLogTask : Gs2RestSessionTask<QueryAccessLogRequest, QueryAccessLogResult>
+        public class QueryAccessLogTask : Gs2RestSessionTask<QueryAccessLogRequest, QueryAccessLogResult>
         {
             public QueryAccessLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryAccessLogRequest request) : base(session, factory, request)
             {
@@ -639,6 +882,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.QueryAccessLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.QueryAccessLogResult> QueryAccessLogFuture(
+                Request.QueryAccessLogRequest request
+        )
+		{
+			return new QueryAccessLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryAccessLogResult> QueryAccessLogAsync(
+                Request.QueryAccessLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryAccessLogResult> result = null;
+			await QueryAccessLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryAccessLogTask QueryAccessLogAsync(
+                Request.QueryAccessLogRequest request
+        )
+		{
+			return new QueryAccessLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.QueryAccessLogResult> QueryAccessLogAsync(
                 Request.QueryAccessLogRequest request
@@ -654,7 +937,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class CountAccessLogTask : Gs2RestSessionTask<CountAccessLogRequest, CountAccessLogResult>
+        public class CountAccessLogTask : Gs2RestSessionTask<CountAccessLogRequest, CountAccessLogResult>
         {
             public CountAccessLogTask(IGs2Session session, RestSessionRequestFactory factory, CountAccessLogRequest request) : base(session, factory, request)
             {
@@ -727,6 +1010,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountAccessLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountAccessLogResult> CountAccessLogFuture(
+                Request.CountAccessLogRequest request
+        )
+		{
+			return new CountAccessLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountAccessLogResult> CountAccessLogAsync(
+                Request.CountAccessLogRequest request
+        )
+		{
+            AsyncResult<Result.CountAccessLogResult> result = null;
+			await CountAccessLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountAccessLogTask CountAccessLogAsync(
+                Request.CountAccessLogRequest request
+        )
+		{
+			return new CountAccessLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountAccessLogResult> CountAccessLogAsync(
                 Request.CountAccessLogRequest request
@@ -742,7 +1065,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class QueryIssueStampSheetLogTask : Gs2RestSessionTask<QueryIssueStampSheetLogRequest, QueryIssueStampSheetLogResult>
+        public class QueryIssueStampSheetLogTask : Gs2RestSessionTask<QueryIssueStampSheetLogRequest, QueryIssueStampSheetLogResult>
         {
             public QueryIssueStampSheetLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryIssueStampSheetLogRequest request) : base(session, factory, request)
             {
@@ -818,6 +1141,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.QueryIssueStampSheetLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.QueryIssueStampSheetLogResult> QueryIssueStampSheetLogFuture(
+                Request.QueryIssueStampSheetLogRequest request
+        )
+		{
+			return new QueryIssueStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryIssueStampSheetLogResult> QueryIssueStampSheetLogAsync(
+                Request.QueryIssueStampSheetLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryIssueStampSheetLogResult> result = null;
+			await QueryIssueStampSheetLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryIssueStampSheetLogTask QueryIssueStampSheetLogAsync(
+                Request.QueryIssueStampSheetLogRequest request
+        )
+		{
+			return new QueryIssueStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.QueryIssueStampSheetLogResult> QueryIssueStampSheetLogAsync(
                 Request.QueryIssueStampSheetLogRequest request
@@ -833,7 +1196,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class CountIssueStampSheetLogTask : Gs2RestSessionTask<CountIssueStampSheetLogRequest, CountIssueStampSheetLogResult>
+        public class CountIssueStampSheetLogTask : Gs2RestSessionTask<CountIssueStampSheetLogRequest, CountIssueStampSheetLogResult>
         {
             public CountIssueStampSheetLogTask(IGs2Session session, RestSessionRequestFactory factory, CountIssueStampSheetLogRequest request) : base(session, factory, request)
             {
@@ -909,6 +1272,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountIssueStampSheetLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountIssueStampSheetLogResult> CountIssueStampSheetLogFuture(
+                Request.CountIssueStampSheetLogRequest request
+        )
+		{
+			return new CountIssueStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountIssueStampSheetLogResult> CountIssueStampSheetLogAsync(
+                Request.CountIssueStampSheetLogRequest request
+        )
+		{
+            AsyncResult<Result.CountIssueStampSheetLogResult> result = null;
+			await CountIssueStampSheetLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountIssueStampSheetLogTask CountIssueStampSheetLogAsync(
+                Request.CountIssueStampSheetLogRequest request
+        )
+		{
+			return new CountIssueStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountIssueStampSheetLogResult> CountIssueStampSheetLogAsync(
                 Request.CountIssueStampSheetLogRequest request
@@ -924,7 +1327,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class QueryExecuteStampSheetLogTask : Gs2RestSessionTask<QueryExecuteStampSheetLogRequest, QueryExecuteStampSheetLogResult>
+        public class QueryExecuteStampSheetLogTask : Gs2RestSessionTask<QueryExecuteStampSheetLogRequest, QueryExecuteStampSheetLogResult>
         {
             public QueryExecuteStampSheetLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryExecuteStampSheetLogRequest request) : base(session, factory, request)
             {
@@ -1000,6 +1403,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.QueryExecuteStampSheetLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.QueryExecuteStampSheetLogResult> QueryExecuteStampSheetLogFuture(
+                Request.QueryExecuteStampSheetLogRequest request
+        )
+		{
+			return new QueryExecuteStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryExecuteStampSheetLogResult> QueryExecuteStampSheetLogAsync(
+                Request.QueryExecuteStampSheetLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryExecuteStampSheetLogResult> result = null;
+			await QueryExecuteStampSheetLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryExecuteStampSheetLogTask QueryExecuteStampSheetLogAsync(
+                Request.QueryExecuteStampSheetLogRequest request
+        )
+		{
+			return new QueryExecuteStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.QueryExecuteStampSheetLogResult> QueryExecuteStampSheetLogAsync(
                 Request.QueryExecuteStampSheetLogRequest request
@@ -1015,7 +1458,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class CountExecuteStampSheetLogTask : Gs2RestSessionTask<CountExecuteStampSheetLogRequest, CountExecuteStampSheetLogResult>
+        public class CountExecuteStampSheetLogTask : Gs2RestSessionTask<CountExecuteStampSheetLogRequest, CountExecuteStampSheetLogResult>
         {
             public CountExecuteStampSheetLogTask(IGs2Session session, RestSessionRequestFactory factory, CountExecuteStampSheetLogRequest request) : base(session, factory, request)
             {
@@ -1091,6 +1534,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountExecuteStampSheetLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountExecuteStampSheetLogResult> CountExecuteStampSheetLogFuture(
+                Request.CountExecuteStampSheetLogRequest request
+        )
+		{
+			return new CountExecuteStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountExecuteStampSheetLogResult> CountExecuteStampSheetLogAsync(
+                Request.CountExecuteStampSheetLogRequest request
+        )
+		{
+            AsyncResult<Result.CountExecuteStampSheetLogResult> result = null;
+			await CountExecuteStampSheetLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountExecuteStampSheetLogTask CountExecuteStampSheetLogAsync(
+                Request.CountExecuteStampSheetLogRequest request
+        )
+		{
+			return new CountExecuteStampSheetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountExecuteStampSheetLogResult> CountExecuteStampSheetLogAsync(
                 Request.CountExecuteStampSheetLogRequest request
@@ -1106,7 +1589,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class QueryExecuteStampTaskLogTask : Gs2RestSessionTask<QueryExecuteStampTaskLogRequest, QueryExecuteStampTaskLogResult>
+        public class QueryExecuteStampTaskLogTask : Gs2RestSessionTask<QueryExecuteStampTaskLogRequest, QueryExecuteStampTaskLogResult>
         {
             public QueryExecuteStampTaskLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryExecuteStampTaskLogRequest request) : base(session, factory, request)
             {
@@ -1182,6 +1665,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.QueryExecuteStampTaskLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.QueryExecuteStampTaskLogResult> QueryExecuteStampTaskLogFuture(
+                Request.QueryExecuteStampTaskLogRequest request
+        )
+		{
+			return new QueryExecuteStampTaskLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryExecuteStampTaskLogResult> QueryExecuteStampTaskLogAsync(
+                Request.QueryExecuteStampTaskLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryExecuteStampTaskLogResult> result = null;
+			await QueryExecuteStampTaskLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryExecuteStampTaskLogTask QueryExecuteStampTaskLogAsync(
+                Request.QueryExecuteStampTaskLogRequest request
+        )
+		{
+			return new QueryExecuteStampTaskLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.QueryExecuteStampTaskLogResult> QueryExecuteStampTaskLogAsync(
                 Request.QueryExecuteStampTaskLogRequest request
@@ -1197,7 +1720,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class CountExecuteStampTaskLogTask : Gs2RestSessionTask<CountExecuteStampTaskLogRequest, CountExecuteStampTaskLogResult>
+        public class CountExecuteStampTaskLogTask : Gs2RestSessionTask<CountExecuteStampTaskLogRequest, CountExecuteStampTaskLogResult>
         {
             public CountExecuteStampTaskLogTask(IGs2Session session, RestSessionRequestFactory factory, CountExecuteStampTaskLogRequest request) : base(session, factory, request)
             {
@@ -1273,6 +1796,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountExecuteStampTaskLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountExecuteStampTaskLogResult> CountExecuteStampTaskLogFuture(
+                Request.CountExecuteStampTaskLogRequest request
+        )
+		{
+			return new CountExecuteStampTaskLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountExecuteStampTaskLogResult> CountExecuteStampTaskLogAsync(
+                Request.CountExecuteStampTaskLogRequest request
+        )
+		{
+            AsyncResult<Result.CountExecuteStampTaskLogResult> result = null;
+			await CountExecuteStampTaskLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountExecuteStampTaskLogTask CountExecuteStampTaskLogAsync(
+                Request.CountExecuteStampTaskLogRequest request
+        )
+		{
+			return new CountExecuteStampTaskLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountExecuteStampTaskLogResult> CountExecuteStampTaskLogAsync(
                 Request.CountExecuteStampTaskLogRequest request
@@ -1288,7 +1851,7 @@ namespace Gs2.Gs2Log
 #endif
 
 
-        private class PutLogTask : Gs2RestSessionTask<PutLogRequest, PutLogResult>
+        public class PutLogTask : Gs2RestSessionTask<PutLogRequest, PutLogResult>
         {
             public PutLogTask(IGs2Session session, RestSessionRequestFactory factory, PutLogRequest request) : base(session, factory, request)
             {
@@ -1363,6 +1926,46 @@ namespace Gs2.Gs2Log
             yield return task;
             callback.Invoke(new AsyncResult<Result.PutLogResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PutLogResult> PutLogFuture(
+                Request.PutLogRequest request
+        )
+		{
+			return new PutLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PutLogResult> PutLogAsync(
+                Request.PutLogRequest request
+        )
+		{
+            AsyncResult<Result.PutLogResult> result = null;
+			await PutLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PutLogTask PutLogAsync(
+                Request.PutLogRequest request
+        )
+		{
+			return new PutLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PutLogResult> PutLogAsync(
                 Request.PutLogRequest request

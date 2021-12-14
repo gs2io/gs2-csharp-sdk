@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -202,6 +245,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -217,7 +300,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -266,6 +349,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -281,7 +404,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -330,6 +453,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -345,7 +508,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -417,6 +580,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -432,7 +635,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -481,6 +684,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -496,7 +739,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DescribeCountersTask : Gs2RestSessionTask<DescribeCountersRequest, DescribeCountersResult>
+        public class DescribeCountersTask : Gs2RestSessionTask<DescribeCountersRequest, DescribeCountersResult>
         {
             public DescribeCountersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCountersRequest request) : base(session, factory, request)
             {
@@ -558,6 +801,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeCountersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeCountersResult> DescribeCountersFuture(
+                Request.DescribeCountersRequest request
+        )
+		{
+			return new DescribeCountersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCountersResult> DescribeCountersAsync(
+                Request.DescribeCountersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCountersResult> result = null;
+			await DescribeCounters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCountersTask DescribeCountersAsync(
+                Request.DescribeCountersRequest request
+        )
+		{
+			return new DescribeCountersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeCountersResult> DescribeCountersAsync(
                 Request.DescribeCountersRequest request
@@ -573,7 +856,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DescribeCountersByUserIdTask : Gs2RestSessionTask<DescribeCountersByUserIdRequest, DescribeCountersByUserIdResult>
+        public class DescribeCountersByUserIdTask : Gs2RestSessionTask<DescribeCountersByUserIdRequest, DescribeCountersByUserIdResult>
         {
             public DescribeCountersByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCountersByUserIdRequest request) : base(session, factory, request)
             {
@@ -632,6 +915,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeCountersByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdFuture(
+                Request.DescribeCountersByUserIdRequest request
+        )
+		{
+			return new DescribeCountersByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
+                Request.DescribeCountersByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCountersByUserIdResult> result = null;
+			await DescribeCountersByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCountersByUserIdTask DescribeCountersByUserIdAsync(
+                Request.DescribeCountersByUserIdRequest request
+        )
+		{
+			return new DescribeCountersByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
                 Request.DescribeCountersByUserIdRequest request
@@ -647,7 +970,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetCounterTask : Gs2RestSessionTask<GetCounterRequest, GetCounterResult>
+        public class GetCounterTask : Gs2RestSessionTask<GetCounterRequest, GetCounterResult>
         {
             public GetCounterTask(IGs2Session session, RestSessionRequestFactory factory, GetCounterRequest request) : base(session, factory, request)
             {
@@ -702,6 +1025,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCounterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCounterResult> GetCounterFuture(
+                Request.GetCounterRequest request
+        )
+		{
+			return new GetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCounterResult> GetCounterAsync(
+                Request.GetCounterRequest request
+        )
+		{
+            AsyncResult<Result.GetCounterResult> result = null;
+			await GetCounter(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCounterTask GetCounterAsync(
+                Request.GetCounterRequest request
+        )
+		{
+			return new GetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCounterResult> GetCounterAsync(
                 Request.GetCounterRequest request
@@ -717,7 +1080,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetCounterByUserIdTask : Gs2RestSessionTask<GetCounterByUserIdRequest, GetCounterByUserIdResult>
+        public class GetCounterByUserIdTask : Gs2RestSessionTask<GetCounterByUserIdRequest, GetCounterByUserIdResult>
         {
             public GetCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetCounterByUserIdRequest request) : base(session, factory, request)
             {
@@ -769,6 +1132,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCounterByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCounterByUserIdResult> GetCounterByUserIdFuture(
+                Request.GetCounterByUserIdRequest request
+        )
+		{
+			return new GetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
+                Request.GetCounterByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetCounterByUserIdResult> result = null;
+			await GetCounterByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCounterByUserIdTask GetCounterByUserIdAsync(
+                Request.GetCounterByUserIdRequest request
+        )
+		{
+			return new GetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
                 Request.GetCounterByUserIdRequest request
@@ -784,7 +1187,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class CountUpTask : Gs2RestSessionTask<CountUpRequest, CountUpResult>
+        public class CountUpTask : Gs2RestSessionTask<CountUpRequest, CountUpResult>
         {
             public CountUpTask(IGs2Session session, RestSessionRequestFactory factory, CountUpRequest request) : base(session, factory, request)
             {
@@ -862,6 +1265,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountUpResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountUpResult> CountUpFuture(
+                Request.CountUpRequest request
+        )
+		{
+			return new CountUpTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountUpResult> CountUpAsync(
+                Request.CountUpRequest request
+        )
+		{
+            AsyncResult<Result.CountUpResult> result = null;
+			await CountUp(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountUpTask CountUpAsync(
+                Request.CountUpRequest request
+        )
+		{
+			return new CountUpTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountUpResult> CountUpAsync(
                 Request.CountUpRequest request
@@ -877,7 +1320,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class CountUpByUserIdTask : Gs2RestSessionTask<CountUpByUserIdRequest, CountUpByUserIdResult>
+        public class CountUpByUserIdTask : Gs2RestSessionTask<CountUpByUserIdRequest, CountUpByUserIdResult>
         {
             public CountUpByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CountUpByUserIdRequest request) : base(session, factory, request)
             {
@@ -952,6 +1395,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountUpByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountUpByUserIdResult> CountUpByUserIdFuture(
+                Request.CountUpByUserIdRequest request
+        )
+		{
+			return new CountUpByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountUpByUserIdResult> CountUpByUserIdAsync(
+                Request.CountUpByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CountUpByUserIdResult> result = null;
+			await CountUpByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountUpByUserIdTask CountUpByUserIdAsync(
+                Request.CountUpByUserIdRequest request
+        )
+		{
+			return new CountUpByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountUpByUserIdResult> CountUpByUserIdAsync(
                 Request.CountUpByUserIdRequest request
@@ -967,7 +1450,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DeleteCounterByUserIdTask : Gs2RestSessionTask<DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>
+        public class DeleteCounterByUserIdTask : Gs2RestSessionTask<DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>
         {
             public DeleteCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCounterByUserIdRequest request) : base(session, factory, request)
             {
@@ -1019,6 +1502,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteCounterByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdFuture(
+                Request.DeleteCounterByUserIdRequest request
+        )
+		{
+			return new DeleteCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
+                Request.DeleteCounterByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteCounterByUserIdResult> result = null;
+			await DeleteCounterByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteCounterByUserIdTask DeleteCounterByUserIdAsync(
+                Request.DeleteCounterByUserIdRequest request
+        )
+		{
+			return new DeleteCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
                 Request.DeleteCounterByUserIdRequest request
@@ -1034,7 +1557,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class CountUpByStampTaskTask : Gs2RestSessionTask<CountUpByStampTaskRequest, CountUpByStampTaskResult>
+        public class CountUpByStampTaskTask : Gs2RestSessionTask<CountUpByStampTaskRequest, CountUpByStampTaskResult>
         {
             public CountUpByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, CountUpByStampTaskRequest request) : base(session, factory, request)
             {
@@ -1104,6 +1627,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.CountUpByStampTaskResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CountUpByStampTaskResult> CountUpByStampTaskFuture(
+                Request.CountUpByStampTaskRequest request
+        )
+		{
+			return new CountUpByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountUpByStampTaskResult> CountUpByStampTaskAsync(
+                Request.CountUpByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.CountUpByStampTaskResult> result = null;
+			await CountUpByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountUpByStampTaskTask CountUpByStampTaskAsync(
+                Request.CountUpByStampTaskRequest request
+        )
+		{
+			return new CountUpByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CountUpByStampTaskResult> CountUpByStampTaskAsync(
                 Request.CountUpByStampTaskRequest request
@@ -1119,7 +1682,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DeleteByStampSheetTask : Gs2RestSessionTask<DeleteByStampSheetRequest, DeleteByStampSheetResult>
+        public class DeleteByStampSheetTask : Gs2RestSessionTask<DeleteByStampSheetRequest, DeleteByStampSheetResult>
         {
             public DeleteByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, DeleteByStampSheetRequest request) : base(session, factory, request)
             {
@@ -1189,6 +1752,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteByStampSheetResult> DeleteByStampSheetFuture(
+                Request.DeleteByStampSheetRequest request
+        )
+		{
+			return new DeleteByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteByStampSheetResult> DeleteByStampSheetAsync(
+                Request.DeleteByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.DeleteByStampSheetResult> result = null;
+			await DeleteByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteByStampSheetTask DeleteByStampSheetAsync(
+                Request.DeleteByStampSheetRequest request
+        )
+		{
+			return new DeleteByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteByStampSheetResult> DeleteByStampSheetAsync(
                 Request.DeleteByStampSheetRequest request
@@ -1204,7 +1807,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DescribeLimitModelMastersTask : Gs2RestSessionTask<DescribeLimitModelMastersRequest, DescribeLimitModelMastersResult>
+        public class DescribeLimitModelMastersTask : Gs2RestSessionTask<DescribeLimitModelMastersRequest, DescribeLimitModelMastersResult>
         {
             public DescribeLimitModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLimitModelMastersRequest request) : base(session, factory, request)
             {
@@ -1259,6 +1862,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeLimitModelMastersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeLimitModelMastersResult> DescribeLimitModelMastersFuture(
+                Request.DescribeLimitModelMastersRequest request
+        )
+		{
+			return new DescribeLimitModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLimitModelMastersResult> DescribeLimitModelMastersAsync(
+                Request.DescribeLimitModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLimitModelMastersResult> result = null;
+			await DescribeLimitModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLimitModelMastersTask DescribeLimitModelMastersAsync(
+                Request.DescribeLimitModelMastersRequest request
+        )
+		{
+			return new DescribeLimitModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeLimitModelMastersResult> DescribeLimitModelMastersAsync(
                 Request.DescribeLimitModelMastersRequest request
@@ -1274,7 +1917,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class CreateLimitModelMasterTask : Gs2RestSessionTask<CreateLimitModelMasterRequest, CreateLimitModelMasterResult>
+        public class CreateLimitModelMasterTask : Gs2RestSessionTask<CreateLimitModelMasterRequest, CreateLimitModelMasterResult>
         {
             public CreateLimitModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateLimitModelMasterRequest request) : base(session, factory, request)
             {
@@ -1371,6 +2014,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateLimitModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateLimitModelMasterResult> CreateLimitModelMasterFuture(
+                Request.CreateLimitModelMasterRequest request
+        )
+		{
+			return new CreateLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateLimitModelMasterResult> CreateLimitModelMasterAsync(
+                Request.CreateLimitModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateLimitModelMasterResult> result = null;
+			await CreateLimitModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateLimitModelMasterTask CreateLimitModelMasterAsync(
+                Request.CreateLimitModelMasterRequest request
+        )
+		{
+			return new CreateLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateLimitModelMasterResult> CreateLimitModelMasterAsync(
                 Request.CreateLimitModelMasterRequest request
@@ -1386,7 +2069,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetLimitModelMasterTask : Gs2RestSessionTask<GetLimitModelMasterRequest, GetLimitModelMasterResult>
+        public class GetLimitModelMasterTask : Gs2RestSessionTask<GetLimitModelMasterRequest, GetLimitModelMasterResult>
         {
             public GetLimitModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetLimitModelMasterRequest request) : base(session, factory, request)
             {
@@ -1436,6 +2119,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetLimitModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetLimitModelMasterResult> GetLimitModelMasterFuture(
+                Request.GetLimitModelMasterRequest request
+        )
+		{
+			return new GetLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLimitModelMasterResult> GetLimitModelMasterAsync(
+                Request.GetLimitModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetLimitModelMasterResult> result = null;
+			await GetLimitModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLimitModelMasterTask GetLimitModelMasterAsync(
+                Request.GetLimitModelMasterRequest request
+        )
+		{
+			return new GetLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetLimitModelMasterResult> GetLimitModelMasterAsync(
                 Request.GetLimitModelMasterRequest request
@@ -1451,7 +2174,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class UpdateLimitModelMasterTask : Gs2RestSessionTask<UpdateLimitModelMasterRequest, UpdateLimitModelMasterResult>
+        public class UpdateLimitModelMasterTask : Gs2RestSessionTask<UpdateLimitModelMasterRequest, UpdateLimitModelMasterResult>
         {
             public UpdateLimitModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateLimitModelMasterRequest request) : base(session, factory, request)
             {
@@ -1544,6 +2267,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateLimitModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateLimitModelMasterResult> UpdateLimitModelMasterFuture(
+                Request.UpdateLimitModelMasterRequest request
+        )
+		{
+			return new UpdateLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateLimitModelMasterResult> UpdateLimitModelMasterAsync(
+                Request.UpdateLimitModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateLimitModelMasterResult> result = null;
+			await UpdateLimitModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateLimitModelMasterTask UpdateLimitModelMasterAsync(
+                Request.UpdateLimitModelMasterRequest request
+        )
+		{
+			return new UpdateLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateLimitModelMasterResult> UpdateLimitModelMasterAsync(
                 Request.UpdateLimitModelMasterRequest request
@@ -1559,7 +2322,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DeleteLimitModelMasterTask : Gs2RestSessionTask<DeleteLimitModelMasterRequest, DeleteLimitModelMasterResult>
+        public class DeleteLimitModelMasterTask : Gs2RestSessionTask<DeleteLimitModelMasterRequest, DeleteLimitModelMasterResult>
         {
             public DeleteLimitModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteLimitModelMasterRequest request) : base(session, factory, request)
             {
@@ -1609,6 +2372,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteLimitModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteLimitModelMasterResult> DeleteLimitModelMasterFuture(
+                Request.DeleteLimitModelMasterRequest request
+        )
+		{
+			return new DeleteLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteLimitModelMasterResult> DeleteLimitModelMasterAsync(
+                Request.DeleteLimitModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteLimitModelMasterResult> result = null;
+			await DeleteLimitModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteLimitModelMasterTask DeleteLimitModelMasterAsync(
+                Request.DeleteLimitModelMasterRequest request
+        )
+		{
+			return new DeleteLimitModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteLimitModelMasterResult> DeleteLimitModelMasterAsync(
                 Request.DeleteLimitModelMasterRequest request
@@ -1624,7 +2427,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
@@ -1673,6 +2476,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -1688,7 +2531,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetCurrentLimitMasterTask : Gs2RestSessionTask<GetCurrentLimitMasterRequest, GetCurrentLimitMasterResult>
+        public class GetCurrentLimitMasterTask : Gs2RestSessionTask<GetCurrentLimitMasterRequest, GetCurrentLimitMasterResult>
         {
             public GetCurrentLimitMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentLimitMasterRequest request) : base(session, factory, request)
             {
@@ -1737,6 +2580,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCurrentLimitMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCurrentLimitMasterResult> GetCurrentLimitMasterFuture(
+                Request.GetCurrentLimitMasterRequest request
+        )
+		{
+			return new GetCurrentLimitMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentLimitMasterResult> GetCurrentLimitMasterAsync(
+                Request.GetCurrentLimitMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentLimitMasterResult> result = null;
+			await GetCurrentLimitMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentLimitMasterTask GetCurrentLimitMasterAsync(
+                Request.GetCurrentLimitMasterRequest request
+        )
+		{
+			return new GetCurrentLimitMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCurrentLimitMasterResult> GetCurrentLimitMasterAsync(
                 Request.GetCurrentLimitMasterRequest request
@@ -1752,7 +2635,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class UpdateCurrentLimitMasterTask : Gs2RestSessionTask<UpdateCurrentLimitMasterRequest, UpdateCurrentLimitMasterResult>
+        public class UpdateCurrentLimitMasterTask : Gs2RestSessionTask<UpdateCurrentLimitMasterRequest, UpdateCurrentLimitMasterResult>
         {
             public UpdateCurrentLimitMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentLimitMasterRequest request) : base(session, factory, request)
             {
@@ -1819,6 +2702,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentLimitMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentLimitMasterResult> UpdateCurrentLimitMasterFuture(
+                Request.UpdateCurrentLimitMasterRequest request
+        )
+		{
+			return new UpdateCurrentLimitMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentLimitMasterResult> UpdateCurrentLimitMasterAsync(
+                Request.UpdateCurrentLimitMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentLimitMasterResult> result = null;
+			await UpdateCurrentLimitMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentLimitMasterTask UpdateCurrentLimitMasterAsync(
+                Request.UpdateCurrentLimitMasterRequest request
+        )
+		{
+			return new UpdateCurrentLimitMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentLimitMasterResult> UpdateCurrentLimitMasterAsync(
                 Request.UpdateCurrentLimitMasterRequest request
@@ -1834,7 +2757,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class UpdateCurrentLimitMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentLimitMasterFromGitHubRequest, UpdateCurrentLimitMasterFromGitHubResult>
+        public class UpdateCurrentLimitMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentLimitMasterFromGitHubRequest, UpdateCurrentLimitMasterFromGitHubResult>
         {
             public UpdateCurrentLimitMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentLimitMasterFromGitHubRequest request) : base(session, factory, request)
             {
@@ -1901,6 +2824,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentLimitMasterFromGitHubResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentLimitMasterFromGitHubResult> UpdateCurrentLimitMasterFromGitHubFuture(
+                Request.UpdateCurrentLimitMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentLimitMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentLimitMasterFromGitHubResult> UpdateCurrentLimitMasterFromGitHubAsync(
+                Request.UpdateCurrentLimitMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentLimitMasterFromGitHubResult> result = null;
+			await UpdateCurrentLimitMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentLimitMasterFromGitHubTask UpdateCurrentLimitMasterFromGitHubAsync(
+                Request.UpdateCurrentLimitMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentLimitMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentLimitMasterFromGitHubResult> UpdateCurrentLimitMasterFromGitHubAsync(
                 Request.UpdateCurrentLimitMasterFromGitHubRequest request
@@ -1916,7 +2879,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class DescribeLimitModelsTask : Gs2RestSessionTask<DescribeLimitModelsRequest, DescribeLimitModelsResult>
+        public class DescribeLimitModelsTask : Gs2RestSessionTask<DescribeLimitModelsRequest, DescribeLimitModelsResult>
         {
             public DescribeLimitModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLimitModelsRequest request) : base(session, factory, request)
             {
@@ -1965,6 +2928,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeLimitModelsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeLimitModelsResult> DescribeLimitModelsFuture(
+                Request.DescribeLimitModelsRequest request
+        )
+		{
+			return new DescribeLimitModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLimitModelsResult> DescribeLimitModelsAsync(
+                Request.DescribeLimitModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLimitModelsResult> result = null;
+			await DescribeLimitModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLimitModelsTask DescribeLimitModelsAsync(
+                Request.DescribeLimitModelsRequest request
+        )
+		{
+			return new DescribeLimitModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeLimitModelsResult> DescribeLimitModelsAsync(
                 Request.DescribeLimitModelsRequest request
@@ -1980,7 +2983,7 @@ namespace Gs2.Gs2Limit
 #endif
 
 
-        private class GetLimitModelTask : Gs2RestSessionTask<GetLimitModelRequest, GetLimitModelResult>
+        public class GetLimitModelTask : Gs2RestSessionTask<GetLimitModelRequest, GetLimitModelResult>
         {
             public GetLimitModelTask(IGs2Session session, RestSessionRequestFactory factory, GetLimitModelRequest request) : base(session, factory, request)
             {
@@ -2030,6 +3033,46 @@ namespace Gs2.Gs2Limit
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetLimitModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetLimitModelResult> GetLimitModelFuture(
+                Request.GetLimitModelRequest request
+        )
+		{
+			return new GetLimitModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLimitModelResult> GetLimitModelAsync(
+                Request.GetLimitModelRequest request
+        )
+		{
+            AsyncResult<Result.GetLimitModelResult> result = null;
+			await GetLimitModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLimitModelTask GetLimitModelAsync(
+                Request.GetLimitModelRequest request
+        )
+		{
+			return new GetLimitModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetLimitModelResult> GetLimitModelAsync(
                 Request.GetLimitModelRequest request

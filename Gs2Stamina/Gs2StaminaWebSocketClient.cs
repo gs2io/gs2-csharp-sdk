@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Stamina
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -117,8 +120,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -131,7 +167,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -187,8 +223,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -201,7 +270,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -272,8 +341,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -286,7 +388,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -342,8 +444,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -356,7 +491,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class CreateStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.CreateStaminaModelMasterRequest, Result.CreateStaminaModelMasterResult>
+        public class CreateStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.CreateStaminaModelMasterRequest, Result.CreateStaminaModelMasterResult>
         {
 	        public CreateStaminaModelMasterTask(IGs2Session session, Request.CreateStaminaModelMasterRequest request) : base(session, request)
 	        {
@@ -467,8 +602,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateStaminaModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateStaminaModelMasterResult> CreateStaminaModelMasterFuture(
+                Request.CreateStaminaModelMasterRequest request
+        )
+		{
+			return new CreateStaminaModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateStaminaModelMasterResult> CreateStaminaModelMasterAsync(
+            Request.CreateStaminaModelMasterRequest request
+        )
+		{
+		    var task = new CreateStaminaModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateStaminaModelMasterTask CreateStaminaModelMasterAsync(
+                Request.CreateStaminaModelMasterRequest request
+        )
+		{
+			return new CreateStaminaModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateStaminaModelMasterResult> CreateStaminaModelMaster(
+		public async Task<Result.CreateStaminaModelMasterResult> CreateStaminaModelMasterAsync(
             Request.CreateStaminaModelMasterRequest request
         )
 		{
@@ -481,7 +649,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.GetStaminaModelMasterRequest, Result.GetStaminaModelMasterResult>
+        public class GetStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.GetStaminaModelMasterRequest, Result.GetStaminaModelMasterResult>
         {
 	        public GetStaminaModelMasterTask(IGs2Session session, Request.GetStaminaModelMasterRequest request) : base(session, request)
 	        {
@@ -542,8 +710,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStaminaModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetStaminaModelMasterResult> GetStaminaModelMasterFuture(
+                Request.GetStaminaModelMasterRequest request
+        )
+		{
+			return new GetStaminaModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStaminaModelMasterResult> GetStaminaModelMasterAsync(
+            Request.GetStaminaModelMasterRequest request
+        )
+		{
+		    var task = new GetStaminaModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStaminaModelMasterTask GetStaminaModelMasterAsync(
+                Request.GetStaminaModelMasterRequest request
+        )
+		{
+			return new GetStaminaModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetStaminaModelMasterResult> GetStaminaModelMaster(
+		public async Task<Result.GetStaminaModelMasterResult> GetStaminaModelMasterAsync(
             Request.GetStaminaModelMasterRequest request
         )
 		{
@@ -556,7 +757,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateStaminaModelMasterRequest, Result.UpdateStaminaModelMasterResult>
+        public class UpdateStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateStaminaModelMasterRequest, Result.UpdateStaminaModelMasterResult>
         {
 	        public UpdateStaminaModelMasterTask(IGs2Session session, Request.UpdateStaminaModelMasterRequest request) : base(session, request)
 	        {
@@ -667,8 +868,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateStaminaModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateStaminaModelMasterResult> UpdateStaminaModelMasterFuture(
+                Request.UpdateStaminaModelMasterRequest request
+        )
+		{
+			return new UpdateStaminaModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateStaminaModelMasterResult> UpdateStaminaModelMasterAsync(
+            Request.UpdateStaminaModelMasterRequest request
+        )
+		{
+		    var task = new UpdateStaminaModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateStaminaModelMasterTask UpdateStaminaModelMasterAsync(
+                Request.UpdateStaminaModelMasterRequest request
+        )
+		{
+			return new UpdateStaminaModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateStaminaModelMasterResult> UpdateStaminaModelMaster(
+		public async Task<Result.UpdateStaminaModelMasterResult> UpdateStaminaModelMasterAsync(
             Request.UpdateStaminaModelMasterRequest request
         )
 		{
@@ -681,7 +915,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteStaminaModelMasterRequest, Result.DeleteStaminaModelMasterResult>
+        public class DeleteStaminaModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteStaminaModelMasterRequest, Result.DeleteStaminaModelMasterResult>
         {
 	        public DeleteStaminaModelMasterTask(IGs2Session session, Request.DeleteStaminaModelMasterRequest request) : base(session, request)
 	        {
@@ -742,8 +976,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteStaminaModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteStaminaModelMasterResult> DeleteStaminaModelMasterFuture(
+                Request.DeleteStaminaModelMasterRequest request
+        )
+		{
+			return new DeleteStaminaModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteStaminaModelMasterResult> DeleteStaminaModelMasterAsync(
+            Request.DeleteStaminaModelMasterRequest request
+        )
+		{
+		    var task = new DeleteStaminaModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteStaminaModelMasterTask DeleteStaminaModelMasterAsync(
+                Request.DeleteStaminaModelMasterRequest request
+        )
+		{
+			return new DeleteStaminaModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteStaminaModelMasterResult> DeleteStaminaModelMaster(
+		public async Task<Result.DeleteStaminaModelMasterResult> DeleteStaminaModelMasterAsync(
             Request.DeleteStaminaModelMasterRequest request
         )
 		{
@@ -756,7 +1023,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class CreateMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.CreateMaxStaminaTableMasterRequest, Result.CreateMaxStaminaTableMasterResult>
+        public class CreateMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.CreateMaxStaminaTableMasterRequest, Result.CreateMaxStaminaTableMasterResult>
         {
 	        public CreateMaxStaminaTableMasterTask(IGs2Session session, Request.CreateMaxStaminaTableMasterRequest request) : base(session, request)
 	        {
@@ -842,8 +1109,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateMaxStaminaTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateMaxStaminaTableMasterResult> CreateMaxStaminaTableMasterFuture(
+                Request.CreateMaxStaminaTableMasterRequest request
+        )
+		{
+			return new CreateMaxStaminaTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateMaxStaminaTableMasterResult> CreateMaxStaminaTableMasterAsync(
+            Request.CreateMaxStaminaTableMasterRequest request
+        )
+		{
+		    var task = new CreateMaxStaminaTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateMaxStaminaTableMasterTask CreateMaxStaminaTableMasterAsync(
+                Request.CreateMaxStaminaTableMasterRequest request
+        )
+		{
+			return new CreateMaxStaminaTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateMaxStaminaTableMasterResult> CreateMaxStaminaTableMaster(
+		public async Task<Result.CreateMaxStaminaTableMasterResult> CreateMaxStaminaTableMasterAsync(
             Request.CreateMaxStaminaTableMasterRequest request
         )
 		{
@@ -856,7 +1156,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.GetMaxStaminaTableMasterRequest, Result.GetMaxStaminaTableMasterResult>
+        public class GetMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.GetMaxStaminaTableMasterRequest, Result.GetMaxStaminaTableMasterResult>
         {
 	        public GetMaxStaminaTableMasterTask(IGs2Session session, Request.GetMaxStaminaTableMasterRequest request) : base(session, request)
 	        {
@@ -917,8 +1217,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMaxStaminaTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMaxStaminaTableMasterResult> GetMaxStaminaTableMasterFuture(
+                Request.GetMaxStaminaTableMasterRequest request
+        )
+		{
+			return new GetMaxStaminaTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMaxStaminaTableMasterResult> GetMaxStaminaTableMasterAsync(
+            Request.GetMaxStaminaTableMasterRequest request
+        )
+		{
+		    var task = new GetMaxStaminaTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMaxStaminaTableMasterTask GetMaxStaminaTableMasterAsync(
+                Request.GetMaxStaminaTableMasterRequest request
+        )
+		{
+			return new GetMaxStaminaTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMaxStaminaTableMasterResult> GetMaxStaminaTableMaster(
+		public async Task<Result.GetMaxStaminaTableMasterResult> GetMaxStaminaTableMasterAsync(
             Request.GetMaxStaminaTableMasterRequest request
         )
 		{
@@ -931,7 +1264,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateMaxStaminaTableMasterRequest, Result.UpdateMaxStaminaTableMasterResult>
+        public class UpdateMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateMaxStaminaTableMasterRequest, Result.UpdateMaxStaminaTableMasterResult>
         {
 	        public UpdateMaxStaminaTableMasterTask(IGs2Session session, Request.UpdateMaxStaminaTableMasterRequest request) : base(session, request)
 	        {
@@ -1017,8 +1350,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateMaxStaminaTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateMaxStaminaTableMasterResult> UpdateMaxStaminaTableMasterFuture(
+                Request.UpdateMaxStaminaTableMasterRequest request
+        )
+		{
+			return new UpdateMaxStaminaTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateMaxStaminaTableMasterResult> UpdateMaxStaminaTableMasterAsync(
+            Request.UpdateMaxStaminaTableMasterRequest request
+        )
+		{
+		    var task = new UpdateMaxStaminaTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateMaxStaminaTableMasterTask UpdateMaxStaminaTableMasterAsync(
+                Request.UpdateMaxStaminaTableMasterRequest request
+        )
+		{
+			return new UpdateMaxStaminaTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateMaxStaminaTableMasterResult> UpdateMaxStaminaTableMaster(
+		public async Task<Result.UpdateMaxStaminaTableMasterResult> UpdateMaxStaminaTableMasterAsync(
             Request.UpdateMaxStaminaTableMasterRequest request
         )
 		{
@@ -1031,7 +1397,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteMaxStaminaTableMasterRequest, Result.DeleteMaxStaminaTableMasterResult>
+        public class DeleteMaxStaminaTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteMaxStaminaTableMasterRequest, Result.DeleteMaxStaminaTableMasterResult>
         {
 	        public DeleteMaxStaminaTableMasterTask(IGs2Session session, Request.DeleteMaxStaminaTableMasterRequest request) : base(session, request)
 	        {
@@ -1092,8 +1458,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteMaxStaminaTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteMaxStaminaTableMasterResult> DeleteMaxStaminaTableMasterFuture(
+                Request.DeleteMaxStaminaTableMasterRequest request
+        )
+		{
+			return new DeleteMaxStaminaTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteMaxStaminaTableMasterResult> DeleteMaxStaminaTableMasterAsync(
+            Request.DeleteMaxStaminaTableMasterRequest request
+        )
+		{
+		    var task = new DeleteMaxStaminaTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteMaxStaminaTableMasterTask DeleteMaxStaminaTableMasterAsync(
+                Request.DeleteMaxStaminaTableMasterRequest request
+        )
+		{
+			return new DeleteMaxStaminaTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteMaxStaminaTableMasterResult> DeleteMaxStaminaTableMaster(
+		public async Task<Result.DeleteMaxStaminaTableMasterResult> DeleteMaxStaminaTableMasterAsync(
             Request.DeleteMaxStaminaTableMasterRequest request
         )
 		{
@@ -1106,7 +1505,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class CreateRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.CreateRecoverIntervalTableMasterRequest, Result.CreateRecoverIntervalTableMasterResult>
+        public class CreateRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.CreateRecoverIntervalTableMasterRequest, Result.CreateRecoverIntervalTableMasterResult>
         {
 	        public CreateRecoverIntervalTableMasterTask(IGs2Session session, Request.CreateRecoverIntervalTableMasterRequest request) : base(session, request)
 	        {
@@ -1192,8 +1591,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateRecoverIntervalTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateRecoverIntervalTableMasterResult> CreateRecoverIntervalTableMasterFuture(
+                Request.CreateRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new CreateRecoverIntervalTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateRecoverIntervalTableMasterResult> CreateRecoverIntervalTableMasterAsync(
+            Request.CreateRecoverIntervalTableMasterRequest request
+        )
+		{
+		    var task = new CreateRecoverIntervalTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateRecoverIntervalTableMasterTask CreateRecoverIntervalTableMasterAsync(
+                Request.CreateRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new CreateRecoverIntervalTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateRecoverIntervalTableMasterResult> CreateRecoverIntervalTableMaster(
+		public async Task<Result.CreateRecoverIntervalTableMasterResult> CreateRecoverIntervalTableMasterAsync(
             Request.CreateRecoverIntervalTableMasterRequest request
         )
 		{
@@ -1206,7 +1638,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.GetRecoverIntervalTableMasterRequest, Result.GetRecoverIntervalTableMasterResult>
+        public class GetRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.GetRecoverIntervalTableMasterRequest, Result.GetRecoverIntervalTableMasterResult>
         {
 	        public GetRecoverIntervalTableMasterTask(IGs2Session session, Request.GetRecoverIntervalTableMasterRequest request) : base(session, request)
 	        {
@@ -1267,8 +1699,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRecoverIntervalTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRecoverIntervalTableMasterResult> GetRecoverIntervalTableMasterFuture(
+                Request.GetRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new GetRecoverIntervalTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRecoverIntervalTableMasterResult> GetRecoverIntervalTableMasterAsync(
+            Request.GetRecoverIntervalTableMasterRequest request
+        )
+		{
+		    var task = new GetRecoverIntervalTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRecoverIntervalTableMasterTask GetRecoverIntervalTableMasterAsync(
+                Request.GetRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new GetRecoverIntervalTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRecoverIntervalTableMasterResult> GetRecoverIntervalTableMaster(
+		public async Task<Result.GetRecoverIntervalTableMasterResult> GetRecoverIntervalTableMasterAsync(
             Request.GetRecoverIntervalTableMasterRequest request
         )
 		{
@@ -1281,7 +1746,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateRecoverIntervalTableMasterRequest, Result.UpdateRecoverIntervalTableMasterResult>
+        public class UpdateRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateRecoverIntervalTableMasterRequest, Result.UpdateRecoverIntervalTableMasterResult>
         {
 	        public UpdateRecoverIntervalTableMasterTask(IGs2Session session, Request.UpdateRecoverIntervalTableMasterRequest request) : base(session, request)
 	        {
@@ -1367,8 +1832,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateRecoverIntervalTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateRecoverIntervalTableMasterResult> UpdateRecoverIntervalTableMasterFuture(
+                Request.UpdateRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new UpdateRecoverIntervalTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateRecoverIntervalTableMasterResult> UpdateRecoverIntervalTableMasterAsync(
+            Request.UpdateRecoverIntervalTableMasterRequest request
+        )
+		{
+		    var task = new UpdateRecoverIntervalTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateRecoverIntervalTableMasterTask UpdateRecoverIntervalTableMasterAsync(
+                Request.UpdateRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new UpdateRecoverIntervalTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateRecoverIntervalTableMasterResult> UpdateRecoverIntervalTableMaster(
+		public async Task<Result.UpdateRecoverIntervalTableMasterResult> UpdateRecoverIntervalTableMasterAsync(
             Request.UpdateRecoverIntervalTableMasterRequest request
         )
 		{
@@ -1381,7 +1879,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteRecoverIntervalTableMasterRequest, Result.DeleteRecoverIntervalTableMasterResult>
+        public class DeleteRecoverIntervalTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteRecoverIntervalTableMasterRequest, Result.DeleteRecoverIntervalTableMasterResult>
         {
 	        public DeleteRecoverIntervalTableMasterTask(IGs2Session session, Request.DeleteRecoverIntervalTableMasterRequest request) : base(session, request)
 	        {
@@ -1442,8 +1940,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteRecoverIntervalTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteRecoverIntervalTableMasterResult> DeleteRecoverIntervalTableMasterFuture(
+                Request.DeleteRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new DeleteRecoverIntervalTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteRecoverIntervalTableMasterResult> DeleteRecoverIntervalTableMasterAsync(
+            Request.DeleteRecoverIntervalTableMasterRequest request
+        )
+		{
+		    var task = new DeleteRecoverIntervalTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteRecoverIntervalTableMasterTask DeleteRecoverIntervalTableMasterAsync(
+                Request.DeleteRecoverIntervalTableMasterRequest request
+        )
+		{
+			return new DeleteRecoverIntervalTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteRecoverIntervalTableMasterResult> DeleteRecoverIntervalTableMaster(
+		public async Task<Result.DeleteRecoverIntervalTableMasterResult> DeleteRecoverIntervalTableMasterAsync(
             Request.DeleteRecoverIntervalTableMasterRequest request
         )
 		{
@@ -1456,7 +1987,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class CreateRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.CreateRecoverValueTableMasterRequest, Result.CreateRecoverValueTableMasterResult>
+        public class CreateRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.CreateRecoverValueTableMasterRequest, Result.CreateRecoverValueTableMasterResult>
         {
 	        public CreateRecoverValueTableMasterTask(IGs2Session session, Request.CreateRecoverValueTableMasterRequest request) : base(session, request)
 	        {
@@ -1542,8 +2073,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateRecoverValueTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateRecoverValueTableMasterResult> CreateRecoverValueTableMasterFuture(
+                Request.CreateRecoverValueTableMasterRequest request
+        )
+		{
+			return new CreateRecoverValueTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateRecoverValueTableMasterResult> CreateRecoverValueTableMasterAsync(
+            Request.CreateRecoverValueTableMasterRequest request
+        )
+		{
+		    var task = new CreateRecoverValueTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateRecoverValueTableMasterTask CreateRecoverValueTableMasterAsync(
+                Request.CreateRecoverValueTableMasterRequest request
+        )
+		{
+			return new CreateRecoverValueTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateRecoverValueTableMasterResult> CreateRecoverValueTableMaster(
+		public async Task<Result.CreateRecoverValueTableMasterResult> CreateRecoverValueTableMasterAsync(
             Request.CreateRecoverValueTableMasterRequest request
         )
 		{
@@ -1556,7 +2120,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.GetRecoverValueTableMasterRequest, Result.GetRecoverValueTableMasterResult>
+        public class GetRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.GetRecoverValueTableMasterRequest, Result.GetRecoverValueTableMasterResult>
         {
 	        public GetRecoverValueTableMasterTask(IGs2Session session, Request.GetRecoverValueTableMasterRequest request) : base(session, request)
 	        {
@@ -1617,8 +2181,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRecoverValueTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRecoverValueTableMasterResult> GetRecoverValueTableMasterFuture(
+                Request.GetRecoverValueTableMasterRequest request
+        )
+		{
+			return new GetRecoverValueTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRecoverValueTableMasterResult> GetRecoverValueTableMasterAsync(
+            Request.GetRecoverValueTableMasterRequest request
+        )
+		{
+		    var task = new GetRecoverValueTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRecoverValueTableMasterTask GetRecoverValueTableMasterAsync(
+                Request.GetRecoverValueTableMasterRequest request
+        )
+		{
+			return new GetRecoverValueTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetRecoverValueTableMasterResult> GetRecoverValueTableMaster(
+		public async Task<Result.GetRecoverValueTableMasterResult> GetRecoverValueTableMasterAsync(
             Request.GetRecoverValueTableMasterRequest request
         )
 		{
@@ -1631,7 +2228,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateRecoverValueTableMasterRequest, Result.UpdateRecoverValueTableMasterResult>
+        public class UpdateRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.UpdateRecoverValueTableMasterRequest, Result.UpdateRecoverValueTableMasterResult>
         {
 	        public UpdateRecoverValueTableMasterTask(IGs2Session session, Request.UpdateRecoverValueTableMasterRequest request) : base(session, request)
 	        {
@@ -1717,8 +2314,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateRecoverValueTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateRecoverValueTableMasterResult> UpdateRecoverValueTableMasterFuture(
+                Request.UpdateRecoverValueTableMasterRequest request
+        )
+		{
+			return new UpdateRecoverValueTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateRecoverValueTableMasterResult> UpdateRecoverValueTableMasterAsync(
+            Request.UpdateRecoverValueTableMasterRequest request
+        )
+		{
+		    var task = new UpdateRecoverValueTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateRecoverValueTableMasterTask UpdateRecoverValueTableMasterAsync(
+                Request.UpdateRecoverValueTableMasterRequest request
+        )
+		{
+			return new UpdateRecoverValueTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateRecoverValueTableMasterResult> UpdateRecoverValueTableMaster(
+		public async Task<Result.UpdateRecoverValueTableMasterResult> UpdateRecoverValueTableMasterAsync(
             Request.UpdateRecoverValueTableMasterRequest request
         )
 		{
@@ -1731,7 +2361,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteRecoverValueTableMasterRequest, Result.DeleteRecoverValueTableMasterResult>
+        public class DeleteRecoverValueTableMasterTask : Gs2WebSocketSessionTask<Request.DeleteRecoverValueTableMasterRequest, Result.DeleteRecoverValueTableMasterResult>
         {
 	        public DeleteRecoverValueTableMasterTask(IGs2Session session, Request.DeleteRecoverValueTableMasterRequest request) : base(session, request)
 	        {
@@ -1792,8 +2422,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteRecoverValueTableMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteRecoverValueTableMasterResult> DeleteRecoverValueTableMasterFuture(
+                Request.DeleteRecoverValueTableMasterRequest request
+        )
+		{
+			return new DeleteRecoverValueTableMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteRecoverValueTableMasterResult> DeleteRecoverValueTableMasterAsync(
+            Request.DeleteRecoverValueTableMasterRequest request
+        )
+		{
+		    var task = new DeleteRecoverValueTableMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteRecoverValueTableMasterTask DeleteRecoverValueTableMasterAsync(
+                Request.DeleteRecoverValueTableMasterRequest request
+        )
+		{
+			return new DeleteRecoverValueTableMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteRecoverValueTableMasterResult> DeleteRecoverValueTableMaster(
+		public async Task<Result.DeleteRecoverValueTableMasterResult> DeleteRecoverValueTableMasterAsync(
             Request.DeleteRecoverValueTableMasterRequest request
         )
 		{
@@ -1806,7 +2469,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetStaminaModelTask : Gs2WebSocketSessionTask<Request.GetStaminaModelRequest, Result.GetStaminaModelResult>
+        public class GetStaminaModelTask : Gs2WebSocketSessionTask<Request.GetStaminaModelRequest, Result.GetStaminaModelResult>
         {
 	        public GetStaminaModelTask(IGs2Session session, Request.GetStaminaModelRequest request) : base(session, request)
 	        {
@@ -1867,8 +2530,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStaminaModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetStaminaModelResult> GetStaminaModelFuture(
+                Request.GetStaminaModelRequest request
+        )
+		{
+			return new GetStaminaModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStaminaModelResult> GetStaminaModelAsync(
+            Request.GetStaminaModelRequest request
+        )
+		{
+		    var task = new GetStaminaModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStaminaModelTask GetStaminaModelAsync(
+                Request.GetStaminaModelRequest request
+        )
+		{
+			return new GetStaminaModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetStaminaModelResult> GetStaminaModel(
+		public async Task<Result.GetStaminaModelResult> GetStaminaModelAsync(
             Request.GetStaminaModelRequest request
         )
 		{
@@ -1881,7 +2577,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetStaminaTask : Gs2WebSocketSessionTask<Request.GetStaminaRequest, Result.GetStaminaResult>
+        public class GetStaminaTask : Gs2WebSocketSessionTask<Request.GetStaminaRequest, Result.GetStaminaResult>
         {
 	        public GetStaminaTask(IGs2Session session, Request.GetStaminaRequest request) : base(session, request)
 	        {
@@ -1952,8 +2648,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStaminaResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetStaminaResult> GetStaminaFuture(
+                Request.GetStaminaRequest request
+        )
+		{
+			return new GetStaminaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStaminaResult> GetStaminaAsync(
+            Request.GetStaminaRequest request
+        )
+		{
+		    var task = new GetStaminaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStaminaTask GetStaminaAsync(
+                Request.GetStaminaRequest request
+        )
+		{
+			return new GetStaminaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetStaminaResult> GetStamina(
+		public async Task<Result.GetStaminaResult> GetStaminaAsync(
             Request.GetStaminaRequest request
         )
 		{
@@ -1966,7 +2695,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class GetStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.GetStaminaByUserIdRequest, Result.GetStaminaByUserIdResult>
+        public class GetStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.GetStaminaByUserIdRequest, Result.GetStaminaByUserIdResult>
         {
 	        public GetStaminaByUserIdTask(IGs2Session session, Request.GetStaminaByUserIdRequest request) : base(session, request)
 	        {
@@ -2032,8 +2761,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStaminaByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetStaminaByUserIdResult> GetStaminaByUserIdFuture(
+                Request.GetStaminaByUserIdRequest request
+        )
+		{
+			return new GetStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStaminaByUserIdResult> GetStaminaByUserIdAsync(
+            Request.GetStaminaByUserIdRequest request
+        )
+		{
+		    var task = new GetStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStaminaByUserIdTask GetStaminaByUserIdAsync(
+                Request.GetStaminaByUserIdRequest request
+        )
+		{
+			return new GetStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetStaminaByUserIdResult> GetStaminaByUserId(
+		public async Task<Result.GetStaminaByUserIdResult> GetStaminaByUserIdAsync(
             Request.GetStaminaByUserIdRequest request
         )
 		{
@@ -2046,7 +2808,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class UpdateStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateStaminaByUserIdRequest, Result.UpdateStaminaByUserIdResult>
+        public class UpdateStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateStaminaByUserIdRequest, Result.UpdateStaminaByUserIdResult>
         {
 	        public UpdateStaminaByUserIdTask(IGs2Session session, Request.UpdateStaminaByUserIdRequest request) : base(session, request)
 	        {
@@ -2132,8 +2894,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateStaminaByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateStaminaByUserIdResult> UpdateStaminaByUserIdFuture(
+                Request.UpdateStaminaByUserIdRequest request
+        )
+		{
+			return new UpdateStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateStaminaByUserIdResult> UpdateStaminaByUserIdAsync(
+            Request.UpdateStaminaByUserIdRequest request
+        )
+		{
+		    var task = new UpdateStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateStaminaByUserIdTask UpdateStaminaByUserIdAsync(
+                Request.UpdateStaminaByUserIdRequest request
+        )
+		{
+			return new UpdateStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateStaminaByUserIdResult> UpdateStaminaByUserId(
+		public async Task<Result.UpdateStaminaByUserIdResult> UpdateStaminaByUserIdAsync(
             Request.UpdateStaminaByUserIdRequest request
         )
 		{
@@ -2146,7 +2941,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class ConsumeStaminaTask : Gs2WebSocketSessionTask<Request.ConsumeStaminaRequest, Result.ConsumeStaminaResult>
+        public class ConsumeStaminaTask : Gs2WebSocketSessionTask<Request.ConsumeStaminaRequest, Result.ConsumeStaminaResult>
         {
 	        public ConsumeStaminaTask(IGs2Session session, Request.ConsumeStaminaRequest request) : base(session, request)
 	        {
@@ -2222,8 +3017,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.ConsumeStaminaResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ConsumeStaminaResult> ConsumeStaminaFuture(
+                Request.ConsumeStaminaRequest request
+        )
+		{
+			return new ConsumeStaminaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeStaminaResult> ConsumeStaminaAsync(
+            Request.ConsumeStaminaRequest request
+        )
+		{
+		    var task = new ConsumeStaminaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ConsumeStaminaTask ConsumeStaminaAsync(
+                Request.ConsumeStaminaRequest request
+        )
+		{
+			return new ConsumeStaminaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.ConsumeStaminaResult> ConsumeStamina(
+		public async Task<Result.ConsumeStaminaResult> ConsumeStaminaAsync(
             Request.ConsumeStaminaRequest request
         )
 		{
@@ -2236,7 +3064,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class ConsumeStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.ConsumeStaminaByUserIdRequest, Result.ConsumeStaminaByUserIdResult>
+        public class ConsumeStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.ConsumeStaminaByUserIdRequest, Result.ConsumeStaminaByUserIdResult>
         {
 	        public ConsumeStaminaByUserIdTask(IGs2Session session, Request.ConsumeStaminaByUserIdRequest request) : base(session, request)
 	        {
@@ -2307,8 +3135,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.ConsumeStaminaByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdFuture(
+                Request.ConsumeStaminaByUserIdRequest request
+        )
+		{
+			return new ConsumeStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdAsync(
+            Request.ConsumeStaminaByUserIdRequest request
+        )
+		{
+		    var task = new ConsumeStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ConsumeStaminaByUserIdTask ConsumeStaminaByUserIdAsync(
+                Request.ConsumeStaminaByUserIdRequest request
+        )
+		{
+			return new ConsumeStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.ConsumeStaminaByUserIdResult> ConsumeStaminaByUserId(
+		public async Task<Result.ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdAsync(
             Request.ConsumeStaminaByUserIdRequest request
         )
 		{
@@ -2321,7 +3182,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class RecoverStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByUserIdRequest, Result.RecoverStaminaByUserIdResult>
+        public class RecoverStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByUserIdRequest, Result.RecoverStaminaByUserIdResult>
         {
 	        public RecoverStaminaByUserIdTask(IGs2Session session, Request.RecoverStaminaByUserIdRequest request) : base(session, request)
 	        {
@@ -2392,8 +3253,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.RecoverStaminaByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RecoverStaminaByUserIdResult> RecoverStaminaByUserIdFuture(
+                Request.RecoverStaminaByUserIdRequest request
+        )
+		{
+			return new RecoverStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RecoverStaminaByUserIdResult> RecoverStaminaByUserIdAsync(
+            Request.RecoverStaminaByUserIdRequest request
+        )
+		{
+		    var task = new RecoverStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RecoverStaminaByUserIdTask RecoverStaminaByUserIdAsync(
+                Request.RecoverStaminaByUserIdRequest request
+        )
+		{
+			return new RecoverStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.RecoverStaminaByUserIdResult> RecoverStaminaByUserId(
+		public async Task<Result.RecoverStaminaByUserIdResult> RecoverStaminaByUserIdAsync(
             Request.RecoverStaminaByUserIdRequest request
         )
 		{
@@ -2406,7 +3300,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class RaiseMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.RaiseMaxValueByUserIdRequest, Result.RaiseMaxValueByUserIdResult>
+        public class RaiseMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.RaiseMaxValueByUserIdRequest, Result.RaiseMaxValueByUserIdResult>
         {
 	        public RaiseMaxValueByUserIdTask(IGs2Session session, Request.RaiseMaxValueByUserIdRequest request) : base(session, request)
 	        {
@@ -2477,8 +3371,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.RaiseMaxValueByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RaiseMaxValueByUserIdResult> RaiseMaxValueByUserIdFuture(
+                Request.RaiseMaxValueByUserIdRequest request
+        )
+		{
+			return new RaiseMaxValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RaiseMaxValueByUserIdResult> RaiseMaxValueByUserIdAsync(
+            Request.RaiseMaxValueByUserIdRequest request
+        )
+		{
+		    var task = new RaiseMaxValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RaiseMaxValueByUserIdTask RaiseMaxValueByUserIdAsync(
+                Request.RaiseMaxValueByUserIdRequest request
+        )
+		{
+			return new RaiseMaxValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.RaiseMaxValueByUserIdResult> RaiseMaxValueByUserId(
+		public async Task<Result.RaiseMaxValueByUserIdResult> RaiseMaxValueByUserIdAsync(
             Request.RaiseMaxValueByUserIdRequest request
         )
 		{
@@ -2491,7 +3418,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.SetMaxValueByUserIdRequest, Result.SetMaxValueByUserIdResult>
+        public class SetMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.SetMaxValueByUserIdRequest, Result.SetMaxValueByUserIdResult>
         {
 	        public SetMaxValueByUserIdTask(IGs2Session session, Request.SetMaxValueByUserIdRequest request) : base(session, request)
 	        {
@@ -2562,8 +3489,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetMaxValueByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetMaxValueByUserIdResult> SetMaxValueByUserIdFuture(
+                Request.SetMaxValueByUserIdRequest request
+        )
+		{
+			return new SetMaxValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetMaxValueByUserIdResult> SetMaxValueByUserIdAsync(
+            Request.SetMaxValueByUserIdRequest request
+        )
+		{
+		    var task = new SetMaxValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetMaxValueByUserIdTask SetMaxValueByUserIdAsync(
+                Request.SetMaxValueByUserIdRequest request
+        )
+		{
+			return new SetMaxValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetMaxValueByUserIdResult> SetMaxValueByUserId(
+		public async Task<Result.SetMaxValueByUserIdResult> SetMaxValueByUserIdAsync(
             Request.SetMaxValueByUserIdRequest request
         )
 		{
@@ -2576,7 +3536,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverIntervalByUserIdTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByUserIdRequest, Result.SetRecoverIntervalByUserIdResult>
+        public class SetRecoverIntervalByUserIdTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByUserIdRequest, Result.SetRecoverIntervalByUserIdResult>
         {
 	        public SetRecoverIntervalByUserIdTask(IGs2Session session, Request.SetRecoverIntervalByUserIdRequest request) : base(session, request)
 	        {
@@ -2647,8 +3607,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverIntervalByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserIdFuture(
+                Request.SetRecoverIntervalByUserIdRequest request
+        )
+		{
+			return new SetRecoverIntervalByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserIdAsync(
+            Request.SetRecoverIntervalByUserIdRequest request
+        )
+		{
+		    var task = new SetRecoverIntervalByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverIntervalByUserIdTask SetRecoverIntervalByUserIdAsync(
+                Request.SetRecoverIntervalByUserIdRequest request
+        )
+		{
+			return new SetRecoverIntervalByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserId(
+		public async Task<Result.SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserIdAsync(
             Request.SetRecoverIntervalByUserIdRequest request
         )
 		{
@@ -2661,7 +3654,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverValueByUserIdTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByUserIdRequest, Result.SetRecoverValueByUserIdResult>
+        public class SetRecoverValueByUserIdTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByUserIdRequest, Result.SetRecoverValueByUserIdResult>
         {
 	        public SetRecoverValueByUserIdTask(IGs2Session session, Request.SetRecoverValueByUserIdRequest request) : base(session, request)
 	        {
@@ -2732,8 +3725,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverValueByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverValueByUserIdResult> SetRecoverValueByUserIdFuture(
+                Request.SetRecoverValueByUserIdRequest request
+        )
+		{
+			return new SetRecoverValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverValueByUserIdResult> SetRecoverValueByUserIdAsync(
+            Request.SetRecoverValueByUserIdRequest request
+        )
+		{
+		    var task = new SetRecoverValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverValueByUserIdTask SetRecoverValueByUserIdAsync(
+                Request.SetRecoverValueByUserIdRequest request
+        )
+		{
+			return new SetRecoverValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverValueByUserIdResult> SetRecoverValueByUserId(
+		public async Task<Result.SetRecoverValueByUserIdResult> SetRecoverValueByUserIdAsync(
             Request.SetRecoverValueByUserIdRequest request
         )
 		{
@@ -2746,7 +3772,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetMaxValueByStatusTask : Gs2WebSocketSessionTask<Request.SetMaxValueByStatusRequest, Result.SetMaxValueByStatusResult>
+        public class SetMaxValueByStatusTask : Gs2WebSocketSessionTask<Request.SetMaxValueByStatusRequest, Result.SetMaxValueByStatusResult>
         {
 	        public SetMaxValueByStatusTask(IGs2Session session, Request.SetMaxValueByStatusRequest request) : base(session, request)
 	        {
@@ -2832,8 +3858,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetMaxValueByStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetMaxValueByStatusResult> SetMaxValueByStatusFuture(
+                Request.SetMaxValueByStatusRequest request
+        )
+		{
+			return new SetMaxValueByStatusTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetMaxValueByStatusResult> SetMaxValueByStatusAsync(
+            Request.SetMaxValueByStatusRequest request
+        )
+		{
+		    var task = new SetMaxValueByStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetMaxValueByStatusTask SetMaxValueByStatusAsync(
+                Request.SetMaxValueByStatusRequest request
+        )
+		{
+			return new SetMaxValueByStatusTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetMaxValueByStatusResult> SetMaxValueByStatus(
+		public async Task<Result.SetMaxValueByStatusResult> SetMaxValueByStatusAsync(
             Request.SetMaxValueByStatusRequest request
         )
 		{
@@ -2846,7 +3905,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverIntervalByStatusTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByStatusRequest, Result.SetRecoverIntervalByStatusResult>
+        public class SetRecoverIntervalByStatusTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByStatusRequest, Result.SetRecoverIntervalByStatusResult>
         {
 	        public SetRecoverIntervalByStatusTask(IGs2Session session, Request.SetRecoverIntervalByStatusRequest request) : base(session, request)
 	        {
@@ -2932,8 +3991,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverIntervalByStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverIntervalByStatusResult> SetRecoverIntervalByStatusFuture(
+                Request.SetRecoverIntervalByStatusRequest request
+        )
+		{
+			return new SetRecoverIntervalByStatusTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverIntervalByStatusResult> SetRecoverIntervalByStatusAsync(
+            Request.SetRecoverIntervalByStatusRequest request
+        )
+		{
+		    var task = new SetRecoverIntervalByStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverIntervalByStatusTask SetRecoverIntervalByStatusAsync(
+                Request.SetRecoverIntervalByStatusRequest request
+        )
+		{
+			return new SetRecoverIntervalByStatusTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverIntervalByStatusResult> SetRecoverIntervalByStatus(
+		public async Task<Result.SetRecoverIntervalByStatusResult> SetRecoverIntervalByStatusAsync(
             Request.SetRecoverIntervalByStatusRequest request
         )
 		{
@@ -2946,7 +4038,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverValueByStatusTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByStatusRequest, Result.SetRecoverValueByStatusResult>
+        public class SetRecoverValueByStatusTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByStatusRequest, Result.SetRecoverValueByStatusResult>
         {
 	        public SetRecoverValueByStatusTask(IGs2Session session, Request.SetRecoverValueByStatusRequest request) : base(session, request)
 	        {
@@ -3032,8 +4124,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverValueByStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverValueByStatusResult> SetRecoverValueByStatusFuture(
+                Request.SetRecoverValueByStatusRequest request
+        )
+		{
+			return new SetRecoverValueByStatusTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverValueByStatusResult> SetRecoverValueByStatusAsync(
+            Request.SetRecoverValueByStatusRequest request
+        )
+		{
+		    var task = new SetRecoverValueByStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverValueByStatusTask SetRecoverValueByStatusAsync(
+                Request.SetRecoverValueByStatusRequest request
+        )
+		{
+			return new SetRecoverValueByStatusTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverValueByStatusResult> SetRecoverValueByStatus(
+		public async Task<Result.SetRecoverValueByStatusResult> SetRecoverValueByStatusAsync(
             Request.SetRecoverValueByStatusRequest request
         )
 		{
@@ -3046,7 +4171,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class DeleteStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteStaminaByUserIdRequest, Result.DeleteStaminaByUserIdResult>
+        public class DeleteStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteStaminaByUserIdRequest, Result.DeleteStaminaByUserIdResult>
         {
 	        public DeleteStaminaByUserIdTask(IGs2Session session, Request.DeleteStaminaByUserIdRequest request) : base(session, request)
 	        {
@@ -3112,8 +4237,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteStaminaByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteStaminaByUserIdResult> DeleteStaminaByUserIdFuture(
+                Request.DeleteStaminaByUserIdRequest request
+        )
+		{
+			return new DeleteStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteStaminaByUserIdResult> DeleteStaminaByUserIdAsync(
+            Request.DeleteStaminaByUserIdRequest request
+        )
+		{
+		    var task = new DeleteStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteStaminaByUserIdTask DeleteStaminaByUserIdAsync(
+                Request.DeleteStaminaByUserIdRequest request
+        )
+		{
+			return new DeleteStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteStaminaByUserIdResult> DeleteStaminaByUserId(
+		public async Task<Result.DeleteStaminaByUserIdResult> DeleteStaminaByUserIdAsync(
             Request.DeleteStaminaByUserIdRequest request
         )
 		{
@@ -3126,7 +4284,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class RecoverStaminaByStampSheetTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByStampSheetRequest, Result.RecoverStaminaByStampSheetResult>
+        public class RecoverStaminaByStampSheetTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByStampSheetRequest, Result.RecoverStaminaByStampSheetResult>
         {
 	        public RecoverStaminaByStampSheetTask(IGs2Session session, Request.RecoverStaminaByStampSheetRequest request) : base(session, request)
 	        {
@@ -3187,8 +4345,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.RecoverStaminaByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RecoverStaminaByStampSheetResult> RecoverStaminaByStampSheetFuture(
+                Request.RecoverStaminaByStampSheetRequest request
+        )
+		{
+			return new RecoverStaminaByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RecoverStaminaByStampSheetResult> RecoverStaminaByStampSheetAsync(
+            Request.RecoverStaminaByStampSheetRequest request
+        )
+		{
+		    var task = new RecoverStaminaByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RecoverStaminaByStampSheetTask RecoverStaminaByStampSheetAsync(
+                Request.RecoverStaminaByStampSheetRequest request
+        )
+		{
+			return new RecoverStaminaByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.RecoverStaminaByStampSheetResult> RecoverStaminaByStampSheet(
+		public async Task<Result.RecoverStaminaByStampSheetResult> RecoverStaminaByStampSheetAsync(
             Request.RecoverStaminaByStampSheetRequest request
         )
 		{
@@ -3201,7 +4392,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class RaiseMaxValueByStampSheetTask : Gs2WebSocketSessionTask<Request.RaiseMaxValueByStampSheetRequest, Result.RaiseMaxValueByStampSheetResult>
+        public class RaiseMaxValueByStampSheetTask : Gs2WebSocketSessionTask<Request.RaiseMaxValueByStampSheetRequest, Result.RaiseMaxValueByStampSheetResult>
         {
 	        public RaiseMaxValueByStampSheetTask(IGs2Session session, Request.RaiseMaxValueByStampSheetRequest request) : base(session, request)
 	        {
@@ -3262,8 +4453,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.RaiseMaxValueByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RaiseMaxValueByStampSheetResult> RaiseMaxValueByStampSheetFuture(
+                Request.RaiseMaxValueByStampSheetRequest request
+        )
+		{
+			return new RaiseMaxValueByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RaiseMaxValueByStampSheetResult> RaiseMaxValueByStampSheetAsync(
+            Request.RaiseMaxValueByStampSheetRequest request
+        )
+		{
+		    var task = new RaiseMaxValueByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RaiseMaxValueByStampSheetTask RaiseMaxValueByStampSheetAsync(
+                Request.RaiseMaxValueByStampSheetRequest request
+        )
+		{
+			return new RaiseMaxValueByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.RaiseMaxValueByStampSheetResult> RaiseMaxValueByStampSheet(
+		public async Task<Result.RaiseMaxValueByStampSheetResult> RaiseMaxValueByStampSheetAsync(
             Request.RaiseMaxValueByStampSheetRequest request
         )
 		{
@@ -3276,7 +4500,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetMaxValueByStampSheetTask : Gs2WebSocketSessionTask<Request.SetMaxValueByStampSheetRequest, Result.SetMaxValueByStampSheetResult>
+        public class SetMaxValueByStampSheetTask : Gs2WebSocketSessionTask<Request.SetMaxValueByStampSheetRequest, Result.SetMaxValueByStampSheetResult>
         {
 	        public SetMaxValueByStampSheetTask(IGs2Session session, Request.SetMaxValueByStampSheetRequest request) : base(session, request)
 	        {
@@ -3337,8 +4561,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetMaxValueByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetMaxValueByStampSheetResult> SetMaxValueByStampSheetFuture(
+                Request.SetMaxValueByStampSheetRequest request
+        )
+		{
+			return new SetMaxValueByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetMaxValueByStampSheetResult> SetMaxValueByStampSheetAsync(
+            Request.SetMaxValueByStampSheetRequest request
+        )
+		{
+		    var task = new SetMaxValueByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetMaxValueByStampSheetTask SetMaxValueByStampSheetAsync(
+                Request.SetMaxValueByStampSheetRequest request
+        )
+		{
+			return new SetMaxValueByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetMaxValueByStampSheetResult> SetMaxValueByStampSheet(
+		public async Task<Result.SetMaxValueByStampSheetResult> SetMaxValueByStampSheetAsync(
             Request.SetMaxValueByStampSheetRequest request
         )
 		{
@@ -3351,7 +4608,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverIntervalByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByStampSheetRequest, Result.SetRecoverIntervalByStampSheetResult>
+        public class SetRecoverIntervalByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRecoverIntervalByStampSheetRequest, Result.SetRecoverIntervalByStampSheetResult>
         {
 	        public SetRecoverIntervalByStampSheetTask(IGs2Session session, Request.SetRecoverIntervalByStampSheetRequest request) : base(session, request)
 	        {
@@ -3412,8 +4669,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverIntervalByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverIntervalByStampSheetResult> SetRecoverIntervalByStampSheetFuture(
+                Request.SetRecoverIntervalByStampSheetRequest request
+        )
+		{
+			return new SetRecoverIntervalByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverIntervalByStampSheetResult> SetRecoverIntervalByStampSheetAsync(
+            Request.SetRecoverIntervalByStampSheetRequest request
+        )
+		{
+		    var task = new SetRecoverIntervalByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverIntervalByStampSheetTask SetRecoverIntervalByStampSheetAsync(
+                Request.SetRecoverIntervalByStampSheetRequest request
+        )
+		{
+			return new SetRecoverIntervalByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverIntervalByStampSheetResult> SetRecoverIntervalByStampSheet(
+		public async Task<Result.SetRecoverIntervalByStampSheetResult> SetRecoverIntervalByStampSheetAsync(
             Request.SetRecoverIntervalByStampSheetRequest request
         )
 		{
@@ -3426,7 +4716,7 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
-        private class SetRecoverValueByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByStampSheetRequest, Result.SetRecoverValueByStampSheetResult>
+        public class SetRecoverValueByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRecoverValueByStampSheetRequest, Result.SetRecoverValueByStampSheetResult>
         {
 	        public SetRecoverValueByStampSheetTask(IGs2Session session, Request.SetRecoverValueByStampSheetRequest request) : base(session, request)
 	        {
@@ -3487,8 +4777,41 @@ namespace Gs2.Gs2Stamina
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetRecoverValueByStampSheetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetRecoverValueByStampSheetResult> SetRecoverValueByStampSheetFuture(
+                Request.SetRecoverValueByStampSheetRequest request
+        )
+		{
+			return new SetRecoverValueByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRecoverValueByStampSheetResult> SetRecoverValueByStampSheetAsync(
+            Request.SetRecoverValueByStampSheetRequest request
+        )
+		{
+		    var task = new SetRecoverValueByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRecoverValueByStampSheetTask SetRecoverValueByStampSheetAsync(
+                Request.SetRecoverValueByStampSheetRequest request
+        )
+		{
+			return new SetRecoverValueByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.SetRecoverValueByStampSheetResult> SetRecoverValueByStampSheet(
+		public async Task<Result.SetRecoverValueByStampSheetResult> SetRecoverValueByStampSheetAsync(
             Request.SetRecoverValueByStampSheetRequest request
         )
 		{

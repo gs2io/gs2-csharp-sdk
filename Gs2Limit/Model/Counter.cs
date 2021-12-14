@@ -36,6 +36,7 @@ namespace Gs2.Gs2Limit.Model
         public string Name { set; get; }
         public string UserId { set; get; }
         public int? Count { set; get; }
+        public long? NextResetAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
 
@@ -64,6 +65,11 @@ namespace Gs2.Gs2Limit.Model
             return this;
         }
 
+        public Counter WithNextResetAt(long? nextResetAt) {
+            this.NextResetAt = nextResetAt;
+            return this;
+        }
+
         public Counter WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
@@ -88,6 +94,7 @@ namespace Gs2.Gs2Limit.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
+                .WithNextResetAt(!data.Keys.Contains("nextResetAt") || data["nextResetAt"] == null ? null : (long?)long.Parse(data["nextResetAt"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -100,6 +107,7 @@ namespace Gs2.Gs2Limit.Model
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["count"] = Count,
+                ["nextResetAt"] = NextResetAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -127,6 +135,10 @@ namespace Gs2.Gs2Limit.Model
             if (Count != null) {
                 writer.WritePropertyName("count");
                 writer.Write(int.Parse(Count.ToString()));
+            }
+            if (NextResetAt != null) {
+                writer.WritePropertyName("nextResetAt");
+                writer.Write(long.Parse(NextResetAt.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -182,6 +194,14 @@ namespace Gs2.Gs2Limit.Model
             else
             {
                 diff += (int)(Count - other.Count);
+            }
+            if (NextResetAt == null && NextResetAt == other.NextResetAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(NextResetAt - other.NextResetAt);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

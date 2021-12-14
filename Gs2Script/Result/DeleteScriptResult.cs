@@ -33,6 +33,12 @@ namespace Gs2.Gs2Script.Result
 	[System.Serializable]
 	public class DeleteScriptResult : IResult
 	{
+        public Gs2.Gs2Script.Model.Script Item { set; get; }
+
+        public DeleteScriptResult WithItem(Gs2.Gs2Script.Model.Script item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Script.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteScriptResult();
+            return new DeleteScriptResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Script.Model.Script.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

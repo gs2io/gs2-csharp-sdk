@@ -35,6 +35,8 @@ namespace Gs2.Gs2Friend.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
 
         public DescribeBlackListByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -43,6 +45,16 @@ namespace Gs2.Gs2Friend.Request
 
         public DescribeBlackListByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public DescribeBlackListByUserIdRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
+            return this;
+        }
+
+        public DescribeBlackListByUserIdRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
@@ -56,7 +68,9 @@ namespace Gs2.Gs2Friend.Request
             }
             return new DescribeBlackListByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
         public JsonData ToJson()
@@ -64,6 +78,8 @@ namespace Gs2.Gs2Friend.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
@@ -77,6 +93,14 @@ namespace Gs2.Gs2Friend.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
             }
             writer.WriteObjectEnd();
         }

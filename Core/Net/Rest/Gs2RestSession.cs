@@ -7,6 +7,9 @@ using Gs2.Core.Model;
 using Gs2.Core.Model.Internal;
 using Gs2.Core.Result;
 #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 #endif
@@ -92,7 +95,11 @@ namespace Gs2.Core.Net
             callback.Invoke(new AsyncResult<OpenResult>(new OpenResult(), null));
         }
         
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<OpenResult> OpenAsync()
+#else
         public async Task<OpenResult> OpenAsync()
+#endif
         {
             if (State == State.Available)
             {
@@ -129,7 +136,11 @@ namespace Gs2.Core.Net
             yield return null;
         }
 
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask SendAsync(IGs2SessionRequest request)
+#else
         public async Task SendAsync(IGs2SessionRequest request)
+#endif
         {
             if (request is RestSessionRequest sessionRequest)
             {
@@ -177,7 +188,12 @@ namespace Gs2.Core.Net
             }
             yield return null;
         }
+        
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask CloseAsync()
+#else
         public async Task CloseAsync()
+#endif
         {
             if (State == State.Idle)
             {

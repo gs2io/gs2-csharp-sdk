@@ -33,6 +33,12 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class DeleteNamespaceResult : IResult
 	{
+        public Gs2.Gs2News.Model.Namespace Item { set; get; }
+
+        public DeleteNamespaceResult WithItem(Gs2.Gs2News.Model.Namespace item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2News.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteNamespaceResult();
+            return new DeleteNamespaceResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2News.Model.Namespace.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -207,6 +250,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -222,7 +305,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -271,6 +354,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -286,7 +409,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -335,6 +458,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -350,7 +513,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -427,6 +590,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -442,7 +645,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -491,6 +694,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -506,7 +749,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DescribeDataObjectsTask : Gs2RestSessionTask<DescribeDataObjectsRequest, DescribeDataObjectsResult>
+        public class DescribeDataObjectsTask : Gs2RestSessionTask<DescribeDataObjectsRequest, DescribeDataObjectsResult>
         {
             public DescribeDataObjectsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDataObjectsRequest request) : base(session, factory, request)
             {
@@ -568,6 +811,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeDataObjectsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeDataObjectsResult> DescribeDataObjectsFuture(
+                Request.DescribeDataObjectsRequest request
+        )
+		{
+			return new DescribeDataObjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDataObjectsResult> DescribeDataObjectsAsync(
+                Request.DescribeDataObjectsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDataObjectsResult> result = null;
+			await DescribeDataObjects(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDataObjectsTask DescribeDataObjectsAsync(
+                Request.DescribeDataObjectsRequest request
+        )
+		{
+			return new DescribeDataObjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeDataObjectsResult> DescribeDataObjectsAsync(
                 Request.DescribeDataObjectsRequest request
@@ -583,7 +866,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DescribeDataObjectsByUserIdTask : Gs2RestSessionTask<DescribeDataObjectsByUserIdRequest, DescribeDataObjectsByUserIdResult>
+        public class DescribeDataObjectsByUserIdTask : Gs2RestSessionTask<DescribeDataObjectsByUserIdRequest, DescribeDataObjectsByUserIdResult>
         {
             public DescribeDataObjectsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDataObjectsByUserIdRequest request) : base(session, factory, request)
             {
@@ -642,6 +925,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeDataObjectsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeDataObjectsByUserIdResult> DescribeDataObjectsByUserIdFuture(
+                Request.DescribeDataObjectsByUserIdRequest request
+        )
+		{
+			return new DescribeDataObjectsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDataObjectsByUserIdResult> DescribeDataObjectsByUserIdAsync(
+                Request.DescribeDataObjectsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDataObjectsByUserIdResult> result = null;
+			await DescribeDataObjectsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDataObjectsByUserIdTask DescribeDataObjectsByUserIdAsync(
+                Request.DescribeDataObjectsByUserIdRequest request
+        )
+		{
+			return new DescribeDataObjectsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeDataObjectsByUserIdResult> DescribeDataObjectsByUserIdAsync(
                 Request.DescribeDataObjectsByUserIdRequest request
@@ -657,7 +980,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareUploadTask : Gs2RestSessionTask<PrepareUploadRequest, PrepareUploadResult>
+        public class PrepareUploadTask : Gs2RestSessionTask<PrepareUploadRequest, PrepareUploadResult>
         {
             public PrepareUploadTask(IGs2Session session, RestSessionRequestFactory factory, PrepareUploadRequest request) : base(session, factory, request)
             {
@@ -753,6 +1076,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareUploadResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareUploadResult> PrepareUploadFuture(
+                Request.PrepareUploadRequest request
+        )
+		{
+			return new PrepareUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareUploadResult> PrepareUploadAsync(
+                Request.PrepareUploadRequest request
+        )
+		{
+            AsyncResult<Result.PrepareUploadResult> result = null;
+			await PrepareUpload(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareUploadTask PrepareUploadAsync(
+                Request.PrepareUploadRequest request
+        )
+		{
+			return new PrepareUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareUploadResult> PrepareUploadAsync(
                 Request.PrepareUploadRequest request
@@ -768,7 +1131,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareUploadByUserIdTask : Gs2RestSessionTask<PrepareUploadByUserIdRequest, PrepareUploadByUserIdResult>
+        public class PrepareUploadByUserIdTask : Gs2RestSessionTask<PrepareUploadByUserIdRequest, PrepareUploadByUserIdResult>
         {
             public PrepareUploadByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PrepareUploadByUserIdRequest request) : base(session, factory, request)
             {
@@ -861,6 +1224,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareUploadByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareUploadByUserIdResult> PrepareUploadByUserIdFuture(
+                Request.PrepareUploadByUserIdRequest request
+        )
+		{
+			return new PrepareUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareUploadByUserIdResult> PrepareUploadByUserIdAsync(
+                Request.PrepareUploadByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PrepareUploadByUserIdResult> result = null;
+			await PrepareUploadByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareUploadByUserIdTask PrepareUploadByUserIdAsync(
+                Request.PrepareUploadByUserIdRequest request
+        )
+		{
+			return new PrepareUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareUploadByUserIdResult> PrepareUploadByUserIdAsync(
                 Request.PrepareUploadByUserIdRequest request
@@ -876,7 +1279,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class UpdateDataObjectTask : Gs2RestSessionTask<UpdateDataObjectRequest, UpdateDataObjectResult>
+        public class UpdateDataObjectTask : Gs2RestSessionTask<UpdateDataObjectRequest, UpdateDataObjectResult>
         {
             public UpdateDataObjectTask(IGs2Session session, RestSessionRequestFactory factory, UpdateDataObjectRequest request) : base(session, factory, request)
             {
@@ -958,6 +1361,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateDataObjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateDataObjectResult> UpdateDataObjectFuture(
+                Request.UpdateDataObjectRequest request
+        )
+		{
+			return new UpdateDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateDataObjectResult> UpdateDataObjectAsync(
+                Request.UpdateDataObjectRequest request
+        )
+		{
+            AsyncResult<Result.UpdateDataObjectResult> result = null;
+			await UpdateDataObject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateDataObjectTask UpdateDataObjectAsync(
+                Request.UpdateDataObjectRequest request
+        )
+		{
+			return new UpdateDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateDataObjectResult> UpdateDataObjectAsync(
                 Request.UpdateDataObjectRequest request
@@ -973,7 +1416,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class UpdateDataObjectByUserIdTask : Gs2RestSessionTask<UpdateDataObjectByUserIdRequest, UpdateDataObjectByUserIdResult>
+        public class UpdateDataObjectByUserIdTask : Gs2RestSessionTask<UpdateDataObjectByUserIdRequest, UpdateDataObjectByUserIdResult>
         {
             public UpdateDataObjectByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UpdateDataObjectByUserIdRequest request) : base(session, factory, request)
             {
@@ -1052,6 +1495,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateDataObjectByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateDataObjectByUserIdResult> UpdateDataObjectByUserIdFuture(
+                Request.UpdateDataObjectByUserIdRequest request
+        )
+		{
+			return new UpdateDataObjectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateDataObjectByUserIdResult> UpdateDataObjectByUserIdAsync(
+                Request.UpdateDataObjectByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UpdateDataObjectByUserIdResult> result = null;
+			await UpdateDataObjectByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateDataObjectByUserIdTask UpdateDataObjectByUserIdAsync(
+                Request.UpdateDataObjectByUserIdRequest request
+        )
+		{
+			return new UpdateDataObjectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateDataObjectByUserIdResult> UpdateDataObjectByUserIdAsync(
                 Request.UpdateDataObjectByUserIdRequest request
@@ -1067,7 +1550,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareReUploadTask : Gs2RestSessionTask<PrepareReUploadRequest, PrepareReUploadResult>
+        public class PrepareReUploadTask : Gs2RestSessionTask<PrepareReUploadRequest, PrepareReUploadResult>
         {
             public PrepareReUploadTask(IGs2Session session, RestSessionRequestFactory factory, PrepareReUploadRequest request) : base(session, factory, request)
             {
@@ -1139,6 +1622,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareReUploadResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareReUploadResult> PrepareReUploadFuture(
+                Request.PrepareReUploadRequest request
+        )
+		{
+			return new PrepareReUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareReUploadResult> PrepareReUploadAsync(
+                Request.PrepareReUploadRequest request
+        )
+		{
+            AsyncResult<Result.PrepareReUploadResult> result = null;
+			await PrepareReUpload(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareReUploadTask PrepareReUploadAsync(
+                Request.PrepareReUploadRequest request
+        )
+		{
+			return new PrepareReUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareReUploadResult> PrepareReUploadAsync(
                 Request.PrepareReUploadRequest request
@@ -1154,7 +1677,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareReUploadByUserIdTask : Gs2RestSessionTask<PrepareReUploadByUserIdRequest, PrepareReUploadByUserIdResult>
+        public class PrepareReUploadByUserIdTask : Gs2RestSessionTask<PrepareReUploadByUserIdRequest, PrepareReUploadByUserIdResult>
         {
             public PrepareReUploadByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PrepareReUploadByUserIdRequest request) : base(session, factory, request)
             {
@@ -1223,6 +1746,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareReUploadByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareReUploadByUserIdResult> PrepareReUploadByUserIdFuture(
+                Request.PrepareReUploadByUserIdRequest request
+        )
+		{
+			return new PrepareReUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareReUploadByUserIdResult> PrepareReUploadByUserIdAsync(
+                Request.PrepareReUploadByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PrepareReUploadByUserIdResult> result = null;
+			await PrepareReUploadByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareReUploadByUserIdTask PrepareReUploadByUserIdAsync(
+                Request.PrepareReUploadByUserIdRequest request
+        )
+		{
+			return new PrepareReUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareReUploadByUserIdResult> PrepareReUploadByUserIdAsync(
                 Request.PrepareReUploadByUserIdRequest request
@@ -1238,7 +1801,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DoneUploadTask : Gs2RestSessionTask<DoneUploadRequest, DoneUploadResult>
+        public class DoneUploadTask : Gs2RestSessionTask<DoneUploadRequest, DoneUploadResult>
         {
             public DoneUploadTask(IGs2Session session, RestSessionRequestFactory factory, DoneUploadRequest request) : base(session, factory, request)
             {
@@ -1305,6 +1868,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DoneUploadResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DoneUploadResult> DoneUploadFuture(
+                Request.DoneUploadRequest request
+        )
+		{
+			return new DoneUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoneUploadResult> DoneUploadAsync(
+                Request.DoneUploadRequest request
+        )
+		{
+            AsyncResult<Result.DoneUploadResult> result = null;
+			await DoneUpload(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoneUploadTask DoneUploadAsync(
+                Request.DoneUploadRequest request
+        )
+		{
+			return new DoneUploadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DoneUploadResult> DoneUploadAsync(
                 Request.DoneUploadRequest request
@@ -1320,7 +1923,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DoneUploadByUserIdTask : Gs2RestSessionTask<DoneUploadByUserIdRequest, DoneUploadByUserIdResult>
+        public class DoneUploadByUserIdTask : Gs2RestSessionTask<DoneUploadByUserIdRequest, DoneUploadByUserIdResult>
         {
             public DoneUploadByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DoneUploadByUserIdRequest request) : base(session, factory, request)
             {
@@ -1384,6 +1987,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DoneUploadByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DoneUploadByUserIdResult> DoneUploadByUserIdFuture(
+                Request.DoneUploadByUserIdRequest request
+        )
+		{
+			return new DoneUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoneUploadByUserIdResult> DoneUploadByUserIdAsync(
+                Request.DoneUploadByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DoneUploadByUserIdResult> result = null;
+			await DoneUploadByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoneUploadByUserIdTask DoneUploadByUserIdAsync(
+                Request.DoneUploadByUserIdRequest request
+        )
+		{
+			return new DoneUploadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DoneUploadByUserIdResult> DoneUploadByUserIdAsync(
                 Request.DoneUploadByUserIdRequest request
@@ -1399,7 +2042,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DeleteDataObjectTask : Gs2RestSessionTask<DeleteDataObjectRequest, DeleteDataObjectResult>
+        public class DeleteDataObjectTask : Gs2RestSessionTask<DeleteDataObjectRequest, DeleteDataObjectResult>
         {
             public DeleteDataObjectTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDataObjectRequest request) : base(session, factory, request)
             {
@@ -1453,6 +2096,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteDataObjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteDataObjectResult> DeleteDataObjectFuture(
+                Request.DeleteDataObjectRequest request
+        )
+		{
+			return new DeleteDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteDataObjectResult> DeleteDataObjectAsync(
+                Request.DeleteDataObjectRequest request
+        )
+		{
+            AsyncResult<Result.DeleteDataObjectResult> result = null;
+			await DeleteDataObject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteDataObjectTask DeleteDataObjectAsync(
+                Request.DeleteDataObjectRequest request
+        )
+		{
+			return new DeleteDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteDataObjectResult> DeleteDataObjectAsync(
                 Request.DeleteDataObjectRequest request
@@ -1468,7 +2151,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DeleteDataObjectByUserIdTask : Gs2RestSessionTask<DeleteDataObjectByUserIdRequest, DeleteDataObjectByUserIdResult>
+        public class DeleteDataObjectByUserIdTask : Gs2RestSessionTask<DeleteDataObjectByUserIdRequest, DeleteDataObjectByUserIdResult>
         {
             public DeleteDataObjectByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDataObjectByUserIdRequest request) : base(session, factory, request)
             {
@@ -1519,6 +2202,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteDataObjectByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteDataObjectByUserIdResult> DeleteDataObjectByUserIdFuture(
+                Request.DeleteDataObjectByUserIdRequest request
+        )
+		{
+			return new DeleteDataObjectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteDataObjectByUserIdResult> DeleteDataObjectByUserIdAsync(
+                Request.DeleteDataObjectByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteDataObjectByUserIdResult> result = null;
+			await DeleteDataObjectByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteDataObjectByUserIdTask DeleteDataObjectByUserIdAsync(
+                Request.DeleteDataObjectByUserIdRequest request
+        )
+		{
+			return new DeleteDataObjectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteDataObjectByUserIdResult> DeleteDataObjectByUserIdAsync(
                 Request.DeleteDataObjectByUserIdRequest request
@@ -1534,7 +2257,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadTask : Gs2RestSessionTask<PrepareDownloadRequest, PrepareDownloadResult>
+        public class PrepareDownloadTask : Gs2RestSessionTask<PrepareDownloadRequest, PrepareDownloadResult>
         {
             public PrepareDownloadTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadRequest request) : base(session, factory, request)
             {
@@ -1605,6 +2328,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadResult> PrepareDownloadFuture(
+                Request.PrepareDownloadRequest request
+        )
+		{
+			return new PrepareDownloadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadResult> PrepareDownloadAsync(
+                Request.PrepareDownloadRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadResult> result = null;
+			await PrepareDownload(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadTask PrepareDownloadAsync(
+                Request.PrepareDownloadRequest request
+        )
+		{
+			return new PrepareDownloadTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadResult> PrepareDownloadAsync(
                 Request.PrepareDownloadRequest request
@@ -1620,7 +2383,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadByUserIdTask : Gs2RestSessionTask<PrepareDownloadByUserIdRequest, PrepareDownloadByUserIdResult>
+        public class PrepareDownloadByUserIdTask : Gs2RestSessionTask<PrepareDownloadByUserIdRequest, PrepareDownloadByUserIdResult>
         {
             public PrepareDownloadByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadByUserIdRequest request) : base(session, factory, request)
             {
@@ -1688,6 +2451,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadByUserIdResult> PrepareDownloadByUserIdFuture(
+                Request.PrepareDownloadByUserIdRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadByUserIdResult> PrepareDownloadByUserIdAsync(
+                Request.PrepareDownloadByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadByUserIdResult> result = null;
+			await PrepareDownloadByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadByUserIdTask PrepareDownloadByUserIdAsync(
+                Request.PrepareDownloadByUserIdRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadByUserIdResult> PrepareDownloadByUserIdAsync(
                 Request.PrepareDownloadByUserIdRequest request
@@ -1703,7 +2506,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadByGenerationTask : Gs2RestSessionTask<PrepareDownloadByGenerationRequest, PrepareDownloadByGenerationResult>
+        public class PrepareDownloadByGenerationTask : Gs2RestSessionTask<PrepareDownloadByGenerationRequest, PrepareDownloadByGenerationResult>
         {
             public PrepareDownloadByGenerationTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadByGenerationRequest request) : base(session, factory, request)
             {
@@ -1775,6 +2578,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadByGenerationResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadByGenerationResult> PrepareDownloadByGenerationFuture(
+                Request.PrepareDownloadByGenerationRequest request
+        )
+		{
+			return new PrepareDownloadByGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadByGenerationResult> PrepareDownloadByGenerationAsync(
+                Request.PrepareDownloadByGenerationRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadByGenerationResult> result = null;
+			await PrepareDownloadByGeneration(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadByGenerationTask PrepareDownloadByGenerationAsync(
+                Request.PrepareDownloadByGenerationRequest request
+        )
+		{
+			return new PrepareDownloadByGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadByGenerationResult> PrepareDownloadByGenerationAsync(
                 Request.PrepareDownloadByGenerationRequest request
@@ -1790,7 +2633,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadByGenerationAndUserIdTask : Gs2RestSessionTask<PrepareDownloadByGenerationAndUserIdRequest, PrepareDownloadByGenerationAndUserIdResult>
+        public class PrepareDownloadByGenerationAndUserIdTask : Gs2RestSessionTask<PrepareDownloadByGenerationAndUserIdRequest, PrepareDownloadByGenerationAndUserIdResult>
         {
             public PrepareDownloadByGenerationAndUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadByGenerationAndUserIdRequest request) : base(session, factory, request)
             {
@@ -1859,6 +2702,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadByGenerationAndUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadByGenerationAndUserIdResult> PrepareDownloadByGenerationAndUserIdFuture(
+                Request.PrepareDownloadByGenerationAndUserIdRequest request
+        )
+		{
+			return new PrepareDownloadByGenerationAndUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadByGenerationAndUserIdResult> PrepareDownloadByGenerationAndUserIdAsync(
+                Request.PrepareDownloadByGenerationAndUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadByGenerationAndUserIdResult> result = null;
+			await PrepareDownloadByGenerationAndUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadByGenerationAndUserIdTask PrepareDownloadByGenerationAndUserIdAsync(
+                Request.PrepareDownloadByGenerationAndUserIdRequest request
+        )
+		{
+			return new PrepareDownloadByGenerationAndUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadByGenerationAndUserIdResult> PrepareDownloadByGenerationAndUserIdAsync(
                 Request.PrepareDownloadByGenerationAndUserIdRequest request
@@ -1874,7 +2757,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadOwnDataTask : Gs2RestSessionTask<PrepareDownloadOwnDataRequest, PrepareDownloadOwnDataResult>
+        public class PrepareDownloadOwnDataTask : Gs2RestSessionTask<PrepareDownloadOwnDataRequest, PrepareDownloadOwnDataResult>
         {
             public PrepareDownloadOwnDataTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadOwnDataRequest request) : base(session, factory, request)
             {
@@ -1941,6 +2824,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadOwnDataResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadOwnDataResult> PrepareDownloadOwnDataFuture(
+                Request.PrepareDownloadOwnDataRequest request
+        )
+		{
+			return new PrepareDownloadOwnDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadOwnDataResult> PrepareDownloadOwnDataAsync(
+                Request.PrepareDownloadOwnDataRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadOwnDataResult> result = null;
+			await PrepareDownloadOwnData(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadOwnDataTask PrepareDownloadOwnDataAsync(
+                Request.PrepareDownloadOwnDataRequest request
+        )
+		{
+			return new PrepareDownloadOwnDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadOwnDataResult> PrepareDownloadOwnDataAsync(
                 Request.PrepareDownloadOwnDataRequest request
@@ -1956,7 +2879,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadByUserIdAndDataObjectNameTask : Gs2RestSessionTask<PrepareDownloadByUserIdAndDataObjectNameRequest, PrepareDownloadByUserIdAndDataObjectNameResult>
+        public class PrepareDownloadByUserIdAndDataObjectNameTask : Gs2RestSessionTask<PrepareDownloadByUserIdAndDataObjectNameRequest, PrepareDownloadByUserIdAndDataObjectNameResult>
         {
             public PrepareDownloadByUserIdAndDataObjectNameTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadByUserIdAndDataObjectNameRequest request) : base(session, factory, request)
             {
@@ -2007,6 +2930,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadByUserIdAndDataObjectNameResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadByUserIdAndDataObjectNameResult> PrepareDownloadByUserIdAndDataObjectNameFuture(
+                Request.PrepareDownloadByUserIdAndDataObjectNameRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdAndDataObjectNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadByUserIdAndDataObjectNameResult> PrepareDownloadByUserIdAndDataObjectNameAsync(
+                Request.PrepareDownloadByUserIdAndDataObjectNameRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadByUserIdAndDataObjectNameResult> result = null;
+			await PrepareDownloadByUserIdAndDataObjectName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadByUserIdAndDataObjectNameTask PrepareDownloadByUserIdAndDataObjectNameAsync(
+                Request.PrepareDownloadByUserIdAndDataObjectNameRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdAndDataObjectNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadByUserIdAndDataObjectNameResult> PrepareDownloadByUserIdAndDataObjectNameAsync(
                 Request.PrepareDownloadByUserIdAndDataObjectNameRequest request
@@ -2022,7 +2985,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadOwnDataByGenerationTask : Gs2RestSessionTask<PrepareDownloadOwnDataByGenerationRequest, PrepareDownloadOwnDataByGenerationResult>
+        public class PrepareDownloadOwnDataByGenerationTask : Gs2RestSessionTask<PrepareDownloadOwnDataByGenerationRequest, PrepareDownloadOwnDataByGenerationResult>
         {
             public PrepareDownloadOwnDataByGenerationTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadOwnDataByGenerationRequest request) : base(session, factory, request)
             {
@@ -2090,6 +3053,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadOwnDataByGenerationResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadOwnDataByGenerationResult> PrepareDownloadOwnDataByGenerationFuture(
+                Request.PrepareDownloadOwnDataByGenerationRequest request
+        )
+		{
+			return new PrepareDownloadOwnDataByGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadOwnDataByGenerationResult> PrepareDownloadOwnDataByGenerationAsync(
+                Request.PrepareDownloadOwnDataByGenerationRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadOwnDataByGenerationResult> result = null;
+			await PrepareDownloadOwnDataByGeneration(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadOwnDataByGenerationTask PrepareDownloadOwnDataByGenerationAsync(
+                Request.PrepareDownloadOwnDataByGenerationRequest request
+        )
+		{
+			return new PrepareDownloadOwnDataByGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadOwnDataByGenerationResult> PrepareDownloadOwnDataByGenerationAsync(
                 Request.PrepareDownloadOwnDataByGenerationRequest request
@@ -2105,7 +3108,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask : Gs2RestSessionTask<PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest, PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult>
+        public class PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask : Gs2RestSessionTask<PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest, PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult>
         {
             public PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask(IGs2Session session, RestSessionRequestFactory factory, PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest request) : base(session, factory, request)
             {
@@ -2170,6 +3173,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult> PrepareDownloadByUserIdAndDataObjectNameAndGenerationFuture(
+                Request.PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult> PrepareDownloadByUserIdAndDataObjectNameAndGenerationAsync(
+                Request.PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest request
+        )
+		{
+            AsyncResult<Result.PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult> result = null;
+			await PrepareDownloadByUserIdAndDataObjectNameAndGeneration(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask PrepareDownloadByUserIdAndDataObjectNameAndGenerationAsync(
+                Request.PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest request
+        )
+		{
+			return new PrepareDownloadByUserIdAndDataObjectNameAndGenerationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.PrepareDownloadByUserIdAndDataObjectNameAndGenerationResult> PrepareDownloadByUserIdAndDataObjectNameAndGenerationAsync(
                 Request.PrepareDownloadByUserIdAndDataObjectNameAndGenerationRequest request
@@ -2185,7 +3228,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class RestoreDataObjectTask : Gs2RestSessionTask<RestoreDataObjectRequest, RestoreDataObjectResult>
+        public class RestoreDataObjectTask : Gs2RestSessionTask<RestoreDataObjectRequest, RestoreDataObjectResult>
         {
             public RestoreDataObjectTask(IGs2Session session, RestSessionRequestFactory factory, RestoreDataObjectRequest request) : base(session, factory, request)
             {
@@ -2252,6 +3295,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.RestoreDataObjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.RestoreDataObjectResult> RestoreDataObjectFuture(
+                Request.RestoreDataObjectRequest request
+        )
+		{
+			return new RestoreDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RestoreDataObjectResult> RestoreDataObjectAsync(
+                Request.RestoreDataObjectRequest request
+        )
+		{
+            AsyncResult<Result.RestoreDataObjectResult> result = null;
+			await RestoreDataObject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RestoreDataObjectTask RestoreDataObjectAsync(
+                Request.RestoreDataObjectRequest request
+        )
+		{
+			return new RestoreDataObjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.RestoreDataObjectResult> RestoreDataObjectAsync(
                 Request.RestoreDataObjectRequest request
@@ -2267,7 +3350,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DescribeDataObjectHistoriesTask : Gs2RestSessionTask<DescribeDataObjectHistoriesRequest, DescribeDataObjectHistoriesResult>
+        public class DescribeDataObjectHistoriesTask : Gs2RestSessionTask<DescribeDataObjectHistoriesRequest, DescribeDataObjectHistoriesResult>
         {
             public DescribeDataObjectHistoriesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDataObjectHistoriesRequest request) : base(session, factory, request)
             {
@@ -2327,6 +3410,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeDataObjectHistoriesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeDataObjectHistoriesResult> DescribeDataObjectHistoriesFuture(
+                Request.DescribeDataObjectHistoriesRequest request
+        )
+		{
+			return new DescribeDataObjectHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDataObjectHistoriesResult> DescribeDataObjectHistoriesAsync(
+                Request.DescribeDataObjectHistoriesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDataObjectHistoriesResult> result = null;
+			await DescribeDataObjectHistories(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDataObjectHistoriesTask DescribeDataObjectHistoriesAsync(
+                Request.DescribeDataObjectHistoriesRequest request
+        )
+		{
+			return new DescribeDataObjectHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeDataObjectHistoriesResult> DescribeDataObjectHistoriesAsync(
                 Request.DescribeDataObjectHistoriesRequest request
@@ -2342,7 +3465,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class DescribeDataObjectHistoriesByUserIdTask : Gs2RestSessionTask<DescribeDataObjectHistoriesByUserIdRequest, DescribeDataObjectHistoriesByUserIdResult>
+        public class DescribeDataObjectHistoriesByUserIdTask : Gs2RestSessionTask<DescribeDataObjectHistoriesByUserIdRequest, DescribeDataObjectHistoriesByUserIdResult>
         {
             public DescribeDataObjectHistoriesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDataObjectHistoriesByUserIdRequest request) : base(session, factory, request)
             {
@@ -2399,6 +3522,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeDataObjectHistoriesByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeDataObjectHistoriesByUserIdResult> DescribeDataObjectHistoriesByUserIdFuture(
+                Request.DescribeDataObjectHistoriesByUserIdRequest request
+        )
+		{
+			return new DescribeDataObjectHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDataObjectHistoriesByUserIdResult> DescribeDataObjectHistoriesByUserIdAsync(
+                Request.DescribeDataObjectHistoriesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDataObjectHistoriesByUserIdResult> result = null;
+			await DescribeDataObjectHistoriesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDataObjectHistoriesByUserIdTask DescribeDataObjectHistoriesByUserIdAsync(
+                Request.DescribeDataObjectHistoriesByUserIdRequest request
+        )
+		{
+			return new DescribeDataObjectHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeDataObjectHistoriesByUserIdResult> DescribeDataObjectHistoriesByUserIdAsync(
                 Request.DescribeDataObjectHistoriesByUserIdRequest request
@@ -2414,7 +3577,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class GetDataObjectHistoryTask : Gs2RestSessionTask<GetDataObjectHistoryRequest, GetDataObjectHistoryResult>
+        public class GetDataObjectHistoryTask : Gs2RestSessionTask<GetDataObjectHistoryRequest, GetDataObjectHistoryResult>
         {
             public GetDataObjectHistoryTask(IGs2Session session, RestSessionRequestFactory factory, GetDataObjectHistoryRequest request) : base(session, factory, request)
             {
@@ -2482,6 +3645,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetDataObjectHistoryResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetDataObjectHistoryResult> GetDataObjectHistoryFuture(
+                Request.GetDataObjectHistoryRequest request
+        )
+		{
+			return new GetDataObjectHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDataObjectHistoryResult> GetDataObjectHistoryAsync(
+                Request.GetDataObjectHistoryRequest request
+        )
+		{
+            AsyncResult<Result.GetDataObjectHistoryResult> result = null;
+			await GetDataObjectHistory(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetDataObjectHistoryTask GetDataObjectHistoryAsync(
+                Request.GetDataObjectHistoryRequest request
+        )
+		{
+			return new GetDataObjectHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetDataObjectHistoryResult> GetDataObjectHistoryAsync(
                 Request.GetDataObjectHistoryRequest request
@@ -2497,7 +3700,7 @@ namespace Gs2.Gs2Datastore
 #endif
 
 
-        private class GetDataObjectHistoryByUserIdTask : Gs2RestSessionTask<GetDataObjectHistoryByUserIdRequest, GetDataObjectHistoryByUserIdResult>
+        public class GetDataObjectHistoryByUserIdTask : Gs2RestSessionTask<GetDataObjectHistoryByUserIdRequest, GetDataObjectHistoryByUserIdResult>
         {
             public GetDataObjectHistoryByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetDataObjectHistoryByUserIdRequest request) : base(session, factory, request)
             {
@@ -2562,6 +3765,46 @@ namespace Gs2.Gs2Datastore
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetDataObjectHistoryByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetDataObjectHistoryByUserIdResult> GetDataObjectHistoryByUserIdFuture(
+                Request.GetDataObjectHistoryByUserIdRequest request
+        )
+		{
+			return new GetDataObjectHistoryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDataObjectHistoryByUserIdResult> GetDataObjectHistoryByUserIdAsync(
+                Request.GetDataObjectHistoryByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetDataObjectHistoryByUserIdResult> result = null;
+			await GetDataObjectHistoryByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetDataObjectHistoryByUserIdTask GetDataObjectHistoryByUserIdAsync(
+                Request.GetDataObjectHistoryByUserIdRequest request
+        )
+		{
+			return new GetDataObjectHistoryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetDataObjectHistoryByUserIdResult> GetDataObjectHistoryByUserIdAsync(
                 Request.GetDataObjectHistoryByUserIdRequest request

@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -202,6 +245,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -217,7 +300,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -266,6 +349,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -281,7 +404,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -330,6 +453,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -345,7 +508,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -417,6 +580,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -432,7 +635,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -481,6 +684,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -496,7 +739,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeEventMastersTask : Gs2RestSessionTask<DescribeEventMastersRequest, DescribeEventMastersResult>
+        public class DescribeEventMastersTask : Gs2RestSessionTask<DescribeEventMastersRequest, DescribeEventMastersResult>
         {
             public DescribeEventMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeEventMastersRequest request) : base(session, factory, request)
             {
@@ -551,6 +794,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeEventMastersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeEventMastersResult> DescribeEventMastersFuture(
+                Request.DescribeEventMastersRequest request
+        )
+		{
+			return new DescribeEventMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeEventMastersResult> DescribeEventMastersAsync(
+                Request.DescribeEventMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeEventMastersResult> result = null;
+			await DescribeEventMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeEventMastersTask DescribeEventMastersAsync(
+                Request.DescribeEventMastersRequest request
+        )
+		{
+			return new DescribeEventMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeEventMastersResult> DescribeEventMastersAsync(
                 Request.DescribeEventMastersRequest request
@@ -566,7 +849,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class CreateEventMasterTask : Gs2RestSessionTask<CreateEventMasterRequest, CreateEventMasterResult>
+        public class CreateEventMasterTask : Gs2RestSessionTask<CreateEventMasterRequest, CreateEventMasterResult>
         {
             public CreateEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateEventMasterRequest request) : base(session, factory, request)
             {
@@ -703,6 +986,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateEventMasterResult> CreateEventMasterFuture(
+                Request.CreateEventMasterRequest request
+        )
+		{
+			return new CreateEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateEventMasterResult> CreateEventMasterAsync(
+                Request.CreateEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateEventMasterResult> result = null;
+			await CreateEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateEventMasterTask CreateEventMasterAsync(
+                Request.CreateEventMasterRequest request
+        )
+		{
+			return new CreateEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateEventMasterResult> CreateEventMasterAsync(
                 Request.CreateEventMasterRequest request
@@ -718,7 +1041,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventMasterTask : Gs2RestSessionTask<GetEventMasterRequest, GetEventMasterResult>
+        public class GetEventMasterTask : Gs2RestSessionTask<GetEventMasterRequest, GetEventMasterResult>
         {
             public GetEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetEventMasterRequest request) : base(session, factory, request)
             {
@@ -768,6 +1091,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventMasterResult> GetEventMasterFuture(
+                Request.GetEventMasterRequest request
+        )
+		{
+			return new GetEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventMasterResult> GetEventMasterAsync(
+                Request.GetEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetEventMasterResult> result = null;
+			await GetEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetEventMasterTask GetEventMasterAsync(
+                Request.GetEventMasterRequest request
+        )
+		{
+			return new GetEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetEventMasterResult> GetEventMasterAsync(
                 Request.GetEventMasterRequest request
@@ -783,7 +1146,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateEventMasterTask : Gs2RestSessionTask<UpdateEventMasterRequest, UpdateEventMasterResult>
+        public class UpdateEventMasterTask : Gs2RestSessionTask<UpdateEventMasterRequest, UpdateEventMasterResult>
         {
             public UpdateEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateEventMasterRequest request) : base(session, factory, request)
             {
@@ -916,6 +1279,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateEventMasterResult> UpdateEventMasterFuture(
+                Request.UpdateEventMasterRequest request
+        )
+		{
+			return new UpdateEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateEventMasterResult> UpdateEventMasterAsync(
+                Request.UpdateEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateEventMasterResult> result = null;
+			await UpdateEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateEventMasterTask UpdateEventMasterAsync(
+                Request.UpdateEventMasterRequest request
+        )
+		{
+			return new UpdateEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateEventMasterResult> UpdateEventMasterAsync(
                 Request.UpdateEventMasterRequest request
@@ -931,7 +1334,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteEventMasterTask : Gs2RestSessionTask<DeleteEventMasterRequest, DeleteEventMasterResult>
+        public class DeleteEventMasterTask : Gs2RestSessionTask<DeleteEventMasterRequest, DeleteEventMasterResult>
         {
             public DeleteEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteEventMasterRequest request) : base(session, factory, request)
             {
@@ -981,6 +1384,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteEventMasterResult> DeleteEventMasterFuture(
+                Request.DeleteEventMasterRequest request
+        )
+		{
+			return new DeleteEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteEventMasterResult> DeleteEventMasterAsync(
+                Request.DeleteEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteEventMasterResult> result = null;
+			await DeleteEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteEventMasterTask DeleteEventMasterAsync(
+                Request.DeleteEventMasterRequest request
+        )
+		{
+			return new DeleteEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteEventMasterResult> DeleteEventMasterAsync(
                 Request.DeleteEventMasterRequest request
@@ -996,7 +1439,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeTriggersTask : Gs2RestSessionTask<DescribeTriggersRequest, DescribeTriggersResult>
+        public class DescribeTriggersTask : Gs2RestSessionTask<DescribeTriggersRequest, DescribeTriggersResult>
         {
             public DescribeTriggersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTriggersRequest request) : base(session, factory, request)
             {
@@ -1055,6 +1498,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeTriggersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeTriggersResult> DescribeTriggersFuture(
+                Request.DescribeTriggersRequest request
+        )
+		{
+			return new DescribeTriggersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTriggersResult> DescribeTriggersAsync(
+                Request.DescribeTriggersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTriggersResult> result = null;
+			await DescribeTriggers(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTriggersTask DescribeTriggersAsync(
+                Request.DescribeTriggersRequest request
+        )
+		{
+			return new DescribeTriggersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeTriggersResult> DescribeTriggersAsync(
                 Request.DescribeTriggersRequest request
@@ -1070,7 +1553,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeTriggersByUserIdTask : Gs2RestSessionTask<DescribeTriggersByUserIdRequest, DescribeTriggersByUserIdResult>
+        public class DescribeTriggersByUserIdTask : Gs2RestSessionTask<DescribeTriggersByUserIdRequest, DescribeTriggersByUserIdResult>
         {
             public DescribeTriggersByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTriggersByUserIdRequest request) : base(session, factory, request)
             {
@@ -1126,6 +1609,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeTriggersByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeTriggersByUserIdResult> DescribeTriggersByUserIdFuture(
+                Request.DescribeTriggersByUserIdRequest request
+        )
+		{
+			return new DescribeTriggersByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTriggersByUserIdResult> DescribeTriggersByUserIdAsync(
+                Request.DescribeTriggersByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTriggersByUserIdResult> result = null;
+			await DescribeTriggersByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTriggersByUserIdTask DescribeTriggersByUserIdAsync(
+                Request.DescribeTriggersByUserIdRequest request
+        )
+		{
+			return new DescribeTriggersByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeTriggersByUserIdResult> DescribeTriggersByUserIdAsync(
                 Request.DescribeTriggersByUserIdRequest request
@@ -1141,7 +1664,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetTriggerTask : Gs2RestSessionTask<GetTriggerRequest, GetTriggerResult>
+        public class GetTriggerTask : Gs2RestSessionTask<GetTriggerRequest, GetTriggerResult>
         {
             public GetTriggerTask(IGs2Session session, RestSessionRequestFactory factory, GetTriggerRequest request) : base(session, factory, request)
             {
@@ -1195,6 +1718,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTriggerResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTriggerResult> GetTriggerFuture(
+                Request.GetTriggerRequest request
+        )
+		{
+			return new GetTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTriggerResult> GetTriggerAsync(
+                Request.GetTriggerRequest request
+        )
+		{
+            AsyncResult<Result.GetTriggerResult> result = null;
+			await GetTrigger(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTriggerTask GetTriggerAsync(
+                Request.GetTriggerRequest request
+        )
+		{
+			return new GetTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetTriggerResult> GetTriggerAsync(
                 Request.GetTriggerRequest request
@@ -1210,7 +1773,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetTriggerByUserIdTask : Gs2RestSessionTask<GetTriggerByUserIdRequest, GetTriggerByUserIdResult>
+        public class GetTriggerByUserIdTask : Gs2RestSessionTask<GetTriggerByUserIdRequest, GetTriggerByUserIdResult>
         {
             public GetTriggerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetTriggerByUserIdRequest request) : base(session, factory, request)
             {
@@ -1261,6 +1824,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetTriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetTriggerByUserIdResult> GetTriggerByUserIdFuture(
+                Request.GetTriggerByUserIdRequest request
+        )
+		{
+			return new GetTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTriggerByUserIdResult> GetTriggerByUserIdAsync(
+                Request.GetTriggerByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetTriggerByUserIdResult> result = null;
+			await GetTriggerByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTriggerByUserIdTask GetTriggerByUserIdAsync(
+                Request.GetTriggerByUserIdRequest request
+        )
+		{
+			return new GetTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetTriggerByUserIdResult> GetTriggerByUserIdAsync(
                 Request.GetTriggerByUserIdRequest request
@@ -1276,7 +1879,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class TriggerByUserIdTask : Gs2RestSessionTask<TriggerByUserIdRequest, TriggerByUserIdResult>
+        public class TriggerByUserIdTask : Gs2RestSessionTask<TriggerByUserIdRequest, TriggerByUserIdResult>
         {
             public TriggerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, TriggerByUserIdRequest request) : base(session, factory, request)
             {
@@ -1350,6 +1953,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.TriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.TriggerByUserIdResult> TriggerByUserIdFuture(
+                Request.TriggerByUserIdRequest request
+        )
+		{
+			return new TriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TriggerByUserIdResult> TriggerByUserIdAsync(
+                Request.TriggerByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.TriggerByUserIdResult> result = null;
+			await TriggerByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public TriggerByUserIdTask TriggerByUserIdAsync(
+                Request.TriggerByUserIdRequest request
+        )
+		{
+			return new TriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.TriggerByUserIdResult> TriggerByUserIdAsync(
                 Request.TriggerByUserIdRequest request
@@ -1365,7 +2008,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteTriggerTask : Gs2RestSessionTask<DeleteTriggerRequest, DeleteTriggerResult>
+        public class DeleteTriggerTask : Gs2RestSessionTask<DeleteTriggerRequest, DeleteTriggerResult>
         {
             public DeleteTriggerTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTriggerRequest request) : base(session, factory, request)
             {
@@ -1419,6 +2062,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTriggerResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTriggerResult> DeleteTriggerFuture(
+                Request.DeleteTriggerRequest request
+        )
+		{
+			return new DeleteTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTriggerResult> DeleteTriggerAsync(
+                Request.DeleteTriggerRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTriggerResult> result = null;
+			await DeleteTrigger(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTriggerTask DeleteTriggerAsync(
+                Request.DeleteTriggerRequest request
+        )
+		{
+			return new DeleteTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteTriggerResult> DeleteTriggerAsync(
                 Request.DeleteTriggerRequest request
@@ -1434,7 +2117,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DeleteTriggerByUserIdTask : Gs2RestSessionTask<DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult>
+        public class DeleteTriggerByUserIdTask : Gs2RestSessionTask<DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult>
         {
             public DeleteTriggerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTriggerByUserIdRequest request) : base(session, factory, request)
             {
@@ -1485,6 +2168,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteTriggerByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdFuture(
+                Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+			return new DeleteTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdAsync(
+                Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTriggerByUserIdResult> result = null;
+			await DeleteTriggerByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTriggerByUserIdTask DeleteTriggerByUserIdAsync(
+                Request.DeleteTriggerByUserIdRequest request
+        )
+		{
+			return new DeleteTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteTriggerByUserIdResult> DeleteTriggerByUserIdAsync(
                 Request.DeleteTriggerByUserIdRequest request
@@ -1500,7 +2223,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeEventsTask : Gs2RestSessionTask<DescribeEventsRequest, DescribeEventsResult>
+        public class DescribeEventsTask : Gs2RestSessionTask<DescribeEventsRequest, DescribeEventsResult>
         {
             public DescribeEventsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeEventsRequest request) : base(session, factory, request)
             {
@@ -1553,6 +2276,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeEventsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeEventsResult> DescribeEventsFuture(
+                Request.DescribeEventsRequest request
+        )
+		{
+			return new DescribeEventsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeEventsResult> DescribeEventsAsync(
+                Request.DescribeEventsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeEventsResult> result = null;
+			await DescribeEvents(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeEventsTask DescribeEventsAsync(
+                Request.DescribeEventsRequest request
+        )
+		{
+			return new DescribeEventsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeEventsResult> DescribeEventsAsync(
                 Request.DescribeEventsRequest request
@@ -1568,7 +2331,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeEventsByUserIdTask : Gs2RestSessionTask<DescribeEventsByUserIdRequest, DescribeEventsByUserIdResult>
+        public class DescribeEventsByUserIdTask : Gs2RestSessionTask<DescribeEventsByUserIdRequest, DescribeEventsByUserIdResult>
         {
             public DescribeEventsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeEventsByUserIdRequest request) : base(session, factory, request)
             {
@@ -1618,6 +2381,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeEventsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeEventsByUserIdResult> DescribeEventsByUserIdFuture(
+                Request.DescribeEventsByUserIdRequest request
+        )
+		{
+			return new DescribeEventsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeEventsByUserIdResult> DescribeEventsByUserIdAsync(
+                Request.DescribeEventsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeEventsByUserIdResult> result = null;
+			await DescribeEventsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeEventsByUserIdTask DescribeEventsByUserIdAsync(
+                Request.DescribeEventsByUserIdRequest request
+        )
+		{
+			return new DescribeEventsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeEventsByUserIdResult> DescribeEventsByUserIdAsync(
                 Request.DescribeEventsByUserIdRequest request
@@ -1633,7 +2436,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class DescribeRawEventsTask : Gs2RestSessionTask<DescribeRawEventsRequest, DescribeRawEventsResult>
+        public class DescribeRawEventsTask : Gs2RestSessionTask<DescribeRawEventsRequest, DescribeRawEventsResult>
         {
             public DescribeRawEventsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRawEventsRequest request) : base(session, factory, request)
             {
@@ -1682,6 +2485,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeRawEventsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeRawEventsResult> DescribeRawEventsFuture(
+                Request.DescribeRawEventsRequest request
+        )
+		{
+			return new DescribeRawEventsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeRawEventsResult> DescribeRawEventsAsync(
+                Request.DescribeRawEventsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeRawEventsResult> result = null;
+			await DescribeRawEvents(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeRawEventsTask DescribeRawEventsAsync(
+                Request.DescribeRawEventsRequest request
+        )
+		{
+			return new DescribeRawEventsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeRawEventsResult> DescribeRawEventsAsync(
                 Request.DescribeRawEventsRequest request
@@ -1697,7 +2540,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventTask : Gs2RestSessionTask<GetEventRequest, GetEventResult>
+        public class GetEventTask : Gs2RestSessionTask<GetEventRequest, GetEventResult>
         {
             public GetEventTask(IGs2Session session, RestSessionRequestFactory factory, GetEventRequest request) : base(session, factory, request)
             {
@@ -1751,6 +2594,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventResult> GetEventFuture(
+                Request.GetEventRequest request
+        )
+		{
+			return new GetEventTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventResult> GetEventAsync(
+                Request.GetEventRequest request
+        )
+		{
+            AsyncResult<Result.GetEventResult> result = null;
+			await GetEvent(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetEventTask GetEventAsync(
+                Request.GetEventRequest request
+        )
+		{
+			return new GetEventTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetEventResult> GetEventAsync(
                 Request.GetEventRequest request
@@ -1766,7 +2649,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetEventByUserIdTask : Gs2RestSessionTask<GetEventByUserIdRequest, GetEventByUserIdResult>
+        public class GetEventByUserIdTask : Gs2RestSessionTask<GetEventByUserIdRequest, GetEventByUserIdResult>
         {
             public GetEventByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetEventByUserIdRequest request) : base(session, factory, request)
             {
@@ -1817,6 +2700,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetEventByUserIdResult> GetEventByUserIdFuture(
+                Request.GetEventByUserIdRequest request
+        )
+		{
+			return new GetEventByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetEventByUserIdResult> GetEventByUserIdAsync(
+                Request.GetEventByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetEventByUserIdResult> result = null;
+			await GetEventByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetEventByUserIdTask GetEventByUserIdAsync(
+                Request.GetEventByUserIdRequest request
+        )
+		{
+			return new GetEventByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetEventByUserIdResult> GetEventByUserIdAsync(
                 Request.GetEventByUserIdRequest request
@@ -1832,7 +2755,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetRawEventTask : Gs2RestSessionTask<GetRawEventRequest, GetRawEventResult>
+        public class GetRawEventTask : Gs2RestSessionTask<GetRawEventRequest, GetRawEventResult>
         {
             public GetRawEventTask(IGs2Session session, RestSessionRequestFactory factory, GetRawEventRequest request) : base(session, factory, request)
             {
@@ -1882,6 +2805,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetRawEventResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetRawEventResult> GetRawEventFuture(
+                Request.GetRawEventRequest request
+        )
+		{
+			return new GetRawEventTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRawEventResult> GetRawEventAsync(
+                Request.GetRawEventRequest request
+        )
+		{
+            AsyncResult<Result.GetRawEventResult> result = null;
+			await GetRawEvent(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetRawEventTask GetRawEventAsync(
+                Request.GetRawEventRequest request
+        )
+		{
+			return new GetRawEventTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetRawEventResult> GetRawEventAsync(
                 Request.GetRawEventRequest request
@@ -1897,7 +2860,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
@@ -1946,6 +2909,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -1961,7 +2964,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class GetCurrentEventMasterTask : Gs2RestSessionTask<GetCurrentEventMasterRequest, GetCurrentEventMasterResult>
+        public class GetCurrentEventMasterTask : Gs2RestSessionTask<GetCurrentEventMasterRequest, GetCurrentEventMasterResult>
         {
             public GetCurrentEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentEventMasterRequest request) : base(session, factory, request)
             {
@@ -2010,6 +3013,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCurrentEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCurrentEventMasterResult> GetCurrentEventMasterFuture(
+                Request.GetCurrentEventMasterRequest request
+        )
+		{
+			return new GetCurrentEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentEventMasterResult> GetCurrentEventMasterAsync(
+                Request.GetCurrentEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentEventMasterResult> result = null;
+			await GetCurrentEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentEventMasterTask GetCurrentEventMasterAsync(
+                Request.GetCurrentEventMasterRequest request
+        )
+		{
+			return new GetCurrentEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCurrentEventMasterResult> GetCurrentEventMasterAsync(
                 Request.GetCurrentEventMasterRequest request
@@ -2025,7 +3068,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateCurrentEventMasterTask : Gs2RestSessionTask<UpdateCurrentEventMasterRequest, UpdateCurrentEventMasterResult>
+        public class UpdateCurrentEventMasterTask : Gs2RestSessionTask<UpdateCurrentEventMasterRequest, UpdateCurrentEventMasterResult>
         {
             public UpdateCurrentEventMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentEventMasterRequest request) : base(session, factory, request)
             {
@@ -2092,6 +3135,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentEventMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentEventMasterResult> UpdateCurrentEventMasterFuture(
+                Request.UpdateCurrentEventMasterRequest request
+        )
+		{
+			return new UpdateCurrentEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentEventMasterResult> UpdateCurrentEventMasterAsync(
+                Request.UpdateCurrentEventMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentEventMasterResult> result = null;
+			await UpdateCurrentEventMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentEventMasterTask UpdateCurrentEventMasterAsync(
+                Request.UpdateCurrentEventMasterRequest request
+        )
+		{
+			return new UpdateCurrentEventMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentEventMasterResult> UpdateCurrentEventMasterAsync(
                 Request.UpdateCurrentEventMasterRequest request
@@ -2107,7 +3190,7 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
-        private class UpdateCurrentEventMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentEventMasterFromGitHubRequest, UpdateCurrentEventMasterFromGitHubResult>
+        public class UpdateCurrentEventMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentEventMasterFromGitHubRequest, UpdateCurrentEventMasterFromGitHubResult>
         {
             public UpdateCurrentEventMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentEventMasterFromGitHubRequest request) : base(session, factory, request)
             {
@@ -2174,6 +3257,46 @@ namespace Gs2.Gs2Schedule
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentEventMasterFromGitHubResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentEventMasterFromGitHubResult> UpdateCurrentEventMasterFromGitHubFuture(
+                Request.UpdateCurrentEventMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentEventMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentEventMasterFromGitHubResult> UpdateCurrentEventMasterFromGitHubAsync(
+                Request.UpdateCurrentEventMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentEventMasterFromGitHubResult> result = null;
+			await UpdateCurrentEventMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentEventMasterFromGitHubTask UpdateCurrentEventMasterFromGitHubAsync(
+                Request.UpdateCurrentEventMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentEventMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentEventMasterFromGitHubResult> UpdateCurrentEventMasterFromGitHubAsync(
                 Request.UpdateCurrentEventMasterFromGitHubRequest request

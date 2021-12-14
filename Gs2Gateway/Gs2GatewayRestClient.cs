@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -207,6 +250,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -222,7 +305,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -271,6 +354,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -286,7 +409,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -335,6 +458,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -350,7 +513,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -427,6 +590,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -442,7 +645,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -491,6 +694,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -506,7 +749,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DescribeWebSocketSessionsTask : Gs2RestSessionTask<DescribeWebSocketSessionsRequest, DescribeWebSocketSessionsResult>
+        public class DescribeWebSocketSessionsTask : Gs2RestSessionTask<DescribeWebSocketSessionsRequest, DescribeWebSocketSessionsResult>
         {
             public DescribeWebSocketSessionsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeWebSocketSessionsRequest request) : base(session, factory, request)
             {
@@ -565,6 +808,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeWebSocketSessionsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeWebSocketSessionsResult> DescribeWebSocketSessionsFuture(
+                Request.DescribeWebSocketSessionsRequest request
+        )
+		{
+			return new DescribeWebSocketSessionsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeWebSocketSessionsResult> DescribeWebSocketSessionsAsync(
+                Request.DescribeWebSocketSessionsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeWebSocketSessionsResult> result = null;
+			await DescribeWebSocketSessions(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeWebSocketSessionsTask DescribeWebSocketSessionsAsync(
+                Request.DescribeWebSocketSessionsRequest request
+        )
+		{
+			return new DescribeWebSocketSessionsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeWebSocketSessionsResult> DescribeWebSocketSessionsAsync(
                 Request.DescribeWebSocketSessionsRequest request
@@ -580,7 +863,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DescribeWebSocketSessionsByUserIdTask : Gs2RestSessionTask<DescribeWebSocketSessionsByUserIdRequest, DescribeWebSocketSessionsByUserIdResult>
+        public class DescribeWebSocketSessionsByUserIdTask : Gs2RestSessionTask<DescribeWebSocketSessionsByUserIdRequest, DescribeWebSocketSessionsByUserIdResult>
         {
             public DescribeWebSocketSessionsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeWebSocketSessionsByUserIdRequest request) : base(session, factory, request)
             {
@@ -636,6 +919,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeWebSocketSessionsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeWebSocketSessionsByUserIdResult> DescribeWebSocketSessionsByUserIdFuture(
+                Request.DescribeWebSocketSessionsByUserIdRequest request
+        )
+		{
+			return new DescribeWebSocketSessionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeWebSocketSessionsByUserIdResult> DescribeWebSocketSessionsByUserIdAsync(
+                Request.DescribeWebSocketSessionsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeWebSocketSessionsByUserIdResult> result = null;
+			await DescribeWebSocketSessionsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeWebSocketSessionsByUserIdTask DescribeWebSocketSessionsByUserIdAsync(
+                Request.DescribeWebSocketSessionsByUserIdRequest request
+        )
+		{
+			return new DescribeWebSocketSessionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeWebSocketSessionsByUserIdResult> DescribeWebSocketSessionsByUserIdAsync(
                 Request.DescribeWebSocketSessionsByUserIdRequest request
@@ -651,7 +974,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SetUserIdTask : Gs2RestSessionTask<SetUserIdRequest, SetUserIdResult>
+        public class SetUserIdTask : Gs2RestSessionTask<SetUserIdRequest, SetUserIdResult>
         {
             public SetUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetUserIdRequest request) : base(session, factory, request)
             {
@@ -722,6 +1045,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetUserIdResult> SetUserIdFuture(
+                Request.SetUserIdRequest request
+        )
+		{
+			return new SetUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetUserIdResult> SetUserIdAsync(
+                Request.SetUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetUserIdResult> result = null;
+			await SetUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetUserIdTask SetUserIdAsync(
+                Request.SetUserIdRequest request
+        )
+		{
+			return new SetUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SetUserIdResult> SetUserIdAsync(
                 Request.SetUserIdRequest request
@@ -737,7 +1100,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SetUserIdByUserIdTask : Gs2RestSessionTask<SetUserIdByUserIdRequest, SetUserIdByUserIdResult>
+        public class SetUserIdByUserIdTask : Gs2RestSessionTask<SetUserIdByUserIdRequest, SetUserIdByUserIdResult>
         {
             public SetUserIdByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetUserIdByUserIdRequest request) : base(session, factory, request)
             {
@@ -805,6 +1168,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetUserIdByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetUserIdByUserIdResult> SetUserIdByUserIdFuture(
+                Request.SetUserIdByUserIdRequest request
+        )
+		{
+			return new SetUserIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetUserIdByUserIdResult> SetUserIdByUserIdAsync(
+                Request.SetUserIdByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetUserIdByUserIdResult> result = null;
+			await SetUserIdByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetUserIdByUserIdTask SetUserIdByUserIdAsync(
+                Request.SetUserIdByUserIdRequest request
+        )
+		{
+			return new SetUserIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SetUserIdByUserIdResult> SetUserIdByUserIdAsync(
                 Request.SetUserIdByUserIdRequest request
@@ -820,7 +1223,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SendNotificationTask : Gs2RestSessionTask<SendNotificationRequest, SendNotificationResult>
+        public class SendNotificationTask : Gs2RestSessionTask<SendNotificationRequest, SendNotificationResult>
         {
             public SendNotificationTask(IGs2Session session, RestSessionRequestFactory factory, SendNotificationRequest request) : base(session, factory, request)
             {
@@ -903,6 +1306,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SendNotificationResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SendNotificationResult> SendNotificationFuture(
+                Request.SendNotificationRequest request
+        )
+		{
+			return new SendNotificationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SendNotificationResult> SendNotificationAsync(
+                Request.SendNotificationRequest request
+        )
+		{
+            AsyncResult<Result.SendNotificationResult> result = null;
+			await SendNotification(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SendNotificationTask SendNotificationAsync(
+                Request.SendNotificationRequest request
+        )
+		{
+			return new SendNotificationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SendNotificationResult> SendNotificationAsync(
                 Request.SendNotificationRequest request
@@ -918,7 +1361,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SetFirebaseTokenTask : Gs2RestSessionTask<SetFirebaseTokenRequest, SetFirebaseTokenResult>
+        public class SetFirebaseTokenTask : Gs2RestSessionTask<SetFirebaseTokenRequest, SetFirebaseTokenResult>
         {
             public SetFirebaseTokenTask(IGs2Session session, RestSessionRequestFactory factory, SetFirebaseTokenRequest request) : base(session, factory, request)
             {
@@ -989,6 +1432,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetFirebaseTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetFirebaseTokenResult> SetFirebaseTokenFuture(
+                Request.SetFirebaseTokenRequest request
+        )
+		{
+			return new SetFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetFirebaseTokenResult> SetFirebaseTokenAsync(
+                Request.SetFirebaseTokenRequest request
+        )
+		{
+            AsyncResult<Result.SetFirebaseTokenResult> result = null;
+			await SetFirebaseToken(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetFirebaseTokenTask SetFirebaseTokenAsync(
+                Request.SetFirebaseTokenRequest request
+        )
+		{
+			return new SetFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SetFirebaseTokenResult> SetFirebaseTokenAsync(
                 Request.SetFirebaseTokenRequest request
@@ -1004,7 +1487,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SetFirebaseTokenByUserIdTask : Gs2RestSessionTask<SetFirebaseTokenByUserIdRequest, SetFirebaseTokenByUserIdResult>
+        public class SetFirebaseTokenByUserIdTask : Gs2RestSessionTask<SetFirebaseTokenByUserIdRequest, SetFirebaseTokenByUserIdResult>
         {
             public SetFirebaseTokenByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetFirebaseTokenByUserIdRequest request) : base(session, factory, request)
             {
@@ -1072,6 +1555,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SetFirebaseTokenByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SetFirebaseTokenByUserIdResult> SetFirebaseTokenByUserIdFuture(
+                Request.SetFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new SetFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetFirebaseTokenByUserIdResult> SetFirebaseTokenByUserIdAsync(
+                Request.SetFirebaseTokenByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetFirebaseTokenByUserIdResult> result = null;
+			await SetFirebaseTokenByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetFirebaseTokenByUserIdTask SetFirebaseTokenByUserIdAsync(
+                Request.SetFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new SetFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SetFirebaseTokenByUserIdResult> SetFirebaseTokenByUserIdAsync(
                 Request.SetFirebaseTokenByUserIdRequest request
@@ -1087,7 +1610,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class GetFirebaseTokenTask : Gs2RestSessionTask<GetFirebaseTokenRequest, GetFirebaseTokenResult>
+        public class GetFirebaseTokenTask : Gs2RestSessionTask<GetFirebaseTokenRequest, GetFirebaseTokenResult>
         {
             public GetFirebaseTokenTask(IGs2Session session, RestSessionRequestFactory factory, GetFirebaseTokenRequest request) : base(session, factory, request)
             {
@@ -1140,6 +1663,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetFirebaseTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetFirebaseTokenResult> GetFirebaseTokenFuture(
+                Request.GetFirebaseTokenRequest request
+        )
+		{
+			return new GetFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetFirebaseTokenResult> GetFirebaseTokenAsync(
+                Request.GetFirebaseTokenRequest request
+        )
+		{
+            AsyncResult<Result.GetFirebaseTokenResult> result = null;
+			await GetFirebaseToken(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetFirebaseTokenTask GetFirebaseTokenAsync(
+                Request.GetFirebaseTokenRequest request
+        )
+		{
+			return new GetFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetFirebaseTokenResult> GetFirebaseTokenAsync(
                 Request.GetFirebaseTokenRequest request
@@ -1155,7 +1718,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class GetFirebaseTokenByUserIdTask : Gs2RestSessionTask<GetFirebaseTokenByUserIdRequest, GetFirebaseTokenByUserIdResult>
+        public class GetFirebaseTokenByUserIdTask : Gs2RestSessionTask<GetFirebaseTokenByUserIdRequest, GetFirebaseTokenByUserIdResult>
         {
             public GetFirebaseTokenByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetFirebaseTokenByUserIdRequest request) : base(session, factory, request)
             {
@@ -1205,6 +1768,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetFirebaseTokenByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetFirebaseTokenByUserIdResult> GetFirebaseTokenByUserIdFuture(
+                Request.GetFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new GetFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetFirebaseTokenByUserIdResult> GetFirebaseTokenByUserIdAsync(
+                Request.GetFirebaseTokenByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetFirebaseTokenByUserIdResult> result = null;
+			await GetFirebaseTokenByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetFirebaseTokenByUserIdTask GetFirebaseTokenByUserIdAsync(
+                Request.GetFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new GetFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetFirebaseTokenByUserIdResult> GetFirebaseTokenByUserIdAsync(
                 Request.GetFirebaseTokenByUserIdRequest request
@@ -1220,7 +1823,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DeleteFirebaseTokenTask : Gs2RestSessionTask<DeleteFirebaseTokenRequest, DeleteFirebaseTokenResult>
+        public class DeleteFirebaseTokenTask : Gs2RestSessionTask<DeleteFirebaseTokenRequest, DeleteFirebaseTokenResult>
         {
             public DeleteFirebaseTokenTask(IGs2Session session, RestSessionRequestFactory factory, DeleteFirebaseTokenRequest request) : base(session, factory, request)
             {
@@ -1273,6 +1876,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteFirebaseTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteFirebaseTokenResult> DeleteFirebaseTokenFuture(
+                Request.DeleteFirebaseTokenRequest request
+        )
+		{
+			return new DeleteFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteFirebaseTokenResult> DeleteFirebaseTokenAsync(
+                Request.DeleteFirebaseTokenRequest request
+        )
+		{
+            AsyncResult<Result.DeleteFirebaseTokenResult> result = null;
+			await DeleteFirebaseToken(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteFirebaseTokenTask DeleteFirebaseTokenAsync(
+                Request.DeleteFirebaseTokenRequest request
+        )
+		{
+			return new DeleteFirebaseTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteFirebaseTokenResult> DeleteFirebaseTokenAsync(
                 Request.DeleteFirebaseTokenRequest request
@@ -1288,7 +1931,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class DeleteFirebaseTokenByUserIdTask : Gs2RestSessionTask<DeleteFirebaseTokenByUserIdRequest, DeleteFirebaseTokenByUserIdResult>
+        public class DeleteFirebaseTokenByUserIdTask : Gs2RestSessionTask<DeleteFirebaseTokenByUserIdRequest, DeleteFirebaseTokenByUserIdResult>
         {
             public DeleteFirebaseTokenByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteFirebaseTokenByUserIdRequest request) : base(session, factory, request)
             {
@@ -1338,6 +1981,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteFirebaseTokenByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteFirebaseTokenByUserIdResult> DeleteFirebaseTokenByUserIdFuture(
+                Request.DeleteFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new DeleteFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteFirebaseTokenByUserIdResult> DeleteFirebaseTokenByUserIdAsync(
+                Request.DeleteFirebaseTokenByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteFirebaseTokenByUserIdResult> result = null;
+			await DeleteFirebaseTokenByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteFirebaseTokenByUserIdTask DeleteFirebaseTokenByUserIdAsync(
+                Request.DeleteFirebaseTokenByUserIdRequest request
+        )
+		{
+			return new DeleteFirebaseTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteFirebaseTokenByUserIdResult> DeleteFirebaseTokenByUserIdAsync(
                 Request.DeleteFirebaseTokenByUserIdRequest request
@@ -1353,7 +2036,7 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
-        private class SendMobileNotificationByUserIdTask : Gs2RestSessionTask<SendMobileNotificationByUserIdRequest, SendMobileNotificationByUserIdResult>
+        public class SendMobileNotificationByUserIdTask : Gs2RestSessionTask<SendMobileNotificationByUserIdRequest, SendMobileNotificationByUserIdResult>
         {
             public SendMobileNotificationByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SendMobileNotificationByUserIdRequest request) : base(session, factory, request)
             {
@@ -1431,6 +2114,46 @@ namespace Gs2.Gs2Gateway
             yield return task;
             callback.Invoke(new AsyncResult<Result.SendMobileNotificationByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SendMobileNotificationByUserIdResult> SendMobileNotificationByUserIdFuture(
+                Request.SendMobileNotificationByUserIdRequest request
+        )
+		{
+			return new SendMobileNotificationByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SendMobileNotificationByUserIdResult> SendMobileNotificationByUserIdAsync(
+                Request.SendMobileNotificationByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SendMobileNotificationByUserIdResult> result = null;
+			await SendMobileNotificationByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SendMobileNotificationByUserIdTask SendMobileNotificationByUserIdAsync(
+                Request.SendMobileNotificationByUserIdRequest request
+        )
+		{
+			return new SendMobileNotificationByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SendMobileNotificationByUserIdResult> SendMobileNotificationByUserIdAsync(
                 Request.SendMobileNotificationByUserIdRequest request

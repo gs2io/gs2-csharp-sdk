@@ -1,0 +1,68 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading;
+using Cysharp.Threading.Tasks;
+    #endif
+#endif
+
+namespace Gs2.Gs2Deploy.Domain.Cache
+{
+
+    public class ResourceDomainCache {
+
+        Dictionary<string, Gs2.Gs2Deploy.Model.Resource> items;
+        public ResourceDomainCache() {
+            this.items = new Dictionary<string, Gs2.Gs2Deploy.Model.Resource>();
+        }
+
+        public void Update(
+            Gs2.Gs2Deploy.Model.Resource item
+        ) {
+            var keys = string.Join(":",
+                item.Name.ToString()
+            );
+            this.items[keys] = item;
+        }
+
+        public Gs2.Gs2Deploy.Model.Resource Get(
+            string resourceName
+        ) {
+            var keys = string.Join(":",
+                resourceName.ToString()
+            );
+            return this.items[keys];
+        }
+
+        public void Delete(
+            Gs2.Gs2Deploy.Model.Resource item
+        ) {
+            var keys = string.Join(":",
+                item.Name.ToString()
+            );
+            this.items.Remove(keys);
+        }
+    }
+}

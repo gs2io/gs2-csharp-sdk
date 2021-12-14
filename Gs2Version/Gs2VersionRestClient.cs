@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
+        public class DescribeNamespacesTask : Gs2RestSessionTask<DescribeNamespacesRequest, DescribeNamespacesResult>
         {
             public DescribeNamespacesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeNamespacesRequest request) : base(session, factory, request)
             {
@@ -112,6 +115,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeNamespacesResult> result = null;
+			await DescribeNamespaces(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeNamespacesTask DescribeNamespacesAsync(
+                Request.DescribeNamespacesRequest request
+        )
+		{
+			return new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -127,7 +170,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2RestSessionTask<CreateNamespaceRequest, CreateNamespaceResult>
         {
             public CreateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, CreateNamespaceRequest request) : base(session, factory, request)
             {
@@ -217,6 +260,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.CreateNamespaceResult> result = null;
+			await CreateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -232,7 +315,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
+        public class GetNamespaceStatusTask : Gs2RestSessionTask<GetNamespaceStatusRequest, GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceStatusRequest request) : base(session, factory, request)
             {
@@ -281,6 +364,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceStatusResult> result = null;
+			await GetNamespaceStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -296,7 +419,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
+        public class GetNamespaceTask : Gs2RestSessionTask<GetNamespaceRequest, GetNamespaceResult>
         {
             public GetNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, GetNamespaceRequest request) : base(session, factory, request)
             {
@@ -345,6 +468,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.GetNamespaceResult> result = null;
+			await GetNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -360,7 +523,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2RestSessionTask<UpdateNamespaceRequest, UpdateNamespaceResult>
         {
             public UpdateNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, UpdateNamespaceRequest request) : base(session, factory, request)
             {
@@ -447,6 +610,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.UpdateNamespaceResult> result = null;
+			await UpdateNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -462,7 +665,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2RestSessionTask<DeleteNamespaceRequest, DeleteNamespaceResult>
         {
             public DeleteNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, DeleteNamespaceRequest request) : base(session, factory, request)
             {
@@ -511,6 +714,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.DeleteNamespaceResult> result = null;
+			await DeleteNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -526,7 +769,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DescribeVersionModelMastersTask : Gs2RestSessionTask<DescribeVersionModelMastersRequest, DescribeVersionModelMastersResult>
+        public class DescribeVersionModelMastersTask : Gs2RestSessionTask<DescribeVersionModelMastersRequest, DescribeVersionModelMastersResult>
         {
             public DescribeVersionModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeVersionModelMastersRequest request) : base(session, factory, request)
             {
@@ -581,6 +824,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeVersionModelMastersResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeVersionModelMastersResult> DescribeVersionModelMastersFuture(
+                Request.DescribeVersionModelMastersRequest request
+        )
+		{
+			return new DescribeVersionModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeVersionModelMastersResult> DescribeVersionModelMastersAsync(
+                Request.DescribeVersionModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeVersionModelMastersResult> result = null;
+			await DescribeVersionModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeVersionModelMastersTask DescribeVersionModelMastersAsync(
+                Request.DescribeVersionModelMastersRequest request
+        )
+		{
+			return new DescribeVersionModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeVersionModelMastersResult> DescribeVersionModelMastersAsync(
                 Request.DescribeVersionModelMastersRequest request
@@ -596,7 +879,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CreateVersionModelMasterTask : Gs2RestSessionTask<CreateVersionModelMasterRequest, CreateVersionModelMasterResult>
+        public class CreateVersionModelMasterTask : Gs2RestSessionTask<CreateVersionModelMasterRequest, CreateVersionModelMasterResult>
         {
             public CreateVersionModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateVersionModelMasterRequest request) : base(session, factory, request)
             {
@@ -703,6 +986,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateVersionModelMasterResult> CreateVersionModelMasterFuture(
+                Request.CreateVersionModelMasterRequest request
+        )
+		{
+			return new CreateVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateVersionModelMasterResult> CreateVersionModelMasterAsync(
+                Request.CreateVersionModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateVersionModelMasterResult> result = null;
+			await CreateVersionModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateVersionModelMasterTask CreateVersionModelMasterAsync(
+                Request.CreateVersionModelMasterRequest request
+        )
+		{
+			return new CreateVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateVersionModelMasterResult> CreateVersionModelMasterAsync(
                 Request.CreateVersionModelMasterRequest request
@@ -718,7 +1041,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetVersionModelMasterTask : Gs2RestSessionTask<GetVersionModelMasterRequest, GetVersionModelMasterResult>
+        public class GetVersionModelMasterTask : Gs2RestSessionTask<GetVersionModelMasterRequest, GetVersionModelMasterResult>
         {
             public GetVersionModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetVersionModelMasterRequest request) : base(session, factory, request)
             {
@@ -768,6 +1091,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetVersionModelMasterResult> GetVersionModelMasterFuture(
+                Request.GetVersionModelMasterRequest request
+        )
+		{
+			return new GetVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetVersionModelMasterResult> GetVersionModelMasterAsync(
+                Request.GetVersionModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetVersionModelMasterResult> result = null;
+			await GetVersionModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetVersionModelMasterTask GetVersionModelMasterAsync(
+                Request.GetVersionModelMasterRequest request
+        )
+		{
+			return new GetVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetVersionModelMasterResult> GetVersionModelMasterAsync(
                 Request.GetVersionModelMasterRequest request
@@ -783,7 +1146,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateVersionModelMasterTask : Gs2RestSessionTask<UpdateVersionModelMasterRequest, UpdateVersionModelMasterResult>
+        public class UpdateVersionModelMasterTask : Gs2RestSessionTask<UpdateVersionModelMasterRequest, UpdateVersionModelMasterResult>
         {
             public UpdateVersionModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateVersionModelMasterRequest request) : base(session, factory, request)
             {
@@ -886,6 +1249,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterFuture(
+                Request.UpdateVersionModelMasterRequest request
+        )
+		{
+			return new UpdateVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterAsync(
+                Request.UpdateVersionModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateVersionModelMasterResult> result = null;
+			await UpdateVersionModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateVersionModelMasterTask UpdateVersionModelMasterAsync(
+                Request.UpdateVersionModelMasterRequest request
+        )
+		{
+			return new UpdateVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateVersionModelMasterResult> UpdateVersionModelMasterAsync(
                 Request.UpdateVersionModelMasterRequest request
@@ -901,7 +1304,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteVersionModelMasterTask : Gs2RestSessionTask<DeleteVersionModelMasterRequest, DeleteVersionModelMasterResult>
+        public class DeleteVersionModelMasterTask : Gs2RestSessionTask<DeleteVersionModelMasterRequest, DeleteVersionModelMasterResult>
         {
             public DeleteVersionModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteVersionModelMasterRequest request) : base(session, factory, request)
             {
@@ -951,6 +1354,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteVersionModelMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterFuture(
+                Request.DeleteVersionModelMasterRequest request
+        )
+		{
+			return new DeleteVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterAsync(
+                Request.DeleteVersionModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteVersionModelMasterResult> result = null;
+			await DeleteVersionModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteVersionModelMasterTask DeleteVersionModelMasterAsync(
+                Request.DeleteVersionModelMasterRequest request
+        )
+		{
+			return new DeleteVersionModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteVersionModelMasterResult> DeleteVersionModelMasterAsync(
                 Request.DeleteVersionModelMasterRequest request
@@ -966,7 +1409,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DescribeVersionModelsTask : Gs2RestSessionTask<DescribeVersionModelsRequest, DescribeVersionModelsResult>
+        public class DescribeVersionModelsTask : Gs2RestSessionTask<DescribeVersionModelsRequest, DescribeVersionModelsResult>
         {
             public DescribeVersionModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeVersionModelsRequest request) : base(session, factory, request)
             {
@@ -1015,6 +1458,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeVersionModelsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeVersionModelsResult> DescribeVersionModelsFuture(
+                Request.DescribeVersionModelsRequest request
+        )
+		{
+			return new DescribeVersionModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeVersionModelsResult> DescribeVersionModelsAsync(
+                Request.DescribeVersionModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeVersionModelsResult> result = null;
+			await DescribeVersionModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeVersionModelsTask DescribeVersionModelsAsync(
+                Request.DescribeVersionModelsRequest request
+        )
+		{
+			return new DescribeVersionModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeVersionModelsResult> DescribeVersionModelsAsync(
                 Request.DescribeVersionModelsRequest request
@@ -1030,7 +1513,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetVersionModelTask : Gs2RestSessionTask<GetVersionModelRequest, GetVersionModelResult>
+        public class GetVersionModelTask : Gs2RestSessionTask<GetVersionModelRequest, GetVersionModelResult>
         {
             public GetVersionModelTask(IGs2Session session, RestSessionRequestFactory factory, GetVersionModelRequest request) : base(session, factory, request)
             {
@@ -1080,6 +1563,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetVersionModelResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetVersionModelResult> GetVersionModelFuture(
+                Request.GetVersionModelRequest request
+        )
+		{
+			return new GetVersionModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetVersionModelResult> GetVersionModelAsync(
+                Request.GetVersionModelRequest request
+        )
+		{
+            AsyncResult<Result.GetVersionModelResult> result = null;
+			await GetVersionModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetVersionModelTask GetVersionModelAsync(
+                Request.GetVersionModelRequest request
+        )
+		{
+			return new GetVersionModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetVersionModelResult> GetVersionModelAsync(
                 Request.GetVersionModelRequest request
@@ -1095,7 +1618,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DescribeAcceptVersionsTask : Gs2RestSessionTask<DescribeAcceptVersionsRequest, DescribeAcceptVersionsResult>
+        public class DescribeAcceptVersionsTask : Gs2RestSessionTask<DescribeAcceptVersionsRequest, DescribeAcceptVersionsResult>
         {
             public DescribeAcceptVersionsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeAcceptVersionsRequest request) : base(session, factory, request)
             {
@@ -1154,6 +1677,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeAcceptVersionsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeAcceptVersionsResult> DescribeAcceptVersionsFuture(
+                Request.DescribeAcceptVersionsRequest request
+        )
+		{
+			return new DescribeAcceptVersionsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeAcceptVersionsResult> DescribeAcceptVersionsAsync(
+                Request.DescribeAcceptVersionsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeAcceptVersionsResult> result = null;
+			await DescribeAcceptVersions(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeAcceptVersionsTask DescribeAcceptVersionsAsync(
+                Request.DescribeAcceptVersionsRequest request
+        )
+		{
+			return new DescribeAcceptVersionsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeAcceptVersionsResult> DescribeAcceptVersionsAsync(
                 Request.DescribeAcceptVersionsRequest request
@@ -1169,7 +1732,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DescribeAcceptVersionsByUserIdTask : Gs2RestSessionTask<DescribeAcceptVersionsByUserIdRequest, DescribeAcceptVersionsByUserIdResult>
+        public class DescribeAcceptVersionsByUserIdTask : Gs2RestSessionTask<DescribeAcceptVersionsByUserIdRequest, DescribeAcceptVersionsByUserIdResult>
         {
             public DescribeAcceptVersionsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeAcceptVersionsByUserIdRequest request) : base(session, factory, request)
             {
@@ -1227,6 +1790,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeAcceptVersionsByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeAcceptVersionsByUserIdResult> DescribeAcceptVersionsByUserIdFuture(
+                Request.DescribeAcceptVersionsByUserIdRequest request
+        )
+		{
+			return new DescribeAcceptVersionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeAcceptVersionsByUserIdResult> DescribeAcceptVersionsByUserIdAsync(
+                Request.DescribeAcceptVersionsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeAcceptVersionsByUserIdResult> result = null;
+			await DescribeAcceptVersionsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeAcceptVersionsByUserIdTask DescribeAcceptVersionsByUserIdAsync(
+                Request.DescribeAcceptVersionsByUserIdRequest request
+        )
+		{
+			return new DescribeAcceptVersionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeAcceptVersionsByUserIdResult> DescribeAcceptVersionsByUserIdAsync(
                 Request.DescribeAcceptVersionsByUserIdRequest request
@@ -1242,7 +1845,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class AcceptTask : Gs2RestSessionTask<AcceptRequest, AcceptResult>
+        public class AcceptTask : Gs2RestSessionTask<AcceptRequest, AcceptResult>
         {
             public AcceptTask(IGs2Session session, RestSessionRequestFactory factory, AcceptRequest request) : base(session, factory, request)
             {
@@ -1313,6 +1916,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.AcceptResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AcceptResult> AcceptFuture(
+                Request.AcceptRequest request
+        )
+		{
+			return new AcceptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcceptResult> AcceptAsync(
+                Request.AcceptRequest request
+        )
+		{
+            AsyncResult<Result.AcceptResult> result = null;
+			await Accept(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcceptTask AcceptAsync(
+                Request.AcceptRequest request
+        )
+		{
+			return new AcceptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.AcceptResult> AcceptAsync(
                 Request.AcceptRequest request
@@ -1328,7 +1971,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class AcceptByUserIdTask : Gs2RestSessionTask<AcceptByUserIdRequest, AcceptByUserIdResult>
+        public class AcceptByUserIdTask : Gs2RestSessionTask<AcceptByUserIdRequest, AcceptByUserIdResult>
         {
             public AcceptByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AcceptByUserIdRequest request) : base(session, factory, request)
             {
@@ -1396,6 +2039,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.AcceptByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.AcceptByUserIdResult> AcceptByUserIdFuture(
+                Request.AcceptByUserIdRequest request
+        )
+		{
+			return new AcceptByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcceptByUserIdResult> AcceptByUserIdAsync(
+                Request.AcceptByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AcceptByUserIdResult> result = null;
+			await AcceptByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcceptByUserIdTask AcceptByUserIdAsync(
+                Request.AcceptByUserIdRequest request
+        )
+		{
+			return new AcceptByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.AcceptByUserIdResult> AcceptByUserIdAsync(
                 Request.AcceptByUserIdRequest request
@@ -1411,7 +2094,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetAcceptVersionTask : Gs2RestSessionTask<GetAcceptVersionRequest, GetAcceptVersionResult>
+        public class GetAcceptVersionTask : Gs2RestSessionTask<GetAcceptVersionRequest, GetAcceptVersionResult>
         {
             public GetAcceptVersionTask(IGs2Session session, RestSessionRequestFactory factory, GetAcceptVersionRequest request) : base(session, factory, request)
             {
@@ -1465,6 +2148,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAcceptVersionResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAcceptVersionResult> GetAcceptVersionFuture(
+                Request.GetAcceptVersionRequest request
+        )
+		{
+			return new GetAcceptVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAcceptVersionResult> GetAcceptVersionAsync(
+                Request.GetAcceptVersionRequest request
+        )
+		{
+            AsyncResult<Result.GetAcceptVersionResult> result = null;
+			await GetAcceptVersion(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetAcceptVersionTask GetAcceptVersionAsync(
+                Request.GetAcceptVersionRequest request
+        )
+		{
+			return new GetAcceptVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetAcceptVersionResult> GetAcceptVersionAsync(
                 Request.GetAcceptVersionRequest request
@@ -1480,7 +2203,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetAcceptVersionByUserIdTask : Gs2RestSessionTask<GetAcceptVersionByUserIdRequest, GetAcceptVersionByUserIdResult>
+        public class GetAcceptVersionByUserIdTask : Gs2RestSessionTask<GetAcceptVersionByUserIdRequest, GetAcceptVersionByUserIdResult>
         {
             public GetAcceptVersionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetAcceptVersionByUserIdRequest request) : base(session, factory, request)
             {
@@ -1531,6 +2254,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetAcceptVersionByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdFuture(
+                Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+			return new GetAcceptVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdAsync(
+                Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetAcceptVersionByUserIdResult> result = null;
+			await GetAcceptVersionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetAcceptVersionByUserIdTask GetAcceptVersionByUserIdAsync(
+                Request.GetAcceptVersionByUserIdRequest request
+        )
+		{
+			return new GetAcceptVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetAcceptVersionByUserIdResult> GetAcceptVersionByUserIdAsync(
                 Request.GetAcceptVersionByUserIdRequest request
@@ -1546,7 +2309,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteAcceptVersionTask : Gs2RestSessionTask<DeleteAcceptVersionRequest, DeleteAcceptVersionResult>
+        public class DeleteAcceptVersionTask : Gs2RestSessionTask<DeleteAcceptVersionRequest, DeleteAcceptVersionResult>
         {
             public DeleteAcceptVersionTask(IGs2Session session, RestSessionRequestFactory factory, DeleteAcceptVersionRequest request) : base(session, factory, request)
             {
@@ -1600,6 +2363,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAcceptVersionResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAcceptVersionResult> DeleteAcceptVersionFuture(
+                Request.DeleteAcceptVersionRequest request
+        )
+		{
+			return new DeleteAcceptVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAcceptVersionResult> DeleteAcceptVersionAsync(
+                Request.DeleteAcceptVersionRequest request
+        )
+		{
+            AsyncResult<Result.DeleteAcceptVersionResult> result = null;
+			await DeleteAcceptVersion(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteAcceptVersionTask DeleteAcceptVersionAsync(
+                Request.DeleteAcceptVersionRequest request
+        )
+		{
+			return new DeleteAcceptVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteAcceptVersionResult> DeleteAcceptVersionAsync(
                 Request.DeleteAcceptVersionRequest request
@@ -1615,7 +2418,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class DeleteAcceptVersionByUserIdTask : Gs2RestSessionTask<DeleteAcceptVersionByUserIdRequest, DeleteAcceptVersionByUserIdResult>
+        public class DeleteAcceptVersionByUserIdTask : Gs2RestSessionTask<DeleteAcceptVersionByUserIdRequest, DeleteAcceptVersionByUserIdResult>
         {
             public DeleteAcceptVersionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteAcceptVersionByUserIdRequest request) : base(session, factory, request)
             {
@@ -1666,6 +2469,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAcceptVersionByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdFuture(
+                Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+			return new DeleteAcceptVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdAsync(
+                Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteAcceptVersionByUserIdResult> result = null;
+			await DeleteAcceptVersionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteAcceptVersionByUserIdTask DeleteAcceptVersionByUserIdAsync(
+                Request.DeleteAcceptVersionByUserIdRequest request
+        )
+		{
+			return new DeleteAcceptVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteAcceptVersionByUserIdResult> DeleteAcceptVersionByUserIdAsync(
                 Request.DeleteAcceptVersionByUserIdRequest request
@@ -1681,7 +2524,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CheckVersionTask : Gs2RestSessionTask<CheckVersionRequest, CheckVersionResult>
+        public class CheckVersionTask : Gs2RestSessionTask<CheckVersionRequest, CheckVersionResult>
         {
             public CheckVersionTask(IGs2Session session, RestSessionRequestFactory factory, CheckVersionRequest request) : base(session, factory, request)
             {
@@ -1761,6 +2604,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CheckVersionResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CheckVersionResult> CheckVersionFuture(
+                Request.CheckVersionRequest request
+        )
+		{
+			return new CheckVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CheckVersionResult> CheckVersionAsync(
+                Request.CheckVersionRequest request
+        )
+		{
+            AsyncResult<Result.CheckVersionResult> result = null;
+			await CheckVersion(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CheckVersionTask CheckVersionAsync(
+                Request.CheckVersionRequest request
+        )
+		{
+			return new CheckVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CheckVersionResult> CheckVersionAsync(
                 Request.CheckVersionRequest request
@@ -1776,7 +2659,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CheckVersionByUserIdTask : Gs2RestSessionTask<CheckVersionByUserIdRequest, CheckVersionByUserIdResult>
+        public class CheckVersionByUserIdTask : Gs2RestSessionTask<CheckVersionByUserIdRequest, CheckVersionByUserIdResult>
         {
             public CheckVersionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CheckVersionByUserIdRequest request) : base(session, factory, request)
             {
@@ -1853,6 +2736,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CheckVersionByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CheckVersionByUserIdResult> CheckVersionByUserIdFuture(
+                Request.CheckVersionByUserIdRequest request
+        )
+		{
+			return new CheckVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CheckVersionByUserIdResult> CheckVersionByUserIdAsync(
+                Request.CheckVersionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CheckVersionByUserIdResult> result = null;
+			await CheckVersionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CheckVersionByUserIdTask CheckVersionByUserIdAsync(
+                Request.CheckVersionByUserIdRequest request
+        )
+		{
+			return new CheckVersionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CheckVersionByUserIdResult> CheckVersionByUserIdAsync(
                 Request.CheckVersionByUserIdRequest request
@@ -1868,7 +2791,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class CalculateSignatureTask : Gs2RestSessionTask<CalculateSignatureRequest, CalculateSignatureResult>
+        public class CalculateSignatureTask : Gs2RestSessionTask<CalculateSignatureRequest, CalculateSignatureResult>
         {
             public CalculateSignatureTask(IGs2Session session, RestSessionRequestFactory factory, CalculateSignatureRequest request) : base(session, factory, request)
             {
@@ -1936,6 +2859,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.CalculateSignatureResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CalculateSignatureResult> CalculateSignatureFuture(
+                Request.CalculateSignatureRequest request
+        )
+		{
+			return new CalculateSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CalculateSignatureResult> CalculateSignatureAsync(
+                Request.CalculateSignatureRequest request
+        )
+		{
+            AsyncResult<Result.CalculateSignatureResult> result = null;
+			await CalculateSignature(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CalculateSignatureTask CalculateSignatureAsync(
+                Request.CalculateSignatureRequest request
+        )
+		{
+			return new CalculateSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CalculateSignatureResult> CalculateSignatureAsync(
                 Request.CalculateSignatureRequest request
@@ -1951,7 +2914,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
             {
@@ -2000,6 +2963,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -2015,7 +3018,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class GetCurrentVersionMasterTask : Gs2RestSessionTask<GetCurrentVersionMasterRequest, GetCurrentVersionMasterResult>
+        public class GetCurrentVersionMasterTask : Gs2RestSessionTask<GetCurrentVersionMasterRequest, GetCurrentVersionMasterResult>
         {
             public GetCurrentVersionMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentVersionMasterRequest request) : base(session, factory, request)
             {
@@ -2064,6 +3067,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCurrentVersionMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCurrentVersionMasterResult> GetCurrentVersionMasterFuture(
+                Request.GetCurrentVersionMasterRequest request
+        )
+		{
+			return new GetCurrentVersionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentVersionMasterResult> GetCurrentVersionMasterAsync(
+                Request.GetCurrentVersionMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentVersionMasterResult> result = null;
+			await GetCurrentVersionMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentVersionMasterTask GetCurrentVersionMasterAsync(
+                Request.GetCurrentVersionMasterRequest request
+        )
+		{
+			return new GetCurrentVersionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCurrentVersionMasterResult> GetCurrentVersionMasterAsync(
                 Request.GetCurrentVersionMasterRequest request
@@ -2079,7 +3122,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateCurrentVersionMasterTask : Gs2RestSessionTask<UpdateCurrentVersionMasterRequest, UpdateCurrentVersionMasterResult>
+        public class UpdateCurrentVersionMasterTask : Gs2RestSessionTask<UpdateCurrentVersionMasterRequest, UpdateCurrentVersionMasterResult>
         {
             public UpdateCurrentVersionMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentVersionMasterRequest request) : base(session, factory, request)
             {
@@ -2146,6 +3189,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentVersionMasterResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentVersionMasterResult> UpdateCurrentVersionMasterFuture(
+                Request.UpdateCurrentVersionMasterRequest request
+        )
+		{
+			return new UpdateCurrentVersionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentVersionMasterResult> UpdateCurrentVersionMasterAsync(
+                Request.UpdateCurrentVersionMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentVersionMasterResult> result = null;
+			await UpdateCurrentVersionMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentVersionMasterTask UpdateCurrentVersionMasterAsync(
+                Request.UpdateCurrentVersionMasterRequest request
+        )
+		{
+			return new UpdateCurrentVersionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentVersionMasterResult> UpdateCurrentVersionMasterAsync(
                 Request.UpdateCurrentVersionMasterRequest request
@@ -2161,7 +3244,7 @@ namespace Gs2.Gs2Version
 #endif
 
 
-        private class UpdateCurrentVersionMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentVersionMasterFromGitHubRequest, UpdateCurrentVersionMasterFromGitHubResult>
+        public class UpdateCurrentVersionMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentVersionMasterFromGitHubRequest, UpdateCurrentVersionMasterFromGitHubResult>
         {
             public UpdateCurrentVersionMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentVersionMasterFromGitHubRequest request) : base(session, factory, request)
             {
@@ -2228,6 +3311,46 @@ namespace Gs2.Gs2Version
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateCurrentVersionMasterFromGitHubResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateCurrentVersionMasterFromGitHubResult> UpdateCurrentVersionMasterFromGitHubFuture(
+                Request.UpdateCurrentVersionMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentVersionMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentVersionMasterFromGitHubResult> UpdateCurrentVersionMasterFromGitHubAsync(
+                Request.UpdateCurrentVersionMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentVersionMasterFromGitHubResult> result = null;
+			await UpdateCurrentVersionMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentVersionMasterFromGitHubTask UpdateCurrentVersionMasterFromGitHubAsync(
+                Request.UpdateCurrentVersionMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentVersionMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateCurrentVersionMasterFromGitHubResult> UpdateCurrentVersionMasterFromGitHubAsync(
                 Request.UpdateCurrentVersionMasterFromGitHubRequest request

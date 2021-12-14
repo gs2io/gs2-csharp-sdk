@@ -9,8 +9,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using AOT;
+#endif
 
 namespace Gs2.HybridWebSocket
 {

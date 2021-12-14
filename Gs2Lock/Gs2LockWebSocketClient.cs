@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Lock
 		}
 
 
-        private class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
+        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
 	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
 	        {
@@ -112,8 +115,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+            Request.CreateNamespaceRequest request
+        )
+		{
+		    var task = new CreateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateNamespaceTask CreateNamespaceAsync(
+                Request.CreateNamespaceRequest request
+        )
+		{
+			return new CreateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespace(
+		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
         )
 		{
@@ -126,7 +162,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
+        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
 	        {
@@ -182,8 +218,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+            Request.GetNamespaceRequest request
+        )
+		{
+		    var task = new GetNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceTask GetNamespaceAsync(
+                Request.GetNamespaceRequest request
+        )
+		{
+			return new GetNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespace(
+		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
         )
 		{
@@ -196,7 +265,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
+        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
 	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
 	        {
@@ -262,8 +331,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+            Request.UpdateNamespaceRequest request
+        )
+		{
+		    var task = new UpdateNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateNamespaceTask UpdateNamespaceAsync(
+                Request.UpdateNamespaceRequest request
+        )
+		{
+			return new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespace(
+		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
         )
 		{
@@ -276,7 +378,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
+        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
 	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
 	        {
@@ -332,8 +434,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+            Request.DeleteNamespaceRequest request
+        )
+		{
+		    var task = new DeleteNamespaceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteNamespaceTask DeleteNamespaceAsync(
+                Request.DeleteNamespaceRequest request
+        )
+		{
+			return new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespace(
+		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
         )
 		{
@@ -346,7 +481,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class LockTask : Gs2WebSocketSessionTask<Request.LockRequest, Result.LockResult>
+        public class LockTask : Gs2WebSocketSessionTask<Request.LockRequest, Result.LockResult>
         {
 	        public LockTask(IGs2Session session, Request.LockRequest request) : base(session, request)
 	        {
@@ -427,8 +562,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.LockResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LockResult> LockFuture(
+                Request.LockRequest request
+        )
+		{
+			return new LockTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LockResult> LockAsync(
+            Request.LockRequest request
+        )
+		{
+		    var task = new LockTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public LockTask LockAsync(
+                Request.LockRequest request
+        )
+		{
+			return new LockTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.LockResult> Lock(
+		public async Task<Result.LockResult> LockAsync(
             Request.LockRequest request
         )
 		{
@@ -441,7 +609,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class LockByUserIdTask : Gs2WebSocketSessionTask<Request.LockByUserIdRequest, Result.LockByUserIdResult>
+        public class LockByUserIdTask : Gs2WebSocketSessionTask<Request.LockByUserIdRequest, Result.LockByUserIdResult>
         {
 	        public LockByUserIdTask(IGs2Session session, Request.LockByUserIdRequest request) : base(session, request)
 	        {
@@ -517,8 +685,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.LockByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.LockByUserIdResult> LockByUserIdFuture(
+                Request.LockByUserIdRequest request
+        )
+		{
+			return new LockByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LockByUserIdResult> LockByUserIdAsync(
+            Request.LockByUserIdRequest request
+        )
+		{
+		    var task = new LockByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public LockByUserIdTask LockByUserIdAsync(
+                Request.LockByUserIdRequest request
+        )
+		{
+			return new LockByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.LockByUserIdResult> LockByUserId(
+		public async Task<Result.LockByUserIdResult> LockByUserIdAsync(
             Request.LockByUserIdRequest request
         )
 		{
@@ -531,7 +732,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class UnlockTask : Gs2WebSocketSessionTask<Request.UnlockRequest, Result.UnlockResult>
+        public class UnlockTask : Gs2WebSocketSessionTask<Request.UnlockRequest, Result.UnlockResult>
         {
 	        public UnlockTask(IGs2Session session, Request.UnlockRequest request) : base(session, request)
 	        {
@@ -607,8 +808,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.UnlockResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UnlockResult> UnlockFuture(
+                Request.UnlockRequest request
+        )
+		{
+			return new UnlockTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnlockResult> UnlockAsync(
+            Request.UnlockRequest request
+        )
+		{
+		    var task = new UnlockTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnlockTask UnlockAsync(
+                Request.UnlockRequest request
+        )
+		{
+			return new UnlockTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UnlockResult> Unlock(
+		public async Task<Result.UnlockResult> UnlockAsync(
             Request.UnlockRequest request
         )
 		{
@@ -621,7 +855,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class UnlockByUserIdTask : Gs2WebSocketSessionTask<Request.UnlockByUserIdRequest, Result.UnlockByUserIdResult>
+        public class UnlockByUserIdTask : Gs2WebSocketSessionTask<Request.UnlockByUserIdRequest, Result.UnlockByUserIdResult>
         {
 	        public UnlockByUserIdTask(IGs2Session session, Request.UnlockByUserIdRequest request) : base(session, request)
 	        {
@@ -692,8 +926,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.UnlockByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UnlockByUserIdResult> UnlockByUserIdFuture(
+                Request.UnlockByUserIdRequest request
+        )
+		{
+			return new UnlockByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnlockByUserIdResult> UnlockByUserIdAsync(
+            Request.UnlockByUserIdRequest request
+        )
+		{
+		    var task = new UnlockByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UnlockByUserIdTask UnlockByUserIdAsync(
+                Request.UnlockByUserIdRequest request
+        )
+		{
+			return new UnlockByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UnlockByUserIdResult> UnlockByUserId(
+		public async Task<Result.UnlockByUserIdResult> UnlockByUserIdAsync(
             Request.UnlockByUserIdRequest request
         )
 		{
@@ -706,7 +973,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class GetMutexTask : Gs2WebSocketSessionTask<Request.GetMutexRequest, Result.GetMutexResult>
+        public class GetMutexTask : Gs2WebSocketSessionTask<Request.GetMutexRequest, Result.GetMutexResult>
         {
 	        public GetMutexTask(IGs2Session session, Request.GetMutexRequest request) : base(session, request)
 	        {
@@ -777,8 +1044,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMutexResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMutexResult> GetMutexFuture(
+                Request.GetMutexRequest request
+        )
+		{
+			return new GetMutexTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMutexResult> GetMutexAsync(
+            Request.GetMutexRequest request
+        )
+		{
+		    var task = new GetMutexTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMutexTask GetMutexAsync(
+                Request.GetMutexRequest request
+        )
+		{
+			return new GetMutexTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMutexResult> GetMutex(
+		public async Task<Result.GetMutexResult> GetMutexAsync(
             Request.GetMutexRequest request
         )
 		{
@@ -791,7 +1091,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class GetMutexByUserIdTask : Gs2WebSocketSessionTask<Request.GetMutexByUserIdRequest, Result.GetMutexByUserIdResult>
+        public class GetMutexByUserIdTask : Gs2WebSocketSessionTask<Request.GetMutexByUserIdRequest, Result.GetMutexByUserIdResult>
         {
 	        public GetMutexByUserIdTask(IGs2Session session, Request.GetMutexByUserIdRequest request) : base(session, request)
 	        {
@@ -857,8 +1157,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetMutexByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetMutexByUserIdResult> GetMutexByUserIdFuture(
+                Request.GetMutexByUserIdRequest request
+        )
+		{
+			return new GetMutexByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetMutexByUserIdResult> GetMutexByUserIdAsync(
+            Request.GetMutexByUserIdRequest request
+        )
+		{
+		    var task = new GetMutexByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetMutexByUserIdTask GetMutexByUserIdAsync(
+                Request.GetMutexByUserIdRequest request
+        )
+		{
+			return new GetMutexByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetMutexByUserIdResult> GetMutexByUserId(
+		public async Task<Result.GetMutexByUserIdResult> GetMutexByUserIdAsync(
             Request.GetMutexByUserIdRequest request
         )
 		{
@@ -871,7 +1204,7 @@ namespace Gs2.Gs2Lock
 #endif
 
 
-        private class DeleteMutexByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteMutexByUserIdRequest, Result.DeleteMutexByUserIdResult>
+        public class DeleteMutexByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteMutexByUserIdRequest, Result.DeleteMutexByUserIdResult>
         {
 	        public DeleteMutexByUserIdTask(IGs2Session session, Request.DeleteMutexByUserIdRequest request) : base(session, request)
 	        {
@@ -937,8 +1270,41 @@ namespace Gs2.Gs2Lock
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteMutexByUserIdResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteMutexByUserIdResult> DeleteMutexByUserIdFuture(
+                Request.DeleteMutexByUserIdRequest request
+        )
+		{
+			return new DeleteMutexByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteMutexByUserIdResult> DeleteMutexByUserIdAsync(
+            Request.DeleteMutexByUserIdRequest request
+        )
+		{
+		    var task = new DeleteMutexByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteMutexByUserIdTask DeleteMutexByUserIdAsync(
+                Request.DeleteMutexByUserIdRequest request
+        )
+		{
+			return new DeleteMutexByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteMutexByUserIdResult> DeleteMutexByUserId(
+		public async Task<Result.DeleteMutexByUserIdResult> DeleteMutexByUserIdAsync(
             Request.DeleteMutexByUserIdRequest request
         )
 		{
