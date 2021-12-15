@@ -226,6 +226,11 @@ namespace Gs2.Core.Net
             return _result.ContainsKey(request.TaskId);
         }
 
+        public bool IsDisconnected()
+        {
+            return State == State.Idle || State == State.Closing || State == State.Closed;
+        }
+
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
             var result = _result[request.TaskId];

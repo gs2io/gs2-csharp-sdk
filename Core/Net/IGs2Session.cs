@@ -19,6 +19,7 @@ namespace Gs2.Core.Net
         IGs2Credential Credential { get; }
         Region Region { get; }
 
+        bool IsDisconnected();
         bool IsCanceled();
         bool IsCompleted(IGs2SessionRequest request);
         IGs2SessionResult MarkRead(IGs2SessionRequest request);

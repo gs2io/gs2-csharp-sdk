@@ -112,6 +112,13 @@ namespace Gs2.Core.Net
                     }
                 }
             };
+
+            _session.OnClose += (sender, closeEventArgs) =>
+            {
+#pragma warning disable 4014
+                CloseAsync();
+#pragma warning restore 4014
+            };
             
             _session.OnError += (sender, errorEventArgs) =>
             {
@@ -336,6 +343,11 @@ namespace Gs2.Core.Net
         public bool IsCompleted(IGs2SessionRequest request)
         {
             return _result.ContainsKey(request.TaskId);
+        }
+
+        public bool IsDisconnected()
+        {
+            return State == State.Idle || State == State.Closing || State == State.Closed;
         }
 
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)

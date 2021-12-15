@@ -37,6 +37,12 @@ namespace Gs2.Core.Net
                 yield break;
             }
 
+            if (Session.IsDisconnected())
+            {
+                OnError(new SessionNotOpenException("Session no longer open."));
+                yield break;
+            }
+
             yield return Session.Send(request);
             var begin = DateTime.Now;
             while (!Session.IsCompleted(request))
@@ -75,6 +81,11 @@ namespace Gs2.Core.Net
             if (Session.IsCanceled())
             {
                 throw new UserCancelException(new RequestError[0]);
+            }
+
+            if (Session.IsDisconnected())
+            {
+                throw new SessionNotOpenException("Session no longer open.");
             }
 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
