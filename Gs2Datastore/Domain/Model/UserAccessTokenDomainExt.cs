@@ -28,7 +28,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         
 #if UNITY_2017_1_OR_NEWER
 	#if GS2_ENABLE_UNITASK
-	    public async UniTask<DataObjectAccessTokenDomain> Upload(
+	    public async UniTask<DataObject> Upload(
 	#else
 	    private class UploadImplFuture : Gs2Future<RestResult>
 	    {
@@ -176,11 +176,11 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        }
 	        }
 	        {
-		        var result = await this.DataObject(
+		        var result = await (await this.DataObject(
 			        dataObjectName
 			    ).DoneUploadAsync(
 			        new DoneUploadRequest()
-		        );
+		        )).Model();
 		        return result;
 	        }
 	#else

@@ -137,7 +137,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	    
 #if UNITY_2017_1_OR_NEWER
 	#if GS2_ENABLE_UNITASK
-	    public async UniTask<DataObjectDomain> ReUpload(
+	    public async UniTask<DataObject> ReUpload(
 	#else
 	    private class ReUploadImplFuture : Gs2Future<RestResult>
 	    {
@@ -258,9 +258,9 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        }
 	        }
 	        {
-		        var result = await this.DoneUploadAsync(
+		        var result = await (await this.DoneUploadAsync(
 			        new DoneUploadByUserIdRequest()
-		        );
+		        )).Model();
 		        return result;
 	        }
 	#else

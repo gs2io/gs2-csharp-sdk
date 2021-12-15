@@ -169,7 +169,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		    }
 	    }
 
-	    public class ReUploadFuture : Gs2Future<DataObject>
+	    public class ReUploadFuture : Gs2Future<DataObjectAccessTokenDomain>
 	    {
 		    private DataObjectAccessTokenDomain _domain;
 		    private byte[] _data;
@@ -227,9 +227,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 						    OnError(task.Error);
 						    yield break;
 					    }
-						var task2 = task.Result.Model();
-						yield return task2;
-					    OnComplete(task2.Result);
+					    OnComplete(_domain);
 				    }
 			    }
 		    }
