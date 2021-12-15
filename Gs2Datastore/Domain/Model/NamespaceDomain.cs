@@ -98,8 +98,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -146,8 +146,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.Namespace> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.Namespace> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -202,8 +202,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -261,8 +261,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -318,8 +318,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -342,7 +342,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             string parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
                 result?.Item?.UserId,
-                "DataObject      "
+                "DataObject"
             );
                     
             if (result.Item != null) {

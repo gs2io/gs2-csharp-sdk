@@ -114,8 +114,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -174,8 +174,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -230,8 +230,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch (Gs2.Core.Exception.Gs2Exception e) {
                     throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
                 }
-            }
         #endif
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -256,8 +256,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -312,8 +312,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch (Gs2.Core.Exception.Gs2Exception e) {
                     throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
                 }
-            }
         #endif
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -338,8 +338,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -394,8 +394,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch (Gs2.Core.Exception.Gs2Exception e) {
                     throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
                 }
-            }
         #endif
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -420,8 +420,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

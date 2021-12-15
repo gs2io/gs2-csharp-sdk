@@ -99,8 +99,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -147,8 +147,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Namespace> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Namespace> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -203,8 +203,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -262,8 +262,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -319,8 +319,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -389,8 +389,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);
@@ -459,8 +459,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName);

@@ -104,8 +104,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -161,8 +161,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -221,8 +221,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

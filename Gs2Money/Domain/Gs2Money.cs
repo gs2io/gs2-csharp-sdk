@@ -93,8 +93,8 @@ namespace Gs2.Gs2Money.Domain
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.NamespaceDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.NamespaceDomain> self)
+            {
         #endif
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateNamespaceFuture(

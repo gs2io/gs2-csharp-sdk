@@ -104,8 +104,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.RateModel> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.RateModel> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

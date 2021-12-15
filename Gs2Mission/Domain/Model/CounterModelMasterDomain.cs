@@ -104,8 +104,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.CounterModelMaster> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.CounterModelMaster> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -161,8 +161,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -221,8 +221,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

@@ -109,8 +109,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemModel> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemModel> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

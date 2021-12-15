@@ -104,8 +104,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ExperienceModel> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ExperienceModel> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

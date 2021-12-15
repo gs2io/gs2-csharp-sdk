@@ -109,8 +109,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Trigger> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Trigger> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -167,8 +167,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -231,8 +231,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

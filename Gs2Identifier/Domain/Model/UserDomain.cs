@@ -99,8 +99,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
+            {
         #endif
             request
                 .WithUserName(this._userName);
@@ -158,8 +158,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
+            {
         #endif
             request
                 .WithUserName(this._userName);
@@ -214,8 +214,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
+            {
         #endif
             request
                 .WithUserName(this._userName);
@@ -271,8 +271,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
+            {
         #endif
             request
                 .WithUserName(this._userName);

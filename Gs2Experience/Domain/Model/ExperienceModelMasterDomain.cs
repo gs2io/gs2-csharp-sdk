@@ -104,8 +104,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ExperienceModelMaster> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ExperienceModelMaster> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -161,8 +161,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -221,8 +221,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

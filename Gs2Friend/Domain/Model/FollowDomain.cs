@@ -109,8 +109,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FollowUserDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FollowUserDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

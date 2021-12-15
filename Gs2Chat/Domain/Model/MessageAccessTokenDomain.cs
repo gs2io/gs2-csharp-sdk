@@ -118,8 +118,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Message> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Message> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

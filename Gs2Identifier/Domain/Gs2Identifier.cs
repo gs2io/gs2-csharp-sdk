@@ -93,8 +93,8 @@ namespace Gs2.Gs2Identifier.Domain
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
+            {
         #endif
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateUserFuture(
@@ -156,8 +156,8 @@ namespace Gs2.Gs2Identifier.Domain
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
+            {
         #endif
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateSecurityPolicyFuture(

@@ -109,8 +109,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -167,8 +167,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

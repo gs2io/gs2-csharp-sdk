@@ -109,8 +109,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -170,8 +170,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -228,8 +228,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -289,8 +289,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

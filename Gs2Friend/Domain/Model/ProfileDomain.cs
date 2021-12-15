@@ -105,8 +105,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Profile> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Profile> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -161,8 +161,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.ProfileDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.ProfileDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -220,8 +220,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.ProfileDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.ProfileDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -271,8 +271,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.PublicProfileDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.PublicProfileDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

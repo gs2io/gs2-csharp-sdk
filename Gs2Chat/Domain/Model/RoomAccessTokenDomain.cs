@@ -113,8 +113,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -175,8 +175,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -234,8 +234,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

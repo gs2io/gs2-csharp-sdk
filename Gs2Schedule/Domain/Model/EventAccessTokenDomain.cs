@@ -109,8 +109,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)

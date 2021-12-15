@@ -97,8 +97,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
+            {
         #endif
             request
                 .WithSecurityPolicyName(this._securityPolicyName);
@@ -156,8 +156,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> self)
+            {
         #endif
             request
                 .WithSecurityPolicyName(this._securityPolicyName);
@@ -212,8 +212,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
+            {
         #endif
             request
                 .WithSecurityPolicyName(this._securityPolicyName);

@@ -109,8 +109,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -171,8 +171,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.BoxDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.BoxDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
@@ -232,8 +232,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-          IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.BoxDomain> self)
-          {
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.BoxDomain> self)
+            {
         #endif
             request
                 .WithNamespaceName(this._namespaceName)
