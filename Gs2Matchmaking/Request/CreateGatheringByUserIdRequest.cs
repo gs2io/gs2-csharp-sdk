@@ -40,6 +40,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
         public string[] AllowUserIds { set; get; }
         public long? ExpiresAt { set; get; }
+        public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
 
         public CreateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -76,6 +77,11 @@ namespace Gs2.Gs2Matchmaking.Request
             return this;
         }
 
+        public CreateGatheringByUserIdRequest WithExpiresAtTimeSpan(Gs2.Gs2Matchmaking.Model.TimeSpan_ expiresAtTimeSpan) {
+            this.ExpiresAtTimeSpan = expiresAtTimeSpan;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -97,7 +103,8 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithExpiresAtTimeSpan(!data.Keys.Contains("expiresAtTimeSpan") || data["expiresAtTimeSpan"] == null ? null : Gs2.Gs2Matchmaking.Model.TimeSpan_.FromJson(data["expiresAtTimeSpan"]));
         }
 
         public JsonData ToJson()
@@ -124,6 +131,7 @@ namespace Gs2.Gs2Matchmaking.Request
                         }).ToArray()
                     ),
                 ["expiresAt"] = ExpiresAt,
+                ["expiresAtTimeSpan"] = ExpiresAtTimeSpan?.ToJson(),
             };
         }
 
@@ -166,6 +174,9 @@ namespace Gs2.Gs2Matchmaking.Request
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            if (ExpiresAtTimeSpan != null) {
+                ExpiresAtTimeSpan.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

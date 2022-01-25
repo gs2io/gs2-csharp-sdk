@@ -11,13 +11,43 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Matchmaking.Model
 {
 	public class LeaveNotification
 	{
-        public string namespaceName { set; get; }
-        public string gatheringName { set; get; }
-        public string leaveUserId { set; get; }
+        public string NamespaceName { set; get; }
+        public string GatheringName { set; get; }
+        public string LeaveUserId { set; get; }
+        public LeaveNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public LeaveNotification WithGatheringName(string gatheringName) {
+            this.GatheringName = gatheringName;
+            return this;
+        }
+        public LeaveNotification WithLeaveUserId(string leaveUserId) {
+            this.LeaveUserId = leaveUserId;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static LeaveNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new LeaveNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithLeaveUserId(!data.Keys.Contains("leaveUserId") || data["leaveUserId"] == null ? null : data["leaveUserId"].ToString());
+        }
     }
 }

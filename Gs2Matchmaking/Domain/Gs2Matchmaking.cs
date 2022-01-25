@@ -36,12 +36,15 @@ using Gs2.Gs2Matchmaking.Domain.Iterator;
 using Gs2.Gs2Matchmaking.Domain.Model;
 using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
+using Gs2.Gs2Matchmaking.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +115,10 @@ namespace Gs2.Gs2Matchmaking.Domain
                 request
             );
             #endif
-            string parentKey = "matchmaking:Gs2.Gs2Matchmaking.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +140,16 @@ namespace Gs2.Gs2Matchmaking.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Namespace> Namespaces(
             #endif
@@ -202,6 +206,72 @@ namespace Gs2.Gs2Matchmaking.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+        }
+
+        [Serializable]
+        private class JoinNotificationEvent : UnityEvent<JoinNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static JoinNotificationEvent onJoinNotification = new JoinNotificationEvent();
+
+        public event UnityAction<JoinNotification> OnJoinNotification
+        {
+            add => onJoinNotification.AddListener(value);
+            remove => onJoinNotification.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class LeaveNotificationEvent : UnityEvent<LeaveNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static LeaveNotificationEvent onLeaveNotification = new LeaveNotificationEvent();
+
+        public event UnityAction<LeaveNotification> OnLeaveNotification
+        {
+            add => onLeaveNotification.AddListener(value);
+            remove => onLeaveNotification.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class CompleteNotificationEvent : UnityEvent<CompleteNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
+
+        public event UnityAction<CompleteNotification> OnCompleteNotification
+        {
+            add => onCompleteNotification.AddListener(value);
+            remove => onCompleteNotification.RemoveListener(value);
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
+            switch (action) {
+                case "Join": {
+                    onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+                case "Leave": {
+                    onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+                case "Complete": {
+                    onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+            }
         }
     }
 }

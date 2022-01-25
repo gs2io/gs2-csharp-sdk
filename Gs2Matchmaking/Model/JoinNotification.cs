@@ -11,13 +11,43 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Matchmaking.Model
 {
 	public class JoinNotification
 	{
-        public string namespaceName { set; get; }
-        public string gatheringName { set; get; }
-        public string joinUserId { set; get; }
+        public string NamespaceName { set; get; }
+        public string GatheringName { set; get; }
+        public string JoinUserId { set; get; }
+        public JoinNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public JoinNotification WithGatheringName(string gatheringName) {
+            this.GatheringName = gatheringName;
+            return this;
+        }
+        public JoinNotification WithJoinUserId(string joinUserId) {
+            this.JoinUserId = joinUserId;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static JoinNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new JoinNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
+                .WithJoinUserId(!data.Keys.Contains("joinUserId") || data["joinUserId"] == null ? null : data["joinUserId"].ToString());
+        }
     }
 }

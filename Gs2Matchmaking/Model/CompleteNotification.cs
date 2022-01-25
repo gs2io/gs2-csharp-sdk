@@ -11,12 +11,37 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Matchmaking.Model
 {
 	public class CompleteNotification
 	{
-        public string namespaceName { set; get; }
-        public string gatheringName { set; get; }
+        public string NamespaceName { set; get; }
+        public string GatheringName { set; get; }
+        public CompleteNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public CompleteNotification WithGatheringName(string gatheringName) {
+            this.GatheringName = gatheringName;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static CompleteNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CompleteNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString());
+        }
     }
 }

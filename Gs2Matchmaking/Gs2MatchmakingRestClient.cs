@@ -1009,6 +1009,11 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("expiresAt");
                     jsonWriter.Write(request.ExpiresAt.ToString());
                 }
+                if (request.ExpiresAtTimeSpan != null)
+                {
+                    jsonWriter.WritePropertyName("expiresAtTimeSpan");
+                    request.ExpiresAtTimeSpan.WriteJson(jsonWriter);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1170,6 +1175,11 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("expiresAt");
                     jsonWriter.Write(request.ExpiresAt.ToString());
+                }
+                if (request.ExpiresAtTimeSpan != null)
+                {
+                    jsonWriter.WritePropertyName("expiresAtTimeSpan");
+                    request.ExpiresAtTimeSpan.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {

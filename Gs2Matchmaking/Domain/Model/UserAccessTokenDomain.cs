@@ -128,20 +128,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "Singleton",
-                "Gathering"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Singleton",
+                    "Gathering"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    result.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    key,
+                    resultModel.Item,
+                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain domain = new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
@@ -188,7 +192,20 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
+        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            return new DoMatchmakingIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken,
+                player
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
             #endif
@@ -231,7 +248,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
+        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
+        )
+        {
+            return new DescribeRatingsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating> RatingsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
             #endif

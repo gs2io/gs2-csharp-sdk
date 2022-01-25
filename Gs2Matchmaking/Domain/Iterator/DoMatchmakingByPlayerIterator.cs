@@ -58,11 +58,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-        #if GS2_ENABLE_UNITASK
-    public class DoMatchmakingByPlayerIterator {
-        #else
     public class DoMatchmakingByPlayerIterator : Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> {
-        #endif
     #else
     public class DoMatchmakingByPlayerIterator : IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> {
     #endif
@@ -142,16 +138,45 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
         public override bool HasNext()
         {
             if (Error != null) return false;
             return _hasNext();
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+
+        protected override System.Collections.IEnumerator Next(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering> callback
+        )
+        {
+            yield return UniTask.ToCoroutine(
+                async () => {
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        Current = null;
+                        return;
+                    }
+                    Gs2.Gs2Matchmaking.Model.Gathering ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    Current = ret;
+                }
+            );
+            callback.Invoke(Current);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+            #else
 
         protected override IEnumerator Next(
             Action<Gs2.Gs2Matchmaking.Model.Gathering> callback
