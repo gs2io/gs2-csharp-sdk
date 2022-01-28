@@ -629,114 +629,6 @@ namespace Gs2.Gs2Friend
 #endif
 
 
-        public class GetPublicProfileTask : Gs2WebSocketSessionTask<Request.GetPublicProfileRequest, Result.GetPublicProfileResult>
-        {
-	        public GetPublicProfileTask(IGs2Session session, Request.GetPublicProfileRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.GetPublicProfileRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "friend",
-                    "profile",
-                    "getPublicProfile",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetPublicProfile(
-                Request.GetPublicProfileRequest request,
-                UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
-        )
-		{
-			var task = new GetPublicProfileTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
-                Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
-            Request.GetPublicProfileRequest request
-        )
-		{
-		    var task = new GetPublicProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-    #else
-		public GetPublicProfileTask GetPublicProfileAsync(
-                Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
-                Gs2WebSocketSession,
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
-            Request.GetPublicProfileRequest request
-        )
-		{
-		    var task = new GetPublicProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class GetFollowTask : Gs2WebSocketSessionTask<Request.GetFollowRequest, Result.GetFollowResult>
         {
 	        public GetFollowTask(IGs2Session session, Request.GetFollowRequest request) : base(session, request)
@@ -3290,6 +3182,114 @@ namespace Gs2.Gs2Friend
         )
 		{
 		    var task = new RejectRequestByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPublicProfileTask : Gs2WebSocketSessionTask<Request.GetPublicProfileRequest, Result.GetPublicProfileResult>
+        {
+	        public GetPublicProfileTask(IGs2Session session, Request.GetPublicProfileRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPublicProfileRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "friend",
+                    "publicProfile",
+                    "getPublicProfile",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPublicProfile(
+                Request.GetPublicProfileRequest request,
+                UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
+        )
+		{
+			var task = new GetPublicProfileTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
+                Request.GetPublicProfileRequest request
+        )
+		{
+			return new GetPublicProfileTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
+            Request.GetPublicProfileRequest request
+        )
+		{
+		    var task = new GetPublicProfileTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPublicProfileTask GetPublicProfileAsync(
+                Request.GetPublicProfileRequest request
+        )
+		{
+			return new GetPublicProfileTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
+            Request.GetPublicProfileRequest request
+        )
+		{
+		    var task = new GetPublicProfileTask(
 		        Gs2WebSocketSession,
 		        request
             );

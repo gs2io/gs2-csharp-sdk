@@ -68,6 +68,108 @@ namespace Gs2.Gs2JobQueue.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserIdFromGrn(
+            string grn
+        )
+        {
+            var match = _userIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["userId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _jobNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetJobNameFromGrn(
+            string grn
+        )
+        {
+            var match = _jobNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["jobName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["jobName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _tryNumberRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):queue:(?<namespaceName>.+):user:(?<userId>.+):job:(?<jobName>.+):jobResult:(?<tryNumber>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetTryNumberFromGrn(
+            string grn
+        )
+        {
+            var match = _tryNumberRegex.Match(grn);
+            if (!match.Success || !match.Groups["tryNumber"].Success)
+            {
+                return null;
+            }
+            return match.Groups["tryNumber"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

@@ -104,6 +104,91 @@ namespace Gs2.Gs2Stamina.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):user:(?<userId>.+):stamina:(?<staminaName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):user:(?<userId>.+):stamina:(?<staminaName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):user:(?<userId>.+):stamina:(?<staminaName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):user:(?<userId>.+):stamina:(?<staminaName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserIdFromGrn(
+            string grn
+        )
+        {
+            var match = _userIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["userId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _staminaNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):user:(?<userId>.+):stamina:(?<staminaName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetStaminaNameFromGrn(
+            string grn
+        )
+        {
+            var match = _staminaNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["staminaName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["staminaName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

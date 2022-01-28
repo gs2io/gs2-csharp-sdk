@@ -50,6 +50,40 @@ namespace Gs2.Gs2Identifier.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2::(?<ownerId>.+):identifier:user:(?<userName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2::(?<ownerId>.+):identifier:user:(?<userName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserNameFromGrn(
+            string grn
+        )
+        {
+            var match = _userNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["userName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

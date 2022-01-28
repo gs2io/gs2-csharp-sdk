@@ -1436,342 +1436,6 @@ namespace Gs2.Gs2Friend
 #endif
 
 
-        public class GetPublicProfileTask : Gs2RestSessionTask<GetPublicProfileRequest, GetPublicProfileResult>
-        {
-            public GetPublicProfileTask(IGs2Session session, RestSessionRequestFactory factory, GetPublicProfileRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetPublicProfileRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "friend")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/profile/public";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetPublicProfile(
-                Request.GetPublicProfileRequest request,
-                UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
-        )
-		{
-			var task = new GetPublicProfileTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
-                Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
-                Request.GetPublicProfileRequest request
-        )
-		{
-            AsyncResult<Result.GetPublicProfileResult> result = null;
-			await GetPublicProfile(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetPublicProfileTask GetPublicProfileAsync(
-                Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
-                Request.GetPublicProfileRequest request
-        )
-		{
-			var task = new GetPublicProfileTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class DescribeFollowsTask : Gs2RestSessionTask<DescribeFollowsRequest, DescribeFollowsResult>
-        {
-            public DescribeFollowsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFollowsRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeFollowsRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "friend")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/follow";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.WithProfile != null) {
-                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
-                }
-                if (request.PageToken != null) {
-                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
-                }
-                if (request.Limit != null) {
-                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeFollows(
-                Request.DescribeFollowsRequest request,
-                UnityAction<AsyncResult<Result.DescribeFollowsResult>> callback
-        )
-		{
-			var task = new DescribeFollowsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFollowsResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeFollowsResult> DescribeFollowsFuture(
-                Request.DescribeFollowsRequest request
-        )
-		{
-			return new DescribeFollowsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFollowsResult> DescribeFollowsAsync(
-                Request.DescribeFollowsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFollowsResult> result = null;
-			await DescribeFollows(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeFollowsTask DescribeFollowsAsync(
-                Request.DescribeFollowsRequest request
-        )
-		{
-			return new DescribeFollowsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeFollowsResult> DescribeFollowsAsync(
-                Request.DescribeFollowsRequest request
-        )
-		{
-			var task = new DescribeFollowsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class DescribeFollowsByUserIdTask : Gs2RestSessionTask<DescribeFollowsByUserIdRequest, DescribeFollowsByUserIdResult>
-        {
-            public DescribeFollowsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFollowsByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeFollowsByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "friend")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/follow";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.WithProfile != null) {
-                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
-                }
-                if (request.PageToken != null) {
-                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
-                }
-                if (request.Limit != null) {
-                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeFollowsByUserId(
-                Request.DescribeFollowsByUserIdRequest request,
-                UnityAction<AsyncResult<Result.DescribeFollowsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeFollowsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFollowsByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdFuture(
-                Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-			return new DescribeFollowsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
-                Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFollowsByUserIdResult> result = null;
-			await DescribeFollowsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeFollowsByUserIdTask DescribeFollowsByUserIdAsync(
-                Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-			return new DescribeFollowsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
-                Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-			var task = new DescribeFollowsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class DescribeFriendsTask : Gs2RestSessionTask<DescribeFriendsRequest, DescribeFriendsResult>
         {
             public DescribeFriendsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFriendsRequest request) : base(session, factory, request)
@@ -2675,6 +2339,237 @@ namespace Gs2.Gs2Friend
         )
 		{
 			var task = new UnregisterBlackListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeFollowsTask : Gs2RestSessionTask<DescribeFollowsRequest, DescribeFollowsResult>
+        {
+            public DescribeFollowsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFollowsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeFollowsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "friend")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/follow";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeFollows(
+                Request.DescribeFollowsRequest request,
+                UnityAction<AsyncResult<Result.DescribeFollowsResult>> callback
+        )
+		{
+			var task = new DescribeFollowsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeFollowsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeFollowsResult> DescribeFollowsFuture(
+                Request.DescribeFollowsRequest request
+        )
+		{
+			return new DescribeFollowsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeFollowsResult> DescribeFollowsAsync(
+                Request.DescribeFollowsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeFollowsResult> result = null;
+			await DescribeFollows(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeFollowsTask DescribeFollowsAsync(
+                Request.DescribeFollowsRequest request
+        )
+		{
+			return new DescribeFollowsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeFollowsResult> DescribeFollowsAsync(
+                Request.DescribeFollowsRequest request
+        )
+		{
+			var task = new DescribeFollowsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeFollowsByUserIdTask : Gs2RestSessionTask<DescribeFollowsByUserIdRequest, DescribeFollowsByUserIdResult>
+        {
+            public DescribeFollowsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFollowsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeFollowsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "friend")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/follow";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeFollowsByUserId(
+                Request.DescribeFollowsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeFollowsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeFollowsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeFollowsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdFuture(
+                Request.DescribeFollowsByUserIdRequest request
+        )
+		{
+			return new DescribeFollowsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
+                Request.DescribeFollowsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeFollowsByUserIdResult> result = null;
+			await DescribeFollowsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeFollowsByUserIdTask DescribeFollowsByUserIdAsync(
+                Request.DescribeFollowsByUserIdRequest request
+        )
+		{
+			return new DescribeFollowsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
+                Request.DescribeFollowsByUserIdRequest request
+        )
+		{
+			var task = new DescribeFollowsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -5580,6 +5475,111 @@ namespace Gs2.Gs2Friend
         )
 		{
 			var task = new RejectRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPublicProfileTask : Gs2RestSessionTask<GetPublicProfileRequest, GetPublicProfileResult>
+        {
+            public GetPublicProfileTask(IGs2Session session, RestSessionRequestFactory factory, GetPublicProfileRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetPublicProfileRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "friend")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/profile/public";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPublicProfile(
+                Request.GetPublicProfileRequest request,
+                UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
+        )
+		{
+			var task = new GetPublicProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
+                Request.GetPublicProfileRequest request
+        )
+		{
+			return new GetPublicProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
+                Request.GetPublicProfileRequest request
+        )
+		{
+            AsyncResult<Result.GetPublicProfileResult> result = null;
+			await GetPublicProfile(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetPublicProfileTask GetPublicProfileAsync(
+                Request.GetPublicProfileRequest request
+        )
+		{
+			return new GetPublicProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
+                Request.GetPublicProfileRequest request
+        )
+		{
+			var task = new GetPublicProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

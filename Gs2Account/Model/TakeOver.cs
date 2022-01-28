@@ -68,6 +68,91 @@ namespace Gs2.Gs2Account.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):takeOver:(?<type>.+):(?<userIdentifier>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):takeOver:(?<type>.+):(?<userIdentifier>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):takeOver:(?<type>.+):(?<userIdentifier>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _typeRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):takeOver:(?<type>.+):(?<userIdentifier>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetTypeFromGrn(
+            string grn
+        )
+        {
+            var match = _typeRegex.Match(grn);
+            if (!match.Success || !match.Groups["type"].Success)
+            {
+                return null;
+            }
+            return match.Groups["type"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userIdentifierRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):takeOver:(?<type>.+):(?<userIdentifier>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserIdentifierFromGrn(
+            string grn
+        )
+        {
+            var match = _userIdentifierRegex.Match(grn);
+            if (!match.Success || !match.Groups["userIdentifier"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userIdentifier"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

@@ -74,6 +74,91 @@ namespace Gs2.Gs2Chat.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):chat:(?<namespaceName>.+):room:(?<roomName>.+):message:(?<messageName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):chat:(?<namespaceName>.+):room:(?<roomName>.+):message:(?<messageName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):chat:(?<namespaceName>.+):room:(?<roomName>.+):message:(?<messageName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _roomNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):chat:(?<namespaceName>.+):room:(?<roomName>.+):message:(?<messageName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRoomNameFromGrn(
+            string grn
+        )
+        {
+            var match = _roomNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["roomName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["roomName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _messageNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):chat:(?<namespaceName>.+):room:(?<roomName>.+):message:(?<messageName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetMessageNameFromGrn(
+            string grn
+        )
+        {
+            var match = _messageNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["messageName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["messageName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

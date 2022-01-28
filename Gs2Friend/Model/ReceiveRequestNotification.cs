@@ -11,12 +11,37 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Friend.Model
 {
 	public class ReceiveRequestNotification
 	{
-        public string namespaceName { set; get; }
-        public string fromUserId { set; get; }
+        public string NamespaceName { set; get; }
+        public string FromUserId { set; get; }
+        public ReceiveRequestNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public ReceiveRequestNotification WithFromUserId(string fromUserId) {
+            this.FromUserId = fromUserId;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static ReceiveRequestNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new ReceiveRequestNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
+        }
     }
 }

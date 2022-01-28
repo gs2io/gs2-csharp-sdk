@@ -11,13 +11,43 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Mission.Model
 {
 	public class CompleteNotification
 	{
-        public string namespaceName { set; get; }
-        public string groupName { set; get; }
-        public string taskName { set; get; }
+        public string NamespaceName { set; get; }
+        public string GroupName { set; get; }
+        public string TaskName { set; get; }
+        public CompleteNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public CompleteNotification WithGroupName(string groupName) {
+            this.GroupName = groupName;
+            return this;
+        }
+        public CompleteNotification WithTaskName(string taskName) {
+            this.TaskName = taskName;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static CompleteNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CompleteNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithGroupName(!data.Keys.Contains("groupName") || data["groupName"] == null ? null : data["groupName"].ToString())
+                .WithTaskName(!data.Keys.Contains("taskName") || data["taskName"] == null ? null : data["taskName"].ToString());
+        }
     }
 }
