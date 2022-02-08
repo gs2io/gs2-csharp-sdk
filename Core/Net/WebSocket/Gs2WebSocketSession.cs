@@ -222,7 +222,15 @@ namespace Gs2.Core.Net
             if (request is WebSocketSessionRequest sessionRequest)
             {
                 _inflightRequest[sessionRequest.TaskId] = sessionRequest;
-                _session.Send(sessionRequest?.Body);
+
+                try
+                {
+                    _session.Send(sessionRequest?.Body);
+                }
+                catch (SystemException e)
+                {
+                    _inflightRequest.Remove(sessionRequest.TaskId);
+                }
             }
 
             yield return null;
@@ -233,7 +241,15 @@ namespace Gs2.Core.Net
             if (request is WebSocketSessionRequest sessionRequest)
             {
                 _inflightRequest[sessionRequest.TaskId] = sessionRequest;
-                _session.Send(sessionRequest?.Body);
+
+                try
+                {
+                    _session.Send(sessionRequest?.Body);
+                }
+                catch (SystemException e)
+                {
+                    _inflightRequest.Remove(sessionRequest.TaskId);
+                }
             }
         }
 
@@ -246,7 +262,15 @@ namespace Gs2.Core.Net
             if (request is WebSocketSessionRequest sessionRequest)
             {
                 _inflightRequest[sessionRequest.TaskId] = sessionRequest;
-                _session.Send(sessionRequest?.Body);
+
+                try
+                {
+                    _session.Send(sessionRequest?.Body);
+                }
+                catch (SystemException e)
+                {
+                    _inflightRequest.Remove(sessionRequest.TaskId);
+                }
             }
 
             await Task.Yield();
@@ -266,30 +290,42 @@ namespace Gs2.Core.Net
             {
                 State = State.CancellingTasks;
                 
-                while (_inflightRequest.Count > 0)
-                {
+				{
+                	var begin = DateTime.Now;
+                	while (_inflightRequest.Count > 0)
+                	{
+                    	if ((DateTime.Now - begin).Seconds > 3)
+                    	{
+                        	_inflightRequest.Clear();
+                        	break;
+                    	}
+
 #if UNITY_2017_1_OR_NEWER
-                    yield return new WaitForSeconds(0.01f);
+                    	yield return new WaitForSeconds(0.01f);
 #endif
-                }
+                	}
+				}
 
                 State = State.Closing;
                 
                 _session.Close();
-            
-                var begin = DateTime.Now;
-                while (_session.ReadyState != WebSocketState.Closed)
+
                 {
-                    if ((DateTime.Now - begin).Seconds > 10)
+                    var begin = DateTime.Now;
+                    while (_session.ReadyState != WebSocketState.Closed)
                     {
-                        throw new RequestTimeoutException(new RequestError[0]);
-                    }
+                        if ((DateTime.Now - begin).Seconds > 3)
+                        {
+                        	_inflightRequest.Clear();
+                        	break;
+                        }
 
 #if UNITY_2017_1_OR_NEWER
-                    yield return new WaitForSeconds(0.05f);
+                        yield return new WaitForSeconds(0.05f);
 #endif
+                    }
                 }
-                
+
                 State = State.Closed;
             }
             callback.Invoke();
@@ -311,26 +347,37 @@ namespace Gs2.Core.Net
             {
                 State = State.CancellingTasks;
 
-                while (_inflightRequest.Count > 0)
                 {
-                    await Task.Delay(10);
+                    var begin = DateTime.Now;
+                    while (_inflightRequest.Count > 0)
+                    {
+                        if ((DateTime.Now - begin).Seconds > 3)
+                        {
+                        	_inflightRequest.Clear();
+                        	break;
+                        }
+
+                        await Task.Delay(10);
+                    }
                 }
-                
+
                 State = State.Closing;
                 
                 _session.Close();
-            
-                var begin = DateTime.Now;
-                while (_session.ReadyState != WebSocketState.Closed)
-                {
-                    if ((DateTime.Now - begin).Seconds > 10)
-                    {
-                        throw new RequestTimeoutException(new RequestError[0]);
-                    }
 
-                    await Task.Delay(50);
+                {
+                    var begin = DateTime.Now;
+                    while (_session.ReadyState != WebSocketState.Closed)
+                    {
+                        if ((DateTime.Now - begin).Seconds > 3)
+                        {
+                            throw new RequestTimeoutException(new RequestError[0]);
+                        }
+
+                        await Task.Delay(50);
+                    }
                 }
-                
+
                 State = State.Closed;
             }
         }
