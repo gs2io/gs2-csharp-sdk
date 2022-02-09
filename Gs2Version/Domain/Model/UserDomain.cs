@@ -128,6 +128,10 @@ namespace Gs2.Gs2Version.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Version.Domain.Model.UserDomain domain = this;
             this.Body = domain.Body = result?.Body;
             this.Signature = domain.Signature = result?.Signature;
@@ -145,7 +149,18 @@ namespace Gs2.Gs2Version.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
+        public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
+        )
+        {
+            return new DescribeAcceptVersionsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersionsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
             #endif

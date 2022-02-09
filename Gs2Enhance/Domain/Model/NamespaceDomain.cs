@@ -120,6 +120,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Enhance.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -168,17 +172,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -224,17 +221,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Enhance.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -286,12 +276,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Enhance.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Enhance.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -340,18 +328,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "RateModelMaster"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "RateModelMaster"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -415,7 +407,17 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.RateModel> RateModels(
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.RateModel> RateModels(
+        )
+        {
+            return new DescribeRateModelsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.RateModel> RateModelsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Enhance.Model.RateModel> RateModels(
             #endif
@@ -454,7 +456,17 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.RateModelMaster> RateModelMasters(
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.RateModelMaster> RateModelMasters(
+        )
+        {
+            return new DescribeRateModelMastersIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.RateModelMaster> RateModelMastersAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Enhance.Model.RateModelMaster> RateModelMasters(
             #endif
@@ -546,14 +558,21 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Enhance.Model.Namespace>(
-                            _parentKey,
-                            Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "namespace")
+                            {
+                                _cache.Delete<Gs2.Gs2Enhance.Model.Namespace>(
+                                    _parentKey,
+                                    Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                        this.NamespaceName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -562,13 +581,20 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "namespace")
+                    {
                     _cache.Delete<Gs2.Gs2Enhance.Model.Namespace>(
-                        _parentKey,
-                        Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            this.NamespaceName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                this.NamespaceName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Enhance.Model.Namespace>(

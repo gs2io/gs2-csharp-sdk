@@ -11,12 +11,37 @@ using System;
 using System.Collections.Generic;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
 
 namespace Gs2.Gs2Realtime.Model
 {
 	public class CreateNotification
 	{
-        public string namespaceName { set; get; }
-        public string roomName { set; get; }
+        public string NamespaceName { set; get; }
+        public string RoomName { set; get; }
+        public CreateNotification WithNamespaceName(string namespaceName) {
+            this.NamespaceName = namespaceName;
+            return this;
+        }
+        public CreateNotification WithRoomName(string roomName) {
+            this.RoomName = roomName;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static CreateNotification FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new CreateNotification()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString());
+        }
     }
 }

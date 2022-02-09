@@ -132,6 +132,10 @@ namespace Gs2.Gs2Version.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Version.Domain.Model.CheckerDomain domain = this;
             this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
             this.Warnings = domain.Warnings = result?.Warnings;

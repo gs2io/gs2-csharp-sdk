@@ -58,11 +58,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-        #if GS2_ENABLE_UNITASK
-    public class DescribeCategoryModelsIterator {
-        #else
     public class DescribeCategoryModelsIterator : Gs2Iterator<Gs2.Gs2Ranking.Model.CategoryModel> {
-        #endif
     #else
     public class DescribeCategoryModelsIterator : IAsyncEnumerable<Gs2.Gs2Ranking.Model.CategoryModel> {
     #endif
@@ -158,16 +154,45 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.CategoryModel> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
         public override bool HasNext()
         {
             if (Error != null) return false;
             return _hasNext();
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+
+        protected override System.Collections.IEnumerator Next(
+            Action<Gs2.Gs2Ranking.Model.CategoryModel> callback
+        )
+        {
+            yield return UniTask.ToCoroutine(
+                async () => {
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        Current = null;
+                        return;
+                    }
+                    Gs2.Gs2Ranking.Model.CategoryModel ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    Current = ret;
+                }
+            );
+            callback.Invoke(Current);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.CategoryModel> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+            #else
 
         protected override IEnumerator Next(
             Action<Gs2.Gs2Ranking.Model.CategoryModel> callback

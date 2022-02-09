@@ -129,20 +129,23 @@ namespace Gs2.Gs2News.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
-                "SetCookieRequestEntry"
-            );
-            foreach (var item in result?.Items) {
-                    
-                if (item != null) {
-                    _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        this._accessToken?.UserId.ToString(),
+                        "SetCookieRequestEntry"
+                    );
+                    var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                        item.Key.ToString(),
+                        item.Value.ToString()
+                    );
+                    cache.Put(
                         parentKey,
-                        Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
-                            item?.Key?.ToString(),
-                            item?.Value?.ToString()
-                        ),
+                        key,
                         item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );

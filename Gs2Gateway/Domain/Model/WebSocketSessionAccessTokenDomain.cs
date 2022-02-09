@@ -117,6 +117,18 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain> self)
             {
         #endif
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future2 = Model();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                self.OnError(future2.Error);
+                yield break;
+            }
+            var model = future2.Result;
+            #else
+            var model = await Model();
+            #endif
             request
                 .WithNamespaceName(this._namespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -136,13 +148,22 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                    resultModel.Item.NamespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "WebSocketSession"
+                );
+                var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }

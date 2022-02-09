@@ -132,14 +132,23 @@ namespace Gs2.Gs2Quest.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                        request.QuestName != null ? request.QuestName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    _questGroupName.ToString(),
+                    "QuestModel"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -213,14 +222,21 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Quest.Model.QuestModel>(
-                            _parentKey,
-                            Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                                this.QuestName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "questModel")
+                            {
+                                _cache.Delete<Gs2.Gs2Quest.Model.QuestModel>(
+                                    _parentKey,
+                                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                                        this.QuestName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -229,13 +245,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "questModel")
+                    {
                     _cache.Delete<Gs2.Gs2Quest.Model.QuestModel>(
-                        _parentKey,
-                        Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                            this.QuestName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                                this.QuestName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(

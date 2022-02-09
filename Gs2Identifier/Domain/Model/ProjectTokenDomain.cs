@@ -115,6 +115,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
@@ -163,16 +167,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

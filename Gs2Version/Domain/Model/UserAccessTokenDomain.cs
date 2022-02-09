@@ -96,7 +96,18 @@ namespace Gs2.Gs2Version.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
+        public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
+        )
+        {
+            return new DescribeAcceptVersionsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersionsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
             #endif

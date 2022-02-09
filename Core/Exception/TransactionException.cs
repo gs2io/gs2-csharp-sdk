@@ -17,6 +17,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 
@@ -58,6 +61,25 @@ namespace Gs2.Core.Exception
             return new Gs2InlineFuture(Impl);
         }
 #else
+        public Gs2Future Retry()
+        {
+            IEnumerator Impl(Gs2Future self)
+            {
+                yield return UniTask.ToCoroutine(async () =>
+                {
+                    try
+                    {
+                        await this._stampSheet.RunAsync();
+                    }
+                    catch (Gs2Exception e)
+                    {
+                        self.OnError(e);
+                    }
+                });
+            }
+            return new Gs2InlineFuture(Impl);
+        }
+        
         public async Task RetryAsync() {
             await this._stampSheet.RunAsync();
         }

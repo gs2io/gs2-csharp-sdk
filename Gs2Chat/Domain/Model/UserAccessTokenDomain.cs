@@ -127,19 +127,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "Singleton",
-                "Room"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Singleton",
+                    "Room"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -184,7 +188,18 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+        )
+        {
+            return new DescribeSubscribesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
             #endif

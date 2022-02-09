@@ -118,7 +118,20 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> Probabilities(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
+            string lotteryName
+        )
+        {
+            return new DescribeProbabilitiesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                lotteryName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> ProbabilitiesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
             #endif
@@ -159,7 +172,18 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Box> Boxes(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.Box> Boxes(
+        )
+        {
+            return new DescribeBoxesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Box> BoxesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Box> Boxes(
             #endif

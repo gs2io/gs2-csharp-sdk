@@ -128,20 +128,24 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "Await"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Await"
+                );
+                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString(),
+                    resultModel.Item.RateName.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString(),
-                        request.RateName != null ? request.RateName.ToString() : null
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -183,7 +187,20 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Exchange.Model.Await> Awaits(
+        public Gs2Iterator<Gs2.Gs2Exchange.Model.Await> Awaits(
+            string rateName
+        )
+        {
+            return new DescribeAwaitsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId,
+                rateName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Exchange.Model.Await> AwaitsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Exchange.Model.Await> Awaits(
             #endif

@@ -126,14 +126,22 @@ namespace Gs2.Gs2Quest.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
-                        request.QuestGroupName != null ? request.QuestGroupName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "QuestGroupModel"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -150,7 +158,18 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModel> QuestModels(
+        public Gs2Iterator<Gs2.Gs2Quest.Model.QuestModel> QuestModels(
+        )
+        {
+            return new DescribeQuestModelsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._questGroupName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModel> QuestModelsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Quest.Model.QuestModel> QuestModels(
             #endif
@@ -246,14 +265,21 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Quest.Model.QuestGroupModel>(
-                            _parentKey,
-                            Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
-                                this.QuestGroupName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "questGroupModel")
+                            {
+                                _cache.Delete<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                                    _parentKey,
+                                    Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                                        this.QuestGroupName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -262,13 +288,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "questGroupModel")
+                    {
                     _cache.Delete<Gs2.Gs2Quest.Model.QuestGroupModel>(
-                        _parentKey,
-                        Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
-                            this.QuestGroupName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                                this.QuestGroupName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.QuestGroupModel>(

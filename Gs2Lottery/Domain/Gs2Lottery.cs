@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Lottery.Domain
                 request
             );
             #endif
-            string parentKey = "lottery:Gs2.Gs2Lottery.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Lottery.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Lottery.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Lottery.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Namespace> Namespaces(
             #endif
@@ -188,20 +191,21 @@ namespace Gs2.Gs2Lottery.Domain
         ) {
                 switch (method) {
                     case "DrawByUserId": {
-                        DrawByUserIdRequest requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        DrawByUserIdResult resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Items) {
-                            string parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                        var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
-                                "Lottery"
+                                resultModel.BoxItems.UserId.ToString(),
+                                "BoxItems"
                             );
-                            string key = Gs2.Gs2Lottery.Domain.Model.LotteryDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.BoxItems,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
@@ -224,28 +228,36 @@ namespace Gs2.Gs2Lottery.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "draw_by_user_id": {
-                        DrawByUserIdRequest requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        DrawByUserIdResult resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        foreach (var item in resultModel.Items) {
-                            string parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+            switch (method) {
+                case "draw_by_user_id": {
+                    var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
-                                "Lottery"
+                                resultModel.BoxItems.UserId.ToString(),
+                                "BoxItems"
                             );
-                            string key = Gs2.Gs2Lottery.Domain.Model.LotteryDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.BoxItems,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        break;
-                    }
+                    break;
                 }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

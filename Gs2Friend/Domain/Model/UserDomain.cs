@@ -127,19 +127,23 @@ namespace Gs2.Gs2Friend.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "FriendRequest"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    requestModel.UserId.ToString(),
+                    "SendFriendRequest"
+                );
+                var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
+                    resultModel.Item.TargetUserId.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
-                        request.TargetUserId != null ? request.TargetUserId.ToString() : null
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -191,7 +195,18 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<string> BlackLists(
+        public Gs2Iterator<string> BlackLists(
+        )
+        {
+            return new DescribeBlackListByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<string> BlackListsAsync(
             #else
         public Gs2Iterator<string> BlackLists(
             #endif
@@ -228,9 +243,36 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
+        public Gs2.Gs2Friend.Domain.Model.FollowDomain Follow(
+            bool? withProfile
+        ) {
+            return new Gs2.Gs2Friend.Domain.Model.FollowDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                this._userId,
+                withProfile
+            );
+        }
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> Follows(
+        public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
+            bool? withProfile
+        )
+        {
+            return new DescribeFollowsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId,
+                withProfile
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> FollowsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
             #endif
@@ -257,23 +299,36 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
-        public Gs2.Gs2Friend.Domain.Model.FollowDomain Follow(
-            bool? withProfile
+        public Gs2.Gs2Friend.Domain.Model.FollowUserDomain FollowUser(
+            string targetUserId
         ) {
-            return new Gs2.Gs2Friend.Domain.Model.FollowDomain(
+            return new Gs2.Gs2Friend.Domain.Model.FollowUserDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
                 this._namespaceName,
                 this._userId,
-                withProfile
+                targetUserId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> Friends(
+        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
+            bool? withProfile
+        )
+        {
+            return new DescribeFriendsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId,
+                withProfile
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> FriendsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
             #endif
@@ -342,7 +397,18 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
+        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
+        )
+        {
+            return new DescribeSendRequestsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> SendRequestsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
             #endif
@@ -395,7 +461,18 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
+        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
+        )
+        {
+            return new DescribeReceiveRequestsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequestsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
             #endif

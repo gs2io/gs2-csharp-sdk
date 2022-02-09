@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Experience.Domain
                 request
             );
             #endif
-            string parentKey = "experience:Gs2.Gs2Experience.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Experience.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Experience.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Experience.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Experience.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Experience.Model.Namespace> Namespaces(
             #endif
@@ -188,63 +191,72 @@ namespace Gs2.Gs2Experience.Domain
         ) {
                 switch (method) {
                     case "AddExperienceByUserId": {
-                        AddExperienceByUserIdRequest requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AddExperienceByUserIdResult resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "AddRankCapByUserId": {
-                        AddRankCapByUserIdRequest requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AddRankCapByUserIdResult resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetRankCapByUserId": {
-                        SetRankCapByUserIdRequest requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetRankCapByUserIdResult resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -264,68 +276,84 @@ namespace Gs2.Gs2Experience.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "add_experience_by_user_id": {
-                        AddExperienceByUserIdRequest requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AddExperienceByUserIdResult resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "add_rank_cap_by_user_id": {
-                        AddRankCapByUserIdRequest requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AddRankCapByUserIdResult resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_rank_cap_by_user_id": {
-                        SetRankCapByUserIdRequest requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetRankCapByUserIdResult resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Status"
-                        );
-                        string key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.ExperienceName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "add_experience_by_user_id": {
+                    var requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
                 }
+                case "add_rank_cap_by_user_id": {
+                    var requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "set_rank_cap_by_user_id": {
+                    var requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

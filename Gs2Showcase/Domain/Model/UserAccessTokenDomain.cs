@@ -93,7 +93,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.Showcase> Showcases(
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(
+        )
+        {
+            return new DescribeShowcasesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.Showcase> ShowcasesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(
             #endif

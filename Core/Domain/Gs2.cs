@@ -49,19 +49,130 @@ namespace Gs2.Core.Domain
         public readonly Gs2Version.Domain.Gs2Version Version;
 
         public Gs2(
-            Gs2RestSession session
-        ) : this(session, null)
-        {
-        }
-
-        public Gs2(
             Gs2RestSession session,
-            Gs2WebSocketSession wssession
+            Gs2WebSocketSession wssession = null,
+            string distributorNamespaceName = null
         )
         {
-            var stampSheetConfiguration = StampSheetConfiguration.Builder().Build();
+            var stampSheetConfiguration = StampSheetConfiguration.Builder()
+                .WithNamespaceName(distributorNamespaceName)
+                .Build();
             _cache = new CacheDatabase();
             _jobQueueDomain = new JobQueueDomain(this);
+
+            if (wssession != null)
+            {
+                wssession.OnNotificationMessage += message =>
+                {
+                    if (message.subject.Contains(":"))
+                    {
+                        var service = message.subject.Substring(0, message.subject.IndexOf(':'));
+                        var method = message.subject.Substring(message.subject.IndexOf(':') + 1);
+                        switch (service)
+                        {
+                            case "Gs2Account":
+                                Gs2Account.Domain.Gs2Account.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Auth":
+                                Gs2Auth.Domain.Gs2Auth.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Chat":
+                                Gs2Chat.Domain.Gs2Chat.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Datastore":
+                                Gs2Datastore.Domain.Gs2Datastore.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Dictionary":
+                                Gs2Dictionary.Domain.Gs2Dictionary.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Distributor":
+                                Gs2Distributor.Domain.Gs2Distributor.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Enhance":
+                                Gs2Enhance.Domain.Gs2Enhance.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Exchange":
+                                Gs2Exchange.Domain.Gs2Exchange.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Experience":
+                                Gs2Experience.Domain.Gs2Experience.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Formation":
+                                Gs2Formation.Domain.Gs2Formation.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Friend":
+                                Gs2Friend.Domain.Gs2Friend.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Gateway":
+                                Gs2Gateway.Domain.Gs2Gateway.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Identifier":
+                                Gs2Identifier.Domain.Gs2Identifier.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Inbox":
+                                Gs2Inbox.Domain.Gs2Inbox.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Inventory":
+                                Gs2Inventory.Domain.Gs2Inventory.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2JobQueue":
+                                Gs2JobQueue.Domain.Gs2JobQueue.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Key":
+                                Gs2Key.Domain.Gs2Key.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Limit":
+                                Gs2Limit.Domain.Gs2Limit.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Lock":
+                                Gs2Lock.Domain.Gs2Lock.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Log":
+                                Gs2Log.Domain.Gs2Log.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Lottery":
+                                Gs2Lottery.Domain.Gs2Lottery.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Matchmaking":
+                                Gs2Matchmaking.Domain.Gs2Matchmaking.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Mission":
+                                Gs2Mission.Domain.Gs2Mission.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Money":
+                                Gs2Money.Domain.Gs2Money.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2News":
+                                Gs2News.Domain.Gs2News.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Quest":
+                                Gs2Quest.Domain.Gs2Quest.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Ranking":
+                                Gs2Ranking.Domain.Gs2Ranking.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Realtime":
+                                Gs2Realtime.Domain.Gs2Realtime.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Schedule":
+                                Gs2Schedule.Domain.Gs2Schedule.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Script":
+                                Gs2Script.Domain.Gs2Script.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Showcase":
+                                Gs2Showcase.Domain.Gs2Showcase.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Stamina":
+                                Gs2Stamina.Domain.Gs2Stamina.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Version":
+                                Gs2Version.Domain.Gs2Version.HandleNotification(_cache, method, message.payload);
+                                break;
+                        }
+                    }
+                };
+            }
 
             Account = new Gs2Account.Domain.Gs2Account(_cache, _jobQueueDomain, stampSheetConfiguration, session);
             Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, stampSheetConfiguration, session);

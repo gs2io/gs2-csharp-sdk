@@ -131,17 +131,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            string parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
-                "Job"
-            );
-            _cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
-                parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    result?.Item?.Name?.ToString()
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Job"
+                );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+            }
             if (result?.Item != null) {
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
                         _cache,

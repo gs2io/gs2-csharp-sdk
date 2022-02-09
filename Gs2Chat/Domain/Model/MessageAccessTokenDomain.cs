@@ -143,14 +143,24 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                        request.MessageName != null ? request.MessageName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Singleton",
+                    resultModel.Item.RoomName.ToString(),
+                    "Message"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -226,14 +236,21 @@ namespace Gs2.Gs2Chat.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Chat.Model.Message>(
-                            _parentKey,
-                            Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                                this.MessageName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "message")
+                            {
+                                _cache.Delete<Gs2.Gs2Chat.Model.Message>(
+                                    _parentKey,
+                                    Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                                        this.MessageName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -242,13 +259,20 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "message")
+                    {
                     _cache.Delete<Gs2.Gs2Chat.Model.Message>(
-                        _parentKey,
-                        Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                            this.MessageName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                                this.MessageName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Chat.Model.Message>(

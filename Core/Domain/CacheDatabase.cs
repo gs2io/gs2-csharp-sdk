@@ -33,6 +33,15 @@ namespace Gs2.Core.Domain
         }
 
         public void ListCacheClear<TKind>(string parentKey) {
+            if (!_cache.ContainsKey(typeof(TKind)))
+            {
+                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
+            }
+            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
+            {
+                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
+            }
+            _cache[typeof(TKind)][parentKey].Clear();
             if (!_listCached.ContainsKey(typeof(TKind)))
             {
                 _listCached[typeof(TKind)] = new Dictionary<string, bool>();

@@ -38,7 +38,7 @@ namespace Gs2.Gs2Log.Model
         public string UserId { set; get; }
         public string Action { set; get; }
         public string Args { set; get; }
-        public string Tasks { set; get; }
+        public string[] Tasks { set; get; }
 
         public IssueStampSheetLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
@@ -75,7 +75,7 @@ namespace Gs2.Gs2Log.Model
             return this;
         }
 
-        public IssueStampSheetLog WithTasks(string tasks) {
+        public IssueStampSheetLog WithTasks(string[] tasks) {
             this.Tasks = tasks;
             return this;
         }
@@ -96,7 +96,9 @@ namespace Gs2.Gs2Log.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null ? null : data["tasks"].ToString());
+                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null ? new string[]{} : data["tasks"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
         }
 
         public JsonData ToJson()
@@ -109,7 +111,11 @@ namespace Gs2.Gs2Log.Model
                 ["userId"] = UserId,
                 ["action"] = Action,
                 ["args"] = Args,
-                ["tasks"] = Tasks,
+                ["tasks"] = new JsonData(Tasks == null ? new JsonData[]{} :
+                        Tasks.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
             };
         }
 
@@ -146,7 +152,14 @@ namespace Gs2.Gs2Log.Model
             }
             if (Tasks != null) {
                 writer.WritePropertyName("tasks");
-                writer.Write(Tasks.ToString());
+                writer.WriteArrayStart();
+                foreach (var task in Tasks)
+                {
+                    if (task != null) {
+                        writer.Write(task.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -217,7 +230,11 @@ namespace Gs2.Gs2Log.Model
             }
             else
             {
-                diff += Tasks.CompareTo(other.Tasks);
+                diff += Tasks.Length - other.Tasks.Length;
+                for (var i = 0; i < Tasks.Length; i++)
+                {
+                    diff += Tasks[i].CompareTo(other.Tasks[i]);
+                }
             }
             return diff;
         }

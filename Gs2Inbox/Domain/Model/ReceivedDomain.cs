@@ -127,13 +127,22 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Received"
+                );
+                var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -183,13 +192,22 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Received"
+                );
+                var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -245,11 +263,20 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
-                _parentKey,
-                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Received"
+                );
+                var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Inbox.Model.Received>(parentKey, key);
+            }
             Gs2.Gs2Inbox.Domain.Model.ReceivedDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -316,13 +343,20 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
-                            _parentKey,
-                            Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                            )
-                        );
+                            if (e.errors[0].component == "received")
+                            {
+                                _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
+                                    _parentKey,
+                                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -331,12 +365,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "received")
+                    {
                     _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
-                        _parentKey,
-                        Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Inbox.Model.Received>(

@@ -44,8 +44,12 @@ namespace Gs2.Core.Domain
             this._stampSheetEvent = stampSheetEvent;
         }
         
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
+        public async UniTask RunAsync()
+    #else
         public Gs2Future Run()
+    #endif
 #else
         public async Task RunAsync()
 #endif

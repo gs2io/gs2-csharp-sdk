@@ -132,18 +132,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "BoxItems"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "BoxItems"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -194,14 +198,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
-                        request.PrizeTableName != null ? request.PrizeTableName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Box"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
+                    resultModel.Item.PrizeTableName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -255,21 +268,20 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "Box"
-            );
-            foreach (Gs2.Gs2Lottery.Model.Box item in _cache.List<Gs2.Gs2Lottery.Model.Box>(
-                    parentKey
-            )) {
-                _cache.Delete<Gs2.Gs2Lottery.Model.Box>(
-                    parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
-                        request.PrizeTableName != null ? request.PrizeTableName.ToString() : null
-                    )
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+                foreach (Gs2.Gs2Lottery.Model.Box item in cache.List<Gs2.Gs2Lottery.Model.Box>(
+                    _parentKey
+                )) {
+                    cache.Delete<Gs2.Gs2Lottery.Model.Box>(
+                        _parentKey,
+                        Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
+                            request.PrizeTableName != null ? request.PrizeTableName.ToString() : null
+                        )
+                    );
+                }
             Gs2.Gs2Lottery.Domain.Model.BoxDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -346,13 +358,20 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
-                            _parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                            )
-                        );
+                            if (e.errors[0].component == "boxItems")
+                            {
+                                _cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
+                                    _parentKey,
+                                    Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -361,12 +380,19 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "boxItems")
+                    {
                     _cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
-                        _parentKey,
-                        Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(

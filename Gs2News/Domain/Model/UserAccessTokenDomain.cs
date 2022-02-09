@@ -95,7 +95,18 @@ namespace Gs2.Gs2News.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2News.Model.News> Newses(
+        public Gs2Iterator<Gs2.Gs2News.Model.News> Newses(
+        )
+        {
+            return new DescribeNewsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2News.Model.News> NewsesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2News.Model.News> Newses(
             #endif

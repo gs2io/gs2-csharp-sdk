@@ -94,7 +94,18 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Dictionary.Model.Entry> Entries(
+        public Gs2Iterator<Gs2.Gs2Dictionary.Model.Entry> Entries(
+        )
+        {
+            return new DescribeEntriesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Dictionary.Model.Entry> EntriesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Dictionary.Model.Entry> Entries(
             #endif

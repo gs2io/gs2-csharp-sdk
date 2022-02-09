@@ -123,6 +123,10 @@ namespace Gs2.Gs2News.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
@@ -172,6 +176,10 @@ namespace Gs2.Gs2News.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -219,6 +227,10 @@ namespace Gs2.Gs2News.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

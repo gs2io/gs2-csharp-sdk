@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Showcase.Domain
                 request
             );
             #endif
-            string parentKey = "showcase:Gs2.Gs2Showcase.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Showcase.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Showcase.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Showcase.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Namespace> Namespaces(
             #endif
@@ -201,6 +204,13 @@ namespace Gs2.Gs2Showcase.Domain
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
+        ) {
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
         ) {
         }
     }

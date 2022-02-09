@@ -42,6 +42,7 @@ namespace Gs2.Gs2Log.Model
         public string AwsAccessKeyId { set; get; }
         public string AwsSecretAccessKey { set; get; }
         public string FirehoseStreamName { set; get; }
+        public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
 
@@ -97,6 +98,11 @@ namespace Gs2.Gs2Log.Model
 
         public Namespace WithFirehoseStreamName(string firehoseStreamName) {
             this.FirehoseStreamName = firehoseStreamName;
+            return this;
+        }
+
+        public Namespace WithStatus(string status) {
+            this.Status = status;
             return this;
         }
 
@@ -181,6 +187,7 @@ namespace Gs2.Gs2Log.Model
                 .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
                 .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())
                 .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString())
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -199,6 +206,7 @@ namespace Gs2.Gs2Log.Model
                 ["awsAccessKeyId"] = AwsAccessKeyId,
                 ["awsSecretAccessKey"] = AwsSecretAccessKey,
                 ["firehoseStreamName"] = FirehoseStreamName,
+                ["status"] = Status,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -250,6 +258,10 @@ namespace Gs2.Gs2Log.Model
             if (FirehoseStreamName != null) {
                 writer.WritePropertyName("firehoseStreamName");
                 writer.Write(FirehoseStreamName.ToString());
+            }
+            if (Status != null) {
+                writer.WritePropertyName("status");
+                writer.Write(Status.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -353,6 +365,14 @@ namespace Gs2.Gs2Log.Model
             else
             {
                 diff += FirehoseStreamName.CompareTo(other.FirehoseStreamName);
+            }
+            if (Status == null && Status == other.Status)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Status.CompareTo(other.Status);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

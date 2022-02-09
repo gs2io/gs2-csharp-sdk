@@ -36,12 +36,15 @@ using Gs2.Gs2Mission.Domain.Iterator;
 using Gs2.Gs2Mission.Domain.Model;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
+using Gs2.Gs2Mission.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +115,10 @@ namespace Gs2.Gs2Mission.Domain
                 request
             );
             #endif
-            string parentKey = "mission:Gs2.Gs2Mission.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Mission.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Mission.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +140,16 @@ namespace Gs2.Gs2Mission.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Mission.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Mission.Model.Namespace> Namespaces(
             #endif
@@ -188,25 +192,28 @@ namespace Gs2.Gs2Mission.Domain
         ) {
                 switch (method) {
                     case "IncreaseCounterByUserId": {
-                        IncreaseCounterByUserIdRequest requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        IncreaseCounterByUserIdResult resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Counter"
-                        );
-                        string key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
-                            parentKey.Replace("Counter", "Complete")
-                        );
+                        var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Counter"
+                            );
+                            var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                            cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
+                                parentKey.Replace("Counter", "Complete")
+                            );
+                        }
                         break;
                     }
                 }
@@ -220,22 +227,25 @@ namespace Gs2.Gs2Mission.Domain
         ) {
                 switch (method) {
                     case "ReceiveByUserId": {
-                        ReceiveByUserIdRequest requestModel = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        ReceiveByUserIdResult resultModel = ReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Complete"
-                        );
-                        string key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            resultModel.Item.MissionGroupName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Complete"
+                            );
+                            var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                                resultModel.Item.MissionGroupName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -247,30 +257,61 @@ namespace Gs2.Gs2Mission.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "increase_counter_by_user_id": {
-                        IncreaseCounterByUserIdRequest requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        IncreaseCounterByUserIdResult resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Counter"
-                        );
-                        string key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
-                            parentKey.Replace("Counter", "Complete")
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "increase_counter_by_user_id": {
+                    var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Counter"
+                            );
+                            var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                            cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
+                                parentKey.Replace("Counter", "Complete")
+                            );
+                        }
+                    break;
                 }
+            }
+        }
+
+        [Serializable]
+        private class CompleteNotificationEvent : UnityEvent<CompleteNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
+
+        public event UnityAction<CompleteNotification> OnCompleteNotification
+        {
+            add => onCompleteNotification.AddListener(value);
+            remove => onCompleteNotification.RemoveListener(value);
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
+            switch (action) {
+                case "Complete": {
+                    onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+            }
         }
     }
 }

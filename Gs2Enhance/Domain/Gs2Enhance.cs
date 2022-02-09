@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Enhance.Domain
                 request
             );
             #endif
-            string parentKey = "enhance:Gs2.Gs2Enhance.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Enhance.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Enhance.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Enhance.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Enhance.Model.Namespace> Namespaces(
             #endif
@@ -188,39 +191,45 @@ namespace Gs2.Gs2Enhance.Domain
         ) {
                 switch (method) {
                     case "DirectEnhanceByUserId": {
-                        DirectEnhanceByUserIdRequest requestModel = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        DirectEnhanceByUserIdResult resultModel = DirectEnhanceByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            requestModel.UserId.ToString(),
-                            "Enhance"
-                        );
-                        string key = Gs2.Gs2Enhance.Domain.Model.EnhanceDomain.CreateCacheKey(
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DirectEnhanceByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "RateModel"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "CreateProgressByUserId": {
-                        CreateProgressByUserIdRequest requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        CreateProgressByUserIdResult resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Progress"
-                        );
-                        string key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Progress"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -234,16 +243,19 @@ namespace Gs2.Gs2Enhance.Domain
         ) {
                 switch (method) {
                     case "DeleteProgressByUserId": {
-                        DeleteProgressByUserIdRequest requestModel = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        DeleteProgressByUserIdResult resultModel = DeleteProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Progress"
-                        );
-                        string key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+                        var requestModel = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Progress"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                            );
+                            cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+                        }
                         break;
                     }
                 }
@@ -255,44 +267,57 @@ namespace Gs2.Gs2Enhance.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "direct_enhance_by_user_id": {
-                        DirectEnhanceByUserIdRequest requestModel = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        DirectEnhanceByUserIdResult resultModel = DirectEnhanceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            requestModel.UserId.ToString(),
-                            "Enhance"
-                        );
-                        string key = Gs2.Gs2Enhance.Domain.Model.EnhanceDomain.CreateCacheKey(
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "create_progress_by_user_id": {
-                        CreateProgressByUserIdRequest requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        CreateProgressByUserIdResult resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Progress"
-                        );
-                        string key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "direct_enhance_by_user_id": {
+                    var requestModel = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = DirectEnhanceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "RateModel"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
                 }
+                case "create_progress_by_user_id": {
+                    var requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Progress"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

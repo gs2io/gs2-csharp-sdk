@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Inventory.Domain
                 request
             );
             #endif
-            string parentKey = "inventory:Gs2.Gs2Inventory.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Inventory.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Inventory.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
             #endif
@@ -188,121 +191,210 @@ namespace Gs2.Gs2Inventory.Domain
         ) {
                 switch (method) {
                     case "AddCapacityByUserId": {
-                        AddCapacityByUserIdRequest requestModel = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AddCapacityByUserIdResult resultModel = AddCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Inventory"
-                        );
-                        string key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                            resultModel.Item.InventoryName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AddCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Item.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetCapacityByUserId": {
-                        SetCapacityByUserIdRequest requestModel = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetCapacityByUserIdResult resultModel = SetCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Inventory"
-                        );
-                        string key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                            resultModel.Item.InventoryName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Item.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "AcquireItemSetByUserId": {
-                        AcquireItemSetByUserIdRequest requestModel = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AcquireItemSetByUserIdResult resultModel = AcquireItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Items) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                        var requestModel = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            foreach (var item in resultModel.Items) {
+                                var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                                    requestModel.NamespaceName.ToString(),
+                                    item.UserId.ToString(),
+                                    item.InventoryName.ToString(),
+                                    "ItemSet"
+                                );
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    item.Name.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    "null"
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key2,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                item.UserId.ToString(),
-                                item.InventoryName.ToString(),
-                                "ItemSet"
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                item.ItemName.ToString(),
-                                item.Name.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.ItemModel,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
-                            key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                item.ItemName.ToString(),
-                                "null"
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.Inventory,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
                         break;
                     }
                     case "AddReferenceOfByUserId": {
-                        AddReferenceOfByUserIdRequest requestModel = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AddReferenceOfByUserIdResult resultModel = AddReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Item) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        var requestModel = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AddReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
-                                requestModel.InventoryName.ToString(),
-                                requestModel.ItemName.ToString(),
-                                requestModel.ItemSetName.ToString(),
-                                "ReferenceOf"
+                                resultModel.ItemSet.UserId.ToString(),
+                                resultModel.ItemSet.InventoryName.ToString(),
+                                "ItemSet"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                                item.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                resultModel.ItemSet.ItemName.ToString(),
+                                resultModel.ItemSet.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.ItemSet,
+                                resultModel.ItemSet.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ItemModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Inventory,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
                         break;
                     }
                     case "DeleteReferenceOfByUserId": {
-                        DeleteReferenceOfByUserIdRequest requestModel = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        DeleteReferenceOfByUserIdResult resultModel = DeleteReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Item) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        var requestModel = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
+                                resultModel.ItemSet.UserId.ToString(),
+                                resultModel.ItemSet.InventoryName.ToString(),
+                                "ItemSet"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                resultModel.ItemSet.ItemName.ToString(),
+                                resultModel.ItemSet.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                requestModel.ItemName.ToString(),
-                                requestModel.ItemSetName.ToString(),
-                                "ReferenceOf"
+                                "ItemModel"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                                item.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
                             );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
                             );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
                         }
                         break;
                     }
@@ -317,57 +409,123 @@ namespace Gs2.Gs2Inventory.Domain
         ) {
                 switch (method) {
                     case "ConsumeItemSetByUserId": {
-                        ConsumeItemSetByUserIdRequest requestModel = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        ConsumeItemSetByUserIdResult resultModel = ConsumeItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Items) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                        var requestModel = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ConsumeItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            foreach (var item in resultModel.Items) {
+                                var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                                    requestModel.NamespaceName.ToString(),
+                                    item.UserId.ToString(),
+                                    item.InventoryName.ToString(),
+                                    "ItemSet"
+                                );
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    item.Name.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    "null"
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key2,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                item.UserId.ToString(),
-                                item.InventoryName.ToString(),
-                                "ItemSet"
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                item.ItemName.ToString(),
-                                item.Name.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.ItemModel,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
-                            string key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                item.ItemName.ToString(),
-                                "null"
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
                             );
                             cache.Put(
                                 parentKey,
-                                key2,
-                                item,
+                                key,
+                                resultModel.Inventory,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
                         break;
                     }
                     case "VerifyReferenceOfByUserId": {
-                        VerifyReferenceOfByUserIdRequest requestModel = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        VerifyReferenceOfByUserIdResult resultModel = VerifyReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        foreach (var item in resultModel.Item) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        var requestModel = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
-                                requestModel.InventoryName.ToString(),
-                                requestModel.ItemName.ToString(),
-                                requestModel.ItemSetName.ToString(),
-                                "ReferenceOf"
+                                resultModel.ItemSet.UserId.ToString(),
+                                resultModel.ItemSet.InventoryName.ToString(),
+                                "ItemSet"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                                item.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                resultModel.ItemSet.ItemName.ToString(),
+                                resultModel.ItemSet.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.ItemSet,
+                                resultModel.ItemSet.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ItemModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Inventory,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
@@ -382,117 +540,223 @@ namespace Gs2.Gs2Inventory.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "add_capacity_by_user_id": {
-                        AddCapacityByUserIdRequest requestModel = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AddCapacityByUserIdResult resultModel = AddCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Inventory"
-                        );
-                        string key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                            resultModel.Item.InventoryName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_capacity_by_user_id": {
-                        SetCapacityByUserIdRequest requestModel = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetCapacityByUserIdResult resultModel = SetCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Inventory"
-                        );
-                        string key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                            resultModel.Item.InventoryName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "acquire_item_set_by_user_id": {
-                        AcquireItemSetByUserIdRequest requestModel = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AcquireItemSetByUserIdResult resultModel = AcquireItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        foreach (var item in resultModel.Items) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+            switch (method) {
+                case "add_capacity_by_user_id": {
+                    var requestModel = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AddCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                item.UserId.ToString(),
-                                item.InventoryName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Item.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "set_capacity_by_user_id": {
+                    var requestModel = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Item.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "acquire_item_set_by_user_id": {
+                    var requestModel = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    {
+                            foreach (var item in resultModel.Items) {
+                                var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                                    requestModel.NamespaceName.ToString(),
+                                    item.UserId.ToString(),
+                                    item.InventoryName.ToString(),
+                                    "ItemSet"
+                                );
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    item.Name.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    item.ItemName.ToString(),
+                                    "null"
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key2,
+                                    item,
+                                    item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ItemModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Inventory,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "add_reference_of_by_user_id": {
+                    var requestModel = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AddReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.ItemSet.UserId.ToString(),
+                                resultModel.ItemSet.InventoryName.ToString(),
                                 "ItemSet"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                item.ItemName.ToString(),
-                                item.Name.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                resultModel.ItemSet.ItemName.ToString(),
+                                resultModel.ItemSet.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                resultModel.ItemSet,
+                                resultModel.ItemSet.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        break;
-                    }
-                    case "add_reference_of_by_user_id": {
-                        AddReferenceOfByUserIdRequest requestModel = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AddReferenceOfByUserIdResult resultModel = AddReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        foreach (var item in resultModel.Item) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                requestModel.ItemName.ToString(),
-                                requestModel.ItemSetName.ToString(),
-                                "ReferenceOf"
+                                "ItemModel"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                                item.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.ItemModel,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        break;
-                    }
-                    case "delete_reference_of_by_user_id": {
-                        DeleteReferenceOfByUserIdRequest requestModel = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        DeleteReferenceOfByUserIdResult resultModel = DeleteReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        foreach (var item in resultModel.Item) {
-                            string parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                requestModel.UserId.ToString(),
-                                requestModel.InventoryName.ToString(),
-                                requestModel.ItemName.ToString(),
-                                requestModel.ItemSetName.ToString(),
-                                "ReferenceOf"
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
                             );
-                            string key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                                item.ToString()
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
                             );
                             cache.Put(
                                 parentKey,
                                 key,
-                                item,
+                                resultModel.Inventory,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        break;
-                    }
+                    break;
                 }
+                case "delete_reference_of_by_user_id": {
+                    var requestModel = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = DeleteReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.ItemSet.UserId.ToString(),
+                                resultModel.ItemSet.InventoryName.ToString(),
+                                "ItemSet"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                resultModel.ItemSet.ItemName.ToString(),
+                                resultModel.ItemSet.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.InventoryName.ToString(),
+                                "ItemModel"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                resultModel.ItemModel.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Inventory.UserId.ToString(),
+                                "Inventory"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                                resultModel.Inventory.InventoryName.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
+                        }
+                    break;
+                }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

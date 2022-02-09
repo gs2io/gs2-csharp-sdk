@@ -96,7 +96,18 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.Progress> Progresses(
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.Progress> Progresses(
+        )
+        {
+            return new DescribeProgressesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.Progress> ProgressesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Enhance.Model.Progress> Progresses(
             #endif

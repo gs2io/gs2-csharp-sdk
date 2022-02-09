@@ -127,20 +127,24 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "SubscribeUser"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "SubscribeUser"
+                );
+                var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                    resultModel.Item.CategoryName.ToString(),
+                    resultModel.Item.TargetUserId.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
-                        request.CategoryName != null ? request.CategoryName.ToString() : null,
-                        request.TargetUserId != null ? request.TargetUserId.ToString() : null
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -183,7 +187,20 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryName(
+        public Gs2Iterator<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryName(
+            string categoryName
+        )
+        {
+            return new DescribeSubscribesByCategoryNameAndUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                categoryName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryNameAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryName(
             #endif
@@ -228,7 +245,20 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> Rankings(
+        public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> Rankings(
+            string categoryName
+        )
+        {
+            return new DescribeRankingsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                categoryName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> RankingsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> Rankings(
             #endif
@@ -257,7 +287,21 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> NearRankings(
+        public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> NearRankings(
+            string categoryName,
+            long? score
+        )
+        {
+            return new DescribeNearRankingsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                categoryName,
+                score
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> NearRankingsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> NearRankings(
             #endif
@@ -301,7 +345,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Score> Scores(
+        public Gs2Iterator<Gs2.Gs2Ranking.Model.Score> Scores(
+            string categoryName,
+            string scorerUserId
+        )
+        {
+            return new DescribeScoresByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                categoryName,
+                this._userId,
+                scorerUserId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Score> ScoresAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Score> Scores(
             #endif

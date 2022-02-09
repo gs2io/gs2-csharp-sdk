@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Formation.Domain
                 request
             );
             #endif
-            string parentKey = "formation:Gs2.Gs2Formation.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Formation.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Formation.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Formation.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Formation.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Formation.Model.Namespace> Namespaces(
             #endif
@@ -188,61 +191,116 @@ namespace Gs2.Gs2Formation.Domain
         ) {
                 switch (method) {
                     case "AddMoldCapacityByUserId": {
-                        AddMoldCapacityByUserIdRequest requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        AddMoldCapacityByUserIdResult resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Mold"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "MoldModel"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                                resultModel.MoldModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.MoldModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetMoldCapacityByUserId": {
-                        SetMoldCapacityByUserIdRequest requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetMoldCapacityByUserIdResult resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Mold"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "MoldModel"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                                resultModel.MoldModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.MoldModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "AcquireActionsToFormProperties": {
-                        AcquireActionsToFormPropertiesRequest requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(request));
-                        AcquireActionsToFormPropertiesResult resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            requestModel.UserId.ToString(),
-                            requestModel.MoldName.ToString(),
-                            "Form"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                            resultModel.Item.Index.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.UserId.ToString(),
+                                requestModel.MoldName.ToString(),
+                                "Form"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
+                                resultModel.Item.Index.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Mold.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Mold.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Mold,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -262,66 +320,128 @@ namespace Gs2.Gs2Formation.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "add_mold_capacity_by_user_id": {
-                        AddMoldCapacityByUserIdRequest requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AddMoldCapacityByUserIdResult resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Mold"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_mold_capacity_by_user_id": {
-                        SetMoldCapacityByUserIdRequest requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetMoldCapacityByUserIdResult resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Mold"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "acquire_actions_to_form_properties": {
-                        AcquireActionsToFormPropertiesRequest requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        AcquireActionsToFormPropertiesResult resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            requestModel.UserId.ToString(),
-                            requestModel.MoldName.ToString(),
-                            "Form"
-                        );
-                        string key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                            resultModel.Item.Index.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "add_mold_capacity_by_user_id": {
+                    var requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "MoldModel"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                                resultModel.MoldModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.MoldModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
                 }
+                case "set_mold_capacity_by_user_id": {
+                    var requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "MoldModel"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                                resultModel.MoldModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.MoldModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "acquire_actions_to_form_properties": {
+                    var requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                requestModel.UserId.ToString(),
+                                requestModel.MoldName.ToString(),
+                                "Form"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
+                                resultModel.Item.Index.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Mold.UserId.ToString(),
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Mold.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Mold,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

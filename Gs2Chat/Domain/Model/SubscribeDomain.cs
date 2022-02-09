@@ -132,14 +132,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName != null ? request.RoomName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Subscribe"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    resultModel.Item.RoomName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -193,14 +202,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName != null ? request.RoomName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Subscribe"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    resultModel.Item.RoomName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -251,14 +269,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName != null ? request.RoomName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Subscribe"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    resultModel.Item.RoomName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -312,14 +339,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName != null ? request.RoomName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Subscribe"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    resultModel.Item.RoomName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -396,14 +432,21 @@ namespace Gs2.Gs2Chat.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
-                            _parentKey,
-                            Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                                this.RoomName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "subscribe")
+                            {
+                                _cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
+                                    _parentKey,
+                                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                                        this.RoomName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -412,13 +455,20 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "subscribe")
+                    {
                     _cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
-                        _parentKey,
-                        Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                            this.RoomName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                                this.RoomName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(

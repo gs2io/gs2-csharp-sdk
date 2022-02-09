@@ -135,6 +135,10 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
             this.Protocol = domain.Protocol = result?.Protocol;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -151,7 +155,18 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
+        public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
+        )
+        {
+            return new DescribeWebSocketSessionsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessionsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
             #endif

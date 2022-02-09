@@ -139,15 +139,24 @@ namespace Gs2.Gs2Experience.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        request.ExperienceName != null ? request.ExperienceName.ToString() : null,
-                        request.PropertyId != null ? request.PropertyId.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Status"
+                );
+                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                    resultModel.Item.ExperienceName.ToString(),
+                    resultModel.Item.PropertyId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -199,15 +208,24 @@ namespace Gs2.Gs2Experience.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        request.ExperienceName != null ? request.ExperienceName.ToString() : null,
-                        request.PropertyId != null ? request.PropertyId.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Status"
+                );
+                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                    resultModel.Item.ExperienceName.ToString(),
+                    resultModel.Item.PropertyId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -291,15 +309,22 @@ namespace Gs2.Gs2Experience.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Experience.Model.Status>(
-                            _parentKey,
-                            Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                                this.ExperienceName?.ToString(),
-                                this.PropertyId?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "status")
+                            {
+                                _cache.Delete<Gs2.Gs2Experience.Model.Status>(
+                                    _parentKey,
+                                    Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                        this.ExperienceName?.ToString(),
+                                        this.PropertyId?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -308,14 +333,21 @@ namespace Gs2.Gs2Experience.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "status")
+                    {
                     _cache.Delete<Gs2.Gs2Experience.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.ExperienceName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                this.ExperienceName?.ToString(),
+                                this.PropertyId?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Experience.Model.Status>(

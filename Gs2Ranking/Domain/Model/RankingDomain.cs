@@ -133,14 +133,23 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        request.CategoryName != null ? request.CategoryName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Singleton",
+                    "Ranking"
+                );
+                var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                    requestModel.CategoryName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -191,21 +200,25 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "Score"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Singleton",
+                    "Score"
+                );
+                var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    resultModel.Item.CategoryName.ToString(),
+                    resultModel.Item.ScorerUserId.ToString(),
+                    resultModel.Item.UniqueId.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
-                        request.CategoryName != null ? request.CategoryName.ToString() : null,
-                        result.Item?.ScorerUserId?.ToString(),
-                        result.Item?.UniqueId?.ToString()
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -292,14 +305,21 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Ranking.Model.Ranking>(
-                            _parentKey,
-                            Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                this.CategoryName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "ranking")
+                            {
+                                _cache.Delete<Gs2.Gs2Ranking.Model.Ranking>(
+                                    _parentKey,
+                                    Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                                        this.CategoryName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -308,13 +328,20 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "ranking")
+                    {
                     _cache.Delete<Gs2.Gs2Ranking.Model.Ranking>(
-                        _parentKey,
-                        Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                                this.CategoryName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(

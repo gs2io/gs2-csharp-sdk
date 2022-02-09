@@ -120,6 +120,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Lottery.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -168,17 +172,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -224,17 +221,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Lottery.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -286,12 +276,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Lottery.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Lottery.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -340,18 +328,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "PrizeTableMaster"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "PrizeTableMaster"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.PrizeTableMasterDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -410,18 +402,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "LotteryModelMaster"
-            );
-                    
-            if (result.Item != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "LotteryModelMaster"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -485,7 +481,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel> LotteryModels(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModel> LotteryModels(
+        )
+        {
+            return new DescribeLotteryModelsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel> LotteryModelsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModel> LotteryModels(
             #endif
@@ -524,7 +530,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMasters(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMasters(
+        )
+        {
+            return new DescribePrizeTableMastersIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMastersAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMasters(
             #endif
@@ -563,7 +579,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModelMaster> LotteryModelMasters(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModelMaster> LotteryModelMasters(
+        )
+        {
+            return new DescribeLotteryModelMastersIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModelMaster> LotteryModelMastersAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModelMaster> LotteryModelMasters(
             #endif
@@ -602,7 +628,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
+        )
+        {
+            return new DescribePrizeTablesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTablesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
             #endif
@@ -694,14 +730,21 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Lottery.Model.Namespace>(
-                            _parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "namespace")
+                            {
+                                _cache.Delete<Gs2.Gs2Lottery.Model.Namespace>(
+                                    _parentKey,
+                                    Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                        this.NamespaceName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -710,13 +753,20 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "namespace")
+                    {
                     _cache.Delete<Gs2.Gs2Lottery.Model.Namespace>(
-                        _parentKey,
-                        Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            this.NamespaceName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                this.NamespaceName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Lottery.Model.Namespace>(

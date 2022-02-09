@@ -133,25 +133,38 @@ namespace Gs2.Gs2Formation.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                        request.MoldName != null ? request.MoldName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Mold"
+                );
+                var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-                    
-            if (result.MoldModel != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
-                        request.MoldName != null ? request.MoldName.ToString() : null
-                    ),
-                    result.MoldModel,
+            {
+                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "MoldModel"
+                );
+                var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                    resultModel.MoldModel.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.MoldModel,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -205,12 +218,21 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                    request.MoldName != null ? request.MoldName.ToString() : null
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Mold"
+                );
+                var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
+            }
             Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -227,7 +249,19 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Form> Forms(
+        public Gs2Iterator<Gs2.Gs2Formation.Model.Form> Forms(
+        )
+        {
+            return new DescribeFormsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._moldName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Form> FormsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Formation.Model.Form> Forms(
             #endif
@@ -327,14 +361,21 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
-                            _parentKey,
-                            Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                                this.MoldName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "mold")
+                            {
+                                _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
+                                    _parentKey,
+                                    Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                        this.MoldName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -343,13 +384,20 @@ namespace Gs2.Gs2Formation.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "mold")
+                    {
                     _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
-                        _parentKey,
-                        Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            this.MoldName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                this.MoldName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Formation.Model.Mold>(

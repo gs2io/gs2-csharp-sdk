@@ -94,7 +94,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Mold> Molds(
+        public Gs2Iterator<Gs2.Gs2Formation.Model.Mold> Molds(
+        )
+        {
+            return new DescribeMoldsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Mold> MoldsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Formation.Model.Mold> Molds(
             #endif

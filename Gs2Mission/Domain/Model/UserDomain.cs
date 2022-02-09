@@ -94,7 +94,18 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Counter> Counters(
+        public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
+        )
+        {
+            return new DescribeCountersByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Counter> CountersAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
             #endif
@@ -135,7 +146,18 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Complete> Completes(
+        public Gs2Iterator<Gs2.Gs2Mission.Model.Complete> Completes(
+        )
+        {
+            return new DescribeCompletesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Complete> CompletesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Mission.Model.Complete> Completes(
             #endif

@@ -122,6 +122,10 @@ namespace Gs2.Gs2Log.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -170,17 +174,10 @@ namespace Gs2.Gs2Log.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -226,17 +223,10 @@ namespace Gs2.Gs2Log.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -288,12 +278,10 @@ namespace Gs2.Gs2Log.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName != null ? request.NamespaceName.ToString() : null
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -340,6 +328,10 @@ namespace Gs2.Gs2Log.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -366,7 +358,29 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLog> AccessLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.AccessLog> AccessLog(
+            string service,
+            string method,
+            string userId,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new QueryAccessLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLog> AccessLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLog> AccessLog(
             #endif
@@ -404,7 +418,29 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new CountAccessLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
             #endif
@@ -464,7 +500,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new QueryExecuteStampSheetLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLog(
             #endif
@@ -504,7 +564,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new CountExecuteStampSheetLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
             #endif
@@ -566,7 +650,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new QueryExecuteStampTaskLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLog(
             #endif
@@ -606,7 +714,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new CountExecuteStampTaskLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
             #endif
@@ -668,7 +800,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new QueryIssueStampSheetLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLog(
             #endif
@@ -708,7 +864,31 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
+        public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm
+        )
+        {
+            return new CountIssueStampSheetLogIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLogAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
             #endif
@@ -823,14 +1003,21 @@ namespace Gs2.Gs2Log.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
-                            _parentKey,
-                            Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "namespace")
+                            {
+                                _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
+                                    _parentKey,
+                                    Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                        this.NamespaceName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -839,13 +1026,20 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "namespace")
+                    {
                     _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
-                        _parentKey,
-                        Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            this.NamespaceName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                this.NamespaceName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Log.Model.Namespace>(

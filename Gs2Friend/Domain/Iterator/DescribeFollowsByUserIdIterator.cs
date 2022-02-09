@@ -58,11 +58,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-        #if GS2_ENABLE_UNITASK
-    public class DescribeFollowsByUserIdIterator {
-        #else
     public class DescribeFollowsByUserIdIterator : Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> {
-        #endif
     #else
     public class DescribeFollowsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> {
     #endif
@@ -105,10 +101,9 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Friend.Domain.Model.FollowDomain.CreateCacheParentKey(
+            string parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
                 this._userId != null ? this._userId.ToString() : null,
-                this._withProfile != null ? this._withProfile.ToString() : "False",
                 "FollowUser"
             );
             string listParentKey = parentKey;
@@ -174,16 +169,45 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
         public override bool HasNext()
         {
             if (Error != null) return false;
             return _hasNext();
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+
+        protected override System.Collections.IEnumerator Next(
+            Action<Gs2.Gs2Friend.Model.FollowUser> callback
+        )
+        {
+            yield return UniTask.ToCoroutine(
+                async () => {
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        Current = null;
+                        return;
+                    }
+                    Gs2.Gs2Friend.Model.FollowUser ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    Current = ret;
+                }
+            );
+            callback.Invoke(Current);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+            #else
 
         protected override IEnumerator Next(
             Action<Gs2.Gs2Friend.Model.FollowUser> callback

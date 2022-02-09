@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Stamina.Domain
                 request
             );
             #endif
-            string parentKey = "stamina:Gs2.Gs2Stamina.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Stamina.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Stamina.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Stamina.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Stamina.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Stamina.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Stamina.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Stamina.Model.Namespace> Namespaces(
             #endif
@@ -188,98 +191,188 @@ namespace Gs2.Gs2Stamina.Domain
         ) {
                 switch (method) {
                     case "RecoverStaminaByUserId": {
-                        RecoverStaminaByUserIdRequest requestModel = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        RecoverStaminaByUserIdResult resultModel = RecoverStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RecoverStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "RaiseMaxValueByUserId": {
-                        RaiseMaxValueByUserIdRequest requestModel = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        RaiseMaxValueByUserIdResult resultModel = RaiseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RaiseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetMaxValueByUserId": {
-                        SetMaxValueByUserIdRequest requestModel = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetMaxValueByUserIdResult resultModel = SetMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetRecoverIntervalByUserId": {
-                        SetRecoverIntervalByUserIdRequest requestModel = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetRecoverIntervalByUserIdResult resultModel = SetRecoverIntervalByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetRecoverIntervalByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "SetRecoverValueByUserId": {
-                        SetRecoverValueByUserIdRequest requestModel = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        SetRecoverValueByUserIdResult resultModel = SetRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -293,22 +386,40 @@ namespace Gs2.Gs2Stamina.Domain
         ) {
                 switch (method) {
                     case "ConsumeStaminaByUserId": {
-                        ConsumeStaminaByUserIdRequest requestModel = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        ConsumeStaminaByUserIdResult resultModel = ConsumeStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ConsumeStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -320,103 +431,200 @@ namespace Gs2.Gs2Stamina.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "recover_stamina_by_user_id": {
-                        RecoverStaminaByUserIdRequest requestModel = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        RecoverStaminaByUserIdResult resultModel = RecoverStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "raise_max_value_by_user_id": {
-                        RaiseMaxValueByUserIdRequest requestModel = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        RaiseMaxValueByUserIdResult resultModel = RaiseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_max_value_by_user_id": {
-                        SetMaxValueByUserIdRequest requestModel = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetMaxValueByUserIdResult resultModel = SetMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_recover_interval_by_user_id": {
-                        SetRecoverIntervalByUserIdRequest requestModel = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetRecoverIntervalByUserIdResult resultModel = SetRecoverIntervalByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
-                    case "set_recover_value_by_user_id": {
-                        SetRecoverValueByUserIdRequest requestModel = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        SetRecoverValueByUserIdResult resultModel = SetRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Stamina"
-                        );
-                        string key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                            resultModel.Item.StaminaName.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "recover_stamina_by_user_id": {
+                    var requestModel = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = RecoverStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
                 }
+                case "raise_max_value_by_user_id": {
+                    var requestModel = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = RaiseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "set_max_value_by_user_id": {
+                    var requestModel = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "set_recover_interval_by_user_id": {
+                    var requestModel = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetRecoverIntervalByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "set_recover_value_by_user_id": {
+                    var requestModel = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

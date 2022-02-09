@@ -95,7 +95,18 @@ namespace Gs2.Gs2Money.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Wallet> Wallets(
+        public Gs2Iterator<Gs2.Gs2Money.Model.Wallet> Wallets(
+        )
+        {
+            return new DescribeWalletsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Wallet> WalletsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Money.Model.Wallet> Wallets(
             #endif

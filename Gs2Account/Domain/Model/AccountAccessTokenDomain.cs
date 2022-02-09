@@ -96,7 +96,18 @@ namespace Gs2.Gs2Account.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
+        public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
+        )
+        {
+            return new DescribeTakeOversIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> TakeOversAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
             #endif

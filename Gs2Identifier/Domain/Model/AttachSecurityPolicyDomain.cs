@@ -121,20 +121,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 request
             );
             #endif
-            string parentKey = "identifier:Gs2.Gs2Identifier.Model.SecurityPolicy";
-            foreach (var item in result?.Items) {
-                    
-                if (item != null) {
-                    _cache.Put(
-                        parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                            item?.Name?.ToString()
-                        ),
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
@@ -192,20 +182,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 request
             );
             #endif
-            string parentKey = "identifier:Gs2.Gs2Identifier.Model.SecurityPolicy";
-            foreach (var item in result?.Items) {
-                    
-                if (item != null) {
-                    _cache.Put(
-                        parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                            item?.Name?.ToString()
-                        ),
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
@@ -263,20 +243,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 request
             );
             #endif
-            string parentKey = "identifier:Gs2.Gs2Identifier.Model.SecurityPolicy";
-            foreach (var item in result?.Items) {
-                    
-                if (item != null) {
-                    _cache.Put(
-                        parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                            item?.Name?.ToString()
-                        ),
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {

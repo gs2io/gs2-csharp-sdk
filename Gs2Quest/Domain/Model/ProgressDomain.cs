@@ -128,35 +128,53 @@ namespace Gs2.Gs2Quest.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Progress"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-                    
-            if (result.QuestGroup != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
-                        result.QuestGroup?.Name?.ToString()
-                    ),
-                    result.QuestGroup,
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "QuestGroupModel"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                    resultModel.QuestGroup.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.QuestGroup,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-                    
-            if (result.Quest != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                        result.Quest?.Name?.ToString()
-                    ),
-                    result.Quest,
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.QuestGroup.Name.ToString(),
+                    "QuestModel"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    resultModel.Quest.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Quest,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -187,10 +205,22 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> self)
             {
         #endif
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future2 = Model();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                self.OnError(future2.Error);
+                yield break;
+            }
+            var model = future2.Result;
+            #else
+            var model = await Model();
+            #endif
             request
                 .WithNamespaceName(this._namespaceName)
                 .WithUserId(this._userId)
-                .WithTransactionId(this._transactionId);
+                .WithTransactionId(model.TransactionId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.EndByUserIdFuture(
                 request
@@ -207,16 +237,35 @@ namespace Gs2.Gs2Quest.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Progress"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+                cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName?.ToString(),
+                        this.UserId?.ToString(),
+                        "CompletedQuestList"
+                    ),
+                    Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        result.Item?.QuestModelId.Split(':')[7]
+                    )
+                );
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -302,13 +351,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
-                            _parentKey,
-                            Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                            )
-                        );
+                            if (e.errors[0].component == "progress")
+                            {
+                                _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
+                                    _parentKey,
+                                    Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -317,12 +373,19 @@ namespace Gs2.Gs2Quest.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "progress")
+                    {
                     _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
-                        _parentKey,
-                        Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.Progress>(

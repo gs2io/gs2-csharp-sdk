@@ -94,7 +94,20 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.Status> Statuses(
+        public Gs2Iterator<Gs2.Gs2Experience.Model.Status> Statuses(
+            string experienceName
+        )
+        {
+            return new DescribeStatusesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                experienceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.Status> StatusesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Experience.Model.Status> Statuses(
             #endif

@@ -94,7 +94,17 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Room> Rooms(
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Room> Rooms(
+        )
+        {
+            return new DescribeRoomsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Room> RoomsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Chat.Model.Room> Rooms(
             #endif
@@ -136,7 +146,18 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+        )
+        {
+            return new DescribeSubscribesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
             #endif
@@ -163,7 +184,19 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(
+            string roomName
+        )
+        {
+            return new DescribeSubscribesByRoomNameIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                roomName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomNameAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(
             #endif

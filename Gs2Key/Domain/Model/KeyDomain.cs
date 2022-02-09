@@ -127,14 +127,22 @@ namespace Gs2.Gs2Key.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        request.KeyName != null ? request.KeyName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Key"
+                );
+                var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -187,14 +195,22 @@ namespace Gs2.Gs2Key.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        request.KeyName != null ? request.KeyName.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Key"
+                );
+                var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
@@ -247,12 +263,20 @@ namespace Gs2.Gs2Key.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            _cache.Delete<Gs2.Gs2Key.Model.Key>(
-                _parentKey,
-                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    request.KeyName != null ? request.KeyName.ToString() : null
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "Key"
+                );
+                var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Key.Model.Key>(parentKey, key);
+            }
             Gs2.Gs2Key.Domain.Model.KeyDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -302,6 +326,10 @@ namespace Gs2.Gs2Key.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Key.Domain.Model.KeyDomain domain = this;
             this.Data = domain.Data = result?.Data;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -351,6 +379,10 @@ namespace Gs2.Gs2Key.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Key.Domain.Model.KeyDomain domain = this;
             this.Data = domain.Data = result?.Data;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -422,14 +454,21 @@ namespace Gs2.Gs2Key.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Key.Model.Key>(
-                            _parentKey,
-                            Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                                this.KeyName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "key")
+                            {
+                                _cache.Delete<Gs2.Gs2Key.Model.Key>(
+                                    _parentKey,
+                                    Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                                        this.KeyName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -438,13 +477,20 @@ namespace Gs2.Gs2Key.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "key")
+                    {
                     _cache.Delete<Gs2.Gs2Key.Model.Key>(
-                        _parentKey,
-                        Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            this.KeyName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                                this.KeyName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Key.Model.Key>(

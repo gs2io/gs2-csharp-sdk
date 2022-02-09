@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -314,14 +316,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException)
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            _cache.Delete<Gs2.Gs2Identifier.Model.Password>(
-                            _parentKey,
-                            Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                                this.UserName?.ToString()
-                            )
-                        );
+                            if (e.errors[0].component == "password")
+                            {
+                                _cache.Delete<Gs2.Gs2Identifier.Model.Password>(
+                                    _parentKey,
+                                    Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                                        this.UserName?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
                         }
                         else
                         {
@@ -330,13 +339,20 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         }
                     }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException) {
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "password")
+                    {
                     _cache.Delete<Gs2.Gs2Identifier.Model.Password>(
-                        _parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                            this.UserName?.ToString()
-                        )
-                    );
+                            _parentKey,
+                            Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                                this.UserName?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Identifier.Model.Password>(

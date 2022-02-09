@@ -132,14 +132,23 @@ namespace Gs2.Gs2Money.Domain.Model
                 request
             );
             #endif
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    _parentKey,
-                    Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
-                        request.TransactionId != null ? request.TransactionId.ToString() : null
-                    ),
-                    result.Item,
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Receipt"
+                );
+                var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                    resultModel.Item.TransactionId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }

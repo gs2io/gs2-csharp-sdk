@@ -94,7 +94,20 @@ namespace Gs2.Gs2Limit.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Limit.Model.Counter> Counters(
+        public Gs2Iterator<Gs2.Gs2Limit.Model.Counter> Counters(
+            string limitName
+        )
+        {
+            return new DescribeCountersIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken,
+                limitName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Limit.Model.Counter> CountersAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Limit.Model.Counter> Counters(
             #endif

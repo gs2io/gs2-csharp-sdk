@@ -94,7 +94,18 @@ namespace Gs2.Gs2Lock.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lock.Model.Mutex> Mutexes(
+        public Gs2Iterator<Gs2.Gs2Lock.Model.Mutex> Mutexes(
+        )
+        {
+            return new DescribeMutexesByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lock.Model.Mutex> MutexesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Lock.Model.Mutex> Mutexes(
             #endif

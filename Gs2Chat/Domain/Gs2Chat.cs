@@ -36,12 +36,15 @@ using Gs2.Gs2Chat.Domain.Iterator;
 using Gs2.Gs2Chat.Domain.Model;
 using Gs2.Gs2Chat.Request;
 using Gs2.Gs2Chat.Result;
+using Gs2.Gs2Chat.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +115,10 @@ namespace Gs2.Gs2Chat.Domain
                 request
             );
             #endif
-            string parentKey = "chat:Gs2.Gs2Chat.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Chat.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Chat.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Chat.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +140,16 @@ namespace Gs2.Gs2Chat.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Chat.Model.Namespace> Namespaces(
             #endif
@@ -202,6 +206,34 @@ namespace Gs2.Gs2Chat.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+        }
+
+        [Serializable]
+        private class PostNotificationEvent : UnityEvent<PostNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static PostNotificationEvent onPostNotification = new PostNotificationEvent();
+
+        public event UnityAction<PostNotification> OnPostNotification
+        {
+            add => onPostNotification.AddListener(value);
+            remove => onPostNotification.RemoveListener(value);
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
+            switch (action) {
+                case "Post": {
+                    onPostNotification.Invoke(PostNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+            }
         }
     }
 }

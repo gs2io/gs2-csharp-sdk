@@ -58,11 +58,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-        #if GS2_ENABLE_UNITASK
-    public class DescribeReferenceOfIterator {
-        #else
     public class DescribeReferenceOfIterator : Gs2Iterator<string> {
-        #endif
     #else
     public class DescribeReferenceOfIterator : IAsyncEnumerable<string> {
     #endif
@@ -169,16 +165,45 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<string> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
         public override bool HasNext()
         {
             if (Error != null) return false;
             return _hasNext();
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+
+        protected override System.Collections.IEnumerator Next(
+            Action<string> callback
+        )
+        {
+            yield return UniTask.ToCoroutine(
+                async () => {
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        Current = null;
+                        return;
+                    }
+                    string ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    Current = ret;
+                }
+            );
+            callback.Invoke(Current);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<string> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+            #else
 
         protected override IEnumerator Next(
             Action<string> callback

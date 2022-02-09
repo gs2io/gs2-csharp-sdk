@@ -42,6 +42,8 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
@@ -112,18 +114,10 @@ namespace Gs2.Gs2Money.Domain
                 request
             );
             #endif
-            string parentKey = "money:Gs2.Gs2Money.Model.Namespace";
-                    
-            if (result.Item != null) {
-                _cache.Put(
-                    parentKey,
-                    Gs2.Gs2Money.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        result.Item?.Name?.ToString()
-                    ),
-                    result.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             Gs2.Gs2Money.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Money.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -145,7 +139,16 @@ namespace Gs2.Gs2Money.Domain
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Namespace> Namespaces(
+        public Gs2Iterator<Gs2.Gs2Money.Model.Namespace> Namespaces(
+        )
+        {
+            return new DescribeNamespacesIterator(
+                this._cache,
+                this._client
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Namespace> NamespacesAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Money.Model.Namespace> Namespaces(
             #endif
@@ -188,22 +191,25 @@ namespace Gs2.Gs2Money.Domain
         ) {
                 switch (method) {
                     case "DepositByUserId": {
-                        DepositByUserIdRequest requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        DepositByUserIdResult resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Wallet"
-                        );
-                        string key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            resultModel.Item.Slot.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Wallet"
+                            );
+                            var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                                    "null"
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -217,41 +223,47 @@ namespace Gs2.Gs2Money.Domain
         ) {
                 switch (method) {
                     case "WithdrawByUserId": {
-                        WithdrawByUserIdRequest requestModel = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        WithdrawByUserIdResult resultModel = WithdrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Wallet"
-                        );
-                        string key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            resultModel.Item.Slot.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = WithdrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Wallet"
+                            );
+                            var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                                    "null"
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                     case "RecordReceipt": {
-                        RecordReceiptRequest requestModel = RecordReceiptRequest.FromJson(JsonMapper.ToObject(request));
-                        RecordReceiptResult resultModel = RecordReceiptResult.FromJson(JsonMapper.ToObject(result));
-                        string parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Receipt"
-                        );
-                        string key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
-                            resultModel.Item.TransactionId.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
+                        var requestModel = RecordReceiptRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RecordReceiptResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Receipt"
+                            );
+                            var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                                resultModel.Item.TransactionId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
                         break;
                     }
                 }
@@ -263,27 +275,37 @@ namespace Gs2.Gs2Money.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
-                switch (method) {
-                    case "deposit_by_user_id": {
-                        DepositByUserIdRequest requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                        DepositByUserIdResult resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        string parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName.ToString(),
-                            resultModel.Item.UserId.ToString(),
-                            "Wallet"
-                        );
-                        string key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            resultModel.Item.Slot.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                              UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        break;
-                    }
+            switch (method) {
+                case "deposit_by_user_id": {
+                    var requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                "Wallet"
+                            );
+                            var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                                    "null"
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
                 }
+            }
+        }
+
+        public static void HandleNotification(
+                CacheDatabase cache,
+                string action,
+                string payload
+        ) {
         }
     }
 }

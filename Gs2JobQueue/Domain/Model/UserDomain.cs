@@ -128,19 +128,22 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 request
             );
             #endif
-            string parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "Job"
-            );
-            foreach (var item in result?.Items) {
-                    
-                if (item != null) {
-                    _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        item.UserId.ToString(),
+                        "Job"
+                    );
+                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                        item.Name.ToString()
+                    );
+                    cache.Put(
                         parentKey,
-                        Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                            item?.Name?.ToString()
-                        ),
+                        key,
                         item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
@@ -212,17 +215,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            string parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                "Job"
-            );
-            _cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
-                parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    result?.Item?.Name?.ToString()
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Job"
+                );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+            }
             if (result?.Item != null) {
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
                         _cache,
@@ -255,7 +262,18 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.Job> Jobs(
+        public Gs2Iterator<Gs2.Gs2JobQueue.Model.Job> Jobs(
+        )
+        {
+            return new DescribeJobsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.Job> JobsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.Job> Jobs(
             #endif
@@ -296,7 +314,18 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(
+        public Gs2Iterator<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(
+        )
+        {
+            return new DescribeDeadLetterJobsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(
             #endif

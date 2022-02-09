@@ -127,6 +127,10 @@ namespace Gs2.Gs2Quest.Domain.Model
                 request
             );
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -198,16 +202,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            string parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
-                "Progress"
-            );
-            _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
-                parentKey,
-                Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                )
-            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Progress"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+            }
             Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain domain = new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -243,7 +251,18 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
+        public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
+        )
+        {
+            return new DescribeCompletedQuestListsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._accessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestListsAsync(
             #else
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
             #endif

@@ -127,14 +127,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 request
             );
             #endif
-            string parentKey = "lottery:Gs2.Gs2Lottery.Model.DrawnPrize";
-                    
-            if (result.BoxItems != null) {
-                _cache.Put(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+          
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.BoxItems.UserId.ToString(),
+                    "BoxItems"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                );
+                cache.Put(
                     parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                    ),
-                    result.BoxItems,
+                    key,
+                    resultModel.BoxItems,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
