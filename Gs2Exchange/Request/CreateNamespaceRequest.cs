@@ -39,6 +39,7 @@ namespace Gs2.Gs2Exchange.Request
         public bool? EnableDirectExchange { set; get; }
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
+        public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
 
         public CreateNamespaceRequest WithName(string name) {
@@ -71,6 +72,11 @@ namespace Gs2.Gs2Exchange.Request
             return this;
         }
 
+        public CreateNamespaceRequest WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
+            this.ExchangeScript = exchangeScript;
+            return this;
+        }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -91,6 +97,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -103,6 +110,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["enableDirectExchange"] = EnableDirectExchange,
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
+                ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -133,6 +141,9 @@ namespace Gs2.Gs2Exchange.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
+            }
+            if (ExchangeScript != null) {
+                ExchangeScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

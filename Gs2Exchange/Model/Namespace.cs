@@ -38,6 +38,7 @@ namespace Gs2.Gs2Exchange.Model
         public bool? EnableAwaitExchange { set; get; }
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
+        public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -74,6 +75,11 @@ namespace Gs2.Gs2Exchange.Model
 
         public Namespace WithKeyId(string keyId) {
             this.KeyId = keyId;
+            return this;
+        }
+
+        public Namespace WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
+            this.ExchangeScript = exchangeScript;
             return this;
         }
 
@@ -159,6 +165,7 @@ namespace Gs2.Gs2Exchange.Model
                 .WithEnableAwaitExchange(!data.Keys.Contains("enableAwaitExchange") || data["enableAwaitExchange"] == null ? null : (bool?)bool.Parse(data["enableAwaitExchange"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -174,6 +181,7 @@ namespace Gs2.Gs2Exchange.Model
                 ["enableAwaitExchange"] = EnableAwaitExchange,
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
+                ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -210,6 +218,10 @@ namespace Gs2.Gs2Exchange.Model
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
+            }
+            if (ExchangeScript != null) {
+                writer.WritePropertyName("exchangeScript");
+                ExchangeScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -285,6 +297,14 @@ namespace Gs2.Gs2Exchange.Model
             else
             {
                 diff += KeyId.CompareTo(other.KeyId);
+            }
+            if (ExchangeScript == null && ExchangeScript == other.ExchangeScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ExchangeScript.CompareTo(other.ExchangeScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
