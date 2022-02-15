@@ -130,7 +130,14 @@ namespace Gs2.Core.Net
             if (request is RestSessionRequestFuture sessionRequest)
             {
                 _inflightRequest[sessionRequest.TaskId] = sessionRequest;
+
                 yield return sessionRequest;
+
+                if (sessionRequest.Error != null)
+                {
+                    _inflightRequest.Remove(sessionRequest.TaskId);
+                }
+
                 _result[sessionRequest.TaskId] = sessionRequest.Result;
             }
             yield return null;
@@ -156,6 +163,8 @@ namespace Gs2.Core.Net
                     {
                         Error = e,
                     };
+                    
+                    _inflightRequest.Remove(sessionRequest.TaskId);
                 }
             }
             await Task.Yield();
@@ -174,12 +183,21 @@ namespace Gs2.Core.Net
             else
             {
                 State = State.CancellingTasks;
-                
-                while (_inflightRequest.Count > 0)
+
                 {
+                    var begin = DateTime.Now;
+                    while (_inflightRequest.Count > 0)
+                    {
+                        if ((DateTime.Now - begin).Seconds > 3)
+                        {
+                            _inflightRequest.Clear();
+                            break;
+                        }
+                        
 #if UNITY_2017_1_OR_NEWER
-                    yield return new WaitForSeconds(0.01f);
+                        yield return new WaitForSeconds(0.01f);
 #endif
+                    }
                 }
 
                 State = State.Closing;
@@ -202,12 +220,21 @@ namespace Gs2.Core.Net
             else
             {
                 State = State.CancellingTasks;
-                
-                while (_inflightRequest.Count > 0)
-                {
-                    await Task.Delay(10);
-                }
 
+                {
+                    var begin = DateTime.Now;
+                    while (_inflightRequest.Count > 0)
+                    {
+                        if ((DateTime.Now - begin).Seconds > 3)
+                        {
+                            _inflightRequest.Clear();
+                            break;
+                        }
+                        
+                        await Task.Delay(10);
+                    }
+                }
+                
                 State = State.Closing;
 
                 State = State.Closed;
