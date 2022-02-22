@@ -109,7 +109,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -264,7 +264,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -277,7 +277,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -305,7 +305,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -368,7 +368,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -381,7 +381,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -409,7 +409,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -472,7 +472,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -485,7 +485,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -513,7 +513,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -624,7 +624,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -637,7 +637,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -665,7 +665,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -728,7 +728,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -741,7 +741,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -769,7 +769,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -838,7 +838,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DescribeAccountsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -851,7 +851,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeAccountsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -879,7 +879,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeAccountsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -955,7 +955,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new CreateAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -968,7 +968,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -996,7 +996,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1078,7 +1078,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new UpdateTimeOffsetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1091,7 +1091,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTimeOffsetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1119,7 +1119,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTimeOffsetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1183,7 +1183,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new GetAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1196,7 +1196,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1224,7 +1224,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1288,7 +1288,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DeleteAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1301,7 +1301,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1329,7 +1329,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1416,7 +1416,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new AuthenticationTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1429,7 +1429,7 @@ namespace Gs2.Gs2Account
 		{
 			return new AuthenticationTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1457,7 +1457,7 @@ namespace Gs2.Gs2Account
 		{
 			return new AuthenticationTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1530,7 +1530,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DescribeTakeOversTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1543,7 +1543,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeTakeOversTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1571,7 +1571,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeTakeOversTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1641,7 +1641,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DescribeTakeOversByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1654,7 +1654,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeTakeOversByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1682,7 +1682,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DescribeTakeOversByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1777,7 +1777,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new CreateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1790,7 +1790,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1818,7 +1818,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1910,7 +1910,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new CreateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1923,7 +1923,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1951,7 +1951,7 @@ namespace Gs2.Gs2Account
 		{
 			return new CreateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2019,7 +2019,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new GetTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2032,7 +2032,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2060,7 +2060,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2125,7 +2125,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new GetTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2138,7 +2138,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2166,7 +2166,7 @@ namespace Gs2.Gs2Account
 		{
 			return new GetTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2257,7 +2257,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new UpdateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2270,7 +2270,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2298,7 +2298,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2386,7 +2386,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new UpdateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2399,7 +2399,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2427,7 +2427,7 @@ namespace Gs2.Gs2Account
 		{
 			return new UpdateTakeOverByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2498,7 +2498,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DeleteTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2511,7 +2511,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2539,7 +2539,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2604,7 +2604,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DeleteTakeOverByUserIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2617,7 +2617,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteTakeOverByUserIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2645,7 +2645,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DeleteTakeOverByUserIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2732,7 +2732,7 @@ namespace Gs2.Gs2Account
 		{
 			var task = new DoTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2745,7 +2745,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DoTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2773,7 +2773,7 @@ namespace Gs2.Gs2Account
 		{
 			return new DoTakeOverTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

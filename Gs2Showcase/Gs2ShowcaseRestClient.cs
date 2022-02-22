@@ -109,7 +109,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -249,7 +249,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -262,7 +262,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -290,7 +290,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -353,7 +353,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -366,7 +366,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -394,7 +394,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -457,7 +457,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -470,7 +470,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -498,7 +498,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -594,7 +594,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -607,7 +607,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -635,7 +635,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -698,7 +698,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -711,7 +711,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -739,7 +739,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -808,7 +808,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeSalesItemMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -821,7 +821,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeSalesItemMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -849,7 +849,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeSalesItemMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -960,7 +960,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new CreateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -973,7 +973,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1001,7 +1001,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1065,7 +1065,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1078,7 +1078,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1106,7 +1106,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1213,7 +1213,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1226,7 +1226,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1254,7 +1254,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1318,7 +1318,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DeleteSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1331,7 +1331,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1359,7 +1359,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteSalesItemMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1428,7 +1428,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeSalesItemGroupMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1441,7 +1441,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeSalesItemGroupMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1469,7 +1469,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeSalesItemGroupMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1570,7 +1570,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new CreateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1583,7 +1583,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1611,7 +1611,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1675,7 +1675,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1688,7 +1688,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1716,7 +1716,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1813,7 +1813,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1826,7 +1826,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1854,7 +1854,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1918,7 +1918,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DeleteSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1931,7 +1931,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1959,7 +1959,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteSalesItemGroupMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2028,7 +2028,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeShowcaseMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2041,7 +2041,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcaseMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2069,7 +2069,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcaseMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2175,7 +2175,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new CreateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2188,7 +2188,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2216,7 +2216,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new CreateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2280,7 +2280,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2293,7 +2293,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2321,7 +2321,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2423,7 +2423,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2436,7 +2436,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2464,7 +2464,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2528,7 +2528,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DeleteShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2541,7 +2541,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2569,7 +2569,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DeleteShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2632,7 +2632,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2645,7 +2645,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2673,7 +2673,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2736,7 +2736,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2749,7 +2749,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2777,7 +2777,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2858,7 +2858,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2871,7 +2871,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2899,7 +2899,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateCurrentShowcaseMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2980,7 +2980,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new UpdateCurrentShowcaseMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2993,7 +2993,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateCurrentShowcaseMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3021,7 +3021,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new UpdateCurrentShowcaseMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3088,7 +3088,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeShowcasesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3101,7 +3101,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcasesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3129,7 +3129,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcasesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3193,7 +3193,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new DescribeShowcasesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3206,7 +3206,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcasesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3234,7 +3234,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new DescribeShowcasesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3302,7 +3302,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetShowcaseTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3315,7 +3315,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3343,7 +3343,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3408,7 +3408,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new GetShowcaseByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3421,7 +3421,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3449,7 +3449,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new GetShowcaseByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3541,7 +3541,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new BuyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3554,7 +3554,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new BuyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3582,7 +3582,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new BuyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3671,7 +3671,7 @@ namespace Gs2.Gs2Showcase
 		{
 			var task = new BuyByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3684,7 +3684,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new BuyByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3712,7 +3712,7 @@ namespace Gs2.Gs2Showcase
 		{
 			return new BuyByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

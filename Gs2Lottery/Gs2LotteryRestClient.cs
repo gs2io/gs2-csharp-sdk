@@ -109,7 +109,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -272,7 +272,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -300,7 +300,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -363,7 +363,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -376,7 +376,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -404,7 +404,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -467,7 +467,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -480,7 +480,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -508,7 +508,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -614,7 +614,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -627,7 +627,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -655,7 +655,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -718,7 +718,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -731,7 +731,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -759,7 +759,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -828,7 +828,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeLotteryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -841,7 +841,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeLotteryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -869,7 +869,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeLotteryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -980,7 +980,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new CreateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -993,7 +993,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1021,7 +1021,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1085,7 +1085,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1098,7 +1098,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1126,7 +1126,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1233,7 +1233,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new UpdateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1246,7 +1246,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1274,7 +1274,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1338,7 +1338,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DeleteLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1351,7 +1351,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeleteLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1379,7 +1379,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeleteLotteryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1448,7 +1448,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribePrizeTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1461,7 +1461,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribePrizeTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1489,7 +1489,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribePrizeTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1590,7 +1590,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new CreatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1603,7 +1603,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1631,7 +1631,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new CreatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1695,7 +1695,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetPrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1708,7 +1708,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetPrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1736,7 +1736,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetPrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1833,7 +1833,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new UpdatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1846,7 +1846,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1874,7 +1874,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdatePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1938,7 +1938,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DeletePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1951,7 +1951,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeletePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1979,7 +1979,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DeletePrizeTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2052,7 +2052,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeBoxesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2065,7 +2065,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeBoxesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2093,7 +2093,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeBoxesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2163,7 +2163,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeBoxesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2176,7 +2176,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeBoxesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2204,7 +2204,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeBoxesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2272,7 +2272,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2285,7 +2285,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2313,7 +2313,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2378,7 +2378,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2391,7 +2391,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2419,7 +2419,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2484,7 +2484,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetRawBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2497,7 +2497,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetRawBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2525,7 +2525,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetRawBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2593,7 +2593,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new ResetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2606,7 +2606,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ResetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2634,7 +2634,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ResetBoxTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2699,7 +2699,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new ResetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2712,7 +2712,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ResetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2740,7 +2740,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ResetBoxByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2803,7 +2803,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeLotteryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2816,7 +2816,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeLotteryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2844,7 +2844,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeLotteryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2908,7 +2908,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetLotteryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2921,7 +2921,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetLotteryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2949,7 +2949,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetLotteryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3012,7 +3012,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribePrizeTablesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3025,7 +3025,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribePrizeTablesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3053,7 +3053,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribePrizeTablesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3117,7 +3117,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetPrizeTableTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3130,7 +3130,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetPrizeTableTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3158,7 +3158,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetPrizeTableTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3251,7 +3251,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DrawByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3264,7 +3264,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DrawByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3292,7 +3292,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DrawByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3376,7 +3376,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DrawByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3389,7 +3389,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DrawByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3417,7 +3417,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DrawByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3485,7 +3485,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeProbabilitiesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3498,7 +3498,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeProbabilitiesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3526,7 +3526,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeProbabilitiesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3591,7 +3591,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new DescribeProbabilitiesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3604,7 +3604,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeProbabilitiesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3632,7 +3632,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new DescribeProbabilitiesByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3695,7 +3695,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3708,7 +3708,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3736,7 +3736,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3799,7 +3799,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new GetCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3812,7 +3812,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3840,7 +3840,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new GetCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3921,7 +3921,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new UpdateCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3934,7 +3934,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3962,7 +3962,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateCurrentLotteryMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4043,7 +4043,7 @@ namespace Gs2.Gs2Lottery
 		{
 			var task = new UpdateCurrentLotteryMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4056,7 +4056,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateCurrentLotteryMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4084,7 +4084,7 @@ namespace Gs2.Gs2Lottery
 		{
 			return new UpdateCurrentLotteryMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

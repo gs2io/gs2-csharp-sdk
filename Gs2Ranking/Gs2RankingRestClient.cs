@@ -109,7 +109,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -239,7 +239,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -252,7 +252,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -280,7 +280,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -343,7 +343,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -356,7 +356,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -384,7 +384,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -447,7 +447,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -460,7 +460,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -488,7 +488,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -574,7 +574,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -587,7 +587,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -615,7 +615,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -678,7 +678,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -691,7 +691,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -719,7 +719,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -782,7 +782,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeCategoryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -795,7 +795,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeCategoryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -823,7 +823,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeCategoryModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -887,7 +887,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetCategoryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -900,7 +900,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCategoryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -928,7 +928,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCategoryModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -997,7 +997,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeCategoryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1010,7 +1010,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeCategoryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1038,7 +1038,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeCategoryModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1184,7 +1184,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new CreateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1197,7 +1197,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CreateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1225,7 +1225,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CreateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1289,7 +1289,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1302,7 +1302,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1330,7 +1330,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1472,7 +1472,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UpdateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1485,7 +1485,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1513,7 +1513,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1577,7 +1577,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DeleteCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1590,7 +1590,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DeleteCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1618,7 +1618,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DeleteCategoryModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1700,7 +1700,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new SubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1713,7 +1713,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new SubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1741,7 +1741,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new SubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1820,7 +1820,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new SubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1833,7 +1833,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new SubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1861,7 +1861,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new SubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1936,7 +1936,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeScoresTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1949,7 +1949,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeScoresTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1977,7 +1977,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeScoresTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2049,7 +2049,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeScoresByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2062,7 +2062,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeScoresByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2090,7 +2090,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeScoresByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2160,7 +2160,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2173,7 +2173,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2201,7 +2201,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2268,7 +2268,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2281,7 +2281,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2309,7 +2309,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2386,7 +2386,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2399,7 +2399,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2427,7 +2427,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2501,7 +2501,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeRankingssByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2514,7 +2514,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeRankingssByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2542,7 +2542,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeRankingssByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2609,7 +2609,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeNearRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2622,7 +2622,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeNearRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2650,7 +2650,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeNearRankingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2720,7 +2720,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2733,7 +2733,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2761,7 +2761,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2828,7 +2828,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetRankingByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2841,7 +2841,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetRankingByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2869,7 +2869,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetRankingByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2960,7 +2960,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new PutScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2973,7 +2973,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new PutScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3001,7 +3001,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new PutScoreTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3089,7 +3089,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new PutScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3102,7 +3102,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new PutScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3130,7 +3130,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new PutScoreByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3207,7 +3207,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new CalcRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3220,7 +3220,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CalcRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3248,7 +3248,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new CalcRankingTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3311,7 +3311,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3324,7 +3324,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3352,7 +3352,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3415,7 +3415,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3428,7 +3428,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3456,7 +3456,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3537,7 +3537,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3550,7 +3550,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3578,7 +3578,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3659,7 +3659,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3672,7 +3672,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3700,7 +3700,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3769,7 +3769,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetSubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3782,7 +3782,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetSubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3810,7 +3810,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetSubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3876,7 +3876,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new GetSubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3889,7 +3889,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetSubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3917,7 +3917,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new GetSubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3986,7 +3986,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UnsubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3999,7 +3999,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UnsubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4027,7 +4027,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UnsubscribeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4093,7 +4093,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new UnsubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4106,7 +4106,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UnsubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4134,7 +4134,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new UnsubscribeByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4202,7 +4202,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeSubscribesByCategoryNameTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4215,7 +4215,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeSubscribesByCategoryNameTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4243,7 +4243,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeSubscribesByCategoryNameTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4308,7 +4308,7 @@ namespace Gs2.Gs2Ranking
 		{
 			var task = new DescribeSubscribesByCategoryNameAndUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4321,7 +4321,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeSubscribesByCategoryNameAndUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4349,7 +4349,7 @@ namespace Gs2.Gs2Ranking
 		{
 			return new DescribeSubscribesByCategoryNameAndUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

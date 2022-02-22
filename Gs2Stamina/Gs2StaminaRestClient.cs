@@ -109,7 +109,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeNamespacesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -244,7 +244,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -257,7 +257,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -285,7 +285,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -348,7 +348,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -361,7 +361,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -389,7 +389,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetNamespaceStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -452,7 +452,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -465,7 +465,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -493,7 +493,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -584,7 +584,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -597,7 +597,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -625,7 +625,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -688,7 +688,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -701,7 +701,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -729,7 +729,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteNamespaceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -798,7 +798,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeStaminaModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -811,7 +811,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminaModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -839,7 +839,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminaModelMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -970,7 +970,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new CreateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -983,7 +983,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1011,7 +1011,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1075,7 +1075,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1088,7 +1088,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1116,7 +1116,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1243,7 +1243,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1256,7 +1256,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1284,7 +1284,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1348,7 +1348,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1361,7 +1361,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1389,7 +1389,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteStaminaModelMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1458,7 +1458,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeMaxStaminaTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1471,7 +1471,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeMaxStaminaTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1499,7 +1499,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeMaxStaminaTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1605,7 +1605,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new CreateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1618,7 +1618,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1646,7 +1646,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1710,7 +1710,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1723,7 +1723,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1751,7 +1751,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1853,7 +1853,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1866,7 +1866,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1894,7 +1894,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1958,7 +1958,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1971,7 +1971,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1999,7 +1999,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteMaxStaminaTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2068,7 +2068,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeRecoverIntervalTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2081,7 +2081,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeRecoverIntervalTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2109,7 +2109,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeRecoverIntervalTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2215,7 +2215,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new CreateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2228,7 +2228,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2256,7 +2256,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2320,7 +2320,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2333,7 +2333,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2361,7 +2361,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2463,7 +2463,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2476,7 +2476,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2504,7 +2504,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2568,7 +2568,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2581,7 +2581,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2609,7 +2609,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteRecoverIntervalTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2678,7 +2678,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeRecoverValueTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2691,7 +2691,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeRecoverValueTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2719,7 +2719,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeRecoverValueTableMastersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2825,7 +2825,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new CreateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2838,7 +2838,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2866,7 +2866,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new CreateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2930,7 +2930,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2943,7 +2943,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2971,7 +2971,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3073,7 +3073,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3086,7 +3086,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3114,7 +3114,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3178,7 +3178,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3191,7 +3191,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3219,7 +3219,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteRecoverValueTableMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3282,7 +3282,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3295,7 +3295,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3323,7 +3323,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ExportMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3386,7 +3386,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3399,7 +3399,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3427,7 +3427,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3508,7 +3508,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3521,7 +3521,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3549,7 +3549,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateCurrentStaminaMasterTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3630,7 +3630,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateCurrentStaminaMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3643,7 +3643,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateCurrentStaminaMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3671,7 +3671,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateCurrentStaminaMasterFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3734,7 +3734,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeStaminaModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3747,7 +3747,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminaModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3775,7 +3775,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminaModelsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3839,7 +3839,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetStaminaModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3852,7 +3852,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3880,7 +3880,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaModelTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -3953,7 +3953,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeStaminasTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -3966,7 +3966,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminasTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -3994,7 +3994,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminasTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4064,7 +4064,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DescribeStaminasByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4077,7 +4077,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminasByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4105,7 +4105,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DescribeStaminasByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4173,7 +4173,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4186,7 +4186,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4214,7 +4214,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4279,7 +4279,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new GetStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4292,7 +4292,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4320,7 +4320,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new GetStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4418,7 +4418,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new UpdateStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4431,7 +4431,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4459,7 +4459,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new UpdateStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4545,7 +4545,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new ConsumeStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4558,7 +4558,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4586,7 +4586,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4669,7 +4669,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new ConsumeStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4682,7 +4682,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4710,7 +4710,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4793,7 +4793,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new RecoverStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4806,7 +4806,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RecoverStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4834,7 +4834,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RecoverStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -4917,7 +4917,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new RaiseMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -4930,7 +4930,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RaiseMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -4958,7 +4958,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RaiseMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5041,7 +5041,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5054,7 +5054,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5082,7 +5082,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5165,7 +5165,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverIntervalByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5178,7 +5178,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5206,7 +5206,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5289,7 +5289,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5302,7 +5302,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5330,7 +5330,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5426,7 +5426,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetMaxValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5439,7 +5439,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5467,7 +5467,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5563,7 +5563,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverIntervalByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5576,7 +5576,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5604,7 +5604,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5700,7 +5700,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5713,7 +5713,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5741,7 +5741,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5806,7 +5806,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new DeleteStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5819,7 +5819,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5847,7 +5847,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new DeleteStaminaByUserIdTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -5931,7 +5931,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new RecoverStaminaByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -5944,7 +5944,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RecoverStaminaByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -5972,7 +5972,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RecoverStaminaByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -6056,7 +6056,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new RaiseMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -6069,7 +6069,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RaiseMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -6097,7 +6097,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new RaiseMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -6181,7 +6181,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -6194,7 +6194,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -6222,7 +6222,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetMaxValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -6306,7 +6306,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverIntervalByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -6319,7 +6319,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -6347,7 +6347,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverIntervalByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -6431,7 +6431,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new SetRecoverValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -6444,7 +6444,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -6472,7 +6472,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new SetRecoverValueByStampSheetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -6556,7 +6556,7 @@ namespace Gs2.Gs2Stamina
 		{
 			var task = new ConsumeStaminaByStampTaskTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -6569,7 +6569,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaByStampTaskTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -6597,7 +6597,7 @@ namespace Gs2.Gs2Stamina
 		{
 			return new ConsumeStaminaByStampTaskTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

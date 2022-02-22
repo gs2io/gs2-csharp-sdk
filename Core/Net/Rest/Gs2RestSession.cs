@@ -27,13 +27,14 @@ namespace Gs2.Core.Net
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
-
-        public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1) : this(basicGs2Credential, region.DisplayName())
+        public bool _checkCertificateRevocation { get; } = true;
+        
+        public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation)
         {
             
         }
 
-        public Gs2RestSession(IGs2Credential basicGs2Credential, string region)
+        public Gs2RestSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
         {
             Credential = basicGs2Credential;
             if (Enum.TryParse(region, out Region result))
@@ -45,6 +46,7 @@ namespace Gs2.Core.Net
                 Region = Region.ApNortheast1;
             }
 
+            _checkCertificateRevocation = checkCertificateRevocation;
             State = State.Idle;
         }
 
@@ -71,7 +73,7 @@ namespace Gs2.Core.Net
             var task = new RestOpenTask(
                 this,
 #if UNITY_2017_1_OR_NEWER
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
 #else
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 #endif
@@ -110,7 +112,7 @@ namespace Gs2.Core.Net
             var result = await new RestOpenTask(
                 this,
 #if UNITY_2017_1_OR_NEWER
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
 #else
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 #endif

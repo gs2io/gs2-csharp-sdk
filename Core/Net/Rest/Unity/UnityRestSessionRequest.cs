@@ -30,8 +30,32 @@ namespace Gs2.Core.Net
         }
     }
 
+    public class DisabledCertificateHandler : CertificateHandler {
+        protected override bool ValidateCertificate(byte[] certificateData)
+        {
+            return true;
+        }
+    }
+    
     public class UnityRestSessionRequest : RestSessionRequestFuture
     {
+		CertificateHandler _certificateHandler = null;
+        public bool _checkCertificateRevocation { get; } = true;
+
+        public UnityRestSessionRequest()
+        {
+        }
+        
+        public UnityRestSessionRequest(bool checkCertificateRevocation = true)
+        {
+            _checkCertificateRevocation = checkCertificateRevocation;
+        }
+        
+        public UnityRestSessionRequest(CertificateHandler certificateHandler = null)
+        {
+            _certificateHandler = certificateHandler;
+        }
+        
         public override async Task<RestResult> Invoke()
         {
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
@@ -60,6 +84,11 @@ namespace Gs2.Core.Net
             {
                 request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
             }
+
+            if (_certificateHandler != null)
+                request.certificateHandler = _certificateHandler;
+            else if (!_checkCertificateRevocation)
+                request.certificateHandler = new DisabledCertificateHandler();
 
             await request.SendWebRequest().ToUniTask();
 
@@ -104,6 +133,11 @@ namespace Gs2.Core.Net
             {
                 request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
             }
+
+            if (_certificateHandler != null)
+                request.certificateHandler = _certificateHandler;
+            else if (!_checkCertificateRevocation)
+                request.certificateHandler = new DisabledCertificateHandler();
 
             yield return request.SendWebRequest();
 
