@@ -10,9 +10,11 @@ namespace Gs2.Core.Domain
     public class Gs2
     {
         public static int DefaultCacheMinutes = 15;
+        private DateTime _lastPingAt = DateTime.Now;
 
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
+        private readonly Gs2WebSocketSession _webSocketSession;
 
         public readonly Gs2Account.Domain.Gs2Account Account;
         public readonly Gs2Auth.Domain.Gs2Auth Auth;
@@ -57,6 +59,7 @@ namespace Gs2.Core.Domain
             var stampSheetConfiguration = StampSheetConfiguration.Builder()
                 .WithNamespaceName(distributorNamespaceName)
                 .Build();
+            _webSocketSession = wssession;
             _cache = new CacheDatabase();
             _jobQueueDomain = new JobQueueDomain(this);
 
@@ -281,6 +284,12 @@ namespace Gs2.Core.Domain
         {
             while (true)
             {
+                if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
+                {
+                    _webSocketSession?.Ping();
+                    _lastPingAt = DateTime.Now;
+                }
+                
                 if (await _jobQueueDomain.Run(
                     accessToken
                 ))

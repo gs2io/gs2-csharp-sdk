@@ -172,6 +172,11 @@ namespace Gs2.Core.Net
             await Task.Yield();
         }
 
+        public bool Ping()
+        {
+            return true;
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public IEnumerator Close(UnityAction callback)
 #else

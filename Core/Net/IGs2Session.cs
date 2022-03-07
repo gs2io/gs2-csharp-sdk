@@ -32,7 +32,9 @@ namespace Gs2.Core.Net
         IEnumerator Close(Action callback);
 #endif
         IEnumerator Send(IGs2SessionRequest request);
-        
+
+        public bool Ping();
+
 #if UNITY_2017_1_OR_NEWER
     #if GS2_ENABLE_UNITASK
         UniTask<OpenResult> OpenAsync();
