@@ -33,7 +33,7 @@ namespace Gs2.Core.Net
 #endif
         IEnumerator Send(IGs2SessionRequest request);
 
-        public bool Ping();
+        bool Ping();
 
 #if UNITY_2017_1_OR_NEWER
     #if GS2_ENABLE_UNITASK
