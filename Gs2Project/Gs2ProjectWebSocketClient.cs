@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Project
 		}
 
 
-        private class CreateAccountTask : Gs2WebSocketSessionTask<Request.CreateAccountRequest, Result.CreateAccountResult>
+        public class CreateAccountTask : Gs2WebSocketSessionTask<Request.CreateAccountRequest, Result.CreateAccountResult>
         {
 	        public CreateAccountTask(IGs2Session session, Request.CreateAccountRequest request) : base(session, request)
 	        {
@@ -78,6 +81,11 @@ namespace Gs2.Gs2Project
                 {
                     jsonWriter.WritePropertyName("password");
                     jsonWriter.Write(request.Password.ToString());
+                }
+                if (request.Lang != null)
+                {
+                    jsonWriter.WritePropertyName("lang");
+                    jsonWriter.Write(request.Lang.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -117,8 +125,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateAccountResult> CreateAccountFuture(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateAccountResult> CreateAccountAsync(
+            Request.CreateAccountRequest request
+        )
+		{
+		    var task = new CreateAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateAccountTask CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateAccountResult> CreateAccount(
+		public async Task<Result.CreateAccountResult> CreateAccountAsync(
             Request.CreateAccountRequest request
         )
 		{
@@ -131,7 +172,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class VerifyTask : Gs2WebSocketSessionTask<Request.VerifyRequest, Result.VerifyResult>
+        public class VerifyTask : Gs2WebSocketSessionTask<Request.VerifyRequest, Result.VerifyResult>
         {
 	        public VerifyTask(IGs2Session session, Request.VerifyRequest request) : base(session, request)
 	        {
@@ -187,8 +228,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.VerifyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.VerifyResult> VerifyFuture(
+                Request.VerifyRequest request
+        )
+		{
+			return new VerifyTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyResult> VerifyAsync(
+            Request.VerifyRequest request
+        )
+		{
+		    var task = new VerifyTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyTask VerifyAsync(
+                Request.VerifyRequest request
+        )
+		{
+			return new VerifyTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.VerifyResult> Verify(
+		public async Task<Result.VerifyResult> VerifyAsync(
             Request.VerifyRequest request
         )
 		{
@@ -201,7 +275,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateAccountTask : Gs2WebSocketSessionTask<Request.UpdateAccountRequest, Result.UpdateAccountResult>
+        public class UpdateAccountTask : Gs2WebSocketSessionTask<Request.UpdateAccountRequest, Result.UpdateAccountResult>
         {
 	        public UpdateAccountTask(IGs2Session session, Request.UpdateAccountRequest request) : base(session, request)
 	        {
@@ -277,8 +351,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateAccountResult> UpdateAccountFuture(
+                Request.UpdateAccountRequest request
+        )
+		{
+			return new UpdateAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateAccountResult> UpdateAccountAsync(
+            Request.UpdateAccountRequest request
+        )
+		{
+		    var task = new UpdateAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateAccountTask UpdateAccountAsync(
+                Request.UpdateAccountRequest request
+        )
+		{
+			return new UpdateAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateAccountResult> UpdateAccount(
+		public async Task<Result.UpdateAccountResult> UpdateAccountAsync(
             Request.UpdateAccountRequest request
         )
 		{
@@ -291,7 +398,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteAccountTask : Gs2WebSocketSessionTask<Request.DeleteAccountRequest, Result.DeleteAccountResult>
+        public class DeleteAccountTask : Gs2WebSocketSessionTask<Request.DeleteAccountRequest, Result.DeleteAccountResult>
         {
 	        public DeleteAccountTask(IGs2Session session, Request.DeleteAccountRequest request) : base(session, request)
 	        {
@@ -347,8 +454,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAccountResult> DeleteAccountFuture(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAccountResult> DeleteAccountAsync(
+            Request.DeleteAccountRequest request
+        )
+		{
+		    var task = new DeleteAccountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteAccountTask DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteAccountResult> DeleteAccount(
+		public async Task<Result.DeleteAccountResult> DeleteAccountAsync(
             Request.DeleteAccountRequest request
         )
 		{
@@ -361,7 +501,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class CreateProjectTask : Gs2WebSocketSessionTask<Request.CreateProjectRequest, Result.CreateProjectResult>
+        public class CreateProjectTask : Gs2WebSocketSessionTask<Request.CreateProjectRequest, Result.CreateProjectResult>
         {
 	        public CreateProjectTask(IGs2Session session, Request.CreateProjectRequest request) : base(session, request)
 	        {
@@ -452,8 +592,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProjectResult> CreateProjectFuture(
+                Request.CreateProjectRequest request
+        )
+		{
+			return new CreateProjectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProjectResult> CreateProjectAsync(
+            Request.CreateProjectRequest request
+        )
+		{
+		    var task = new CreateProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateProjectTask CreateProjectAsync(
+                Request.CreateProjectRequest request
+        )
+		{
+			return new CreateProjectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateProjectResult> CreateProject(
+		public async Task<Result.CreateProjectResult> CreateProjectAsync(
             Request.CreateProjectRequest request
         )
 		{
@@ -466,7 +639,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTask : Gs2WebSocketSessionTask<Request.GetProjectRequest, Result.GetProjectResult>
+        public class GetProjectTask : Gs2WebSocketSessionTask<Request.GetProjectRequest, Result.GetProjectResult>
         {
 	        public GetProjectTask(IGs2Session session, Request.GetProjectRequest request) : base(session, request)
 	        {
@@ -527,8 +700,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectResult> GetProjectFuture(
+                Request.GetProjectRequest request
+        )
+		{
+			return new GetProjectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectResult> GetProjectAsync(
+            Request.GetProjectRequest request
+        )
+		{
+		    var task = new GetProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProjectTask GetProjectAsync(
+                Request.GetProjectRequest request
+        )
+		{
+			return new GetProjectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetProjectResult> GetProject(
+		public async Task<Result.GetProjectResult> GetProjectAsync(
             Request.GetProjectRequest request
         )
 		{
@@ -541,7 +747,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTokenTask : Gs2WebSocketSessionTask<Request.GetProjectTokenRequest, Result.GetProjectTokenResult>
+        public class GetProjectTokenTask : Gs2WebSocketSessionTask<Request.GetProjectTokenRequest, Result.GetProjectTokenResult>
         {
 	        public GetProjectTokenTask(IGs2Session session, Request.GetProjectTokenRequest request) : base(session, request)
 	        {
@@ -602,8 +808,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectTokenResult> GetProjectTokenFuture(
+                Request.GetProjectTokenRequest request
+        )
+		{
+			return new GetProjectTokenTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectTokenResult> GetProjectTokenAsync(
+            Request.GetProjectTokenRequest request
+        )
+		{
+		    var task = new GetProjectTokenTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProjectTokenTask GetProjectTokenAsync(
+                Request.GetProjectTokenRequest request
+        )
+		{
+			return new GetProjectTokenTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetProjectTokenResult> GetProjectToken(
+		public async Task<Result.GetProjectTokenResult> GetProjectTokenAsync(
             Request.GetProjectTokenRequest request
         )
 		{
@@ -616,7 +855,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTokenByIdentifierTask : Gs2WebSocketSessionTask<Request.GetProjectTokenByIdentifierRequest, Result.GetProjectTokenByIdentifierResult>
+        public class GetProjectTokenByIdentifierTask : Gs2WebSocketSessionTask<Request.GetProjectTokenByIdentifierRequest, Result.GetProjectTokenByIdentifierResult>
         {
 	        public GetProjectTokenByIdentifierTask(IGs2Session session, Request.GetProjectTokenByIdentifierRequest request) : base(session, request)
 	        {
@@ -687,8 +926,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectTokenByIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierFuture(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+			return new GetProjectTokenByIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierAsync(
+            Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+		    var task = new GetProjectTokenByIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProjectTokenByIdentifierTask GetProjectTokenByIdentifierAsync(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+			return new GetProjectTokenByIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifier(
+		public async Task<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierAsync(
             Request.GetProjectTokenByIdentifierRequest request
         )
 		{
@@ -701,7 +973,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateProjectTask : Gs2WebSocketSessionTask<Request.UpdateProjectRequest, Result.UpdateProjectResult>
+        public class UpdateProjectTask : Gs2WebSocketSessionTask<Request.UpdateProjectRequest, Result.UpdateProjectResult>
         {
 	        public UpdateProjectTask(IGs2Session session, Request.UpdateProjectRequest request) : base(session, request)
 	        {
@@ -792,8 +1064,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateProjectResult> UpdateProjectFuture(
+                Request.UpdateProjectRequest request
+        )
+		{
+			return new UpdateProjectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateProjectResult> UpdateProjectAsync(
+            Request.UpdateProjectRequest request
+        )
+		{
+		    var task = new UpdateProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateProjectTask UpdateProjectAsync(
+                Request.UpdateProjectRequest request
+        )
+		{
+			return new UpdateProjectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateProjectResult> UpdateProject(
+		public async Task<Result.UpdateProjectResult> UpdateProjectAsync(
             Request.UpdateProjectRequest request
         )
 		{
@@ -806,7 +1111,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteProjectTask : Gs2WebSocketSessionTask<Request.DeleteProjectRequest, Result.DeleteProjectResult>
+        public class DeleteProjectTask : Gs2WebSocketSessionTask<Request.DeleteProjectRequest, Result.DeleteProjectResult>
         {
 	        public DeleteProjectTask(IGs2Session session, Request.DeleteProjectRequest request) : base(session, request)
 	        {
@@ -867,8 +1172,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProjectResult> DeleteProjectFuture(
+                Request.DeleteProjectRequest request
+        )
+		{
+			return new DeleteProjectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProjectResult> DeleteProjectAsync(
+            Request.DeleteProjectRequest request
+        )
+		{
+		    var task = new DeleteProjectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteProjectTask DeleteProjectAsync(
+                Request.DeleteProjectRequest request
+        )
+		{
+			return new DeleteProjectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteProjectResult> DeleteProject(
+		public async Task<Result.DeleteProjectResult> DeleteProjectAsync(
             Request.DeleteProjectRequest request
         )
 		{
@@ -881,7 +1219,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class CreateBillingMethodTask : Gs2WebSocketSessionTask<Request.CreateBillingMethodRequest, Result.CreateBillingMethodResult>
+        public class CreateBillingMethodTask : Gs2WebSocketSessionTask<Request.CreateBillingMethodRequest, Result.CreateBillingMethodResult>
         {
 	        public CreateBillingMethodTask(IGs2Session session, Request.CreateBillingMethodRequest request) : base(session, request)
 	        {
@@ -957,8 +1295,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateBillingMethodResult> CreateBillingMethodFuture(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+			return new CreateBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBillingMethodResult> CreateBillingMethodAsync(
+            Request.CreateBillingMethodRequest request
+        )
+		{
+		    var task = new CreateBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateBillingMethodTask CreateBillingMethodAsync(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+			return new CreateBillingMethodTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.CreateBillingMethodResult> CreateBillingMethod(
+		public async Task<Result.CreateBillingMethodResult> CreateBillingMethodAsync(
             Request.CreateBillingMethodRequest request
         )
 		{
@@ -971,7 +1342,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetBillingMethodTask : Gs2WebSocketSessionTask<Request.GetBillingMethodRequest, Result.GetBillingMethodResult>
+        public class GetBillingMethodTask : Gs2WebSocketSessionTask<Request.GetBillingMethodRequest, Result.GetBillingMethodResult>
         {
 	        public GetBillingMethodTask(IGs2Session session, Request.GetBillingMethodRequest request) : base(session, request)
 	        {
@@ -1032,8 +1403,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetBillingMethodResult> GetBillingMethodFuture(
+                Request.GetBillingMethodRequest request
+        )
+		{
+			return new GetBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBillingMethodResult> GetBillingMethodAsync(
+            Request.GetBillingMethodRequest request
+        )
+		{
+		    var task = new GetBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBillingMethodTask GetBillingMethodAsync(
+                Request.GetBillingMethodRequest request
+        )
+		{
+			return new GetBillingMethodTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetBillingMethodResult> GetBillingMethod(
+		public async Task<Result.GetBillingMethodResult> GetBillingMethodAsync(
             Request.GetBillingMethodRequest request
         )
 		{
@@ -1046,7 +1450,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateBillingMethodTask : Gs2WebSocketSessionTask<Request.UpdateBillingMethodRequest, Result.UpdateBillingMethodResult>
+        public class UpdateBillingMethodTask : Gs2WebSocketSessionTask<Request.UpdateBillingMethodRequest, Result.UpdateBillingMethodResult>
         {
 	        public UpdateBillingMethodTask(IGs2Session session, Request.UpdateBillingMethodRequest request) : base(session, request)
 	        {
@@ -1112,8 +1516,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateBillingMethodResult> UpdateBillingMethodFuture(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+			return new UpdateBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBillingMethodResult> UpdateBillingMethodAsync(
+            Request.UpdateBillingMethodRequest request
+        )
+		{
+		    var task = new UpdateBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateBillingMethodTask UpdateBillingMethodAsync(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+			return new UpdateBillingMethodTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.UpdateBillingMethodResult> UpdateBillingMethod(
+		public async Task<Result.UpdateBillingMethodResult> UpdateBillingMethodAsync(
             Request.UpdateBillingMethodRequest request
         )
 		{
@@ -1126,7 +1563,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteBillingMethodTask : Gs2WebSocketSessionTask<Request.DeleteBillingMethodRequest, Result.DeleteBillingMethodResult>
+        public class DeleteBillingMethodTask : Gs2WebSocketSessionTask<Request.DeleteBillingMethodRequest, Result.DeleteBillingMethodResult>
         {
 	        public DeleteBillingMethodTask(IGs2Session session, Request.DeleteBillingMethodRequest request) : base(session, request)
 	        {
@@ -1187,8 +1624,41 @@ namespace Gs2.Gs2Project
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteBillingMethodResult> DeleteBillingMethodFuture(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+			return new DeleteBillingMethodTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBillingMethodResult> DeleteBillingMethodAsync(
+            Request.DeleteBillingMethodRequest request
+        )
+		{
+		    var task = new DeleteBillingMethodTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteBillingMethodTask DeleteBillingMethodAsync(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+			return new DeleteBillingMethodTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.DeleteBillingMethodResult> DeleteBillingMethod(
+		public async Task<Result.DeleteBillingMethodResult> DeleteBillingMethodAsync(
             Request.DeleteBillingMethodRequest request
         )
 		{

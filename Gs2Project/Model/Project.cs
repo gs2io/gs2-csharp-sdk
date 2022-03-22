@@ -98,6 +98,40 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _accountNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetAccountNameFromGrn(
+            string grn
+        )
+        {
+            var match = _accountNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["accountName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["accountName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _projectNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetProjectNameFromGrn(
+            string grn
+        )
+        {
+            var match = _projectNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["projectName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["projectName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class CreateAccountTask : Gs2RestSessionTask<CreateAccountRequest, CreateAccountResult>
+        public class CreateAccountTask : Gs2RestSessionTask<CreateAccountRequest, CreateAccountResult>
         {
             public CreateAccountTask(IGs2Session session, RestSessionRequestFactory factory, CreateAccountRequest request) : base(session, factory, request)
             {
@@ -97,6 +100,11 @@ namespace Gs2.Gs2Project
                     jsonWriter.WritePropertyName("password");
                     jsonWriter.Write(request.Password);
                 }
+                if (request.Lang != null)
+                {
+                    jsonWriter.WritePropertyName("lang");
+                    jsonWriter.Write(request.Lang);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -133,12 +141,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new CreateAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateAccountResult> CreateAccountFuture(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateAccountResult> CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+            AsyncResult<Result.CreateAccountResult> result = null;
+			await CreateAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateAccountTask CreateAccountAsync(
+                Request.CreateAccountRequest request
+        )
+		{
+			return new CreateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateAccountResult> CreateAccountAsync(
                 Request.CreateAccountRequest request
@@ -154,7 +202,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class VerifyTask : Gs2RestSessionTask<VerifyRequest, VerifyResult>
+        public class VerifyTask : Gs2RestSessionTask<VerifyRequest, VerifyResult>
         {
             public VerifyTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRequest request) : base(session, factory, request)
             {
@@ -213,12 +261,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new VerifyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.VerifyResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.VerifyResult> VerifyFuture(
+                Request.VerifyRequest request
+        )
+		{
+			return new VerifyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyResult> VerifyAsync(
+                Request.VerifyRequest request
+        )
+		{
+            AsyncResult<Result.VerifyResult> result = null;
+			await Verify(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyTask VerifyAsync(
+                Request.VerifyRequest request
+        )
+		{
+			return new VerifyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.VerifyResult> VerifyAsync(
                 Request.VerifyRequest request
@@ -234,7 +322,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class SignInTask : Gs2RestSessionTask<SignInRequest, SignInResult>
+        public class SignInTask : Gs2RestSessionTask<SignInRequest, SignInResult>
         {
             public SignInTask(IGs2Session session, RestSessionRequestFactory factory, SignInRequest request) : base(session, factory, request)
             {
@@ -298,12 +386,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new SignInTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.SignInResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.SignInResult> SignInFuture(
+                Request.SignInRequest request
+        )
+		{
+			return new SignInTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SignInResult> SignInAsync(
+                Request.SignInRequest request
+        )
+		{
+            AsyncResult<Result.SignInResult> result = null;
+			await SignIn(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SignInTask SignInAsync(
+                Request.SignInRequest request
+        )
+		{
+			return new SignInTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.SignInResult> SignInAsync(
                 Request.SignInRequest request
@@ -319,7 +447,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class IssueAccountTokenTask : Gs2RestSessionTask<IssueAccountTokenRequest, IssueAccountTokenResult>
+        public class IssueAccountTokenTask : Gs2RestSessionTask<IssueAccountTokenRequest, IssueAccountTokenResult>
         {
             public IssueAccountTokenTask(IGs2Session session, RestSessionRequestFactory factory, IssueAccountTokenRequest request) : base(session, factory, request)
             {
@@ -378,12 +506,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new IssueAccountTokenTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.IssueAccountTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.IssueAccountTokenResult> IssueAccountTokenFuture(
+                Request.IssueAccountTokenRequest request
+        )
+		{
+			return new IssueAccountTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IssueAccountTokenResult> IssueAccountTokenAsync(
+                Request.IssueAccountTokenRequest request
+        )
+		{
+            AsyncResult<Result.IssueAccountTokenResult> result = null;
+			await IssueAccountToken(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IssueAccountTokenTask IssueAccountTokenAsync(
+                Request.IssueAccountTokenRequest request
+        )
+		{
+			return new IssueAccountTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.IssueAccountTokenResult> IssueAccountTokenAsync(
                 Request.IssueAccountTokenRequest request
@@ -399,7 +567,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class ForgetTask : Gs2RestSessionTask<ForgetRequest, ForgetResult>
+        public class ForgetTask : Gs2RestSessionTask<ForgetRequest, ForgetResult>
         {
             public ForgetTask(IGs2Session session, RestSessionRequestFactory factory, ForgetRequest request) : base(session, factory, request)
             {
@@ -421,6 +589,11 @@ namespace Gs2.Gs2Project
                 {
                     jsonWriter.WritePropertyName("email");
                     jsonWriter.Write(request.Email);
+                }
+                if (request.Lang != null)
+                {
+                    jsonWriter.WritePropertyName("lang");
+                    jsonWriter.Write(request.Lang);
                 }
                 if (request.ContextStack != null)
                 {
@@ -458,12 +631,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new ForgetTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.ForgetResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.ForgetResult> ForgetFuture(
+                Request.ForgetRequest request
+        )
+		{
+			return new ForgetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ForgetResult> ForgetAsync(
+                Request.ForgetRequest request
+        )
+		{
+            AsyncResult<Result.ForgetResult> result = null;
+			await Forget(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ForgetTask ForgetAsync(
+                Request.ForgetRequest request
+        )
+		{
+			return new ForgetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.ForgetResult> ForgetAsync(
                 Request.ForgetRequest request
@@ -479,7 +692,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class IssuePasswordTask : Gs2RestSessionTask<IssuePasswordRequest, IssuePasswordResult>
+        public class IssuePasswordTask : Gs2RestSessionTask<IssuePasswordRequest, IssuePasswordResult>
         {
             public IssuePasswordTask(IGs2Session session, RestSessionRequestFactory factory, IssuePasswordRequest request) : base(session, factory, request)
             {
@@ -538,12 +751,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new IssuePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.IssuePasswordResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.IssuePasswordResult> IssuePasswordFuture(
+                Request.IssuePasswordRequest request
+        )
+		{
+			return new IssuePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IssuePasswordResult> IssuePasswordAsync(
+                Request.IssuePasswordRequest request
+        )
+		{
+            AsyncResult<Result.IssuePasswordResult> result = null;
+			await IssuePassword(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IssuePasswordTask IssuePasswordAsync(
+                Request.IssuePasswordRequest request
+        )
+		{
+			return new IssuePasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.IssuePasswordResult> IssuePasswordAsync(
                 Request.IssuePasswordRequest request
@@ -559,7 +812,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateAccountTask : Gs2RestSessionTask<UpdateAccountRequest, UpdateAccountResult>
+        public class UpdateAccountTask : Gs2RestSessionTask<UpdateAccountRequest, UpdateAccountResult>
         {
             public UpdateAccountTask(IGs2Session session, RestSessionRequestFactory factory, UpdateAccountRequest request) : base(session, factory, request)
             {
@@ -638,12 +891,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new UpdateAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateAccountResult> UpdateAccountFuture(
+                Request.UpdateAccountRequest request
+        )
+		{
+			return new UpdateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateAccountResult> UpdateAccountAsync(
+                Request.UpdateAccountRequest request
+        )
+		{
+            AsyncResult<Result.UpdateAccountResult> result = null;
+			await UpdateAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateAccountTask UpdateAccountAsync(
+                Request.UpdateAccountRequest request
+        )
+		{
+			return new UpdateAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateAccountResult> UpdateAccountAsync(
                 Request.UpdateAccountRequest request
@@ -659,7 +952,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteAccountTask : Gs2RestSessionTask<DeleteAccountRequest, DeleteAccountResult>
+        public class DeleteAccountTask : Gs2RestSessionTask<DeleteAccountRequest, DeleteAccountResult>
         {
             public DeleteAccountTask(IGs2Session session, RestSessionRequestFactory factory, DeleteAccountRequest request) : base(session, factory, request)
             {
@@ -700,12 +993,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DeleteAccountTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteAccountResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteAccountResult> DeleteAccountFuture(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteAccountResult> DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+            AsyncResult<Result.DeleteAccountResult> result = null;
+			await DeleteAccount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteAccountTask DeleteAccountAsync(
+                Request.DeleteAccountRequest request
+        )
+		{
+			return new DeleteAccountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteAccountResult> DeleteAccountAsync(
                 Request.DeleteAccountRequest request
@@ -721,7 +1054,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DescribeProjectsTask : Gs2RestSessionTask<DescribeProjectsRequest, DescribeProjectsResult>
+        public class DescribeProjectsTask : Gs2RestSessionTask<DescribeProjectsRequest, DescribeProjectsResult>
         {
             public DescribeProjectsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProjectsRequest request) : base(session, factory, request)
             {
@@ -771,12 +1104,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DescribeProjectsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeProjectsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeProjectsResult> DescribeProjectsFuture(
+                Request.DescribeProjectsRequest request
+        )
+		{
+			return new DescribeProjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeProjectsResult> DescribeProjectsAsync(
+                Request.DescribeProjectsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeProjectsResult> result = null;
+			await DescribeProjects(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeProjectsTask DescribeProjectsAsync(
+                Request.DescribeProjectsRequest request
+        )
+		{
+			return new DescribeProjectsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeProjectsResult> DescribeProjectsAsync(
                 Request.DescribeProjectsRequest request
@@ -792,7 +1165,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class CreateProjectTask : Gs2RestSessionTask<CreateProjectRequest, CreateProjectResult>
+        public class CreateProjectTask : Gs2RestSessionTask<CreateProjectRequest, CreateProjectResult>
         {
             public CreateProjectTask(IGs2Session session, RestSessionRequestFactory factory, CreateProjectRequest request) : base(session, factory, request)
             {
@@ -886,12 +1259,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new CreateProjectTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateProjectResult> CreateProjectFuture(
+                Request.CreateProjectRequest request
+        )
+		{
+			return new CreateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateProjectResult> CreateProjectAsync(
+                Request.CreateProjectRequest request
+        )
+		{
+            AsyncResult<Result.CreateProjectResult> result = null;
+			await CreateProject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateProjectTask CreateProjectAsync(
+                Request.CreateProjectRequest request
+        )
+		{
+			return new CreateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateProjectResult> CreateProjectAsync(
                 Request.CreateProjectRequest request
@@ -907,7 +1320,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTask : Gs2RestSessionTask<GetProjectRequest, GetProjectResult>
+        public class GetProjectTask : Gs2RestSessionTask<GetProjectRequest, GetProjectResult>
         {
             public GetProjectTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectRequest request) : base(session, factory, request)
             {
@@ -953,12 +1366,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new GetProjectTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectResult> GetProjectFuture(
+                Request.GetProjectRequest request
+        )
+		{
+			return new GetProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectResult> GetProjectAsync(
+                Request.GetProjectRequest request
+        )
+		{
+            AsyncResult<Result.GetProjectResult> result = null;
+			await GetProject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProjectTask GetProjectAsync(
+                Request.GetProjectRequest request
+        )
+		{
+			return new GetProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetProjectResult> GetProjectAsync(
                 Request.GetProjectRequest request
@@ -974,7 +1427,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTokenTask : Gs2RestSessionTask<GetProjectTokenRequest, GetProjectTokenResult>
+        public class GetProjectTokenTask : Gs2RestSessionTask<GetProjectTokenRequest, GetProjectTokenResult>
         {
             public GetProjectTokenTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectTokenRequest request) : base(session, factory, request)
             {
@@ -1035,12 +1488,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new GetProjectTokenTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectTokenResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectTokenResult> GetProjectTokenFuture(
+                Request.GetProjectTokenRequest request
+        )
+		{
+			return new GetProjectTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectTokenResult> GetProjectTokenAsync(
+                Request.GetProjectTokenRequest request
+        )
+		{
+            AsyncResult<Result.GetProjectTokenResult> result = null;
+			await GetProjectToken(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProjectTokenTask GetProjectTokenAsync(
+                Request.GetProjectTokenRequest request
+        )
+		{
+			return new GetProjectTokenTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetProjectTokenResult> GetProjectTokenAsync(
                 Request.GetProjectTokenRequest request
@@ -1056,7 +1549,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetProjectTokenByIdentifierTask : Gs2RestSessionTask<GetProjectTokenByIdentifierRequest, GetProjectTokenByIdentifierResult>
+        public class GetProjectTokenByIdentifierTask : Gs2RestSessionTask<GetProjectTokenByIdentifierRequest, GetProjectTokenByIdentifierResult>
         {
             public GetProjectTokenByIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, GetProjectTokenByIdentifierRequest request) : base(session, factory, request)
             {
@@ -1119,12 +1612,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new GetProjectTokenByIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetProjectTokenByIdentifierResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierFuture(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+			return new GetProjectTokenByIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierAsync(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.GetProjectTokenByIdentifierResult> result = null;
+			await GetProjectTokenByIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProjectTokenByIdentifierTask GetProjectTokenByIdentifierAsync(
+                Request.GetProjectTokenByIdentifierRequest request
+        )
+		{
+			return new GetProjectTokenByIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetProjectTokenByIdentifierResult> GetProjectTokenByIdentifierAsync(
                 Request.GetProjectTokenByIdentifierRequest request
@@ -1140,7 +1673,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateProjectTask : Gs2RestSessionTask<UpdateProjectRequest, UpdateProjectResult>
+        public class UpdateProjectTask : Gs2RestSessionTask<UpdateProjectRequest, UpdateProjectResult>
         {
             public UpdateProjectTask(IGs2Session session, RestSessionRequestFactory factory, UpdateProjectRequest request) : base(session, factory, request)
             {
@@ -1231,12 +1764,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new UpdateProjectTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateProjectResult> UpdateProjectFuture(
+                Request.UpdateProjectRequest request
+        )
+		{
+			return new UpdateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateProjectResult> UpdateProjectAsync(
+                Request.UpdateProjectRequest request
+        )
+		{
+            AsyncResult<Result.UpdateProjectResult> result = null;
+			await UpdateProject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateProjectTask UpdateProjectAsync(
+                Request.UpdateProjectRequest request
+        )
+		{
+			return new UpdateProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateProjectResult> UpdateProjectAsync(
                 Request.UpdateProjectRequest request
@@ -1252,7 +1825,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteProjectTask : Gs2RestSessionTask<DeleteProjectRequest, DeleteProjectResult>
+        public class DeleteProjectTask : Gs2RestSessionTask<DeleteProjectRequest, DeleteProjectResult>
         {
             public DeleteProjectTask(IGs2Session session, RestSessionRequestFactory factory, DeleteProjectRequest request) : base(session, factory, request)
             {
@@ -1298,12 +1871,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DeleteProjectTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteProjectResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteProjectResult> DeleteProjectFuture(
+                Request.DeleteProjectRequest request
+        )
+		{
+			return new DeleteProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteProjectResult> DeleteProjectAsync(
+                Request.DeleteProjectRequest request
+        )
+		{
+            AsyncResult<Result.DeleteProjectResult> result = null;
+			await DeleteProject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteProjectTask DeleteProjectAsync(
+                Request.DeleteProjectRequest request
+        )
+		{
+			return new DeleteProjectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteProjectResult> DeleteProjectAsync(
                 Request.DeleteProjectRequest request
@@ -1319,7 +1932,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DescribeBillingMethodsTask : Gs2RestSessionTask<DescribeBillingMethodsRequest, DescribeBillingMethodsResult>
+        public class DescribeBillingMethodsTask : Gs2RestSessionTask<DescribeBillingMethodsRequest, DescribeBillingMethodsResult>
         {
             public DescribeBillingMethodsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBillingMethodsRequest request) : base(session, factory, request)
             {
@@ -1369,12 +1982,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DescribeBillingMethodsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeBillingMethodsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeBillingMethodsResult> DescribeBillingMethodsFuture(
+                Request.DescribeBillingMethodsRequest request
+        )
+		{
+			return new DescribeBillingMethodsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBillingMethodsResult> DescribeBillingMethodsAsync(
+                Request.DescribeBillingMethodsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBillingMethodsResult> result = null;
+			await DescribeBillingMethods(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBillingMethodsTask DescribeBillingMethodsAsync(
+                Request.DescribeBillingMethodsRequest request
+        )
+		{
+			return new DescribeBillingMethodsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeBillingMethodsResult> DescribeBillingMethodsAsync(
                 Request.DescribeBillingMethodsRequest request
@@ -1390,7 +2043,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class CreateBillingMethodTask : Gs2RestSessionTask<CreateBillingMethodRequest, CreateBillingMethodResult>
+        public class CreateBillingMethodTask : Gs2RestSessionTask<CreateBillingMethodRequest, CreateBillingMethodResult>
         {
             public CreateBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, CreateBillingMethodRequest request) : base(session, factory, request)
             {
@@ -1469,12 +2122,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new CreateBillingMethodTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.CreateBillingMethodResult> CreateBillingMethodFuture(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+			return new CreateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBillingMethodResult> CreateBillingMethodAsync(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+            AsyncResult<Result.CreateBillingMethodResult> result = null;
+			await CreateBillingMethod(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateBillingMethodTask CreateBillingMethodAsync(
+                Request.CreateBillingMethodRequest request
+        )
+		{
+			return new CreateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.CreateBillingMethodResult> CreateBillingMethodAsync(
                 Request.CreateBillingMethodRequest request
@@ -1490,7 +2183,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class GetBillingMethodTask : Gs2RestSessionTask<GetBillingMethodRequest, GetBillingMethodResult>
+        public class GetBillingMethodTask : Gs2RestSessionTask<GetBillingMethodRequest, GetBillingMethodResult>
         {
             public GetBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, GetBillingMethodRequest request) : base(session, factory, request)
             {
@@ -1536,12 +2229,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new GetBillingMethodTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetBillingMethodResult> GetBillingMethodFuture(
+                Request.GetBillingMethodRequest request
+        )
+		{
+			return new GetBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBillingMethodResult> GetBillingMethodAsync(
+                Request.GetBillingMethodRequest request
+        )
+		{
+            AsyncResult<Result.GetBillingMethodResult> result = null;
+			await GetBillingMethod(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBillingMethodTask GetBillingMethodAsync(
+                Request.GetBillingMethodRequest request
+        )
+		{
+			return new GetBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetBillingMethodResult> GetBillingMethodAsync(
                 Request.GetBillingMethodRequest request
@@ -1557,7 +2290,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class UpdateBillingMethodTask : Gs2RestSessionTask<UpdateBillingMethodRequest, UpdateBillingMethodResult>
+        public class UpdateBillingMethodTask : Gs2RestSessionTask<UpdateBillingMethodRequest, UpdateBillingMethodResult>
         {
             public UpdateBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, UpdateBillingMethodRequest request) : base(session, factory, request)
             {
@@ -1623,12 +2356,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new UpdateBillingMethodTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.UpdateBillingMethodResult> UpdateBillingMethodFuture(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+			return new UpdateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBillingMethodResult> UpdateBillingMethodAsync(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+            AsyncResult<Result.UpdateBillingMethodResult> result = null;
+			await UpdateBillingMethod(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateBillingMethodTask UpdateBillingMethodAsync(
+                Request.UpdateBillingMethodRequest request
+        )
+		{
+			return new UpdateBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.UpdateBillingMethodResult> UpdateBillingMethodAsync(
                 Request.UpdateBillingMethodRequest request
@@ -1644,7 +2417,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DeleteBillingMethodTask : Gs2RestSessionTask<DeleteBillingMethodRequest, DeleteBillingMethodResult>
+        public class DeleteBillingMethodTask : Gs2RestSessionTask<DeleteBillingMethodRequest, DeleteBillingMethodResult>
         {
             public DeleteBillingMethodTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBillingMethodRequest request) : base(session, factory, request)
             {
@@ -1690,12 +2463,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DeleteBillingMethodTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteBillingMethodResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DeleteBillingMethodResult> DeleteBillingMethodFuture(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+			return new DeleteBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBillingMethodResult> DeleteBillingMethodAsync(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+            AsyncResult<Result.DeleteBillingMethodResult> result = null;
+			await DeleteBillingMethod(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteBillingMethodTask DeleteBillingMethodAsync(
+                Request.DeleteBillingMethodRequest request
+        )
+		{
+			return new DeleteBillingMethodTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DeleteBillingMethodResult> DeleteBillingMethodAsync(
                 Request.DeleteBillingMethodRequest request
@@ -1711,7 +2524,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DescribeReceiptsTask : Gs2RestSessionTask<DescribeReceiptsRequest, DescribeReceiptsResult>
+        public class DescribeReceiptsTask : Gs2RestSessionTask<DescribeReceiptsRequest, DescribeReceiptsResult>
         {
             public DescribeReceiptsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeReceiptsRequest request) : base(session, factory, request)
             {
@@ -1761,12 +2574,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DescribeReceiptsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeReceiptsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeReceiptsResult> DescribeReceiptsFuture(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+			return new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeReceiptsResult> DescribeReceiptsAsync(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeReceiptsResult> result = null;
+			await DescribeReceipts(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeReceiptsTask DescribeReceiptsAsync(
+                Request.DescribeReceiptsRequest request
+        )
+		{
+			return new DescribeReceiptsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeReceiptsResult> DescribeReceiptsAsync(
                 Request.DescribeReceiptsRequest request
@@ -1782,7 +2635,7 @@ namespace Gs2.Gs2Project
 #endif
 
 
-        private class DescribeBillingsTask : Gs2RestSessionTask<DescribeBillingsRequest, DescribeBillingsResult>
+        public class DescribeBillingsTask : Gs2RestSessionTask<DescribeBillingsRequest, DescribeBillingsResult>
         {
             public DescribeBillingsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBillingsRequest request) : base(session, factory, request)
             {
@@ -1836,12 +2689,52 @@ namespace Gs2.Gs2Project
 		{
 			var task = new DescribeBillingsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeBillingsResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeBillingsResult> DescribeBillingsFuture(
+                Request.DescribeBillingsRequest request
+        )
+		{
+			return new DescribeBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBillingsResult> DescribeBillingsAsync(
+                Request.DescribeBillingsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBillingsResult> result = null;
+			await DescribeBillings(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBillingsTask DescribeBillingsAsync(
+                Request.DescribeBillingsRequest request
+        )
+		{
+			return new DescribeBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeBillingsResult> DescribeBillingsAsync(
                 Request.DescribeBillingsRequest request

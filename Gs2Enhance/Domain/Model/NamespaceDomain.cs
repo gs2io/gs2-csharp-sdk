@@ -368,32 +368,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
-        public Gs2.Gs2Enhance.Domain.Model.UserDomain User(
-            string userId
-        ) {
-            return new Gs2.Gs2Enhance.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                userId
-            );
-        }
-
-        public UserAccessTokenDomain AccessToken(
-            AccessToken accessToken
-        ) {
-            return new UserAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                accessToken
-            );
-        }
-
         public Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain CurrentRateMaster(
         ) {
             return new Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain(
@@ -451,6 +425,32 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 this._session,
                 this._namespaceName,
                 rateName
+            );
+        }
+
+        public Gs2.Gs2Enhance.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Enhance.Domain.Model.UserDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                accessToken
             );
         }
 

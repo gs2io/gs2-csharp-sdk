@@ -86,6 +86,23 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _accountNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetAccountNameFromGrn(
+            string grn
+        )
+        {
+            var match = _accountNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["accountName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["accountName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

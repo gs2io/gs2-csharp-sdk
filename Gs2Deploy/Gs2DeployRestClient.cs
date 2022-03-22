@@ -109,11 +109,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DescribeStacksTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeStacksResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeStacksResult> DescribeStacksFuture(
+                Request.DescribeStacksRequest request
+        )
+		{
+			return new DescribeStacksTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -139,7 +150,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DescribeStacksTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -228,11 +239,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new CreateStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateStackResult> CreateStackFuture(
+                Request.CreateStackRequest request
+        )
+		{
+			return new CreateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -258,7 +280,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new CreateStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -347,11 +369,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new CreateStackFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.CreateStackFromGitHubResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateStackFromGitHubResult> CreateStackFromGitHubFuture(
+                Request.CreateStackFromGitHubRequest request
+        )
+		{
+			return new CreateStackFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -377,7 +410,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new CreateStackFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -456,11 +489,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new ValidateTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.ValidateResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ValidateResult> ValidateFuture(
+                Request.ValidateRequest request
+        )
+		{
+			return new ValidateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -486,7 +530,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new ValidateTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -549,11 +593,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new GetStackStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStackStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStackStatusResult> GetStackStatusFuture(
+                Request.GetStackStatusRequest request
+        )
+		{
+			return new GetStackStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -579,7 +634,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new GetStackStatusTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -642,11 +697,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new GetStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStackResult> GetStackFuture(
+                Request.GetStackRequest request
+        )
+		{
+			return new GetStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -672,7 +738,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new GetStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -758,11 +824,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new UpdateStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateStackResult> UpdateStackFuture(
+                Request.UpdateStackRequest request
+        )
+		{
+			return new UpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -788,7 +865,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new UpdateStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -874,11 +951,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new UpdateStackFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.UpdateStackFromGitHubResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateStackFromGitHubResult> UpdateStackFromGitHubFuture(
+                Request.UpdateStackFromGitHubRequest request
+        )
+		{
+			return new UpdateStackFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -904,7 +992,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new UpdateStackFromGitHubTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -967,11 +1055,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DeleteStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteStackResult> DeleteStackFuture(
+                Request.DeleteStackRequest request
+        )
+		{
+			return new DeleteStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -997,7 +1096,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DeleteStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1060,11 +1159,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new ForceDeleteStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.ForceDeleteStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ForceDeleteStackResult> ForceDeleteStackFuture(
+                Request.ForceDeleteStackRequest request
+        )
+		{
+			return new ForceDeleteStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1090,7 +1200,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new ForceDeleteStackTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1153,11 +1263,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DeleteStackResourcesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteStackResourcesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteStackResourcesResult> DeleteStackResourcesFuture(
+                Request.DeleteStackResourcesRequest request
+        )
+		{
+			return new DeleteStackResourcesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1183,7 +1304,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DeleteStackResourcesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1246,11 +1367,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DeleteStackEntityTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DeleteStackEntityResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteStackEntityResult> DeleteStackEntityFuture(
+                Request.DeleteStackEntityRequest request
+        )
+		{
+			return new DeleteStackEntityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1276,7 +1408,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DeleteStackEntityTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1345,11 +1477,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DescribeResourcesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeResourcesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeResourcesResult> DescribeResourcesFuture(
+                Request.DescribeResourcesRequest request
+        )
+		{
+			return new DescribeResourcesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1375,7 +1518,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DescribeResourcesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1439,11 +1582,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new GetResourceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetResourceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetResourceResult> GetResourceFuture(
+                Request.GetResourceRequest request
+        )
+		{
+			return new GetResourceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1469,7 +1623,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new GetResourceTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1538,11 +1692,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DescribeEventsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeEventsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeEventsResult> DescribeEventsFuture(
+                Request.DescribeEventsRequest request
+        )
+		{
+			return new DescribeEventsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1568,7 +1733,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DescribeEventsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1632,11 +1797,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new GetEventTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetEventResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetEventResult> GetEventFuture(
+                Request.GetEventRequest request
+        )
+		{
+			return new GetEventTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1662,7 +1838,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new GetEventTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1731,11 +1907,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new DescribeOutputsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeOutputsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeOutputsResult> DescribeOutputsFuture(
+                Request.DescribeOutputsRequest request
+        )
+		{
+			return new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1761,7 +1948,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new DescribeOutputsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1825,11 +2012,22 @@ namespace Gs2.Gs2Deploy
 		{
 			var task = new GetOutputTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetOutputResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetOutputResult> GetOutputFuture(
+                Request.GetOutputRequest request
+        )
+		{
+			return new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
         }
 
     #if GS2_ENABLE_UNITASK
@@ -1855,7 +2053,7 @@ namespace Gs2.Gs2Deploy
 		{
 			return new GetOutputTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

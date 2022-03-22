@@ -34,9 +34,15 @@ namespace Gs2.Gs2Project.Request
 	public class ForgetRequest : Gs2Request<ForgetRequest>
 	{
         public string Email { set; get; }
+        public string Lang { set; get; }
 
         public ForgetRequest WithEmail(string email) {
             this.Email = email;
+            return this;
+        }
+
+        public ForgetRequest WithLang(string lang) {
+            this.Lang = lang;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Project.Request
                 return null;
             }
             return new ForgetRequest()
-                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString());
+                .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
+                .WithLang(!data.Keys.Contains("lang") || data["lang"] == null ? null : data["lang"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["email"] = Email,
+                ["lang"] = Lang,
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Project.Request
             if (Email != null) {
                 writer.WritePropertyName("email");
                 writer.Write(Email.ToString());
+            }
+            if (Lang != null) {
+                writer.WritePropertyName("lang");
+                writer.Write(Lang.ToString());
             }
             writer.WriteObjectEnd();
         }

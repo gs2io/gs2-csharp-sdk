@@ -38,7 +38,7 @@ namespace Gs2.Gs2Project.Model
         public string Region { set; get; }
         public string Service { set; get; }
         public string ActivityType { set; get; }
-        public long? Unit { set; get; }
+        public double? Unit { set; get; }
         public string UnitName { set; get; }
         public long? Price { set; get; }
         public string Currency { set; get; }
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
-        public Billing WithUnit(long? unit) {
+        public Billing WithUnit(double? unit) {
             this.Unit = unit;
             return this;
         }
@@ -110,6 +110,74 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _accountNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+):billing:(?<year>.+):(?<month>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetAccountNameFromGrn(
+            string grn
+        )
+        {
+            var match = _accountNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["accountName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["accountName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _projectNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+):billing:(?<year>.+):(?<month>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetProjectNameFromGrn(
+            string grn
+        )
+        {
+            var match = _projectNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["projectName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["projectName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _yearRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+):billing:(?<year>.+):(?<month>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetYearFromGrn(
+            string grn
+        )
+        {
+            var match = _yearRegex.Match(grn);
+            if (!match.Success || !match.Groups["year"].Success)
+            {
+                return null;
+            }
+            return match.Groups["year"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _monthRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:::gs2:account:(?<accountName>.+):project:(?<projectName>.+):billing:(?<year>.+):(?<month>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetMonthFromGrn(
+            string grn
+        )
+        {
+            var match = _monthRegex.Match(grn);
+            if (!match.Success || !match.Groups["month"].Success)
+            {
+                return null;
+            }
+            return match.Groups["month"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -126,7 +194,7 @@ namespace Gs2.Gs2Project.Model
                 .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
-                .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : (long?)long.Parse(data["unit"].ToString()))
+                .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : (double?)double.Parse(data["unit"].ToString()))
                 .WithUnitName(!data.Keys.Contains("unitName") || data["unitName"] == null ? null : data["unitName"].ToString())
                 .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (long?)long.Parse(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
@@ -186,7 +254,7 @@ namespace Gs2.Gs2Project.Model
             }
             if (Unit != null) {
                 writer.WritePropertyName("unit");
-                writer.Write(long.Parse(Unit.ToString()));
+                writer.Write(double.Parse(Unit.ToString()));
             }
             if (UnitName != null) {
                 writer.WritePropertyName("unitName");

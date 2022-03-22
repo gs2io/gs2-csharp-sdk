@@ -106,6 +106,16 @@ namespace Gs2.Gs2Deploy
             callback.Invoke(new AsyncResult<Result.ValidateResult>(task.Result, task.Error));
         }
 
+		public IFuture<Result.ValidateResult> ValidateFuture(
+                Request.ValidateRequest request
+        )
+		{
+			return new ValidateTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
     #if GS2_ENABLE_UNITASK
 		public async UniTask<Result.ValidateResult> ValidateAsync(
             Request.ValidateRequest request

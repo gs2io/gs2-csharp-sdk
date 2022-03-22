@@ -37,6 +37,7 @@ namespace Gs2.Gs2Project.Request
         public string FullName { set; get; }
         public string CompanyName { set; get; }
         public string Password { set; get; }
+        public string Lang { set; get; }
 
         public CreateAccountRequest WithEmail(string email) {
             this.Email = email;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Project.Request
             return this;
         }
 
+        public CreateAccountRequest WithLang(string lang) {
+            this.Lang = lang;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -70,7 +76,8 @@ namespace Gs2.Gs2Project.Request
                 .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
                 .WithFullName(!data.Keys.Contains("fullName") || data["fullName"] == null ? null : data["fullName"].ToString())
                 .WithCompanyName(!data.Keys.Contains("companyName") || data["companyName"] == null ? null : data["companyName"].ToString())
-                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithLang(!data.Keys.Contains("lang") || data["lang"] == null ? null : data["lang"].ToString());
         }
 
         public JsonData ToJson()
@@ -80,6 +87,7 @@ namespace Gs2.Gs2Project.Request
                 ["fullName"] = FullName,
                 ["companyName"] = CompanyName,
                 ["password"] = Password,
+                ["lang"] = Lang,
             };
         }
 
@@ -101,6 +109,10 @@ namespace Gs2.Gs2Project.Request
             if (Password != null) {
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
+            }
+            if (Lang != null) {
+                writer.WritePropertyName("lang");
+                writer.Write(Lang.ToString());
             }
             writer.WriteObjectEnd();
         }
