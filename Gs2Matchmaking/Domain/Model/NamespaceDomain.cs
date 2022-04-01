@@ -558,21 +558,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public Gs2.Gs2Matchmaking.Domain.Model.VoteDomain Vote(
-            string ratingName,
-            string gatheringName
-        ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.VoteDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                ratingName,
-                gatheringName
-            );
-        }
-
         public Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain CurrentRatingModelMaster(
         ) {
             return new Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain(
@@ -630,6 +615,21 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._session,
                 this._namespaceName,
                 ratingName
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.VoteDomain Vote(
+            string ratingName,
+            string gatheringName
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.VoteDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                ratingName,
+                gatheringName
             );
         }
 

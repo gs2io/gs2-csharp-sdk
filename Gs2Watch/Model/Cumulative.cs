@@ -62,6 +62,74 @@ namespace Gs2.Gs2Watch.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<resourceGrn>.+):(?<name>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<resourceGrn>.+):(?<name>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _resourceGrnRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<resourceGrn>.+):(?<name>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetResourceGrnFromGrn(
+            string grn
+        )
+        {
+            var match = _resourceGrnRegex.Match(grn);
+            if (!match.Success || !match.Groups["resourceGrn"].Success)
+            {
+                return null;
+            }
+            return match.Groups["resourceGrn"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _nameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<resourceGrn>.+):(?<name>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNameFromGrn(
+            string grn
+        )
+        {
+            var match = _nameRegex.Match(grn);
+            if (!match.Success || !match.Groups["name"].Success)
+            {
+                return null;
+            }
+            return match.Groups["name"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

@@ -26,6 +26,9 @@ using Gs2.Util.LitJson;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Threading.Tasks;
 using System.Threading;
@@ -46,7 +49,7 @@ namespace Gs2.Gs2Watch
 		}
 
 
-        private class GetCumulativeTask : Gs2WebSocketSessionTask<Request.GetCumulativeRequest, Result.GetCumulativeResult>
+        public class GetCumulativeTask : Gs2WebSocketSessionTask<Request.GetCumulativeRequest, Result.GetCumulativeResult>
         {
 	        public GetCumulativeTask(IGs2Session session, Request.GetCumulativeRequest request) : base(session, request)
 	        {
@@ -107,8 +110,41 @@ namespace Gs2.Gs2Watch
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCumulativeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCumulativeResult> GetCumulativeFuture(
+                Request.GetCumulativeRequest request
+        )
+		{
+			return new GetCumulativeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCumulativeResult> GetCumulativeAsync(
+            Request.GetCumulativeRequest request
+        )
+		{
+		    var task = new GetCumulativeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCumulativeTask GetCumulativeAsync(
+                Request.GetCumulativeRequest request
+        )
+		{
+			return new GetCumulativeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetCumulativeResult> GetCumulative(
+		public async Task<Result.GetCumulativeResult> GetCumulativeAsync(
             Request.GetCumulativeRequest request
         )
 		{
@@ -121,7 +157,7 @@ namespace Gs2.Gs2Watch
 #endif
 
 
-        private class GetBillingActivityTask : Gs2WebSocketSessionTask<Request.GetBillingActivityRequest, Result.GetBillingActivityResult>
+        public class GetBillingActivityTask : Gs2WebSocketSessionTask<Request.GetBillingActivityRequest, Result.GetBillingActivityResult>
         {
 	        public GetBillingActivityTask(IGs2Session session, Request.GetBillingActivityRequest request) : base(session, request)
 	        {
@@ -192,8 +228,41 @@ namespace Gs2.Gs2Watch
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetBillingActivityResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetBillingActivityResult> GetBillingActivityFuture(
+                Request.GetBillingActivityRequest request
+        )
+		{
+			return new GetBillingActivityTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBillingActivityResult> GetBillingActivityAsync(
+            Request.GetBillingActivityRequest request
+        )
+		{
+		    var task = new GetBillingActivityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBillingActivityTask GetBillingActivityAsync(
+                Request.GetBillingActivityRequest request
+        )
+		{
+			return new GetBillingActivityTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
 #else
-		public async Task<Result.GetBillingActivityResult> GetBillingActivity(
+		public async Task<Result.GetBillingActivityResult> GetBillingActivityAsync(
             Request.GetBillingActivityRequest request
         )
 		{

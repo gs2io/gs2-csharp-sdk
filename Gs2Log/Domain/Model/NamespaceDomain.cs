@@ -345,17 +345,6 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public Gs2.Gs2Log.Domain.Model.LogDomain Log(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.LogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLog> AccessLog(

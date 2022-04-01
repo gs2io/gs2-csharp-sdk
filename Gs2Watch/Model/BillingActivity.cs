@@ -68,6 +68,108 @@ namespace Gs2.Gs2Watch.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _yearRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetYearFromGrn(
+            string grn
+        )
+        {
+            var match = _yearRegex.Match(grn);
+            if (!match.Success || !match.Groups["year"].Success)
+            {
+                return null;
+            }
+            return match.Groups["year"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _monthRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetMonthFromGrn(
+            string grn
+        )
+        {
+            var match = _monthRegex.Match(grn);
+            if (!match.Success || !match.Groups["month"].Success)
+            {
+                return null;
+            }
+            return match.Groups["month"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _serviceRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetServiceFromGrn(
+            string grn
+        )
+        {
+            var match = _serviceRegex.Match(grn);
+            if (!match.Success || !match.Groups["service"].Success)
+            {
+                return null;
+            }
+            return match.Groups["service"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _activityTypeRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetActivityTypeFromGrn(
+            string grn
+        )
+        {
+            var match = _activityTypeRegex.Match(grn);
+            if (!match.Success || !match.Groups["activityType"].Success)
+            {
+                return null;
+            }
+            return match.Groups["activityType"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

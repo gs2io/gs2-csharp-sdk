@@ -486,6 +486,7 @@ namespace Gs2.Gs2Script.Domain.Model
             Gs2.Gs2Script.Domain.Model.NamespaceDomain domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
+            this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

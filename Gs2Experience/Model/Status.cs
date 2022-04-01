@@ -38,6 +38,7 @@ namespace Gs2.Gs2Experience.Model
         public long? ExperienceValue { set; get; }
         public long? RankValue { set; get; }
         public long? RankCapValue { set; get; }
+        public long? NextRankUpExperienceValue { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
 
@@ -73,6 +74,11 @@ namespace Gs2.Gs2Experience.Model
 
         public Status WithRankCapValue(long? rankCapValue) {
             this.RankCapValue = rankCapValue;
+            return this;
+        }
+
+        public Status WithNextRankUpExperienceValue(long? nextRankUpExperienceValue) {
+            this.NextRankUpExperienceValue = nextRankUpExperienceValue;
             return this;
         }
 
@@ -204,6 +210,7 @@ namespace Gs2.Gs2Experience.Model
                 .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)long.Parse(data["experienceValue"].ToString()))
                 .WithRankValue(!data.Keys.Contains("rankValue") || data["rankValue"] == null ? null : (long?)long.Parse(data["rankValue"].ToString()))
                 .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)long.Parse(data["rankCapValue"].ToString()))
+                .WithNextRankUpExperienceValue(!data.Keys.Contains("nextRankUpExperienceValue") || data["nextRankUpExperienceValue"] == null ? null : (long?)long.Parse(data["nextRankUpExperienceValue"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -218,6 +225,7 @@ namespace Gs2.Gs2Experience.Model
                 ["experienceValue"] = ExperienceValue,
                 ["rankValue"] = RankValue,
                 ["rankCapValue"] = RankCapValue,
+                ["nextRankUpExperienceValue"] = NextRankUpExperienceValue,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -253,6 +261,10 @@ namespace Gs2.Gs2Experience.Model
             if (RankCapValue != null) {
                 writer.WritePropertyName("rankCapValue");
                 writer.Write(long.Parse(RankCapValue.ToString()));
+            }
+            if (NextRankUpExperienceValue != null) {
+                writer.WritePropertyName("nextRankUpExperienceValue");
+                writer.Write(long.Parse(NextRankUpExperienceValue.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -324,6 +336,14 @@ namespace Gs2.Gs2Experience.Model
             else
             {
                 diff += (int)(RankCapValue - other.RankCapValue);
+            }
+            if (NextRankUpExperienceValue == null && NextRankUpExperienceValue == other.NextRankUpExperienceValue)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(NextRankUpExperienceValue - other.NextRankUpExperienceValue);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

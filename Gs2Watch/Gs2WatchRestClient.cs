@@ -16,6 +16,9 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
 using UnityEngine.Networking;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
 #else
 using System.Web;
 using System.Net.Http;
@@ -59,7 +62,7 @@ namespace Gs2.Gs2Watch
 #endif
 
 
-        private class GetChartTask : Gs2RestSessionTask<GetChartRequest, GetChartResult>
+        public class GetChartTask : Gs2RestSessionTask<GetChartRequest, GetChartResult>
         {
             public GetChartTask(IGs2Session session, RestSessionRequestFactory factory, GetChartRequest request) : base(session, factory, request)
             {
@@ -165,12 +168,52 @@ namespace Gs2.Gs2Watch
 		{
 			var task = new GetChartTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetChartResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetChartResult> GetChartFuture(
+                Request.GetChartRequest request
+        )
+		{
+			return new GetChartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetChartResult> GetChartAsync(
+                Request.GetChartRequest request
+        )
+		{
+            AsyncResult<Result.GetChartResult> result = null;
+			await GetChart(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetChartTask GetChartAsync(
+                Request.GetChartRequest request
+        )
+		{
+			return new GetChartTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetChartResult> GetChartAsync(
                 Request.GetChartRequest request
@@ -186,7 +229,7 @@ namespace Gs2.Gs2Watch
 #endif
 
 
-        private class GetCumulativeTask : Gs2RestSessionTask<GetCumulativeRequest, GetCumulativeResult>
+        public class GetCumulativeTask : Gs2RestSessionTask<GetCumulativeRequest, GetCumulativeResult>
         {
             public GetCumulativeTask(IGs2Session session, RestSessionRequestFactory factory, GetCumulativeRequest request) : base(session, factory, request)
             {
@@ -247,12 +290,52 @@ namespace Gs2.Gs2Watch
 		{
 			var task = new GetCumulativeTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetCumulativeResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetCumulativeResult> GetCumulativeFuture(
+                Request.GetCumulativeRequest request
+        )
+		{
+			return new GetCumulativeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCumulativeResult> GetCumulativeAsync(
+                Request.GetCumulativeRequest request
+        )
+		{
+            AsyncResult<Result.GetCumulativeResult> result = null;
+			await GetCumulative(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCumulativeTask GetCumulativeAsync(
+                Request.GetCumulativeRequest request
+        )
+		{
+			return new GetCumulativeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetCumulativeResult> GetCumulativeAsync(
                 Request.GetCumulativeRequest request
@@ -268,7 +351,7 @@ namespace Gs2.Gs2Watch
 #endif
 
 
-        private class DescribeBillingActivitiesTask : Gs2RestSessionTask<DescribeBillingActivitiesRequest, DescribeBillingActivitiesResult>
+        public class DescribeBillingActivitiesTask : Gs2RestSessionTask<DescribeBillingActivitiesRequest, DescribeBillingActivitiesResult>
         {
             public DescribeBillingActivitiesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBillingActivitiesRequest request) : base(session, factory, request)
             {
@@ -321,12 +404,52 @@ namespace Gs2.Gs2Watch
 		{
 			var task = new DescribeBillingActivitiesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.DescribeBillingActivitiesResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.DescribeBillingActivitiesResult> DescribeBillingActivitiesFuture(
+                Request.DescribeBillingActivitiesRequest request
+        )
+		{
+			return new DescribeBillingActivitiesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBillingActivitiesResult> DescribeBillingActivitiesAsync(
+                Request.DescribeBillingActivitiesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBillingActivitiesResult> result = null;
+			await DescribeBillingActivities(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBillingActivitiesTask DescribeBillingActivitiesAsync(
+                Request.DescribeBillingActivitiesRequest request
+        )
+		{
+			return new DescribeBillingActivitiesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.DescribeBillingActivitiesResult> DescribeBillingActivitiesAsync(
                 Request.DescribeBillingActivitiesRequest request
@@ -342,7 +465,7 @@ namespace Gs2.Gs2Watch
 #endif
 
 
-        private class GetBillingActivityTask : Gs2RestSessionTask<GetBillingActivityRequest, GetBillingActivityResult>
+        public class GetBillingActivityTask : Gs2RestSessionTask<GetBillingActivityRequest, GetBillingActivityResult>
         {
             public GetBillingActivityTask(IGs2Session session, RestSessionRequestFactory factory, GetBillingActivityRequest request) : base(session, factory, request)
             {
@@ -401,12 +524,52 @@ namespace Gs2.Gs2Watch
 		{
 			var task = new GetBillingActivityTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
             callback.Invoke(new AsyncResult<Result.GetBillingActivityResult>(task.Result, task.Error));
         }
+
+		public IFuture<Result.GetBillingActivityResult> GetBillingActivityFuture(
+                Request.GetBillingActivityRequest request
+        )
+		{
+			return new GetBillingActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBillingActivityResult> GetBillingActivityAsync(
+                Request.GetBillingActivityRequest request
+        )
+		{
+            AsyncResult<Result.GetBillingActivityResult> result = null;
+			await GetBillingActivity(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBillingActivityTask GetBillingActivityAsync(
+                Request.GetBillingActivityRequest request
+        )
+		{
+			return new GetBillingActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
 #else
 		public async Task<Result.GetBillingActivityResult> GetBillingActivityAsync(
                 Request.GetBillingActivityRequest request

@@ -530,6 +530,55 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
+        )
+        {
+            return new DescribePrizeTablesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTablesAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
+            #endif
+        #else
+        public DescribePrizeTablesIterator PrizeTables(
+        #endif
+        )
+        {
+            return new DescribePrizeTablesIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain PrizeTable(
+            string prizeTableName
+        ) {
+            return new Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                prizeTableName
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMasters(
         )
         {
@@ -623,55 +672,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._session,
                 this._namespaceName,
                 lotteryName
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
-        )
-        {
-            return new DescribePrizeTablesIterator(
-                this._cache,
-                this._client,
-                this._namespaceName
-            );
-        }
-
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTablesAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTable> PrizeTables(
-            #endif
-        #else
-        public DescribePrizeTablesIterator PrizeTables(
-        #endif
-        )
-        {
-            return new DescribePrizeTablesIterator(
-                this._cache,
-                this._client,
-                this._namespaceName
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain PrizeTable(
-            string prizeTableName
-        ) {
-            return new Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                prizeTableName
             );
         }
 
