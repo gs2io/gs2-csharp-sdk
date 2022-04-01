@@ -33,6 +33,7 @@ namespace Gs2.Gs2Money.Model
 	{
         public string ReceiptId { set; get; }
         public string TransactionId { set; get; }
+        public string PurchaseToken { set; get; }
         public string UserId { set; get; }
         public string Type { set; get; }
         public int? Slot { set; get; }
@@ -50,6 +51,11 @@ namespace Gs2.Gs2Money.Model
 
         public Receipt WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
+            return this;
+        }
+
+        public Receipt WithPurchaseToken(string purchaseToken) {
+            this.PurchaseToken = purchaseToken;
             return this;
         }
 
@@ -194,6 +200,7 @@ namespace Gs2.Gs2Money.Model
             return new Receipt()
                 .WithReceiptId(!data.Keys.Contains("receiptId") || data["receiptId"] == null ? null : data["receiptId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithPurchaseToken(!data.Keys.Contains("purchaseToken") || data["purchaseToken"] == null ? null : data["purchaseToken"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
@@ -210,6 +217,7 @@ namespace Gs2.Gs2Money.Model
             return new JsonData {
                 ["receiptId"] = ReceiptId,
                 ["transactionId"] = TransactionId,
+                ["purchaseToken"] = PurchaseToken,
                 ["userId"] = UserId,
                 ["type"] = Type,
                 ["slot"] = Slot,
@@ -232,6 +240,10 @@ namespace Gs2.Gs2Money.Model
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
+            }
+            if (PurchaseToken != null) {
+                writer.WritePropertyName("purchaseToken");
+                writer.Write(PurchaseToken.ToString());
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
@@ -291,6 +303,14 @@ namespace Gs2.Gs2Money.Model
             else
             {
                 diff += TransactionId.CompareTo(other.TransactionId);
+            }
+            if (PurchaseToken == null && PurchaseToken == other.PurchaseToken)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PurchaseToken.CompareTo(other.PurchaseToken);
             }
             if (UserId == null && UserId == other.UserId)
             {
