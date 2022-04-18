@@ -8,6 +8,9 @@ using Gs2.Core.Model;
 using Gs2.Core.Model.Internal;
 using Gs2.Core.Result;
 using Gs2.Util.WebSocketSharp;
+#if UNITY_WEBGL && !UNITY_EDITOR
+using Gs2.HybridWebSocket;
+#endif
 #if UNITY_2017_1_OR_NEWER
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
@@ -25,7 +28,11 @@ namespace Gs2.Core.Net
         public delegate void NotificationHandler(NotificationMessage message);
         public event NotificationHandler OnNotificationMessage;
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+        internal HybridWebSocket.WebSocket _session;
+#else
         internal WebSocket _session;
+#endif
         public State State;
 
         internal Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
@@ -74,14 +81,52 @@ namespace Gs2.Core.Net
             
             var url = EndpointHost.Replace("{region}", Region.DisplayName());
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session = WebSocketFactory.CreateInstance(url);
+#else
             _session = new WebSocket(url) {SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12, CheckCertificateRevocation = _checkCertificateRevocation}};
-
+#endif
+            
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session.OnOpen += () =>
+#else
             _session.OnOpen += (sender, eventArgs) =>
+#endif
             {
                 State = State.LoggingIn;
                 new WebSocketOpenTask(this, new LoginRequest {ClientId = Credential.ClientId, ClientSecret = Credential.ClientSecret,}).NonBlockingInvoke();
             };
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session.OnMessage += (message) =>
+			{
+                var gs2WebSocketResponse = new WebSocketResult(message);
+                if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
+                {
+                    // API 応答以外のメッセージ
+                    OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
+                }
+                else
+                {
+                    if (State == State.LoggingIn)
+                    {
+                        if (gs2WebSocketResponse.Error == null)
+                        {
+                            Credential.ProjectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
+                            State = State.Available;
+                        }
+                        else
+                        {
+#pragma warning disable 4014
+                            CloseAsync();
+#pragma warning restore 4014
+                        }
+                    }
+
+                    OnMessage(gs2WebSocketResponse);
+                }
+            };
+#else
             _session.OnMessage += (sender, messageEventArgs) =>
             {
                 if (messageEventArgs.IsText)
@@ -112,21 +157,33 @@ namespace Gs2.Core.Net
                     }
                 }
             };
+#endif
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session.OnClose += (closeEventArgs) =>
+#else
             _session.OnClose += (sender, closeEventArgs) =>
-            {
-#pragma warning disable 4014
-                CloseAsync();
-#pragma warning restore 4014
-            };
-            
-            _session.OnError += (sender, errorEventArgs) =>
+#endif
             {
 #pragma warning disable 4014
                 CloseAsync();
 #pragma warning restore 4014
             };
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session.OnError += (errorEventArgs) =>
+#else
+            _session.OnError += (sender, errorEventArgs) =>
+#endif
+            {
+#pragma warning disable 4014
+                CloseAsync();
+#pragma warning restore 4014
+            };
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _session.Connect();
+#else
             try
             {
                 _session.ConnectAsync();
@@ -135,7 +192,7 @@ namespace Gs2.Core.Net
             {
                 _session.Connect();
             }
-
+#endif
             return new OpenResult();
         }
 
@@ -164,7 +221,11 @@ namespace Gs2.Core.Net
             }
             {
                 var begin = DateTime.Now;
+#if UNITY_WEBGL && !UNITY_EDITOR
+                while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+#else
                 while (_session.ReadyState != WebSocketState.Open)
+#endif
                 {
                     if ((DateTime.Now - begin).Seconds > 10)
                     {
@@ -203,7 +264,11 @@ namespace Gs2.Core.Net
             }
             {
                 var begin = DateTime.Now;
+#if UNITY_WEBGL && !UNITY_EDITOR
+                while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+#else
                 while (_session.ReadyState != WebSocketState.Open)
+#endif
                 {
                     if ((DateTime.Now - begin).Seconds > 10)
                     {
@@ -278,7 +343,11 @@ namespace Gs2.Core.Net
 
         public bool Ping()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return true;
+#else
             return _session.Ping();
+#endif
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -317,7 +386,11 @@ namespace Gs2.Core.Net
 
                 {
                     var begin = DateTime.Now;
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Closed)
+#else
                     while (_session.ReadyState != WebSocketState.Closed)
+#endif
                     {
                         if ((DateTime.Now - begin).Seconds > 3)
                         {
@@ -372,7 +445,11 @@ namespace Gs2.Core.Net
 
                 {
                     var begin = DateTime.Now;
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Closed)
+#else
                     while (_session.ReadyState != WebSocketState.Closed)
+#endif
                     {
                         if ((DateTime.Now - begin).Seconds > 3)
                         {
