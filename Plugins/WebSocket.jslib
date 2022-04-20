@@ -25,6 +25,7 @@ var LibraryWebSocket = {
 		/* Event listeners */
 		onOpen: null,
 		onMesssage: null,
+    	onMesssageBinary: null,
 		onError: null,
 		onClose: null,
 
@@ -51,6 +52,17 @@ var LibraryWebSocket = {
 	WebSocketSetOnMessage: function(callback) {
 
 		webSocketState.onMessage = callback;
+
+	},
+
+	/**
+	 * Set onMessageBinary callback
+	 * 
+	 * @param callback Reference to C# static function
+	 */
+	WebSocketSetOnMessageBinary: function(callback) {
+
+		webSocketState.onMessageBinary = callback;
 
 	},
 
@@ -155,16 +167,33 @@ var LibraryWebSocket = {
 			if (webSocketState.onMessage === null)
 				return;
 
-            var msg = ev.data;
-            var msgBytes = lengthBytesUTF8(msg) + 1;
-            var msgBuffer = _malloc(msgBytes);
-            stringToUTF8(msg, msgBuffer, msgBytes);
+			if (ev.data instanceof ArrayBuffer) {
 
-            try {
-                Runtime.dynCall('vii', webSocketState.onMessage, [ instanceId, msgBuffer ]);
-            } finally {
-                _free(msgBuffer);
-            }
+				var dataBuffer = new Uint8Array(ev.data);
+
+				var buffer = _malloc(dataBuffer.length);
+				HEAPU8.set(dataBuffer, buffer);
+
+				try {
+					Runtime.dynCall('viii', webSocketState.onMessageBinary, [ instanceId, buffer, dataBuffer.length ]);
+				} finally {
+					_free(buffer);
+				}
+
+			}
+			else
+			{
+				var msg = ev.data;
+            	var msgBytes = lengthBytesUTF8(msg) + 1;
+            	var msgBuffer = _malloc(msgBytes);
+            	stringToUTF8(msg, msgBuffer, msgBytes);
+
+	            try {
+    	            Runtime.dynCall('vii', webSocketState.onMessage, [ instanceId, msgBuffer ]);
+        	    } finally {
+            	    _free(msgBuffer);
+            	}
+			}
 		};
 
 		instance.ws.onerror = function(ev) {
@@ -264,6 +293,30 @@ var LibraryWebSocket = {
 
 	},
 
+	/**
+	 * Send message over WebSocket
+	 * 
+	 * @param instanceId Instance ID
+	 * @param bufferPtr Pointer to the message buffer
+	 * @param length Length of the message in the buffer
+	 */
+	WebSocketSendBinary: function(instanceId, bufferPtr, length) {
+	
+		var instance = webSocketState.instances[instanceId];
+		if (!instance) return -1;
+		
+		if (instance.ws === null)
+			return -3;
+
+		if (instance.ws.readyState !== 1)
+			return -6;
+
+		instance.ws.send(HEAPU8.buffer.slice(bufferPtr, bufferPtr + length));
+
+		return 0;
+
+	},
+	
 	/**
 	 * Return WebSocket readyState
 	 * 

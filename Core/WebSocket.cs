@@ -28,14 +28,19 @@ namespace Gs2.HybridWebSocket
     public delegate void WebSocketMessageEventHandler(string data);
 
     /// <summary>
+    /// Handler for message received from WebSocket.
+    /// </summary>
+    public delegate void WebSocketMessageBinaryEventHandler(byte[] data);
+
+    /// <summary>
     /// Handler for an error event received from WebSocket.
     /// </summary>
-    public delegate void WebSocketErrorEventHandler(string errorMsg);
+    public delegate void WebSocketErrorEventHandler(ErrorEventArgs args);
 
     /// <summary>
     /// Handler for WebSocket Close event.
     /// </summary>
-    public delegate void WebSocketCloseEventHandler(WebSocketCloseCode closeCode);
+    public delegate void WebSocketCloseEventHandler(CloseEventArgs args);
 
     /// <summary>
     /// Enum representing WebSocket connection state
@@ -92,6 +97,12 @@ namespace Gs2.HybridWebSocket
         /// </summary>
         /// <param name="data">Payload data.</param>
         void Send(string data);
+
+        /// <summary>
+        /// Send binary data over the socket.
+        /// </summary>
+        /// <param name="data">Payload data.</param>
+        void Send(byte[] data);
 
         /// <summary>
         /// Return WebSocket connection state.
@@ -249,6 +260,9 @@ namespace Gs2.HybridWebSocket
         public static extern int WebSocketSend(int instanceId, string data);
 
         [DllImport("__Internal")]
+        public static extern int WebSocketSendBinary(int instanceId, byte[] dataPtr, int dataLength);
+
+        [DllImport("__Internal")]
         public static extern int WebSocketGetState(int instanceId);
 
         /// <summary>
@@ -266,6 +280,11 @@ namespace Gs2.HybridWebSocket
         /// </summary>
         public event WebSocketMessageEventHandler OnMessage;
 
+        /// <summary>
+        /// Occurs when a message is received.
+        /// </summary>
+        public event WebSocketMessageBinaryEventHandler OnMessageBinary;
+        
         /// <summary>
         /// Occurs when an error was reported from WebSocket.
         /// </summary>
@@ -351,6 +370,20 @@ namespace Gs2.HybridWebSocket
         }
 
         /// <summary>
+        /// Send binary data over the socket.
+        /// </summary>
+        /// <param name="data">Payload data.</param>
+        public void Send(byte[] data)
+        {
+
+            int ret = WebSocketSendBinary(this.instanceId, data, data.Length);
+
+            if (ret < 0)
+                throw WebSocketHelpers.GetErrorMessageFromCode(ret, null);
+
+        }
+
+        /// <summary>
         /// Return WebSocket connection state.
         /// </summary>
         /// <returns>The state.</returns>
@@ -406,6 +439,18 @@ namespace Gs2.HybridWebSocket
         }
 
         /// <summary>
+        /// Delegates onMessage event from JSLIB to native sharp event
+        /// Is called by WebSocketFactory
+        /// </summary>
+        /// <param name="data">Binary data.</param>
+        public void DelegateOnMessageBinaryEvent(byte[] data)
+        {
+
+            this.OnMessageBinary?.Invoke(data);
+
+        }
+
+        /// <summary>
         /// Delegates onError event from JSLIB to native sharp event
         /// Is called by WebSocketFactory
         /// </summary>
@@ -413,7 +458,7 @@ namespace Gs2.HybridWebSocket
         public void DelegateOnErrorEvent(string errorMsg)
         {
 
-            this.OnError?.Invoke(errorMsg);
+            this.OnError?.Invoke(new ErrorEventArgs(errorMsg));
 
         }
 
@@ -425,12 +470,12 @@ namespace Gs2.HybridWebSocket
         public void DelegateOnCloseEvent(int closeCode)
         {
 
-            this.OnClose?.Invoke(WebSocketHelpers.ParseCloseCodeEnum(closeCode));
+            this.OnClose?.Invoke(new CloseEventArgs((ushort)WebSocketHelpers.ParseCloseCodeEnum(closeCode), null));
 
         }
 
     }
-#else
+#else // UNITY_WEBGL && !UNITY_EDITOR
     public class WebSocket : IWebSocket
     {
 
@@ -488,14 +533,14 @@ namespace Gs2.HybridWebSocket
                 // Bind OnError event
                 this.ws.OnError += (sender, ev) =>
                 {
-                    this.OnError?.Invoke(ev.Message);
+                    this.OnError?.Invoke(new ErrorEventArgs(ev.Message));
                 };
 
                 // Bind OnClose event
                 this.ws.OnClose += (sender, ev) =>
                 {
                     this.OnClose?.Invoke(
-                        WebSocketHelpers.ParseCloseCodeEnum( (int)ev.Code )
+                        new CloseEventArgs((ushort)WebSocketHelpers.ParseCloseCodeEnum((int)ev.Code), null)
                     );
                 };
 
@@ -579,6 +624,28 @@ namespace Gs2.HybridWebSocket
         }
 
         /// <summary>
+        /// Send binary data over the socket.
+        /// </summary>
+        /// <param name="data">Payload data.</param>
+        public void Send(byte[] data)
+        {
+
+            // Check state
+            if (this.ws.ReadyState != Gs2.Util.WebSocketSharp.WebSocketState.Open)
+                throw new WebSocketInvalidStateException("WebSocket is not in open state.");
+
+            try
+            {
+                this.ws.Send(data);
+            }
+            catch (Exception e)
+            {
+                throw new WebSocketUnexpectedException("Failed to send message.", e);
+            }
+
+        }
+
+        /// <summary>
         /// Return WebSocket connection state.
         /// </summary>
         /// <returns>The state.</returns>
@@ -606,7 +673,7 @@ namespace Gs2.HybridWebSocket
         }
 
     }
-#endif
+#endif // UNITY_WEBGL && !UNITY_EDITOR
 
     /// <summary>
     /// Class providing static access methods to work with JSLIB WebSocket or WebSocketSharp interface
@@ -621,6 +688,7 @@ namespace Gs2.HybridWebSocket
         /* Delegates */
         public delegate void OnOpenCallback(int instanceId);
         public delegate void OnMessageCallback(int instanceId, System.IntPtr msgPtr);
+        public delegate void OnMessageBinaryCallback(int instanceId, System.IntPtr msgPtr, int msgSize);
         public delegate void OnErrorCallback(int instanceId, System.IntPtr errorPtr);
         public delegate void OnCloseCallback(int instanceId, int closeCode);
 
@@ -638,6 +706,9 @@ namespace Gs2.HybridWebSocket
         public static extern void WebSocketSetOnMessage(OnMessageCallback callback);
 
         [DllImport("__Internal")]
+        public static extern void WebSocketSetOnMessageBinary(OnMessageBinaryCallback callback);
+
+        [DllImport("__Internal")]
         public static extern void WebSocketSetOnError(OnErrorCallback callback);
 
         [DllImport("__Internal")]
@@ -651,8 +722,10 @@ namespace Gs2.HybridWebSocket
          */
         private static void Initialize()
         {
+
             WebSocketSetOnOpen(DelegateOnOpenEvent);
             WebSocketSetOnMessage(DelegateOnMessageEvent);
+            WebSocketSetOnMessageBinary(DelegateOnMessageBinaryEvent);
             WebSocketSetOnError(DelegateOnErrorEvent);
             WebSocketSetOnClose(DelegateOnCloseEvent);
 
@@ -667,6 +740,7 @@ namespace Gs2.HybridWebSocket
         /// <param name="instanceId">Instance identifier.</param>
         public static void HandleInstanceDestroy(int instanceId)
         {
+
             instances.Remove(instanceId);
             WebSocketFree(instanceId);
 
@@ -675,6 +749,7 @@ namespace Gs2.HybridWebSocket
         [MonoPInvokeCallback(typeof(OnOpenCallback))]
         public static void DelegateOnOpenEvent(int instanceId)
         {
+
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
@@ -697,9 +772,27 @@ namespace Gs2.HybridWebSocket
 
         }
 
+        [MonoPInvokeCallback(typeof(OnMessageBinaryCallback))]
+        public static void DelegateOnMessageBinaryEvent(int instanceId, System.IntPtr msgPtr, int msgSize)
+        {
+            Debug.Log("DelegateOnMessageBinaryEvent");
+            
+            WebSocket instanceRef;
+
+            if (instances.TryGetValue(instanceId, out instanceRef))
+            {
+                byte[] msg = new byte[msgSize];
+                Marshal.Copy(msgPtr, msg, 0, msgSize);
+
+                instanceRef.DelegateOnMessageBinaryEvent(msg);
+            }
+
+        }
+
         [MonoPInvokeCallback(typeof(OnErrorCallback))]
         public static void DelegateOnErrorEvent(int instanceId, System.IntPtr errorPtr)
         {
+
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
@@ -715,6 +808,7 @@ namespace Gs2.HybridWebSocket
         [MonoPInvokeCallback(typeof(OnCloseCallback))]
         public static void DelegateOnCloseEvent(int instanceId, int closeCode)
         {
+
             WebSocket instanceRef;
 
             if (instances.TryGetValue(instanceId, out instanceRef))
@@ -723,7 +817,7 @@ namespace Gs2.HybridWebSocket
             }
 
         }
-#endif
+#endif // UNITY_WEBGL && !UNITY_EDITOR
 
         /// <summary>
         /// Create WebSocket client instance
@@ -733,14 +827,14 @@ namespace Gs2.HybridWebSocket
         public static WebSocket CreateInstance(string url)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        if (!isInitialized)
-            Initialize();
+            if (!isInitialized)
+                Initialize();
 
-        int instanceId = WebSocketAllocate(url);
-        WebSocket wrapper = new WebSocket(instanceId);
-        instances.Add(instanceId, wrapper);
+            int instanceId = WebSocketAllocate(url);
+            WebSocket wrapper = new WebSocket(instanceId);
+            instances.Add(instanceId, wrapper);
 
-        return wrapper;
+            return wrapper;
 #else
             return new WebSocket(url);
 #endif
@@ -748,4 +842,40 @@ namespace Gs2.HybridWebSocket
 
     }
 
+    public class ErrorEventArgs : EventArgs
+    {
+        private Exception _exception;
+        private string _message;
+
+        internal ErrorEventArgs(string message)
+            : this(message, (Exception) null)
+        {
+        }
+
+        internal ErrorEventArgs(string message, Exception exception)
+        {
+            this._message = message;
+            this._exception = exception;
+        }
+
+        public Exception Exception => this._exception;
+
+        public string Message => this._message;
+    }
+
+    public class CloseEventArgs : EventArgs
+    {
+        private ushort _code;
+        private string _reason;
+        
+        internal CloseEventArgs(ushort code, string reason)
+        {
+            this._code = code;
+            this._reason = reason;
+        }
+
+        public ushort Code => this._code;
+
+        public string Reason => this._reason;
+    }
 }
