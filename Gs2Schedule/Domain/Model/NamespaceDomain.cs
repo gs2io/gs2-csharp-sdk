@@ -115,15 +115,19 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.GetNamespaceStatusAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Schedule.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -167,15 +171,51 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "schedule",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "schedule",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -216,15 +256,51 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "schedule",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "schedule",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Schedule.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -268,18 +344,44 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "schedule",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Schedule.Model.Namespace>(parentKey, key);
+            }
             #else
             DeleteNamespaceResult result = null;
             try {
                 result = await this._client.DeleteNamespaceAsync(
                     request
                 );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "schedule",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Schedule.Model.Namespace>(parentKey, key);
+                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-          
             Gs2.Gs2Schedule.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -323,15 +425,10 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateEventMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -347,6 +444,30 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateEventMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "EventMaster"
+                );
+                var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Schedule.Domain.Model.EventMasterDomain domain = new Gs2.Gs2Schedule.Domain.Model.EventMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -404,7 +525,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._namespaceName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Schedule.Model.EventMaster> EventMasters(
@@ -490,8 +610,13 @@ namespace Gs2.Gs2Schedule.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Namespace> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                "schedule",
+                "Namespace"
+            );
             Gs2.Gs2Schedule.Model.Namespace value = _cache.Get<Gs2.Gs2Schedule.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )
@@ -549,7 +674,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Schedule.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )

@@ -33,6 +33,12 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DeleteProfileByUserIdResult : IResult
 	{
+        public Gs2.Gs2Friend.Model.Profile Item { set; get; }
+
+        public DeleteProfileByUserIdResult WithItem(Gs2.Gs2Friend.Model.Profile item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Friend.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteProfileByUserIdResult();
+            return new DeleteProfileByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Friend.Model.Profile.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

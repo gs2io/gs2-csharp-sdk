@@ -97,21 +97,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain JobResult(
-            string tryNumber
-        ) {
-            return new Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken,
-                this._jobName,
-                tryNumber
-            );
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

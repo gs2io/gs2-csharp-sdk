@@ -121,15 +121,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetRateModelMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -145,6 +140,30 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetRateModelMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "RateModelMaster"
+                );
+                var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -186,15 +205,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.UpdateRateModelMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -210,6 +224,30 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.UpdateRateModelMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "RateModelMaster"
+                );
+                var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -254,18 +292,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            DeleteRateModelMasterResult result = null;
-            try {
-                result = await this._client.DeleteRateModelMasterAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -276,6 +306,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Exchange.Model.RateModelMaster>(parentKey, key);
             }
+            #else
+            DeleteRateModelMasterResult result = null;
+            try {
+                result = await this._client.DeleteRateModelMasterAsync(
+                    request
+                );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        "RateModelMaster"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Exchange.Model.RateModelMaster>(parentKey, key);
+                }
+            } catch(Gs2.Core.Exception.NotFoundException) {}
+            #endif
             Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

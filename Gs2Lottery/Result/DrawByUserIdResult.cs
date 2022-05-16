@@ -36,7 +36,6 @@ namespace Gs2.Gs2Lottery.Result
         public Gs2.Gs2Lottery.Model.DrawnPrize[] Items { set; get; }
         public string StampSheet { set; get; }
         public string StampSheetEncryptionKeyId { set; get; }
-        public Gs2.Gs2Lottery.Model.BoxItems BoxItems { set; get; }
 
         public DrawByUserIdResult WithItems(Gs2.Gs2Lottery.Model.DrawnPrize[] items) {
             this.Items = items;
@@ -53,11 +52,6 @@ namespace Gs2.Gs2Lottery.Result
             return this;
         }
 
-        public DrawByUserIdResult WithBoxItems(Gs2.Gs2Lottery.Model.BoxItems boxItems) {
-            this.BoxItems = boxItems;
-            return this;
-        }
-
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -71,8 +65,7 @@ namespace Gs2.Gs2Lottery.Result
                     return Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(v);
                 }).ToArray())
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
-                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
-                .WithBoxItems(!data.Keys.Contains("boxItems") || data["boxItems"] == null ? null : Gs2.Gs2Lottery.Model.BoxItems.FromJson(data["boxItems"]));
+                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -86,7 +79,6 @@ namespace Gs2.Gs2Lottery.Result
                     ),
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
-                ["boxItems"] = BoxItems?.ToJson(),
             };
         }
 
@@ -108,9 +100,6 @@ namespace Gs2.Gs2Lottery.Result
             if (StampSheetEncryptionKeyId != null) {
                 writer.WritePropertyName("stampSheetEncryptionKeyId");
                 writer.Write(StampSheetEncryptionKeyId.ToString());
-            }
-            if (BoxItems != null) {
-                BoxItems.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

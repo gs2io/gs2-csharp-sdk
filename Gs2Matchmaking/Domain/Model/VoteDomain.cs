@@ -126,15 +126,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.CommitVoteAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.VoteDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Enhance.Request
         public string TargetItemSetId { set; get; }
         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
         public bool? Force { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CreateProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Enhance.Request
 
         public CreateProgressByUserIdRequest WithForce(bool? force) {
             this.Force = force;
+            return this;
+        }
+
+        public CreateProgressByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

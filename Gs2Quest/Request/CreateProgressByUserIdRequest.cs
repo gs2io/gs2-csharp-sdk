@@ -38,6 +38,7 @@ namespace Gs2.Gs2Quest.Request
         public string QuestModelId { set; get; }
         public bool? Force { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CreateProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Quest.Request
 
         public CreateProgressByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public CreateProgressByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

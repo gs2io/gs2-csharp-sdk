@@ -39,6 +39,7 @@ namespace Gs2.Gs2Limit.Request
         public string UserId { set; get; }
         public int? CountUpValue { set; get; }
         public int? MaxValue { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CountUpByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Limit.Request
 
         public CountUpByUserIdRequest WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
+            return this;
+        }
+
+        public CountUpByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

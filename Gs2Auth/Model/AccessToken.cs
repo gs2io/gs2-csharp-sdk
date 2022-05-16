@@ -34,6 +34,7 @@ namespace Gs2.Gs2Auth.Model
         public string Token { set; get; }
         public string UserId { set; get; }
         public long? Expire { set; get; }
+        public int? TimeOffset { set; get; }
 
         public AccessToken WithToken(string token) {
             this.Token = token;
@@ -50,6 +51,11 @@ namespace Gs2.Gs2Auth.Model
             return this;
         }
 
+        public AccessToken WithTimeOffset(int? timeOffset) {
+            this.TimeOffset = timeOffset;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -61,7 +67,8 @@ namespace Gs2.Gs2Auth.Model
             return new AccessToken()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()));
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()))
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()));
         }
 
         public JsonData ToJson()
@@ -70,6 +77,7 @@ namespace Gs2.Gs2Auth.Model
                 ["token"] = Token,
                 ["userId"] = UserId,
                 ["expire"] = Expire,
+                ["timeOffset"] = TimeOffset,
             };
         }
 
@@ -87,6 +95,10 @@ namespace Gs2.Gs2Auth.Model
             if (Expire != null) {
                 writer.WritePropertyName("expire");
                 writer.Write(long.Parse(Expire.ToString()));
+            }
+            if (TimeOffset != null) {
+                writer.WritePropertyName("timeOffset");
+                writer.Write(int.Parse(TimeOffset.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -118,6 +130,14 @@ namespace Gs2.Gs2Auth.Model
             else
             {
                 diff += (int)(Expire - other.Expire);
+            }
+            if (TimeOffset == null && TimeOffset == other.TimeOffset)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(TimeOffset - other.TimeOffset);
             }
             return diff;
         }

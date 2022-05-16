@@ -37,6 +37,7 @@ namespace Gs2.Gs2Inventory.Request
         public string InventoryName { set; get; }
         public string UserId { set; get; }
         public int? NewCapacityValue { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SetCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Inventory.Request
 
         public SetCapacityByUserIdRequest WithNewCapacityValue(int? newCapacityValue) {
             this.NewCapacityValue = newCapacityValue;
+            return this;
+        }
+
+        public SetCapacityByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Quest.Request
         public string UserId { set; get; }
         public bool? Force { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public StartByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Quest.Request
 
         public StartByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public StartByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

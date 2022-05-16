@@ -37,6 +37,7 @@ namespace Gs2.Gs2Chat.Request
         public string RoomName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Chat.Request
 
         public SubscribeByUserIdRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
+            return this;
+        }
+
+        public SubscribeByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

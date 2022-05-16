@@ -275,6 +275,114 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class ForgetTask : Gs2WebSocketSessionTask<Request.ForgetRequest, Result.ForgetResult>
+        {
+	        public ForgetTask(IGs2Session session, Request.ForgetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ForgetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.Email != null)
+                {
+                    jsonWriter.WritePropertyName("email");
+                    jsonWriter.Write(request.Email.ToString());
+                }
+                if (request.Lang != null)
+                {
+                    jsonWriter.WritePropertyName("lang");
+                    jsonWriter.Write(request.Lang.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "forget",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Forget(
+                Request.ForgetRequest request,
+                UnityAction<AsyncResult<Result.ForgetResult>> callback
+        )
+		{
+			var task = new ForgetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ForgetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ForgetResult> ForgetFuture(
+                Request.ForgetRequest request
+        )
+		{
+			return new ForgetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ForgetResult> ForgetAsync(
+            Request.ForgetRequest request
+        )
+		{
+		    var task = new ForgetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ForgetTask ForgetAsync(
+                Request.ForgetRequest request
+        )
+		{
+			return new ForgetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ForgetResult> ForgetAsync(
+            Request.ForgetRequest request
+        )
+		{
+		    var task = new ForgetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateAccountTask : Gs2WebSocketSessionTask<Request.UpdateAccountRequest, Result.UpdateAccountResult>
         {
 	        public UpdateAccountTask(IGs2Session session, Request.UpdateAccountRequest request) : base(session, request)

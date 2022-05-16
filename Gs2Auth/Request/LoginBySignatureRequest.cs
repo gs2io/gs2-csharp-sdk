@@ -33,15 +33,9 @@ namespace Gs2.Gs2Auth.Request
 	[System.Serializable]
 	public class LoginBySignatureRequest : Gs2Request<LoginBySignatureRequest>
 	{
-        public string UserId { set; get; }
         public string KeyId { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
-
-        public LoginBySignatureRequest WithUserId(string userId) {
-            this.UserId = userId;
-            return this;
-        }
 
         public LoginBySignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
@@ -67,7 +61,6 @@ namespace Gs2.Gs2Auth.Request
                 return null;
             }
             return new LoginBySignatureRequest()
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
                 .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
@@ -76,7 +69,6 @@ namespace Gs2.Gs2Auth.Request
         public JsonData ToJson()
         {
             return new JsonData {
-                ["userId"] = UserId,
                 ["keyId"] = KeyId,
                 ["body"] = Body,
                 ["signature"] = Signature,
@@ -86,10 +78,6 @@ namespace Gs2.Gs2Auth.Request
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (UserId != null) {
-                writer.WritePropertyName("userId");
-                writer.Write(UserId.ToString());
-            }
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());

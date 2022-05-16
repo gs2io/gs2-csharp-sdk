@@ -91,7 +91,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 "User"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Room> Rooms(
@@ -143,7 +142,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 password
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
@@ -181,7 +179,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             );
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(

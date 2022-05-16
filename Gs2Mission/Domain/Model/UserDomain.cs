@@ -91,7 +91,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 "User"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
@@ -143,7 +142,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 counterName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Mission.Model.Complete> Completes(

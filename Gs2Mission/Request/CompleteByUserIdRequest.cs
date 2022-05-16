@@ -38,6 +38,7 @@ namespace Gs2.Gs2Mission.Request
         public string MissionTaskName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Mission.Request
 
         public CompleteByUserIdRequest WithConfig(Gs2.Gs2Mission.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public CompleteByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

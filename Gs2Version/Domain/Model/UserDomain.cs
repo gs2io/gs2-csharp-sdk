@@ -123,15 +123,19 @@ namespace Gs2.Gs2Version.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.CalculateSignatureAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Version.Domain.Model.UserDomain domain = this;
             this.Body = domain.Body = result?.Body;
             this.Signature = domain.Signature = result?.Signature;
@@ -146,7 +150,6 @@ namespace Gs2.Gs2Version.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.UserDomain>(Impl);
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(

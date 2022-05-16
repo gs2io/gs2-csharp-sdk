@@ -37,6 +37,7 @@ namespace Gs2.Gs2Ranking.Request
         public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UnsubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Ranking.Request
 
         public UnsubscribeByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
+            return this;
+        }
+
+        public UnsubscribeByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

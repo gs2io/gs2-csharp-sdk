@@ -36,6 +36,7 @@ namespace Gs2.Gs2Chat.Request
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UnsubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Chat.Request
 
         public UnsubscribeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public UnsubscribeByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

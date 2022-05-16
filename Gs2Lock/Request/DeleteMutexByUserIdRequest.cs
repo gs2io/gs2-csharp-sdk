@@ -36,6 +36,7 @@ namespace Gs2.Gs2Lock.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string PropertyId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteMutexByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Lock.Request
 
         public DeleteMutexByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
+            return this;
+        }
+
+        public DeleteMutexByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

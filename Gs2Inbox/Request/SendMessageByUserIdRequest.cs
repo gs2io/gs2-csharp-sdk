@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inbox.Request
         public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public long? ExpiresAt { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SendMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Inbox.Request
 
         public SendMessageByUserIdRequest WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
             this.ExpiresTimeSpan = expiresTimeSpan;
+            return this;
+        }
+
+        public SendMessageByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -36,6 +36,7 @@ namespace Gs2.Gs2Quest.Request
         public string NamespaceName { set; get; }
         public string QuestGroupName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteCompletedQuestListByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Quest.Request
 
         public DeleteCompletedQuestListByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public DeleteCompletedQuestListByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

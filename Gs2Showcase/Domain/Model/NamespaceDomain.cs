@@ -115,15 +115,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.GetNamespaceStatusAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Showcase.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -167,15 +171,51 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "showcase",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "showcase",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -216,15 +256,51 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "showcase",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "showcase",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Showcase.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -268,18 +344,44 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "showcase",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Showcase.Model.Namespace>(parentKey, key);
+            }
             #else
             DeleteNamespaceResult result = null;
             try {
                 result = await this._client.DeleteNamespaceAsync(
                     request
                 );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "showcase",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Showcase.Model.Namespace>(parentKey, key);
+                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-          
             Gs2.Gs2Showcase.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -323,15 +425,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateSalesItemMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -347,6 +444,30 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateSalesItemMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "SalesItemMaster"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain domain = new Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -397,15 +518,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateSalesItemGroupMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -421,6 +537,30 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateSalesItemGroupMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "SalesItemGroupMaster"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain domain = new Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -471,15 +611,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateShowcaseMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -495,6 +630,30 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateShowcaseMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "ShowcaseMaster"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain domain = new Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -519,39 +678,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain CurrentShowcaseMaster(
         ) {
             return new Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.SalesItemDomain SalesItem(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.SalesItemDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.SalesItemGroupDomain SalesItemGroup(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.SalesItemGroupDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain DisplayItem(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -585,7 +711,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 accessToken
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Showcase.Model.SalesItemMaster> SalesItemMasters(
@@ -634,7 +759,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 salesItemName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Showcase.Model.SalesItemGroupMaster> SalesItemGroupMasters(
@@ -683,18 +807,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 salesItemGroupName
             );
         }
-
-        public Gs2.Gs2Showcase.Domain.Model.DisplayItemMasterDomain DisplayItemMaster(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.DisplayItemMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Showcase.Model.ShowcaseMaster> ShowcaseMasters(
@@ -780,8 +892,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Namespace> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                "showcase",
+                "Namespace"
+            );
             Gs2.Gs2Showcase.Model.Namespace value = _cache.Get<Gs2.Gs2Showcase.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )
@@ -839,7 +956,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Showcase.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )

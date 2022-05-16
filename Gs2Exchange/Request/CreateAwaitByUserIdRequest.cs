@@ -37,6 +37,7 @@ namespace Gs2.Gs2Exchange.Request
         public string UserId { set; get; }
         public string RateName { set; get; }
         public int? Count { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CreateAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Exchange.Request
 
         public CreateAwaitByUserIdRequest WithCount(int? count) {
             this.Count = count;
+            return this;
+        }
+
+        public CreateAwaitByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

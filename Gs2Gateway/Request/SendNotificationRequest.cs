@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
         public string Payload { set; get; }
         public bool? EnableTransferMobileNotification { set; get; }
         public string Sound { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SendNotificationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Gateway.Request
 
         public SendNotificationRequest WithSound(string sound) {
             this.Sound = sound;
+            return this;
+        }
+
+        public SendNotificationRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

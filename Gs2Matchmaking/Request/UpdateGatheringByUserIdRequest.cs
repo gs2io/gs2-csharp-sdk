@@ -37,6 +37,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public string GatheringName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UpdateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public UpdateGatheringByUserIdRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
             this.AttributeRanges = attributeRanges;
+            return this;
+        }
+
+        public UpdateGatheringByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

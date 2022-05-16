@@ -36,6 +36,7 @@ namespace Gs2.Gs2Mission.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string CounterName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Mission.Request
 
         public DeleteCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
+            return this;
+        }
+
+        public DeleteCounterByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Mission.Request
         public string CounterName { set; get; }
         public string UserId { set; get; }
         public long? Value { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public IncreaseCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Mission.Request
 
         public IncreaseCounterByUserIdRequest WithValue(long? value) {
             this.Value = value;
+            return this;
+        }
+
+        public IncreaseCounterByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

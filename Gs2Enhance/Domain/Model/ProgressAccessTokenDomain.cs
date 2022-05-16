@@ -124,15 +124,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetProgressAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -163,6 +158,45 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetProgressAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Progress"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "RateModel"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                    resultModel.RateModel.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.RateModel,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -204,15 +238,19 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.StartAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -276,15 +314,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.EndAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -300,6 +333,30 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.EndAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Progress"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -363,18 +420,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            DeleteProgressResult result = null;
-            try {
-                result = await this._client.DeleteProgressAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -385,6 +434,28 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
             }
+            #else
+            DeleteProgressResult result = null;
+            try {
+                result = await this._client.DeleteProgressAsync(
+                    request
+                );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+                }
+            } catch(Gs2.Core.Exception.NotFoundException) {}
+            #endif
             Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

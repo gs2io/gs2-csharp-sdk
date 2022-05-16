@@ -144,15 +144,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetBallotByUserIdAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -172,6 +167,34 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetBallotByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Ballot"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    resultModel.Item.RatingName.ToString(),
+                    resultModel.Item.GatheringName.ToString(),
+                    resultModel.Item.NumberOfPlayer.ToString(),
+                    requestModel.KeyId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.BallotDomain domain = this;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;

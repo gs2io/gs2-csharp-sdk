@@ -345,6 +345,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
+        public Gs2.Gs2Log.Domain.Model.LogDomain Log(
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.LogDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLog> AccessLog(
@@ -404,7 +414,6 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
@@ -475,18 +484,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._namespaceName
             );
         }
-
-        public Gs2.Gs2Log.Domain.Model.AccessLogCountDomain AccessLogCount(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.AccessLogCountDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLog(
@@ -550,7 +547,6 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
@@ -625,18 +621,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._namespaceName
             );
         }
-
-        public Gs2.Gs2Log.Domain.Model.ExecuteStampSheetLogCountDomain ExecuteStampSheetLogCount(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.ExecuteStampSheetLogCountDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLog(
@@ -700,7 +684,6 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
@@ -775,18 +758,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._namespaceName
             );
         }
-
-        public Gs2.Gs2Log.Domain.Model.ExecuteStampTaskLogCountDomain ExecuteStampTaskLogCount(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.ExecuteStampTaskLogCountDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLog(
@@ -850,7 +821,6 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
@@ -918,17 +888,6 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain IssueStampSheetLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
-            );
-        }
-
-        public Gs2.Gs2Log.Domain.Model.IssueStampSheetLogCountDomain IssueStampSheetLogCount(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.IssueStampSheetLogCountDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

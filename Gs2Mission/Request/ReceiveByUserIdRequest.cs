@@ -37,6 +37,7 @@ namespace Gs2.Gs2Mission.Request
         public string MissionGroupName { set; get; }
         public string MissionTaskName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Mission.Request
 
         public ReceiveByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public ReceiveByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Limit.Request
         public string LimitName { set; get; }
         public string UserId { set; get; }
         public string CounterName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Limit.Request
 
         public DeleteCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
+            return this;
+        }
+
+        public DeleteCounterByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

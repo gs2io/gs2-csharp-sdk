@@ -33,12 +33,6 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class ForgetResult : IResult
 	{
-        public string IssuePasswordToken { set; get; }
-
-        public ForgetResult WithIssuePasswordToken(string issuePasswordToken) {
-            this.IssuePasswordToken = issuePasswordToken;
-            return this;
-        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -48,24 +42,18 @@ namespace Gs2.Gs2Project.Result
             if (data == null) {
                 return null;
             }
-            return new ForgetResult()
-                .WithIssuePasswordToken(!data.Keys.Contains("issuePasswordToken") || data["issuePasswordToken"] == null ? null : data["issuePasswordToken"].ToString());
+            return new ForgetResult();
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
-                ["issuePasswordToken"] = IssuePasswordToken,
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (IssuePasswordToken != null) {
-                writer.WritePropertyName("issuePasswordToken");
-                writer.Write(IssuePasswordToken.ToString());
-            }
             writer.WriteObjectEnd();
         }
     }

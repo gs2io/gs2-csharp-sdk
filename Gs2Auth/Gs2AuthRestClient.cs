@@ -205,11 +205,6 @@ namespace Gs2.Gs2Auth
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId);
-                }
                 if (request.KeyId != null)
                 {
                     jsonWriter.WritePropertyName("keyId");

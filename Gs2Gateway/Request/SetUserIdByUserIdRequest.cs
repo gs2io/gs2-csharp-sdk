@@ -36,6 +36,7 @@ namespace Gs2.Gs2Gateway.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public bool? AllowConcurrentAccess { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SetUserIdByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Gateway.Request
 
         public SetUserIdByUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
+            return this;
+        }
+
+        public SetUserIdByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

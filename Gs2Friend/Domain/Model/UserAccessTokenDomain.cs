@@ -122,15 +122,10 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.SendRequestAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -147,6 +142,31 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.SendRequestAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    this._accessToken?.UserId.ToString(),
+                    "SendFriendRequest"
+                );
+                var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
+                    resultModel.Item.TargetUserId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -192,7 +212,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._accessToken
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<string> BlackLists(
@@ -242,21 +261,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._accessToken
             );
         }
-
-        public Gs2.Gs2Friend.Domain.Model.FollowAccessTokenDomain Follow(
-            bool? withProfile
-        ) {
-            return new Gs2.Gs2Friend.Domain.Model.FollowAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken,
-                withProfile
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
@@ -312,7 +316,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 targetUserId
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
@@ -368,33 +371,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 withProfile
             );
         }
-
-        public Gs2.Gs2Friend.Domain.Model.SendBoxAccessTokenDomain SendBox(
-        ) {
-            return new Gs2.Gs2Friend.Domain.Model.SendBoxAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken
-            );
-        }
-
-        public Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain FriendRequest(
-            string targetUserId
-        ) {
-            return new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken,
-                targetUserId
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
@@ -446,19 +422,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 targetUserId
             );
         }
-
-        public Gs2.Gs2Friend.Domain.Model.InboxAccessTokenDomain Inbox(
-        ) {
-            return new Gs2.Gs2Friend.Domain.Model.InboxAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(

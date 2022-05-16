@@ -35,6 +35,7 @@ namespace Gs2.Gs2Inbox.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Inbox.Request
 
         public DeleteReceivedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public DeleteReceivedByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -124,15 +124,10 @@ namespace Gs2.Gs2News.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.WantGrantAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          {
+              {
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
                         requestModel.NamespaceName.ToString(),
@@ -151,6 +146,33 @@ namespace Gs2.Gs2News.Domain.Model
                     );
                 }
             }
+            #else
+            var result = await this._client.WantGrantAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        this._accessToken?.UserId.ToString(),
+                        "SetCookieRequestEntry"
+                    );
+                    var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                        item.Key.ToString(),
+                        item.Value.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            #endif
             Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[] domain = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {

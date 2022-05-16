@@ -121,15 +121,10 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetStaminaModelMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -145,6 +140,30 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetStaminaModelMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "StaminaModelMaster"
+                );
+                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -186,15 +205,10 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.UpdateStaminaModelMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -210,6 +224,30 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.UpdateStaminaModelMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "StaminaModelMaster"
+                );
+                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -254,18 +292,10 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            DeleteStaminaModelMasterResult result = null;
-            try {
-                result = await this._client.DeleteStaminaModelMasterAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -276,6 +306,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Stamina.Model.StaminaModelMaster>(parentKey, key);
             }
+            #else
+            DeleteStaminaModelMasterResult result = null;
+            try {
+                result = await this._client.DeleteStaminaModelMasterAsync(
+                    request
+                );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        "StaminaModelMaster"
+                    );
+                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Stamina.Model.StaminaModelMaster>(parentKey, key);
+                }
+            } catch(Gs2.Core.Exception.NotFoundException) {}
+            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

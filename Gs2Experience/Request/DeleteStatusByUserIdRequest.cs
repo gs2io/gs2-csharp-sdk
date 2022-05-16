@@ -37,6 +37,7 @@ namespace Gs2.Gs2Experience.Request
         public string UserId { set; get; }
         public string ExperienceName { set; get; }
         public string PropertyId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Experience.Request
 
         public DeleteStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
+            return this;
+        }
+
+        public DeleteStatusByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

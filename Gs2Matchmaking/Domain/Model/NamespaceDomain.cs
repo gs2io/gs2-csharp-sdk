@@ -115,15 +115,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.GetNamespaceStatusAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -167,15 +171,51 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "matchmaking",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "matchmaking",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -216,15 +256,51 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "matchmaking",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "matchmaking",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -268,18 +344,44 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "matchmaking",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(parentKey, key);
+            }
             #else
             DeleteNamespaceResult result = null;
             try {
                 result = await this._client.DeleteNamespaceAsync(
                     request
                 );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "matchmaking",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(parentKey, key);
+                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-          
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -323,15 +425,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.VoteAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -351,6 +448,34 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.VoteAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Ballot"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    resultModel.Item.RatingName.ToString(),
+                    resultModel.Item.GatheringName.ToString(),
+                    resultModel.Item.NumberOfPlayer.ToString(),
+                    requestModel.KeyId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.BallotDomain domain = new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -405,15 +530,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.VoteMultipleAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -433,6 +553,34 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.VoteMultipleAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Ballot"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    resultModel.Item.RatingName.ToString(),
+                    resultModel.Item.GatheringName.ToString(),
+                    resultModel.Item.NumberOfPlayer.ToString(),
+                    requestModel.KeyId.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.BallotDomain domain = new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -487,15 +635,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateRatingModelMasterAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -511,6 +654,30 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateRatingModelMasterAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "RatingModelMaster"
+                );
+                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -568,7 +735,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._namespaceName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.RatingModel> RatingModels(
@@ -632,7 +798,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 gatheringName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.RatingModelMaster> RatingModelMasters(
@@ -718,8 +883,13 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Namespace> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                "matchmaking",
+                "Namespace"
+            );
             Gs2.Gs2Matchmaking.Model.Namespace value = _cache.Get<Gs2.Gs2Matchmaking.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )
@@ -777,7 +947,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Matchmaking.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )

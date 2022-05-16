@@ -37,6 +37,7 @@ namespace Gs2.Gs2Exchange.Request
         public string UserId { set; get; }
         public string RateName { set; get; }
         public string AwaitName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Exchange.Request
 
         public DeleteAwaitByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
+            return this;
+        }
+
+        public DeleteAwaitByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

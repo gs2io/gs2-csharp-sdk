@@ -122,15 +122,19 @@ namespace Gs2.Gs2Quest.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.StartAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -194,18 +198,10 @@ namespace Gs2.Gs2Quest.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            DeleteProgressResult result = null;
-            try {
-                result = await this._client.DeleteProgressAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -216,6 +212,28 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
             }
+            #else
+            DeleteProgressResult result = null;
+            try {
+                result = await this._client.DeleteProgressAsync(
+                    request
+                );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                }
+            } catch(Gs2.Core.Exception.NotFoundException) {}
+            #endif
             Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain domain = new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -248,7 +266,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._accessToken
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(

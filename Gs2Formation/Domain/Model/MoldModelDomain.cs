@@ -121,15 +121,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetMoldModelAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -145,6 +140,30 @@ namespace Gs2.Gs2Formation.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetMoldModelAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    "MoldModel"
+                );
+                var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -154,20 +173,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.MoldModel>(Impl);
         #endif
-        }
-
-        public Gs2.Gs2Formation.Domain.Model.FormModelDomain FormModel(
-            string formModelName
-        ) {
-            return new Gs2.Gs2Formation.Domain.Model.FormModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._moldName,
-                formModelName
-            );
         }
 
         public static string CreateCacheParentKey(

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Money.Request
         public int? Slot { set; get; }
         public float? Price { set; get; }
         public int? Count { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DepositByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Money.Request
 
         public DepositByUserIdRequest WithCount(int? count) {
             this.Count = count;
+            return this;
+        }
+
+        public DepositByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

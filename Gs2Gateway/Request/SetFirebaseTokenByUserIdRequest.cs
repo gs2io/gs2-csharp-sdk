@@ -36,6 +36,7 @@ namespace Gs2.Gs2Gateway.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string Token { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SetFirebaseTokenByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Gateway.Request
 
         public SetFirebaseTokenByUserIdRequest WithToken(string token) {
             this.Token = token;
+            return this;
+        }
+
+        public SetFirebaseTokenByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

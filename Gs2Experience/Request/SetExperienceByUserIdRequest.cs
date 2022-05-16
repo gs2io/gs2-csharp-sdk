@@ -38,6 +38,7 @@ namespace Gs2.Gs2Experience.Request
         public string ExperienceName { set; get; }
         public string PropertyId { set; get; }
         public long? ExperienceValue { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SetExperienceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Experience.Request
 
         public SetExperienceByUserIdRequest WithExperienceValue(long? experienceValue) {
             this.ExperienceValue = experienceValue;
+            return this;
+        }
+
+        public SetExperienceByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

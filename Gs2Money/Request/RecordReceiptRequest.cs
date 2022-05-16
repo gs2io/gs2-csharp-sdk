@@ -37,6 +37,7 @@ namespace Gs2.Gs2Money.Request
         public string UserId { set; get; }
         public string ContentsId { set; get; }
         public string Receipt { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public RecordReceiptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Money.Request
 
         public RecordReceiptRequest WithReceipt(string receipt) {
             this.Receipt = receipt;
+            return this;
+        }
+
+        public RecordReceiptRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

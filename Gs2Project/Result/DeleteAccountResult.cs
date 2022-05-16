@@ -33,6 +33,12 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DeleteAccountResult : IResult
 	{
+        public Gs2.Gs2Project.Model.Account Item { set; get; }
+
+        public DeleteAccountResult WithItem(Gs2.Gs2Project.Model.Account item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Project.Result
             if (data == null) {
                 return null;
             }
-            return new DeleteAccountResult();
+            return new DeleteAccountResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.Account.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

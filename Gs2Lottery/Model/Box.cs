@@ -33,6 +33,7 @@ namespace Gs2.Gs2Lottery.Model
 	{
         public string BoxId { set; get; }
         public string PrizeTableName { set; get; }
+        public int? Index { set; get; }
         public string UserId { set; get; }
         public int[] DrawnIndexes { set; get; }
         public long? CreatedAt { set; get; }
@@ -45,6 +46,11 @@ namespace Gs2.Gs2Lottery.Model
 
         public Box WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
+            return this;
+        }
+
+        public Box WithIndex(int? index) {
+            this.Index = index;
             return this;
         }
 
@@ -69,7 +75,7 @@ namespace Gs2.Gs2Lottery.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -86,7 +92,7 @@ namespace Gs2.Gs2Lottery.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -103,7 +109,7 @@ namespace Gs2.Gs2Lottery.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -120,7 +126,7 @@ namespace Gs2.Gs2Lottery.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -137,7 +143,7 @@ namespace Gs2.Gs2Lottery.Model
         }
 
         private static System.Text.RegularExpressions.Regex _prizeTableNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -153,6 +159,23 @@ namespace Gs2.Gs2Lottery.Model
             return match.Groups["prizeTableName"].Value;
         }
 
+        private static System.Text.RegularExpressions.Regex _indexRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):lottery:(?<namespaceName>.+):user:(?<userId>.+):box:table:(?<prizeTableName>.+):(?<index>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetIndexFromGrn(
+            string grn
+        )
+        {
+            var match = _indexRegex.Match(grn);
+            if (!match.Success || !match.Groups["index"].Success)
+            {
+                return null;
+            }
+            return match.Groups["index"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -164,6 +187,7 @@ namespace Gs2.Gs2Lottery.Model
             return new Box()
                 .WithBoxId(!data.Keys.Contains("boxId") || data["boxId"] == null ? null : data["boxId"].ToString())
                 .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()))
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithDrawnIndexes(!data.Keys.Contains("drawnIndexes") || data["drawnIndexes"] == null ? new int[]{} : data["drawnIndexes"].Cast<JsonData>().Select(v => {
                     return int.Parse(v.ToString());
@@ -177,6 +201,7 @@ namespace Gs2.Gs2Lottery.Model
             return new JsonData {
                 ["boxId"] = BoxId,
                 ["prizeTableName"] = PrizeTableName,
+                ["index"] = Index,
                 ["userId"] = UserId,
                 ["drawnIndexes"] = new JsonData(DrawnIndexes == null ? new JsonData[]{} :
                         DrawnIndexes.Select(v => {
@@ -198,6 +223,10 @@ namespace Gs2.Gs2Lottery.Model
             if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
                 writer.Write(PrizeTableName.ToString());
+            }
+            if (Index != null) {
+                writer.WritePropertyName("index");
+                writer.Write(int.Parse(Index.ToString()));
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
@@ -244,6 +273,14 @@ namespace Gs2.Gs2Lottery.Model
             else
             {
                 diff += PrizeTableName.CompareTo(other.PrizeTableName);
+            }
+            if (Index == null && Index == other.Index)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Index - other.Index);
             }
             if (UserId == null && UserId == other.UserId)
             {

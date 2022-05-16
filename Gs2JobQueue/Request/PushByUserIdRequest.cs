@@ -36,6 +36,7 @@ namespace Gs2.Gs2JobQueue.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2JobQueue.Model.JobEntry[] Jobs { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PushByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2JobQueue.Request
 
         public PushByUserIdRequest WithJobs(Gs2.Gs2JobQueue.Model.JobEntry[] jobs) {
             this.Jobs = jobs;
+            return this;
+        }
+
+        public PushByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Account.Request
         public int? Type { set; get; }
         public string OldPassword { set; get; }
         public string Password { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UpdateTakeOverByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Account.Request
 
         public UpdateTakeOverByUserIdRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+
+        public UpdateTakeOverByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -116,15 +116,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.ExportMasterAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -168,15 +172,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.GetCurrentMessageMasterAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -217,15 +225,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.UpdateCurrentMessageMasterAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -269,15 +281,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.UpdateCurrentMessageMasterFromGitHubAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -306,13 +322,9 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string namespaceName
         )
         {
-            return string.Join(
-                ":",
-                namespaceName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -331,7 +343,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             Gs2.Gs2Inbox.Model.CurrentMessageMaster value = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                 _parentKey,
                 Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
                 )
             );
             if (value == null) {
@@ -354,7 +365,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                                 _cache.Delete<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                                     _parentKey,
                                     Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                                        this.NamespaceName?.ToString()
                                     )
                                 );
                             }
@@ -376,7 +386,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     _cache.Delete<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                             _parentKey,
                             Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
                             )
                         );
                     }
@@ -389,7 +398,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 value = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                 _parentKey,
                 Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
                 )
             );
             }

@@ -123,15 +123,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.CreateAwaitByUserIdAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -149,6 +144,32 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.CreateAwaitByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                    "Await"
+                );
+                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString(),
+                    resultModel.Item.RateName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Exchange.Domain.Model.AwaitDomain domain = new Gs2.Gs2Exchange.Domain.Model.AwaitDomain(
                 this._cache,
                 this._jobQueueDomain,
@@ -184,7 +205,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._userId
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Exchange.Model.Await> Awaits(

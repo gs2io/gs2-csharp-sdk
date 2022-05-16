@@ -41,6 +41,7 @@ namespace Gs2.Gs2Formation.Request
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public AcquireActionsToFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -79,6 +80,11 @@ namespace Gs2.Gs2Formation.Request
 
         public AcquireActionsToFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.AcquireActionConfig[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public AcquireActionsToFormPropertiesRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

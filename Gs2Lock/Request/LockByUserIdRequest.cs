@@ -38,6 +38,7 @@ namespace Gs2.Gs2Lock.Request
         public string UserId { set; get; }
         public string TransactionId { set; get; }
         public long? Ttl { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public LockByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Lock.Request
 
         public LockByUserIdRequest WithTtl(long? ttl) {
             this.Ttl = ttl;
+            return this;
+        }
+
+        public LockByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -136,7 +136,6 @@ namespace Gs2.Gs2Log.Domain
             return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain>(Impl);
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.Namespace> Namespaces(

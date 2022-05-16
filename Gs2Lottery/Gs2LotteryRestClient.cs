@@ -2439,112 +2439,6 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        public class GetRawBoxByUserIdTask : Gs2RestSessionTask<GetRawBoxByUserIdRequest, GetRawBoxByUserIdResult>
-        {
-            public GetRawBoxByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetRawBoxByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetRawBoxByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/box/{prizeTableName}/raw";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetRawBoxByUserId(
-                Request.GetRawBoxByUserIdRequest request,
-                UnityAction<AsyncResult<Result.GetRawBoxByUserIdResult>> callback
-        )
-		{
-			var task = new GetRawBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetRawBoxByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetRawBoxByUserIdResult> GetRawBoxByUserIdFuture(
-                Request.GetRawBoxByUserIdRequest request
-        )
-		{
-			return new GetRawBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetRawBoxByUserIdResult> GetRawBoxByUserIdAsync(
-                Request.GetRawBoxByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetRawBoxByUserIdResult> result = null;
-			await GetRawBoxByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetRawBoxByUserIdTask GetRawBoxByUserIdAsync(
-                Request.GetRawBoxByUserIdRequest request
-        )
-		{
-			return new GetRawBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetRawBoxByUserIdResult> GetRawBoxByUserIdAsync(
-                Request.GetRawBoxByUserIdRequest request
-        )
-		{
-			var task = new GetRawBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class ResetBoxTask : Gs2RestSessionTask<ResetBoxRequest, ResetBoxResult>
         {
             public ResetBoxTask(IGs2Session session, RestSessionRequestFactory factory, ResetBoxRequest request) : base(session, factory, request)
@@ -2680,6 +2574,10 @@ namespace Gs2.Gs2Lottery
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -3232,6 +3130,10 @@ namespace Gs2.Gs2Lottery
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(

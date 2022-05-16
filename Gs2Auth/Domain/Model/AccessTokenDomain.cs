@@ -109,15 +109,19 @@ namespace Gs2.Gs2Auth.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.LoginAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
             this._cache.Put(
                 this._parentKey,
@@ -170,15 +174,19 @@ namespace Gs2.Gs2Auth.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.LoginBySignatureAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
             this._cache.Put(
                 this._parentKey,
@@ -234,8 +242,13 @@ namespace Gs2.Gs2Auth.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Auth.Model.AccessToken> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                "auth",
+                "AccessToken"
+            );
             Gs2.Gs2Auth.Model.AccessToken value = _cache.Get<Gs2.Gs2Auth.Model.AccessToken>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
                 )
             );

@@ -36,6 +36,7 @@ namespace Gs2.Gs2JobQueue.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string DeadLetterJobName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteDeadLetterJobByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2JobQueue.Request
 
         public DeleteDeadLetterJobByUserIdRequest WithDeadLetterJobName(string deadLetterJobName) {
             this.DeadLetterJobName = deadLetterJobName;
+            return this;
+        }
+
+        public DeleteDeadLetterJobByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

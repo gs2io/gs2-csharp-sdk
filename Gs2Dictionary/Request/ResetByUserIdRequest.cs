@@ -35,6 +35,7 @@ namespace Gs2.Gs2Dictionary.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public ResetByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Dictionary.Request
 
         public ResetByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public ResetByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

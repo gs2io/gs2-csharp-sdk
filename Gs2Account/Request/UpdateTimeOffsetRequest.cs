@@ -36,6 +36,7 @@ namespace Gs2.Gs2Account.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public int? TimeOffset { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UpdateTimeOffsetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Account.Request
 
         public UpdateTimeOffsetRequest WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
+            return this;
+        }
+
+        public UpdateTimeOffsetRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

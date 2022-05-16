@@ -38,6 +38,7 @@ namespace Gs2.Gs2Schedule.Request
         public string UserId { set; get; }
         public string TriggerStrategy { set; get; }
         public int? Ttl { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Schedule.Request
 
         public TriggerByUserIdRequest WithTtl(int? ttl) {
             this.Ttl = ttl;
+            return this;
+        }
+
+        public TriggerByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

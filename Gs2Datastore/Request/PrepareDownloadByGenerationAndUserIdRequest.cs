@@ -37,6 +37,7 @@ namespace Gs2.Gs2Datastore.Request
         public string UserId { set; get; }
         public string DataObjectId { set; get; }
         public string Generation { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PrepareDownloadByGenerationAndUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Datastore.Request
 
         public PrepareDownloadByGenerationAndUserIdRequest WithGeneration(string generation) {
             this.Generation = generation;
+            return this;
+        }
+
+        public PrepareDownloadByGenerationAndUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

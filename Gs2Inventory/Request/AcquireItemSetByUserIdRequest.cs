@@ -41,6 +41,7 @@ namespace Gs2.Gs2Inventory.Request
         public long? ExpiresAt { set; get; }
         public bool? CreateNewItemSet { set; get; }
         public string ItemSetName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public AcquireItemSetByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -79,6 +80,11 @@ namespace Gs2.Gs2Inventory.Request
 
         public AcquireItemSetByUserIdRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
+            return this;
+        }
+
+        public AcquireItemSetByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

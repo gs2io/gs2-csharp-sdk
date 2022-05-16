@@ -1199,6 +1199,10 @@ namespace Gs2.Gs2Matchmaking
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -1459,6 +1463,10 @@ namespace Gs2.Gs2Matchmaking
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -1846,6 +1854,10 @@ namespace Gs2.Gs2Matchmaking
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -2165,6 +2177,10 @@ namespace Gs2.Gs2Matchmaking
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -4195,6 +4211,10 @@ namespace Gs2.Gs2Matchmaking
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(

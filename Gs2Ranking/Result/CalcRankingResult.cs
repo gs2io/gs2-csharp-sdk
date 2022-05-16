@@ -33,6 +33,12 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class CalcRankingResult : IResult
 	{
+        public bool? Processing { set; get; }
+
+        public CalcRankingResult WithProcessing(bool? processing) {
+            this.Processing = processing;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,24 @@ namespace Gs2.Gs2Ranking.Result
             if (data == null) {
                 return null;
             }
-            return new CalcRankingResult();
+            return new CalcRankingResult()
+                .WithProcessing(!data.Keys.Contains("processing") || data["processing"] == null ? null : (bool?)bool.Parse(data["processing"].ToString()));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["processing"] = Processing,
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Processing != null) {
+                writer.WritePropertyName("processing");
+                writer.Write(bool.Parse(Processing.ToString()));
+            }
             writer.WriteObjectEnd();
         }
     }

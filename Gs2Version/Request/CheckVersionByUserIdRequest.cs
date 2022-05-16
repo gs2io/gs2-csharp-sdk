@@ -36,6 +36,7 @@ namespace Gs2.Gs2Version.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2Version.Model.TargetVersion[] TargetVersions { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public CheckVersionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Version.Request
 
         public CheckVersionByUserIdRequest WithTargetVersions(Gs2.Gs2Version.Model.TargetVersion[] targetVersions) {
             this.TargetVersions = targetVersions;
+            return this;
+        }
+
+        public CheckVersionByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

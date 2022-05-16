@@ -38,6 +38,7 @@ namespace Gs2.Gs2Experience.Request
         public string ExperienceName { set; get; }
         public string PropertyId { set; get; }
         public long? RankCapValue { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public AddRankCapByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Experience.Request
 
         public AddRankCapByUserIdRequest WithRankCapValue(long? rankCapValue) {
             this.RankCapValue = rankCapValue;
+            return this;
+        }
+
+        public AddRankCapByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

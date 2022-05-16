@@ -36,6 +36,7 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string MessageName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public OpenMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Inbox.Request
 
         public OpenMessageByUserIdRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
+            return this;
+        }
+
+        public OpenMessageByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

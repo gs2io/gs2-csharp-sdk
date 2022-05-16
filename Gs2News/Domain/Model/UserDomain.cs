@@ -92,7 +92,6 @@ namespace Gs2.Gs2News.Domain.Model
                 "User"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2News.Model.News> Newses(
@@ -140,22 +139,6 @@ namespace Gs2.Gs2News.Domain.Model
                 this._session,
                 this._namespaceName,
                 this._userId
-            );
-        }
-
-        public Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain SetCookieRequestEntry(
-            string key,
-            string value
-        ) {
-            return new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._userId,
-                key,
-                value
             );
         }
 

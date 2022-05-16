@@ -123,15 +123,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.PushByUserIdAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          {
+              {
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                         requestModel.NamespaceName.ToString(),
@@ -149,6 +144,32 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     );
                 }
             }
+            #else
+            var result = await this._client.PushByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        item.UserId.ToString(),
+                        "Job"
+                    );
+                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                        item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            #endif
             Gs2.Gs2JobQueue.Domain.Model.JobDomain[] domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
@@ -207,18 +228,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            RunByUserIdResult result = null;
-            try {
-                result = await this._client.RunByUserIdAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
@@ -230,6 +243,29 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
             }
+            #else
+            RunByUserIdResult result = null;
+            try {
+                result = await this._client.RunByUserIdAsync(
+                    request
+                );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "Job"
+                    );
+                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                }
+            } catch(Gs2.Core.Exception.NotFoundException) {}
+            #endif
             if (result?.Item != null) {
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
                         _cache,
@@ -259,7 +295,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain>(Impl);
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.Job> Jobs(
@@ -311,7 +346,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 jobName
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(

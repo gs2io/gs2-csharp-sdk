@@ -75,7 +75,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -92,7 +92,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _stackNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 

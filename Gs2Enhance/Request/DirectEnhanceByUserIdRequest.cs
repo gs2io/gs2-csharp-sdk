@@ -39,6 +39,7 @@ namespace Gs2.Gs2Enhance.Request
         public string TargetItemSetId { set; get; }
         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DirectEnhanceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Enhance.Request
 
         public DirectEnhanceByUserIdRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public DirectEnhanceByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

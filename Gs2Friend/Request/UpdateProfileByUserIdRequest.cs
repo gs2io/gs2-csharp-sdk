@@ -38,6 +38,7 @@ namespace Gs2.Gs2Friend.Request
         public string PublicProfile { set; get; }
         public string FollowerProfile { set; get; }
         public string FriendProfile { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public UpdateProfileByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Friend.Request
 
         public UpdateProfileByUserIdRequest WithFriendProfile(string friendProfile) {
             this.FriendProfile = friendProfile;
+            return this;
+        }
+
+        public UpdateProfileByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

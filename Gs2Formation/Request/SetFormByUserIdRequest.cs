@@ -38,6 +38,7 @@ namespace Gs2.Gs2Formation.Request
         public string MoldName { set; get; }
         public int? Index { set; get; }
         public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public SetFormByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Formation.Request
 
         public SetFormByUserIdRequest WithSlots(Gs2.Gs2Formation.Model.Slot[] slots) {
             this.Slots = slots;
+            return this;
+        }
+
+        public SetFormByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

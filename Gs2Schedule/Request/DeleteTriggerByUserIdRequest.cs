@@ -36,6 +36,7 @@ namespace Gs2.Gs2Schedule.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string TriggerName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteTriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Schedule.Request
 
         public DeleteTriggerByUserIdRequest WithTriggerName(string triggerName) {
             this.TriggerName = triggerName;
+            return this;
+        }
+
+        public DeleteTriggerByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

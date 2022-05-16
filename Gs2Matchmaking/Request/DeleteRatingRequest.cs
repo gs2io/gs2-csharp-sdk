@@ -36,6 +36,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string RatingName { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteRatingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public DeleteRatingRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
+            return this;
+        }
+
+        public DeleteRatingRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

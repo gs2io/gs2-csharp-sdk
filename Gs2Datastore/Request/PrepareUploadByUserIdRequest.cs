@@ -40,6 +40,7 @@ namespace Gs2.Gs2Datastore.Request
         public string Scope { set; get; }
         public string[] AllowUserIds { set; get; }
         public bool? UpdateIfExists { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PrepareUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -73,6 +74,11 @@ namespace Gs2.Gs2Datastore.Request
 
         public PrepareUploadByUserIdRequest WithUpdateIfExists(bool? updateIfExists) {
             this.UpdateIfExists = updateIfExists;
+            return this;
+        }
+
+        public PrepareUploadByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

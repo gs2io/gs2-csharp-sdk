@@ -38,6 +38,7 @@ namespace Gs2.Gs2Lottery.Request
         public string UserId { set; get; }
         public int? Count { set; get; }
         public Gs2.Gs2Lottery.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DrawByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Lottery.Request
 
         public DrawByUserIdRequest WithConfig(Gs2.Gs2Lottery.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public DrawByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

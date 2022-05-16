@@ -38,6 +38,7 @@ namespace Gs2.Gs2Ranking.Request
         public string UserId { set; get; }
         public long? Score { set; get; }
         public string Metadata { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PutScoreByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Ranking.Request
 
         public PutScoreByUserIdRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+
+        public PutScoreByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

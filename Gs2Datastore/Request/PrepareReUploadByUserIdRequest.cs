@@ -37,6 +37,7 @@ namespace Gs2.Gs2Datastore.Request
         public string DataObjectName { set; get; }
         public string UserId { set; get; }
         public string ContentType { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PrepareReUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Datastore.Request
 
         public PrepareReUploadByUserIdRequest WithContentType(string contentType) {
             this.ContentType = contentType;
+            return this;
+        }
+
+        public PrepareReUploadByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

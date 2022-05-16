@@ -36,6 +36,7 @@ namespace Gs2.Gs2Friend.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteRequestByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Friend.Request
 
         public DeleteRequestByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
+            return this;
+        }
+
+        public DeleteRequestByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

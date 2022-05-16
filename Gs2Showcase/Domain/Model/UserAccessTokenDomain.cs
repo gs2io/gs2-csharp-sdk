@@ -90,7 +90,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 "User"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Chat.Request
         public int? Category { set; get; }
         public string Metadata { set; get; }
         public string Password { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public PostByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Chat.Request
 
         public PostByUserIdRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+
+        public PostByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

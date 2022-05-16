@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public string ItemSetName { set; get; }
         public string ReferenceOf { set; get; }
+        public string DuplicationAvoider { set; get; }
 
         public DeleteReferenceOfByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,11 @@ namespace Gs2.Gs2Inventory.Request
 
         public DeleteReferenceOfByUserIdRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
+            return this;
+        }
+
+        public DeleteReferenceOfByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
