@@ -485,6 +485,18 @@ namespace Gs2.Gs2Account.Domain.Model
             );
         }
 
+        public Gs2.Gs2Account.Domain.Model.DataOwnerDomain DataOwner(
+        ) {
+            return new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                this._userId
+            );
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

@@ -55,7 +55,7 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Account.Domain.Model
 {
 
-    public partial class AccountAccessTokenDomain {
+    public partial class DataOwnerAccessTokenDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
@@ -65,13 +65,10 @@ namespace Gs2.Gs2Account.Domain.Model
         private readonly AccessToken _accessToken;
 
         private readonly String _parentKey;
-        public string Body { get; set; }
-        public string Signature { get; set; }
-        public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
 
-        public AccountAccessTokenDomain(
+        public DataOwnerAccessTokenDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
@@ -88,72 +85,10 @@ namespace Gs2.Gs2Account.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+            this._parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "Account"
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
-        )
-        {
-            return new DescribeTakeOversIterator(
-                this._cache,
-                this._client,
-                this._namespaceName,
-                this._accessToken
-            );
-        }
-
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> TakeOversAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
-            #endif
-        #else
-        public DescribeTakeOversIterator TakeOvers(
-        #endif
-        )
-        {
-            return new DescribeTakeOversIterator(
-                this._cache,
-                this._client,
-                this._namespaceName,
-                this._accessToken
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain TakeOver(
-            int? type
-        ) {
-            return new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken,
-                type
-            );
-        }
-
-        public Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain DataOwner(
-        ) {
-            return new Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                this._accessToken
+                this._accessToken?.UserId?.ToString(),
+                "DataOwner"
             );
         }
 
@@ -173,32 +108,27 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string userId
         )
         {
-            return string.Join(
-                ":",
-                userId ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Model.Account> Model() {
+        public async UniTask<Gs2.Gs2Account.Model.DataOwner> Model() {
             #else
-        public IFuture<Gs2.Gs2Account.Model.Account> Model() {
+        public IFuture<Gs2.Gs2Account.Model.DataOwner> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Account.Model.Account> Model() {
+        public async Task<Gs2.Gs2Account.Model.DataOwner> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.Account> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.DataOwner> self)
             {
         #endif
-            Gs2.Gs2Account.Model.Account value = _cache.Get<Gs2.Gs2Account.Model.Account>(
+            Gs2.Gs2Account.Model.DataOwner value = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                 _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId?.ToString()
+                Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -209,7 +139,7 @@ namespace Gs2.Gs2Account.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.Account>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Account.Model.DataOwner>(Impl);
         #endif
         }
 

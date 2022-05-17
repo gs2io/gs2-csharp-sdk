@@ -35,6 +35,7 @@ namespace Gs2.Gs2Account.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public bool? ChangePasswordIfTakeOver { set; get; }
+        public bool? DifferentUserIdForLoginAndDataRetention { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
@@ -60,6 +61,11 @@ namespace Gs2.Gs2Account.Model
 
         public Namespace WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
             this.ChangePasswordIfTakeOver = changePasswordIfTakeOver;
+            return this;
+        }
+
+        public Namespace WithDifferentUserIdForLoginAndDataRetention(bool? differentUserIdForLoginAndDataRetention) {
+            this.DifferentUserIdForLoginAndDataRetention = differentUserIdForLoginAndDataRetention;
             return this;
         }
 
@@ -162,6 +168,7 @@ namespace Gs2.Gs2Account.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
+                .WithDifferentUserIdForLoginAndDataRetention(!data.Keys.Contains("differentUserIdForLoginAndDataRetention") || data["differentUserIdForLoginAndDataRetention"] == null ? null : (bool?)bool.Parse(data["differentUserIdForLoginAndDataRetention"].ToString()))
                 .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
                 .WithAuthenticationScript(!data.Keys.Contains("authenticationScript") || data["authenticationScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["authenticationScript"]))
                 .WithCreateTakeOverScript(!data.Keys.Contains("createTakeOverScript") || data["createTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createTakeOverScript"]))
@@ -178,6 +185,7 @@ namespace Gs2.Gs2Account.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["changePasswordIfTakeOver"] = ChangePasswordIfTakeOver,
+                ["differentUserIdForLoginAndDataRetention"] = DifferentUserIdForLoginAndDataRetention,
                 ["createAccountScript"] = CreateAccountScript?.ToJson(),
                 ["authenticationScript"] = AuthenticationScript?.ToJson(),
                 ["createTakeOverScript"] = CreateTakeOverScript?.ToJson(),
@@ -206,6 +214,10 @@ namespace Gs2.Gs2Account.Model
             if (ChangePasswordIfTakeOver != null) {
                 writer.WritePropertyName("changePasswordIfTakeOver");
                 writer.Write(bool.Parse(ChangePasswordIfTakeOver.ToString()));
+            }
+            if (DifferentUserIdForLoginAndDataRetention != null) {
+                writer.WritePropertyName("differentUserIdForLoginAndDataRetention");
+                writer.Write(bool.Parse(DifferentUserIdForLoginAndDataRetention.ToString()));
             }
             if (CreateAccountScript != null) {
                 writer.WritePropertyName("createAccountScript");
@@ -273,6 +285,14 @@ namespace Gs2.Gs2Account.Model
             else
             {
                 diff += ChangePasswordIfTakeOver == other.ChangePasswordIfTakeOver ? 0 : 1;
+            }
+            if (DifferentUserIdForLoginAndDataRetention == null && DifferentUserIdForLoginAndDataRetention == other.DifferentUserIdForLoginAndDataRetention)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += DifferentUserIdForLoginAndDataRetention == other.DifferentUserIdForLoginAndDataRetention ? 0 : 1;
             }
             if (CreateAccountScript == null && CreateAccountScript == other.CreateAccountScript)
             {
