@@ -156,6 +156,161 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.UserDomain>(Impl);
         #endif
         }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[]> DisconnectAsync(
+            #else
+        public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[]> Disconnect(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[]> DisconnectAsync(
+        #endif
+            DisconnectByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[]> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName)
+                .WithUserId(this._userId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.DisconnectByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                        item.NamespaceName.ToString(),
+                        item.UserId.ToString(),
+                        "WebSocketSession"
+                    );
+                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            #else
+            var result = await this._client.DisconnectByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              {
+                foreach (var item in resultModel.Items) {
+                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                        item.NamespaceName.ToString(),
+                        item.UserId.ToString(),
+                        "WebSocketSession"
+                    );
+                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            #endif
+            Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[] domain = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[result?.Items.Length ?? 0];
+            for (int i=0; i<result?.Items.Length; i++)
+            {
+                domain[i] = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this._wssession,
+                    result.Items[i]?.NamespaceName,
+                    result.Items[i]?.UserId
+                );
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[]>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Gateway.Domain.Model.UserDomain> DisconnectAllAsync(
+            #else
+        public IFuture<Gs2.Gs2Gateway.Domain.Model.UserDomain> DisconnectAll(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Gateway.Domain.Model.UserDomain> DisconnectAllAsync(
+        #endif
+            DisconnectAllRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.UserDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.DisconnectAllFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #else
+            var result = await this._client.DisconnectAllAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #endif
+            Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.UserDomain>(Impl);
+        #endif
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(

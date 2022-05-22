@@ -727,6 +727,109 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
+        public class DisconnectAllTask : Gs2WebSocketSessionTask<Request.DisconnectAllRequest, Result.DisconnectAllResult>
+        {
+	        public DisconnectAllTask(IGs2Session session, Request.DisconnectAllRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DisconnectAllRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "gateway",
+                    "webSocketSession",
+                    "disconnectAll",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DisconnectAll(
+                Request.DisconnectAllRequest request,
+                UnityAction<AsyncResult<Result.DisconnectAllResult>> callback
+        )
+		{
+			var task = new DisconnectAllTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DisconnectAllResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DisconnectAllResult> DisconnectAllFuture(
+                Request.DisconnectAllRequest request
+        )
+		{
+			return new DisconnectAllTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DisconnectAllResult> DisconnectAllAsync(
+            Request.DisconnectAllRequest request
+        )
+		{
+		    var task = new DisconnectAllTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DisconnectAllTask DisconnectAllAsync(
+                Request.DisconnectAllRequest request
+        )
+		{
+			return new DisconnectAllTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DisconnectAllResult> DisconnectAllAsync(
+            Request.DisconnectAllRequest request
+        )
+		{
+		    var task = new DisconnectAllTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetFirebaseTokenTask : Gs2WebSocketSessionTask<Request.SetFirebaseTokenRequest, Result.SetFirebaseTokenResult>
         {
 	        public SetFirebaseTokenTask(IGs2Session session, Request.SetFirebaseTokenRequest request) : base(session, request)

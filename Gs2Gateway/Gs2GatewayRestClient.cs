@@ -1369,6 +1369,219 @@ namespace Gs2.Gs2Gateway
 #endif
 
 
+        public class DisconnectByUserIdTask : Gs2RestSessionTask<DisconnectByUserIdRequest, DisconnectByUserIdResult>
+        {
+            public DisconnectByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DisconnectByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DisconnectByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "gateway")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/session/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DisconnectByUserId(
+                Request.DisconnectByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DisconnectByUserIdResult>> callback
+        )
+		{
+			var task = new DisconnectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DisconnectByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DisconnectByUserIdResult> DisconnectByUserIdFuture(
+                Request.DisconnectByUserIdRequest request
+        )
+		{
+			return new DisconnectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DisconnectByUserIdResult> DisconnectByUserIdAsync(
+                Request.DisconnectByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DisconnectByUserIdResult> result = null;
+			await DisconnectByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DisconnectByUserIdTask DisconnectByUserIdAsync(
+                Request.DisconnectByUserIdRequest request
+        )
+		{
+			return new DisconnectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DisconnectByUserIdResult> DisconnectByUserIdAsync(
+                Request.DisconnectByUserIdRequest request
+        )
+		{
+			var task = new DisconnectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DisconnectAllTask : Gs2RestSessionTask<DisconnectAllRequest, DisconnectAllResult>
+        {
+            public DisconnectAllTask(IGs2Session session, RestSessionRequestFactory factory, DisconnectAllRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DisconnectAllRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "gateway")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/session";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DisconnectAll(
+                Request.DisconnectAllRequest request,
+                UnityAction<AsyncResult<Result.DisconnectAllResult>> callback
+        )
+		{
+			var task = new DisconnectAllTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DisconnectAllResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DisconnectAllResult> DisconnectAllFuture(
+                Request.DisconnectAllRequest request
+        )
+		{
+			return new DisconnectAllTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DisconnectAllResult> DisconnectAllAsync(
+                Request.DisconnectAllRequest request
+        )
+		{
+            AsyncResult<Result.DisconnectAllResult> result = null;
+			await DisconnectAll(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DisconnectAllTask DisconnectAllAsync(
+                Request.DisconnectAllRequest request
+        )
+		{
+			return new DisconnectAllTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DisconnectAllResult> DisconnectAllAsync(
+                Request.DisconnectAllRequest request
+        )
+		{
+			var task = new DisconnectAllTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetFirebaseTokenTask : Gs2RestSessionTask<SetFirebaseTokenRequest, SetFirebaseTokenResult>
         {
             public SetFirebaseTokenTask(IGs2Session session, RestSessionRequestFactory factory, SetFirebaseTokenRequest request) : base(session, factory, request)
