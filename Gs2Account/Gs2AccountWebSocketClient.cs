@@ -762,6 +762,124 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class UpdateBannedTask : Gs2WebSocketSessionTask<Request.UpdateBannedRequest, Result.UpdateBannedResult>
+        {
+	        public UpdateBannedTask(IGs2Session session, Request.UpdateBannedRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateBannedRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Banned != null)
+                {
+                    jsonWriter.WritePropertyName("banned");
+                    jsonWriter.Write(request.Banned.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "updateBanned",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateBanned(
+                Request.UpdateBannedRequest request,
+                UnityAction<AsyncResult<Result.UpdateBannedResult>> callback
+        )
+		{
+			var task = new UpdateBannedTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBannedResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateBannedResult> UpdateBannedFuture(
+                Request.UpdateBannedRequest request
+        )
+		{
+			return new UpdateBannedTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBannedResult> UpdateBannedAsync(
+            Request.UpdateBannedRequest request
+        )
+		{
+		    var task = new UpdateBannedTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateBannedTask UpdateBannedAsync(
+                Request.UpdateBannedRequest request
+        )
+		{
+			return new UpdateBannedTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateBannedResult> UpdateBannedAsync(
+            Request.UpdateBannedRequest request
+        )
+		{
+		    var task = new UpdateBannedTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetAccountTask : Gs2WebSocketSessionTask<Request.GetAccountRequest, Result.GetAccountResult>
         {
 	        public GetAccountTask(IGs2Session session, Request.GetAccountRequest request) : base(session, request)

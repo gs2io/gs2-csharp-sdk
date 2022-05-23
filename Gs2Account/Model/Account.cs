@@ -35,6 +35,7 @@ namespace Gs2.Gs2Account.Model
         public string UserId { set; get; }
         public string Password { set; get; }
         public int? TimeOffset { set; get; }
+        public bool? Banned { set; get; }
         public long? CreatedAt { set; get; }
 
         public Account WithAccountId(string accountId) {
@@ -54,6 +55,11 @@ namespace Gs2.Gs2Account.Model
 
         public Account WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
+            return this;
+        }
+
+        public Account WithBanned(bool? banned) {
+            this.Banned = banned;
             return this;
         }
 
@@ -143,6 +149,7 @@ namespace Gs2.Gs2Account.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()))
+                .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
         }
 
@@ -153,6 +160,7 @@ namespace Gs2.Gs2Account.Model
                 ["userId"] = UserId,
                 ["password"] = Password,
                 ["timeOffset"] = TimeOffset,
+                ["banned"] = Banned,
                 ["createdAt"] = CreatedAt,
             };
         }
@@ -175,6 +183,10 @@ namespace Gs2.Gs2Account.Model
             if (TimeOffset != null) {
                 writer.WritePropertyName("timeOffset");
                 writer.Write(int.Parse(TimeOffset.ToString()));
+            }
+            if (Banned != null) {
+                writer.WritePropertyName("banned");
+                writer.Write(bool.Parse(Banned.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -218,6 +230,14 @@ namespace Gs2.Gs2Account.Model
             else
             {
                 diff += (int)(TimeOffset - other.TimeOffset);
+            }
+            if (Banned == null && Banned == other.Banned)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Banned == other.Banned ? 0 : 1;
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
