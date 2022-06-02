@@ -128,7 +128,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "LotteryModel"
+                        "LotteryModel"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "LotteryModel"
+                        "LotteryModel"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "lotteryModel")
                     {
-                    _cache.Delete<Gs2.Gs2Lottery.Model.LotteryModel>(
+                        _cache.Delete<Gs2.Gs2Lottery.Model.LotteryModel>(
                             _parentKey,
                             Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
                                 this.LotteryName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Lottery.Model.LotteryModel>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
-                    this.LotteryName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
+                        this.LotteryName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

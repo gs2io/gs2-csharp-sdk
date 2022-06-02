@@ -92,7 +92,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "deploy:Gs2.Gs2Deploy.Model.Stack";
+            string parentKey = "deploy:Stack";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Deploy.Model.Stack>
             (

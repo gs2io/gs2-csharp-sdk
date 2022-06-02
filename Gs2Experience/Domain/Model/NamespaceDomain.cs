@@ -83,7 +83,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "experience:Gs2.Gs2Experience.Model.Namespace";
+            this._parentKey = "experience:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -432,7 +432,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
                 var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ThresholdMaster"
+                        "ThresholdMaster"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
                 var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ThresholdMaster"
+                        "ThresholdMaster"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -525,7 +525,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
                 var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ExperienceModelMaster"
+                        "ExperienceModelMaster"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -548,7 +548,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
                 var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ExperienceModelMaster"
+                        "ExperienceModelMaster"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -849,7 +849,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Experience.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Experience.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -863,11 +863,11 @@ namespace Gs2.Gs2Experience.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Experience.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

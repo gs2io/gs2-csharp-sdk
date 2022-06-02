@@ -128,7 +128,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
                     _stackName.ToString(),
-                    "Output"
+                        "Output"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.OutputDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
                     _stackName.ToString(),
-                    "Output"
+                        "Output"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.OutputDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "output")
                     {
-                    _cache.Delete<Gs2.Gs2Deploy.Model.Output>(
+                        _cache.Delete<Gs2.Gs2Deploy.Model.Output>(
                             _parentKey,
                             Gs2.Gs2Deploy.Domain.Model.OutputDomain.CreateCacheKey(
                                 this.OutputName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Deploy.Model.Output>(
-                _parentKey,
-                Gs2.Gs2Deploy.Domain.Model.OutputDomain.CreateCacheKey(
-                    this.OutputName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.OutputDomain.CreateCacheKey(
+                        this.OutputName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

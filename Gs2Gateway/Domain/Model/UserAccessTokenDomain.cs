@@ -64,7 +64,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2WebSocketSession _wssession;
         private readonly Gs2GatewayWebSocketClient _wsclient;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string Protocol { get; set; }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -135,7 +137,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "ReceiveFriendRequest"
+                        "ReceiveFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -159,7 +161,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "ReceiveFriendRequest"
+                        "ReceiveFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -222,7 +224,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "ReceiveFriendRequest"
+                        "ReceiveFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -264,7 +266,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "ReceiveFriendRequest"
+                            "ReceiveFriendRequest"
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
@@ -301,7 +303,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 result?.Item?.UserId,
-                this._fromUserId
+                this._fromUserId,
+                "ReceiveFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -355,7 +358,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "ReceiveFriendRequest"
+                        "ReceiveFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -397,7 +400,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "ReceiveFriendRequest"
+                            "ReceiveFriendRequest"
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
@@ -434,7 +437,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 result?.Item?.UserId,
-                this._fromUserId
+                this._fromUserId,
+                "ReceiveFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -534,7 +538,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "friendRequest")
                     {
-                    _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                        _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                             _parentKey,
                             Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
                                 this.FromUserId?.ToString()
@@ -548,11 +552,11 @@ namespace Gs2.Gs2Friend.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
-                    this.FromUserId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
+                        this.FromUserId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

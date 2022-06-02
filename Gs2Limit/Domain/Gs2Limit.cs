@@ -233,7 +233,7 @@ namespace Gs2.Gs2Limit.Domain
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Counter"
+                                    "Counter"
                             );
                             var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
                                 resultModel.Item.LimitName.ToString(),
@@ -261,7 +261,7 @@ namespace Gs2.Gs2Limit.Domain
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Counter"
+                                    "Counter"
                             );
                             var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
                                 resultModel.Item.LimitName.ToString(),
@@ -294,7 +294,7 @@ namespace Gs2.Gs2Limit.Domain
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Counter"
+                                    "Counter"
                             );
                             var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
                                 resultModel.Item.LimitName.ToString(),

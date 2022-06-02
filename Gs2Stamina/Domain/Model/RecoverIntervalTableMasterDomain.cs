@@ -128,7 +128,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RecoverIntervalTableMaster"
+                        "RecoverIntervalTableMaster"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RecoverIntervalTableMaster"
+                        "RecoverIntervalTableMaster"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -212,7 +212,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RecoverIntervalTableMaster"
+                        "RecoverIntervalTableMaster"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -235,7 +235,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RecoverIntervalTableMaster"
+                        "RecoverIntervalTableMaster"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -299,7 +299,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RecoverIntervalTableMaster"
+                        "RecoverIntervalTableMaster"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -319,7 +319,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
-                        "RecoverIntervalTableMaster"
+                            "RecoverIntervalTableMaster"
                     );
                     var key = Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -425,7 +425,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "recoverIntervalTableMaster")
                     {
-                    _cache.Delete<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                        _cache.Delete<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
                             _parentKey,
                             Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
                                 this.RecoverIntervalTableName?.ToString()
@@ -439,11 +439,11 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
-                    this.RecoverIntervalTableName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
+                        this.RecoverIntervalTableName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

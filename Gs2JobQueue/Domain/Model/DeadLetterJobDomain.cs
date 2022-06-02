@@ -135,7 +135,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "DeadLetterJob"
+                        "DeadLetterJob"
                 );
                 var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "DeadLetterJob"
+                        "DeadLetterJob"
                 );
                 var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -222,7 +222,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "DeadLetterJob"
+                        "DeadLetterJob"
                 );
                 var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -243,7 +243,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "DeadLetterJob"
+                            "DeadLetterJob"
                     );
                     var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -351,7 +351,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "deadLetterJob")
                     {
-                    _cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
+                        _cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
                             _parentKey,
                             Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                                 this.DeadLetterJobName?.ToString()
@@ -365,11 +365,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    this.DeadLetterJobName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
+                        this.DeadLetterJobName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

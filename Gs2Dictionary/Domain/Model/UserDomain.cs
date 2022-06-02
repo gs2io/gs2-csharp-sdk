@@ -228,11 +228,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+                var parentKey = CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        requestModel.UserId.ToString(),
+                        "Entry"
+                );
                 foreach (Gs2.Gs2Dictionary.Model.Entry item in cache.List<Gs2.Gs2Dictionary.Model.Entry>(
-                    _parentKey
+                    parentKey
                 )) {
                     cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                        _parentKey,
+                        parentKey,
                         Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             item?.Name?.ToString()
                         )
@@ -246,11 +251,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+                var parentKey = CreateCacheParentKey(
+                        requestModel.NamespaceName.ToString(),
+                        requestModel.UserId.ToString(),
+                        "Entry"
+                );
                 foreach (Gs2.Gs2Dictionary.Model.Entry item in cache.List<Gs2.Gs2Dictionary.Model.Entry>(
-                    _parentKey
+                    parentKey
                 )) {
                     cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                        _parentKey,
+                        parentKey,
                         Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             item?.Name?.ToString()
                         )

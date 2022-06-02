@@ -232,7 +232,7 @@ namespace Gs2.Gs2Enhance.Domain
                         {
                             var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "RateModel"
+                                    "RateModel"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
@@ -254,9 +254,11 @@ namespace Gs2.Gs2Enhance.Domain
                             var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Progress"
+                                    "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                                resultModel.Item.RateName.ToString(),
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
@@ -285,9 +287,11 @@ namespace Gs2.Gs2Enhance.Domain
                             var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Progress"
+                                    "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                                resultModel.Item.RateName.ToString(),
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
                         }
@@ -310,7 +314,7 @@ namespace Gs2.Gs2Enhance.Domain
                         {
                             var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "RateModel"
+                                    "RateModel"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
@@ -332,9 +336,11 @@ namespace Gs2.Gs2Enhance.Domain
                             var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Progress"
+                                    "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                                resultModel.Item.RateName.ToString(),
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,

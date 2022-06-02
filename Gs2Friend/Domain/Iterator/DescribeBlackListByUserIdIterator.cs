@@ -98,7 +98,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "friend:string";
+            string parentKey = "friend:UserId";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<string>
             (

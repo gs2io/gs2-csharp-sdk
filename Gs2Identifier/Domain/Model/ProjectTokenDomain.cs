@@ -80,7 +80,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._client = new Gs2IdentifierRestClient(
                 session
             );
-            this._parentKey = "identifier:Gs2.Gs2Identifier.Model.ProjectToken";
+            this._parentKey = "identifier:ProjectToken";
         }
 
         #if UNITY_2017_1_OR_NEWER

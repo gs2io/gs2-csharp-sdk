@@ -135,7 +135,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "CompletedQuestList"
+                        "CompletedQuestList"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                     resultModel.Item.QuestGroupName.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "CompletedQuestList"
+                        "CompletedQuestList"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                     resultModel.Item.QuestGroupName.ToString()
@@ -222,7 +222,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "CompletedQuestList"
+                        "CompletedQuestList"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                     resultModel.Item.QuestGroupName.ToString()
@@ -243,7 +243,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "CompletedQuestList"
+                            "CompletedQuestList"
                     );
                     var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                         resultModel.Item.QuestGroupName.ToString()
@@ -351,7 +351,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "completedQuestList")
                     {
-                    _cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
                             _parentKey,
                             Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                                 this.QuestGroupName?.ToString()
@@ -365,11 +365,11 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                _parentKey,
-                Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                    this.QuestGroupName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        this.QuestGroupName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

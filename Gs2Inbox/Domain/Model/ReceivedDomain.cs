@@ -130,7 +130,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Received"
+                        "Received"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 );
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Received"
+                        "Received"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 );
@@ -214,7 +214,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Received"
+                        "Received"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 );
@@ -237,7 +237,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Received"
+                        "Received"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 );
@@ -301,7 +301,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Received"
+                        "Received"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 );
@@ -321,7 +321,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Received"
+                            "Received"
                     );
                     var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                     );
@@ -420,7 +420,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "received")
                     {
-                    _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
+                        _cache.Delete<Gs2.Gs2Inbox.Model.Received>(
                             _parentKey,
                             Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                             )
@@ -433,10 +433,10 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
-                _parentKey,
-                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

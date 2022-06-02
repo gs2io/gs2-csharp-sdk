@@ -96,7 +96,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         private async Task _load() {
         #endif
             string parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName != null ? this._userName.ToString() : null,
+                "Singleton",
                 "Password"
             );
             string listParentKey = parentKey;
@@ -139,7 +139,6 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                                    item.UserName?.ToString()
                             ),
                             item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes

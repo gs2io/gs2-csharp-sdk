@@ -83,7 +83,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "showcase:Gs2.Gs2Showcase.Model.Namespace";
+            this._parentKey = "showcase:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -432,7 +432,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "SalesItemMaster"
+                        "SalesItemMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "SalesItemMaster"
+                        "SalesItemMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -525,7 +525,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "SalesItemGroupMaster"
+                        "SalesItemGroupMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -548,7 +548,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "SalesItemGroupMaster"
+                        "SalesItemGroupMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -618,7 +618,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ShowcaseMaster"
+                        "ShowcaseMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -641,7 +641,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "ShowcaseMaster"
+                        "ShowcaseMaster"
                 );
                 var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -942,7 +942,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Showcase.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Showcase.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -956,11 +956,11 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Showcase.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

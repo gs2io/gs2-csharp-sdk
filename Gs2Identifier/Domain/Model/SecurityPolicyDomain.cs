@@ -81,7 +81,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 session
             );
             this._securityPolicyName = securityPolicyName;
-            this._parentKey = "identifier:Gs2.Gs2Identifier.Model.SecurityPolicy";
+            this._parentKey = "identifier:SecurityPolicy";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -424,7 +424,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "securityPolicy")
                     {
-                    _cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                             _parentKey,
                             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                                 this.SecurityPolicyName?.ToString()
@@ -438,11 +438,11 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                parentKey,
-                Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                    this.SecurityPolicyName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        this.SecurityPolicyName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

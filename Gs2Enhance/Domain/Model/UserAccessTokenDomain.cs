@@ -62,7 +62,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2EnhanceRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public long? AcquireExperience { get; set; }
@@ -94,7 +95,85 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
         }
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enhance.Domain.Model.UserAccessTokenDomain> StartAsync(
+            #else
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.UserAccessTokenDomain> Start(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Enhance.Domain.Model.UserAccessTokenDomain> StartAsync(
+        #endif
+            StartRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UserAccessTokenDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.StartFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #else
+            var result = await this._client.StartAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #endif
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enhance.Domain.Model.UserAccessTokenDomain>(Impl);
+        #endif
+        }
+
         public Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain Progress(
+            string rateName,
+            string progressName
         ) {
             return new Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain(
                 this._cache,
@@ -102,7 +181,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._namespaceName,
-                this._accessToken
+                this._accessToken,
+                rateName,
+                progressName
             );
         }
 

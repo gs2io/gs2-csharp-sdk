@@ -296,13 +296,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string userName
         )
         {
-            return string.Join(
-                ":",
-                userName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -321,7 +317,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             Gs2.Gs2Identifier.Model.AttachSecurityPolicy value = _cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
-                    this.UserName?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

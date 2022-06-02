@@ -92,7 +92,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "dictionary:Gs2.Gs2Dictionary.Model.Namespace";
+            string parentKey = "dictionary:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Dictionary.Model.Namespace>
             (

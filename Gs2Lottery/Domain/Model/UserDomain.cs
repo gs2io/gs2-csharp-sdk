@@ -197,7 +197,41 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    this.UserId.ToString(),
+                    "BoxItems"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                );
+                this._cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
+                    parentKey,
+                    key
+                );
+                this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.BoxItems>(
+                    parentKey
+                );
+            }
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    this.UserId.ToString(),
+                    "Box"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
+                    request.PrizeTableName
+                );
+                this._cache.Delete<Gs2.Gs2Lottery.Model.Box>(
+                    parentKey,
+                    key
+                );
+                this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.Box>(
+                    parentKey
+                );
+            }
+
             Gs2.Gs2Lottery.Domain.Model.UserDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

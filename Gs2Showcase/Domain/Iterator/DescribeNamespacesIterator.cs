@@ -92,7 +92,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "showcase:Gs2.Gs2Showcase.Model.Namespace";
+            string parentKey = "showcase:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Showcase.Model.Namespace>
             (

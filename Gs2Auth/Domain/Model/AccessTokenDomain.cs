@@ -79,7 +79,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             this._client = new Gs2AuthRestClient(
                 session
             );
-            this._parentKey = "auth:Gs2.Gs2Auth.Model.AccessToken";
+            this._parentKey = "auth:AccessToken";
         }
 
         #if UNITY_2017_1_OR_NEWER

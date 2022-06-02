@@ -135,7 +135,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -224,7 +224,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -311,7 +311,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -332,7 +332,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         "Singleton",
-                        "Gathering"
+                            "Gathering"
                     );
                     var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -440,7 +440,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "gathering")
                     {
-                    _cache.Delete<Gs2.Gs2Matchmaking.Model.Gathering>(
+                        _cache.Delete<Gs2.Gs2Matchmaking.Model.Gathering>(
                             _parentKey,
                             Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                                 this.GatheringName?.ToString()
@@ -454,11 +454,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Matchmaking.Model.Gathering>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    this.GatheringName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
+                        this.GatheringName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

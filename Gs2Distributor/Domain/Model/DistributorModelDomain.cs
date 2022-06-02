@@ -128,7 +128,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             {
                 var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "DistributorModel"
+                        "DistributorModel"
                 );
                 var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             {
                 var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "DistributorModel"
+                        "DistributorModel"
                 );
                 var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "distributorModel")
                     {
-                    _cache.Delete<Gs2.Gs2Distributor.Model.DistributorModel>(
+                        _cache.Delete<Gs2.Gs2Distributor.Model.DistributorModel>(
                             _parentKey,
                             Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
                                 this.DistributorName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Distributor.Model.DistributorModel>(
-                _parentKey,
-                Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
-                    this.DistributorName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
+                        this.DistributorName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

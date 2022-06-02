@@ -233,7 +233,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
@@ -255,7 +255,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
@@ -306,7 +306,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -322,7 +322,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -345,7 +345,7 @@ namespace Gs2.Gs2Inventory.Domain
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.ItemSet.UserId.ToString(),
                                 resultModel.ItemSet.InventoryName.ToString(),
-                                "ItemSet"
+                                    "ItemSet"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 resultModel.ItemSet.ItemName.ToString(),
@@ -362,7 +362,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -378,7 +378,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -401,7 +401,7 @@ namespace Gs2.Gs2Inventory.Domain
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.ItemSet.UserId.ToString(),
                                 resultModel.ItemSet.InventoryName.ToString(),
-                                "ItemSet"
+                                    "ItemSet"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 resultModel.ItemSet.ItemName.ToString(),
@@ -413,7 +413,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -424,7 +424,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -480,7 +480,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -496,7 +496,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -519,7 +519,7 @@ namespace Gs2.Gs2Inventory.Domain
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.ItemSet.UserId.ToString(),
                                 resultModel.ItemSet.InventoryName.ToString(),
-                                "ItemSet"
+                                    "ItemSet"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 resultModel.ItemSet.ItemName.ToString(),
@@ -536,7 +536,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -552,7 +552,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -584,7 +584,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
@@ -606,7 +606,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
@@ -657,7 +657,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -673,7 +673,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -696,7 +696,7 @@ namespace Gs2.Gs2Inventory.Domain
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.ItemSet.UserId.ToString(),
                                 resultModel.ItemSet.InventoryName.ToString(),
-                                "ItemSet"
+                                    "ItemSet"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 resultModel.ItemSet.ItemName.ToString(),
@@ -713,7 +713,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -729,7 +729,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
@@ -752,7 +752,7 @@ namespace Gs2.Gs2Inventory.Domain
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.ItemSet.UserId.ToString(),
                                 resultModel.ItemSet.InventoryName.ToString(),
-                                "ItemSet"
+                                    "ItemSet"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 resultModel.ItemSet.ItemName.ToString(),
@@ -764,7 +764,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 requestModel.InventoryName.ToString(),
-                                "ItemModel"
+                                    "ItemModel"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                                 resultModel.ItemModel.Name.ToString()
@@ -775,7 +775,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Inventory.UserId.ToString(),
-                                "Inventory"
+                                    "Inventory"
                             );
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()

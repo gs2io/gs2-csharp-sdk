@@ -124,6 +124,23 @@ namespace Gs2.Gs2Account.Model
             return match.Groups["userId"].Value;
         }
 
+        private static System.Text.RegularExpressions.Regex _dataOwnerNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):account:(?<namespaceName>.+):account:(?<userId>.+):dataOwner:(?<dataOwnerName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetDataOwnerNameFromGrn(
+            string grn
+        )
+        {
+            var match = _dataOwnerNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["dataOwnerName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["dataOwnerName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif

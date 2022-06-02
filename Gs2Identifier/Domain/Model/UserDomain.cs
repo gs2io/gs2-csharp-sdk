@@ -83,7 +83,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 session
             );
             this._userName = userName;
-            this._parentKey = "identifier:Gs2.Gs2Identifier.Model.User";
+            this._parentKey = "identifier:User";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -376,10 +376,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.UserName.ToString(),
-                    "Identifier"
+                        "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.UserName.ToString(),
                     resultModel.Item.ClientId.ToString()
                 );
                 cache.Put(
@@ -400,10 +399,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.UserName.ToString(),
-                    "Identifier"
+                        "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.UserName.ToString(),
                     resultModel.Item.ClientId.ToString()
                 );
                 cache.Put(
@@ -525,8 +523,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
-                this._session,
-                this._userName
+                this._session
             );
         }
 
@@ -627,7 +624,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "user")
                     {
-                    _cache.Delete<Gs2.Gs2Identifier.Model.User>(
+                        _cache.Delete<Gs2.Gs2Identifier.Model.User>(
                             _parentKey,
                             Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                                 this.UserName?.ToString()
@@ -641,11 +638,11 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Identifier.Model.User>(
-                parentKey,
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    this.UserName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                        this.UserName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

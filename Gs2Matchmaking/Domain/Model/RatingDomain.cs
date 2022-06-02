@@ -135,7 +135,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Rating"
+                        "Rating"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Rating"
+                        "Rating"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -222,7 +222,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Rating"
+                        "Rating"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -243,7 +243,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Rating"
+                            "Rating"
                     );
                     var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -351,7 +351,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "rating")
                     {
-                    _cache.Delete<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _cache.Delete<Gs2.Gs2Matchmaking.Model.Rating>(
                             _parentKey,
                             Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                                 this.RatingName?.ToString()
@@ -365,11 +365,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                    this.RatingName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        this.RatingName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

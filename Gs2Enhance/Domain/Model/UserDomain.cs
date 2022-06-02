@@ -93,6 +93,182 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 "User"
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enhance.Domain.Model.ProgressDomain> CreateProgressAsync(
+            #else
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressDomain> CreateProgress(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Enhance.Domain.Model.ProgressDomain> CreateProgressAsync(
+        #endif
+            CreateProgressByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName)
+                .WithUserId(this._userId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.CreateProgressByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                        "Progress"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                    resultModel.Item.RateName.ToString(),
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #else
+            var result = await this._client.CreateProgressByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                        "Progress"
+                );
+                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                    resultModel.Item.RateName.ToString(),
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
+            Gs2.Gs2Enhance.Domain.Model.ProgressDomain domain = new Gs2.Gs2Enhance.Domain.Model.ProgressDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                request.NamespaceName,
+                result?.Item?.UserId,
+                result?.Item?.RateName,
+                result?.Item?.Name
+            );
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enhance.Domain.Model.ProgressDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enhance.Domain.Model.UserDomain> StartAsync(
+            #else
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.UserDomain> Start(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Enhance.Domain.Model.UserDomain> StartAsync(
+        #endif
+            StartByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UserDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName)
+                .WithUserId(this._userId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.StartByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #else
+            var result = await this._client.StartByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            #endif
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enhance.Domain.Model.UserDomain>(Impl);
+        #endif
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Enhance.Model.Progress> Progresses(
@@ -132,6 +308,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         }
 
         public Gs2.Gs2Enhance.Domain.Model.ProgressDomain Progress(
+            string rateName,
+            string progressName
         ) {
             return new Gs2.Gs2Enhance.Domain.Model.ProgressDomain(
                 this._cache,
@@ -139,7 +317,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._namespaceName,
-                this._userId
+                this._userId,
+                rateName,
+                progressName
             );
         }
 

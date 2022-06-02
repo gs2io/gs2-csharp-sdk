@@ -135,7 +135,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -225,7 +225,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -249,7 +249,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -312,7 +312,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -336,7 +336,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "TakeOver"
+                        "TakeOver"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                     resultModel.Item.Type.ToString()
@@ -448,7 +448,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "takeOver")
                     {
-                    _cache.Delete<Gs2.Gs2Account.Model.TakeOver>(
+                        _cache.Delete<Gs2.Gs2Account.Model.TakeOver>(
                             _parentKey,
                             Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                                 this.Type?.ToString()
@@ -462,11 +462,11 @@ namespace Gs2.Gs2Account.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                        this.Type?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

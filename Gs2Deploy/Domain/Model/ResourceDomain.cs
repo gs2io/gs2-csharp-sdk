@@ -128,7 +128,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
                     _stackName.ToString(),
-                    "Resource"
+                        "Resource"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
                     _stackName.ToString(),
-                    "Resource"
+                        "Resource"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "resource")
                     {
-                    _cache.Delete<Gs2.Gs2Deploy.Model.Resource>(
+                        _cache.Delete<Gs2.Gs2Deploy.Model.Resource>(
                             _parentKey,
                             Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                                 this.ResourceName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
-                _parentKey,
-                Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                    this.ResourceName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        this.ResourceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

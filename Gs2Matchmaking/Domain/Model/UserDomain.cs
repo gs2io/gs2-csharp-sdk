@@ -131,7 +131,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -227,7 +227,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         "Singleton",
-                        "Gathering"
+                            "Gathering"
                     );
                     var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()

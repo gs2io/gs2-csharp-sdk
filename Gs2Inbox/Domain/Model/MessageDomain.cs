@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -135,7 +137,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +161,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -222,7 +224,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -249,16 +251,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
                 );
-                cache.Put(
+                cache.Delete<Gs2.Gs2Inbox.Model.Message>(
                     parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    key
                 );
                 cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
                     parentKey
@@ -318,7 +318,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -342,7 +342,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -427,7 +427,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -448,7 +448,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Message"
+                            "Message"
                     );
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -556,7 +556,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "message")
                     {
-                    _cache.Delete<Gs2.Gs2Inbox.Model.Message>(
+                        _cache.Delete<Gs2.Gs2Inbox.Model.Message>(
                             _parentKey,
                             Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                                 this.MessageName?.ToString()
@@ -570,11 +570,11 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Inbox.Model.Message>(
-                _parentKey,
-                Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    this.MessageName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                        this.MessageName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

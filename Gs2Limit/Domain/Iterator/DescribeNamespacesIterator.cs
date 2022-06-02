@@ -92,7 +92,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "limit:Gs2.Gs2Limit.Model.Namespace";
+            string parentKey = "limit:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Limit.Model.Namespace>
             (

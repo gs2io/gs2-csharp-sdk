@@ -128,7 +128,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "PrizeTable"
+                        "PrizeTable"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "PrizeTable"
+                        "PrizeTable"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "prizeTable")
                     {
-                    _cache.Delete<Gs2.Gs2Lottery.Model.PrizeTable>(
+                        _cache.Delete<Gs2.Gs2Lottery.Model.PrizeTable>(
                             _parentKey,
                             Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                                 this.PrizeTableName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Lottery.Model.PrizeTable>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
-                    this.PrizeTableName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                        this.PrizeTableName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

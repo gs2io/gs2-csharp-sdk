@@ -92,7 +92,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "schedule:Gs2.Gs2Schedule.Model.Namespace";
+            string parentKey = "schedule:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Schedule.Model.Namespace>
             (

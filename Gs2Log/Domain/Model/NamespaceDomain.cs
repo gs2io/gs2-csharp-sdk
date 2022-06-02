@@ -85,7 +85,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "log:Gs2.Gs2Log.Model.Namespace";
+            this._parentKey = "log:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -117,15 +117,19 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.GetNamespaceStatusAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -169,15 +173,51 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -218,15 +258,51 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -270,18 +346,44 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Log.Model.Namespace>(parentKey, key);
+            }
             #else
             DeleteNamespaceResult result = null;
             try {
                 result = await this._client.DeleteNamespaceAsync(
                     request
                 );
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+              
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "log",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Log.Model.Namespace>(parentKey, key);
+                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-          
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -323,15 +425,19 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.PutLogAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            #endif
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -932,8 +1038,13 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Namespace> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                "log",
+                "Namespace"
+            );
             Gs2.Gs2Log.Model.Namespace value = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )
@@ -977,7 +1088,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Log.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -991,11 +1102,11 @@ namespace Gs2.Gs2Log.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

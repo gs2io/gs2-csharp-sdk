@@ -233,7 +233,7 @@ namespace Gs2.Gs2Money.Domain
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Wallet"
+                                    "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                                     "null"
@@ -265,7 +265,7 @@ namespace Gs2.Gs2Money.Domain
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Wallet"
+                                    "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                                     "null"
@@ -287,7 +287,7 @@ namespace Gs2.Gs2Money.Domain
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Receipt"
+                                    "Receipt"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
                                 resultModel.Item.TransactionId.ToString()
@@ -319,7 +319,7 @@ namespace Gs2.Gs2Money.Domain
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Wallet"
+                                    "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                                     "null"

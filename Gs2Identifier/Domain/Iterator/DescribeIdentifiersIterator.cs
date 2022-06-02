@@ -139,7 +139,6 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                                    item.UserName?.ToString(),
                                     item.ClientId?.ToString()
                             ),
                             item,

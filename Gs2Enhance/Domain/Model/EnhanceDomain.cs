@@ -131,7 +131,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()

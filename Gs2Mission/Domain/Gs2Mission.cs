@@ -234,7 +234,7 @@ namespace Gs2.Gs2Mission.Domain
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Counter"
+                                    "Counter"
                             );
                             var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
@@ -269,7 +269,7 @@ namespace Gs2.Gs2Mission.Domain
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Complete"
+                                    "Complete"
                             );
                             var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
                                 resultModel.Item.MissionGroupName.ToString()
@@ -301,7 +301,7 @@ namespace Gs2.Gs2Mission.Domain
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Counter"
+                                    "Counter"
                             );
                             var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()

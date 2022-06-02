@@ -35,6 +35,8 @@ namespace Gs2.Gs2Enhance.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
+        public string RateName { set; get; }
+        public string ProgressName { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
 
         public EndRequest WithNamespaceName(string namespaceName) {
@@ -44,6 +46,16 @@ namespace Gs2.Gs2Enhance.Request
 
         public EndRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
+            return this;
+        }
+
+        public EndRequest WithRateName(string rateName) {
+            this.RateName = rateName;
+            return this;
+        }
+
+        public EndRequest WithProgressName(string progressName) {
+            this.ProgressName = progressName;
             return this;
         }
 
@@ -63,6 +75,8 @@ namespace Gs2.Gs2Enhance.Request
             return new EndRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
+                .WithProgressName(!data.Keys.Contains("progressName") || data["progressName"] == null ? null : data["progressName"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Enhance.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Config.FromJson(v);
                 }).ToArray());
@@ -73,6 +87,8 @@ namespace Gs2.Gs2Enhance.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
+                ["rateName"] = RateName,
+                ["progressName"] = ProgressName,
                 ["config"] = new JsonData(Config == null ? new JsonData[]{} :
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
@@ -92,6 +108,14 @@ namespace Gs2.Gs2Enhance.Request
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
+            }
+            if (RateName != null) {
+                writer.WritePropertyName("rateName");
+                writer.Write(RateName.ToString());
+            }
+            if (ProgressName != null) {
+                writer.WritePropertyName("progressName");
+                writer.Write(ProgressName.ToString());
             }
             writer.WriteArrayStart();
             foreach (var confi in Config)

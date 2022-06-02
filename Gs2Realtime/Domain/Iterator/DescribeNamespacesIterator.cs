@@ -92,7 +92,7 @@ namespace Gs2.Gs2Realtime.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "realtime:Gs2.Gs2Realtime.Model.Namespace";
+            string parentKey = "realtime:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Realtime.Model.Namespace>
             (

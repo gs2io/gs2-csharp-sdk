@@ -92,7 +92,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "chat:Gs2.Gs2Chat.Model.Namespace";
+            string parentKey = "chat:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Chat.Model.Namespace>
             (

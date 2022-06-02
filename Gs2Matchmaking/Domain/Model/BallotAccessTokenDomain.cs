@@ -62,7 +62,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2MatchmakingRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _ratingName;
         private readonly string _gatheringName;
         private readonly int? _numberOfPlayer;
@@ -152,7 +153,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -179,7 +180,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -314,7 +315,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "ballot")
                     {
-                    _cache.Delete<Gs2.Gs2Matchmaking.Model.Ballot>(
+                        _cache.Delete<Gs2.Gs2Matchmaking.Model.Ballot>(
                             _parentKey,
                             Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                                 this.RatingName?.ToString(),
@@ -331,14 +332,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    this.RatingName?.ToString(),
-                    this.GatheringName?.ToString(),
-                    this.NumberOfPlayer?.ToString(),
-                    this.KeyId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                        this.RatingName?.ToString(),
+                        this.GatheringName?.ToString(),
+                        this.NumberOfPlayer?.ToString(),
+                        this.KeyId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

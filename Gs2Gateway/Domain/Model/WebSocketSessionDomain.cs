@@ -151,7 +151,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.NamespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "WebSocketSession"
+                        "WebSocketSession"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                 );
@@ -174,7 +174,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.NamespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "WebSocketSession"
+                        "WebSocketSession"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                 );

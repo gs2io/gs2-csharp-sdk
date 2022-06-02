@@ -83,7 +83,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 session
             );
             this._stackName = stackName;
-            this._parentKey = "deploy:Gs2.Gs2Deploy.Model.Stack";
+            this._parentKey = "deploy:Stack";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -964,7 +964,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "stack")
                     {
-                    _cache.Delete<Gs2.Gs2Deploy.Model.Stack>(
+                        _cache.Delete<Gs2.Gs2Deploy.Model.Stack>(
                             _parentKey,
                             Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                                 this.StackName?.ToString()
@@ -978,11 +978,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
-                parentKey,
-                Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                    this.StackName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        this.StackName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

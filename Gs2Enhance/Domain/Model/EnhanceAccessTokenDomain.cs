@@ -62,7 +62,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2EnhanceRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public long? AcquireExperience { get; set; }
@@ -131,7 +132,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()

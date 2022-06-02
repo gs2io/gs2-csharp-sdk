@@ -128,7 +128,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
                 var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "MoldModel"
+                        "MoldModel"
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
                 var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "MoldModel"
+                        "MoldModel"
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "moldModel")
                     {
-                    _cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(
+                        _cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(
                             _parentKey,
                             Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                                 this.MoldName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Formation.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Formation.Model.MoldModel>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
-                    this.MoldName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                        this.MoldName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

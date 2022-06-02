@@ -233,7 +233,7 @@ namespace Gs2.Gs2Inbox.Domain
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Message"
+                                    "Message"
                             );
                             var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
@@ -265,7 +265,7 @@ namespace Gs2.Gs2Inbox.Domain
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Message"
+                                    "Message"
                             );
                             var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
@@ -300,7 +300,7 @@ namespace Gs2.Gs2Inbox.Domain
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Message"
+                                    "Message"
                             );
                             var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()

@@ -130,7 +130,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -300,7 +300,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -320,7 +320,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Progress"
+                            "Progress"
                     );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                     );

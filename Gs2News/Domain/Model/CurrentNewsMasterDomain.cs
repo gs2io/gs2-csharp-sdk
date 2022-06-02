@@ -271,13 +271,9 @@ namespace Gs2.Gs2News.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string namespaceName
         )
         {
-            return string.Join(
-                ":",
-                namespaceName ?? "null"
-            );
+            return "Singleton";
         }
 
     }

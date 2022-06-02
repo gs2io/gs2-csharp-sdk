@@ -69,7 +69,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _yearRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -120,7 +120,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _monthRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _serviceRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Watch.Model
         }
 
         private static System.Text.RegularExpressions.Regex _activityTypeRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):watch:billingActivity:(?<year>.+):(?<month>.+):(?<service>.+):(?<activityType>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 

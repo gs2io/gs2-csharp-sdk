@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,7 +64,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2FriendRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
@@ -130,7 +133,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     this._accessToken?.UserId.ToString(),
-                    "SendFriendRequest"
+                        "SendFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     this._accessToken?.UserId.ToString(),
-                    "SendFriendRequest"
+                        "SendFriendRequest"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                     resultModel.Item.TargetUserId.ToString()
@@ -174,7 +177,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 this._accessToken,
-                result?.Item?.TargetUserId
+                result?.Item?.TargetUserId,
+                "SendFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -304,7 +308,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         public Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain FollowUser(
-            string targetUserId
+            string targetUserId,
+            bool? withProfile
         ) {
             return new Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain(
                 this._cache,
@@ -313,7 +318,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 this._namespaceName,
                 this._accessToken,
-                targetUserId
+                targetUserId,
+                withProfile
             );
         }
         #if UNITY_2017_1_OR_NEWER

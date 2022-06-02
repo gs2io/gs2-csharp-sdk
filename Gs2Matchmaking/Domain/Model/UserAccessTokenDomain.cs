@@ -62,7 +62,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2MatchmakingRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
@@ -131,7 +132,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -155,7 +156,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     "Singleton",
-                    "Gathering"
+                        "Gathering"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()

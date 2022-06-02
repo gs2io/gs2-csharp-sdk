@@ -62,7 +62,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2FriendRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
@@ -130,7 +131,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -153,7 +154,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -217,7 +218,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -240,7 +241,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );

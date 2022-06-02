@@ -62,7 +62,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2ScheduleRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _triggerName;
 
         private readonly String _parentKey;
@@ -135,7 +136,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Trigger"
+                        "Trigger"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +160,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Trigger"
+                        "Trigger"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -222,7 +223,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Trigger"
+                        "Trigger"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -243,7 +244,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Trigger"
+                            "Trigger"
                     );
                     var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -351,7 +352,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "trigger")
                     {
-                    _cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(
+                        _cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(
                             _parentKey,
                             Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                                 this.TriggerName?.ToString()
@@ -365,11 +366,11 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Schedule.Model.Trigger>(
-                _parentKey,
-                Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
-                    this.TriggerName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                        this.TriggerName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

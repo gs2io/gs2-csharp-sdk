@@ -2339,9 +2339,11 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress";
+                    + "/{namespaceName}/user/me/progress/{rateName}/progress/{progressName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -2447,10 +2449,12 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress";
+                    + "/{namespaceName}/user/{userId}/progress/{rateName}/progress/{progressName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -2857,9 +2861,11 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress/end";
+                    + "/{namespaceName}/user/me/progress/rate/{rateName}/progress/{progressName}/end";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2988,10 +2994,12 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress/end";
+                    + "/{namespaceName}/user/{userId}/progress/rate/{rateName}/progress/{progressName}/end";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -3120,9 +3128,11 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress";
+                    + "/{namespaceName}/user/me/progress/rate/{rateName}/progress/{progressName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
                 if (request.ContextStack != null)
@@ -3228,10 +3238,12 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress";
+                    + "/{namespaceName}/user/{userId}/progress/rate/{rateName}/progress/{progressName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
                 if (request.ContextStack != null)

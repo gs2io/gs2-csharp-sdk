@@ -233,7 +233,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -270,7 +270,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -285,7 +285,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -307,7 +307,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -322,7 +322,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -344,7 +344,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -359,7 +359,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -381,7 +381,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -396,7 +396,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -428,7 +428,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -443,7 +443,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -475,7 +475,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -490,7 +490,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -512,7 +512,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -527,7 +527,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -549,7 +549,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -564,7 +564,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -586,7 +586,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -601,7 +601,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
@@ -623,7 +623,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
                                 resultModel.Item.UserId.ToString(),
-                                "Stamina"
+                                    "Stamina"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
@@ -638,7 +638,7 @@ namespace Gs2.Gs2Stamina.Domain
                         {
                             var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName.ToString(),
-                                "StaminaModel"
+                                    "StaminaModel"
                             );
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()

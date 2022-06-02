@@ -128,7 +128,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
                 var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "VersionModel"
+                        "VersionModel"
                 );
                 var key = Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
                 var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "VersionModel"
+                        "VersionModel"
                 );
                 var key = Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "versionModel")
                     {
-                    _cache.Delete<Gs2.Gs2Version.Model.VersionModel>(
+                        _cache.Delete<Gs2.Gs2Version.Model.VersionModel>(
                             _parentKey,
                             Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
                                 this.VersionName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Version.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Version.Model.VersionModel>(
-                _parentKey,
-                Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
-                    this.VersionName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
+                        this.VersionName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

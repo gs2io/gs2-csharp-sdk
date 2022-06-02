@@ -104,7 +104,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             string parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
                 this._accessToken?.UserId?.ToString(),
-                "FollowUser"
+                "FollowUser:" + (_withProfile == true)
             );
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Friend.Model.FollowUser>

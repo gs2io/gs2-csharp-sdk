@@ -142,7 +142,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -167,7 +167,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -232,7 +232,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -257,7 +257,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -327,7 +327,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -352,7 +352,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -420,7 +420,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -445,7 +445,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -513,7 +513,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -538,7 +538,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -606,7 +606,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -631,7 +631,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -699,7 +699,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Status"
+                        "Status"
                 );
                 var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                     resultModel.Item.ExperienceName.ToString(),
@@ -721,7 +721,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Status"
+                            "Status"
                     );
                     var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                         resultModel.Item.ExperienceName.ToString(),
@@ -836,7 +836,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "status")
                     {
-                    _cache.Delete<Gs2.Gs2Experience.Model.Status>(
+                        _cache.Delete<Gs2.Gs2Experience.Model.Status>(
                             _parentKey,
                             Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
                                 this.ExperienceName?.ToString(),
@@ -851,12 +851,12 @@ namespace Gs2.Gs2Experience.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Experience.Model.Status>(
-                _parentKey,
-                Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.ExperienceName?.ToString(),
-                    this.PropertyId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        this.ExperienceName?.ToString(),
+                        this.PropertyId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

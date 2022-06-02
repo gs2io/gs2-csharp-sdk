@@ -92,7 +92,7 @@ namespace Gs2.Gs2News.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "news:Gs2.Gs2News.Model.Namespace";
+            string parentKey = "news:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2News.Model.Namespace>
             (

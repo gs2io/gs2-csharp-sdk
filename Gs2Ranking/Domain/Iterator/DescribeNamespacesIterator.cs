@@ -92,7 +92,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "ranking:Gs2.Gs2Ranking.Model.Namespace";
+            string parentKey = "ranking:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Ranking.Model.Namespace>
             (

@@ -133,7 +133,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -156,7 +156,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -240,7 +240,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -304,7 +304,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -327,7 +327,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -391,7 +391,7 @@ namespace Gs2.Gs2Script.Domain.Model
             {
                 var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "Script"
+                        "Script"
                 );
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -411,7 +411,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 {
                     var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
-                        "Script"
+                            "Script"
                     );
                     var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -517,7 +517,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "script")
                     {
-                    _cache.Delete<Gs2.Gs2Script.Model.Script>(
+                        _cache.Delete<Gs2.Gs2Script.Model.Script>(
                             _parentKey,
                             Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                                 this.ScriptName?.ToString()
@@ -531,11 +531,11 @@ namespace Gs2.Gs2Script.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Script.Model.Script>(
-                _parentKey,
-                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    this.ScriptName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                        this.ScriptName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

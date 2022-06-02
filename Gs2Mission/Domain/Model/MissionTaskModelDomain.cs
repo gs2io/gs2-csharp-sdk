@@ -135,7 +135,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     _missionGroupName.ToString(),
-                    "MissionTaskModel"
+                        "MissionTaskModel"
                 );
                 var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     _missionGroupName.ToString(),
-                    "MissionTaskModel"
+                        "MissionTaskModel"
                 );
                 var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -268,7 +268,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "missionTaskModel")
                     {
-                    _cache.Delete<Gs2.Gs2Mission.Model.MissionTaskModel>(
+                        _cache.Delete<Gs2.Gs2Mission.Model.MissionTaskModel>(
                             _parentKey,
                             Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
                                 this.MissionTaskName?.ToString()
@@ -282,11 +282,11 @@ namespace Gs2.Gs2Mission.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    this.MissionTaskName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
+                        this.MissionTaskName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

@@ -83,7 +83,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "matchmaking:Gs2.Gs2Matchmaking.Model.Namespace";
+            this._parentKey = "matchmaking:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -433,7 +433,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -460,7 +460,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -538,7 +538,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -565,7 +565,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Ballot"
+                        "Ballot"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                     resultModel.Item.RatingName.ToString(),
@@ -642,7 +642,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RatingModelMaster"
+                        "RatingModelMaster"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -665,7 +665,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RatingModelMaster"
+                        "RatingModelMaster"
                 );
                 var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -933,7 +933,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -947,11 +947,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Matchmaking.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

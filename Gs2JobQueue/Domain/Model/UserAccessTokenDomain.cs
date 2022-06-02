@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,7 +64,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2JobQueueRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public bool? IsLastJob { get; set; }
@@ -131,7 +134,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Job"
+                        "Job"
                 );
                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -147,18 +150,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var requestModel = request;
                 var resultModel = result;
                 var cache = _cache;
-              
-                {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                        "Job"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
-                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
             if (result?.Item != null) {

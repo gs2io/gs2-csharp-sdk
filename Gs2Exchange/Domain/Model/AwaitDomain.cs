@@ -141,7 +141,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -166,7 +166,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -231,7 +231,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -256,7 +256,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -343,7 +343,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -368,7 +368,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -480,7 +480,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -567,7 +567,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Await"
+                        "Await"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
@@ -589,7 +589,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Await"
+                            "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString(),
@@ -704,7 +704,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "await")
                     {
-                    _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
+                        _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
                             _parentKey,
                             Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                                 this.AwaitName?.ToString(),
@@ -719,12 +719,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
-                _parentKey,
-                Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    this.AwaitName?.ToString(),
-                    this.RateName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                        this.AwaitName?.ToString(),
+                        this.RateName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

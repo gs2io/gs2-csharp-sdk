@@ -92,7 +92,7 @@ namespace Gs2.Gs2Gateway.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "gateway:Gs2.Gs2Gateway.Model.Namespace";
+            string parentKey = "gateway:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Gateway.Model.Namespace>
             (

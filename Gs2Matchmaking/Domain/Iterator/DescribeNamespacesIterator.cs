@@ -92,7 +92,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "matchmaking:Gs2.Gs2Matchmaking.Model.Namespace";
+            string parentKey = "matchmaking:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Matchmaking.Model.Namespace>
             (

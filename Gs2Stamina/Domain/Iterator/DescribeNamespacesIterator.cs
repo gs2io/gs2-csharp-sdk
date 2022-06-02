@@ -92,7 +92,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "stamina:Gs2.Gs2Stamina.Model.Namespace";
+            string parentKey = "stamina:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Stamina.Model.Namespace>
             (

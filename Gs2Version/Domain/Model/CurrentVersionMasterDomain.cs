@@ -120,6 +120,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.ExportMasterAsync(
                 request
@@ -128,6 +142,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain domain = this;
 
@@ -176,6 +204,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetCurrentVersionMasterAsync(
                 request
@@ -184,6 +226,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -229,6 +285,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateCurrentVersionMasterAsync(
                 request
@@ -237,6 +307,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain domain = this;
 
@@ -285,6 +369,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateCurrentVersionMasterFromGitHubAsync(
                 request
@@ -293,6 +391,20 @@ namespace Gs2.Gs2Version.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentVersionMaster"
+                );
+                var key = Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain domain = this;
 
@@ -383,7 +495,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "currentVersionMaster")
                     {
-                    _cache.Delete<Gs2.Gs2Version.Model.CurrentVersionMaster>(
+                        _cache.Delete<Gs2.Gs2Version.Model.CurrentVersionMaster>(
                             _parentKey,
                             Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
                             )
@@ -396,10 +508,10 @@ namespace Gs2.Gs2Version.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Version.Model.CurrentVersionMaster>(
-                _parentKey,
-                Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

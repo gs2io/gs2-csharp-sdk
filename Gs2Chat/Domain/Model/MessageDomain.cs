@@ -147,7 +147,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     _namespaceName.ToString(),
                     "Singleton",
                     resultModel.Item.RoomName.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     _namespaceName.ToString(),
                     "Singleton",
                     resultModel.Item.RoomName.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -237,7 +237,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     _namespaceName.ToString(),
                     "Singleton",
                     resultModel.Item.RoomName.ToString(),
-                    "Message"
+                        "Message"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         _namespaceName.ToString(),
                         "Singleton",
                         resultModel.Item.RoomName.ToString(),
-                        "Message"
+                            "Message"
                     );
                     var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -369,7 +369,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "message")
                     {
-                    _cache.Delete<Gs2.Gs2Chat.Model.Message>(
+                        _cache.Delete<Gs2.Gs2Chat.Model.Message>(
                             _parentKey,
                             Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                                 this.MessageName?.ToString()
@@ -383,11 +383,11 @@ namespace Gs2.Gs2Chat.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Chat.Model.Message>(
-                _parentKey,
-                Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                    this.MessageName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                        this.MessageName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

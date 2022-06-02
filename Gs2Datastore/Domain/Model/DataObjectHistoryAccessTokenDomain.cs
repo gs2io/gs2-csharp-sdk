@@ -62,7 +62,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2DatastoreRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _dataObjectName;
         private readonly string _generation;
 
@@ -142,7 +143,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     _namespaceName.ToString(),
                     this._accessToken?.UserId.ToString(),
                     resultModel.Item.DataObjectName.ToString(),
-                    "DataObjectHistory"
+                        "DataObjectHistory"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                     resultModel.Item.Generation.ToString()
@@ -167,7 +168,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     _namespaceName.ToString(),
                     this._accessToken?.UserId.ToString(),
                     resultModel.Item.DataObjectName.ToString(),
-                    "DataObjectHistory"
+                        "DataObjectHistory"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                     resultModel.Item.Generation.ToString()
@@ -278,7 +279,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "dataObjectHistory")
                     {
-                    _cache.Delete<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                        _cache.Delete<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                             _parentKey,
                             Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                                 this.Generation?.ToString()
@@ -292,11 +293,11 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                _parentKey,
-                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    this.Generation?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
+                        this.Generation?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

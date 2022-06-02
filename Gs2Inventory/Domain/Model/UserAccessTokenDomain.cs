@@ -62,7 +62,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }

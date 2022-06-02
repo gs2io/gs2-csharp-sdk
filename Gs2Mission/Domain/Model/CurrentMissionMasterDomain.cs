@@ -120,6 +120,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.ExportMasterAsync(
                 request
@@ -128,6 +142,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain domain = this;
 
@@ -176,6 +204,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.GetCurrentMissionMasterAsync(
                 request
@@ -184,6 +226,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -229,6 +285,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateCurrentMissionMasterAsync(
                 request
@@ -237,6 +307,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain domain = this;
 
@@ -285,6 +369,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.UpdateCurrentMissionMasterFromGitHubAsync(
                 request
@@ -293,6 +391,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             var resultModel = result;
             var cache = _cache;
               
+            {
+                var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "CurrentMissionMaster"
+                );
+                var key = Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #endif
             Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain domain = this;
 
@@ -322,13 +434,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string namespaceName
         )
         {
-            return string.Join(
-                ":",
-                namespaceName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -347,7 +455,6 @@ namespace Gs2.Gs2Mission.Domain.Model
             Gs2.Gs2Mission.Model.CurrentMissionMaster value = _cache.Get<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
                 _parentKey,
                 Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
                 )
             );
             if (value == null) {
@@ -370,7 +477,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                                 _cache.Delete<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
                                     _parentKey,
                                     Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
-                                        this.NamespaceName?.ToString()
                                     )
                                 );
                             }
@@ -389,10 +495,9 @@ namespace Gs2.Gs2Mission.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "currentMissionMaster")
                     {
-                    _cache.Delete<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
+                        _cache.Delete<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
                             _parentKey,
                             Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
                             )
                         );
                     }
@@ -403,11 +508,10 @@ namespace Gs2.Gs2Mission.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

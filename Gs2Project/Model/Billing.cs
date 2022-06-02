@@ -40,7 +40,7 @@ namespace Gs2.Gs2Project.Model
         public string ActivityType { set; get; }
         public double? Unit { set; get; }
         public string UnitName { set; get; }
-        public long? Price { set; get; }
+        public double? Price { set; get; }
         public string Currency { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -90,7 +90,7 @@ namespace Gs2.Gs2Project.Model
             return this;
         }
 
-        public Billing WithPrice(long? price) {
+        public Billing WithPrice(double? price) {
             this.Price = price;
             return this;
         }
@@ -196,7 +196,7 @@ namespace Gs2.Gs2Project.Model
                 .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
                 .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : (double?)double.Parse(data["unit"].ToString()))
                 .WithUnitName(!data.Keys.Contains("unitName") || data["unitName"] == null ? null : data["unitName"].ToString())
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (long?)long.Parse(data["price"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (double?)double.Parse(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -262,7 +262,7 @@ namespace Gs2.Gs2Project.Model
             }
             if (Price != null) {
                 writer.WritePropertyName("price");
-                writer.Write(long.Parse(Price.ToString()));
+                writer.Write(double.Parse(Price.ToString()));
             }
             if (Currency != null) {
                 writer.WritePropertyName("currency");

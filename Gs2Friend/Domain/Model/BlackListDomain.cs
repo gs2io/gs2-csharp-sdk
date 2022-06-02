@@ -130,7 +130,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );
@@ -240,7 +240,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BlackList"
+                        "BlackList"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 );

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Enhance.Model
         public string ProgressId { set; get; }
         public string UserId { set; get; }
         public string RateName { set; get; }
+        public string Name { set; get; }
         public string PropertyId { set; get; }
         public int? ExperienceValue { set; get; }
         public float? Rate { set; get; }
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Enhance.Model
 
         public Progress WithRateName(string rateName) {
             this.RateName = rateName;
+            return this;
+        }
+
+        public Progress WithName(string name) {
+            this.Name = name;
             return this;
         }
 
@@ -80,6 +86,108 @@ namespace Gs2.Gs2Enhance.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserIdFromGrn(
+            string grn
+        )
+        {
+            var match = _userIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["userId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _rateNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRateNameFromGrn(
+            string grn
+        )
+        {
+            var match = _rateNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["rateName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["rateName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _progressNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetProgressNameFromGrn(
+            string grn
+        )
+        {
+            var match = _progressNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["progressName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["progressName"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -92,6 +200,7 @@ namespace Gs2.Gs2Enhance.Model
                 .WithProgressId(!data.Keys.Contains("progressId") || data["progressId"] == null ? null : data["progressId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
+                .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (int?)int.Parse(data["experienceValue"].ToString()))
                 .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
@@ -105,6 +214,7 @@ namespace Gs2.Gs2Enhance.Model
                 ["progressId"] = ProgressId,
                 ["userId"] = UserId,
                 ["rateName"] = RateName,
+                ["name"] = Name,
                 ["propertyId"] = PropertyId,
                 ["experienceValue"] = ExperienceValue,
                 ["rate"] = Rate,
@@ -127,6 +237,10 @@ namespace Gs2.Gs2Enhance.Model
             if (RateName != null) {
                 writer.WritePropertyName("rateName");
                 writer.Write(RateName.ToString());
+            }
+            if (Name != null) {
+                writer.WritePropertyName("name");
+                writer.Write(Name.ToString());
             }
             if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
@@ -178,6 +292,14 @@ namespace Gs2.Gs2Enhance.Model
             else
             {
                 diff += RateName.CompareTo(other.RateName);
+            }
+            if (Name == null && Name == other.Name)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Name.CompareTo(other.Name);
             }
             if (PropertyId == null && PropertyId == other.PropertyId)
             {

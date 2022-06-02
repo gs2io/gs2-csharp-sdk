@@ -35,6 +35,8 @@ namespace Gs2.Gs2Enhance.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string RateName { set; get; }
+        public string ProgressName { set; get; }
         public string DuplicationAvoider { set; get; }
 
         public DeleteProgressByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -44,6 +46,16 @@ namespace Gs2.Gs2Enhance.Request
 
         public DeleteProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public DeleteProgressByUserIdRequest WithRateName(string rateName) {
+            this.RateName = rateName;
+            return this;
+        }
+
+        public DeleteProgressByUserIdRequest WithProgressName(string progressName) {
+            this.ProgressName = progressName;
             return this;
         }
 
@@ -62,7 +74,9 @@ namespace Gs2.Gs2Enhance.Request
             }
             return new DeleteProgressByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
+                .WithProgressName(!data.Keys.Contains("progressName") || data["progressName"] == null ? null : data["progressName"].ToString());
         }
 
         public JsonData ToJson()
@@ -70,6 +84,8 @@ namespace Gs2.Gs2Enhance.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["rateName"] = RateName,
+                ["progressName"] = ProgressName,
             };
         }
 
@@ -83,6 +99,14 @@ namespace Gs2.Gs2Enhance.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (RateName != null) {
+                writer.WritePropertyName("rateName");
+                writer.Write(RateName.ToString());
+            }
+            if (ProgressName != null) {
+                writer.WritePropertyName("progressName");
+                writer.Write(ProgressName.ToString());
             }
             writer.WriteObjectEnd();
         }

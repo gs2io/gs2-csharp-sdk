@@ -128,7 +128,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "RateModel"
+                        "RateModel"
                 );
                 var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "rateModel")
                     {
-                    _cache.Delete<Gs2.Gs2Enhance.Model.RateModel>(
+                        _cache.Delete<Gs2.Gs2Enhance.Model.RateModel>(
                             _parentKey,
                             Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
                                 this.RateName?.ToString()
@@ -272,11 +272,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Enhance.Model.RateModel>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
-                    this.RateName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                        this.RateName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

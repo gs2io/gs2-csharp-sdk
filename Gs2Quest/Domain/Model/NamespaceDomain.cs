@@ -83,7 +83,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "quest:Gs2.Gs2Quest.Model.Namespace";
+            this._parentKey = "quest:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -432,7 +432,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "QuestGroupModelMaster"
+                        "QuestGroupModelMaster"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "QuestGroupModelMaster"
+                        "QuestGroupModelMaster"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -487,32 +487,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain>(Impl);
         #endif
-        }
-
-        public Gs2.Gs2Quest.Domain.Model.UserDomain User(
-            string userId
-        ) {
-            return new Gs2.Gs2Quest.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                userId
-            );
-        }
-
-        public UserAccessTokenDomain AccessToken(
-            AccessToken accessToken
-        ) {
-            return new UserAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName,
-                accessToken
-            );
         }
 
         public Gs2.Gs2Quest.Domain.Model.CurrentQuestMasterDomain CurrentQuestMaster(
@@ -571,6 +545,32 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._session,
                 this._namespaceName,
                 questGroupName
+            );
+        }
+
+        public Gs2.Gs2Quest.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Quest.Domain.Model.UserDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                accessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -708,7 +708,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Quest.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Quest.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -722,11 +722,11 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

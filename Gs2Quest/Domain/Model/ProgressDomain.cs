@@ -131,7 +131,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -145,7 +145,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "QuestGroupModel"
+                        "QuestGroupModel"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                     resultModel.QuestGroup.Name.ToString()
@@ -161,7 +161,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.QuestGroup.Name.ToString(),
-                    "QuestModel"
+                        "QuestModel"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                     resultModel.Quest.Name.ToString()
@@ -185,7 +185,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -199,7 +199,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "QuestGroupModel"
+                        "QuestGroupModel"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                     resultModel.QuestGroup.Name.ToString()
@@ -215,7 +215,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.QuestGroup.Name.ToString(),
-                    "QuestModel"
+                        "QuestModel"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                     resultModel.Quest.Name.ToString()
@@ -290,7 +290,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -323,7 +323,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Progress"
+                        "Progress"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "progress")
                     {
-                    _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
+                        _cache.Delete<Gs2.Gs2Quest.Model.Progress>(
                             _parentKey,
                             Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                             )
@@ -468,10 +468,10 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Quest.Model.Progress>(
-                _parentKey,
-                Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

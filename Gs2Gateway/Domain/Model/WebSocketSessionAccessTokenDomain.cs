@@ -64,7 +64,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2WebSocketSession _wssession;
         private readonly Gs2GatewayWebSocketClient _wsclient;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _connectionId;
 
         private readonly String _parentKey;
@@ -151,7 +152,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.NamespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "WebSocketSession"
+                        "WebSocketSession"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                 );
@@ -174,7 +175,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.NamespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "WebSocketSession"
+                        "WebSocketSession"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                 );

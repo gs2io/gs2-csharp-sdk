@@ -62,7 +62,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2ChatRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _roomName;
 
         private readonly String _parentKey;
@@ -135,7 +136,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -159,7 +160,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -225,7 +226,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -249,7 +250,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -312,7 +313,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -336,7 +337,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -402,7 +403,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Subscribe"
+                        "Subscribe"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                     resultModel.Item.RoomName.ToString()
@@ -423,7 +424,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         resultModel.Item.UserId.ToString(),
-                        "Subscribe"
+                            "Subscribe"
                     );
                     var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                         resultModel.Item.RoomName.ToString()
@@ -531,7 +532,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "subscribe")
                     {
-                    _cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
+                        _cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
                             _parentKey,
                             Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                                 this.RoomName?.ToString()
@@ -545,11 +546,11 @@ namespace Gs2.Gs2Chat.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.RoomName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        this.RoomName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

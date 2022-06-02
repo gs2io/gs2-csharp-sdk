@@ -144,6 +144,8 @@ namespace Gs2.Gs2Enhance.Domain.Iterator
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                                    item.RateName?.ToString(),
+                                    item.Name?.ToString()
                             ),
                             item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes

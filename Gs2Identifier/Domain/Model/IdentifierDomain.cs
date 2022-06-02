@@ -129,10 +129,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.UserName.ToString(),
-                    "Identifier"
+                        "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.UserName.ToString(),
                     resultModel.Item.ClientId.ToString()
                 );
                 cache.Put(
@@ -153,10 +152,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.UserName.ToString(),
-                    "Identifier"
+                        "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.UserName.ToString(),
                     resultModel.Item.ClientId.ToString()
                 );
                 cache.Put(
@@ -215,10 +213,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                     resultModel.Item.UserName.ToString(),
-                    "Identifier"
+                        "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.UserName.ToString(),
                     resultModel.Item.ClientId.ToString()
                 );
                 cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(parentKey, key);
@@ -236,10 +233,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 {
                     var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                         resultModel.Item.UserName.ToString(),
-                        "Identifier"
+                            "Identifier"
                     );
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                        resultModel.Item.UserName.ToString(),
                         resultModel.Item.ClientId.ToString()
                     );
                     cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(parentKey, key);
@@ -276,13 +272,11 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
 
         public static string CreateCacheKey(
-            string userName,
             string clientId
         )
         {
             return string.Join(
                 ":",
-                userName ?? "null",
                 clientId ?? "null"
             );
         }
@@ -303,7 +297,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             Gs2.Gs2Identifier.Model.Identifier value = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    this.UserName?.ToString(),
                     this.ClientId?.ToString()
                 )
             );
@@ -327,7 +320,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                                 _cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(
                                     _parentKey,
                                     Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                                        this.UserName?.ToString(),
                                         this.ClientId?.ToString()
                                     )
                                 );
@@ -347,10 +339,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "identifier")
                     {
-                    _cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(
+                        _cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(
                             _parentKey,
                             Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                                this.UserName?.ToString(),
                                 this.ClientId?.ToString()
                             )
                         );
@@ -362,12 +353,11 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    this.UserName?.ToString(),
-                    this.ClientId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
+                        this.ClientId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

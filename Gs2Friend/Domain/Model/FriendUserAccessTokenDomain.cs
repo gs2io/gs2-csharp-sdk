@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,7 +64,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2FriendRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
+
         private readonly bool? _withProfile;
         private readonly string _targetUserId;
 
@@ -141,8 +145,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    _withProfile.ToString(),
-                    "FriendUser"
+                    this._withProfile != null ? this._withProfile.ToString() : "False",
+                        "FriendUser"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
                     resultModel.Item.UserId.ToString()
@@ -166,8 +170,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    _withProfile.ToString(),
-                    "FriendUser"
+                    this._withProfile != null ? this._withProfile.ToString() : "False",
+                        "FriendUser"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
                     resultModel.Item.UserId.ToString()
@@ -230,8 +234,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     this._accessToken?.UserId.ToString(),
-                    _withProfile.ToString(),
-                    "FriendUser"
+                    this._withProfile != null ? this._withProfile.ToString() : "False",
+                        "FriendUser"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
                     resultModel.Item.UserId.ToString()
@@ -274,7 +278,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
                         this._accessToken?.UserId.ToString(),
-                        _withProfile.ToString(),
+                        this._withProfile != null ? this._withProfile.ToString() : "False",
                         "FriendUser"
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
@@ -282,28 +286,44 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(parentKey, key);
                 }
+                {
+                    var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        this._accessToken?.UserId.ToString(),
+                        this._withProfile != null ? (!this._withProfile).ToString() : "True",
+                        "FriendUser"
+                    );
+                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        resultModel.Item.UserId.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(parentKey, key);
+                }
+                {
                     cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
                         Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                             this._namespaceName != null ? this._namespaceName.ToString() : null,
-                            this.UserId != null ? this.UserId.ToString() : null,
+                            resultModel.Item.UserId != null ? resultModel.Item.UserId.ToString() : null,
                             "False",
                             "FriendUser"
                         ),
                         Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                            resultModel.Item.UserId.ToString()
+                            this.UserId.ToString()
                         )
                     );
+                }
+                {
                     cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
                         Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                             this._namespaceName != null ? this._namespaceName.ToString() : null,
-                            this.UserId != null ? this.UserId.ToString() : null,
+                            resultModel.Item.UserId != null ? resultModel.Item.UserId.ToString() : null,
                             "True",
                             "FriendUser"
                         ),
                         Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                            resultModel.Item.UserId.ToString()
+                            this.UserId.ToString()
                         )
                     );
+                }
             } catch(Gs2.Core.Exception.NotFoundException) {}
             #endif
             Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain domain = this;
@@ -407,7 +427,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "friendUser")
                     {
-                    _cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
+                        _cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
                             _parentKey,
                             Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
                                 this.TargetUserId?.ToString()
@@ -421,11 +441,11 @@ namespace Gs2.Gs2Friend.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                    this.TargetUserId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        this.TargetUserId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

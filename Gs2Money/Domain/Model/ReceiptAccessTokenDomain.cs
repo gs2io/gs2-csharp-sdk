@@ -62,7 +62,8 @@ namespace Gs2.Gs2Money.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2MoneyRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _transactionId;
 
         private readonly String _parentKey;

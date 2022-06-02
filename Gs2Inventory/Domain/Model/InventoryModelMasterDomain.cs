@@ -129,7 +129,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "InventoryModelMaster"
+                        "InventoryModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "InventoryModelMaster"
+                        "InventoryModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "InventoryModelMaster"
+                        "InventoryModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -236,7 +236,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "InventoryModelMaster"
+                        "InventoryModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -300,7 +300,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "InventoryModelMaster"
+                        "InventoryModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -320,7 +320,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
-                        "InventoryModelMaster"
+                            "InventoryModelMaster"
                     );
                     var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -381,7 +381,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.InventoryName.ToString(),
-                    "ItemModelMaster"
+                        "ItemModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -405,7 +405,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.InventoryName.ToString(),
-                    "ItemModelMaster"
+                        "ItemModelMaster"
                 );
                 var key = Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -574,7 +574,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "inventoryModelMaster")
                     {
-                    _cache.Delete<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                        _cache.Delete<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
                             _parentKey,
                             Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                                 this.InventoryName?.ToString()
@@ -588,11 +588,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
-                    this.InventoryName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
+                        this.InventoryName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

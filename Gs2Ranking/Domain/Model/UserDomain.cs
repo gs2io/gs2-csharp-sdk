@@ -131,7 +131,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "SubscribeUser"
+                        "SubscribeUser"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),
@@ -156,7 +156,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "SubscribeUser"
+                        "SubscribeUser"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),

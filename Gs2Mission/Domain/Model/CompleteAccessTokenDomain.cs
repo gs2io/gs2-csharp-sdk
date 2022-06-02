@@ -62,7 +62,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2MissionRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _missionGroupName;
 
         private readonly String _parentKey;
@@ -212,7 +213,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Complete"
+                        "Complete"
                 );
                 var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
                     resultModel.Item.MissionGroupName.ToString()
@@ -236,7 +237,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Complete"
+                        "Complete"
                 );
                 var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
                     resultModel.Item.MissionGroupName.ToString()
@@ -345,7 +346,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "complete")
                     {
-                    _cache.Delete<Gs2.Gs2Mission.Model.Complete>(
+                        _cache.Delete<Gs2.Gs2Mission.Model.Complete>(
                             _parentKey,
                             Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
                                 this.MissionGroupName?.ToString()
@@ -359,11 +360,11 @@ namespace Gs2.Gs2Mission.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        this.MissionGroupName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

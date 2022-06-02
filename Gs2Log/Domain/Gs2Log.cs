@@ -109,15 +109,51 @@ namespace Gs2.Gs2Log.Domain
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
             #else
             var result = await this._client.CreateNamespaceAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "log",
+                    "Namespace"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Log.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,

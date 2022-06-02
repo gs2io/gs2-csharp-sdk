@@ -82,7 +82,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "lock:Gs2.Gs2Lock.Model.Namespace";
+            this._parentKey = "lock:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -507,7 +507,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Lock.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Lock.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -521,11 +521,11 @@ namespace Gs2.Gs2Lock.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Lock.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

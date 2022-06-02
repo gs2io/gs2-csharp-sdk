@@ -83,7 +83,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = "version:Gs2.Gs2Version.Model.Namespace";
+            this._parentKey = "version:Namespace";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -432,7 +432,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
                 var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "VersionModelMaster"
+                        "VersionModelMaster"
                 );
                 var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -455,7 +455,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
                 var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "VersionModelMaster"
+                        "VersionModelMaster"
                 );
                 var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -708,7 +708,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                    _cache.Delete<Gs2.Gs2Version.Model.Namespace>(
+                        _cache.Delete<Gs2.Gs2Version.Model.Namespace>(
                             _parentKey,
                             Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
                                 this.NamespaceName?.ToString()
@@ -722,11 +722,11 @@ namespace Gs2.Gs2Version.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Version.Model.Namespace>(
-                parentKey,
-                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )
-            );
+                    parentKey,
+                    Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        this.NamespaceName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

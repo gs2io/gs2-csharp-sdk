@@ -62,7 +62,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2RankingRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
@@ -131,7 +132,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "SubscribeUser"
+                        "SubscribeUser"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),
@@ -156,7 +157,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "SubscribeUser"
+                        "SubscribeUser"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),

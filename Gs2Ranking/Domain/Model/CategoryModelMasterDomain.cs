@@ -128,7 +128,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "CategoryModelMaster"
+                        "CategoryModelMaster"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "CategoryModelMaster"
+                        "CategoryModelMaster"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -212,7 +212,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "CategoryModelMaster"
+                        "CategoryModelMaster"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -235,7 +235,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "CategoryModelMaster"
+                        "CategoryModelMaster"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -299,7 +299,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    "CategoryModelMaster"
+                        "CategoryModelMaster"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -319,7 +319,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 {
                     var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         _namespaceName.ToString(),
-                        "CategoryModelMaster"
+                            "CategoryModelMaster"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
@@ -425,7 +425,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "categoryModelMaster")
                     {
-                    _cache.Delete<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                        _cache.Delete<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                             _parentKey,
                             Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                                 this.CategoryName?.ToString()
@@ -439,11 +439,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
+                        this.CategoryName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

@@ -137,7 +137,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Entry"
+                        "Entry"
                 );
                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -161,7 +161,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Entry"
+                        "Entry"
                 );
                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -224,7 +224,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Entry"
+                        "Entry"
                 );
                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Entry"
+                        "Entry"
                 );
                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -362,7 +362,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "entry")
                     {
-                    _cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                        _cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
                             _parentKey,
                             Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                 this.EntryModelName?.ToString()
@@ -376,11 +376,11 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
-                _parentKey,
-                Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                    this.EntryModelName?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                        this.EntryModelName?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

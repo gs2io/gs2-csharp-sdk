@@ -131,7 +131,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Receipt"
+                        "Receipt"
                 );
                 var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
                     resultModel.Item.TransactionId.ToString()
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "Receipt"
+                        "Receipt"
                 );
                 var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
                     resultModel.Item.TransactionId.ToString()

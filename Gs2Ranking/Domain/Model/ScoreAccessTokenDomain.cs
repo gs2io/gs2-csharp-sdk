@@ -62,7 +62,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2RankingRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
         private readonly string _categoryName;
         private readonly string _scorerUserId;
         private readonly string _uniqueId;
@@ -99,7 +100,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._uniqueId = uniqueId;
             this._parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
+                this.UserId.ToString(),
                 "Score"
             );
         }
@@ -144,8 +145,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                    "Score"
+                    this.UserId.ToString(),
+                        "Score"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),
@@ -170,8 +171,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                    "Score"
+                    this.UserId.ToString(),
+                        "Score"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     resultModel.Item.CategoryName.ToString(),
@@ -250,7 +251,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     this.CategoryName?.ToString(),
                     this.ScorerUserId?.ToString(),
-                    this.UniqueId?.ToString()
+                    this.UniqueId ?? "0"
                 )
             );
             if (value == null) {
@@ -275,7 +276,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                         this.CategoryName?.ToString(),
                                         this.ScorerUserId?.ToString(),
-                                        this.UniqueId?.ToString()
+                                        this.UniqueId ?? "0"
                                     )
                                 );
                             }
@@ -294,12 +295,12 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "score")
                     {
-                    _cache.Delete<Gs2.Gs2Ranking.Model.Score>(
+                        _cache.Delete<Gs2.Gs2Ranking.Model.Score>(
                             _parentKey,
                             Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                 this.CategoryName?.ToString(),
                                 this.ScorerUserId?.ToString(),
-                                this.UniqueId?.ToString()
+                                this.UniqueId ?? "0"
                             )
                         );
                     }
@@ -310,13 +311,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Ranking.Model.Score>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
-                    this.CategoryName?.ToString(),
-                    this.ScorerUserId?.ToString(),
-                    this.UniqueId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                        this.CategoryName?.ToString(),
+                        this.ScorerUserId?.ToString(),
+                        this.UniqueId ?? "0"
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

@@ -148,6 +148,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
             self.OnComplete(value);
             yield return null;
         #else
+            if (value == null)
+            {
+                var result = await this._client.GetBoxByUserIdAsync(
+                    new GetBoxByUserIdRequest()
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithPrizeTableName(this.PrizeTableName)
+                        .WithUserId(this.UserId)
+                );
+                value = result.Item;
+            }
             return value;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
