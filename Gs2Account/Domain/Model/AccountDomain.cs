@@ -563,9 +563,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     resultModel.Item.UserId.ToString(),
                     "DataOwner"
                 );
-                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
+                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
                 cache.Put(
                     parentKey,
                     key,
@@ -647,9 +645,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     resultModel.Item.UserId.ToString(),
                     "DataOwner"
                 );
-                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
+                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
                 cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
             }
             #else

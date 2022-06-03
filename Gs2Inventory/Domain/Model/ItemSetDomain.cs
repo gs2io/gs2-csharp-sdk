@@ -1475,7 +1475,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.ItemSet>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.ItemSet[]>(Impl);
         #endif
         }
 

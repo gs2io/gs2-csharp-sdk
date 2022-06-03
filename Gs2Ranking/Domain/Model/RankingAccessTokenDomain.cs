@@ -323,10 +323,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string scorerUserId
         ) {
             #else
-        public IFuture<Gs2.Gs2Ranking.Model.Ranking> Model() {
+        public IFuture<Gs2.Gs2Ranking.Model.Ranking> Model(
+            string scorerUserId
+        ) {
             #endif
         #else
-        public async Task<Gs2.Gs2Ranking.Model.Ranking> Model() {
+        public async Task<Gs2.Gs2Ranking.Model.Ranking> Model(
+            string scorerUserId
+        ) {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Ranking> self)

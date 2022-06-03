@@ -129,13 +129,13 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Lottery.Model.BoxItems> Model() {
             #else
-        public IFuture<Gs2.Gs2Lottery.Model.Box> Model() {
+        public IFuture<Gs2.Gs2Lottery.Model.BoxItems> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Lottery.Model.Box> Model() {
+        public async Task<Gs2.Gs2Lottery.Model.BoxItems> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.Box> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
             {
         #endif
             Gs2.Gs2Lottery.Model.BoxItems value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.Box>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.BoxItems>(Impl);
         #endif
         }
 
