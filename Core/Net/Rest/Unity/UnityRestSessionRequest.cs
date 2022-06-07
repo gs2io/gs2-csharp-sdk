@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
+using Gs2.Core.Exception;
 #endif
 using UnityEngine.Networking;
 
@@ -64,7 +65,7 @@ namespace Gs2.Core.Net
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            var request = new UnityWebRequest(
+            using var request = new UnityWebRequest(
                 uri,
                 Method.TransformUnity()
             );
@@ -92,6 +93,11 @@ namespace Gs2.Core.Net
 
             await request.SendWebRequest().ToUniTask();
 
+            if (request.responseCode == 500)
+            {
+                return await Invoke();
+            }
+            
             var result = new RestResult(
                 (int) request.responseCode,
                 request.downloadHandler.text
@@ -113,7 +119,7 @@ namespace Gs2.Core.Net
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            var request = new UnityWebRequest(
+            using var request = new UnityWebRequest(
                 uri,
                 Method.TransformUnity()
             );
@@ -140,6 +146,11 @@ namespace Gs2.Core.Net
                 request.certificateHandler = new DisabledCertificateHandler();
 
             yield return request.SendWebRequest();
+            if (request.responseCode == 500)
+            {
+                yield return Action();
+                yield break;
+            }
 
             OnComplete(new RestResult(
                 (int) request.responseCode,

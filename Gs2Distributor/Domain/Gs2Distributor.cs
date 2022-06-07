@@ -36,6 +36,7 @@ using Gs2.Gs2Distributor.Domain.Iterator;
 using Gs2.Gs2Distributor.Domain.Model;
 using Gs2.Gs2Distributor.Request;
 using Gs2.Gs2Distributor.Result;
+using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -242,11 +243,32 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
         }
 
+        [Serializable]
+        private class AutoRunStampSheetNotificationEvent : UnityEvent<AutoRunStampSheetNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static AutoRunStampSheetNotificationEvent onAutoRunStampSheetNotification = new AutoRunStampSheetNotificationEvent();
+
+        public event UnityAction<AutoRunStampSheetNotification> OnAutoRunStampSheetNotification
+        {
+            add => onAutoRunStampSheetNotification.AddListener(value);
+            remove => onAutoRunStampSheetNotification.RemoveListener(value);
+        }
+
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+            switch (action) {
+                case "AutoRunStampSheet": {
+                    onAutoRunStampSheetNotification.Invoke(AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+            }
         }
     }
 }

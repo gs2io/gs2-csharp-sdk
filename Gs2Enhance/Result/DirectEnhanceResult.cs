@@ -34,13 +34,20 @@ namespace Gs2.Gs2Enhance.Result
 	public class DirectEnhanceResult : IResult
 	{
         public Gs2.Gs2Enhance.Model.RateModel Item { set; get; }
+        public string TransactionId { set; get; }
         public string StampSheet { set; get; }
         public string StampSheetEncryptionKeyId { set; get; }
+        public bool? AutoRunStampSheet { set; get; }
         public long? AcquireExperience { set; get; }
         public float? BonusRate { set; get; }
 
         public DirectEnhanceResult WithItem(Gs2.Gs2Enhance.Model.RateModel item) {
             this.Item = item;
+            return this;
+        }
+
+        public DirectEnhanceResult WithTransactionId(string transactionId) {
+            this.TransactionId = transactionId;
             return this;
         }
 
@@ -51,6 +58,11 @@ namespace Gs2.Gs2Enhance.Result
 
         public DirectEnhanceResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
             this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
+            return this;
+        }
+
+        public DirectEnhanceResult WithAutoRunStampSheet(bool? autoRunStampSheet) {
+            this.AutoRunStampSheet = autoRunStampSheet;
             return this;
         }
 
@@ -74,8 +86,10 @@ namespace Gs2.Gs2Enhance.Result
             }
             return new DirectEnhanceResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enhance.Model.RateModel.FromJson(data["item"]))
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
+                .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()))
                 .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)long.Parse(data["acquireExperience"].ToString()))
                 .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()));
         }
@@ -84,8 +98,10 @@ namespace Gs2.Gs2Enhance.Result
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["transactionId"] = TransactionId,
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
+                ["autoRunStampSheet"] = AutoRunStampSheet,
                 ["acquireExperience"] = AcquireExperience,
                 ["bonusRate"] = BonusRate,
             };
@@ -97,6 +113,10 @@ namespace Gs2.Gs2Enhance.Result
             if (Item != null) {
                 Item.WriteJson(writer);
             }
+            if (TransactionId != null) {
+                writer.WritePropertyName("transactionId");
+                writer.Write(TransactionId.ToString());
+            }
             if (StampSheet != null) {
                 writer.WritePropertyName("stampSheet");
                 writer.Write(StampSheet.ToString());
@@ -104,6 +124,10 @@ namespace Gs2.Gs2Enhance.Result
             if (StampSheetEncryptionKeyId != null) {
                 writer.WritePropertyName("stampSheetEncryptionKeyId");
                 writer.Write(StampSheetEncryptionKeyId.ToString());
+            }
+            if (AutoRunStampSheet != null) {
+                writer.WritePropertyName("autoRunStampSheet");
+                writer.Write(bool.Parse(AutoRunStampSheet.ToString()));
             }
             if (AcquireExperience != null) {
                 writer.WritePropertyName("acquireExperience");

@@ -72,6 +72,11 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.StartQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("startQuestScript");
@@ -87,6 +92,11 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("failedQuestScript");
                     request.FailedQuestScript.WriteJson(jsonWriter);
                 }
+                if (request.LogSetting != null)
+                {
+                    jsonWriter.WritePropertyName("logSetting");
+                    request.LogSetting.WriteJson(jsonWriter);
+                }
                 if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
@@ -96,11 +106,6 @@ namespace Gs2.Gs2Quest
                 {
                     jsonWriter.WritePropertyName("keyId");
                     jsonWriter.Write(request.KeyId.ToString());
-                }
-                if (request.LogSetting != null)
-                {
-                    jsonWriter.WritePropertyName("logSetting");
-                    request.LogSetting.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {
@@ -313,6 +318,11 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.StartQuestScript != null)
                 {
                     jsonWriter.WritePropertyName("startQuestScript");
@@ -328,6 +338,11 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("failedQuestScript");
                     request.FailedQuestScript.WriteJson(jsonWriter);
                 }
+                if (request.LogSetting != null)
+                {
+                    jsonWriter.WritePropertyName("logSetting");
+                    request.LogSetting.WriteJson(jsonWriter);
+                }
                 if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
@@ -337,11 +352,6 @@ namespace Gs2.Gs2Quest
                 {
                     jsonWriter.WritePropertyName("keyId");
                     jsonWriter.Write(request.KeyId.ToString());
-                }
-                if (request.LogSetting != null)
-                {
-                    jsonWriter.WritePropertyName("logSetting");
-                    request.LogSetting.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {

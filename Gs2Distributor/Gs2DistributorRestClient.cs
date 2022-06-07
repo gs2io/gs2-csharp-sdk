@@ -203,6 +203,11 @@ namespace Gs2.Gs2Distributor
                     jsonWriter.WritePropertyName("assumeUserId");
                     jsonWriter.Write(request.AssumeUserId);
                 }
+                if (request.AutoRunStampSheetNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunStampSheetNotification");
+                    request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -542,6 +547,11 @@ namespace Gs2.Gs2Distributor
                 {
                     jsonWriter.WritePropertyName("assumeUserId");
                     jsonWriter.Write(request.AssumeUserId);
+                }
+                if (request.AutoRunStampSheetNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunStampSheetNotification");
+                    request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -3020,6 +3030,221 @@ namespace Gs2.Gs2Distributor
         )
 		{
 			var task = new RunStampSheetExpressWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetStampSheetResultTask : Gs2RestSessionTask<GetStampSheetResultRequest, GetStampSheetResultResult>
+        {
+            public GetStampSheetResultTask(IGs2Session session, RestSessionRequestFactory factory, GetStampSheetResultRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetStampSheetResultRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stampSheet/{transactionId}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStampSheetResult(
+                Request.GetStampSheetResultRequest request,
+                UnityAction<AsyncResult<Result.GetStampSheetResultResult>> callback
+        )
+		{
+			var task = new GetStampSheetResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStampSheetResultResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStampSheetResultResult> GetStampSheetResultFuture(
+                Request.GetStampSheetResultRequest request
+        )
+		{
+			return new GetStampSheetResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStampSheetResultResult> GetStampSheetResultAsync(
+                Request.GetStampSheetResultRequest request
+        )
+		{
+            AsyncResult<Result.GetStampSheetResultResult> result = null;
+			await GetStampSheetResult(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetStampSheetResultTask GetStampSheetResultAsync(
+                Request.GetStampSheetResultRequest request
+        )
+		{
+			return new GetStampSheetResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStampSheetResultResult> GetStampSheetResultAsync(
+                Request.GetStampSheetResultRequest request
+        )
+		{
+			var task = new GetStampSheetResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetStampSheetResultByUserIdTask : Gs2RestSessionTask<GetStampSheetResultByUserIdRequest, GetStampSheetResultByUserIdResult>
+        {
+            public GetStampSheetResultByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetStampSheetResultByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetStampSheetResultByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stampSheet/{transactionId}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStampSheetResultByUserId(
+                Request.GetStampSheetResultByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetStampSheetResultByUserIdResult>> callback
+        )
+		{
+			var task = new GetStampSheetResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStampSheetResultByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStampSheetResultByUserIdResult> GetStampSheetResultByUserIdFuture(
+                Request.GetStampSheetResultByUserIdRequest request
+        )
+		{
+			return new GetStampSheetResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStampSheetResultByUserIdResult> GetStampSheetResultByUserIdAsync(
+                Request.GetStampSheetResultByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetStampSheetResultByUserIdResult> result = null;
+			await GetStampSheetResultByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetStampSheetResultByUserIdTask GetStampSheetResultByUserIdAsync(
+                Request.GetStampSheetResultByUserIdRequest request
+        )
+		{
+			return new GetStampSheetResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStampSheetResultByUserIdResult> GetStampSheetResultByUserIdAsync(
+                Request.GetStampSheetResultByUserIdRequest request
+        )
+		{
+			var task = new GetStampSheetResultByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -69,6 +69,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly String _parentKey;
         public string Body { get; set; }
         public string Signature { get; set; }
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string MoldName => _moldName;

@@ -67,6 +67,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private readonly string _progressName;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public long? AcquireExperience { get; set; }
         public float? BonusRate { get; set; }
         public string NamespaceName => _namespaceName;

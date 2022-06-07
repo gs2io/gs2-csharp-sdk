@@ -77,15 +77,10 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("enableDirectEnhance");
                     jsonWriter.Write(request.EnableDirectEnhance.ToString());
                 }
-                if (request.QueueNamespaceId != null)
+                if (request.TransactionSetting != null)
                 {
-                    jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(request.QueueNamespaceId.ToString());
-                }
-                if (request.KeyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(request.KeyId.ToString());
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.EnhanceScript != null)
                 {
@@ -96,6 +91,16 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -313,15 +318,10 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("enableDirectEnhance");
                     jsonWriter.Write(request.EnableDirectEnhance.ToString());
                 }
-                if (request.QueueNamespaceId != null)
+                if (request.TransactionSetting != null)
                 {
-                    jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(request.QueueNamespaceId.ToString());
-                }
-                if (request.KeyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(request.KeyId.ToString());
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.EnhanceScript != null)
                 {
@@ -332,6 +332,16 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
                 }
                 if (request.ContextStack != null)
                 {

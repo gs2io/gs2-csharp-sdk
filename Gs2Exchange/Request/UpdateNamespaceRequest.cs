@@ -37,10 +37,11 @@ namespace Gs2.Gs2Exchange.Request
         public string Description { set; get; }
         public bool? EnableAwaitExchange { set; get; }
         public bool? EnableDirectExchange { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
+        public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -62,13 +63,8 @@ namespace Gs2.Gs2Exchange.Request
             return this;
         }
 
-        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public UpdateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Exchange.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -79,6 +75,16 @@ namespace Gs2.Gs2Exchange.Request
 
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -95,10 +101,11 @@ namespace Gs2.Gs2Exchange.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEnableAwaitExchange(!data.Keys.Contains("enableAwaitExchange") || data["enableAwaitExchange"] == null ? null : (bool?)bool.Parse(data["enableAwaitExchange"].ToString()))
                 .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -108,10 +115,11 @@ namespace Gs2.Gs2Exchange.Request
                 ["description"] = Description,
                 ["enableAwaitExchange"] = EnableAwaitExchange,
                 ["enableDirectExchange"] = EnableDirectExchange,
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -134,6 +142,15 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("enableDirectExchange");
                 writer.Write(bool.Parse(EnableDirectExchange.ToString()));
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
+            if (ExchangeScript != null) {
+                ExchangeScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
                 writer.Write(QueueNamespaceId.ToString());
@@ -141,12 +158,6 @@ namespace Gs2.Gs2Exchange.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
-            }
-            if (ExchangeScript != null) {
-                ExchangeScript.WriteJson(writer);
-            }
-            if (LogSetting != null) {
-                LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

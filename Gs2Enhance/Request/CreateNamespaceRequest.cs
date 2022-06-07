@@ -36,10 +36,11 @@ namespace Gs2.Gs2Enhance.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public bool? EnableDirectEnhance { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
+        public Gs2.Gs2Enhance.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; }
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -56,13 +57,8 @@ namespace Gs2.Gs2Enhance.Request
             return this;
         }
 
-        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Enhance.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -73,6 +69,16 @@ namespace Gs2.Gs2Enhance.Request
 
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
+            return this;
+        }
+
+        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public CreateNamespaceRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -88,10 +94,11 @@ namespace Gs2.Gs2Enhance.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Enhance.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]));
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -100,10 +107,11 @@ namespace Gs2.Gs2Enhance.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["enableDirectEnhance"] = EnableDirectEnhance,
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -122,6 +130,15 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("enableDirectEnhance");
                 writer.Write(bool.Parse(EnableDirectEnhance.ToString()));
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
+            if (EnhanceScript != null) {
+                EnhanceScript.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
                 writer.Write(QueueNamespaceId.ToString());
@@ -129,12 +146,6 @@ namespace Gs2.Gs2Enhance.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
-            }
-            if (EnhanceScript != null) {
-                EnhanceScript.WriteJson(writer);
-            }
-            if (LogSetting != null) {
-                LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

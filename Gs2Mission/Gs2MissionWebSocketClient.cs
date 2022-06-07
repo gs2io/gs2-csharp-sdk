@@ -1056,6 +1056,11 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.MissionCompleteScript != null)
                 {
                     jsonWriter.WritePropertyName("missionCompleteScript");
@@ -1071,16 +1076,6 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("receiveRewardsScript");
                     request.ReceiveRewardsScript.WriteJson(jsonWriter);
                 }
-                if (request.QueueNamespaceId != null)
-                {
-                    jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(request.QueueNamespaceId.ToString());
-                }
-                if (request.KeyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(request.KeyId.ToString());
-                }
                 if (request.CompleteNotification != null)
                 {
                     jsonWriter.WritePropertyName("completeNotification");
@@ -1090,6 +1085,16 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1302,6 +1307,11 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.MissionCompleteScript != null)
                 {
                     jsonWriter.WritePropertyName("missionCompleteScript");
@@ -1317,16 +1327,6 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("receiveRewardsScript");
                     request.ReceiveRewardsScript.WriteJson(jsonWriter);
                 }
-                if (request.QueueNamespaceId != null)
-                {
-                    jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(request.QueueNamespaceId.ToString());
-                }
-                if (request.KeyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(request.KeyId.ToString());
-                }
                 if (request.CompleteNotification != null)
                 {
                     jsonWriter.WritePropertyName("completeNotification");
@@ -1336,6 +1336,16 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
                 }
                 if (request.ContextStack != null)
                 {

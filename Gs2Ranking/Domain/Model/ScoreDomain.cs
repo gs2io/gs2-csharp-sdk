@@ -99,7 +99,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._uniqueId = uniqueId;
             this._parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this.UserId.ToString(),
+                this._userId != null ? this._userId.ToString() : null,
                 "Score"
             );
         }
@@ -144,7 +144,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    this.UserId.ToString(),
+                    resultModel.Item.UserId.ToString(),
                         "Score"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -170,7 +170,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
                 var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    this.UserId.ToString(),
+                    resultModel.Item.UserId.ToString(),
                         "Score"
                 );
                 var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(

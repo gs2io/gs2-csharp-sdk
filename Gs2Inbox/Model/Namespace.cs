@@ -35,15 +35,16 @@ namespace Gs2.Gs2Inbox.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public bool? IsAutomaticDeletingEnabled { set; get; }
+        public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
@@ -65,6 +66,11 @@ namespace Gs2.Gs2Inbox.Model
             return this;
         }
 
+        public Namespace WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
+            return this;
+        }
+
         public Namespace WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
             this.ReceiveMessageScript = receiveMessageScript;
             return this;
@@ -77,16 +83,6 @@ namespace Gs2.Gs2Inbox.Model
 
         public Namespace WithDeleteMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting deleteMessageScript) {
             this.DeleteMessageScript = deleteMessageScript;
-            return this;
-        }
-
-        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public Namespace WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -107,6 +103,16 @@ namespace Gs2.Gs2Inbox.Model
 
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+
+        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public Namespace WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -174,15 +180,16 @@ namespace Gs2.Gs2Inbox.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithIsAutomaticDeletingEnabled(!data.Keys.Contains("isAutomaticDeletingEnabled") || data["isAutomaticDeletingEnabled"] == null ? null : (bool?)bool.Parse(data["isAutomaticDeletingEnabled"].ToString()))
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Inbox.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithReceiveMessageScript(!data.Keys.Contains("receiveMessageScript") || data["receiveMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["receiveMessageScript"]))
                 .WithReadMessageScript(!data.Keys.Contains("readMessageScript") || data["readMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["readMessageScript"]))
                 .WithDeleteMessageScript(!data.Keys.Contains("deleteMessageScript") || data["deleteMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["deleteMessageScript"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithReceiveNotification(!data.Keys.Contains("receiveNotification") || data["receiveNotification"] == null ? null : Gs2.Gs2Inbox.Model.NotificationSetting.FromJson(data["receiveNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inbox.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -192,15 +199,16 @@ namespace Gs2.Gs2Inbox.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["isAutomaticDeletingEnabled"] = IsAutomaticDeletingEnabled,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["receiveMessageScript"] = ReceiveMessageScript?.ToJson(),
                 ["readMessageScript"] = ReadMessageScript?.ToJson(),
                 ["deleteMessageScript"] = DeleteMessageScript?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["receiveNotification"] = ReceiveNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -223,6 +231,10 @@ namespace Gs2.Gs2Inbox.Model
                 writer.WritePropertyName("isAutomaticDeletingEnabled");
                 writer.Write(bool.Parse(IsAutomaticDeletingEnabled.ToString()));
             }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
+            }
             if (ReceiveMessageScript != null) {
                 writer.WritePropertyName("receiveMessageScript");
                 ReceiveMessageScript.WriteJson(writer);
@@ -234,14 +246,6 @@ namespace Gs2.Gs2Inbox.Model
             if (DeleteMessageScript != null) {
                 writer.WritePropertyName("deleteMessageScript");
                 DeleteMessageScript.WriteJson(writer);
-            }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
             }
             if (ReceiveNotification != null) {
                 writer.WritePropertyName("receiveNotification");
@@ -258,6 +262,14 @@ namespace Gs2.Gs2Inbox.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -298,6 +310,14 @@ namespace Gs2.Gs2Inbox.Model
             {
                 diff += IsAutomaticDeletingEnabled == other.IsAutomaticDeletingEnabled ? 0 : 1;
             }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+            }
             if (ReceiveMessageScript == null && ReceiveMessageScript == other.ReceiveMessageScript)
             {
                 // null and null
@@ -321,22 +341,6 @@ namespace Gs2.Gs2Inbox.Model
             else
             {
                 diff += DeleteMessageScript.CompareTo(other.DeleteMessageScript);
-            }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
             }
             if (ReceiveNotification == null && ReceiveNotification == other.ReceiveNotification)
             {
@@ -369,6 +373,22 @@ namespace Gs2.Gs2Inbox.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
             }
             return diff;
         }

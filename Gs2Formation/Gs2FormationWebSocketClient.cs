@@ -72,6 +72,11 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.UpdateMoldScript != null)
                 {
                     jsonWriter.WritePropertyName("updateMoldScript");
@@ -297,6 +302,11 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.UpdateMoldScript != null)
                 {

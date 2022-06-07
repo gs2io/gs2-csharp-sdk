@@ -77,6 +77,11 @@ namespace Gs2.Gs2Distributor
                     jsonWriter.WritePropertyName("assumeUserId");
                     jsonWriter.Write(request.AssumeUserId.ToString());
                 }
+                if (request.AutoRunStampSheetNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunStampSheetNotification");
+                    request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -297,6 +302,11 @@ namespace Gs2.Gs2Distributor
                 {
                     jsonWriter.WritePropertyName("assumeUserId");
                     jsonWriter.Write(request.AssumeUserId.ToString());
+                }
+                if (request.AutoRunStampSheetNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunStampSheetNotification");
+                    request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

@@ -35,13 +35,14 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string NamespaceName { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,11 @@ namespace Gs2.Gs2Mission.Request
 
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -68,16 +74,6 @@ namespace Gs2.Gs2Mission.Request
             return this;
         }
 
-        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public UpdateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
-            return this;
-        }
-
         public UpdateNamespaceRequest WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
@@ -85,6 +81,16 @@ namespace Gs2.Gs2Mission.Request
 
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -99,13 +105,14 @@ namespace Gs2.Gs2Mission.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Mission.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithMissionCompleteScript(!data.Keys.Contains("missionCompleteScript") || data["missionCompleteScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["missionCompleteScript"]))
                 .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
                 .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Mission.Model.NotificationSetting.FromJson(data["completeNotification"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]));
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -113,13 +120,14 @@ namespace Gs2.Gs2Mission.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["missionCompleteScript"] = MissionCompleteScript?.ToJson(),
                 ["counterIncrementScript"] = CounterIncrementScript?.ToJson(),
                 ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["completeNotification"] = CompleteNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -134,6 +142,9 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
             if (MissionCompleteScript != null) {
                 MissionCompleteScript.WriteJson(writer);
             }
@@ -143,6 +154,12 @@ namespace Gs2.Gs2Mission.Request
             if (ReceiveRewardsScript != null) {
                 ReceiveRewardsScript.WriteJson(writer);
             }
+            if (CompleteNotification != null) {
+                CompleteNotification.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
                 writer.Write(QueueNamespaceId.ToString());
@@ -150,12 +167,6 @@ namespace Gs2.Gs2Mission.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
-            }
-            if (CompleteNotification != null) {
-                CompleteNotification.WriteJson(writer);
-            }
-            if (LogSetting != null) {
-                LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

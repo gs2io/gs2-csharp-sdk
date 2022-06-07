@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -251,7 +253,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     this.CategoryName?.ToString(),
                     this.ScorerUserId?.ToString(),
-                    this.UniqueId ?? "0"
+                    this.UniqueId?.ToString() ?? "0"
                 )
             );
             if (value == null) {
@@ -276,7 +278,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                         this.CategoryName?.ToString(),
                                         this.ScorerUserId?.ToString(),
-                                        this.UniqueId ?? "0"
+                                        this.UniqueId?.ToString() ?? "0"
                                     )
                                 );
                             }
@@ -300,7 +302,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                 this.CategoryName?.ToString(),
                                 this.ScorerUserId?.ToString(),
-                                this.UniqueId ?? "0"
+                                this.UniqueId?.ToString() ?? "0"
                             )
                         );
                     }
@@ -315,7 +317,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                         this.CategoryName?.ToString(),
                         this.ScorerUserId?.ToString(),
-                        this.UniqueId ?? "0"
+                        this.UniqueId?.ToString() ?? "0"
                     )
                 );
             }

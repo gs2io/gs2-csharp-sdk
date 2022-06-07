@@ -36,6 +36,7 @@ namespace Gs2.Gs2Distributor.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public string AssumeUserId { set; get; }
+        public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; }
         public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; }
 
         public CreateNamespaceRequest WithName(string name) {
@@ -50,6 +51,11 @@ namespace Gs2.Gs2Distributor.Request
 
         public CreateNamespaceRequest WithAssumeUserId(string assumeUserId) {
             this.AssumeUserId = assumeUserId;
+            return this;
+        }
+
+        public CreateNamespaceRequest WithAutoRunStampSheetNotification(Gs2.Gs2Distributor.Model.NotificationSetting autoRunStampSheetNotification) {
+            this.AutoRunStampSheetNotification = autoRunStampSheetNotification;
             return this;
         }
 
@@ -70,6 +76,7 @@ namespace Gs2.Gs2Distributor.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
+                .WithAutoRunStampSheetNotification(!data.Keys.Contains("autoRunStampSheetNotification") || data["autoRunStampSheetNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunStampSheetNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Distributor.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -79,6 +86,7 @@ namespace Gs2.Gs2Distributor.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["assumeUserId"] = AssumeUserId,
+                ["autoRunStampSheetNotification"] = AutoRunStampSheetNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -97,6 +105,9 @@ namespace Gs2.Gs2Distributor.Request
             if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
                 writer.Write(AssumeUserId.ToString());
+            }
+            if (AutoRunStampSheetNotification != null) {
+                AutoRunStampSheetNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

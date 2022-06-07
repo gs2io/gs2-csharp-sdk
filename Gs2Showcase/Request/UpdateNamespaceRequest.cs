@@ -35,9 +35,10 @@ namespace Gs2.Gs2Showcase.Request
 	{
         public string NamespaceName { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
         public string QueueNamespaceId { set; get; }
         public string KeyId { set; get; }
-        public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
 
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -49,6 +50,16 @@ namespace Gs2.Gs2Showcase.Request
             return this;
         }
 
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
+            return this;
+        }
+
+        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
+            this.LogSetting = logSetting;
+            return this;
+        }
+
         public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
@@ -56,11 +67,6 @@ namespace Gs2.Gs2Showcase.Request
 
         public UpdateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
-            return this;
-        }
-
-        public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
-            this.LogSetting = logSetting;
             return this;
         }
 
@@ -75,9 +81,10 @@ namespace Gs2.Gs2Showcase.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Showcase.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]));
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -85,9 +92,10 @@ namespace Gs2.Gs2Showcase.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["logSetting"] = LogSetting?.ToJson(),
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
-                ["logSetting"] = LogSetting?.ToJson(),
             };
         }
 
@@ -102,6 +110,12 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
+            if (LogSetting != null) {
+                LogSetting.WriteJson(writer);
+            }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
                 writer.Write(QueueNamespaceId.ToString());
@@ -109,9 +123,6 @@ namespace Gs2.Gs2Showcase.Request
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
-            }
-            if (LogSetting != null) {
-                LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

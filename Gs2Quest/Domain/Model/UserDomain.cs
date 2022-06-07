@@ -65,6 +65,8 @@ namespace Gs2.Gs2Quest.Domain.Model
         private readonly string _userId;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;

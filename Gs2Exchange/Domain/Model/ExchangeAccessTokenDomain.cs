@@ -66,6 +66,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
 

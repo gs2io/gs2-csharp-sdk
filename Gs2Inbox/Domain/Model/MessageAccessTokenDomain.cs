@@ -67,6 +67,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
         private readonly string _messageName;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
         public string MessageName => _messageName;

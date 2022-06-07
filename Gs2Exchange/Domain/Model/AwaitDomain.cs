@@ -68,6 +68,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         private readonly String _parentKey;
         public long? UnlockAt { get; set; }
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string AwaitName => _awaitName;

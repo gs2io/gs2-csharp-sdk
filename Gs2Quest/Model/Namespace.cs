@@ -34,14 +34,15 @@ namespace Gs2.Gs2Quest.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Quest.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Quest.Model.ScriptSetting StartQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
@@ -55,6 +56,11 @@ namespace Gs2.Gs2Quest.Model
 
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+
+        public Namespace WithTransactionSetting(Gs2.Gs2Quest.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -73,16 +79,6 @@ namespace Gs2.Gs2Quest.Model
             return this;
         }
 
-        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public Namespace WithKeyId(string keyId) {
-            this.KeyId = keyId;
-            return this;
-        }
-
         public Namespace WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -95,6 +91,16 @@ namespace Gs2.Gs2Quest.Model
 
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+
+        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public Namespace WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -161,14 +167,15 @@ namespace Gs2.Gs2Quest.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Quest.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithStartQuestScript(!data.Keys.Contains("startQuestScript") || data["startQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["startQuestScript"]))
                 .WithCompleteQuestScript(!data.Keys.Contains("completeQuestScript") || data["completeQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["completeQuestScript"]))
                 .WithFailedQuestScript(!data.Keys.Contains("failedQuestScript") || data["failedQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["failedQuestScript"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Quest.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -177,14 +184,15 @@ namespace Gs2.Gs2Quest.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["startQuestScript"] = StartQuestScript?.ToJson(),
                 ["completeQuestScript"] = CompleteQuestScript?.ToJson(),
                 ["failedQuestScript"] = FailedQuestScript?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -203,6 +211,10 @@ namespace Gs2.Gs2Quest.Model
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
+            }
             if (StartQuestScript != null) {
                 writer.WritePropertyName("startQuestScript");
                 StartQuestScript.WriteJson(writer);
@@ -215,14 +227,6 @@ namespace Gs2.Gs2Quest.Model
                 writer.WritePropertyName("failedQuestScript");
                 FailedQuestScript.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
                 LogSetting.WriteJson(writer);
@@ -234,6 +238,14 @@ namespace Gs2.Gs2Quest.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -266,6 +278,14 @@ namespace Gs2.Gs2Quest.Model
             {
                 diff += Description.CompareTo(other.Description);
             }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+            }
             if (StartQuestScript == null && StartQuestScript == other.StartQuestScript)
             {
                 // null and null
@@ -290,22 +310,6 @@ namespace Gs2.Gs2Quest.Model
             {
                 diff += FailedQuestScript.CompareTo(other.FailedQuestScript);
             }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
-            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -329,6 +333,22 @@ namespace Gs2.Gs2Quest.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
             }
             return diff;
         }

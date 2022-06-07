@@ -72,6 +72,11 @@ namespace Gs2.Gs2Showcase
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
@@ -298,6 +303,16 @@ namespace Gs2.Gs2Showcase
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
+                if (request.LogSetting != null)
+                {
+                    jsonWriter.WritePropertyName("logSetting");
+                    request.LogSetting.WriteJson(jsonWriter);
+                }
                 if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
@@ -307,11 +322,6 @@ namespace Gs2.Gs2Showcase
                 {
                     jsonWriter.WritePropertyName("keyId");
                     jsonWriter.Write(request.KeyId.ToString());
-                }
-                if (request.LogSetting != null)
-                {
-                    jsonWriter.WritePropertyName("logSetting");
-                    request.LogSetting.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {

@@ -66,6 +66,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private readonly string _showcaseName;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string ShowcaseName => _showcaseName;

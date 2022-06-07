@@ -35,6 +35,7 @@ namespace Gs2.Gs2Distributor.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public string AssumeUserId { set; get; }
+        public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; }
         public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -56,6 +57,11 @@ namespace Gs2.Gs2Distributor.Model
 
         public Namespace WithAssumeUserId(string assumeUserId) {
             this.AssumeUserId = assumeUserId;
+            return this;
+        }
+
+        public Namespace WithAutoRunStampSheetNotification(Gs2.Gs2Distributor.Model.NotificationSetting autoRunStampSheetNotification) {
+            this.AutoRunStampSheetNotification = autoRunStampSheetNotification;
             return this;
         }
 
@@ -138,6 +144,7 @@ namespace Gs2.Gs2Distributor.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
+                .WithAutoRunStampSheetNotification(!data.Keys.Contains("autoRunStampSheetNotification") || data["autoRunStampSheetNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunStampSheetNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Distributor.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -150,6 +157,7 @@ namespace Gs2.Gs2Distributor.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["assumeUserId"] = AssumeUserId,
+                ["autoRunStampSheetNotification"] = AutoRunStampSheetNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -174,6 +182,10 @@ namespace Gs2.Gs2Distributor.Model
             if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
                 writer.Write(AssumeUserId.ToString());
+            }
+            if (AutoRunStampSheetNotification != null) {
+                writer.WritePropertyName("autoRunStampSheetNotification");
+                AutoRunStampSheetNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -225,6 +237,14 @@ namespace Gs2.Gs2Distributor.Model
             else
             {
                 diff += AssumeUserId.CompareTo(other.AssumeUserId);
+            }
+            if (AutoRunStampSheetNotification == null && AutoRunStampSheetNotification == other.AutoRunStampSheetNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AutoRunStampSheetNotification.CompareTo(other.AutoRunStampSheetNotification);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {

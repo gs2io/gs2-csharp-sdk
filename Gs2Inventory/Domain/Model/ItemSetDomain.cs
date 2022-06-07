@@ -149,31 +149,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -218,31 +221,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -328,31 +334,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -397,31 +406,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -531,31 +543,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -600,31 +615,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -733,31 +751,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -802,31 +823,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {
@@ -945,31 +969,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }{
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
+                    this.UserId.ToString(),
                     requestModel.InventoryName.ToString(),
                     "ItemSet"
                 );
-                foreach (var item in resultModel.Items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        item.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                     requestModel.ItemName.ToString(),
-                    "null"
+                    requestModel.ItemSetName
                 );
+                long? expiresAt = null;
+                foreach (var item in resultModel.Items)
+                {
+                    if (item.ExpiresAt > 0)
+                    {
+                        if (expiresAt.HasValue)
+                        {
+                            expiresAt = Math.Min(expiresAt.Value, item.ExpiresAt.Value);
+                        }
+                        else
+                        {
+                            expiresAt = item.ExpiresAt.Value;
+                        }
+                    }
+                }
                 cache.Put(
                     parentKey,
-                    key2,
+                    key,
                     resultModel.Items,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    expiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
             {

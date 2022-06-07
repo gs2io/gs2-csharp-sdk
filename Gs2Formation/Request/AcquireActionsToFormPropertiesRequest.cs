@@ -38,8 +38,6 @@ namespace Gs2.Gs2Formation.Request
         public string MoldName { set; get; }
         public int? Index { set; get; }
         public Gs2.Gs2Formation.Model.AcquireAction AcquireAction { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
 
@@ -68,16 +66,6 @@ namespace Gs2.Gs2Formation.Request
             return this;
         }
 
-        public AcquireActionsToFormPropertiesRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public AcquireActionsToFormPropertiesRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
-            return this;
-        }
-
         public AcquireActionsToFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.AcquireActionConfig[] config) {
             this.Config = config;
             return this;
@@ -102,8 +90,6 @@ namespace Gs2.Gs2Formation.Request
                 .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
                 .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()))
                 .WithAcquireAction(!data.Keys.Contains("acquireAction") || data["acquireAction"] == null ? null : Gs2.Gs2Formation.Model.AcquireAction.FromJson(data["acquireAction"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Formation.Model.AcquireActionConfig[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.AcquireActionConfig.FromJson(v);
                 }).ToArray());
@@ -117,8 +103,6 @@ namespace Gs2.Gs2Formation.Request
                 ["moldName"] = MoldName,
                 ["index"] = Index,
                 ["acquireAction"] = AcquireAction?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["config"] = new JsonData(Config == null ? new JsonData[]{} :
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
@@ -149,14 +133,6 @@ namespace Gs2.Gs2Formation.Request
             }
             if (AcquireAction != null) {
                 AcquireAction.WriteJson(writer);
-            }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
             }
             writer.WriteArrayStart();
             foreach (var confi in Config)

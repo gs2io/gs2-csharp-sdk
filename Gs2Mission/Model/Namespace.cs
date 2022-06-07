@@ -34,15 +34,16 @@ namespace Gs2.Gs2Mission.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Mission.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; }
         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
@@ -59,6 +60,11 @@ namespace Gs2.Gs2Mission.Model
             return this;
         }
 
+        public Namespace WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
+            return this;
+        }
+
         public Namespace WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
             this.MissionCompleteScript = missionCompleteScript;
             return this;
@@ -71,16 +77,6 @@ namespace Gs2.Gs2Mission.Model
 
         public Namespace WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
             this.ReceiveRewardsScript = receiveRewardsScript;
-            return this;
-        }
-
-        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public Namespace WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -101,6 +97,16 @@ namespace Gs2.Gs2Mission.Model
 
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+
+        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public Namespace WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -167,15 +173,16 @@ namespace Gs2.Gs2Mission.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Mission.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithMissionCompleteScript(!data.Keys.Contains("missionCompleteScript") || data["missionCompleteScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["missionCompleteScript"]))
                 .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
                 .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Mission.Model.NotificationSetting.FromJson(data["completeNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -184,15 +191,16 @@ namespace Gs2.Gs2Mission.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["missionCompleteScript"] = MissionCompleteScript?.ToJson(),
                 ["counterIncrementScript"] = CounterIncrementScript?.ToJson(),
                 ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["completeNotification"] = CompleteNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -211,6 +219,10 @@ namespace Gs2.Gs2Mission.Model
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
+            }
             if (MissionCompleteScript != null) {
                 writer.WritePropertyName("missionCompleteScript");
                 MissionCompleteScript.WriteJson(writer);
@@ -222,14 +234,6 @@ namespace Gs2.Gs2Mission.Model
             if (ReceiveRewardsScript != null) {
                 writer.WritePropertyName("receiveRewardsScript");
                 ReceiveRewardsScript.WriteJson(writer);
-            }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
             }
             if (CompleteNotification != null) {
                 writer.WritePropertyName("completeNotification");
@@ -246,6 +250,14 @@ namespace Gs2.Gs2Mission.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -278,6 +290,14 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += Description.CompareTo(other.Description);
             }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+            }
             if (MissionCompleteScript == null && MissionCompleteScript == other.MissionCompleteScript)
             {
                 // null and null
@@ -301,22 +321,6 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += ReceiveRewardsScript.CompareTo(other.ReceiveRewardsScript);
-            }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
             }
             if (CompleteNotification == null && CompleteNotification == other.CompleteNotification)
             {
@@ -349,6 +353,22 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
             }
             return diff;
         }

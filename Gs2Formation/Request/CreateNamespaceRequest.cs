@@ -35,6 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
         public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Formation.Request
 
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Formation.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Formation.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Formation.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithUpdateMoldScript(!data.Keys.Contains("updateMoldScript") || data["updateMoldScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateMoldScript"]))
                 .WithUpdateFormScript(!data.Keys.Contains("updateFormScript") || data["updateFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateFormScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Formation.Model.LogSetting.FromJson(data["logSetting"]));
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["updateMoldScript"] = UpdateMoldScript?.ToJson(),
                 ["updateFormScript"] = UpdateFormScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -101,6 +109,9 @@ namespace Gs2.Gs2Formation.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (UpdateMoldScript != null) {
                 UpdateMoldScript.WriteJson(writer);

@@ -198,6 +198,11 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.UpdateMoldScript != null)
                 {
                     jsonWriter.WritePropertyName("updateMoldScript");
@@ -542,6 +547,11 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.UpdateMoldScript != null)
                 {
@@ -4761,16 +4771,6 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("acquireAction");
                     request.AcquireAction.WriteJson(jsonWriter);
-                }
-                if (request.QueueNamespaceId != null)
-                {
-                    jsonWriter.WritePropertyName("queueNamespaceId");
-                    jsonWriter.Write(request.QueueNamespaceId);
-                }
-                if (request.KeyId != null)
-                {
-                    jsonWriter.WritePropertyName("keyId");
-                    jsonWriter.Write(request.KeyId);
                 }
                 if (request.Config != null)
                 {

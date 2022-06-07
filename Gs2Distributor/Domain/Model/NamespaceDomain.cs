@@ -611,6 +611,32 @@ namespace Gs2.Gs2Distributor.Domain.Model
             );
         }
 
+        public Gs2.Gs2Distributor.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Distributor.Domain.Model.UserDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                accessToken
+            );
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string childType

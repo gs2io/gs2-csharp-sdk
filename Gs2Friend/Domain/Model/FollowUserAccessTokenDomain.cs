@@ -165,7 +165,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
-                    _accessToken!.UserId.ToString(),
+                    this.UserId,
                         "FollowUser:" + (_withProfile == true)
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(

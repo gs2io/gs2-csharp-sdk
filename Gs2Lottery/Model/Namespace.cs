@@ -34,13 +34,14 @@ namespace Gs2.Gs2Lottery.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
-        public string QueueNamespaceId { set; get; }
-        public string KeyId { set; get; }
+        public Gs2.Gs2Lottery.Model.TransactionSetting TransactionSetting { set; get; }
         public string LotteryTriggerScriptId { set; get; }
         public string ChoicePrizeTableScriptId { set; get; }
         public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; }
 
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
@@ -57,13 +58,8 @@ namespace Gs2.Gs2Lottery.Model
             return this;
         }
 
-        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-
-        public Namespace WithKeyId(string keyId) {
-            this.KeyId = keyId;
+        public Namespace WithTransactionSetting(Gs2.Gs2Lottery.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
 
@@ -89,6 +85,16 @@ namespace Gs2.Gs2Lottery.Model
 
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+
+        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+
+        public Namespace WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -155,13 +161,14 @@ namespace Gs2.Gs2Lottery.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Lottery.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLotteryTriggerScriptId(!data.Keys.Contains("lotteryTriggerScriptId") || data["lotteryTriggerScriptId"] == null ? null : data["lotteryTriggerScriptId"].ToString())
                 .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Lottery.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
         public JsonData ToJson()
@@ -170,13 +177,14 @@ namespace Gs2.Gs2Lottery.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["lotteryTriggerScriptId"] = LotteryTriggerScriptId,
                 ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["queueNamespaceId"] = QueueNamespaceId,
+                ["keyId"] = KeyId,
             };
         }
 
@@ -195,13 +203,9 @@ namespace Gs2.Gs2Lottery.Model
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (LotteryTriggerScriptId != null) {
                 writer.WritePropertyName("lotteryTriggerScriptId");
@@ -222,6 +226,14 @@ namespace Gs2.Gs2Lottery.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -254,21 +266,13 @@ namespace Gs2.Gs2Lottery.Model
             {
                 diff += Description.CompareTo(other.Description);
             }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
             {
                 // null and null
             }
             else
             {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (LotteryTriggerScriptId == null && LotteryTriggerScriptId == other.LotteryTriggerScriptId)
             {
@@ -309,6 +313,22 @@ namespace Gs2.Gs2Lottery.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
             }
             return diff;
         }
