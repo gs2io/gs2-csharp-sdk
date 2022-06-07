@@ -65,48 +65,51 @@ namespace Gs2.Core.Net
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            using var request = new UnityWebRequest(
-                uri,
-                Method.TransformUnity()
-            );
-            request.downloadHandler = new DownloadHandlerBuffer();
-            foreach (var item in Headers)
+            using (var request = new UnityWebRequest(
+                       uri,
+                       Method.TransformUnity()
+                   ))
             {
-                if ((Method == HttpMethod.Post || Method == HttpMethod.Put) && item.Key.ToLower() == "content-type")
+                request.downloadHandler = new DownloadHandlerBuffer();
+                foreach (var item in Headers)
                 {
-                    continue;
+                    if ((Method == HttpMethod.Post || Method == HttpMethod.Put) && item.Key.ToLower() == "content-type")
+                    {
+                        continue;
+                    }
+
+                    request.SetRequestHeader(item.Key, item.Value);
                 }
 
-                request.SetRequestHeader(item.Key, item.Value);
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                if (Method == HttpMethod.Post || Method == HttpMethod.Put)
+                {
+                    request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
+                }
+
+                if (_certificateHandler != null)
+                    request.certificateHandler = _certificateHandler;
+                else if (!_checkCertificateRevocation)
+                    request.certificateHandler = new DisabledCertificateHandler();
+
+                await request.SendWebRequest().ToUniTask();
+
+                if (request.responseCode == 500)
+                {
+                    return await Invoke();
+                }
+
+                var result = new RestResult(
+                    (int) request.responseCode,
+                    request.downloadHandler.text
+                );
+                OnComplete(result);
+
+                request.Dispose();
+                
+                return result;
             }
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            if (Method == HttpMethod.Post || Method == HttpMethod.Put)
-            {
-                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
-            }
-
-            if (_certificateHandler != null)
-                request.certificateHandler = _certificateHandler;
-            else if (!_checkCertificateRevocation)
-                request.certificateHandler = new DisabledCertificateHandler();
-
-            await request.SendWebRequest().ToUniTask();
-
-            if (request.responseCode == 500)
-            {
-                return await Invoke();
-            }
-            
-            var result = new RestResult(
-                (int) request.responseCode,
-                request.downloadHandler.text
-            );
-            OnComplete(result);
-
-            request.Dispose();
-
-            return result;
 #else
             throw new NotImplementedException();
 #endif
@@ -119,45 +122,48 @@ namespace Gs2.Core.Net
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            using var request = new UnityWebRequest(
-                uri,
-                Method.TransformUnity()
-            );
-            request.downloadHandler = new DownloadHandlerBuffer();
-            foreach (var item in Headers)
+            using (var request = new UnityWebRequest(
+                       uri,
+                       Method.TransformUnity()
+                   ))
             {
-                if ((Method == HttpMethod.Post || Method == HttpMethod.Put) && item.Key.ToLower() == "content-type")
+                request.downloadHandler = new DownloadHandlerBuffer();
+                foreach (var item in Headers)
                 {
-                    continue;
+                    if ((Method == HttpMethod.Post || Method == HttpMethod.Put) && item.Key.ToLower() == "content-type")
+                    {
+                        continue;
+                    }
+
+                    request.SetRequestHeader(item.Key, item.Value);
                 }
 
-                request.SetRequestHeader(item.Key, item.Value);
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                if (Method == HttpMethod.Post || Method == HttpMethod.Put)
+                {
+                    request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
+                }
+
+                if (_certificateHandler != null)
+                    request.certificateHandler = _certificateHandler;
+                else if (!_checkCertificateRevocation)
+                    request.certificateHandler = new DisabledCertificateHandler();
+
+                yield return request.SendWebRequest();
+                if (request.responseCode == 500)
+                {
+                    yield return Action();
+                    yield break;
+                }
+
+                OnComplete(new RestResult(
+                    (int) request.responseCode,
+                    request.downloadHandler.text
+                ));
+
+                request.Dispose();
             }
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            if (Method == HttpMethod.Post || Method == HttpMethod.Put)
-            {
-                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
-            }
-
-            if (_certificateHandler != null)
-                request.certificateHandler = _certificateHandler;
-            else if (!_checkCertificateRevocation)
-                request.certificateHandler = new DisabledCertificateHandler();
-
-            yield return request.SendWebRequest();
-            if (request.responseCode == 500)
-            {
-                yield return Action();
-                yield break;
-            }
-
-            OnComplete(new RestResult(
-                (int) request.responseCode,
-                request.downloadHandler.text
-            ));
-
-            request.Dispose();
         }
     }
 }
