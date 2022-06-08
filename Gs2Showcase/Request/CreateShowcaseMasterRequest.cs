@@ -39,32 +39,26 @@ namespace Gs2.Gs2Showcase.Request
         public string Metadata { set; get; }
         public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; }
         public string SalesPeriodEventId { set; get; }
-
         public CreateShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateShowcaseMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateShowcaseMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateShowcaseMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateShowcaseMasterRequest WithDisplayItems(Gs2.Gs2Showcase.Model.DisplayItemMaster[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
-
         public CreateShowcaseMasterRequest WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;

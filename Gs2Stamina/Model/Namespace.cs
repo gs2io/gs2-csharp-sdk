@@ -38,37 +38,30 @@ namespace Gs2.Gs2Stamina.Model
         public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithOverflowTriggerScript(Gs2.Gs2Stamina.Model.ScriptSetting overflowTriggerScript) {
             this.OverflowTriggerScript = overflowTriggerScript;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Stamina.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

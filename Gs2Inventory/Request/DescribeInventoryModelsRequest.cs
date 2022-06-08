@@ -34,7 +34,6 @@ namespace Gs2.Gs2Inventory.Request
 	public class DescribeInventoryModelsRequest : Gs2Request<DescribeInventoryModelsRequest>
 	{
         public string NamespaceName { set; get; }
-
         public DescribeInventoryModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

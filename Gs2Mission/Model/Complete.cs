@@ -39,42 +39,34 @@ namespace Gs2.Gs2Mission.Model
         public long? NextResetAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Complete WithCompleteId(string completeId) {
             this.CompleteId = completeId;
             return this;
         }
-
         public Complete WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Complete WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public Complete WithCompletedMissionTaskNames(string[] completedMissionTaskNames) {
             this.CompletedMissionTaskNames = completedMissionTaskNames;
             return this;
         }
-
         public Complete WithReceivedMissionTaskNames(string[] receivedMissionTaskNames) {
             this.ReceivedMissionTaskNames = receivedMissionTaskNames;
             return this;
         }
-
         public Complete WithNextResetAt(long? nextResetAt) {
             this.NextResetAt = nextResetAt;
             return this;
         }
-
         public Complete WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Complete WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -41,42 +41,34 @@ namespace Gs2.Gs2Limit.Request
         public int? ResetDayOfMonth { set; get; }
         public string ResetDayOfWeek { set; get; }
         public int? ResetHour { set; get; }
-
         public UpdateLimitModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public UpdateLimitModelMasterRequest WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;

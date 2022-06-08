@@ -36,17 +36,14 @@ namespace Gs2.Gs2Auth.Request
         public string KeyId { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
-
         public LoginBySignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
-
         public LoginBySignatureRequest WithBody(string body) {
             this.Body = body;
             return this;
         }
-
         public LoginBySignatureRequest WithSignature(string signature) {
             this.Signature = signature;
             return this;

@@ -36,17 +36,14 @@ namespace Gs2.Gs2Distributor.Request
         public string NamespaceName { set; get; }
         public string StampTask { set; get; }
         public string KeyId { set; get; }
-
         public RunStampTaskRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RunStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public RunStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

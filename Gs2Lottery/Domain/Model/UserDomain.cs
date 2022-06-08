@@ -67,6 +67,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         private readonly string _userId;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
@@ -124,20 +126,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            #else
-            var result = await this._client.GetBoxByUserIdAsync(
-                request
-            );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+              
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     _namespaceName.ToString(),
                     resultModel.Item.UserId.ToString(),
-                    "BoxItems"
+                        "BoxItems"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
                 );
@@ -148,6 +145,30 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            #else
+            var result = await this._client.GetBoxByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    resultModel.Item.UserId.ToString(),
+                        "BoxItems"
+                );
+                var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -189,14 +210,18 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
             #else
             var result = await this._client.ResetBoxByUserIdAsync(
                 request
             );
-            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
+            #endif
 
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(

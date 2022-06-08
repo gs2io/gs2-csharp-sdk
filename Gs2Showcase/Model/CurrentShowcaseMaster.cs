@@ -33,12 +33,10 @@ namespace Gs2.Gs2Showcase.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
-
         public CurrentShowcaseMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public CurrentShowcaseMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

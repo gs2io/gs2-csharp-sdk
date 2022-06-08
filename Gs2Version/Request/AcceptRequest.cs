@@ -36,17 +36,14 @@ namespace Gs2.Gs2Version.Request
         public string NamespaceName { set; get; }
         public string VersionName { set; get; }
         public string AccessToken { set; get; }
-
         public AcceptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcceptRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public AcceptRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

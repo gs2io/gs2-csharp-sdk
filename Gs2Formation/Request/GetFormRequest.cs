@@ -37,22 +37,18 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string MoldName { set; get; }
         public int? Index { set; get; }
-
         public GetFormRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetFormRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetFormRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public GetFormRequest WithIndex(int? index) {
             this.Index = index;
             return this;

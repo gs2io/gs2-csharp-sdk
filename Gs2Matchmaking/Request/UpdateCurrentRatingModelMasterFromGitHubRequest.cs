@@ -35,12 +35,10 @@ namespace Gs2.Gs2Matchmaking.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Matchmaking.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
         public UpdateCurrentRatingModelMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentRatingModelMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Matchmaking.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

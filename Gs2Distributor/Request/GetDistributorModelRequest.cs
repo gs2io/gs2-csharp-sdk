@@ -35,12 +35,10 @@ namespace Gs2.Gs2Distributor.Request
 	{
         public string NamespaceName { set; get; }
         public string DistributorName { set; get; }
-
         public GetDistributorModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetDistributorModelRequest WithDistributorName(string distributorName) {
             this.DistributorName = distributorName;
             return this;

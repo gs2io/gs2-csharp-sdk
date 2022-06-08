@@ -37,22 +37,18 @@ namespace Gs2.Gs2Account.Request
         public string UserId { set; get; }
         public string KeyId { set; get; }
         public string Password { set; get; }
-
         public AuthenticationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AuthenticationRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AuthenticationRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
-
         public AuthenticationRequest WithPassword(string password) {
             this.Password = password;
             return this;

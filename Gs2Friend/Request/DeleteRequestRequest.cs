@@ -36,17 +36,14 @@ namespace Gs2.Gs2Friend.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string TargetUserId { set; get; }
-
         public DeleteRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteRequestRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteRequestRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

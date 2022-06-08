@@ -35,22 +35,18 @@ namespace Gs2.Gs2Mission.Model
         public int? ResetDayOfMonth { set; get; }
         public string ResetDayOfWeek { set; get; }
         public int? ResetHour { set; get; }
-
         public CounterScopeModel WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public CounterScopeModel WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public CounterScopeModel WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public CounterScopeModel WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;

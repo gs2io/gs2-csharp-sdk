@@ -46,67 +46,54 @@ namespace Gs2.Gs2Matchmaking.Request
         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithEnableRating(bool? enableRating) {
             this.EnableRating = enableRating;
             return this;
         }
-
         public UpdateNamespaceRequest WithCreateGatheringTriggerType(string createGatheringTriggerType) {
             this.CreateGatheringTriggerType = createGatheringTriggerType;
             return this;
         }
-
         public UpdateNamespaceRequest WithCreateGatheringTriggerRealtimeNamespaceId(string createGatheringTriggerRealtimeNamespaceId) {
             this.CreateGatheringTriggerRealtimeNamespaceId = createGatheringTriggerRealtimeNamespaceId;
             return this;
         }
-
         public UpdateNamespaceRequest WithCreateGatheringTriggerScriptId(string createGatheringTriggerScriptId) {
             this.CreateGatheringTriggerScriptId = createGatheringTriggerScriptId;
             return this;
         }
-
         public UpdateNamespaceRequest WithCompleteMatchmakingTriggerType(string completeMatchmakingTriggerType) {
             this.CompleteMatchmakingTriggerType = completeMatchmakingTriggerType;
             return this;
         }
-
         public UpdateNamespaceRequest WithCompleteMatchmakingTriggerRealtimeNamespaceId(string completeMatchmakingTriggerRealtimeNamespaceId) {
             this.CompleteMatchmakingTriggerRealtimeNamespaceId = completeMatchmakingTriggerRealtimeNamespaceId;
             return this;
         }
-
         public UpdateNamespaceRequest WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
             this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
             return this;
         }
-
         public UpdateNamespaceRequest WithJoinNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification) {
             this.JoinNotification = joinNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithLeaveNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting leaveNotification) {
             this.LeaveNotification = leaveNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithCompleteNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

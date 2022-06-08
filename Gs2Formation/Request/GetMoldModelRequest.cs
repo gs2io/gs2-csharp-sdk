@@ -35,12 +35,10 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string MoldName { set; get; }
-
         public GetMoldModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMoldModelRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;

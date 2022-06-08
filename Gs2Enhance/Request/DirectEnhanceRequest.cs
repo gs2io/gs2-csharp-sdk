@@ -39,32 +39,26 @@ namespace Gs2.Gs2Enhance.Request
         public string TargetItemSetId { set; get; }
         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
-
         public DirectEnhanceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DirectEnhanceRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DirectEnhanceRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DirectEnhanceRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
-
         public DirectEnhanceRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
-
         public DirectEnhanceRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

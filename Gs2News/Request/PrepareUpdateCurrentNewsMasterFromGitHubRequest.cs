@@ -35,12 +35,10 @@ namespace Gs2.Gs2News.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2News.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
         public PrepareUpdateCurrentNewsMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareUpdateCurrentNewsMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2News.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

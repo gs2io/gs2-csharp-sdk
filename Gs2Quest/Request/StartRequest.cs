@@ -39,32 +39,26 @@ namespace Gs2.Gs2Quest.Request
         public string AccessToken { set; get; }
         public bool? Force { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
-
         public StartRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public StartRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public StartRequest WithQuestName(string questName) {
             this.QuestName = questName;
             return this;
         }
-
         public StartRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public StartRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
-
         public StartRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
             return this;

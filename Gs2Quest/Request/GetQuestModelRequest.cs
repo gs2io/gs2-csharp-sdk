@@ -36,17 +36,14 @@ namespace Gs2.Gs2Quest.Request
         public string NamespaceName { set; get; }
         public string QuestGroupName { set; get; }
         public string QuestName { set; get; }
-
         public GetQuestModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetQuestModelRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public GetQuestModelRequest WithQuestName(string questName) {
             this.QuestName = questName;
             return this;

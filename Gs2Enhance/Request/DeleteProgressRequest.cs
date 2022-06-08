@@ -37,22 +37,18 @@ namespace Gs2.Gs2Enhance.Request
         public string AccessToken { set; get; }
         public string RateName { set; get; }
         public string ProgressName { set; get; }
-
         public DeleteProgressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteProgressRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteProgressRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DeleteProgressRequest WithProgressName(string progressName) {
             this.ProgressName = progressName;
             return this;

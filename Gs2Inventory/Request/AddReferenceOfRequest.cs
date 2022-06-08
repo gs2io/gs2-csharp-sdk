@@ -39,32 +39,26 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public string ItemSetName { set; get; }
         public string ReferenceOf { set; get; }
-
         public AddReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AddReferenceOfRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public AddReferenceOfRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public AddReferenceOfRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public AddReferenceOfRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
-
         public AddReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;

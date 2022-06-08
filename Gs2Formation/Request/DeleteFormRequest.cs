@@ -37,22 +37,18 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string MoldName { set; get; }
         public int? Index { set; get; }
-
         public DeleteFormRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteFormRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteFormRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public DeleteFormRequest WithIndex(int? index) {
             this.Index = index;
             return this;

@@ -35,22 +35,18 @@ namespace Gs2.Gs2Matchmaking.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public int? Volatility { set; get; }
-
         public RatingModel WithRatingModelId(string ratingModelId) {
             this.RatingModelId = ratingModelId;
             return this;
         }
-
         public RatingModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RatingModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RatingModel WithVolatility(int? volatility) {
             this.Volatility = volatility;
             return this;

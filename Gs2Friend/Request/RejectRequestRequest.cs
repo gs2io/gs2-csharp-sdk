@@ -36,17 +36,14 @@ namespace Gs2.Gs2Friend.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string FromUserId { set; get; }
-
         public RejectRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RejectRequestRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public RejectRequestRequest WithFromUserId(string fromUserId) {
             this.FromUserId = fromUserId;
             return this;

@@ -42,57 +42,46 @@ namespace Gs2.Gs2Mission.Model
         public string PremiseMissionTaskName { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public MissionTaskModelMaster WithMissionTaskId(string missionTaskId) {
             this.MissionTaskId = missionTaskId;
             return this;
         }
-
         public MissionTaskModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public MissionTaskModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public MissionTaskModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public MissionTaskModelMaster WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public MissionTaskModelMaster WithTargetValue(long? targetValue) {
             this.TargetValue = targetValue;
             return this;
         }
-
         public MissionTaskModelMaster WithCompleteAcquireActions(Gs2.Gs2Mission.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
-
         public MissionTaskModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public MissionTaskModelMaster WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;
         }
-
         public MissionTaskModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public MissionTaskModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

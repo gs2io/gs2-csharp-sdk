@@ -38,27 +38,22 @@ namespace Gs2.Gs2Exchange.Request
         public string RateName { set; get; }
         public string AwaitName { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
-
         public AcquireRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcquireRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public AcquireRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public AcquireRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;
         }
-
         public AcquireRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

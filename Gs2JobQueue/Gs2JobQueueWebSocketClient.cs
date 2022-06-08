@@ -72,10 +72,20 @@ namespace Gs2.Gs2JobQueue
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.EnableAutoRun != null)
+                {
+                    jsonWriter.WritePropertyName("enableAutoRun");
+                    jsonWriter.Write(request.EnableAutoRun.ToString());
+                }
                 if (request.PushNotification != null)
                 {
                     jsonWriter.WritePropertyName("pushNotification");
                     request.PushNotification.WriteJson(jsonWriter);
+                }
+                if (request.RunNotification != null)
+                {
+                    jsonWriter.WritePropertyName("runNotification");
+                    request.RunNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -293,10 +303,20 @@ namespace Gs2.Gs2JobQueue
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.EnableAutoRun != null)
+                {
+                    jsonWriter.WritePropertyName("enableAutoRun");
+                    jsonWriter.Write(request.EnableAutoRun.ToString());
+                }
                 if (request.PushNotification != null)
                 {
                     jsonWriter.WritePropertyName("pushNotification");
                     request.PushNotification.WriteJson(jsonWriter);
+                }
+                if (request.RunNotification != null)
+                {
+                    jsonWriter.WritePropertyName("runNotification");
+                    request.RunNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

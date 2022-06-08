@@ -35,24 +35,30 @@ namespace Gs2.Gs2JobQueue.Request
 	{
         public string Name { set; get; }
         public string Description { set; get; }
+        public bool? EnableAutoRun { set; get; }
         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
+        public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
         public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
+        public CreateNamespaceRequest WithEnableAutoRun(bool? enableAutoRun) {
+            this.EnableAutoRun = enableAutoRun;
+            return this;
+        }
         public CreateNamespaceRequest WithPushNotification(Gs2.Gs2JobQueue.Model.NotificationSetting pushNotification) {
             this.PushNotification = pushNotification;
             return this;
         }
-
+        public CreateNamespaceRequest WithRunNotification(Gs2.Gs2JobQueue.Model.NotificationSetting runNotification) {
+            this.RunNotification = runNotification;
+            return this;
+        }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2JobQueue.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -69,7 +75,9 @@ namespace Gs2.Gs2JobQueue.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
                 .WithPushNotification(!data.Keys.Contains("pushNotification") || data["pushNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["pushNotification"]))
+                .WithRunNotification(!data.Keys.Contains("runNotification") || data["runNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["runNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2JobQueue.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -78,7 +86,9 @@ namespace Gs2.Gs2JobQueue.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["enableAutoRun"] = EnableAutoRun,
                 ["pushNotification"] = PushNotification?.ToJson(),
+                ["runNotification"] = RunNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -94,8 +104,15 @@ namespace Gs2.Gs2JobQueue.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (EnableAutoRun != null) {
+                writer.WritePropertyName("enableAutoRun");
+                writer.Write(bool.Parse(EnableAutoRun.ToString()));
+            }
             if (PushNotification != null) {
                 PushNotification.WriteJson(writer);
+            }
+            if (RunNotification != null) {
+                RunNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

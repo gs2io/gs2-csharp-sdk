@@ -34,7 +34,6 @@ namespace Gs2.Gs2News.Request
 	public class GetNamespaceRequest : Gs2Request<GetNamespaceRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

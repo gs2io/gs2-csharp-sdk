@@ -34,7 +34,6 @@ namespace Gs2.Gs2Gateway.Request
 	public class DisconnectAllRequest : Gs2Request<DisconnectAllRequest>
 	{
         public string NamespaceName { set; get; }
-
         public DisconnectAllRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

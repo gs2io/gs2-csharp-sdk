@@ -35,12 +35,10 @@ namespace Gs2.Gs2Lottery.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public DrawByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public DrawByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

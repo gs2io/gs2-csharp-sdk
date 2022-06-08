@@ -34,7 +34,6 @@ namespace Gs2.Gs2Deploy.Request
 	public class GetStackRequest : Gs2Request<GetStackRequest>
 	{
         public string StackName { set; get; }
-
         public GetStackRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

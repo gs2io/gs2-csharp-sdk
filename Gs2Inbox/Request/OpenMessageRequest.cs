@@ -36,17 +36,14 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string MessageName { set; get; }
-
         public OpenMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public OpenMessageRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public OpenMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;

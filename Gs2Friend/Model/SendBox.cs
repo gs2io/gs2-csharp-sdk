@@ -36,27 +36,22 @@ namespace Gs2.Gs2Friend.Model
         public string[] TargetUserIds { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public SendBox WithSendBoxId(string sendBoxId) {
             this.SendBoxId = sendBoxId;
             return this;
         }
-
         public SendBox WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SendBox WithTargetUserIds(string[] targetUserIds) {
             this.TargetUserIds = targetUserIds;
             return this;
         }
-
         public SendBox WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public SendBox WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

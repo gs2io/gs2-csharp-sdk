@@ -35,22 +35,18 @@ namespace Gs2.Gs2Deploy.Model
         public string Name { set; get; }
         public string Value { set; get; }
         public long? CreatedAt { set; get; }
-
         public Output WithOutputId(string outputId) {
             this.OutputId = outputId;
             return this;
         }
-
         public Output WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Output WithValue(string value) {
             this.Value = value;
             return this;
         }
-
         public Output WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

@@ -37,22 +37,18 @@ namespace Gs2.Gs2Enhance.Request
         public string UserId { set; get; }
         public string RateName { set; get; }
         public string ProgressName { set; get; }
-
         public GetProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetProgressByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public GetProgressByUserIdRequest WithProgressName(string progressName) {
             this.ProgressName = progressName;
             return this;

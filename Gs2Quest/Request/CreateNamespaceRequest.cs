@@ -40,49 +40,44 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Quest.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
             this.StartQuestScript = startQuestScript;
             return this;
         }
-
         public CreateNamespaceRequest WithCompleteQuestScript(Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
             this.CompleteQuestScript = completeQuestScript;
             return this;
         }
-
         public CreateNamespaceRequest WithFailedQuestScript(Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
             this.FailedQuestScript = failedQuestScript;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

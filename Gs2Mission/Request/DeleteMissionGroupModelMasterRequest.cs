@@ -35,12 +35,10 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string NamespaceName { set; get; }
         public string MissionGroupName { set; get; }
-
         public DeleteMissionGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteMissionGroupModelMasterRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;

@@ -42,59 +42,52 @@ namespace Gs2.Gs2Inbox.Request
         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithIsAutomaticDeletingEnabled(bool? isAutomaticDeletingEnabled) {
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
             this.ReceiveMessageScript = receiveMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithReadMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting readMessageScript) {
             this.ReadMessageScript = readMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithDeleteMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting deleteMessageScript) {
             this.DeleteMessageScript = deleteMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithReceiveNotification(Gs2.Gs2Inbox.Model.NotificationSetting receiveNotification) {
             this.ReceiveNotification = receiveNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inbox.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -37,17 +37,14 @@ namespace Gs2.Gs2Datastore.Request
         public string UserId { set; get; }
         public string DataObjectId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareDownloadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareDownloadByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public PrepareDownloadByUserIdRequest WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
             return this;

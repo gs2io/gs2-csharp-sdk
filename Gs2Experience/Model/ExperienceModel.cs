@@ -38,37 +38,30 @@ namespace Gs2.Gs2Experience.Model
         public long? DefaultRankCap { set; get; }
         public long? MaxRankCap { set; get; }
         public Gs2.Gs2Experience.Model.Threshold RankThreshold { set; get; }
-
         public ExperienceModel WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public ExperienceModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public ExperienceModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public ExperienceModel WithDefaultExperience(long? defaultExperience) {
             this.DefaultExperience = defaultExperience;
             return this;
         }
-
         public ExperienceModel WithDefaultRankCap(long? defaultRankCap) {
             this.DefaultRankCap = defaultRankCap;
             return this;
         }
-
         public ExperienceModel WithMaxRankCap(long? maxRankCap) {
             this.MaxRankCap = maxRankCap;
             return this;
         }
-
         public ExperienceModel WithRankThreshold(Gs2.Gs2Experience.Model.Threshold rankThreshold) {
             this.RankThreshold = rankThreshold;
             return this;

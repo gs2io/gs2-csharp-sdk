@@ -35,12 +35,10 @@ namespace Gs2.Gs2Distributor.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentDistributorMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentDistributorMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

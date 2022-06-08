@@ -36,17 +36,14 @@ namespace Gs2.Gs2Version.Request
         public string NamespaceName { set; get; }
         public string VersionName { set; get; }
         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
-
         public CalculateSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CalculateSignatureRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public CalculateSignatureRequest WithVersion(Gs2.Gs2Version.Model.Version_ version) {
             this.Version = version;
             return this;

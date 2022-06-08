@@ -39,32 +39,26 @@ namespace Gs2.Gs2Chat.Request
         public string Metadata { set; get; }
         public string Password { set; get; }
         public string[] WhiteListUserIds { set; get; }
-
         public CreateRoomFromBackendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateRoomFromBackendRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateRoomFromBackendRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CreateRoomFromBackendRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateRoomFromBackendRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public CreateRoomFromBackendRequest WithWhiteListUserIds(string[] whiteListUserIds) {
             this.WhiteListUserIds = whiteListUserIds;
             return this;

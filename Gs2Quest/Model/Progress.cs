@@ -40,47 +40,38 @@ namespace Gs2.Gs2Quest.Model
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;
         }
-
         public Progress WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Progress WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public Progress WithQuestModelId(string questModelId) {
             this.QuestModelId = questModelId;
             return this;
         }
-
         public Progress WithRandomSeed(long? randomSeed) {
             this.RandomSeed = randomSeed;
             return this;
         }
-
         public Progress WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
-
         public Progress WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Progress WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Progress WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

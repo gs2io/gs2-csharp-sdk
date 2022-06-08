@@ -42,57 +42,46 @@ namespace Gs2.Gs2Deploy.Model
         public Gs2.Gs2Deploy.Model.OutputField[] OutputFields { set; get; }
         public string WorkId { set; get; }
         public long? CreatedAt { set; get; }
-
         public Resource WithResourceId(string resourceId) {
             this.ResourceId = resourceId;
             return this;
         }
-
         public Resource WithType(string type) {
             this.Type = type;
             return this;
         }
-
         public Resource WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Resource WithRequest(string request) {
             this.Request = request;
             return this;
         }
-
         public Resource WithResponse(string response) {
             this.Response = response;
             return this;
         }
-
         public Resource WithRollbackContext(string rollbackContext) {
             this.RollbackContext = rollbackContext;
             return this;
         }
-
         public Resource WithRollbackRequest(string rollbackRequest) {
             this.RollbackRequest = rollbackRequest;
             return this;
         }
-
         public Resource WithRollbackAfter(string[] rollbackAfter) {
             this.RollbackAfter = rollbackAfter;
             return this;
         }
-
         public Resource WithOutputFields(Gs2.Gs2Deploy.Model.OutputField[] outputFields) {
             this.OutputFields = outputFields;
             return this;
         }
-
         public Resource WithWorkId(string workId) {
             this.WorkId = workId;
             return this;
         }
-
         public Resource WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

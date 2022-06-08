@@ -37,32 +37,26 @@ namespace Gs2.Gs2Formation.Model
         public int? Capacity { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Mold WithMoldId(string moldId) {
             this.MoldId = moldId;
             return this;
         }
-
         public Mold WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Mold WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Mold WithCapacity(int? capacity) {
             this.Capacity = capacity;
             return this;
         }
-
         public Mold WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Mold WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

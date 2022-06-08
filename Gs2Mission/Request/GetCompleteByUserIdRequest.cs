@@ -36,17 +36,14 @@ namespace Gs2.Gs2Mission.Request
         public string NamespaceName { set; get; }
         public string MissionGroupName { set; get; }
         public string UserId { set; get; }
-
         public GetCompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCompleteByUserIdRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public GetCompleteByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

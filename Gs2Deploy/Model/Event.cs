@@ -37,32 +37,26 @@ namespace Gs2.Gs2Deploy.Model
         public string Type { set; get; }
         public string Message { set; get; }
         public long? EventAt { set; get; }
-
         public Event WithEventId(string eventId) {
             this.EventId = eventId;
             return this;
         }
-
         public Event WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Event WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;
         }
-
         public Event WithType(string type) {
             this.Type = type;
             return this;
         }
-
         public Event WithMessage(string message) {
             this.Message = message;
             return this;
         }
-
         public Event WithEventAt(long? eventAt) {
             this.EventAt = eventAt;
             return this;

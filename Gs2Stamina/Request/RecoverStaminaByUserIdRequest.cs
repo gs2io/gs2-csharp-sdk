@@ -38,22 +38,18 @@ namespace Gs2.Gs2Stamina.Request
         public string UserId { set; get; }
         public int? RecoverValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RecoverStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RecoverStaminaByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public RecoverStaminaByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public RecoverStaminaByUserIdRequest WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;

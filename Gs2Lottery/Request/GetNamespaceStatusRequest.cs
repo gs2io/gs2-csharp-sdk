@@ -34,7 +34,6 @@ namespace Gs2.Gs2Lottery.Request
 	public class GetNamespaceStatusRequest : Gs2Request<GetNamespaceStatusRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetNamespaceStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

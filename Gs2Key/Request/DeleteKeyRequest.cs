@@ -35,12 +35,10 @@ namespace Gs2.Gs2Key.Request
 	{
         public string NamespaceName { set; get; }
         public string KeyName { set; get; }
-
         public DeleteKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteKeyRequest WithKeyName(string keyName) {
             this.KeyName = keyName;
             return this;

@@ -37,22 +37,18 @@ namespace Gs2.Gs2Friend.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeReceiveRequestsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeReceiveRequestsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeReceiveRequestsByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeReceiveRequestsByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

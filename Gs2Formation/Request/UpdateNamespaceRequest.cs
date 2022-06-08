@@ -39,32 +39,26 @@ namespace Gs2.Gs2Formation.Request
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
         public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Formation.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithUpdateMoldScript(Gs2.Gs2Formation.Model.ScriptSetting updateMoldScript) {
             this.UpdateMoldScript = updateMoldScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithUpdateFormScript(Gs2.Gs2Formation.Model.ScriptSetting updateFormScript) {
             this.UpdateFormScript = updateFormScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Formation.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

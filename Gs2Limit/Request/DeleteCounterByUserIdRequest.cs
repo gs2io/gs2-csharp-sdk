@@ -38,22 +38,18 @@ namespace Gs2.Gs2Limit.Request
         public string UserId { set; get; }
         public string CounterName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteCounterByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public DeleteCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DeleteCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

@@ -36,17 +36,14 @@ namespace Gs2.Gs2Script.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeScriptsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeScriptsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeScriptsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

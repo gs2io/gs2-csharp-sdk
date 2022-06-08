@@ -38,37 +38,30 @@ namespace Gs2.Gs2Lottery.Model
         public string Method { set; get; }
         public string PrizeTableName { set; get; }
         public string ChoicePrizeTableScriptId { set; get; }
-
         public LotteryModel WithLotteryModelId(string lotteryModelId) {
             this.LotteryModelId = lotteryModelId;
             return this;
         }
-
         public LotteryModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public LotteryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public LotteryModel WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public LotteryModel WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public LotteryModel WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public LotteryModel WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
             this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;

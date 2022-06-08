@@ -34,7 +34,6 @@ namespace Gs2.Gs2Limit.Request
 	public class DescribeLimitModelsRequest : Gs2Request<DescribeLimitModelsRequest>
 	{
         public string NamespaceName { set; get; }
-
         public DescribeLimitModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

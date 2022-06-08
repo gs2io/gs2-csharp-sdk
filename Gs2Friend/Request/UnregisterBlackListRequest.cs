@@ -36,17 +36,14 @@ namespace Gs2.Gs2Friend.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string TargetUserId { set; get; }
-
         public UnregisterBlackListRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnregisterBlackListRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public UnregisterBlackListRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

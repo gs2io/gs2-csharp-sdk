@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -67,6 +69,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         private readonly String _parentKey;
         public bool? IsLastJob { get; set; }
+        public bool? NeedRetry { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string JobName => _jobName;
@@ -265,6 +268,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain>(Impl);
         #endif
+        }
+
+        public Gs2.Gs2JobQueue.Domain.Model.JobResultDomain JobResult(
+            string tryNumber = "0"
+        ) {
+            return new Gs2.Gs2JobQueue.Domain.Model.JobResultDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                this._userId,
+                this._jobName,
+                tryNumber
+            );
         }
 
         public static string CreateCacheParentKey(

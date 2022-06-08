@@ -43,52 +43,42 @@ namespace Gs2.Gs2Exchange.Request
         public Gs2.Gs2Exchange.Model.ConsumeAction[] SkipConsumeActions { set; get; }
         public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
         public Gs2.Gs2Exchange.Model.ConsumeAction[] ConsumeActions { set; get; }
-
         public UpdateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithTimingType(string timingType) {
             this.TimingType = timingType;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithEnableSkip(bool? enableSkip) {
             this.EnableSkip = enableSkip;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;

@@ -36,17 +36,14 @@ namespace Gs2.Gs2Money.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string TransactionId { set; get; }
-
         public GetByUserIdAndTransactionIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetByUserIdAndTransactionIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetByUserIdAndTransactionIdRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

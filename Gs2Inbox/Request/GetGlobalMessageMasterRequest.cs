@@ -35,12 +35,10 @@ namespace Gs2.Gs2Inbox.Request
 	{
         public string NamespaceName { set; get; }
         public string GlobalMessageName { set; get; }
-
         public GetGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetGlobalMessageMasterRequest WithGlobalMessageName(string globalMessageName) {
             this.GlobalMessageName = globalMessageName;
             return this;

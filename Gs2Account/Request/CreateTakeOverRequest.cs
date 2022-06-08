@@ -38,27 +38,22 @@ namespace Gs2.Gs2Account.Request
         public int? Type { set; get; }
         public string UserIdentifier { set; get; }
         public string Password { set; get; }
-
         public CreateTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateTakeOverRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public CreateTakeOverRequest WithType(int? type) {
             this.Type = type;
             return this;
         }
-
         public CreateTakeOverRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
             return this;
         }
-
         public CreateTakeOverRequest WithPassword(string password) {
             this.Password = password;
             return this;

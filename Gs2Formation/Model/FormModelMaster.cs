@@ -38,37 +38,30 @@ namespace Gs2.Gs2Formation.Model
         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public FormModelMaster WithFormModelId(string formModelId) {
             this.FormModelId = formModelId;
             return this;
         }
-
         public FormModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public FormModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public FormModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public FormModelMaster WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
             this.Slots = slots;
             return this;
         }
-
         public FormModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public FormModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

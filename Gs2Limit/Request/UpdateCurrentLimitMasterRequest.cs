@@ -35,12 +35,10 @@ namespace Gs2.Gs2Limit.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentLimitMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentLimitMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

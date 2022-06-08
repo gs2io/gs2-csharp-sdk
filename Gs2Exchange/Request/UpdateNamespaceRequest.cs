@@ -40,49 +40,44 @@ namespace Gs2.Gs2Exchange.Request
         public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithEnableAwaitExchange(bool? enableAwaitExchange) {
             this.EnableAwaitExchange = enableAwaitExchange;
             return this;
         }
-
         public UpdateNamespaceRequest WithEnableDirectExchange(bool? enableDirectExchange) {
             this.EnableDirectExchange = enableDirectExchange;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Exchange.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
             this.ExchangeScript = exchangeScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

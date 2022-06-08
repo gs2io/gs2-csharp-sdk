@@ -40,47 +40,38 @@ namespace Gs2.Gs2Matchmaking.Model
         public long? ExpiresAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Gathering WithGatheringId(string gatheringId) {
             this.GatheringId = gatheringId;
             return this;
         }
-
         public Gathering WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Gathering WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
             this.AttributeRanges = attributeRanges;
             return this;
         }
-
         public Gathering WithCapacityOfRoles(Gs2.Gs2Matchmaking.Model.CapacityOfRole[] capacityOfRoles) {
             this.CapacityOfRoles = capacityOfRoles;
             return this;
         }
-
         public Gathering WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
-
         public Gathering WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Gathering WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public Gathering WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Gathering WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

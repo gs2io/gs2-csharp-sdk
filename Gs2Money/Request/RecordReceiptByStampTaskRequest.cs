@@ -35,12 +35,10 @@ namespace Gs2.Gs2Money.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
-
         public RecordReceiptByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public RecordReceiptByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

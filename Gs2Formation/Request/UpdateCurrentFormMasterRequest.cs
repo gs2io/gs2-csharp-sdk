@@ -35,12 +35,10 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentFormMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentFormMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

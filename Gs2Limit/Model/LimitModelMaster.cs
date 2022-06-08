@@ -41,52 +41,42 @@ namespace Gs2.Gs2Limit.Model
         public int? ResetHour { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public LimitModelMaster WithLimitModelId(string limitModelId) {
             this.LimitModelId = limitModelId;
             return this;
         }
-
         public LimitModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public LimitModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public LimitModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public LimitModelMaster WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public LimitModelMaster WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public LimitModelMaster WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public LimitModelMaster WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
-
         public LimitModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public LimitModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -37,17 +37,14 @@ namespace Gs2.Gs2Gateway.Request
         public string UserId { set; get; }
         public bool? AllowConcurrentAccess { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetUserIdByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetUserIdByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SetUserIdByUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
             return this;

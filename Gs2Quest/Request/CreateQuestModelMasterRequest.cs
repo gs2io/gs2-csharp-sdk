@@ -43,52 +43,42 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
-
         public CreateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
             this.Contents = contents;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithPremiseQuestNames(string[] premiseQuestNames) {
             this.PremiseQuestNames = premiseQuestNames;
             return this;

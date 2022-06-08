@@ -35,12 +35,10 @@ namespace Gs2.Gs2Identifier.Request
 	{
         public string UserName { set; get; }
         public string Password { set; get; }
-
         public CreatePasswordRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public CreatePasswordRequest WithPassword(string password) {
             this.Password = password;
             return this;

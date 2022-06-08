@@ -37,32 +37,26 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public AcceptVersion WithAcceptVersionId(string acceptVersionId) {
             this.AcceptVersionId = acceptVersionId;
             return this;
         }
-
         public AcceptVersion WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public AcceptVersion WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AcceptVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
             this.Version = version;
             return this;
         }
-
         public AcceptVersion WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public AcceptVersion WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

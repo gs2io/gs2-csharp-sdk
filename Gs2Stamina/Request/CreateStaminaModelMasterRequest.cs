@@ -45,62 +45,50 @@ namespace Gs2.Gs2Stamina.Request
         public string MaxStaminaTableName { set; get; }
         public string RecoverIntervalTableName { set; get; }
         public string RecoverValueTableName { set; get; }
-
         public CreateStaminaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithIsOverflow(bool? isOverflow) {
             this.IsOverflow = isOverflow;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithRecoverIntervalTableName(string recoverIntervalTableName) {
             this.RecoverIntervalTableName = recoverIntervalTableName;
             return this;
         }
-
         public CreateStaminaModelMasterRequest WithRecoverValueTableName(string recoverValueTableName) {
             this.RecoverValueTableName = recoverValueTableName;
             return this;

@@ -35,12 +35,10 @@ namespace Gs2.Gs2Identifier.Request
 	{
         public string UserName { set; get; }
         public string SecurityPolicyId { set; get; }
-
         public AttachSecurityPolicyRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public AttachSecurityPolicyRequest WithSecurityPolicyId(string securityPolicyId) {
             this.SecurityPolicyId = securityPolicyId;
             return this;

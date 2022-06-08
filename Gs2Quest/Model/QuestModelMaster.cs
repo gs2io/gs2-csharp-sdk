@@ -43,62 +43,50 @@ namespace Gs2.Gs2Quest.Model
         public string[] PremiseQuestNames { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public QuestModelMaster WithQuestModelId(string questModelId) {
             this.QuestModelId = questModelId;
             return this;
         }
-
         public QuestModelMaster WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public QuestModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public QuestModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public QuestModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public QuestModelMaster WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
             this.Contents = contents;
             return this;
         }
-
         public QuestModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public QuestModelMaster WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public QuestModelMaster WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
-
         public QuestModelMaster WithPremiseQuestNames(string[] premiseQuestNames) {
             this.PremiseQuestNames = premiseQuestNames;
             return this;
         }
-
         public QuestModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public QuestModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

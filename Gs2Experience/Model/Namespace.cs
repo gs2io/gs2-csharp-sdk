@@ -42,57 +42,46 @@ namespace Gs2.Gs2Experience.Model
         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithExperienceCapScriptId(string experienceCapScriptId) {
             this.ExperienceCapScriptId = experienceCapScriptId;
             return this;
         }
-
         public Namespace WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
             this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
-
         public Namespace WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
             this.ChangeRankScript = changeRankScript;
             return this;
         }
-
         public Namespace WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
             this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
-
         public Namespace WithOverflowExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
             this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

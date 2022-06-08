@@ -38,27 +38,22 @@ namespace Gs2.Gs2Datastore.Request
         public string AccessToken { set; get; }
         public string Scope { set; get; }
         public string[] AllowUserIds { set; get; }
-
         public UpdateDataObjectRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateDataObjectRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public UpdateDataObjectRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public UpdateDataObjectRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public UpdateDataObjectRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;

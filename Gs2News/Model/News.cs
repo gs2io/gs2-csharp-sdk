@@ -37,32 +37,26 @@ namespace Gs2.Gs2News.Model
         public string ScheduleEventId { set; get; }
         public long? Timestamp { set; get; }
         public string FrontMatter { set; get; }
-
         public News WithSection(string section) {
             this.Section = section;
             return this;
         }
-
         public News WithContent(string content) {
             this.Content = content;
             return this;
         }
-
         public News WithTitle(string title) {
             this.Title = title;
             return this;
         }
-
         public News WithScheduleEventId(string scheduleEventId) {
             this.ScheduleEventId = scheduleEventId;
             return this;
         }
-
         public News WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;
         }
-
         public News WithFrontMatter(string frontMatter) {
             this.FrontMatter = frontMatter;
             return this;

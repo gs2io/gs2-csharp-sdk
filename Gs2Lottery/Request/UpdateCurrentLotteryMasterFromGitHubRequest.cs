@@ -35,12 +35,10 @@ namespace Gs2.Gs2Lottery.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Lottery.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
         public UpdateCurrentLotteryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentLotteryMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Lottery.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

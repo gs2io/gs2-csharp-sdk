@@ -41,37 +41,30 @@ namespace Gs2.Gs2Stamina.Request
         public int? RecoverIntervalMinutes { set; get; }
         public int? RecoverValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithValue(int? value) {
             this.Value = value;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
         public UpdateStaminaByUserIdRequest WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;

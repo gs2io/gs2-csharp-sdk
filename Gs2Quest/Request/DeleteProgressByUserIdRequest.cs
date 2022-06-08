@@ -36,12 +36,10 @@ namespace Gs2.Gs2Quest.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

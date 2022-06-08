@@ -43,52 +43,42 @@ namespace Gs2.Gs2Exchange.Request
         public Gs2.Gs2Exchange.Model.ConsumeAction[] SkipConsumeActions { set; get; }
         public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
         public Gs2.Gs2Exchange.Model.ConsumeAction[] ConsumeActions { set; get; }
-
         public CreateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateRateModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateRateModelMasterRequest WithTimingType(string timingType) {
             this.TimingType = timingType;
             return this;
         }
-
         public CreateRateModelMasterRequest WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
             return this;
         }
-
         public CreateRateModelMasterRequest WithEnableSkip(bool? enableSkip) {
             this.EnableSkip = enableSkip;
             return this;
         }
-
         public CreateRateModelMasterRequest WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-
         public CreateRateModelMasterRequest WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public CreateRateModelMasterRequest WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;

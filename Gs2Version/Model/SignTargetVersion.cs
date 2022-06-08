@@ -35,22 +35,18 @@ namespace Gs2.Gs2Version.Model
         public string NamespaceName { set; get; }
         public string VersionName { set; get; }
         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
-
         public SignTargetVersion WithRegion(string region) {
             this.Region = region;
             return this;
         }
-
         public SignTargetVersion WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SignTargetVersion WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public SignTargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
             this.Version = version;
             return this;

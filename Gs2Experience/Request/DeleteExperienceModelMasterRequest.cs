@@ -35,12 +35,10 @@ namespace Gs2.Gs2Experience.Request
 	{
         public string NamespaceName { set; get; }
         public string ExperienceName { set; get; }
-
         public DeleteExperienceModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteExperienceModelMasterRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;

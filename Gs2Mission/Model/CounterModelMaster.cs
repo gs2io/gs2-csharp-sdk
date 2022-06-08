@@ -39,42 +39,34 @@ namespace Gs2.Gs2Mission.Model
         public string ChallengePeriodEventId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public CounterModelMaster WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;
         }
-
         public CounterModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CounterModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CounterModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CounterModelMaster WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
             this.Scopes = scopes;
             return this;
         }
-
         public CounterModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public CounterModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public CounterModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

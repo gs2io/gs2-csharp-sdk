@@ -39,32 +39,26 @@ namespace Gs2.Gs2Version.Request
         public Gs2.Gs2Version.Model.ScriptSetting AcceptVersionScript { set; get; }
         public string CheckVersionTriggerScriptId { set; get; }
         public Gs2.Gs2Version.Model.LogSetting LogSetting { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithAssumeUserId(string assumeUserId) {
             this.AssumeUserId = assumeUserId;
             return this;
         }
-
         public CreateNamespaceRequest WithAcceptVersionScript(Gs2.Gs2Version.Model.ScriptSetting acceptVersionScript) {
             this.AcceptVersionScript = acceptVersionScript;
             return this;
         }
-
         public CreateNamespaceRequest WithCheckVersionTriggerScriptId(string checkVersionTriggerScriptId) {
             this.CheckVersionTriggerScriptId = checkVersionTriggerScriptId;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Version.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

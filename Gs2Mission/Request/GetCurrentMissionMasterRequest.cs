@@ -34,7 +34,6 @@ namespace Gs2.Gs2Mission.Request
 	public class GetCurrentMissionMasterRequest : Gs2Request<GetCurrentMissionMasterRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetCurrentMissionMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

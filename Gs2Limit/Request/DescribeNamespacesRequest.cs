@@ -35,12 +35,10 @@ namespace Gs2.Gs2Limit.Request
 	{
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeNamespacesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeNamespacesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

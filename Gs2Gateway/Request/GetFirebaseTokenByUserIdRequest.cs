@@ -35,12 +35,10 @@ namespace Gs2.Gs2Gateway.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-
         public GetFirebaseTokenByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetFirebaseTokenByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

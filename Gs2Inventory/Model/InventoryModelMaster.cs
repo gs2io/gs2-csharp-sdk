@@ -40,47 +40,38 @@ namespace Gs2.Gs2Inventory.Model
         public bool? ProtectReferencedItem { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public InventoryModelMaster WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
             return this;
         }
-
         public InventoryModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public InventoryModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public InventoryModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public InventoryModelMaster WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public InventoryModelMaster WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public InventoryModelMaster WithProtectReferencedItem(bool? protectReferencedItem) {
             this.ProtectReferencedItem = protectReferencedItem;
             return this;
         }
-
         public InventoryModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public InventoryModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

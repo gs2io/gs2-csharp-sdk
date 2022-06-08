@@ -39,27 +39,22 @@ namespace Gs2.Gs2Formation.Request
         public int? Index { set; get; }
         public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetFormByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetFormByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SetFormByUserIdRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public SetFormByUserIdRequest WithIndex(int? index) {
             this.Index = index;
             return this;
         }
-
         public SetFormByUserIdRequest WithSlots(Gs2.Gs2Formation.Model.Slot[] slots) {
             this.Slots = slots;
             return this;

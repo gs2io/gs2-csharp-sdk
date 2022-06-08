@@ -36,17 +36,14 @@ namespace Gs2.Gs2Identifier.Request
         public string SecurityPolicyName { set; get; }
         public string Description { set; get; }
         public string Policy { set; get; }
-
         public UpdateSecurityPolicyRequest WithSecurityPolicyName(string securityPolicyName) {
             this.SecurityPolicyName = securityPolicyName;
             return this;
         }
-
         public UpdateSecurityPolicyRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateSecurityPolicyRequest WithPolicy(string policy) {
             this.Policy = policy;
             return this;

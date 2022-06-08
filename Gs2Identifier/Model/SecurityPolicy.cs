@@ -37,32 +37,26 @@ namespace Gs2.Gs2Identifier.Model
         public string Policy { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public SecurityPolicy WithSecurityPolicyId(string securityPolicyId) {
             this.SecurityPolicyId = securityPolicyId;
             return this;
         }
-
         public SecurityPolicy WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public SecurityPolicy WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public SecurityPolicy WithPolicy(string policy) {
             this.Policy = policy;
             return this;
         }
-
         public SecurityPolicy WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public SecurityPolicy WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -37,22 +37,18 @@ namespace Gs2.Gs2Gateway.Request
         public string Description { set; get; }
         public string FirebaseSecret { set; get; }
         public Gs2.Gs2Gateway.Model.LogSetting LogSetting { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithFirebaseSecret(string firebaseSecret) {
             this.FirebaseSecret = firebaseSecret;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Gateway.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

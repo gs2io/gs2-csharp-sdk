@@ -37,17 +37,14 @@ namespace Gs2.Gs2Account.Request
         public string UserId { set; get; }
         public bool? Banned { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateBannedRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateBannedRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UpdateBannedRequest WithBanned(bool? banned) {
             this.Banned = banned;
             return this;

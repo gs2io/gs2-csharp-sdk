@@ -35,12 +35,10 @@ namespace Gs2.Gs2Lottery.Request
 	{
         public string NamespaceName { set; get; }
         public string PrizeTableName { set; get; }
-
         public DeletePrizeTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeletePrizeTableMasterRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;

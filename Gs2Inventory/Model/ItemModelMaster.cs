@@ -41,52 +41,42 @@ namespace Gs2.Gs2Inventory.Model
         public int? SortValue { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public ItemModelMaster WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;
         }
-
         public ItemModelMaster WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public ItemModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public ItemModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public ItemModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public ItemModelMaster WithStackingLimit(long? stackingLimit) {
             this.StackingLimit = stackingLimit;
             return this;
         }
-
         public ItemModelMaster WithAllowMultipleStacks(bool? allowMultipleStacks) {
             this.AllowMultipleStacks = allowMultipleStacks;
             return this;
         }
-
         public ItemModelMaster WithSortValue(int? sortValue) {
             this.SortValue = sortValue;
             return this;
         }
-
         public ItemModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public ItemModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -35,12 +35,10 @@ namespace Gs2.Gs2Matchmaking.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentRatingModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentRatingModelMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

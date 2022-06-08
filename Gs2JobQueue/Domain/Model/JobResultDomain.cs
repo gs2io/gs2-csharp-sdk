@@ -101,6 +101,95 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        private async UniTask<Gs2.Gs2JobQueue.Model.JobResult> GetAsync(
+            #else
+        private IFuture<Gs2.Gs2JobQueue.Model.JobResult> Get(
+            #endif
+        #else
+        private async Task<Gs2.Gs2JobQueue.Model.JobResult> GetAsync(
+        #endif
+            GetJobResultByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName)
+                .WithUserId(this._userId)
+                .WithJobName(this._jobName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.GetJobResultByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    _userId.ToString(),
+                    _jobName.ToString(),
+                        "JobResult"
+                );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                    resultModel.Item.TryNumber.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #else
+            var result = await this._client.GetJobResultByUserIdAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                    _userId.ToString(),
+                    _jobName.ToString(),
+                        "JobResult"
+                );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                    resultModel.Item.TryNumber.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(result?.Item);
+        #else
+            return result?.Item;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
+        #endif
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -149,6 +238,65 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.TryNumber?.ToString()
                 )
             );
+            if (value == null) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    var future = this.Get(
+        #else
+                try {
+                    await this.GetAsync(
+        #endif
+                        new GetJobResultByUserIdRequest()
+                    );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
+                        {
+                            if (e.errors[0].component == "jobResult")
+                            {
+                                _cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                                    _parentKey,
+                                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                                        this.TryNumber?.ToString()
+                                    )
+                                );
+                            }
+                            else
+                            {
+                                self.OnError(future.Error);
+                            }
+                        }
+                        else
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+        #else
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    if (e.errors[0].component == "jobResult")
+                    {
+                        _cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                            _parentKey,
+                            Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                                this.TryNumber?.ToString()
+                            )
+                        );
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+        #endif
+                value = _cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
+                    _parentKey,
+                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                        this.TryNumber?.ToString()
+                    )
+                );
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);
             yield return null;

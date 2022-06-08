@@ -39,42 +39,34 @@ namespace Gs2.Gs2Stamina.Model
         public int[] Values { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public RecoverValueTableMaster WithRecoverValueTableId(string recoverValueTableId) {
             this.RecoverValueTableId = recoverValueTableId;
             return this;
         }
-
         public RecoverValueTableMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RecoverValueTableMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RecoverValueTableMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public RecoverValueTableMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public RecoverValueTableMaster WithValues(int[] values) {
             this.Values = values;
             return this;
         }
-
         public RecoverValueTableMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public RecoverValueTableMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

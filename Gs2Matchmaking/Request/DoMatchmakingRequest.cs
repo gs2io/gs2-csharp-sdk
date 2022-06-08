@@ -37,22 +37,18 @@ namespace Gs2.Gs2Matchmaking.Request
         public string AccessToken { set; get; }
         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
         public string MatchmakingContextToken { set; get; }
-
         public DoMatchmakingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DoMatchmakingRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DoMatchmakingRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
             this.Player = player;
             return this;
         }
-
         public DoMatchmakingRequest WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
             return this;

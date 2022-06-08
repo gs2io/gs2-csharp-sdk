@@ -41,64 +41,56 @@ namespace Gs2.Gs2Quest.Model
         public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithTransactionSetting(Gs2.Gs2Quest.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public Namespace WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
             this.StartQuestScript = startQuestScript;
             return this;
         }
-
         public Namespace WithCompleteQuestScript(Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
             this.CompleteQuestScript = completeQuestScript;
             return this;
         }
-
         public Namespace WithFailedQuestScript(Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
             this.FailedQuestScript = failedQuestScript;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public Namespace WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public Namespace WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

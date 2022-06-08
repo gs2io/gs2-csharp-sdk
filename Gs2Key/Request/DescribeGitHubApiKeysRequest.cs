@@ -36,17 +36,14 @@ namespace Gs2.Gs2Key.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeGitHubApiKeysRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeGitHubApiKeysRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeGitHubApiKeysRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -35,12 +35,10 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public SetCapacityByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public SetCapacityByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

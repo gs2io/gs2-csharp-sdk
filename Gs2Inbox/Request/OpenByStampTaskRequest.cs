@@ -35,12 +35,10 @@ namespace Gs2.Gs2Inbox.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
-
         public OpenByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public OpenByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

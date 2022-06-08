@@ -37,17 +37,14 @@ namespace Gs2.Gs2Lottery.Request
         public string PrizeTableName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ResetBoxByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ResetBoxByUserIdRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public ResetBoxByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

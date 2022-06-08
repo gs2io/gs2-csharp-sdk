@@ -37,22 +37,18 @@ namespace Gs2.Gs2Datastore.Request
         public string UserId { set; get; }
         public string DataObjectName { set; get; }
         public string Generation { set; get; }
-
         public GetDataObjectHistoryByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetDataObjectHistoryByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetDataObjectHistoryByUserIdRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public GetDataObjectHistoryByUserIdRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;

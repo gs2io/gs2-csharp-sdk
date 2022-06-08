@@ -36,17 +36,14 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string MessageName { set; get; }
-
         public DeleteMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteMessageRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;

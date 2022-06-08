@@ -36,27 +36,22 @@ namespace Gs2.Gs2Lock.Model
         public string PropertyId { set; get; }
         public string TransactionId { set; get; }
         public long? CreatedAt { set; get; }
-
         public Mutex WithMutexId(string mutexId) {
             this.MutexId = mutexId;
             return this;
         }
-
         public Mutex WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Mutex WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public Mutex WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public Mutex WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

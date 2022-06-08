@@ -41,54 +41,48 @@ namespace Gs2.Gs2Mission.Request
         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
             this.MissionCompleteScript = missionCompleteScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithCounterIncrementScript(Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
             this.CounterIncrementScript = counterIncrementScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
             this.ReceiveRewardsScript = receiveRewardsScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

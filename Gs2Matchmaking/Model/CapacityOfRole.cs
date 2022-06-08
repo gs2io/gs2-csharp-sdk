@@ -35,22 +35,18 @@ namespace Gs2.Gs2Matchmaking.Model
         public string[] RoleAliases { set; get; }
         public int? Capacity { set; get; }
         public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; }
-
         public CapacityOfRole WithRoleName(string roleName) {
             this.RoleName = roleName;
             return this;
         }
-
         public CapacityOfRole WithRoleAliases(string[] roleAliases) {
             this.RoleAliases = roleAliases;
             return this;
         }
-
         public CapacityOfRole WithCapacity(int? capacity) {
             this.Capacity = capacity;
             return this;
         }
-
         public CapacityOfRole WithParticipants(Gs2.Gs2Matchmaking.Model.Player[] participants) {
             this.Participants = participants;
             return this;

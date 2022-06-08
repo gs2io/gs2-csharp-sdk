@@ -37,22 +37,18 @@ namespace Gs2.Gs2Mission.Request
         public string AccessToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeCompletesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeCompletesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeCompletesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeCompletesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

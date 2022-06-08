@@ -36,27 +36,22 @@ namespace Gs2.Gs2Friend.Model
         public string[] FromUserIds { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Inbox WithInboxId(string inboxId) {
             this.InboxId = inboxId;
             return this;
         }
-
         public Inbox WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Inbox WithFromUserIds(string[] fromUserIds) {
             this.FromUserIds = fromUserIds;
             return this;
         }
-
         public Inbox WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Inbox WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

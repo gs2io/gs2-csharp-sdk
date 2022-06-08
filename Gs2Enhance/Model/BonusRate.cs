@@ -33,12 +33,10 @@ namespace Gs2.Gs2Enhance.Model
 	{
         public float? Rate { set; get; }
         public int? Weight { set; get; }
-
         public BonusRate WithRate(float? rate) {
             this.Rate = rate;
             return this;
         }
-
         public BonusRate WithWeight(int? weight) {
             this.Weight = weight;
             return this;

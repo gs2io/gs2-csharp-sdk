@@ -36,27 +36,22 @@ namespace Gs2.Gs2Mission.Model
         public string Metadata { set; get; }
         public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
         public string ChallengePeriodEventId { set; get; }
-
         public CounterModel WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;
         }
-
         public CounterModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CounterModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CounterModel WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
             this.Scopes = scopes;
             return this;
         }
-
         public CounterModel WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

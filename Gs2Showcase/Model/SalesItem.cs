@@ -35,22 +35,18 @@ namespace Gs2.Gs2Showcase.Model
         public string Metadata { set; get; }
         public Gs2.Gs2Showcase.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
-
         public SalesItem WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public SalesItem WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public SalesItem WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public SalesItem WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

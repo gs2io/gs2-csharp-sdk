@@ -43,62 +43,50 @@ namespace Gs2.Gs2Exchange.Model
         public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public RateModelMaster WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;
         }
-
         public RateModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RateModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public RateModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RateModelMaster WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public RateModelMaster WithTimingType(string timingType) {
             this.TimingType = timingType;
             return this;
         }
-
         public RateModelMaster WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
             return this;
         }
-
         public RateModelMaster WithEnableSkip(bool? enableSkip) {
             this.EnableSkip = enableSkip;
             return this;
         }
-
         public RateModelMaster WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-
         public RateModelMaster WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public RateModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public RateModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

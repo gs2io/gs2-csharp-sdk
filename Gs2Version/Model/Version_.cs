@@ -34,17 +34,14 @@ namespace Gs2.Gs2Version.Model
         public int? Major { set; get; }
         public int? Minor { set; get; }
         public int? Micro { set; get; }
-
         public Version_ WithMajor(int? major) {
             this.Major = major;
             return this;
         }
-
         public Version_ WithMinor(int? minor) {
             this.Minor = minor;
             return this;
         }
-
         public Version_ WithMicro(int? micro) {
             this.Micro = micro;
             return this;

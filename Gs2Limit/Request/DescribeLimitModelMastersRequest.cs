@@ -36,17 +36,14 @@ namespace Gs2.Gs2Limit.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeLimitModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeLimitModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeLimitModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

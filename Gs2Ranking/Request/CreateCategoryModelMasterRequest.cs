@@ -48,77 +48,62 @@ namespace Gs2.Gs2Ranking.Request
         public string EntryPeriodEventId { set; get; }
         public string AccessPeriodEventId { set; get; }
         public string Generation { set; get; }
-
         public CreateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithMinimumValue(long? minimumValue) {
             this.MinimumValue = minimumValue;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithMaximumValue(long? maximumValue) {
             this.MaximumValue = maximumValue;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithOrderDirection(string orderDirection) {
             this.OrderDirection = orderDirection;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
             this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
             this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;

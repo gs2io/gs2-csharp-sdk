@@ -36,17 +36,14 @@ namespace Gs2.Gs2Stamina.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeRecoverValueTableMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRecoverValueTableMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRecoverValueTableMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

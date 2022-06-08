@@ -36,17 +36,14 @@ namespace Gs2.Gs2Lock.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string PropertyId { set; get; }
-
         public GetMutexByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMutexByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetMutexByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

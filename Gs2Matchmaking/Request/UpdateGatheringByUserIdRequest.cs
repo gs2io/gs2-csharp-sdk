@@ -38,22 +38,18 @@ namespace Gs2.Gs2Matchmaking.Request
         public string UserId { set; get; }
         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateGatheringByUserIdRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
-
         public UpdateGatheringByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UpdateGatheringByUserIdRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
             this.AttributeRanges = attributeRanges;
             return this;

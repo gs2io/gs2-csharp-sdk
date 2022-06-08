@@ -35,12 +35,10 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-
         public DescribeEventsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeEventsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

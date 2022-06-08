@@ -36,17 +36,14 @@ namespace Gs2.Gs2Key.Request
         public string NamespaceName { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
-
         public CreateKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateKeyRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateKeyRequest WithDescription(string description) {
             this.Description = description;
             return this;

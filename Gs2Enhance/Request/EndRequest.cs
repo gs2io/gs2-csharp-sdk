@@ -38,27 +38,22 @@ namespace Gs2.Gs2Enhance.Request
         public string RateName { set; get; }
         public string ProgressName { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
-
         public EndRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public EndRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public EndRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public EndRequest WithProgressName(string progressName) {
             this.ProgressName = progressName;
             return this;
         }
-
         public EndRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

@@ -42,57 +42,46 @@ namespace Gs2.Gs2Stamina.Model
         public Gs2.Gs2Stamina.Model.MaxStaminaTable MaxStaminaTable { set; get; }
         public Gs2.Gs2Stamina.Model.RecoverIntervalTable RecoverIntervalTable { set; get; }
         public Gs2.Gs2Stamina.Model.RecoverValueTable RecoverValueTable { set; get; }
-
         public StaminaModel WithStaminaModelId(string staminaModelId) {
             this.StaminaModelId = staminaModelId;
             return this;
         }
-
         public StaminaModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public StaminaModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public StaminaModel WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
         public StaminaModel WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;
         }
-
         public StaminaModel WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public StaminaModel WithIsOverflow(bool? isOverflow) {
             this.IsOverflow = isOverflow;
             return this;
         }
-
         public StaminaModel WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public StaminaModel WithMaxStaminaTable(Gs2.Gs2Stamina.Model.MaxStaminaTable maxStaminaTable) {
             this.MaxStaminaTable = maxStaminaTable;
             return this;
         }
-
         public StaminaModel WithRecoverIntervalTable(Gs2.Gs2Stamina.Model.RecoverIntervalTable recoverIntervalTable) {
             this.RecoverIntervalTable = recoverIntervalTable;
             return this;
         }
-
         public StaminaModel WithRecoverValueTable(Gs2.Gs2Stamina.Model.RecoverValueTable recoverValueTable) {
             this.RecoverValueTable = recoverValueTable;
             return this;

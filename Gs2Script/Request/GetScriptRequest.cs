@@ -35,12 +35,10 @@ namespace Gs2.Gs2Script.Request
 	{
         public string NamespaceName { set; get; }
         public string ScriptName { set; get; }
-
         public GetScriptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetScriptRequest WithScriptName(string scriptName) {
             this.ScriptName = scriptName;
             return this;

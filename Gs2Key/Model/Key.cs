@@ -36,27 +36,22 @@ namespace Gs2.Gs2Key.Model
         public string Description { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Key WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
-
         public Key WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Key WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Key WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Key WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

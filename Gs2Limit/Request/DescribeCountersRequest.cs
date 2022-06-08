@@ -38,27 +38,22 @@ namespace Gs2.Gs2Limit.Request
         public string LimitName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeCountersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeCountersRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeCountersRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public DescribeCountersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeCountersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

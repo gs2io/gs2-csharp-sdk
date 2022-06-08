@@ -37,22 +37,18 @@ namespace Gs2.Gs2Dictionary.Request
         public string AccessToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeEntriesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeEntriesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeEntriesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeEntriesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

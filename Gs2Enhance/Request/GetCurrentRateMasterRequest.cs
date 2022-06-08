@@ -34,7 +34,6 @@ namespace Gs2.Gs2Enhance.Request
 	public class GetCurrentRateMasterRequest : Gs2Request<GetCurrentRateMasterRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetCurrentRateMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

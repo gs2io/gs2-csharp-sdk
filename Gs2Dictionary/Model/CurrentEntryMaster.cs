@@ -33,12 +33,10 @@ namespace Gs2.Gs2Dictionary.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
-
         public CurrentEntryMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public CurrentEntryMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

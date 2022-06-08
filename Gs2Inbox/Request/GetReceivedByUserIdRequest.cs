@@ -35,12 +35,10 @@ namespace Gs2.Gs2Inbox.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-
         public GetReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetReceivedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

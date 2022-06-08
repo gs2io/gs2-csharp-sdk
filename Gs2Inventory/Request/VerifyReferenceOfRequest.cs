@@ -40,37 +40,30 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemSetName { set; get; }
         public string ReferenceOf { set; get; }
         public string VerifyType { set; get; }
-
         public VerifyReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyReferenceOfRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;
         }
-
         public VerifyReferenceOfRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;

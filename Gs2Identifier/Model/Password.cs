@@ -34,17 +34,14 @@ namespace Gs2.Gs2Identifier.Model
         public string UserId { set; get; }
         public string UserName { set; get; }
         public long? CreatedAt { set; get; }
-
         public Password WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Password WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public Password WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

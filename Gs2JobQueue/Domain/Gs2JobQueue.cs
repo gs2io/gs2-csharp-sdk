@@ -308,6 +308,21 @@ namespace Gs2.Gs2JobQueue.Domain
             remove => onPushNotification.RemoveListener(value);
         }
 
+        [Serializable]
+        private class RunNotificationEvent : UnityEvent<RunNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static RunNotificationEvent onRunNotification = new RunNotificationEvent();
+
+        public event UnityAction<RunNotification> OnRunNotification
+        {
+            add => onRunNotification.AddListener(value);
+            remove => onRunNotification.RemoveListener(value);
+        }
+
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
@@ -316,6 +331,10 @@ namespace Gs2.Gs2JobQueue.Domain
             switch (action) {
                 case "Push": {
                     onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+                case "Run": {
+                    onRunNotification.Invoke(RunNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }

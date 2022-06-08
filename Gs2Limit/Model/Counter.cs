@@ -39,42 +39,34 @@ namespace Gs2.Gs2Limit.Model
         public long? NextResetAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Counter WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;
         }
-
         public Counter WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public Counter WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Counter WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Counter WithCount(int? count) {
             this.Count = count;
             return this;
         }
-
         public Counter WithNextResetAt(long? nextResetAt) {
             this.NextResetAt = nextResetAt;
             return this;
         }
-
         public Counter WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Counter WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

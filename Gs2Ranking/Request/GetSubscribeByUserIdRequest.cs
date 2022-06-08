@@ -37,22 +37,18 @@ namespace Gs2.Gs2Ranking.Request
         public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
-
         public GetSubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetSubscribeByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public GetSubscribeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetSubscribeByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

@@ -34,17 +34,14 @@ namespace Gs2.Gs2Lottery.Model
         public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
         public int? Remaining { set; get; }
         public int? Initial { set; get; }
-
         public BoxItem WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public BoxItem WithRemaining(int? remaining) {
             this.Remaining = remaining;
             return this;
         }
-
         public BoxItem WithInitial(int? initial) {
             this.Initial = initial;
             return this;

@@ -33,12 +33,10 @@ namespace Gs2.Gs2Version.Model
 	{
         public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; }
         public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
-
         public Status WithVersionModel(Gs2.Gs2Version.Model.VersionModel versionModel) {
             this.VersionModel = versionModel;
             return this;
         }
-
         public Status WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;

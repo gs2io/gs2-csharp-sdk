@@ -40,37 +40,30 @@ namespace Gs2.Gs2Formation.Request
         public string FormModelName { set; get; }
         public int? InitialMaxCapacity { set; get; }
         public int? MaxCapacity { set; get; }
-
         public UpdateMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithFormModelName(string formModelName) {
             this.FormModelName = formModelName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithInitialMaxCapacity(int? initialMaxCapacity) {
             this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;

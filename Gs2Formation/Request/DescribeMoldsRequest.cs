@@ -37,22 +37,18 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeMoldsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeMoldsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeMoldsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeMoldsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

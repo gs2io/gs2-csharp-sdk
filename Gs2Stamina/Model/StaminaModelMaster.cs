@@ -45,72 +45,58 @@ namespace Gs2.Gs2Stamina.Model
         public string RecoverValueTableName { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public StaminaModelMaster WithStaminaModelId(string staminaModelId) {
             this.StaminaModelId = staminaModelId;
             return this;
         }
-
         public StaminaModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public StaminaModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public StaminaModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public StaminaModelMaster WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
         public StaminaModelMaster WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;
         }
-
         public StaminaModelMaster WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public StaminaModelMaster WithIsOverflow(bool? isOverflow) {
             this.IsOverflow = isOverflow;
             return this;
         }
-
         public StaminaModelMaster WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public StaminaModelMaster WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
-
         public StaminaModelMaster WithRecoverIntervalTableName(string recoverIntervalTableName) {
             this.RecoverIntervalTableName = recoverIntervalTableName;
             return this;
         }
-
         public StaminaModelMaster WithRecoverValueTableName(string recoverValueTableName) {
             this.RecoverValueTableName = recoverValueTableName;
             return this;
         }
-
         public StaminaModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public StaminaModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

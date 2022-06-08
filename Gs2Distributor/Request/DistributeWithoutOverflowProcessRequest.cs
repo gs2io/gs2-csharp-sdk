@@ -35,12 +35,10 @@ namespace Gs2.Gs2Distributor.Request
 	{
         public string UserId { set; get; }
         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-
         public DistributeWithoutOverflowProcessRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DistributeWithoutOverflowProcessRequest WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;
             return this;

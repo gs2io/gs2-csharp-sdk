@@ -36,17 +36,14 @@ namespace Gs2.Gs2Mission.Request
         public string NamespaceName { set; get; }
         public string MissionGroupName { set; get; }
         public string MissionTaskName { set; get; }
-
         public GetMissionTaskModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMissionTaskModelRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public GetMissionTaskModelRequest WithMissionTaskName(string missionTaskName) {
             this.MissionTaskName = missionTaskName;
             return this;

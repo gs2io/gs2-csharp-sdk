@@ -35,12 +35,10 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public CreateProgressByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public CreateProgressByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

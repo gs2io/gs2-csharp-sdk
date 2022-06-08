@@ -41,52 +41,42 @@ namespace Gs2.Gs2Enhance.Model
         public string[] AcquireExperienceHierarchy { set; get; }
         public string ExperienceModelId { set; get; }
         public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; }
-
         public RateModel WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;
         }
-
         public RateModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RateModel WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public RateModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RateModel WithTargetInventoryModelId(string targetInventoryModelId) {
             this.TargetInventoryModelId = targetInventoryModelId;
             return this;
         }
-
         public RateModel WithAcquireExperienceSuffix(string acquireExperienceSuffix) {
             this.AcquireExperienceSuffix = acquireExperienceSuffix;
             return this;
         }
-
         public RateModel WithMaterialInventoryModelId(string materialInventoryModelId) {
             this.MaterialInventoryModelId = materialInventoryModelId;
             return this;
         }
-
         public RateModel WithAcquireExperienceHierarchy(string[] acquireExperienceHierarchy) {
             this.AcquireExperienceHierarchy = acquireExperienceHierarchy;
             return this;
         }
-
         public RateModel WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public RateModel WithBonusRates(Gs2.Gs2Enhance.Model.BonusRate[] bonusRates) {
             this.BonusRates = bonusRates;
             return this;

@@ -35,22 +35,18 @@ namespace Gs2.Gs2Matchmaking.Model
         public string RatingName { set; get; }
         public string GatheringName { set; get; }
         public int? NumberOfPlayer { set; get; }
-
         public Ballot WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Ballot WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;
         }
-
         public Ballot WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
-
         public Ballot WithNumberOfPlayer(int? numberOfPlayer) {
             this.NumberOfPlayer = numberOfPlayer;
             return this;

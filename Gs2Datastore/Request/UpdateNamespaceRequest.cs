@@ -37,22 +37,18 @@ namespace Gs2.Gs2Datastore.Request
         public string Description { set; get; }
         public Gs2.Gs2Datastore.Model.LogSetting LogSetting { set; get; }
         public Gs2.Gs2Datastore.Model.ScriptSetting DoneUploadScript { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Datastore.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithDoneUploadScript(Gs2.Gs2Datastore.Model.ScriptSetting doneUploadScript) {
             this.DoneUploadScript = doneUploadScript;
             return this;

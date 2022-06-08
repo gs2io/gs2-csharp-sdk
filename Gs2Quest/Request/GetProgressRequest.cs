@@ -35,12 +35,10 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-
         public GetProgressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetProgressRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

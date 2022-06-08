@@ -34,7 +34,6 @@ namespace Gs2.Gs2Account.Request
 	public class CreateAccountRequest : Gs2Request<CreateAccountRequest>
 	{
         public string NamespaceName { set; get; }
-
         public CreateAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

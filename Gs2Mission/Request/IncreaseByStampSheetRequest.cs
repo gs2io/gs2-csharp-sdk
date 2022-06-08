@@ -35,12 +35,10 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public IncreaseByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public IncreaseByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -49,92 +49,74 @@ namespace Gs2.Gs2Schedule.Model
         public int? RelativeDuration { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public EventMaster WithEventId(string eventId) {
             this.EventId = eventId;
             return this;
         }
-
         public EventMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public EventMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public EventMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public EventMaster WithScheduleType(string scheduleType) {
             this.ScheduleType = scheduleType;
             return this;
         }
-
         public EventMaster WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
         }
-
         public EventMaster WithAbsoluteBegin(long? absoluteBegin) {
             this.AbsoluteBegin = absoluteBegin;
             return this;
         }
-
         public EventMaster WithAbsoluteEnd(long? absoluteEnd) {
             this.AbsoluteEnd = absoluteEnd;
             return this;
         }
-
         public EventMaster WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
             this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
-
         public EventMaster WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
             this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
-
         public EventMaster WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
             this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
-
         public EventMaster WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
             this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
-
         public EventMaster WithRepeatBeginHour(int? repeatBeginHour) {
             this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
-
         public EventMaster WithRepeatEndHour(int? repeatEndHour) {
             this.RepeatEndHour = repeatEndHour;
             return this;
         }
-
         public EventMaster WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
             return this;
         }
-
         public EventMaster WithRelativeDuration(int? relativeDuration) {
             this.RelativeDuration = relativeDuration;
             return this;
         }
-
         public EventMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public EventMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

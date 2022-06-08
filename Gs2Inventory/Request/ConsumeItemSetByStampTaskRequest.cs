@@ -35,12 +35,10 @@ namespace Gs2.Gs2Inventory.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
-
         public ConsumeItemSetByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public ConsumeItemSetByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

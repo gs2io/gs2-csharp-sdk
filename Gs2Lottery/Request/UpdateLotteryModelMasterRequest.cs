@@ -41,42 +41,34 @@ namespace Gs2.Gs2Lottery.Request
         public string Method { set; get; }
         public string PrizeTableName { set; get; }
         public string ChoicePrizeTableScriptId { set; get; }
-
         public UpdateLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
             this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;

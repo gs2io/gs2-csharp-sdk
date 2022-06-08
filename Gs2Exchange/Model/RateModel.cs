@@ -40,47 +40,38 @@ namespace Gs2.Gs2Exchange.Model
         public bool? EnableSkip { set; get; }
         public Gs2.Gs2Exchange.Model.ConsumeAction[] SkipConsumeActions { set; get; }
         public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
-
         public RateModel WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;
         }
-
         public RateModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RateModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RateModel WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public RateModel WithTimingType(string timingType) {
             this.TimingType = timingType;
             return this;
         }
-
         public RateModel WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
             return this;
         }
-
         public RateModel WithEnableSkip(bool? enableSkip) {
             this.EnableSkip = enableSkip;
             return this;
         }
-
         public RateModel WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-
         public RateModel WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

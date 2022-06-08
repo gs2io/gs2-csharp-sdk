@@ -35,12 +35,10 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentEventMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

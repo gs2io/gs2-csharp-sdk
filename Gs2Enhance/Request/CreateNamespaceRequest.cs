@@ -39,44 +39,40 @@ namespace Gs2.Gs2Enhance.Request
         public Gs2.Gs2Enhance.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; }
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithEnableDirectEnhance(bool? enableDirectEnhance) {
             this.EnableDirectEnhance = enableDirectEnhance;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Enhance.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithEnhanceScript(Gs2.Gs2Enhance.Model.ScriptSetting enhanceScript) {
             this.EnhanceScript = enhanceScript;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

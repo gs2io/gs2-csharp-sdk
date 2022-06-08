@@ -33,12 +33,10 @@ namespace Gs2.Gs2News.Model
 	{
         public string Key { set; get; }
         public string Value { set; get; }
-
         public SetCookieRequestEntry WithKey(string key) {
             this.Key = key;
             return this;
         }
-
         public SetCookieRequestEntry WithValue(string value) {
             this.Value = value;
             return this;

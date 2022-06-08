@@ -35,12 +35,10 @@ namespace Gs2.Gs2Ranking.Request
 	{
         public string NamespaceName { set; get; }
         public string CategoryName { set; get; }
-
         public GetCategoryModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCategoryModelRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

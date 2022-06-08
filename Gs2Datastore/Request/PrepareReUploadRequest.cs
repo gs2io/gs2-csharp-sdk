@@ -37,22 +37,18 @@ namespace Gs2.Gs2Datastore.Request
         public string DataObjectName { set; get; }
         public string AccessToken { set; get; }
         public string ContentType { set; get; }
-
         public PrepareReUploadRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareReUploadRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public PrepareReUploadRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PrepareReUploadRequest WithContentType(string contentType) {
             this.ContentType = contentType;
             return this;

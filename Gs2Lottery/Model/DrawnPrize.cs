@@ -32,7 +32,6 @@ namespace Gs2.Gs2Lottery.Model
 	public class DrawnPrize : IComparable
 	{
         public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
-
         public DrawnPrize WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

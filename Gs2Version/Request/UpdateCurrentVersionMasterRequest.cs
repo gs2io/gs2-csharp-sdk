@@ -35,12 +35,10 @@ namespace Gs2.Gs2Version.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentVersionMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentVersionMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

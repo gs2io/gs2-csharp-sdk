@@ -39,42 +39,34 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public SalesItemMaster WithSalesItemId(string salesItemId) {
             this.SalesItemId = salesItemId;
             return this;
         }
-
         public SalesItemMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public SalesItemMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public SalesItemMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public SalesItemMaster WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public SalesItemMaster WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public SalesItemMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public SalesItemMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

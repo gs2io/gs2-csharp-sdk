@@ -37,17 +37,14 @@ namespace Gs2.Gs2Version.Request
         public string VersionName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcceptByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcceptByUserIdRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public AcceptByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -34,7 +34,6 @@ namespace Gs2.Gs2Dictionary.Request
 	public class GetCurrentEntryMasterRequest : Gs2Request<GetCurrentEntryMasterRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetCurrentEntryMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

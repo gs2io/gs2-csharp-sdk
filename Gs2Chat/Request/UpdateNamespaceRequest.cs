@@ -43,52 +43,42 @@ namespace Gs2.Gs2Chat.Request
         public Gs2.Gs2Chat.Model.ScriptSetting UnsubscribeRoomScript { set; get; }
         public Gs2.Gs2Chat.Model.NotificationSetting PostNotification { set; get; }
         public Gs2.Gs2Chat.Model.LogSetting LogSetting { set; get; }
-
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithAllowCreateRoom(bool? allowCreateRoom) {
             this.AllowCreateRoom = allowCreateRoom;
             return this;
         }
-
         public UpdateNamespaceRequest WithPostMessageScript(Gs2.Gs2Chat.Model.ScriptSetting postMessageScript) {
             this.PostMessageScript = postMessageScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithCreateRoomScript(Gs2.Gs2Chat.Model.ScriptSetting createRoomScript) {
             this.CreateRoomScript = createRoomScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithDeleteRoomScript(Gs2.Gs2Chat.Model.ScriptSetting deleteRoomScript) {
             this.DeleteRoomScript = deleteRoomScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithSubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting subscribeRoomScript) {
             this.SubscribeRoomScript = subscribeRoomScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithUnsubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting unsubscribeRoomScript) {
             this.UnsubscribeRoomScript = unsubscribeRoomScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithPostNotification(Gs2.Gs2Chat.Model.NotificationSetting postNotification) {
             this.PostNotification = postNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Chat.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

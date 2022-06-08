@@ -35,12 +35,10 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string NamespaceName { set; get; }
         public string QuestGroupName { set; get; }
-
         public DeleteQuestGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteQuestGroupModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;

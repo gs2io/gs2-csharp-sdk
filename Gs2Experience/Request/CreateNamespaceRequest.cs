@@ -41,42 +41,34 @@ namespace Gs2.Gs2Experience.Request
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting OverflowExperienceScript { set; get; }
         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
-
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithExperienceCapScriptId(string experienceCapScriptId) {
             this.ExperienceCapScriptId = experienceCapScriptId;
             return this;
         }
-
         public CreateNamespaceRequest WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
             this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
-
         public CreateNamespaceRequest WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
             this.ChangeRankScript = changeRankScript;
             return this;
         }
-
         public CreateNamespaceRequest WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
             this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
-
         public CreateNamespaceRequest WithOverflowExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
             this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -198,10 +198,20 @@ namespace Gs2.Gs2JobQueue
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.EnableAutoRun != null)
+                {
+                    jsonWriter.WritePropertyName("enableAutoRun");
+                    jsonWriter.Write(request.EnableAutoRun.ToString());
+                }
                 if (request.PushNotification != null)
                 {
                     jsonWriter.WritePropertyName("pushNotification");
                     request.PushNotification.WriteJson(jsonWriter);
+                }
+                if (request.RunNotification != null)
+                {
+                    jsonWriter.WritePropertyName("runNotification");
+                    request.RunNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -538,10 +548,20 @@ namespace Gs2.Gs2JobQueue
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.EnableAutoRun != null)
+                {
+                    jsonWriter.WritePropertyName("enableAutoRun");
+                    jsonWriter.Write(request.EnableAutoRun.ToString());
+                }
                 if (request.PushNotification != null)
                 {
                     jsonWriter.WritePropertyName("pushNotification");
                     request.PushNotification.WriteJson(jsonWriter);
+                }
+                if (request.RunNotification != null)
+                {
+                    jsonWriter.WritePropertyName("runNotification");
+                    request.RunNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -1567,6 +1587,221 @@ namespace Gs2.Gs2JobQueue
         )
 		{
 			var task = new PushByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJobResultTask : Gs2RestSessionTask<GetJobResultRequest, GetJobResultResult>
+        {
+            public GetJobResultTask(IGs2Session session, RestSessionRequestFactory factory, GetJobResultRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetJobResultRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "job-queue")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/job/{jobName}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{jobName}", !string.IsNullOrEmpty(request.JobName) ? request.JobName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJobResult(
+                Request.GetJobResultRequest request,
+                UnityAction<AsyncResult<Result.GetJobResultResult>> callback
+        )
+		{
+			var task = new GetJobResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJobResultResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJobResultResult> GetJobResultFuture(
+                Request.GetJobResultRequest request
+        )
+		{
+			return new GetJobResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJobResultResult> GetJobResultAsync(
+                Request.GetJobResultRequest request
+        )
+		{
+            AsyncResult<Result.GetJobResultResult> result = null;
+			await GetJobResult(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetJobResultTask GetJobResultAsync(
+                Request.GetJobResultRequest request
+        )
+		{
+			return new GetJobResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJobResultResult> GetJobResultAsync(
+                Request.GetJobResultRequest request
+        )
+		{
+			var task = new GetJobResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJobResultByUserIdTask : Gs2RestSessionTask<GetJobResultByUserIdRequest, GetJobResultByUserIdResult>
+        {
+            public GetJobResultByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetJobResultByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetJobResultByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "job-queue")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/job/{jobName}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{jobName}", !string.IsNullOrEmpty(request.JobName) ? request.JobName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJobResultByUserId(
+                Request.GetJobResultByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetJobResultByUserIdResult>> callback
+        )
+		{
+			var task = new GetJobResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJobResultByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJobResultByUserIdResult> GetJobResultByUserIdFuture(
+                Request.GetJobResultByUserIdRequest request
+        )
+		{
+			return new GetJobResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJobResultByUserIdResult> GetJobResultByUserIdAsync(
+                Request.GetJobResultByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetJobResultByUserIdResult> result = null;
+			await GetJobResultByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetJobResultByUserIdTask GetJobResultByUserIdAsync(
+                Request.GetJobResultByUserIdRequest request
+        )
+		{
+			return new GetJobResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJobResultByUserIdResult> GetJobResultByUserIdAsync(
+                Request.GetJobResultByUserIdRequest request
+        )
+		{
+			var task = new GetJobResultByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

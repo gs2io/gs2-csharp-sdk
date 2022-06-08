@@ -37,22 +37,18 @@ namespace Gs2.Gs2Exchange.Request
         public string UserId { set; get; }
         public string RateName { set; get; }
         public string AwaitName { set; get; }
-
         public GetAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetAwaitByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetAwaitByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public GetAwaitByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;

@@ -32,7 +32,6 @@ namespace Gs2.Gs2Identifier.Model
 	public class ProjectToken : IComparable
 	{
         public string Token { set; get; }
-
         public ProjectToken WithToken(string token) {
             this.Token = token;
             return this;

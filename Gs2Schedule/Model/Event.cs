@@ -46,77 +46,62 @@ namespace Gs2.Gs2Schedule.Model
         public int? RepeatEndHour { set; get; }
         public string RelativeTriggerName { set; get; }
         public int? RelativeDuration { set; get; }
-
         public Event WithEventId(string eventId) {
             this.EventId = eventId;
             return this;
         }
-
         public Event WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Event WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Event WithScheduleType(string scheduleType) {
             this.ScheduleType = scheduleType;
             return this;
         }
-
         public Event WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
         }
-
         public Event WithAbsoluteBegin(long? absoluteBegin) {
             this.AbsoluteBegin = absoluteBegin;
             return this;
         }
-
         public Event WithAbsoluteEnd(long? absoluteEnd) {
             this.AbsoluteEnd = absoluteEnd;
             return this;
         }
-
         public Event WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
             this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
-
         public Event WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
             this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
-
         public Event WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
             this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
-
         public Event WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
             this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
-
         public Event WithRepeatBeginHour(int? repeatBeginHour) {
             this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
-
         public Event WithRepeatEndHour(int? repeatEndHour) {
             this.RepeatEndHour = repeatEndHour;
             return this;
         }
-
         public Event WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
             return this;
         }
-
         public Event WithRelativeDuration(int? relativeDuration) {
             this.RelativeDuration = relativeDuration;
             return this;

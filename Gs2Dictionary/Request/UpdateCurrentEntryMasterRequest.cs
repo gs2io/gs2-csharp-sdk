@@ -35,12 +35,10 @@ namespace Gs2.Gs2Dictionary.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentEntryMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentEntryMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

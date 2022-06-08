@@ -33,12 +33,10 @@ namespace Gs2.Gs2Enhance.Model
 	{
         public string MaterialItemSetId { set; get; }
         public int? Count { set; get; }
-
         public Material WithMaterialItemSetId(string materialItemSetId) {
             this.MaterialItemSetId = materialItemSetId;
             return this;
         }
-
         public Material WithCount(int? count) {
             this.Count = count;
             return this;

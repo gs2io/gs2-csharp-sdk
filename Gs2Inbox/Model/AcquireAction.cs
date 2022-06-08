@@ -33,12 +33,10 @@ namespace Gs2.Gs2Inbox.Model
 	{
         public string Action { set; get; }
         public string Request { set; get; }
-
         public AcquireAction WithAction(string action) {
             this.Action = action;
             return this;
         }
-
         public AcquireAction WithRequest(string request) {
             this.Request = request;
             return this;

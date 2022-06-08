@@ -40,32 +40,26 @@ namespace Gs2.Gs2Inbox.Request
         public long? ExpiresAt { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SendMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SendMessageByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SendMessageByUserIdRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public SendMessageByUserIdRequest WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
-
         public SendMessageByUserIdRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public SendMessageByUserIdRequest WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;

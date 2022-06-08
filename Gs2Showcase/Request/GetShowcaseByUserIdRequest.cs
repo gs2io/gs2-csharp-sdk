@@ -36,17 +36,14 @@ namespace Gs2.Gs2Showcase.Request
         public string NamespaceName { set; get; }
         public string ShowcaseName { set; get; }
         public string UserId { set; get; }
-
         public GetShowcaseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetShowcaseByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-
         public GetShowcaseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

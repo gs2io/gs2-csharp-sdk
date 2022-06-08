@@ -36,17 +36,14 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeGlobalMessageMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeGlobalMessageMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeGlobalMessageMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -43,74 +43,64 @@ namespace Gs2.Gs2Inbox.Model
         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithIsAutomaticDeletingEnabled(bool? isAutomaticDeletingEnabled) {
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
-
         public Namespace WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public Namespace WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
             this.ReceiveMessageScript = receiveMessageScript;
             return this;
         }
-
         public Namespace WithReadMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting readMessageScript) {
             this.ReadMessageScript = readMessageScript;
             return this;
         }
-
         public Namespace WithDeleteMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting deleteMessageScript) {
             this.DeleteMessageScript = deleteMessageScript;
             return this;
         }
-
         public Namespace WithReceiveNotification(Gs2.Gs2Inbox.Model.NotificationSetting receiveNotification) {
             this.ReceiveNotification = receiveNotification;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Inbox.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public Namespace WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public Namespace WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

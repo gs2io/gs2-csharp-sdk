@@ -34,7 +34,6 @@ namespace Gs2.Gs2Formation.Request
 	public class GetCurrentFormMasterRequest : Gs2Request<GetCurrentFormMasterRequest>
 	{
         public string NamespaceName { set; get; }
-
         public GetCurrentFormMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

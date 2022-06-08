@@ -39,27 +39,22 @@ namespace Gs2.Gs2Gateway.Request
         public string Payload { set; get; }
         public string Sound { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SendMobileNotificationByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SendMobileNotificationByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SendMobileNotificationByUserIdRequest WithSubject(string subject) {
             this.Subject = subject;
             return this;
         }
-
         public SendMobileNotificationByUserIdRequest WithPayload(string payload) {
             this.Payload = payload;
             return this;
         }
-
         public SendMobileNotificationByUserIdRequest WithSound(string sound) {
             this.Sound = sound;
             return this;

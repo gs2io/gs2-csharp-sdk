@@ -39,32 +39,26 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
         public bool? IsComplete { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
-
         public EndRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public EndRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public EndRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public EndRequest WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
-
         public EndRequest WithIsComplete(bool? isComplete) {
             this.IsComplete = isComplete;
             return this;
         }
-
         public EndRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
             return this;

@@ -38,22 +38,18 @@ namespace Gs2.Gs2Formation.Request
         public string MoldName { set; get; }
         public int? Capacity { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetMoldCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetMoldCapacityByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SetMoldCapacityByUserIdRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public SetMoldCapacityByUserIdRequest WithCapacity(int? capacity) {
             this.Capacity = capacity;
             return this;

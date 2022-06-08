@@ -40,32 +40,26 @@ namespace Gs2.Gs2Formation.Request
         public Gs2.Gs2Formation.Model.AcquireAction AcquireAction { set; get; }
         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcquireActionsToFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcquireActionsToFormPropertiesRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AcquireActionsToFormPropertiesRequest WithMoldName(string moldName) {
             this.MoldName = moldName;
             return this;
         }
-
         public AcquireActionsToFormPropertiesRequest WithIndex(int? index) {
             this.Index = index;
             return this;
         }
-
         public AcquireActionsToFormPropertiesRequest WithAcquireAction(Gs2.Gs2Formation.Model.AcquireAction acquireAction) {
             this.AcquireAction = acquireAction;
             return this;
         }
-
         public AcquireActionsToFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.AcquireActionConfig[] config) {
             this.Config = config;
             return this;

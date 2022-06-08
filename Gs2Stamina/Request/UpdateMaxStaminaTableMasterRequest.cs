@@ -39,32 +39,26 @@ namespace Gs2.Gs2Stamina.Request
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
-
         public UpdateMaxStaminaTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateMaxStaminaTableMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
-
         public UpdateMaxStaminaTableMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateMaxStaminaTableMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateMaxStaminaTableMasterRequest WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public UpdateMaxStaminaTableMasterRequest WithValues(int[] values) {
             this.Values = values;
             return this;

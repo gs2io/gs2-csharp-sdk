@@ -38,22 +38,18 @@ namespace Gs2.Gs2Mission.Request
         public string MissionTaskName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ReceiveByUserIdRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public ReceiveByUserIdRequest WithMissionTaskName(string missionTaskName) {
             this.MissionTaskName = missionTaskName;
             return this;
         }
-
         public ReceiveByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

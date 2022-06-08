@@ -33,12 +33,10 @@ namespace Gs2.Gs2Quest.Model
 	{
         public string Action { set; get; }
         public string Request { set; get; }
-
         public ConsumeAction WithAction(string action) {
             this.Action = action;
             return this;
         }
-
         public ConsumeAction WithRequest(string request) {
             this.Request = request;
             return this;

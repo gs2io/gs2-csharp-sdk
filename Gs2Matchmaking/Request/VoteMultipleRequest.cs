@@ -37,22 +37,18 @@ namespace Gs2.Gs2Matchmaking.Request
         public Gs2.Gs2Matchmaking.Model.SignedBallot[] SignedBallots { set; get; }
         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
         public string KeyId { set; get; }
-
         public VoteMultipleRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VoteMultipleRequest WithSignedBallots(Gs2.Gs2Matchmaking.Model.SignedBallot[] signedBallots) {
             this.SignedBallots = signedBallots;
             return this;
         }
-
         public VoteMultipleRequest WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
             this.GameResults = gameResults;
             return this;
         }
-
         public VoteMultipleRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -38,27 +38,22 @@ namespace Gs2.Gs2Formation.Request
         public string Description { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
-
         public UpdateFormModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateFormModelMasterRequest WithFormModelName(string formModelName) {
             this.FormModelName = formModelName;
             return this;
         }
-
         public UpdateFormModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateFormModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateFormModelMasterRequest WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
             this.Slots = slots;
             return this;

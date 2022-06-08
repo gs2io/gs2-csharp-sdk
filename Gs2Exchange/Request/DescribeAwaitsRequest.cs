@@ -38,27 +38,22 @@ namespace Gs2.Gs2Exchange.Request
         public string RateName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeAwaitsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeAwaitsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeAwaitsRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DescribeAwaitsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeAwaitsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -38,27 +38,22 @@ namespace Gs2.Gs2Ranking.Request
         public string AccessToken { set; get; }
         public string ScorerUserId { set; get; }
         public string UniqueId { set; get; }
-
         public GetScoreRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetScoreRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public GetScoreRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetScoreRequest WithScorerUserId(string scorerUserId) {
             this.ScorerUserId = scorerUserId;
             return this;
         }
-
         public GetScoreRequest WithUniqueId(string uniqueId) {
             this.UniqueId = uniqueId;
             return this;

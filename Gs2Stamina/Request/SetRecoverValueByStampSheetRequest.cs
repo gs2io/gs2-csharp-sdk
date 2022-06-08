@@ -35,12 +35,10 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public SetRecoverValueByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public SetRecoverValueByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

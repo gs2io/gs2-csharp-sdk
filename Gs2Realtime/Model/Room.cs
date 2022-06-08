@@ -39,42 +39,34 @@ namespace Gs2.Gs2Realtime.Model
         public string[] NotificationUserIds { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Room WithRoomId(string roomId) {
             this.RoomId = roomId;
             return this;
         }
-
         public Room WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Room WithIpAddress(string ipAddress) {
             this.IpAddress = ipAddress;
             return this;
         }
-
         public Room WithPort(int? port) {
             this.Port = port;
             return this;
         }
-
         public Room WithEncryptionKey(string encryptionKey) {
             this.EncryptionKey = encryptionKey;
             return this;
         }
-
         public Room WithNotificationUserIds(string[] notificationUserIds) {
             this.NotificationUserIds = notificationUserIds;
             return this;
         }
-
         public Room WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Room WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

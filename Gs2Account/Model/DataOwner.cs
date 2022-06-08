@@ -35,22 +35,18 @@ namespace Gs2.Gs2Account.Model
         public string UserId { set; get; }
         public string Name { set; get; }
         public long? CreatedAt { set; get; }
-
         public DataOwner WithDataOwnerId(string dataOwnerId) {
             this.DataOwnerId = dataOwnerId;
             return this;
         }
-
         public DataOwner WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DataOwner WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public DataOwner WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

@@ -36,27 +36,22 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Gs2Showcase.Model.SalesItem SalesItem { set; get; }
         public Gs2.Gs2Showcase.Model.SalesItemGroup SalesItemGroup { set; get; }
         public string SalesPeriodEventId { set; get; }
-
         public DisplayItem WithDisplayItemId(string displayItemId) {
             this.DisplayItemId = displayItemId;
             return this;
         }
-
         public DisplayItem WithType(string type) {
             this.Type = type;
             return this;
         }
-
         public DisplayItem WithSalesItem(Gs2.Gs2Showcase.Model.SalesItem salesItem) {
             this.SalesItem = salesItem;
             return this;
         }
-
         public DisplayItem WithSalesItemGroup(Gs2.Gs2Showcase.Model.SalesItemGroup salesItemGroup) {
             this.SalesItemGroup = salesItemGroup;
             return this;
         }
-
         public DisplayItem WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;

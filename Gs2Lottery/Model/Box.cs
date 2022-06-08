@@ -38,37 +38,30 @@ namespace Gs2.Gs2Lottery.Model
         public int[] DrawnIndexes { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Box WithBoxId(string boxId) {
             this.BoxId = boxId;
             return this;
         }
-
         public Box WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public Box WithIndex(int? index) {
             this.Index = index;
             return this;
         }
-
         public Box WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Box WithDrawnIndexes(int[] drawnIndexes) {
             this.DrawnIndexes = drawnIndexes;
             return this;
         }
-
         public Box WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Box WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

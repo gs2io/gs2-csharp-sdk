@@ -34,7 +34,6 @@ namespace Gs2.Gs2Formation.Request
 	public class DescribeMoldModelsRequest : Gs2Request<DescribeMoldModelsRequest>
 	{
         public string NamespaceName { set; get; }
-
         public DescribeMoldModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

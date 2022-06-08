@@ -33,12 +33,10 @@ namespace Gs2.Gs2Chat.Model
 	{
         public int? Category { set; get; }
         public bool? EnableTransferMobilePushNotification { set; get; }
-
         public NotificationType WithCategory(int? category) {
             this.Category = category;
             return this;
         }
-
         public NotificationType WithEnableTransferMobilePushNotification(bool? enableTransferMobilePushNotification) {
             this.EnableTransferMobilePushNotification = enableTransferMobilePushNotification;
             return this;

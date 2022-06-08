@@ -38,27 +38,22 @@ namespace Gs2.Gs2Key.Request
         public string Description { set; get; }
         public string ApiKey { set; get; }
         public string EncryptionKeyName { set; get; }
-
         public CreateGitHubApiKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateGitHubApiKeyRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateGitHubApiKeyRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateGitHubApiKeyRequest WithApiKey(string apiKey) {
             this.ApiKey = apiKey;
             return this;
         }
-
         public CreateGitHubApiKeyRequest WithEncryptionKeyName(string encryptionKeyName) {
             this.EncryptionKeyName = encryptionKeyName;
             return this;

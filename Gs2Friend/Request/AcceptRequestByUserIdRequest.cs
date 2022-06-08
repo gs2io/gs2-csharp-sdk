@@ -37,17 +37,14 @@ namespace Gs2.Gs2Friend.Request
         public string UserId { set; get; }
         public string FromUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcceptRequestByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcceptRequestByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AcceptRequestByUserIdRequest WithFromUserId(string fromUserId) {
             this.FromUserId = fromUserId;
             return this;

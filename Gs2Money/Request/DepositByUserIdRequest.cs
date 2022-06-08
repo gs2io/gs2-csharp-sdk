@@ -39,27 +39,22 @@ namespace Gs2.Gs2Money.Request
         public float? Price { set; get; }
         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DepositByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DepositByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DepositByUserIdRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
-
         public DepositByUserIdRequest WithPrice(float? price) {
             this.Price = price;
             return this;
         }
-
         public DepositByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;

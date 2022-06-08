@@ -39,42 +39,34 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public ShowcaseMaster WithShowcaseId(string showcaseId) {
             this.ShowcaseId = showcaseId;
             return this;
         }
-
         public ShowcaseMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public ShowcaseMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public ShowcaseMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public ShowcaseMaster WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
-
         public ShowcaseMaster WithDisplayItems(Gs2.Gs2Showcase.Model.DisplayItemMaster[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
-
         public ShowcaseMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public ShowcaseMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

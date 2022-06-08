@@ -33,12 +33,10 @@ namespace Gs2.Gs2Inventory.Model
 	{
         public string ReferenceOfId { set; get; }
         public string Name { set; get; }
-
         public ReferenceOf WithReferenceOfId(string referenceOfId) {
             this.ReferenceOfId = referenceOfId;
             return this;
         }
-
         public ReferenceOf WithName(string name) {
             this.Name = name;
             return this;

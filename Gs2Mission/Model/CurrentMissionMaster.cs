@@ -33,12 +33,10 @@ namespace Gs2.Gs2Mission.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
-
         public CurrentMissionMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public CurrentMissionMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

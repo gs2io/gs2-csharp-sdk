@@ -37,32 +37,26 @@ namespace Gs2.Gs2Account.Model
         public int? TimeOffset { set; get; }
         public bool? Banned { set; get; }
         public long? CreatedAt { set; get; }
-
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;
         }
-
         public Account WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Account WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public Account WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
             return this;
         }
-
         public Account WithBanned(bool? banned) {
             this.Banned = banned;
             return this;
         }
-
         public Account WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

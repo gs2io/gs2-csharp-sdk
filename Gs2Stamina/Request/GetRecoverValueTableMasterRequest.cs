@@ -35,12 +35,10 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string NamespaceName { set; get; }
         public string RecoverValueTableName { set; get; }
-
         public GetRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetRecoverValueTableMasterRequest WithRecoverValueTableName(string recoverValueTableName) {
             this.RecoverValueTableName = recoverValueTableName;
             return this;

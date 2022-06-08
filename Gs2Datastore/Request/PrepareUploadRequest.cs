@@ -40,37 +40,30 @@ namespace Gs2.Gs2Datastore.Request
         public string Scope { set; get; }
         public string[] AllowUserIds { set; get; }
         public bool? UpdateIfExists { set; get; }
-
         public PrepareUploadRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareUploadRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PrepareUploadRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PrepareUploadRequest WithContentType(string contentType) {
             this.ContentType = contentType;
             return this;
         }
-
         public PrepareUploadRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public PrepareUploadRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
-
         public PrepareUploadRequest WithUpdateIfExists(bool? updateIfExists) {
             this.UpdateIfExists = updateIfExists;
             return this;

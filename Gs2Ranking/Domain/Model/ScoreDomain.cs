@@ -250,7 +250,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     this.CategoryName?.ToString(),
                     this.ScorerUserId?.ToString(),
-                    this.UniqueId ?? "0"
+                    this.UniqueId?.ToString()
                 )
             );
             if (value == null) {
@@ -275,7 +275,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                         this.CategoryName?.ToString(),
                                         this.ScorerUserId?.ToString(),
-                                        this.UniqueId ?? "0"
+                                        this.UniqueId?.ToString()
                                     )
                                 );
                             }
@@ -299,7 +299,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                 this.CategoryName?.ToString(),
                                 this.ScorerUserId?.ToString(),
-                                this.UniqueId ?? "0"
+                                this.UniqueId?.ToString()
                             )
                         );
                     }
@@ -314,7 +314,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                         this.CategoryName?.ToString(),
                         this.ScorerUserId?.ToString(),
-                        this.UniqueId ?? "0"
+                        this.UniqueId?.ToString()
                     )
                 );
             }

@@ -35,12 +35,10 @@ namespace Gs2.Gs2Distributor.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
-
         public RunStampSheetExpressWithoutNamespaceRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public RunStampSheetExpressWithoutNamespaceRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

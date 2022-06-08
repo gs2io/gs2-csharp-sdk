@@ -35,12 +35,10 @@ namespace Gs2.Gs2Script.Request
 	{
         public string Script { set; get; }
         public string Args { set; get; }
-
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;
         }
-
         public DebugInvokeRequest WithArgs(string args) {
             this.Args = args;
             return this;

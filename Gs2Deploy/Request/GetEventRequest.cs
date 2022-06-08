@@ -35,12 +35,10 @@ namespace Gs2.Gs2Deploy.Request
 	{
         public string StackName { set; get; }
         public string EventName { set; get; }
-
         public GetEventRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
-
         public GetEventRequest WithEventName(string eventName) {
             this.EventName = eventName;
             return this;

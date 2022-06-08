@@ -36,27 +36,22 @@ namespace Gs2.Gs2Gateway.Model
         public string Token { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public FirebaseToken WithFirebaseTokenId(string firebaseTokenId) {
             this.FirebaseTokenId = firebaseTokenId;
             return this;
         }
-
         public FirebaseToken WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public FirebaseToken WithToken(string token) {
             this.Token = token;
             return this;
         }
-
         public FirebaseToken WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public FirebaseToken WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -38,37 +38,30 @@ namespace Gs2.Gs2Quest.Model
         public string ChallengePeriodEventId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public QuestGroupModelMaster WithQuestGroupModelId(string questGroupModelId) {
             this.QuestGroupModelId = questGroupModelId;
             return this;
         }
-
         public QuestGroupModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public QuestGroupModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public QuestGroupModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public QuestGroupModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public QuestGroupModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public QuestGroupModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

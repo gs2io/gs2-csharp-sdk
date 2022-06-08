@@ -35,12 +35,10 @@ namespace Gs2.Gs2Datastore.Request
 	{
         public string NamespaceName { set; get; }
         public string DataObjectId { set; get; }
-
         public RestoreDataObjectRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RestoreDataObjectRequest WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
             return this;

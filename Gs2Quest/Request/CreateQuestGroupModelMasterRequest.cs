@@ -38,27 +38,22 @@ namespace Gs2.Gs2Quest.Request
         public string Description { set; get; }
         public string Metadata { set; get; }
         public string ChallengePeriodEventId { set; get; }
-
         public CreateQuestGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateQuestGroupModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateQuestGroupModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateQuestGroupModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateQuestGroupModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

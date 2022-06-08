@@ -39,42 +39,34 @@ namespace Gs2.Gs2Chat.Model
         public string[] WhiteListUserIds { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Room WithRoomId(string roomId) {
             this.RoomId = roomId;
             return this;
         }
-
         public Room WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Room WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Room WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Room WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public Room WithWhiteListUserIds(string[] whiteListUserIds) {
             this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
-
         public Room WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Room WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

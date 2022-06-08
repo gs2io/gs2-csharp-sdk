@@ -35,12 +35,10 @@ namespace Gs2.Gs2Friend.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-
         public GetPublicProfileRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetPublicProfileRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

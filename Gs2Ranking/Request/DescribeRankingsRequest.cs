@@ -39,32 +39,26 @@ namespace Gs2.Gs2Ranking.Request
         public long? StartIndex { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeRankingsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRankingsRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public DescribeRankingsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeRankingsRequest WithStartIndex(long? startIndex) {
             this.StartIndex = startIndex;
             return this;
         }
-
         public DescribeRankingsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRankingsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

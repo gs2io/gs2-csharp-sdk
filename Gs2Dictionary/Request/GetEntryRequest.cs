@@ -36,17 +36,14 @@ namespace Gs2.Gs2Dictionary.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string EntryModelName { set; get; }
-
         public GetEntryRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetEntryRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetEntryRequest WithEntryModelName(string entryModelName) {
             this.EntryModelName = entryModelName;
             return this;

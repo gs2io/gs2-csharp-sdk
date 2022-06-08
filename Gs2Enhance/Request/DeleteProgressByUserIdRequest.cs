@@ -38,22 +38,18 @@ namespace Gs2.Gs2Enhance.Request
         public string RateName { set; get; }
         public string ProgressName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DeleteProgressByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DeleteProgressByUserIdRequest WithProgressName(string progressName) {
             this.ProgressName = progressName;
             return this;

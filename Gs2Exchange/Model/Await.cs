@@ -37,32 +37,26 @@ namespace Gs2.Gs2Exchange.Model
         public string Name { set; get; }
         public int? Count { set; get; }
         public long? ExchangedAt { set; get; }
-
         public Await WithAwaitId(string awaitId) {
             this.AwaitId = awaitId;
             return this;
         }
-
         public Await WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Await WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public Await WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Await WithCount(int? count) {
             this.Count = count;
             return this;
         }
-
         public Await WithExchangedAt(long? exchangedAt) {
             this.ExchangedAt = exchangedAt;
             return this;

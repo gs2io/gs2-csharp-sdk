@@ -34,7 +34,6 @@ namespace Gs2.Gs2Mission.Request
 	public class DescribeCounterModelsRequest : Gs2Request<DescribeCounterModelsRequest>
 	{
         public string NamespaceName { set; get; }
-
         public DescribeCounterModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

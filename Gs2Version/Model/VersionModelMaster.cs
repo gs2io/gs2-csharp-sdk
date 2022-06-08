@@ -43,62 +43,50 @@ namespace Gs2.Gs2Version.Model
         public string SignatureKeyId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public VersionModelMaster WithVersionModelId(string versionModelId) {
             this.VersionModelId = versionModelId;
             return this;
         }
-
         public VersionModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public VersionModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public VersionModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public VersionModelMaster WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
         }
-
         public VersionModelMaster WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
             this.ErrorVersion = errorVersion;
             return this;
         }
-
         public VersionModelMaster WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public VersionModelMaster WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;
         }
-
         public VersionModelMaster WithNeedSignature(bool? needSignature) {
             this.NeedSignature = needSignature;
             return this;
         }
-
         public VersionModelMaster WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
             return this;
         }
-
         public VersionModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public VersionModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -35,22 +35,18 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
-
         public TargetVersion WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public TargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
             this.Version = version;
             return this;
         }
-
         public TargetVersion WithBody(string body) {
             this.Body = body;
             return this;
         }
-
         public TargetVersion WithSignature(string signature) {
             this.Signature = signature;
             return this;

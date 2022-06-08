@@ -37,32 +37,26 @@ namespace Gs2.Gs2Dictionary.Model
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public EntryModelMaster WithEntryModelId(string entryModelId) {
             this.EntryModelId = entryModelId;
             return this;
         }
-
         public EntryModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public EntryModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public EntryModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public EntryModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public EntryModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

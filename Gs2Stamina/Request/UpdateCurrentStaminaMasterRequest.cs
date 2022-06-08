@@ -35,12 +35,10 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
-
         public UpdateCurrentStaminaMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentStaminaMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

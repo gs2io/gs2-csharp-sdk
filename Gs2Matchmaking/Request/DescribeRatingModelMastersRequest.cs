@@ -36,17 +36,14 @@ namespace Gs2.Gs2Matchmaking.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeRatingModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRatingModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRatingModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

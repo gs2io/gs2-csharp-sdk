@@ -36,17 +36,14 @@ namespace Gs2.Gs2Gateway.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public bool? AllowConcurrentAccess { set; get; }
-
         public SetUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetUserIdRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public SetUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
             return this;

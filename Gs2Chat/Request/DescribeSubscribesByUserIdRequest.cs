@@ -37,22 +37,18 @@ namespace Gs2.Gs2Chat.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeSubscribesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSubscribesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeSubscribesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeSubscribesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

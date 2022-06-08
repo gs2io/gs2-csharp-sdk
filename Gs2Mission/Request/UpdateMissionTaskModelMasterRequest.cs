@@ -43,52 +43,42 @@ namespace Gs2.Gs2Mission.Request
         public Gs2.Gs2Mission.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
         public string PremiseMissionTaskName { set; get; }
-
         public UpdateMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithMissionTaskName(string missionTaskName) {
             this.MissionTaskName = missionTaskName;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithTargetValue(long? targetValue) {
             this.TargetValue = targetValue;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithCompleteAcquireActions(Gs2.Gs2Mission.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public UpdateMissionTaskModelMasterRequest WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;

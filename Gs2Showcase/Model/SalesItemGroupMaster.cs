@@ -38,37 +38,30 @@ namespace Gs2.Gs2Showcase.Model
         public string[] SalesItemNames { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public SalesItemGroupMaster WithSalesItemGroupId(string salesItemGroupId) {
             this.SalesItemGroupId = salesItemGroupId;
             return this;
         }
-
         public SalesItemGroupMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public SalesItemGroupMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public SalesItemGroupMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public SalesItemGroupMaster WithSalesItemNames(string[] salesItemNames) {
             this.SalesItemNames = salesItemNames;
             return this;
         }
-
         public SalesItemGroupMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public SalesItemGroupMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

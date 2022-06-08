@@ -37,22 +37,18 @@ namespace Gs2.Gs2Quest.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public DescribeProgressesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeProgressesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeProgressesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeProgressesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

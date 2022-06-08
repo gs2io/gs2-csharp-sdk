@@ -34,17 +34,14 @@ namespace Gs2.Gs2JobQueue.Model
         public string ScriptId { set; get; }
         public string Args { set; get; }
         public int? MaxTryCount { set; get; }
-
         public JobEntry WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
         }
-
         public JobEntry WithArgs(string args) {
             this.Args = args;
             return this;
         }
-
         public JobEntry WithMaxTryCount(int? maxTryCount) {
             this.MaxTryCount = maxTryCount;
             return this;

@@ -40,47 +40,38 @@ namespace Gs2.Gs2Inbox.Model
         public long? ReceivedAt { set; get; }
         public long? ReadAt { set; get; }
         public long? ExpiresAt { set; get; }
-
         public Message WithMessageId(string messageId) {
             this.MessageId = messageId;
             return this;
         }
-
         public Message WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Message WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Message WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Message WithIsRead(bool? isRead) {
             this.IsRead = isRead;
             return this;
         }
-
         public Message WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
-
         public Message WithReceivedAt(long? receivedAt) {
             this.ReceivedAt = receivedAt;
             return this;
         }
-
         public Message WithReadAt(long? readAt) {
             this.ReadAt = readAt;
             return this;
         }
-
         public Message WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;

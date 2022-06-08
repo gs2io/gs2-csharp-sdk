@@ -34,17 +34,14 @@ namespace Gs2.Gs2Friend.Model
         public string UserId { set; get; }
         public string PublicProfile { set; get; }
         public string FollowerProfile { set; get; }
-
         public FollowUser WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public FollowUser WithPublicProfile(string publicProfile) {
             this.PublicProfile = publicProfile;
             return this;
         }
-
         public FollowUser WithFollowerProfile(string followerProfile) {
             this.FollowerProfile = followerProfile;
             return this;
