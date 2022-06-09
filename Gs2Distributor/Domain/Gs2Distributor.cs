@@ -295,29 +295,64 @@ namespace Gs2.Gs2Distributor.Domain
         )
         {
             AutoRunStampSheetNotification[] copiedCompletedStampSheets;
-            lock (_completedStampSheets)
+
+#if !GS2_ENABLE_UNITASK
+            IEnumerator Impl(Gs2Future self)
             {
-                if (_completedStampSheets.Count == 0)
+#endif
+                lock (_completedStampSheets)
                 {
-                    return;
+                    if (_completedStampSheets.Count == 0)
+                    {
+#if GS2_ENABLE_UNITASK
+                        return;
+#else
+                        yield break;
+#endif
+                    }
+
+                    copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
+                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
+                    _completedStampSheets.Clear();
                 }
-                copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                _completedStampSheets.CopyTo(copiedCompletedStampSheets);
-                _completedStampSheets.Clear();
+
+                foreach (var completedStampSheet in copiedCompletedStampSheets)
+                {
+#if GS2_ENABLE_UNITASK
+                    await new AutoStampSheetDomain(
+                        cache,
+                        jobQueueDomain,
+                        session,
+                        stampSheetConfiguration.NamespaceName,
+                        completedStampSheet.TransactionId,
+                        accessToken.Token,
+                        stampSheetConfiguration.StampTaskEventHandler,
+                        stampSheetConfiguration.StampSheetEventHandler
+                    ).RunAsync();
+#else
+                    var future = new AutoStampSheetDomain(
+                        cache,
+                        jobQueueDomain,
+                        session,
+                        stampSheetConfiguration.NamespaceName,
+                        completedStampSheet.TransactionId,
+                        accessToken.Token,
+                        stampSheetConfiguration.StampTaskEventHandler,
+                        stampSheetConfiguration.StampSheetEventHandler
+                    ).Run();
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+#endif
+                }
+#if !GS2_ENABLE_UNITASK
             }
-            foreach (var completedStampSheet in copiedCompletedStampSheets)
-            {
-                await new AutoStampSheetDomain(
-                    cache,
-                    jobQueueDomain,
-                    session,
-                    stampSheetConfiguration.NamespaceName,
-                    completedStampSheet.TransactionId,
-                    accessToken.Token,
-                    stampSheetConfiguration.StampTaskEventHandler,
-                    stampSheetConfiguration.StampSheetEventHandler
-                ).RunAsync();
-            }
+
+            return new Gs2InlineFuture(Impl);
+#endif
         }
     }
 }

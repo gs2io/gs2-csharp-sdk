@@ -360,11 +360,19 @@ namespace Gs2.Gs2JobQueue.Domain
         )
         {
             RunNotification[] copiedCompletedJobs;
+#if !GS2_ENABLE_UNITASK
+            IEnumerator Impl(Gs2Future self)
+            {
+#endif
             lock (_completedJobs)
             {
                 if (_completedJobs.Count == 0)
                 {
+#if GS2_ENABLE_UNITASK
                     return;
+#else
+                    yield break;
+#endif
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
                 _completedJobs.CopyTo(copiedCompletedJobs);
@@ -375,12 +383,19 @@ namespace Gs2.Gs2JobQueue.Domain
                 var client = new Gs2JobQueueRestClient(
                     session
                 );
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = client.GetStampSheetResultFuture(
-                    new GetStampSheetResultRequest()
-                        .WithNamespaceName(_namespaceName)
-                        .WithTransactionId(_transactionId)
-                        .WithAccessToken(_accessToken)
+#if GS2_ENABLE_UNITASK
+                var result = await client.GetJobResultAsync(
+                    new GetJobResultRequest()
+                        .WithNamespaceName(completedJob.NamespaceName)
+                        .WithJobName(completedJob.JobName)
+                        .WithAccessToken(accessToken.Token)
+                );
+#else
+                var future = client.GetJobResultFuture(
+                    new GetJobResultRequest()
+                        .WithNamespaceName(completedJob.NamespaceName)
+                        .WithJobName(completedJob.JobName)
+                        .WithAccessToken(accessToken.Token)
                 );
                 yield return future;
                 if (future.Error != null)
@@ -389,13 +404,6 @@ namespace Gs2.Gs2JobQueue.Domain
                     yield break;
                 }
                 var result = future.Result;
-#else
-                var result = await client.GetJobResultAsync(
-                    new GetJobResultRequest()
-                        .WithNamespaceName(completedJob.NamespaceName)
-                        .WithJobName(completedJob.JobName)
-                        .WithAccessToken(accessToken.Token)
-                );
 #endif
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
                     cache,
@@ -413,6 +421,11 @@ namespace Gs2.Gs2JobQueue.Domain
                     }
                 );
             }
+#if !GS2_ENABLE_UNITASK
+            }
+
+            return new Gs2InlineFuture(Impl);
+#endif
         }
     }
 }

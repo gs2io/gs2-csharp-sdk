@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
+#endif
 using Gs2.Core.Net;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Model;
