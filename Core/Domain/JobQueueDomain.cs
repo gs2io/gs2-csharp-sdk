@@ -22,7 +22,7 @@ namespace Gs2.Core.Domain
             this.gs2 = gs2;
         }
 
-        public void push(
+        public void Push(
             string namespaceName
         ) {
             lock (lockObject)

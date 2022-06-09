@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -59,6 +61,8 @@ namespace Gs2.Gs2JobQueue.Domain
 {
 
     public class Gs2JobQueue {
+        private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
+
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
@@ -334,9 +338,80 @@ namespace Gs2.Gs2JobQueue.Domain
                     break;
                 }
                 case "Run": {
-                    onRunNotification.Invoke(RunNotification.FromJson(JsonMapper.ToObject(payload)));
+                    lock (_completedJobs)
+                    {
+                        var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
+                        _completedJobs.Add(notification);
+                        onRunNotification.Invoke(notification);
+                    }
                     break;
                 }
+            }
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask Dispatch(
+#else
+        public static Gs2Future Dispatch(
+#endif
+            CacheDatabase cache,
+            Gs2RestSession session,
+            AccessToken accessToken
+        )
+        {
+            RunNotification[] copiedCompletedJobs;
+            lock (_completedJobs)
+            {
+                if (_completedJobs.Count == 0)
+                {
+                    return;
+                }
+                copiedCompletedJobs = new RunNotification[_completedJobs.Count];
+                _completedJobs.CopyTo(copiedCompletedJobs);
+                _completedJobs.Clear();
+            }
+            foreach (var completedJob in copiedCompletedJobs)
+            {
+                var client = new Gs2JobQueueRestClient(
+                    session
+                );
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var future = client.GetStampSheetResultFuture(
+                    new GetStampSheetResultRequest()
+                        .WithNamespaceName(_namespaceName)
+                        .WithTransactionId(_transactionId)
+                        .WithAccessToken(_accessToken)
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+#else
+                var result = await client.GetJobResultAsync(
+                    new GetJobResultRequest()
+                        .WithNamespaceName(completedJob.NamespaceName)
+                        .WithJobName(completedJob.JobName)
+                        .WithAccessToken(accessToken.Token)
+                );
+#endif
+                Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
+                    cache,
+                    new Job
+                    {
+                        ScriptId = null,
+                        Args = null,
+                    },
+                    new JobResultBody
+                    {
+                        TryNumber = result?.Item.TryNumber,
+                        StatusCode = result?.Item.StatusCode,
+                        Result = result?.Item.Result,
+                        TryAt = result?.Item.TryAt
+                    }
+                );
             }
         }
     }

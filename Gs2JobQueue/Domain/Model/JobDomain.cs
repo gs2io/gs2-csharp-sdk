@@ -68,6 +68,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private readonly string _jobName;
 
         private readonly String _parentKey;
+        public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public bool? NeedRetry { get; set; }
         public string NamespaceName => _namespaceName;

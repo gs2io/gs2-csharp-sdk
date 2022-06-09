@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -59,6 +61,9 @@ namespace Gs2.Gs2Distributor.Domain
 {
 
     public class Gs2Distributor {
+
+        private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
+        
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
@@ -264,10 +269,54 @@ namespace Gs2.Gs2Distributor.Domain
                 string payload
         ) {
             switch (action) {
-                case "AutoRunStampSheet": {
-                    onAutoRunStampSheetNotification.Invoke(AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload)));
+                case "AutoRunStampSheet":
+                {
+                    lock (_completedStampSheets)
+                    {
+                        var notification = AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload));
+                        _completedStampSheets.Add(notification);
+                        onAutoRunStampSheetNotification.Invoke(notification);
+                    }
                     break;
                 }
+            }
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask Dispatch(
+#else
+        public static Gs2Future Dispatch(
+#endif
+            CacheDatabase cache,
+            JobQueueDomain jobQueueDomain,
+            StampSheetConfiguration stampSheetConfiguration,
+            Gs2RestSession session,
+            AccessToken accessToken
+        )
+        {
+            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
+            lock (_completedStampSheets)
+            {
+                if (_completedStampSheets.Count == 0)
+                {
+                    return;
+                }
+                copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
+                _completedStampSheets.CopyTo(copiedCompletedStampSheets);
+                _completedStampSheets.Clear();
+            }
+            foreach (var completedStampSheet in copiedCompletedStampSheets)
+            {
+                await new AutoStampSheetDomain(
+                    cache,
+                    jobQueueDomain,
+                    session,
+                    stampSheetConfiguration.NamespaceName,
+                    completedStampSheet.TransactionId,
+                    accessToken.Token,
+                    stampSheetConfiguration.StampTaskEventHandler,
+                    stampSheetConfiguration.StampSheetEventHandler
+                ).RunAsync();
             }
         }
     }

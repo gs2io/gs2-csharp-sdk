@@ -21,13 +21,13 @@ namespace Gs2.Gs2JobQueue.Model
 	public class RunNotification
 	{
         public string NamespaceName { set; get; }
-        public string JobId { set; get; }
+        public string JobName { set; get; }
         public RunNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public RunNotification WithJobId(string jobId) {
-            this.JobId = jobId;
+        public RunNotification WithJobName(string jobName) {
+            this.JobName = jobName;
             return this;
         }
 
@@ -41,7 +41,7 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return new RunNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString());
+                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString());
         }
     }
 }

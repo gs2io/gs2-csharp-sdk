@@ -68,6 +68,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
+        public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;

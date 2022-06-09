@@ -67,6 +67,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private readonly string _userId;
 
         private readonly String _parentKey;
+        public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
@@ -185,10 +186,15 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     result.Items[i]?.Name
                 );
             }
-            this._jobQueueDomain.push(
+
+            if (result.AutoRun != null && !result.AutoRun.Value)
+            {
+                this._jobQueueDomain.Push(
                     this._namespaceName
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                );
+            }
+            this.AutoRun = result?.AutoRun;
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
             yield return null;
         #else

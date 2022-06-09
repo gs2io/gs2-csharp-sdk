@@ -34,9 +34,15 @@ namespace Gs2.Gs2JobQueue.Result
 	public class PushByStampSheetResult : IResult
 	{
         public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; }
+        public bool? AutoRun { set; get; }
 
         public PushByStampSheetResult WithItems(Gs2.Gs2JobQueue.Model.Job[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public PushByStampSheetResult WithAutoRun(bool? autoRun) {
+            this.AutoRun = autoRun;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2JobQueue.Result
             return new PushByStampSheetResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2JobQueue.Model.Job[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.Job.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : (bool?)bool.Parse(data["autoRun"].ToString()));
         }
 
         public JsonData ToJson()
@@ -63,6 +70,7 @@ namespace Gs2.Gs2JobQueue.Result
                             return v.ToJson();
                         }).ToArray()
                     ),
+                ["autoRun"] = AutoRun,
             };
         }
 
@@ -77,6 +85,10 @@ namespace Gs2.Gs2JobQueue.Result
                 }
             }
             writer.WriteArrayEnd();
+            if (AutoRun != null) {
+                writer.WritePropertyName("autoRun");
+                writer.Write(bool.Parse(AutoRun.ToString()));
+            }
             writer.WriteObjectEnd();
         }
     }

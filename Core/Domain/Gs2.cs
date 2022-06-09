@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Gs2.Core.Net;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2JobQueue.Model;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Core.Domain
 {
@@ -14,6 +17,8 @@ namespace Gs2.Core.Domain
 
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
+        private readonly StampSheetConfiguration _sheetConfiguration;
+        private readonly Gs2RestSession _restSession;
         private readonly Gs2WebSocketSession _webSocketSession;
 
         public readonly Gs2Account.Domain.Gs2Account Account;
@@ -56,9 +61,10 @@ namespace Gs2.Core.Domain
             string distributorNamespaceName = null
         )
         {
-            var stampSheetConfiguration = StampSheetConfiguration.Builder()
+            _sheetConfiguration = StampSheetConfiguration.Builder()
                 .WithNamespaceName(distributorNamespaceName)
                 .Build();
+            _restSession = session;
             _webSocketSession = wssession;
             _cache = new CacheDatabase();
             _jobQueueDomain = new JobQueueDomain(this);
@@ -177,45 +183,45 @@ namespace Gs2.Core.Domain
                 };
             }
 
-            Account = new Gs2Account.Domain.Gs2Account(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Chat = new Gs2Chat.Domain.Gs2Chat(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Datastore = new Gs2Datastore.Domain.Gs2Datastore(_cache, _jobQueueDomain, stampSheetConfiguration, session);
+            Account = new Gs2Account.Domain.Gs2Account(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Chat = new Gs2Chat.Domain.Gs2Chat(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Datastore = new Gs2Datastore.Domain.Gs2Datastore(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Dictionary =
-                new Gs2Dictionary.Domain.Gs2Dictionary(_cache, _jobQueueDomain, stampSheetConfiguration, session);
+                new Gs2Dictionary.Domain.Gs2Dictionary(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Distributor =
-                new Gs2Distributor.Domain.Gs2Distributor(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Enhance = new Gs2Enhance.Domain.Gs2Enhance(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Exchange = new Gs2Exchange.Domain.Gs2Exchange(_cache, _jobQueueDomain, stampSheetConfiguration, session);
+                new Gs2Distributor.Domain.Gs2Distributor(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Enhance = new Gs2Enhance.Domain.Gs2Enhance(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Exchange = new Gs2Exchange.Domain.Gs2Exchange(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Experience =
-                new Gs2Experience.Domain.Gs2Experience(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Formation = new Gs2Formation.Domain.Gs2Formation(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Friend = new Gs2Friend.Domain.Gs2Friend(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Gateway = new Gs2Gateway.Domain.Gs2Gateway(_cache, _jobQueueDomain, stampSheetConfiguration, session,
+                new Gs2Experience.Domain.Gs2Experience(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Formation = new Gs2Formation.Domain.Gs2Formation(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Friend = new Gs2Friend.Domain.Gs2Friend(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Gateway = new Gs2Gateway.Domain.Gs2Gateway(_cache, _jobQueueDomain, _sheetConfiguration, session,
                 wssession);
             Identifier =
-                new Gs2Identifier.Domain.Gs2Identifier(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Inbox = new Gs2Inbox.Domain.Gs2Inbox(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Inventory = new Gs2Inventory.Domain.Gs2Inventory(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Key = new Gs2Key.Domain.Gs2Key(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Limit = new Gs2Limit.Domain.Gs2Limit(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Lock = new Gs2Lock.Domain.Gs2Lock(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Log = new Gs2Log.Domain.Gs2Log(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Lottery = new Gs2Lottery.Domain.Gs2Lottery(_cache, _jobQueueDomain, stampSheetConfiguration, session);
+                new Gs2Identifier.Domain.Gs2Identifier(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Inbox = new Gs2Inbox.Domain.Gs2Inbox(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Inventory = new Gs2Inventory.Domain.Gs2Inventory(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Key = new Gs2Key.Domain.Gs2Key(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Limit = new Gs2Limit.Domain.Gs2Limit(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Lock = new Gs2Lock.Domain.Gs2Lock(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Log = new Gs2Log.Domain.Gs2Log(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Lottery = new Gs2Lottery.Domain.Gs2Lottery(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Matchmaking =
-                new Gs2Matchmaking.Domain.Gs2Matchmaking(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Mission = new Gs2Mission.Domain.Gs2Mission(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Money = new Gs2Money.Domain.Gs2Money(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            News = new Gs2News.Domain.Gs2News(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Quest = new Gs2Quest.Domain.Gs2Quest(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Ranking = new Gs2Ranking.Domain.Gs2Ranking(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Realtime = new Gs2Realtime.Domain.Gs2Realtime(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Schedule = new Gs2Schedule.Domain.Gs2Schedule(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Script = new Gs2Script.Domain.Gs2Script(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, stampSheetConfiguration, session);
-            Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, stampSheetConfiguration, session);
+                new Gs2Matchmaking.Domain.Gs2Matchmaking(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Mission = new Gs2Mission.Domain.Gs2Mission(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Money = new Gs2Money.Domain.Gs2Money(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            News = new Gs2News.Domain.Gs2News(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Quest = new Gs2Quest.Domain.Gs2Quest(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Ranking = new Gs2Ranking.Domain.Gs2Ranking(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Realtime = new Gs2Realtime.Domain.Gs2Realtime(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Schedule = new Gs2Schedule.Domain.Gs2Schedule(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Script = new Gs2Script.Domain.Gs2Script(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, _sheetConfiguration, session);
         }
 
         public void ClearCache()
@@ -291,11 +297,19 @@ namespace Gs2.Core.Domain
                 }
                 
                 if (await _jobQueueDomain.Run(
-                    accessToken
-                ))
+                        accessToken
+                    ))
                 {
                     break;
                 }
+
+                await Gs2Distributor.Domain.Gs2Distributor.Dispatch(
+                    _cache,
+                    _jobQueueDomain,
+                    _sheetConfiguration,
+                    _restSession,
+                    accessToken
+                );
             }
         }
 
@@ -552,7 +566,7 @@ namespace Gs2.Core.Domain
             string namespaceName
         )
         {
-            jobQueueDomain.push(namespaceName);
+            jobQueueDomain.Push(namespaceName);
         }
 
         public static void UpdateCacheFromJobResult(

@@ -33,6 +33,8 @@ namespace Gs2.Gs2JobQueue.Model
 	{
         public string JobResultId { set; get; }
         public string JobId { set; get; }
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
         public int? TryNumber { set; get; }
         public int? StatusCode { set; get; }
         public string Result { set; get; }
@@ -43,6 +45,14 @@ namespace Gs2.Gs2JobQueue.Model
         }
         public JobResult WithJobId(string jobId) {
             this.JobId = jobId;
+            return this;
+        }
+        public JobResult WithScriptId(string scriptId) {
+            this.ScriptId = scriptId;
+            return this;
+        }
+        public JobResult WithArgs(string args) {
+            this.Args = args;
             return this;
         }
         public JobResult WithTryNumber(int? tryNumber) {
@@ -175,6 +185,8 @@ namespace Gs2.Gs2JobQueue.Model
             return new JobResult()
                 .WithJobResultId(!data.Keys.Contains("jobResultId") || data["jobResultId"] == null ? null : data["jobResultId"].ToString())
                 .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString())
+                .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
                 .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)int.Parse(data["tryNumber"].ToString()))
                 .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)int.Parse(data["statusCode"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
@@ -186,6 +198,8 @@ namespace Gs2.Gs2JobQueue.Model
             return new JsonData {
                 ["jobResultId"] = JobResultId,
                 ["jobId"] = JobId,
+                ["scriptId"] = ScriptId,
+                ["args"] = Args,
                 ["tryNumber"] = TryNumber,
                 ["statusCode"] = StatusCode,
                 ["result"] = Result,
@@ -203,6 +217,14 @@ namespace Gs2.Gs2JobQueue.Model
             if (JobId != null) {
                 writer.WritePropertyName("jobId");
                 writer.Write(JobId.ToString());
+            }
+            if (ScriptId != null) {
+                writer.WritePropertyName("scriptId");
+                writer.Write(ScriptId.ToString());
+            }
+            if (Args != null) {
+                writer.WritePropertyName("args");
+                writer.Write(Args.ToString());
             }
             if (TryNumber != null) {
                 writer.WritePropertyName("tryNumber");
@@ -242,6 +264,22 @@ namespace Gs2.Gs2JobQueue.Model
             else
             {
                 diff += JobId.CompareTo(other.JobId);
+            }
+            if (ScriptId == null && ScriptId == other.ScriptId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ScriptId.CompareTo(other.ScriptId);
+            }
+            if (Args == null && Args == other.Args)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Args.CompareTo(other.Args);
             }
             if (TryNumber == null && TryNumber == other.TryNumber)
             {
