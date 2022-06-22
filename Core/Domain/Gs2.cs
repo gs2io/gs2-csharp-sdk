@@ -297,13 +297,6 @@ namespace Gs2.Core.Domain
                     _webSocketSession?.Ping();
                     _lastPingAt = DateTime.Now;
                 }
-                
-                if (await _jobQueueDomain.Run(
-                        accessToken
-                    ))
-                {
-                    break;
-                }
 
                 await Gs2Distributor.Domain.Gs2Distributor.Dispatch(
                     _cache,
@@ -312,6 +305,13 @@ namespace Gs2.Core.Domain
                     _restSession,
                     accessToken
                 );
+                
+                if (await _jobQueueDomain.Run(
+                        accessToken
+                    ))
+                {
+                    break;
+                }
             }
         }
 
@@ -694,6 +694,12 @@ namespace Gs2.Core.Domain
                     }
                 }
             }
+        }
+        
+        public async UniTask Disconnect()
+        {
+            await _restSession.CloseAsync();
+            await _webSocketSession.CloseAsync();
         }
     }
 }

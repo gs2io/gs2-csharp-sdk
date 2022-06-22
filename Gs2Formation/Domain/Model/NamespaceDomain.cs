@@ -594,6 +594,54 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Formation.Model.FormModel> FormModels(
+        )
+        {
+            return new DescribeFormModelsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.FormModel> FormModelsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Formation.Model.FormModel> FormModels(
+            #endif
+        #else
+        public DescribeFormModelsIterator FormModels(
+        #endif
+        )
+        {
+            return new DescribeFormModelsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Formation.Domain.Model.FormModelDomain FormModel(
+            string formModelName
+        ) {
+            return new Gs2.Gs2Formation.Domain.Model.FormModelDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                formModelName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModel> MoldModels(
         )
         {

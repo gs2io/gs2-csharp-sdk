@@ -511,6 +511,114 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class GetFormModelTask : Gs2WebSocketSessionTask<Request.GetFormModelRequest, Result.GetFormModelResult>
+        {
+	        public GetFormModelTask(IGs2Session session, Request.GetFormModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetFormModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.FormModelName != null)
+                {
+                    jsonWriter.WritePropertyName("formModelName");
+                    jsonWriter.Write(request.FormModelName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "formModel",
+                    "getFormModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetFormModel(
+                Request.GetFormModelRequest request,
+                UnityAction<AsyncResult<Result.GetFormModelResult>> callback
+        )
+		{
+			var task = new GetFormModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetFormModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetFormModelResult> GetFormModelFuture(
+                Request.GetFormModelRequest request
+        )
+		{
+			return new GetFormModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetFormModelResult> GetFormModelAsync(
+            Request.GetFormModelRequest request
+        )
+		{
+		    var task = new GetFormModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetFormModelTask GetFormModelAsync(
+                Request.GetFormModelRequest request
+        )
+		{
+			return new GetFormModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetFormModelResult> GetFormModelAsync(
+            Request.GetFormModelRequest request
+        )
+		{
+		    var task = new GetFormModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CreateFormModelMasterTask : Gs2WebSocketSessionTask<Request.CreateFormModelMasterRequest, Result.CreateFormModelMasterResult>
         {
 	        public CreateFormModelMasterTask(IGs2Session session, Request.CreateFormModelMasterRequest request) : base(session, request)

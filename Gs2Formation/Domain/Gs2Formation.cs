@@ -338,6 +338,29 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         break;
                     }
+                    case "AcquireActionsToPropertyFormProperties": {
+                        var requestModel = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireActionsToPropertyFormPropertiesResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                    "PropertyForm"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        break;
+                    }
                 }
         }
 
@@ -464,6 +487,29 @@ namespace Gs2.Gs2Formation.Domain
                                 parentKey,
                                 key,
                                 resultModel.Mold,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "acquire_actions_to_property_form_properties": {
+                    var requestModel = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireActionsToPropertyFormPropertiesResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName.ToString(),
+                                resultModel.Item.UserId.ToString(),
+                                    "PropertyForm"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }

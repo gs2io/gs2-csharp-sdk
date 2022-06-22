@@ -65,6 +65,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly string _userId;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
@@ -140,6 +142,63 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._namespaceName,
                 this._userId,
                 moldName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyForm> PropertyForms(
+            string formModelName
+        )
+        {
+            return new DescribePropertyFormsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId,
+                formModelName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyForm> PropertyFormsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyForm> PropertyForms(
+            #endif
+        #else
+        public DescribePropertyFormsByUserIdIterator PropertyForms(
+        #endif
+            string formModelName
+        )
+        {
+            return new DescribePropertyFormsByUserIdIterator(
+                this._cache,
+                this._client,
+                this._namespaceName,
+                this._userId,
+                formModelName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Formation.Domain.Model.PropertyFormDomain PropertyForm(
+            string formModelName,
+            string propertyId
+        ) {
+            return new Gs2.Gs2Formation.Domain.Model.PropertyFormDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                this._userId,
+                formModelName,
+                propertyId
             );
         }
 

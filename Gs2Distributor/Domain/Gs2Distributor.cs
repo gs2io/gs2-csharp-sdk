@@ -51,7 +51,8 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
+using Gs2.Core.Exception;
+#endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -269,7 +270,7 @@ namespace Gs2.Gs2Distributor.Domain
                 string payload
         ) {
             switch (action) {
-                case "AutoRunStampSheet":
+                case "AutoRunStampSheetNotification":
                 {
                     lock (_completedStampSheets)
                     {
@@ -319,16 +320,22 @@ namespace Gs2.Gs2Distributor.Domain
                 foreach (var completedStampSheet in copiedCompletedStampSheets)
                 {
 #if GS2_ENABLE_UNITASK
-                    await new AutoStampSheetDomain(
-                        cache,
-                        jobQueueDomain,
-                        session,
-                        stampSheetConfiguration.NamespaceName,
-                        completedStampSheet.TransactionId,
-                        accessToken.Token,
-                        stampSheetConfiguration.StampTaskEventHandler,
-                        stampSheetConfiguration.StampSheetEventHandler
-                    ).RunAsync();
+                    try
+                    {
+                        await new AutoStampSheetDomain(
+                            cache,
+                            jobQueueDomain,
+                            session,
+                            stampSheetConfiguration.NamespaceName,
+                            completedStampSheet.TransactionId,
+                            accessToken.Token,
+                            stampSheetConfiguration.StampTaskEventHandler,
+                            stampSheetConfiguration.StampSheetEventHandler
+                        ).RunAsync();
+                    }
+                    catch (NotFoundException)
+                    {
+                    }
 #else
                     var future = new AutoStampSheetDomain(
                         cache,
@@ -343,7 +350,10 @@ namespace Gs2.Gs2Distributor.Domain
                     yield return future;
                     if (future.Error != null)
                     {
-                        self.OnError(future.Error);
+                        if (future.Error is NotFoundException) {
+                        } else {
+                            self.OnError(future.Error);
+                        }
                         yield break;
                     }
 #endif

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -40,6 +42,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Gs2Lottery.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -217,6 +220,12 @@ namespace Gs2.Gs2Lottery.Domain
                 namespaceName
             );
         }
+        
+#if UNITY_2017_1_OR_NEWER
+        public static UnityAction<string, string, DrawnPrize[]> DrawnResult;
+#else
+        public static Action<string, string, DrawnPrize[]> DrawnResult;
+#endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
@@ -228,6 +237,12 @@ namespace Gs2.Gs2Lottery.Domain
                     case "DrawByUserId": {
                         var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        DrawnResult?.Invoke(
+                            requestModel.NamespaceName,
+                            requestModel.LotteryName,
+                            resultModel.Items
+                        );
                         
                         break;
                     }
@@ -253,6 +268,12 @@ namespace Gs2.Gs2Lottery.Domain
                     var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
+                    DrawnResult?.Invoke(
+                        requestModel.NamespaceName,
+                        requestModel.LotteryName,
+                        resultModel.Items
+                    );
+
                     break;
                 }
             }
