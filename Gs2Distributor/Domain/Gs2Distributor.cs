@@ -350,7 +350,7 @@ namespace Gs2.Gs2Distributor.Domain
                     yield return future;
                     if (future.Error != null)
                     {
-                        if (future.Error is NotFoundException) {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException) {
                         } else {
                             self.OnError(future.Error);
                         }

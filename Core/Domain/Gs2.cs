@@ -695,11 +695,12 @@ namespace Gs2.Core.Domain
                 }
             }
         }
-        
+#if GS2_ENABLE_UNITASK
         public async UniTask Disconnect()
         {
             await _restSession.CloseAsync();
             await _webSocketSession.CloseAsync();
         }
+#endif
     }
 }
