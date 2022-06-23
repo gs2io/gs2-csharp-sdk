@@ -97,6 +97,33 @@ namespace Gs2.Core.Net
             callback.Invoke(new AsyncResult<OpenResult>(new OpenResult(), null));
         }
         
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator ReOpen(UnityAction<AsyncResult<OpenResult>> callback)
+#else
+        public IEnumerator ReOpen(Action<AsyncResult<OpenResult>> callback)
+#endif
+        {
+            if (State == State.Opening || State == State.LoggingIn)
+            {
+                var begin = DateTime.Now;
+                while (State != State.Available)
+                {
+                    if ((DateTime.Now - begin).Seconds > 10)
+                    {
+                        callback.Invoke(new AsyncResult<OpenResult>(null,
+                            new RequestTimeoutException(new RequestError[0])));
+                        yield break;
+                    }
+
+#if UNITY_2017_1_OR_NEWER
+                    yield return new WaitForSeconds(0.05f);
+#endif
+                }
+            }
+
+            yield return Open(callback);
+        }
+
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<OpenResult> OpenAsync()
 #else
