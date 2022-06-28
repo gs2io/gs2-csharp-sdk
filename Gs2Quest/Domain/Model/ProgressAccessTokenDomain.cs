@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -330,11 +332,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                 );
-                cache.Put(
+                cache.Delete<Gs2.Gs2Quest.Model.Progress>(
                     parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    key
                 );
             }
                 cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(

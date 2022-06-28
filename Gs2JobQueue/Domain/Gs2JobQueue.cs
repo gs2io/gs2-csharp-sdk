@@ -51,7 +51,8 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
+using Gs2.Core.Exception;
+#endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -337,7 +338,7 @@ namespace Gs2.Gs2JobQueue.Domain
                     onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
-                case "Run": {
+                case "RunNotification": {
                     lock (_completedJobs)
                     {
                         var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
@@ -384,12 +385,19 @@ namespace Gs2.Gs2JobQueue.Domain
                     session
                 );
 #if GS2_ENABLE_UNITASK
-                var result = await client.GetJobResultAsync(
-                    new GetJobResultRequest()
-                        .WithNamespaceName(completedJob.NamespaceName)
-                        .WithJobName(completedJob.JobName)
-                        .WithAccessToken(accessToken.Token)
-                );
+                GetJobResultResult result = null;
+                try
+                {
+                    result = await client.GetJobResultAsync(
+                        new GetJobResultRequest()
+                            .WithNamespaceName(completedJob.NamespaceName)
+                            .WithJobName(completedJob.JobName)
+                            .WithAccessToken(accessToken.Token)
+                    );
+                }
+                catch (NotFoundException)
+                {
+                }
 #else
                 var future = client.GetJobResultFuture(
                     new GetJobResultRequest()
@@ -405,21 +413,24 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
                 var result = future.Result;
 #endif
-                Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
-                    cache,
-                    new Job
-                    {
-                        ScriptId = null,
-                        Args = null,
-                    },
-                    new JobResultBody
-                    {
-                        TryNumber = result?.Item.TryNumber,
-                        StatusCode = result?.Item.StatusCode,
-                        Result = result?.Item.Result,
-                        TryAt = result?.Item.TryAt
-                    }
-                );
+                if (result != null)
+                {
+                    Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
+                        cache,
+                        new Job
+                        {
+                            ScriptId = result?.Item.ScriptId,
+                            Args = result?.Item.Args,
+                        },
+                        new JobResultBody
+                        {
+                            TryNumber = result?.Item.TryNumber,
+                            StatusCode = result?.Item.StatusCode,
+                            Result = result?.Item.Result,
+                            TryAt = result?.Item.TryAt
+                        }
+                    );
+                }
             }
 #if !GS2_ENABLE_UNITASK
             }

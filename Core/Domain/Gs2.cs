@@ -305,7 +305,13 @@ namespace Gs2.Core.Domain
                     _restSession,
                     accessToken
                 );
-                
+
+                await Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
+                    _cache,
+                    _restSession,
+                    accessToken
+                );
+
                 if (await _jobQueueDomain.Run(
                         accessToken
                     ))

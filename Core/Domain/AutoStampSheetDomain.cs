@@ -108,7 +108,7 @@ namespace Gs2.Core.Domain
 
                 if (result.Item.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
                 {
-                    var autoRun = PushByUserIdResult.FromJson(result.Item.SheetResult).AutoRun;
+                    var autoRun = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Item.SheetResult)).AutoRun;
                     if (autoRun != null && !autoRun.Value)
                     {
                         Gs2.PushJobQueue(
