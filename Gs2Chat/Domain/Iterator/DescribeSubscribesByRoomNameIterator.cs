@@ -197,6 +197,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 }
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    Current = null;
                     yield break;
         #else
                     break;
