@@ -37,6 +37,7 @@ namespace Gs2.Gs2Showcase.Request
         public string ShowcaseName { set; get; }
         public string DisplayItemId { set; get; }
         public string UserId { set; get; }
+        public int? Quantity { set; get; }
         public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
         public BuyByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Showcase.Request
         }
         public BuyByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public BuyByUserIdRequest WithQuantity(int? quantity) {
+            this.Quantity = quantity;
             return this;
         }
         public BuyByUserIdRequest WithConfig(Gs2.Gs2Showcase.Model.Config[] config) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2Showcase.Request
                 .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
                 .WithDisplayItemId(!data.Keys.Contains("displayItemId") || data["displayItemId"] == null ? null : data["displayItemId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithQuantity(!data.Keys.Contains("quantity") || data["quantity"] == null ? null : (int?)int.Parse(data["quantity"].ToString()))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Showcase.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.Config.FromJson(v);
                 }).ToArray());
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["showcaseName"] = ShowcaseName,
                 ["displayItemId"] = DisplayItemId,
                 ["userId"] = UserId,
+                ["quantity"] = Quantity,
                 ["config"] = new JsonData(Config == null ? new JsonData[]{} :
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
@@ -111,6 +118,10 @@ namespace Gs2.Gs2Showcase.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (Quantity != null) {
+                writer.WritePropertyName("quantity");
+                writer.Write(int.Parse(Quantity.ToString()));
             }
             writer.WriteArrayStart();
             foreach (var confi in Config)

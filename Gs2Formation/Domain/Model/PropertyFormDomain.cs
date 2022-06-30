@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -148,7 +150,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -188,7 +190,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -268,7 +270,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -308,7 +310,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -393,7 +395,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -433,7 +435,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -516,7 +518,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -541,7 +543,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Put(
                     parentKey,
@@ -628,7 +630,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString(),
-                    resultModel.Item.PropertyId.ToString()
+                    request.PropertyId.ToString()
                 );
                 cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
             }

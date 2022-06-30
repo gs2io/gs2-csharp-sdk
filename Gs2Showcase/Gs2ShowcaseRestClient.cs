@@ -3501,6 +3501,11 @@ namespace Gs2.Gs2Showcase
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Quantity != null)
+                {
+                    jsonWriter.WritePropertyName("quantity");
+                    jsonWriter.Write(request.Quantity.ToString());
+                }
                 if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
@@ -3635,6 +3640,11 @@ namespace Gs2.Gs2Showcase
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Quantity != null)
+                {
+                    jsonWriter.WritePropertyName("quantity");
+                    jsonWriter.Write(request.Quantity.ToString());
+                }
                 if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
