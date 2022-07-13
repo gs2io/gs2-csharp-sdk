@@ -1551,6 +1551,16 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("challengePeriodEventId");
                     jsonWriter.Write(request.ChallengePeriodEventId);
                 }
+                if (request.FirstCompleteAcquireActions != null)
+                {
+                    jsonWriter.WritePropertyName("firstCompleteAcquireActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.FirstCompleteAcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
@@ -1830,6 +1840,16 @@ namespace Gs2.Gs2Quest
                 {
                     jsonWriter.WritePropertyName("challengePeriodEventId");
                     jsonWriter.Write(request.ChallengePeriodEventId);
+                }
+                if (request.FirstCompleteAcquireActions != null)
+                {
+                    jsonWriter.WritePropertyName("firstCompleteAcquireActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.FirstCompleteAcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ConsumeActions != null)
                 {

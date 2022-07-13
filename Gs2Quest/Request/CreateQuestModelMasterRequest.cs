@@ -40,6 +40,7 @@ namespace Gs2.Gs2Quest.Request
         public string Metadata { set; get; }
         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
         public string ChallengePeriodEventId { set; get; }
+        public Gs2.Gs2Quest.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
         public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Quest.Request
         }
         public CreateQuestModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
+            return this;
+        }
+        public CreateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] firstCompleteAcquireActions) {
+            this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
         public CreateQuestModelMasterRequest WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
@@ -102,6 +107,9 @@ namespace Gs2.Gs2Quest.Request
                     return Gs2.Gs2Quest.Model.Contents.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
+                .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Quest.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -128,6 +136,12 @@ namespace Gs2.Gs2Quest.Request
                         }).ToArray()
                     ),
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
+                ["firstCompleteAcquireActions"] = new JsonData(FirstCompleteAcquireActions == null ? new JsonData[]{} :
+                        FirstCompleteAcquireActions.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
                 ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
                         ConsumeActions.Select(v => {
                             //noinspection Convert2MethodRef
@@ -183,6 +197,14 @@ namespace Gs2.Gs2Quest.Request
                 writer.WritePropertyName("challengePeriodEventId");
                 writer.Write(ChallengePeriodEventId.ToString());
             }
+            writer.WriteArrayStart();
+            foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
+            {
+                if (firstCompleteAcquireAction != null) {
+                    firstCompleteAcquireAction.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
             writer.WriteArrayStart();
             foreach (var consumeAction in ConsumeActions)
             {
