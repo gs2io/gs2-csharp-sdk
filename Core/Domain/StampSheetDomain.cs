@@ -72,7 +72,7 @@ namespace Gs2.Core.Domain
                     var stampTaskJson = JsonMapper.ToObject(stampTasks[i].ToString());
                     var stampTaskPayload = stampTaskJson["body"].ToString();
                     var stampTaskPayloadJson = JsonMapper.ToObject(stampTaskPayload);
-                    if (_namespaceName == null)
+                	if (string.IsNullOrEmpty(_namespaceName))
                     {
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                         var future = client.RunStampTaskWithoutNamespaceFuture(
@@ -143,7 +143,7 @@ namespace Gs2.Core.Domain
                 string action = null;
                 JsonData requestJson = null;
                 JsonData resultJson = null;
-                if (_namespaceName == null)
+                if (string.IsNullOrEmpty(_namespaceName))
                 {
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = client.RunStampSheetWithoutNamespaceFuture(

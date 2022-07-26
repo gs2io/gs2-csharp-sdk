@@ -232,31 +232,63 @@ namespace Gs2.Core.Domain
         }
 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-        public Gs2Future Dispatch(
+        public Gs2Future<bool> Dispatch(
             AccessToken accessToken
         )
         {
-            IEnumerator Impl(Gs2Future self)
+            IEnumerator Impl(Gs2Future<bool> self)
             {
                 while (true)
                 {
-                    var future = _jobQueueDomain.Run(
-                        accessToken
-                    );
-                    yield return future;
-                    if (future != null)
+                    if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
                     {
-                        self.OnError(future.Error);
-                        yield break;
+                        _webSocketSession?.Ping();
+                        _lastPingAt = DateTime.Now;
                     }
-                    if (future.Result)
+                    
                     {
-                        break;
+                        Gs2Distributor.Domain.Gs2Distributor.Dispatch(
+                            _cache,
+                            _jobQueueDomain,
+                            _sheetConfiguration,
+                            _restSession,
+                            accessToken
+                        );
+                    }
+                    {
+                        var future = Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
+                            _cache,
+                            _restSession,
+                            accessToken
+                        );
+                        yield return future;
+                        if (future != null)
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                        
+                    }
+                    {
+                        Gs2Future<bool> future = _jobQueueDomain.Run(
+                            accessToken
+                        );
+                        yield return future;
+                        if (future != null)
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+
+                        if (future.Result)
+                        {
+                            break;
+                        }
                     }
                 }
             }
 
-            return new Gs2InlineFuture(Impl);
+            return new Gs2InlineFuture<bool>(Impl);
         }
 
         public Gs2Future DispatchByUserId(
@@ -706,6 +738,12 @@ namespace Gs2.Core.Domain
         {
             await _restSession.CloseAsync();
             await _webSocketSession.CloseAsync();
+        }
+#else
+        public IEnumerator Disconnect()
+        {
+            yield return _restSession.Close(() => {});
+            yield return _webSocketSession.Close(() => {});
         }
 #endif
     }
