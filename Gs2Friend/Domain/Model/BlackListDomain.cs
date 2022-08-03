@@ -141,6 +141,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            {
+                cache.ListCacheClear<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
+                );
+            }
             #else
             var result = await this._client.RegisterBlackListByUserIdAsync(
                 request
@@ -162,6 +171,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                     key,
                     resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            {
+                cache.ListCacheClear<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
                 );
             }
             #endif
@@ -228,6 +246,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
+            {
+                cache.ListCacheClear<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
+                );
+            }
             #else
             var result = await this._client.UnregisterBlackListByUserIdAsync(
                 request
@@ -249,6 +276,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                     key,
                     resultModel.Item,
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            {
+                cache.ListCacheClear<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _namespaceName.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
                 );
             }
             #endif
