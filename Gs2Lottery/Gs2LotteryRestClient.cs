@@ -4014,5 +4014,328 @@ namespace Gs2.Gs2Lottery
 			return await task.Invoke();
         }
 #endif
+
+
+        public class DescribePrizeLimitsTask : Gs2RestSessionTask<DescribePrizeLimitsRequest, DescribePrizeLimitsResult>
+        {
+            public DescribePrizeLimitsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePrizeLimitsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribePrizeLimitsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/prizeLimit/{prizeTableName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribePrizeLimits(
+                Request.DescribePrizeLimitsRequest request,
+                UnityAction<AsyncResult<Result.DescribePrizeLimitsResult>> callback
+        )
+		{
+			var task = new DescribePrizeLimitsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribePrizeLimitsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribePrizeLimitsResult> DescribePrizeLimitsFuture(
+                Request.DescribePrizeLimitsRequest request
+        )
+		{
+			return new DescribePrizeLimitsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribePrizeLimitsResult> DescribePrizeLimitsAsync(
+                Request.DescribePrizeLimitsRequest request
+        )
+		{
+            AsyncResult<Result.DescribePrizeLimitsResult> result = null;
+			await DescribePrizeLimits(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribePrizeLimitsTask DescribePrizeLimitsAsync(
+                Request.DescribePrizeLimitsRequest request
+        )
+		{
+			return new DescribePrizeLimitsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribePrizeLimitsResult> DescribePrizeLimitsAsync(
+                Request.DescribePrizeLimitsRequest request
+        )
+		{
+			var task = new DescribePrizeLimitsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPrizeLimitTask : Gs2RestSessionTask<GetPrizeLimitRequest, GetPrizeLimitResult>
+        {
+            public GetPrizeLimitTask(IGs2Session session, RestSessionRequestFactory factory, GetPrizeLimitRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetPrizeLimitRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/prizeLimit/{prizeTableName}/{prizeId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+                url = url.Replace("{prizeId}", !string.IsNullOrEmpty(request.PrizeId) ? request.PrizeId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPrizeLimit(
+                Request.GetPrizeLimitRequest request,
+                UnityAction<AsyncResult<Result.GetPrizeLimitResult>> callback
+        )
+		{
+			var task = new GetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPrizeLimitResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPrizeLimitResult> GetPrizeLimitFuture(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+			return new GetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPrizeLimitResult> GetPrizeLimitAsync(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+            AsyncResult<Result.GetPrizeLimitResult> result = null;
+			await GetPrizeLimit(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetPrizeLimitTask GetPrizeLimitAsync(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+			return new GetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPrizeLimitResult> GetPrizeLimitAsync(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+			var task = new GetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetPrizeLimitTask : Gs2RestSessionTask<ResetPrizeLimitRequest, ResetPrizeLimitResult>
+        {
+            public ResetPrizeLimitTask(IGs2Session session, RestSessionRequestFactory factory, ResetPrizeLimitRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetPrizeLimitRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/prizeLimit/{prizeTableName}/{prizeId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+                url = url.Replace("{prizeId}", !string.IsNullOrEmpty(request.PrizeId) ? request.PrizeId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetPrizeLimit(
+                Request.ResetPrizeLimitRequest request,
+                UnityAction<AsyncResult<Result.ResetPrizeLimitResult>> callback
+        )
+		{
+			var task = new ResetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetPrizeLimitResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetPrizeLimitResult> ResetPrizeLimitFuture(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+			return new ResetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetPrizeLimitResult> ResetPrizeLimitAsync(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+            AsyncResult<Result.ResetPrizeLimitResult> result = null;
+			await ResetPrizeLimit(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetPrizeLimitTask ResetPrizeLimitAsync(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+			return new ResetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetPrizeLimitResult> ResetPrizeLimitAsync(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+			var task = new ResetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

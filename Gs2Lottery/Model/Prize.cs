@@ -34,6 +34,8 @@ namespace Gs2.Gs2Lottery.Model
         public string PrizeId { set; get; }
         public string Type { set; get; }
         public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public int? DrawnLimit { set; get; }
+        public string LimitFailOverPrizeId { set; get; }
         public string PrizeTableName { set; get; }
         public int? Weight { set; get; }
         public Prize WithPrizeId(string prizeId) {
@@ -46,6 +48,14 @@ namespace Gs2.Gs2Lottery.Model
         }
         public Prize WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
+            return this;
+        }
+        public Prize WithDrawnLimit(int? drawnLimit) {
+            this.DrawnLimit = drawnLimit;
+            return this;
+        }
+        public Prize WithLimitFailOverPrizeId(string limitFailOverPrizeId) {
+            this.LimitFailOverPrizeId = limitFailOverPrizeId;
             return this;
         }
         public Prize WithPrizeTableName(string prizeTableName) {
@@ -71,6 +81,8 @@ namespace Gs2.Gs2Lottery.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithDrawnLimit(!data.Keys.Contains("drawnLimit") || data["drawnLimit"] == null ? null : (int?)int.Parse(data["drawnLimit"].ToString()))
+                .WithLimitFailOverPrizeId(!data.Keys.Contains("limitFailOverPrizeId") || data["limitFailOverPrizeId"] == null ? null : data["limitFailOverPrizeId"].ToString())
                 .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
                 .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
         }
@@ -86,6 +98,8 @@ namespace Gs2.Gs2Lottery.Model
                             return v.ToJson();
                         }).ToArray()
                     ),
+                ["drawnLimit"] = DrawnLimit,
+                ["limitFailOverPrizeId"] = LimitFailOverPrizeId,
                 ["prizeTableName"] = PrizeTableName,
                 ["weight"] = Weight,
             };
@@ -112,6 +126,14 @@ namespace Gs2.Gs2Lottery.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (DrawnLimit != null) {
+                writer.WritePropertyName("drawnLimit");
+                writer.Write(int.Parse(DrawnLimit.ToString()));
+            }
+            if (LimitFailOverPrizeId != null) {
+                writer.WritePropertyName("limitFailOverPrizeId");
+                writer.Write(LimitFailOverPrizeId.ToString());
             }
             if (PrizeTableName != null) {
                 writer.WritePropertyName("prizeTableName");
@@ -155,6 +177,22 @@ namespace Gs2.Gs2Lottery.Model
                 {
                     diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
                 }
+            }
+            if (DrawnLimit == null && DrawnLimit == other.DrawnLimit)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(DrawnLimit - other.DrawnLimit);
+            }
+            if (LimitFailOverPrizeId == null && LimitFailOverPrizeId == other.LimitFailOverPrizeId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += LimitFailOverPrizeId.CompareTo(other.LimitFailOverPrizeId);
             }
             if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
             {

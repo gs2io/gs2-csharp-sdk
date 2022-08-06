@@ -1365,5 +1365,231 @@ namespace Gs2.Gs2Lottery
 			return await task.Invoke();
         }
 #endif
+
+
+        public class GetPrizeLimitTask : Gs2WebSocketSessionTask<Request.GetPrizeLimitRequest, Result.GetPrizeLimitResult>
+        {
+	        public GetPrizeLimitTask(IGs2Session session, Request.GetPrizeLimitRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPrizeLimitRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PrizeTableName != null)
+                {
+                    jsonWriter.WritePropertyName("prizeTableName");
+                    jsonWriter.Write(request.PrizeTableName.ToString());
+                }
+                if (request.PrizeId != null)
+                {
+                    jsonWriter.WritePropertyName("prizeId");
+                    jsonWriter.Write(request.PrizeId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "lottery",
+                    "prizeLimit",
+                    "getPrizeLimit",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPrizeLimit(
+                Request.GetPrizeLimitRequest request,
+                UnityAction<AsyncResult<Result.GetPrizeLimitResult>> callback
+        )
+		{
+			var task = new GetPrizeLimitTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPrizeLimitResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPrizeLimitResult> GetPrizeLimitFuture(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+			return new GetPrizeLimitTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPrizeLimitResult> GetPrizeLimitAsync(
+            Request.GetPrizeLimitRequest request
+        )
+		{
+		    var task = new GetPrizeLimitTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPrizeLimitTask GetPrizeLimitAsync(
+                Request.GetPrizeLimitRequest request
+        )
+		{
+			return new GetPrizeLimitTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPrizeLimitResult> GetPrizeLimitAsync(
+            Request.GetPrizeLimitRequest request
+        )
+		{
+		    var task = new GetPrizeLimitTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetPrizeLimitTask : Gs2WebSocketSessionTask<Request.ResetPrizeLimitRequest, Result.ResetPrizeLimitResult>
+        {
+	        public ResetPrizeLimitTask(IGs2Session session, Request.ResetPrizeLimitRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetPrizeLimitRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PrizeTableName != null)
+                {
+                    jsonWriter.WritePropertyName("prizeTableName");
+                    jsonWriter.Write(request.PrizeTableName.ToString());
+                }
+                if (request.PrizeId != null)
+                {
+                    jsonWriter.WritePropertyName("prizeId");
+                    jsonWriter.Write(request.PrizeId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "lottery",
+                    "prizeLimit",
+                    "resetPrizeLimit",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetPrizeLimit(
+                Request.ResetPrizeLimitRequest request,
+                UnityAction<AsyncResult<Result.ResetPrizeLimitResult>> callback
+        )
+		{
+			var task = new ResetPrizeLimitTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetPrizeLimitResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetPrizeLimitResult> ResetPrizeLimitFuture(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+			return new ResetPrizeLimitTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetPrizeLimitResult> ResetPrizeLimitAsync(
+            Request.ResetPrizeLimitRequest request
+        )
+		{
+		    var task = new ResetPrizeLimitTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetPrizeLimitTask ResetPrizeLimitAsync(
+                Request.ResetPrizeLimitRequest request
+        )
+		{
+			return new ResetPrizeLimitTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetPrizeLimitResult> ResetPrizeLimitAsync(
+            Request.ResetPrizeLimitRequest request
+        )
+		{
+		    var task = new ResetPrizeLimitTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }
