@@ -2102,7 +2102,7 @@ namespace Gs2.Gs2Log
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "log")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/insight/{insightName}";
+                    + "/{namespaceName}/insight";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
 
