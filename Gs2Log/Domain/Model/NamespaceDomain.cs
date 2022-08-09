@@ -451,15 +451,97 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public Gs2.Gs2Log.Domain.Model.LogDomain Log(
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsightAsync(
+            #else
+        public IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsight(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsightAsync(
+        #endif
+            CreateInsightRequest request
         ) {
-            return new Gs2.Gs2Log.Domain.Model.LogDomain(
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this._namespaceName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.CreateInsightFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "Insight"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #else
+            var result = await this._client.CreateInsightAsync(
+                request
+            );
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+              
+            {
+                var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    _namespaceName.ToString(),
+                        "Insight"
+                );
+                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    resultModel.Item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+            }
+            #endif
+            Gs2.Gs2Log.Domain.Model.InsightDomain domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName
+                request.NamespaceName,
+                result?.Item?.Name
             );
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.InsightDomain>(Impl);
+        #endif
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -999,6 +1081,65 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._namespaceName
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.LogDomain Log(
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.LogDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Log.Model.Insight> Insights(
+        )
+        {
+            return new DescribeInsightsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Insight> InsightsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Log.Model.Insight> Insights(
+            #endif
+        #else
+        public DescribeInsightsIterator Insights(
+        #endif
+        )
+        {
+            return new DescribeInsightsIterator(
+                this._cache,
+                this._client,
+                this._namespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Log.Domain.Model.InsightDomain Insight(
+            string insightName
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.InsightDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName,
+                insightName
             );
         }
 

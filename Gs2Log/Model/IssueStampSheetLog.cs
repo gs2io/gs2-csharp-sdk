@@ -39,42 +39,34 @@ namespace Gs2.Gs2Log.Model
         public string Action { set; get; }
         public string Args { set; get; }
         public string[] Tasks { set; get; }
-
         public IssueStampSheetLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;
         }
-
         public IssueStampSheetLog WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public IssueStampSheetLog WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public IssueStampSheetLog WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public IssueStampSheetLog WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public IssueStampSheetLog WithAction(string action) {
             this.Action = action;
             return this;
         }
-
         public IssueStampSheetLog WithArgs(string args) {
             this.Args = args;
             return this;
         }
-
         public IssueStampSheetLog WithTasks(string[] tasks) {
             this.Tasks = tasks;
             return this;

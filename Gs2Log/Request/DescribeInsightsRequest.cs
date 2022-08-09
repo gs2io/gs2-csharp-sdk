@@ -31,30 +31,44 @@ namespace Gs2.Gs2Log.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetNamespaceStatusRequest : Gs2Request<GetNamespaceStatusRequest>
+	public class DescribeInsightsRequest : Gs2Request<DescribeInsightsRequest>
 	{
         public string NamespaceName { set; get; }
-        public GetNamespaceStatusRequest WithNamespaceName(string namespaceName) {
+        public string PageToken { set; get; }
+        public int? Limit { set; get; }
+        public DescribeInsightsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public DescribeInsightsRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
+            return this;
+        }
+        public DescribeInsightsRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetNamespaceStatusRequest FromJson(JsonData data)
+        public static DescribeInsightsRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetNamespaceStatusRequest()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+            return new DescribeInsightsRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
@@ -64,6 +78,14 @@ namespace Gs2.Gs2Log.Request
             if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
+            }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write(int.Parse(Limit.ToString()));
             }
             writer.WriteObjectEnd();
         }

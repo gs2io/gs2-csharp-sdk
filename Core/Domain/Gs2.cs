@@ -9,6 +9,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
+using UnityEngine;
 
 namespace Gs2.Core.Domain
 {
@@ -376,6 +377,17 @@ namespace Gs2.Core.Domain
             string result
         )
         {
+            if (result == null)
+            {
+                return;
+            }
+            if (result.StartsWith("{\"message\":\""))
+            {
+                // error
+                Debug.LogError(result);
+                return;
+            }
+
             if (action.Contains(":"))
             {
                 var service = action.Substring(0, action.IndexOf(':'));
@@ -492,6 +504,13 @@ namespace Gs2.Core.Domain
             string result
         )
         {
+            if (result != null && result.StartsWith("{\"message\":\""))
+            {
+                // error
+                Debug.LogError(result);
+                return;
+            }
+
             if (action.Contains(":"))
             {
                 var service = action.Substring(0, action.IndexOf(':'));

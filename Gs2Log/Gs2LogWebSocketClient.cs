@@ -662,5 +662,324 @@ namespace Gs2.Gs2Log
 			return await task.Invoke();
         }
 #endif
+
+
+        public class CreateInsightTask : Gs2WebSocketSessionTask<Request.CreateInsightRequest, Result.CreateInsightResult>
+        {
+	        public CreateInsightTask(IGs2Session session, Request.CreateInsightRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateInsightRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "insight",
+                    "createInsight",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateInsight(
+                Request.CreateInsightRequest request,
+                UnityAction<AsyncResult<Result.CreateInsightResult>> callback
+        )
+		{
+			var task = new CreateInsightTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateInsightResult> CreateInsightFuture(
+                Request.CreateInsightRequest request
+        )
+		{
+			return new CreateInsightTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateInsightResult> CreateInsightAsync(
+            Request.CreateInsightRequest request
+        )
+		{
+		    var task = new CreateInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateInsightTask CreateInsightAsync(
+                Request.CreateInsightRequest request
+        )
+		{
+			return new CreateInsightTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateInsightResult> CreateInsightAsync(
+            Request.CreateInsightRequest request
+        )
+		{
+		    var task = new CreateInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetInsightTask : Gs2WebSocketSessionTask<Request.GetInsightRequest, Result.GetInsightResult>
+        {
+	        public GetInsightTask(IGs2Session session, Request.GetInsightRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetInsightRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InsightName != null)
+                {
+                    jsonWriter.WritePropertyName("insightName");
+                    jsonWriter.Write(request.InsightName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "insight",
+                    "getInsight",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetInsight(
+                Request.GetInsightRequest request,
+                UnityAction<AsyncResult<Result.GetInsightResult>> callback
+        )
+		{
+			var task = new GetInsightTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetInsightResult> GetInsightFuture(
+                Request.GetInsightRequest request
+        )
+		{
+			return new GetInsightTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetInsightResult> GetInsightAsync(
+            Request.GetInsightRequest request
+        )
+		{
+		    var task = new GetInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetInsightTask GetInsightAsync(
+                Request.GetInsightRequest request
+        )
+		{
+			return new GetInsightTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetInsightResult> GetInsightAsync(
+            Request.GetInsightRequest request
+        )
+		{
+		    var task = new GetInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteInsightTask : Gs2WebSocketSessionTask<Request.DeleteInsightRequest, Result.DeleteInsightResult>
+        {
+	        public DeleteInsightTask(IGs2Session session, Request.DeleteInsightRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteInsightRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InsightName != null)
+                {
+                    jsonWriter.WritePropertyName("insightName");
+                    jsonWriter.Write(request.InsightName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "insight",
+                    "deleteInsight",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteInsight(
+                Request.DeleteInsightRequest request,
+                UnityAction<AsyncResult<Result.DeleteInsightResult>> callback
+        )
+		{
+			var task = new DeleteInsightTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteInsightResult> DeleteInsightFuture(
+                Request.DeleteInsightRequest request
+        )
+		{
+			return new DeleteInsightTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteInsightResult> DeleteInsightAsync(
+            Request.DeleteInsightRequest request
+        )
+		{
+		    var task = new DeleteInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteInsightTask DeleteInsightAsync(
+                Request.DeleteInsightRequest request
+        )
+		{
+			return new DeleteInsightTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteInsightResult> DeleteInsightAsync(
+            Request.DeleteInsightRequest request
+        )
+		{
+		    var task = new DeleteInsightTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

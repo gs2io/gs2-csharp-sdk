@@ -31,30 +31,37 @@ namespace Gs2.Gs2Log.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetNamespaceStatusRequest : Gs2Request<GetNamespaceStatusRequest>
+	public class DeleteInsightRequest : Gs2Request<DeleteInsightRequest>
 	{
         public string NamespaceName { set; get; }
-        public GetNamespaceStatusRequest WithNamespaceName(string namespaceName) {
+        public string InsightName { set; get; }
+        public DeleteInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public DeleteInsightRequest WithInsightName(string insightName) {
+            this.InsightName = insightName;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetNamespaceStatusRequest FromJson(JsonData data)
+        public static DeleteInsightRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetNamespaceStatusRequest()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+            return new DeleteInsightRequest()
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithInsightName(!data.Keys.Contains("insightName") || data["insightName"] == null ? null : data["insightName"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
+                ["insightName"] = InsightName,
             };
         }
 
@@ -64,6 +71,10 @@ namespace Gs2.Gs2Log.Request
             if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
+            }
+            if (InsightName != null) {
+                writer.WritePropertyName("insightName");
+                writer.Write(InsightName.ToString());
             }
             writer.WriteObjectEnd();
         }

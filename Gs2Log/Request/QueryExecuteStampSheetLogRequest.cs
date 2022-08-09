@@ -43,52 +43,42 @@ namespace Gs2.Gs2Log.Request
         public bool? LongTerm { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
-
         public QueryExecuteStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithAction(string action) {
             this.Action = action;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -1979,5 +1979,442 @@ namespace Gs2.Gs2Log
 			return await task.Invoke();
         }
 #endif
+
+
+        public class DescribeInsightsTask : Gs2RestSessionTask<DescribeInsightsRequest, DescribeInsightsResult>
+        {
+            public DescribeInsightsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeInsightsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeInsightsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/insight";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeInsights(
+                Request.DescribeInsightsRequest request,
+                UnityAction<AsyncResult<Result.DescribeInsightsResult>> callback
+        )
+		{
+			var task = new DescribeInsightsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeInsightsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeInsightsResult> DescribeInsightsFuture(
+                Request.DescribeInsightsRequest request
+        )
+		{
+			return new DescribeInsightsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeInsightsResult> DescribeInsightsAsync(
+                Request.DescribeInsightsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeInsightsResult> result = null;
+			await DescribeInsights(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeInsightsTask DescribeInsightsAsync(
+                Request.DescribeInsightsRequest request
+        )
+		{
+			return new DescribeInsightsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeInsightsResult> DescribeInsightsAsync(
+                Request.DescribeInsightsRequest request
+        )
+		{
+			var task = new DescribeInsightsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateInsightTask : Gs2RestSessionTask<CreateInsightRequest, CreateInsightResult>
+        {
+            public CreateInsightTask(IGs2Session session, RestSessionRequestFactory factory, CreateInsightRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateInsightRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/insight/{insightName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateInsight(
+                Request.CreateInsightRequest request,
+                UnityAction<AsyncResult<Result.CreateInsightResult>> callback
+        )
+		{
+			var task = new CreateInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateInsightResult> CreateInsightFuture(
+                Request.CreateInsightRequest request
+        )
+		{
+			return new CreateInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateInsightResult> CreateInsightAsync(
+                Request.CreateInsightRequest request
+        )
+		{
+            AsyncResult<Result.CreateInsightResult> result = null;
+			await CreateInsight(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateInsightTask CreateInsightAsync(
+                Request.CreateInsightRequest request
+        )
+		{
+			return new CreateInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateInsightResult> CreateInsightAsync(
+                Request.CreateInsightRequest request
+        )
+		{
+			var task = new CreateInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetInsightTask : Gs2RestSessionTask<GetInsightRequest, GetInsightResult>
+        {
+            public GetInsightTask(IGs2Session session, RestSessionRequestFactory factory, GetInsightRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetInsightRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/insight/{insightName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{insightName}", !string.IsNullOrEmpty(request.InsightName) ? request.InsightName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetInsight(
+                Request.GetInsightRequest request,
+                UnityAction<AsyncResult<Result.GetInsightResult>> callback
+        )
+		{
+			var task = new GetInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetInsightResult> GetInsightFuture(
+                Request.GetInsightRequest request
+        )
+		{
+			return new GetInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetInsightResult> GetInsightAsync(
+                Request.GetInsightRequest request
+        )
+		{
+            AsyncResult<Result.GetInsightResult> result = null;
+			await GetInsight(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetInsightTask GetInsightAsync(
+                Request.GetInsightRequest request
+        )
+		{
+			return new GetInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetInsightResult> GetInsightAsync(
+                Request.GetInsightRequest request
+        )
+		{
+			var task = new GetInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteInsightTask : Gs2RestSessionTask<DeleteInsightRequest, DeleteInsightResult>
+        {
+            public DeleteInsightTask(IGs2Session session, RestSessionRequestFactory factory, DeleteInsightRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteInsightRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/insight/{insightName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{insightName}", !string.IsNullOrEmpty(request.InsightName) ? request.InsightName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteInsight(
+                Request.DeleteInsightRequest request,
+                UnityAction<AsyncResult<Result.DeleteInsightResult>> callback
+        )
+		{
+			var task = new DeleteInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteInsightResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteInsightResult> DeleteInsightFuture(
+                Request.DeleteInsightRequest request
+        )
+		{
+			return new DeleteInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteInsightResult> DeleteInsightAsync(
+                Request.DeleteInsightRequest request
+        )
+		{
+            AsyncResult<Result.DeleteInsightResult> result = null;
+			await DeleteInsight(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteInsightTask DeleteInsightAsync(
+                Request.DeleteInsightRequest request
+        )
+		{
+			return new DeleteInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteInsightResult> DeleteInsightAsync(
+                Request.DeleteInsightRequest request
+        )
+		{
+			var task = new DeleteInsightTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

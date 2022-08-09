@@ -45,72 +45,58 @@ namespace Gs2.Gs2Log.Model
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithType(string type) {
             this.Type = type;
             return this;
         }
-
         public Namespace WithGcpCredentialJson(string gcpCredentialJson) {
             this.GcpCredentialJson = gcpCredentialJson;
             return this;
         }
-
         public Namespace WithBigQueryDatasetName(string bigQueryDatasetName) {
             this.BigQueryDatasetName = bigQueryDatasetName;
             return this;
         }
-
         public Namespace WithLogExpireDays(int? logExpireDays) {
             this.LogExpireDays = logExpireDays;
             return this;
         }
-
         public Namespace WithAwsRegion(string awsRegion) {
             this.AwsRegion = awsRegion;
             return this;
         }
-
         public Namespace WithAwsAccessKeyId(string awsAccessKeyId) {
             this.AwsAccessKeyId = awsAccessKeyId;
             return this;
         }
-
         public Namespace WithAwsSecretAccessKey(string awsSecretAccessKey) {
             this.AwsSecretAccessKey = awsSecretAccessKey;
             return this;
         }
-
         public Namespace WithFirehoseStreamName(string firehoseStreamName) {
             this.FirehoseStreamName = firehoseStreamName;
             return this;
         }
-
         public Namespace WithStatus(string status) {
             this.Status = status;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

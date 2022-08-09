@@ -38,37 +38,30 @@ namespace Gs2.Gs2Log.Model
         public string UserId { set; get; }
         public string Request { set; get; }
         public string Result { set; get; }
-
         public AccessLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;
         }
-
         public AccessLog WithRequestId(string requestId) {
             this.RequestId = requestId;
             return this;
         }
-
         public AccessLog WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public AccessLog WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public AccessLog WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AccessLog WithRequest(string request) {
             this.Request = request;
             return this;
         }
-
         public AccessLog WithResult(string result) {
             this.Result = result;
             return this;

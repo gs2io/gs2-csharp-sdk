@@ -25,45 +25,45 @@ using Gs2.Util.LitJson;
 using UnityEngine.Scripting;
 #endif
 
-namespace Gs2.Gs2Log.Request
+namespace Gs2.Gs2Log.Result
 {
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetNamespaceStatusRequest : Gs2Request<GetNamespaceStatusRequest>
+	public class DeleteInsightResult : IResult
 	{
-        public string NamespaceName { set; get; }
-        public GetNamespaceStatusRequest WithNamespaceName(string namespaceName) {
-            this.NamespaceName = namespaceName;
+        public Gs2.Gs2Log.Model.Insight Item { set; get; }
+
+        public DeleteInsightResult WithItem(Gs2.Gs2Log.Model.Insight item) {
+            this.Item = item;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetNamespaceStatusRequest FromJson(JsonData data)
+        public static DeleteInsightResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetNamespaceStatusRequest()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+            return new DeleteInsightResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Log.Model.Insight.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
-                ["namespaceName"] = NamespaceName,
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (NamespaceName != null) {
-                writer.WritePropertyName("namespaceName");
-                writer.Write(NamespaceName.ToString());
+            if (Item != null) {
+                Item.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

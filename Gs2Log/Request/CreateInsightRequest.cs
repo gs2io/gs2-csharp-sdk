@@ -31,10 +31,10 @@ namespace Gs2.Gs2Log.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetNamespaceStatusRequest : Gs2Request<GetNamespaceStatusRequest>
+	public class CreateInsightRequest : Gs2Request<CreateInsightRequest>
 	{
         public string NamespaceName { set; get; }
-        public GetNamespaceStatusRequest WithNamespaceName(string namespaceName) {
+        public CreateInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
@@ -42,12 +42,12 @@ namespace Gs2.Gs2Log.Request
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetNamespaceStatusRequest FromJson(JsonData data)
+        public static CreateInsightRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetNamespaceStatusRequest()
+            return new CreateInsightRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
         }
 

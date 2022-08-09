@@ -35,22 +35,18 @@ namespace Gs2.Gs2Log.Model
         public string Method { set; get; }
         public string UserId { set; get; }
         public long? Count { set; get; }
-
         public AccessLogCount WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public AccessLogCount WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public AccessLogCount WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AccessLogCount WithCount(long? count) {
             this.Count = count;
             return this;
