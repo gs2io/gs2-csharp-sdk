@@ -35,6 +35,7 @@ namespace Gs2.Gs2Showcase.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Showcase.Model.ScriptSetting BuyScript { set; get; }
         public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -56,6 +57,10 @@ namespace Gs2.Gs2Showcase.Model
         }
         public Namespace WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithBuyScript(Gs2.Gs2Showcase.Model.ScriptSetting buyScript) {
+            this.BuyScript = buyScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
@@ -145,6 +150,7 @@ namespace Gs2.Gs2Showcase.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Showcase.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithBuyScript(!data.Keys.Contains("buyScript") || data["buyScript"] == null ? null : Gs2.Gs2Showcase.Model.ScriptSetting.FromJson(data["buyScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
@@ -159,6 +165,7 @@ namespace Gs2.Gs2Showcase.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["buyScript"] = BuyScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Showcase.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (BuyScript != null) {
+                writer.WritePropertyName("buyScript");
+                BuyScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -244,6 +255,14 @@ namespace Gs2.Gs2Showcase.Model
             else
             {
                 diff += TransactionSetting.CompareTo(other.TransactionSetting);
+            }
+            if (BuyScript == null && BuyScript == other.BuyScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BuyScript.CompareTo(other.BuyScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {

@@ -77,6 +77,11 @@ namespace Gs2.Gs2Showcase
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
+                if (request.BuyScript != null)
+                {
+                    jsonWriter.WritePropertyName("buyScript");
+                    request.BuyScript.WriteJson(jsonWriter);
+                }
                 if (request.QueueNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("queueNamespaceId");
@@ -307,6 +312,11 @@ namespace Gs2.Gs2Showcase
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
+                }
+                if (request.BuyScript != null)
+                {
+                    jsonWriter.WritePropertyName("buyScript");
+                    request.BuyScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

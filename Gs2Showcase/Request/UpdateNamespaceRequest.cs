@@ -36,6 +36,7 @@ namespace Gs2.Gs2Showcase.Request
         public string NamespaceName { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Showcase.Model.ScriptSetting BuyScript { set; get; }
         public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
         [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; }
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Showcase.Request
         }
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithBuyScript(Gs2.Gs2Showcase.Model.ScriptSetting buyScript) {
+            this.BuyScript = buyScript;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
@@ -80,6 +85,7 @@ namespace Gs2.Gs2Showcase.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Showcase.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithBuyScript(!data.Keys.Contains("buyScript") || data["buyScript"] == null ? null : Gs2.Gs2Showcase.Model.ScriptSetting.FromJson(data["buyScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
@@ -91,6 +97,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["buyScript"] = BuyScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
@@ -110,6 +117,9 @@ namespace Gs2.Gs2Showcase.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (BuyScript != null) {
+                BuyScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
