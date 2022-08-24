@@ -27,6 +27,8 @@ namespace Gs2.Core.Net
 
         public delegate void NotificationHandler(NotificationMessage message);
         public event NotificationHandler OnNotificationMessage;
+        public delegate void DisconnectHandler();
+        public event DisconnectHandler OnDisconnect;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         internal HybridWebSocket.WebSocket _session;
@@ -165,6 +167,7 @@ namespace Gs2.Core.Net
             _session.OnClose += (sender, closeEventArgs) =>
 #endif
             {
+                OnDisconnect?.Invoke();
 #pragma warning disable 4014
                 CloseAsync();
 #pragma warning restore 4014
