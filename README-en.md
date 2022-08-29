@@ -4,6 +4,10 @@
 
 SDK for Game Server Services(https://gs2.io) in C#.
 
+It can be used in combination with the .NET Core runtime.
+
+[GS2 SDK for Unity](https://github.com/gs2io/gs2-sdk-for-unity) consists of GS2-CSharp-SDK (for C# environment) and GS2 SDK for Unity (for Unity environment).
+
 ## What is Game Server Services?
 
 > Game Server Services(GS2) is a backend server service (BaaS) specialized for mobile game development.
@@ -20,10 +24,6 @@ Place the downloaded source code in the following folder in your Unity project.
 
 GS2 credentials are required to use the SDK.
 Please issue the credentials according to the instructions in [Getting Started](https://app.gs2.io/docs/en/index.html#get-start).
-
-### Requirements for Operation
-
-- Unity 2019+.
 
 ## Detailed SDK Specifications
 
