@@ -31,9 +31,9 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Scope : IComparable
 	{
-        public double? R { set; get; }
+        public float? R { set; get; }
         public int? Limit { set; get; }
-        public Scope WithR(double? r) {
+        public Scope WithR(float? r) {
             this.R = r;
             return this;
         }
@@ -51,7 +51,7 @@ namespace Gs2.Gs2MegaField.Model
                 return null;
             }
             return new Scope()
-                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (double?)double.Parse(data["r"].ToString()))
+                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
@@ -68,7 +68,7 @@ namespace Gs2.Gs2MegaField.Model
             writer.WriteObjectStart();
             if (R != null) {
                 writer.WritePropertyName("r");
-                writer.Write(double.Parse(R.ToString()));
+                writer.Write(float.Parse(R.ToString()));
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");

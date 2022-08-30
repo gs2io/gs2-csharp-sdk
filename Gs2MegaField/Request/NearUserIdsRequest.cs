@@ -38,7 +38,7 @@ namespace Gs2.Gs2MegaField.Request
         public string AreaModelName { set; get; }
         public string LayerModelName { set; get; }
         public Gs2.Gs2MegaField.Model.Position Point { set; get; }
-        public double? R { set; get; }
+        public float? R { set; get; }
         public int? Limit { set; get; }
         public NearUserIdsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -60,7 +60,7 @@ namespace Gs2.Gs2MegaField.Request
             this.Point = point;
             return this;
         }
-        public NearUserIdsRequest WithR(double? r) {
+        public NearUserIdsRequest WithR(float? r) {
             this.R = r;
             return this;
         }
@@ -83,7 +83,7 @@ namespace Gs2.Gs2MegaField.Request
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : Gs2.Gs2MegaField.Model.Position.FromJson(data["point"]))
-                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (double?)double.Parse(data["r"].ToString()))
+                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
@@ -124,7 +124,7 @@ namespace Gs2.Gs2MegaField.Request
             }
             if (R != null) {
                 writer.WritePropertyName("r");
-                writer.Write(double.Parse(R.ToString()));
+                writer.Write(float.Parse(R.ToString()));
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");

@@ -31,18 +31,18 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Position : IComparable
 	{
-        public double? X { set; get; }
-        public double? Y { set; get; }
-        public double? Z { set; get; }
-        public Position WithX(double? x) {
+        public float? X { set; get; }
+        public float? Y { set; get; }
+        public float? Z { set; get; }
+        public Position WithX(float? x) {
             this.X = x;
             return this;
         }
-        public Position WithY(double? y) {
+        public Position WithY(float? y) {
             this.Y = y;
             return this;
         }
-        public Position WithZ(double? z) {
+        public Position WithZ(float? z) {
             this.Z = z;
             return this;
         }
@@ -56,9 +56,9 @@ namespace Gs2.Gs2MegaField.Model
                 return null;
             }
             return new Position()
-                .WithX(!data.Keys.Contains("x") || data["x"] == null ? null : (double?)double.Parse(data["x"].ToString()))
-                .WithY(!data.Keys.Contains("y") || data["y"] == null ? null : (double?)double.Parse(data["y"].ToString()))
-                .WithZ(!data.Keys.Contains("z") || data["z"] == null ? null : (double?)double.Parse(data["z"].ToString()));
+                .WithX(!data.Keys.Contains("x") || data["x"] == null ? null : (float?)float.Parse(data["x"].ToString()))
+                .WithY(!data.Keys.Contains("y") || data["y"] == null ? null : (float?)float.Parse(data["y"].ToString()))
+                .WithZ(!data.Keys.Contains("z") || data["z"] == null ? null : (float?)float.Parse(data["z"].ToString()));
         }
 
         public JsonData ToJson()
@@ -75,15 +75,15 @@ namespace Gs2.Gs2MegaField.Model
             writer.WriteObjectStart();
             if (X != null) {
                 writer.WritePropertyName("x");
-                writer.Write(double.Parse(X.ToString()));
+                writer.Write(float.Parse(X.ToString()));
             }
             if (Y != null) {
                 writer.WritePropertyName("y");
-                writer.Write(double.Parse(Y.ToString()));
+                writer.Write(float.Parse(Y.ToString()));
             }
             if (Z != null) {
                 writer.WritePropertyName("z");
-                writer.Write(double.Parse(Z.ToString()));
+                writer.Write(float.Parse(Z.ToString()));
             }
             writer.WriteObjectEnd();
         }
