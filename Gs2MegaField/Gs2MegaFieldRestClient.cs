@@ -3606,7 +3606,7 @@ namespace Gs2.Gs2MegaField
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "mega-field")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/spatial/{areaModelName}/{layerModelName}";
+                    + "/{namespaceName}/user/me/spatial/{areaModelName}/{layerModelName}/action";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{areaModelName}", !string.IsNullOrEmpty(request.AreaModelName) ? request.AreaModelName.ToString() : "null");
@@ -3739,7 +3739,7 @@ namespace Gs2.Gs2MegaField
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "mega-field")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/spatial/{areaModelName}/{layerModelName}";
+                    + "/{namespaceName}/user/{userId}/spatial/{areaModelName}/{layerModelName}/action";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");

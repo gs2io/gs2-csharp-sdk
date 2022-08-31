@@ -25,6 +25,10 @@ Place the downloaded source code in the following folder in your Unity project.
 GS2 credentials are required to use the SDK.
 Please issue the credentials according to the instructions in [Getting Started](https://app.gs2.io/docs/en/index.html#get-start).
 
+### Requirements
+
+- C# 8.0 or higher
+
 ## Detailed SDK Specifications
 
 https://app.gs2.io/docs/en/index.html?csharp#service

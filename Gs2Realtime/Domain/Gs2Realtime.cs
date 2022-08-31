@@ -242,7 +242,7 @@ namespace Gs2.Gs2Realtime.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class CreateNotificationEvent : UnityEvent<CreateNotification>
         {
@@ -257,18 +257,21 @@ namespace Gs2.Gs2Realtime.Domain
             add => onCreateNotification.AddListener(value);
             remove => onCreateNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Create": {
                     onCreateNotification.Invoke(CreateNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
+    #endif
         }
     }
 }

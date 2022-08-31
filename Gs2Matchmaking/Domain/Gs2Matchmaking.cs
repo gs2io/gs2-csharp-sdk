@@ -242,7 +242,7 @@ namespace Gs2.Gs2Matchmaking.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class JoinNotificationEvent : UnityEvent<JoinNotification>
         {
@@ -257,7 +257,8 @@ namespace Gs2.Gs2Matchmaking.Domain
             add => onJoinNotification.AddListener(value);
             remove => onJoinNotification.RemoveListener(value);
         }
-
+    #endif
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class LeaveNotificationEvent : UnityEvent<LeaveNotification>
         {
@@ -272,7 +273,8 @@ namespace Gs2.Gs2Matchmaking.Domain
             add => onLeaveNotification.AddListener(value);
             remove => onLeaveNotification.RemoveListener(value);
         }
-
+    #endif
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class CompleteNotificationEvent : UnityEvent<CompleteNotification>
         {
@@ -287,26 +289,33 @@ namespace Gs2.Gs2Matchmaking.Domain
             add => onCompleteNotification.AddListener(value);
             remove => onCompleteNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Join": {
                     onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
                 case "Leave": {
                     onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
                 case "Complete": {
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
+    #endif
         }
     }
 }

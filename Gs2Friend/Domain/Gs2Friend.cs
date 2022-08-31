@@ -242,7 +242,7 @@ namespace Gs2.Gs2Friend.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class FollowNotificationEvent : UnityEvent<FollowNotification>
         {
@@ -257,7 +257,8 @@ namespace Gs2.Gs2Friend.Domain
             add => onFollowNotification.AddListener(value);
             remove => onFollowNotification.RemoveListener(value);
         }
-
+    #endif
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class AcceptRequestNotificationEvent : UnityEvent<AcceptRequestNotification>
         {
@@ -272,7 +273,8 @@ namespace Gs2.Gs2Friend.Domain
             add => onAcceptRequestNotification.AddListener(value);
             remove => onAcceptRequestNotification.RemoveListener(value);
         }
-
+    #endif
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class ReceiveRequestNotificationEvent : UnityEvent<ReceiveRequestNotification>
         {
@@ -287,26 +289,33 @@ namespace Gs2.Gs2Friend.Domain
             add => onReceiveRequestNotification.AddListener(value);
             remove => onReceiveRequestNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Follow": {
                     onFollowNotification.Invoke(FollowNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
                 case "AcceptRequest": {
                     onAcceptRequestNotification.Invoke(AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
                 case "ReceiveRequest": {
                     onReceiveRequestNotification.Invoke(ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
+    #endif
         }
     }
 }

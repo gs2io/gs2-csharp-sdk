@@ -320,7 +320,7 @@ namespace Gs2.Gs2Mission.Domain
                 }
             }
         }
-
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class CompleteNotificationEvent : UnityEvent<CompleteNotification>
         {
@@ -335,18 +335,21 @@ namespace Gs2.Gs2Mission.Domain
             add => onCompleteNotification.AddListener(value);
             remove => onCompleteNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Complete": {
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
+    #endif
         }
     }
 }

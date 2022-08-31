@@ -9,7 +9,11 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
 using UnityEngine;
+#else
+using System.Diagnostics;
+#endif
 
 namespace Gs2.Core.Domain
 {
@@ -232,7 +236,8 @@ namespace Gs2.Core.Domain
             _cache.Clear();
         }
 
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
+#if !GS2_ENABLE_UNITASK
         public Gs2Future<bool> Dispatch(
             AccessToken accessToken
         )
@@ -369,6 +374,7 @@ namespace Gs2.Core.Domain
             }
         }
 #endif
+#endif
 
         public static void UpdateCacheFromStampSheet(
             CacheDatabase cache,
@@ -384,7 +390,11 @@ namespace Gs2.Core.Domain
             if (result.StartsWith("{\"message\":\""))
             {
                 // error
+#if UNITY_2017_1_OR_NEWER
                 Debug.LogError(result);
+#else
+                Debug.WriteLine(result);
+#endif
                 return;
             }
 
@@ -507,7 +517,11 @@ namespace Gs2.Core.Domain
             if (result != null && result.StartsWith("{\"message\":\""))
             {
                 // error
+#if UNITY_2017_1_OR_NEWER
                 Debug.LogError(result);
+#else
+                Debug.WriteLine(result);
+#endif
                 return;
             }
 

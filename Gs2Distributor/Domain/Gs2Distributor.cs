@@ -248,7 +248,7 @@ namespace Gs2.Gs2Distributor.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-
+#if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class AutoRunStampSheetNotificationEvent : UnityEvent<AutoRunStampSheetNotification>
         {
@@ -282,7 +282,17 @@ namespace Gs2.Gs2Distributor.Domain
                 }
             }
         }
+#else
+        public static void HandleNotification(
+            CacheDatabase cache,
+            string action,
+            string payload
+        )
+        {
+        }
+#endif
 
+#if UNITY_2017_1_OR_NEWER
 #if GS2_ENABLE_UNITASK
         public static async UniTask Dispatch(
 #else
@@ -364,5 +374,6 @@ namespace Gs2.Gs2Distributor.Domain
             return new Gs2InlineFuture(Impl);
 #endif
         }
+#endif
     }
 }

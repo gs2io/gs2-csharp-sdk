@@ -47,7 +47,8 @@ namespace Gs2.Core.Exception
             return _isWorthRetry;
         }
 
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
+#if !GS2_ENABLE_UNITASK
         public Gs2Future Retry() {
             IEnumerator Impl(Gs2Future self)
             {
@@ -83,6 +84,7 @@ namespace Gs2.Core.Exception
         public async Task RetryAsync() {
             await this._stampSheet.RunAsync();
         }
+#endif
 #endif
     }
 }

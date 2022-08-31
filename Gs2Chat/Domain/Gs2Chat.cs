@@ -242,7 +242,7 @@ namespace Gs2.Gs2Chat.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class PostNotificationEvent : UnityEvent<PostNotification>
         {
@@ -257,18 +257,21 @@ namespace Gs2.Gs2Chat.Domain
             add => onPostNotification.AddListener(value);
             remove => onPostNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Post": {
                     onPostNotification.Invoke(PostNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
+    #endif
         }
     }
 }

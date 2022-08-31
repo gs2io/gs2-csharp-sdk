@@ -25,6 +25,10 @@ NET Coreランタイムと組み合わせて利用することができます。
 SDKを利用するには GS2 のクレデンシャルが必要です。
 [はじめかた](https://app.gs2.io/docs/index.html#get-start) の手順に従ってクレデンシャルを発行してください。
 
+### 動作条件
+
+- C# 8.0 以上
+
 ## SDK の詳細仕様
 
 https://app.gs2.io/docs/index.html?csharp#service

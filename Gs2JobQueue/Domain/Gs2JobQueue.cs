@@ -298,6 +298,7 @@ namespace Gs2.Gs2JobQueue.Domain
             }
         }
 
+#if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class PushNotificationEvent : UnityEvent<PushNotification>
         {
@@ -349,7 +350,17 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
             }
         }
+#else
+        public static void HandleNotification(
+            CacheDatabase cache,
+            string action,
+            string payload
+        )
+        {
+        }
+#endif
 
+#if UNITY_2017_1_OR_NEWER
 #if GS2_ENABLE_UNITASK
         public static async UniTask Dispatch(
 #else
@@ -438,5 +449,6 @@ namespace Gs2.Gs2JobQueue.Domain
             return new Gs2InlineFuture(Impl);
 #endif
         }
+#endif
     }
 }
