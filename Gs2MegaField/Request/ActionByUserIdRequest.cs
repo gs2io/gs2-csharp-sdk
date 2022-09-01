@@ -38,7 +38,7 @@ namespace Gs2.Gs2MegaField.Request
         public string AreaModelName { set; get; }
         public string LayerModelName { set; get; }
         public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
-        public Gs2.Gs2MegaField.Model.Scope Scope { set; get; }
+        public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
         public string DuplicationAvoider { set; get; }
         public ActionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -60,8 +60,8 @@ namespace Gs2.Gs2MegaField.Request
             this.Position = position;
             return this;
         }
-        public ActionByUserIdRequest WithScope(Gs2.Gs2MegaField.Model.Scope scope) {
-            this.Scope = scope;
+        public ActionByUserIdRequest WithScopes(Gs2.Gs2MegaField.Model.Scope[] scopes) {
+            this.Scopes = scopes;
             return this;
         }
 
@@ -84,7 +84,9 @@ namespace Gs2.Gs2MegaField.Request
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.MyPosition.FromJson(data["position"]))
-                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : Gs2.Gs2MegaField.Model.Scope.FromJson(data["scope"]));
+                .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null ? new Gs2.Gs2MegaField.Model.Scope[]{} : data["scopes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2MegaField.Model.Scope.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
@@ -95,7 +97,12 @@ namespace Gs2.Gs2MegaField.Request
                 ["areaModelName"] = AreaModelName,
                 ["layerModelName"] = LayerModelName,
                 ["position"] = Position?.ToJson(),
-                ["scope"] = Scope?.ToJson(),
+                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                        Scopes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
@@ -121,9 +128,14 @@ namespace Gs2.Gs2MegaField.Request
             if (Position != null) {
                 Position.WriteJson(writer);
             }
-            if (Scope != null) {
-                Scope.WriteJson(writer);
+            writer.WriteArrayStart();
+            foreach (var scope in Scopes)
+            {
+                if (scope != null) {
+                    scope.WriteJson(writer);
+                }
             }
+            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
     }

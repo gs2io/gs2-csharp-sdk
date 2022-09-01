@@ -3622,10 +3622,15 @@ namespace Gs2.Gs2MegaField
                     jsonWriter.WritePropertyName("position");
                     request.Position.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.Scopes != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    request.Scope.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ContextStack != null)
                 {
@@ -3756,10 +3761,15 @@ namespace Gs2.Gs2MegaField
                     jsonWriter.WritePropertyName("position");
                     request.Position.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.Scopes != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    request.Scope.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ContextStack != null)
                 {

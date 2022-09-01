@@ -31,8 +31,13 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Scope : IComparable
 	{
+        public string LayerName { set; get; }
         public float? R { set; get; }
         public int? Limit { set; get; }
+        public Scope WithLayerName(string layerName) {
+            this.LayerName = layerName;
+            return this;
+        }
         public Scope WithR(float? r) {
             this.R = r;
             return this;
@@ -51,6 +56,7 @@ namespace Gs2.Gs2MegaField.Model
                 return null;
             }
             return new Scope()
+                .WithLayerName(!data.Keys.Contains("layerName") || data["layerName"] == null ? null : data["layerName"].ToString())
                 .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
@@ -58,6 +64,7 @@ namespace Gs2.Gs2MegaField.Model
         public JsonData ToJson()
         {
             return new JsonData {
+                ["layerName"] = LayerName,
                 ["r"] = R,
                 ["limit"] = Limit,
             };
@@ -66,6 +73,10 @@ namespace Gs2.Gs2MegaField.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (LayerName != null) {
+                writer.WritePropertyName("layerName");
+                writer.Write(LayerName.ToString());
+            }
             if (R != null) {
                 writer.WritePropertyName("r");
                 writer.Write(float.Parse(R.ToString()));
@@ -81,6 +92,14 @@ namespace Gs2.Gs2MegaField.Model
         {
             var other = obj as Scope;
             var diff = 0;
+            if (LayerName == null && LayerName == other.LayerName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += LayerName.CompareTo(other.LayerName);
+            }
             if (R == null && R == other.R)
             {
                 // null and null
