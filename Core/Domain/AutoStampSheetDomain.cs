@@ -97,7 +97,6 @@ namespace Gs2.Core.Domain
 
                 string action = null;
                 JsonData requestJson = null;
-                JsonData resultJson = null;
                 _stampSheetEvent.Invoke(
                     _cache,
                     result.Item.SheetRequest.Action,

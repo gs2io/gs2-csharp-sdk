@@ -198,18 +198,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> FetchPositionAsync(
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> FetchPositionAsync(
             #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> FetchPosition(
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> FetchPosition(
             #endif
         #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> FetchPositionAsync(
+        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> FetchPositionAsync(
         #endif
             FetchPositionRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> self)
             {
         #endif
             request
@@ -277,16 +277,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 }
             }
             #endif
-            Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[result?.Items.Length ?? 0];
+            Gs2.Gs2MegaField.Domain.Model.SpatialDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
-                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain(
+                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
                     this._cache,
                     this._jobQueueDomain,
                     this._stampSheetConfiguration,
                     this._session,
                     request.NamespaceName,
-                    this._accessToken,
+                    result.Items[i]?.UserId,
                     result.Items[i]?.AreaModelName,
                     result.Items[i]?.LayerModelName
                 );
@@ -299,24 +299,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]>(Impl);
         #endif
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> NearUserIdsAsync(
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> NearUserIdsAsync(
             #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> NearUserIds(
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> NearUserIds(
             #endif
         #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> NearUserIdsAsync(
+        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> NearUserIdsAsync(
         #endif
             NearUserIdsRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> self)
             {
         #endif
             request
@@ -348,16 +348,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
               
             #endif
-            Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[result?.Items.Length ?? 0];
+            Gs2.Gs2MegaField.Domain.Model.SpatialDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
-                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain(
+                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
                     this._cache,
                     this._jobQueueDomain,
                     this._stampSheetConfiguration,
                     this._session,
                     request.NamespaceName,
-                    this._accessToken,
+                    result?.Items[i],
                     request.AreaModelName,
                     request.LayerModelName
                 );
@@ -370,24 +370,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]>(Impl);
         #endif
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> ActionAsync(
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> ActionAsync(
             #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> Action(
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> Action(
             #endif
         #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> ActionAsync(
+        public async Task<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> ActionAsync(
         #endif
             ActionRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> self)
             {
         #endif
             request
@@ -439,7 +439,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
                         requestModel.NamespaceName.ToString(),
-                        this._accessToken?.UserId.ToString(),
+                        item.UserId.ToString(),
                         "Spatial"
                     );
                     var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
@@ -455,16 +455,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 }
             }
             #endif
-            Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[result?.Items.Length ?? 0];
+            Gs2.Gs2MegaField.Domain.Model.SpatialDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
-                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain(
+                domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
                     this._cache,
                     this._jobQueueDomain,
                     this._stampSheetConfiguration,
                     this._session,
                     request.NamespaceName,
-                    this._accessToken,
+                    result.Items[i]?.UserId,
                     result.Items[i]?.AreaModelName,
                     result.Items[i]?.LayerModelName
                 );
@@ -477,7 +477,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]>(Impl);
         #endif
         }
 

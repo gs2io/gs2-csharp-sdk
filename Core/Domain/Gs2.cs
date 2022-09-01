@@ -50,6 +50,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Log.Domain.Gs2Log Log;
         public readonly Gs2Lottery.Domain.Gs2Lottery Lottery;
         public readonly Gs2Matchmaking.Domain.Gs2Matchmaking Matchmaking;
+        public readonly Gs2MegaField.Domain.Gs2MegaField MegaField;
         public readonly Gs2Mission.Domain.Gs2Mission Mission;
         public readonly Gs2Money.Domain.Gs2Money Money;
         public readonly Gs2News.Domain.Gs2News News;
@@ -152,6 +153,9 @@ namespace Gs2.Core.Domain
                             case "Gs2Matchmaking":
                                 Gs2Matchmaking.Domain.Gs2Matchmaking.HandleNotification(_cache, method, message.payload);
                                 break;
+                            case "Gs2MegaField":
+                                Gs2MegaField.Domain.Gs2MegaField.HandleNotification(_cache, method, message.payload);
+                                break;
                             case "Gs2Mission":
                                 Gs2Mission.Domain.Gs2Mission.HandleNotification(_cache, method, message.payload);
                                 break;
@@ -218,6 +222,8 @@ namespace Gs2.Core.Domain
             Lottery = new Gs2Lottery.Domain.Gs2Lottery(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Matchmaking =
                 new Gs2Matchmaking.Domain.Gs2Matchmaking(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            MegaField =
+                new Gs2MegaField.Domain.Gs2MegaField(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Mission = new Gs2Mission.Domain.Gs2Mission(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Money = new Gs2Money.Domain.Gs2Money(_cache, _jobQueueDomain, _sheetConfiguration, session);
             News = new Gs2News.Domain.Gs2News(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -470,6 +476,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Matchmaking":
                         Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2MegaField":
+                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Mission":
                         Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -596,6 +605,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Matchmaking":
                         Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2MegaField":
+                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Mission":
                         Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampTask(cache, method, request, result);
@@ -726,6 +738,10 @@ namespace Gs2.Core.Domain
                                 break;
                             case "matchmaking":
                                 Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromJobResult(cache, method, job,
+                                    result);
+                                break;
+                            case "mega_field":
+                                Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromJobResult(cache, method, job,
                                     result);
                                 break;
                             case "mission":

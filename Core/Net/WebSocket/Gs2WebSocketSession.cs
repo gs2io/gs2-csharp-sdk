@@ -322,7 +322,7 @@ namespace Gs2.Core.Net
                 {
                     _session.Send(sessionRequest?.Body);
                 }
-                catch (SystemException e)
+                catch (SystemException)
                 {
                     _inflightRequest.Remove(sessionRequest.TaskId);
                 }
@@ -341,7 +341,7 @@ namespace Gs2.Core.Net
                 {
                     _session.Send(sessionRequest?.Body);
                 }
-                catch (SystemException e)
+                catch (SystemException)
                 {
                     _inflightRequest.Remove(sessionRequest.TaskId);
                 }
@@ -362,7 +362,7 @@ namespace Gs2.Core.Net
                 {
                     _session.Send(sessionRequest?.Body);
                 }
-                catch (SystemException e)
+                catch (SystemException)
                 {
                     _inflightRequest.Remove(sessionRequest.TaskId);
                 }
