@@ -145,8 +145,12 @@ namespace Gs2.Core.Net
                         {
                             if (gs2WebSocketResponse.Error == null)
                             {
-                                Credential.ProjectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
-                                State = State.Available;
+                                var ProjectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
+                                if (ProjectToken != null)
+                                {
+                                    Credential.ProjectToken = ProjectToken;
+                                    State = State.Available;
+                                }
                             }
                             else
                             {
