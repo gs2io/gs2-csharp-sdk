@@ -59,6 +59,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Realtime.Domain.Gs2Realtime Realtime;
         public readonly Gs2Schedule.Domain.Gs2Schedule Schedule;
         public readonly Gs2Script.Domain.Gs2Script Script;
+        public readonly Gs2SerialKey.Domain.Gs2SerialKey SerialKey;
         public readonly Gs2Showcase.Domain.Gs2Showcase Showcase;
         public readonly Gs2Stamina.Domain.Gs2Stamina Stamina;
         public readonly Gs2Version.Domain.Gs2Version Version;
@@ -180,6 +181,9 @@ namespace Gs2.Core.Domain
                             case "Gs2Script":
                                 Gs2Script.Domain.Gs2Script.HandleNotification(_cache, method, message.payload);
                                 break;
+                            case "Gs2SerialKey":
+                                Gs2SerialKey.Domain.Gs2SerialKey.HandleNotification(_cache, method, message.payload);
+                                break;
                             case "Gs2Showcase":
                                 Gs2Showcase.Domain.Gs2Showcase.HandleNotification(_cache, method, message.payload);
                                 break;
@@ -232,6 +236,7 @@ namespace Gs2.Core.Domain
             Realtime = new Gs2Realtime.Domain.Gs2Realtime(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Schedule = new Gs2Schedule.Domain.Gs2Schedule(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Script = new Gs2Script.Domain.Gs2Script(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -503,6 +508,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Script":
                         Gs2Script.Domain.Gs2Script.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2SerialKey":
+                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Showcase":
                         Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -632,6 +640,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Script":
                         Gs2Script.Domain.Gs2Script.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2SerialKey":
+                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Showcase":
                         Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampTask(cache, method, request, result);
@@ -767,6 +778,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "script":
                                 Gs2Script.Domain.Gs2Script.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "serial_key":
+                                Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "showcase":
                                 Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromJobResult(cache, method, job, result);
