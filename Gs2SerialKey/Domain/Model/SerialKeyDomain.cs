@@ -65,6 +65,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         private readonly string _serialKeyCode;
 
         private readonly String _parentKey;
+        public string Url { get; set; }
         public string NamespaceName => _namespaceName;
         public string SerialKeyCode => _serialKeyCode;
 

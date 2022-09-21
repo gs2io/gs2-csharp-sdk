@@ -712,6 +712,227 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
+        public class DownloadSerialCodesTask : Gs2WebSocketSessionTask<Request.DownloadSerialCodesRequest, Result.DownloadSerialCodesResult>
+        {
+	        public DownloadSerialCodesTask(IGs2Session session, Request.DownloadSerialCodesRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DownloadSerialCodesRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CampaignModelName != null)
+                {
+                    jsonWriter.WritePropertyName("campaignModelName");
+                    jsonWriter.Write(request.CampaignModelName.ToString());
+                }
+                if (request.IssueJobName != null)
+                {
+                    jsonWriter.WritePropertyName("issueJobName");
+                    jsonWriter.Write(request.IssueJobName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "downloadSerialCodes",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DownloadSerialCodes(
+                Request.DownloadSerialCodesRequest request,
+                UnityAction<AsyncResult<Result.DownloadSerialCodesResult>> callback
+        )
+		{
+			var task = new DownloadSerialCodesTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DownloadSerialCodesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DownloadSerialCodesResult> DownloadSerialCodesFuture(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+			return new DownloadSerialCodesTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DownloadSerialCodesResult> DownloadSerialCodesAsync(
+            Request.DownloadSerialCodesRequest request
+        )
+		{
+		    var task = new DownloadSerialCodesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DownloadSerialCodesTask DownloadSerialCodesAsync(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+			return new DownloadSerialCodesTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DownloadSerialCodesResult> DownloadSerialCodesAsync(
+            Request.DownloadSerialCodesRequest request
+        )
+		{
+		    var task = new DownloadSerialCodesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSerialKeyTask : Gs2WebSocketSessionTask<Request.GetSerialKeyRequest, Result.GetSerialKeyResult>
+        {
+	        public GetSerialKeyTask(IGs2Session session, Request.GetSerialKeyRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSerialKeyRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Code != null)
+                {
+                    jsonWriter.WritePropertyName("code");
+                    jsonWriter.Write(request.Code.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "getSerialKey",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSerialKey(
+                Request.GetSerialKeyRequest request,
+                UnityAction<AsyncResult<Result.GetSerialKeyResult>> callback
+        )
+		{
+			var task = new GetSerialKeyTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSerialKeyResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSerialKeyResult> GetSerialKeyFuture(
+                Request.GetSerialKeyRequest request
+        )
+		{
+			return new GetSerialKeyTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSerialKeyResult> GetSerialKeyAsync(
+            Request.GetSerialKeyRequest request
+        )
+		{
+		    var task = new GetSerialKeyTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSerialKeyTask GetSerialKeyAsync(
+                Request.GetSerialKeyRequest request
+        )
+		{
+			return new GetSerialKeyTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSerialKeyResult> GetSerialKeyAsync(
+            Request.GetSerialKeyRequest request
+        )
+		{
+		    var task = new GetSerialKeyTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UseTask : Gs2WebSocketSessionTask<Request.UseRequest, Result.UseResult>
         {
 	        public UseTask(IGs2Session session, Request.UseRequest request) : base(session, request)

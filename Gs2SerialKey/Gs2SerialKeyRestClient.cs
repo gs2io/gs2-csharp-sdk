@@ -1084,18 +1084,18 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
-        public class DescribeSerialCodesTask : Gs2RestSessionTask<DescribeSerialCodesRequest, DescribeSerialCodesResult>
+        public class DescribeSerialKeysTask : Gs2RestSessionTask<DescribeSerialKeysRequest, DescribeSerialKeysResult>
         {
-            public DescribeSerialCodesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSerialCodesRequest request) : base(session, factory, request)
+            public DescribeSerialKeysTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSerialKeysRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(DescribeSerialCodesRequest request)
+            protected override IGs2SessionRequest CreateRequest(DescribeSerialKeysRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "serial-key")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/campaign/{campaignModelName}/issue/{issueJobName}/serialCode";
+                    + "/{namespaceName}/campaign/{campaignModelName}/issue/{issueJobName}/serialKey";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{campaignModelName}", !string.IsNullOrEmpty(request.CampaignModelName) ? request.CampaignModelName.ToString() : "null");
@@ -1128,25 +1128,25 @@ namespace Gs2.Gs2SerialKey
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeSerialCodes(
-                Request.DescribeSerialCodesRequest request,
-                UnityAction<AsyncResult<Result.DescribeSerialCodesResult>> callback
+		public IEnumerator DescribeSerialKeys(
+                Request.DescribeSerialKeysRequest request,
+                UnityAction<AsyncResult<Result.DescribeSerialKeysResult>> callback
         )
 		{
-			var task = new DescribeSerialCodesTask(
+			var task = new DescribeSerialKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSerialCodesResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.DescribeSerialKeysResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.DescribeSerialCodesResult> DescribeSerialCodesFuture(
-                Request.DescribeSerialCodesRequest request
+		public IFuture<Result.DescribeSerialKeysResult> DescribeSerialKeysFuture(
+                Request.DescribeSerialKeysRequest request
         )
 		{
-			return new DescribeSerialCodesTask(
+			return new DescribeSerialKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -1154,12 +1154,12 @@ namespace Gs2.Gs2SerialKey
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSerialCodesResult> DescribeSerialCodesAsync(
-                Request.DescribeSerialCodesRequest request
+		public async UniTask<Result.DescribeSerialKeysResult> DescribeSerialKeysAsync(
+                Request.DescribeSerialKeysRequest request
         )
 		{
-            AsyncResult<Result.DescribeSerialCodesResult> result = null;
-			await DescribeSerialCodes(
+            AsyncResult<Result.DescribeSerialKeysResult> result = null;
+			await DescribeSerialKeys(
                 request,
                 r => result = r
             );
@@ -1170,11 +1170,11 @@ namespace Gs2.Gs2SerialKey
             return result.Result;
         }
     #else
-		public DescribeSerialCodesTask DescribeSerialCodesAsync(
-                Request.DescribeSerialCodesRequest request
+		public DescribeSerialKeysTask DescribeSerialKeysAsync(
+                Request.DescribeSerialKeysRequest request
         )
 		{
-			return new DescribeSerialCodesTask(
+			return new DescribeSerialKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -1182,11 +1182,222 @@ namespace Gs2.Gs2SerialKey
         }
     #endif
 #else
-		public async Task<Result.DescribeSerialCodesResult> DescribeSerialCodesAsync(
-                Request.DescribeSerialCodesRequest request
+		public async Task<Result.DescribeSerialKeysResult> DescribeSerialKeysAsync(
+                Request.DescribeSerialKeysRequest request
         )
 		{
-			var task = new DescribeSerialCodesTask(
+			var task = new DescribeSerialKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DownloadSerialCodesTask : Gs2RestSessionTask<DownloadSerialCodesRequest, DownloadSerialCodesResult>
+        {
+            public DownloadSerialCodesTask(IGs2Session session, RestSessionRequestFactory factory, DownloadSerialCodesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DownloadSerialCodesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "serial-key")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/campaign/{campaignModelName}/issue/{issueJobName}/serialCode/download";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{campaignModelName}", !string.IsNullOrEmpty(request.CampaignModelName) ? request.CampaignModelName.ToString() : "null");
+                url = url.Replace("{issueJobName}", !string.IsNullOrEmpty(request.IssueJobName) ? request.IssueJobName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DownloadSerialCodes(
+                Request.DownloadSerialCodesRequest request,
+                UnityAction<AsyncResult<Result.DownloadSerialCodesResult>> callback
+        )
+		{
+			var task = new DownloadSerialCodesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DownloadSerialCodesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DownloadSerialCodesResult> DownloadSerialCodesFuture(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+			return new DownloadSerialCodesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DownloadSerialCodesResult> DownloadSerialCodesAsync(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+            AsyncResult<Result.DownloadSerialCodesResult> result = null;
+			await DownloadSerialCodes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DownloadSerialCodesTask DownloadSerialCodesAsync(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+			return new DownloadSerialCodesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DownloadSerialCodesResult> DownloadSerialCodesAsync(
+                Request.DownloadSerialCodesRequest request
+        )
+		{
+			var task = new DownloadSerialCodesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSerialKeyTask : Gs2RestSessionTask<GetSerialKeyRequest, GetSerialKeyResult>
+        {
+            public GetSerialKeyTask(IGs2Session session, RestSessionRequestFactory factory, GetSerialKeyRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSerialKeyRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "serial-key")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/serialKey/{code}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{code}", !string.IsNullOrEmpty(request.Code) ? request.Code.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSerialKey(
+                Request.GetSerialKeyRequest request,
+                UnityAction<AsyncResult<Result.GetSerialKeyResult>> callback
+        )
+		{
+			var task = new GetSerialKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSerialKeyResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSerialKeyResult> GetSerialKeyFuture(
+                Request.GetSerialKeyRequest request
+        )
+		{
+			return new GetSerialKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSerialKeyResult> GetSerialKeyAsync(
+                Request.GetSerialKeyRequest request
+        )
+		{
+            AsyncResult<Result.GetSerialKeyResult> result = null;
+			await GetSerialKey(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSerialKeyTask GetSerialKeyAsync(
+                Request.GetSerialKeyRequest request
+        )
+		{
+			return new GetSerialKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSerialKeyResult> GetSerialKeyAsync(
+                Request.GetSerialKeyRequest request
+        )
+		{
+			var task = new GetSerialKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
