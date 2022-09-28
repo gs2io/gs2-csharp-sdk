@@ -769,6 +769,108 @@ namespace Gs2.Gs2Realtime
 #endif
 
 
+        public class NowTask : Gs2RestSessionTask<NowRequest, NowResult>
+        {
+            public NowTask(IGs2Session session, RestSessionRequestFactory factory, NowRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(NowRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "realtime")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/now";
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Now(
+                Request.NowRequest request,
+                UnityAction<AsyncResult<Result.NowResult>> callback
+        )
+		{
+			var task = new NowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.NowResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.NowResult> NowFuture(
+                Request.NowRequest request
+        )
+		{
+			return new NowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.NowResult> NowAsync(
+                Request.NowRequest request
+        )
+		{
+            AsyncResult<Result.NowResult> result = null;
+			await Now(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public NowTask NowAsync(
+                Request.NowRequest request
+        )
+		{
+			return new NowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.NowResult> NowAsync(
+                Request.NowRequest request
+        )
+		{
+			var task = new NowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeRoomsTask : Gs2RestSessionTask<DescribeRoomsRequest, DescribeRoomsResult>
         {
             public DescribeRoomsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRoomsRequest request) : base(session, factory, request)

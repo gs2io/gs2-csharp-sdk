@@ -509,5 +509,103 @@ namespace Gs2.Gs2Realtime
 			return await task.Invoke();
         }
 #endif
+
+
+        public class NowTask : Gs2WebSocketSessionTask<Request.NowRequest, Result.NowResult>
+        {
+	        public NowTask(IGs2Session session, Request.NowRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.NowRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "realtime",
+                    "namespace",
+                    "now",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Now(
+                Request.NowRequest request,
+                UnityAction<AsyncResult<Result.NowResult>> callback
+        )
+		{
+			var task = new NowTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.NowResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.NowResult> NowFuture(
+                Request.NowRequest request
+        )
+		{
+			return new NowTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.NowResult> NowAsync(
+            Request.NowRequest request
+        )
+		{
+		    var task = new NowTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public NowTask NowAsync(
+                Request.NowRequest request
+        )
+		{
+			return new NowTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.NowResult> NowAsync(
+            Request.NowRequest request
+        )
+		{
+		    var task = new NowTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

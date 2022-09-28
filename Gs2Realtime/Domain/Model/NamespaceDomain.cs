@@ -65,6 +65,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         private readonly String _parentKey;
         public string Status { get; set; }
+        public long? Timestamp { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
 
