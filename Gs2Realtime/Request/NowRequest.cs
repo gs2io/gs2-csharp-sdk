@@ -33,6 +33,11 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class NowRequest : Gs2Request<NowRequest>
 	{
+        public string AccessToken { set; get; }
+        public NowRequest WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +47,24 @@ namespace Gs2.Gs2Realtime.Request
             if (data == null) {
                 return null;
             }
-            return new NowRequest();
+            return new NowRequest()
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["accessToken"] = AccessToken,
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
     }

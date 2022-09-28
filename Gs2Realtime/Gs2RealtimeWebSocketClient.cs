@@ -524,6 +524,11 @@ namespace Gs2.Gs2Realtime
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -533,6 +538,11 @@ namespace Gs2.Gs2Realtime
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
                 }
 
                 AddHeader(

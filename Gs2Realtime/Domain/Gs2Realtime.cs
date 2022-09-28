@@ -174,60 +174,6 @@ namespace Gs2.Gs2Realtime.Domain
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain>(Impl);
         #endif
         }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Realtime> NowAsync(
-            #else
-        public IFuture<Gs2Realtime> Now(
-            #endif
-        #else
-        public async Task<Gs2Realtime> NowAsync(
-        #endif
-            NowRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2Realtime> self)
-            {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.NowFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            #else
-            var result = await this._client.NowAsync(
-                request
-            );
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            #endif
-            Gs2Realtime domain = this;
-            this.Timestamp = domain.Timestamp = result?.Timestamp;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2Realtime>(Impl);
-        #endif
-        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Realtime.Model.Namespace> Namespaces(

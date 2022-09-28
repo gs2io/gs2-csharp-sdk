@@ -792,6 +792,10 @@ namespace Gs2.Gs2Realtime
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
 
                 AddHeader(
                     Session.Credential,
