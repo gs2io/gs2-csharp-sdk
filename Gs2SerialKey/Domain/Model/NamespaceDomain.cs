@@ -658,6 +658,17 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain>(Impl);
         #endif
         }
+
+        public Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain CurrentCampaignMaster(
+        ) {
+            return new Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this._namespaceName
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2SerialKey.Model.CampaignModel> CampaignModels(
@@ -808,17 +819,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._session,
                 this._namespaceName,
                 campaignModelName
-            );
-        }
-
-        public Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain CurrentCampaignMaster(
-        ) {
-            return new Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._namespaceName
             );
         }
 
