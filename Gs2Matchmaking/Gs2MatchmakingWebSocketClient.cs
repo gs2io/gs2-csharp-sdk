@@ -107,6 +107,11 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("completeMatchmakingTriggerScriptId");
                     jsonWriter.Write(request.CompleteMatchmakingTriggerScriptId.ToString());
                 }
+                if (request.ChangeRatingScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRatingScript");
+                    request.ChangeRatingScript.WriteJson(jsonWriter);
+                }
                 if (request.JoinNotification != null)
                 {
                     jsonWriter.WritePropertyName("joinNotification");
@@ -372,6 +377,11 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("completeMatchmakingTriggerScriptId");
                     jsonWriter.Write(request.CompleteMatchmakingTriggerScriptId.ToString());
+                }
+                if (request.ChangeRatingScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRatingScript");
+                    request.ChangeRatingScript.WriteJson(jsonWriter);
                 }
                 if (request.JoinNotification != null)
                 {

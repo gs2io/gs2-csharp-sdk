@@ -41,6 +41,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public string CompleteMatchmakingTriggerType { set; get; }
         public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
         public string CompleteMatchmakingTriggerScriptId { set; get; }
+        public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
@@ -85,6 +86,10 @@ namespace Gs2.Gs2Matchmaking.Model
         }
         public Namespace WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
             this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
+            return this;
+        }
+        public Namespace WithChangeRatingScript(Gs2.Gs2Matchmaking.Model.ScriptSetting changeRatingScript) {
+            this.ChangeRatingScript = changeRatingScript;
             return this;
         }
         public Namespace WithJoinNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification) {
@@ -182,6 +187,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithCompleteMatchmakingTriggerType(!data.Keys.Contains("completeMatchmakingTriggerType") || data["completeMatchmakingTriggerType"] == null ? null : data["completeMatchmakingTriggerType"].ToString())
                 .WithCompleteMatchmakingTriggerRealtimeNamespaceId(!data.Keys.Contains("completeMatchmakingTriggerRealtimeNamespaceId") || data["completeMatchmakingTriggerRealtimeNamespaceId"] == null ? null : data["completeMatchmakingTriggerRealtimeNamespaceId"].ToString())
                 .WithCompleteMatchmakingTriggerScriptId(!data.Keys.Contains("completeMatchmakingTriggerScriptId") || data["completeMatchmakingTriggerScriptId"] == null ? null : data["completeMatchmakingTriggerScriptId"].ToString())
+                .WithChangeRatingScript(!data.Keys.Contains("changeRatingScript") || data["changeRatingScript"] == null ? null : Gs2.Gs2Matchmaking.Model.ScriptSetting.FromJson(data["changeRatingScript"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["completeNotification"]))
@@ -203,6 +209,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["completeMatchmakingTriggerType"] = CompleteMatchmakingTriggerType,
                 ["completeMatchmakingTriggerRealtimeNamespaceId"] = CompleteMatchmakingTriggerRealtimeNamespaceId,
                 ["completeMatchmakingTriggerScriptId"] = CompleteMatchmakingTriggerScriptId,
+                ["changeRatingScript"] = ChangeRatingScript?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["completeNotification"] = CompleteNotification?.ToJson(),
@@ -254,6 +261,10 @@ namespace Gs2.Gs2Matchmaking.Model
             if (CompleteMatchmakingTriggerScriptId != null) {
                 writer.WritePropertyName("completeMatchmakingTriggerScriptId");
                 writer.Write(CompleteMatchmakingTriggerScriptId.ToString());
+            }
+            if (ChangeRatingScript != null) {
+                writer.WritePropertyName("changeRatingScript");
+                ChangeRatingScript.WriteJson(writer);
             }
             if (JoinNotification != null) {
                 writer.WritePropertyName("joinNotification");
@@ -365,6 +376,14 @@ namespace Gs2.Gs2Matchmaking.Model
             else
             {
                 diff += CompleteMatchmakingTriggerScriptId.CompareTo(other.CompleteMatchmakingTriggerScriptId);
+            }
+            if (ChangeRatingScript == null && ChangeRatingScript == other.ChangeRatingScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChangeRatingScript.CompareTo(other.ChangeRatingScript);
             }
             if (JoinNotification == null && JoinNotification == other.JoinNotification)
             {
