@@ -3683,6 +3683,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
