@@ -33,6 +33,7 @@ namespace Gs2.Gs2Ranking.Model
 	{
         public long? Rank { set; get; }
         public long? Index { set; get; }
+        public string CategoryName { set; get; }
         public string UserId { set; get; }
         public long? Score { set; get; }
         public string Metadata { set; get; }
@@ -43,6 +44,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public Ranking WithIndex(long? index) {
             this.Index = index;
+            return this;
+        }
+        public Ranking WithCategoryName(string categoryName) {
+            this.CategoryName = categoryName;
             return this;
         }
         public Ranking WithUserId(string userId) {
@@ -73,6 +78,7 @@ namespace Gs2.Gs2Ranking.Model
             return new Ranking()
                 .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (long?)long.Parse(data["rank"].ToString()))
                 .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (long?)long.Parse(data["index"].ToString()))
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Ranking.Model
             return new JsonData {
                 ["rank"] = Rank,
                 ["index"] = Index,
+                ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
                 ["score"] = Score,
                 ["metadata"] = Metadata,
@@ -101,6 +108,10 @@ namespace Gs2.Gs2Ranking.Model
             if (Index != null) {
                 writer.WritePropertyName("index");
                 writer.Write(long.Parse(Index.ToString()));
+            }
+            if (CategoryName != null) {
+                writer.WritePropertyName("categoryName");
+                writer.Write(CategoryName.ToString());
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
@@ -140,6 +151,14 @@ namespace Gs2.Gs2Ranking.Model
             else
             {
                 diff += (int)(Index - other.Index);
+            }
+            if (CategoryName == null && CategoryName == other.CategoryName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CategoryName.CompareTo(other.CategoryName);
             }
             if (UserId == null && UserId == other.UserId)
             {
