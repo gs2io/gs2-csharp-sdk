@@ -131,7 +131,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Room"
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Room"

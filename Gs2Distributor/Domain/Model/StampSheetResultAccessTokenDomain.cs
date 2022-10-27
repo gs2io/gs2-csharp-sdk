@@ -68,7 +68,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string TransactionId => _transactionId;
 
         public StampSheetResultAccessTokenDomain(
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

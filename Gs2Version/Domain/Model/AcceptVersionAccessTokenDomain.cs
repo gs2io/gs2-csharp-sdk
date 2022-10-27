@@ -68,7 +68,7 @@ namespace Gs2.Gs2Version.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string VersionName => _versionName;
 
         public AcceptVersionAccessTokenDomain(
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -210,7 +210,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -299,7 +299,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

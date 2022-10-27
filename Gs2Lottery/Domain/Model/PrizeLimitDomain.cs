@@ -137,7 +137,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.PrizeTableName,

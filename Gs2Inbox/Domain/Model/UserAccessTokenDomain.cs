@@ -68,7 +68,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,
@@ -133,12 +133,12 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Message"
+                    );
                     foreach (var item in resultModel.Item) {
-                        var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Message"
-                        );
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             item.Name.ToString()
                         );

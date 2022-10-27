@@ -137,7 +137,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.AreaModelName,

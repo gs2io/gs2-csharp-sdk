@@ -62,11 +62,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
-        public string NamespaceName => _namespaceName;
         private readonly string _inventoryName;
-        public string InventoryName => _inventoryName;
 
         private readonly String _parentKey;
+        public string NamespaceName => _namespaceName;
+        public string InventoryName => _inventoryName;
 
         public InventoryModelDomain(
             CacheDatabase cache,
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "InventoryModel"

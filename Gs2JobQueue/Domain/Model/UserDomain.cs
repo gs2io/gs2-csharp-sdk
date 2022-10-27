@@ -134,12 +134,12 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Job"
+                    );
                     foreach (var item in resultModel.Items) {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Job"
-                        );
                         var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                             item.Name.ToString()
                         );
@@ -249,7 +249,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

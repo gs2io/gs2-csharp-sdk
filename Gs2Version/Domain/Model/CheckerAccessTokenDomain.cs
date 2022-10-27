@@ -72,7 +72,7 @@ namespace Gs2.Gs2Version.Domain.Model
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public CheckerAccessTokenDomain(
             CacheDatabase cache,

@@ -397,7 +397,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "SalesItemMaster"
@@ -473,7 +473,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "SalesItemGroupMaster"
@@ -549,7 +549,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "ShowcaseMaster"

@@ -213,7 +213,7 @@ namespace Gs2.Gs2Inbox.Domain
                         var requestModel = SendMessageByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = SendMessageByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -245,7 +245,7 @@ namespace Gs2.Gs2Inbox.Domain
                         var requestModel = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = OpenMessageByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -275,7 +275,7 @@ namespace Gs2.Gs2Inbox.Domain
                     var requestModel = SendMessageByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SendMessageByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

@@ -69,7 +69,7 @@ namespace Gs2.Gs2News.Domain.Model
         public string ContentHash { get; set; }
         public string TemplateHash { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,

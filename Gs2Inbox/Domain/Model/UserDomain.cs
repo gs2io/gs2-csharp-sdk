@@ -132,7 +132,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -211,12 +211,12 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Message"
+                    );
                     foreach (var item in resultModel.Item) {
-                        var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Message"
-                        );
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             item.Name.ToString()
                         );

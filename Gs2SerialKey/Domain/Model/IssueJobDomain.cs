@@ -138,7 +138,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.CampaignModelName,

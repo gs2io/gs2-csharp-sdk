@@ -138,14 +138,14 @@ namespace Gs2.Gs2Money.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
                         "Wallet"
                     );
                     var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            "null"
+                            null
                     );
                     cache.Put(
                         parentKey,
@@ -207,14 +207,14 @@ namespace Gs2.Gs2Money.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
                         "Wallet"
                     );
                     var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            "null"
+                            null
                     );
                     cache.Put(
                         parentKey,
@@ -279,14 +279,14 @@ namespace Gs2.Gs2Money.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
                         "Wallet"
                     );
                     var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                            "null"
+                            null
                     );
                     cache.Put(
                         parentKey,

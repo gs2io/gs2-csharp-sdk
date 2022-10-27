@@ -126,7 +126,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFormMaster"
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFormMaster"
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFormMaster"
@@ -327,7 +327,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFormMaster"

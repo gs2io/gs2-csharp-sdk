@@ -213,7 +213,7 @@ namespace Gs2.Gs2Exchange.Domain
                         var requestModel = ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "RateModel"
@@ -234,7 +234,7 @@ namespace Gs2.Gs2Exchange.Domain
                         var requestModel = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = CreateAwaitByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -267,7 +267,7 @@ namespace Gs2.Gs2Exchange.Domain
                         var requestModel = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DeleteAwaitByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -295,7 +295,7 @@ namespace Gs2.Gs2Exchange.Domain
                     var requestModel = ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "RateModel"
@@ -316,7 +316,7 @@ namespace Gs2.Gs2Exchange.Domain
                     var requestModel = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = CreateAwaitByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

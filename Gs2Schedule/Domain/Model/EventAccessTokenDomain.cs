@@ -68,7 +68,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string EventName => _eventName;
 
         public EventAccessTokenDomain(
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

@@ -71,6 +71,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public string Protocol { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
+        public string ConnectionId => _connectionId;
 
         public WebSocketSessionDomain(
             CacheDatabase cache,
@@ -153,7 +154,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

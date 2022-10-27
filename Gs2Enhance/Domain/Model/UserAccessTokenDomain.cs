@@ -72,7 +72,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public float? BonusRate { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,

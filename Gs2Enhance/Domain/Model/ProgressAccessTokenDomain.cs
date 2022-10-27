@@ -73,7 +73,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public long? AcquireExperience { get; set; }
         public float? BonusRate { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string RateName => _rateName;
         public string ProgressName => _progressName;
 
@@ -147,7 +147,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -164,7 +164,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.RateModel != null) {
                     var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "RateModel"
@@ -233,7 +233,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -347,7 +347,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

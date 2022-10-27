@@ -343,7 +343,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.UserName,
                         "Identifier"

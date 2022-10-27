@@ -69,7 +69,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public string NextPageToken { get; set; }
         public bool? Processing { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

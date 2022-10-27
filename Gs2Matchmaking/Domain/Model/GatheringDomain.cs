@@ -137,7 +137,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",
@@ -208,7 +208,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",
@@ -297,7 +297,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",

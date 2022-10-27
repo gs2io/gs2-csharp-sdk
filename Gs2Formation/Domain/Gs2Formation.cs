@@ -213,7 +213,7 @@ namespace Gs2.Gs2Formation.Domain
                         var requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -229,7 +229,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.MoldModel != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "MoldModel"
@@ -250,7 +250,7 @@ namespace Gs2.Gs2Formation.Domain
                         var requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -266,7 +266,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.MoldModel != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "MoldModel"
@@ -287,7 +287,7 @@ namespace Gs2.Gs2Formation.Domain
                         var requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -304,7 +304,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.Mold != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -326,7 +326,7 @@ namespace Gs2.Gs2Formation.Domain
                         var requestModel = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AcquireActionsToPropertyFormPropertiesResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -367,7 +367,7 @@ namespace Gs2.Gs2Formation.Domain
                     var requestModel = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -383,7 +383,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.MoldModel != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "MoldModel"
@@ -404,7 +404,7 @@ namespace Gs2.Gs2Formation.Domain
                     var requestModel = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -420,7 +420,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.MoldModel != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "MoldModel"
@@ -441,7 +441,7 @@ namespace Gs2.Gs2Formation.Domain
                     var requestModel = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AcquireActionsToFormPropertiesResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -458,7 +458,7 @@ namespace Gs2.Gs2Formation.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.Mold != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -480,7 +480,7 @@ namespace Gs2.Gs2Formation.Domain
                     var requestModel = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AcquireActionsToPropertyFormPropertiesResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

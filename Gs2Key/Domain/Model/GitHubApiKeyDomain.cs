@@ -132,7 +132,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "GitHubApiKey"
@@ -202,7 +202,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "GitHubApiKey"
@@ -288,7 +288,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "GitHubApiKey"

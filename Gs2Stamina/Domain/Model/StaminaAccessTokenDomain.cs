@@ -69,7 +69,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private readonly String _parentKey;
         public long? OverflowValue { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string StaminaName => _staminaName;
 
         public StaminaAccessTokenDomain(
@@ -139,7 +139,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.StaminaModel != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModel"
@@ -223,7 +223,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -239,7 +239,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.StaminaModel != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModel"
@@ -310,7 +310,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -326,7 +326,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.StaminaModel != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModel"
@@ -397,7 +397,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -413,7 +413,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.StaminaModel != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModel"
@@ -484,7 +484,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -500,7 +500,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.StaminaModel != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModel"

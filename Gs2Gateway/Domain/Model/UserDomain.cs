@@ -195,12 +195,12 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "WebSocketSession"
+                    );
                     foreach (var item in resultModel.Items) {
-                        var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "WebSocketSession"
-                        );
                         var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                         );
                         cache.Put(

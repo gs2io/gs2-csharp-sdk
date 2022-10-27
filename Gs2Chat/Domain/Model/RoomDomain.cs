@@ -140,7 +140,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",
@@ -210,7 +210,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",
@@ -302,7 +302,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",
@@ -370,7 +370,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Singleton",

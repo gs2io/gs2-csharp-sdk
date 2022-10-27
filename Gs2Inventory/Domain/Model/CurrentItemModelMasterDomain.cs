@@ -62,9 +62,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
-        public string NamespaceName => _namespaceName;
 
         private readonly String _parentKey;
+        public string NamespaceName => _namespaceName;
 
         public CurrentItemModelMasterDomain(
             CacheDatabase cache,
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentItemModelMaster"
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentItemModelMaster"
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentItemModelMaster"
@@ -327,7 +327,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentItemModelMaster"

@@ -69,7 +69,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string DataObjectName => _dataObjectName;
         public string Generation => _generation;
 
@@ -144,7 +144,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

@@ -69,7 +69,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public LotteryAccessTokenDomain(
             CacheDatabase cache,

@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -69,6 +67,9 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _campaignModelName;
         private readonly string _issueJobName;
+        public string NamespaceName => _namespaceName;
+        public string CampaignModelName => _campaignModelName;
+        public string IssueJobName => _issueJobName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2SerialKey.Model.SerialKey[] _result;
@@ -103,8 +104,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                this.NamespaceName,
                 "SerialKey"
             );
             string listParentKey = parentKey;

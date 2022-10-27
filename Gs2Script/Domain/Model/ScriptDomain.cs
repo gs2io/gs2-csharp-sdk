@@ -136,7 +136,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Script"
@@ -203,7 +203,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Script"
@@ -273,7 +273,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Script"
@@ -362,7 +362,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Script"

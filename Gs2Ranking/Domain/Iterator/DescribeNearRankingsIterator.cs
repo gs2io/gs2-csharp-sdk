@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -69,6 +67,9 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _categoryName;
         private readonly long? _score;
+        public string NamespaceName => _namespaceName;
+        public string CategoryName => _categoryName;
+        public long? Score => _score;
         private bool _last;
         private Gs2.Gs2Ranking.Model.Ranking[] _result;
 
@@ -102,7 +103,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this.NamespaceName,
                 "Singleton",
                 "NearRanking"
             );

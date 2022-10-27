@@ -88,7 +88,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -110,7 +110,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.FetchPositionFromSystemFuture(
                 request
@@ -122,56 +122,35 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
-                        "Spatial"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
-                        item.AreaModelName.ToString(),
-                        item.LayerModelName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
             #else
             var result = await this._client.FetchPositionFromSystemAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
-                        "Spatial"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
-                        item.AreaModelName.ToString(),
-                        item.LayerModelName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+            if (resultModel != null) {{
+                    foreach (var item in resultModel.Items) {
+                        var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Spatial"
+                        );
+                        var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
+                            item.AreaModelName.ToString(),
+                            item.LayerModelName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
             }
-            #endif
-            Gs2.Gs2MegaField.Domain.Model.SpatialDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
+            var domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
@@ -183,6 +162,21 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     result.Items[i]?.UserId,
                     result.Items[i]?.AreaModelName,
                     result.Items[i]?.LayerModelName
+                );
+                var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
+                this.NamespaceName,
+                this.UserId,
+                "Spatial"
+            );
+                var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
+                    result.Items[i].AreaModelName.ToString(),
+                    result.Items[i].LayerModelName.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -214,7 +208,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.NearUserIdsFromSystemFuture(
                 request
@@ -226,20 +220,17 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.NearUserIdsFromSystemAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
-            Gs2.Gs2MegaField.Domain.Model.SpatialDomain[] domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
+            if (resultModel != null) {
+            }
+            var domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
@@ -274,8 +265,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._userId,
+                this.NamespaceName,
+                this.UserId,
                 areaModelName,
                 layerModelName
             );

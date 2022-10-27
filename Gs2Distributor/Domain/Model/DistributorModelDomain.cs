@@ -131,7 +131,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "DistributorModel"

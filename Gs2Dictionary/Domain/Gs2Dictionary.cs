@@ -213,12 +213,12 @@ namespace Gs2.Gs2Dictionary.Domain
                         var requestModel = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AddEntriesByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         {
+                            var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Entry"
+                            );
                             foreach (var item in resultModel.Items) {
-                                var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName,
-                                    requestModel.UserId,
-                                    "Entry"
-                                );
                                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                     item.Name.ToString()
                                 );
@@ -254,12 +254,12 @@ namespace Gs2.Gs2Dictionary.Domain
                     var requestModel = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddEntriesByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     {
+                            var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Entry"
+                            );
                             foreach (var item in resultModel.Items) {
-                                var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName,
-                                    requestModel.UserId,
-                                    "Entry"
-                                );
                                 var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                     item.Name.ToString()
                                 );

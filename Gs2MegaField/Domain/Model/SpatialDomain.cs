@@ -142,7 +142,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -216,12 +216,12 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Spatial"
+                    );
                     foreach (var item in resultModel.Items) {
-                        var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Spatial"
-                        );
                         var key = Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                             item.AreaModelName.ToString(),
                             item.LayerModelName.ToString()

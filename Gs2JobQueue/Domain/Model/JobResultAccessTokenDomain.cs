@@ -69,7 +69,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string JobName => _jobName;
         public string TryNumber => _tryNumber;
 
@@ -143,7 +143,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

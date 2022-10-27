@@ -397,7 +397,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "GlobalMessageMaster"

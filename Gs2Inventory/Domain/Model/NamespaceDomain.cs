@@ -62,11 +62,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
-        public string NamespaceName => _namespaceName;
 
         private readonly String _parentKey;
         public string Status { get; set; }
         public string NextPageToken { get; set; }
+        public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
             CacheDatabase cache,
@@ -397,7 +397,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "InventoryModelMaster"

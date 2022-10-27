@@ -69,7 +69,7 @@ namespace Gs2.Gs2News.Domain.Model
         public string BrowserUrl { get; set; }
         public string ZipUrl { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public NewsAccessTokenDomain(
             CacheDatabase cache,
@@ -135,12 +135,12 @@ namespace Gs2.Gs2News.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 {
+                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "SetCookieRequestEntry"
+                    );
                     foreach (var item in resultModel.Items) {
-                        var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "SetCookieRequestEntry"
-                        );
                         var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
                             item.Key.ToString(),
                             item.Value.ToString()

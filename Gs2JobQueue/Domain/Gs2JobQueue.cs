@@ -216,12 +216,12 @@ namespace Gs2.Gs2JobQueue.Domain
                         var requestModel = PushByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = PushByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         {
+                            var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Job"
+                            );
                             foreach (var item in resultModel.Items) {
-                                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName,
-                                    requestModel.UserId,
-                                    "Job"
-                                );
                                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                     item.Name.ToString()
                                 );
@@ -257,12 +257,12 @@ namespace Gs2.Gs2JobQueue.Domain
                     var requestModel = PushByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     {
+                            var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Job"
+                            );
                             foreach (var item in resultModel.Items) {
-                                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName,
-                                    requestModel.UserId,
-                                    "Job"
-                                );
                                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                     item.Name.ToString()
                                 );

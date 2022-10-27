@@ -213,7 +213,7 @@ namespace Gs2.Gs2Limit.Domain
                         var requestModel = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DeleteCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -241,7 +241,7 @@ namespace Gs2.Gs2Limit.Domain
                         var requestModel = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = CountUpByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -274,7 +274,7 @@ namespace Gs2.Gs2Limit.Domain
                     var requestModel = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DeleteCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

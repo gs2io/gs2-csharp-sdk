@@ -62,13 +62,13 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
-        public string NamespaceName => _namespaceName;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
-        public string UserId => _accessToken.UserId;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,

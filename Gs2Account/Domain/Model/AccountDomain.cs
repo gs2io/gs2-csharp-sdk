@@ -134,7 +134,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Account"
@@ -204,7 +204,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Account"
@@ -274,7 +274,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Account"
@@ -360,7 +360,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Account"
@@ -425,7 +425,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "Account"
@@ -497,7 +497,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -583,7 +583,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

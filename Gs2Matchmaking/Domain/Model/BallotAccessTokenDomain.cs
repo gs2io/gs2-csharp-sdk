@@ -73,7 +73,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string RatingName => _ratingName;
         public string GatheringName => _gatheringName;
         public int? NumberOfPlayer => _numberOfPlayer;
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

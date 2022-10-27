@@ -221,7 +221,7 @@ namespace Gs2.Gs2SerialKey.Domain
                         var requestModel = UseByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = UseByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "SerialKey"
@@ -236,7 +236,7 @@ namespace Gs2.Gs2SerialKey.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        {
+                        if (resultModel.CampaignModel != null) {
                             var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 "CampaignModel"

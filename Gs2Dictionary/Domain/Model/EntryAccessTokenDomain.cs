@@ -70,7 +70,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string EntryModelName => _entryModelName;
 
         public EntryAccessTokenDomain(
@@ -140,7 +140,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

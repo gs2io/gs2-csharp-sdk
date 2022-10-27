@@ -397,7 +397,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "RecoverIntervalTableMaster"
@@ -473,7 +473,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "MaxStaminaTableMaster"
@@ -549,7 +549,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "RecoverValueTableMaster"
@@ -625,7 +625,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "StaminaModelMaster"

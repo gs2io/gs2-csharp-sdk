@@ -213,7 +213,7 @@ namespace Gs2.Gs2Quest.Domain
                         var requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -244,7 +244,7 @@ namespace Gs2.Gs2Quest.Domain
                         var requestModel = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DeleteProgressByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -270,7 +270,7 @@ namespace Gs2.Gs2Quest.Domain
                     var requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

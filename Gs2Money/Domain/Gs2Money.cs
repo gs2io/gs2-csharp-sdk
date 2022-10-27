@@ -213,14 +213,14 @@ namespace Gs2.Gs2Money.Domain
                         var requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    "null"
+                                    null
                             );
                             cache.Put(
                                 parentKey,
@@ -245,14 +245,14 @@ namespace Gs2.Gs2Money.Domain
                         var requestModel = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = WithdrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    "null"
+                                    null
                             );
                             cache.Put(
                                 parentKey,
@@ -267,7 +267,7 @@ namespace Gs2.Gs2Money.Domain
                         var requestModel = RecordReceiptRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = RecordReceiptResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -299,14 +299,14 @@ namespace Gs2.Gs2Money.Domain
                     var requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    "null"
+                                    null
                             );
                             cache.Put(
                                 parentKey,

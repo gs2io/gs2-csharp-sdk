@@ -397,7 +397,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "PrizeTableMaster"
@@ -473,7 +473,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "LotteryModelMaster"

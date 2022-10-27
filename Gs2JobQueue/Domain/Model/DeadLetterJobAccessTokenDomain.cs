@@ -68,7 +68,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public string DeadLetterJobName => _deadLetterJobName;
 
         public DeadLetterJobAccessTokenDomain(

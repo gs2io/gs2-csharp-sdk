@@ -70,7 +70,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public string Signature { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public AccountAccessTokenDomain(
             CacheDatabase cache,

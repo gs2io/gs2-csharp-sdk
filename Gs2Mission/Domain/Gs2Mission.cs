@@ -214,7 +214,7 @@ namespace Gs2.Gs2Mission.Domain
                         var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -249,7 +249,7 @@ namespace Gs2.Gs2Mission.Domain
                         var requestModel = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -281,7 +281,7 @@ namespace Gs2.Gs2Mission.Domain
                     var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,

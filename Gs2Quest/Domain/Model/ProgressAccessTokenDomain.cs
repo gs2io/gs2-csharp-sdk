@@ -70,7 +70,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public ProgressAccessTokenDomain(
             CacheDatabase cache,
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.QuestGroup != null) {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "QuestGroupModel"
@@ -166,7 +166,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
+                if (resultModel.Quest != null) {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         Gs2.Gs2Quest.Model.QuestModel.GetQuestGroupNameFromGrn(resultModel.Item.QuestModelId),
@@ -266,7 +266,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,

@@ -126,7 +126,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFieldMaster"
@@ -194,7 +194,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFieldMaster"
@@ -259,7 +259,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFieldMaster"
@@ -327,7 +327,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var cache = _cache;
             if (resultModel != null) {
                 
-                {
+                if (resultModel.Item != null) {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         "CurrentFieldMaster"

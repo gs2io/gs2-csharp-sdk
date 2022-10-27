@@ -213,7 +213,7 @@ namespace Gs2.Gs2Experience.Domain
                         var requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -236,7 +236,7 @@ namespace Gs2.Gs2Experience.Domain
                         var requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Experience.Domain
                         var requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -300,7 +300,7 @@ namespace Gs2.Gs2Experience.Domain
                     var requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -323,7 +323,7 @@ namespace Gs2.Gs2Experience.Domain
                     var requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
@@ -346,7 +346,7 @@ namespace Gs2.Gs2Experience.Domain
                     var requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        {
+                        if (resultModel.Item != null) {
                             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
