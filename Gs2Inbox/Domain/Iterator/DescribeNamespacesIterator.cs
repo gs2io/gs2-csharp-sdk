@@ -92,7 +92,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "inbox:Namespace";
+            var parentKey = "inbox:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Inbox.Model.Namespace>
             (

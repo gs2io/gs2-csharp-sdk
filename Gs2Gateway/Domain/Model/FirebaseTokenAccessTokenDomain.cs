@@ -94,7 +94,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "FirebaseToken"
             );
@@ -130,38 +130,20 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FirebaseToken"
-                );
-                var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.SetFirebaseTokenAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FirebaseToken"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FirebaseToken"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                 );
@@ -172,7 +154,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Gateway.Domain.Model.FirebaseTokenAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -217,38 +198,20 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FirebaseToken"
-                );
-                var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetFirebaseTokenAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FirebaseToken"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FirebaseToken"
                 );
                 var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                 );
@@ -259,7 +222,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -301,42 +263,44 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FirebaseToken"
-                );
-                var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
-                );
-                cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
-            }
             #else
             DeleteFirebaseTokenResult result = null;
             try {
                 result = await this._client.DeleteFirebaseTokenAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "firebaseToken")
                 {
                     var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                            "FirebaseToken"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FirebaseToken"
+                );
                     var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FirebaseToken"
+                );
+                var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
+            }
             Gs2.Gs2Gateway.Domain.Model.FirebaseTokenAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

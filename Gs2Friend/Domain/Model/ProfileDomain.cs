@@ -86,8 +86,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "Profile"
             );
         }
@@ -122,38 +122,20 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Profile"
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetProfileByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Profile"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Profile"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
                 );
@@ -164,7 +146,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -206,38 +187,20 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Profile"
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateProfileByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Profile"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Profile"
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
                 );
@@ -248,7 +211,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Friend.Domain.Model.ProfileDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -293,42 +255,44 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Profile"
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
-                );
-                cache.Delete<Gs2.Gs2Friend.Model.Profile>(parentKey, key);
-            }
             #else
             DeleteProfileByUserIdResult result = null;
             try {
                 result = await this._client.DeleteProfileByUserIdAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "profile")
                 {
                     var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                            "Profile"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Profile"
+                );
                     var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Friend.Model.Profile>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Friend.Model.Profile>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Profile"
+                );
+                var key = Gs2.Gs2Friend.Domain.Model.ProfileDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Friend.Model.Profile>(parentKey, key);
+            }
             Gs2.Gs2Friend.Domain.Model.ProfileDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

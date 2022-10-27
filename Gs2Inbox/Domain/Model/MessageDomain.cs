@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -94,8 +92,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
             this._userId = userId;
             this._messageName = messageName;
             this._parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "Message"
             );
         }
@@ -131,39 +129,20 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetMessageByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -175,7 +154,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -218,55 +196,49 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-                cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
-                    parentKey
-                );
-            }
             #else
-            var result = await this._client.OpenMessageByUserIdAsync(
-                request
-            );
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
+            OpenMessageByUserIdResult result = null;
+            try {
+                result = await this._client.OpenMessageByUserIdAsync(
+                    request
                 );
-                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "message")
+                {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
                 );
-                cache.Delete<Gs2.Gs2Inbox.Model.Message>(
-                    parentKey,
-                    key
-                );
-                cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
-                    parentKey
-                );
+                    var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                        request.MessageName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
             }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
+                );
+                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
+                    parentKey
+                );
+            }
             Gs2.Gs2Inbox.Domain.Model.MessageDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -312,39 +284,20 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.ReadMessageByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -356,7 +309,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -421,44 +373,46 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Message"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
-            }
             #else
             DeleteMessageByUserIdResult result = null;
             try {
                 result = await this._client.DeleteMessageByUserIdAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "message")
                 {
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                            "Message"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
+                );
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
+                        request.MessageName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Message"
+                );
+                var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+            }
             Gs2.Gs2Inbox.Domain.Model.MessageDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

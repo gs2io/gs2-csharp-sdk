@@ -101,8 +101,8 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "Status"
             );

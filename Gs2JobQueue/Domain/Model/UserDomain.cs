@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -91,7 +89,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -126,39 +124,19 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
-                        "Job"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
             #else
             var result = await this._client.PushByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              {
+            {
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
+                        this._namespaceName?.ToString() ?? null,
+                        this._userId?.ToString() ?? null,
                         "Job"
                     );
                     var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
@@ -172,8 +150,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     );
                 }
             }
-            #endif
-            Gs2.Gs2JobQueue.Domain.Model.JobDomain[] domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain[result?.Items.Length ?? 0];
+            var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
@@ -185,8 +162,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     result.Items[i]?.UserId,
                     result.Items[i]?.Name
                 );
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
+                "Job"
+            );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                    result.Items[i].Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
             }
-
             if (result.AutoRun != null && !result.AutoRun.Value)
             {
                 this._jobQueueDomain.Push(
@@ -194,7 +184,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 );
             }
             this.AutoRun = result?.AutoRun;
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
             yield return null;
         #else
@@ -236,32 +226,37 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Job"
-                );
-                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
-            }
             #else
             RunByUserIdResult result = null;
             try {
                 result = await this._client.RunByUserIdAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "job")
+                {
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Job"
+                );
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+            }
             if (result?.Item != null) {
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
                         _cache,
@@ -269,7 +264,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         result?.Result
                 );
             }
-            Gs2.Gs2JobQueue.Domain.Model.JobDomain domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
+            var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

@@ -88,8 +88,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "Lottery"
             );
         }
@@ -124,19 +124,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.DrawByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(

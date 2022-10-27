@@ -110,19 +110,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.LoginAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
@@ -166,33 +162,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "ProjectToken"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.LoginByUserAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -208,7 +186,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

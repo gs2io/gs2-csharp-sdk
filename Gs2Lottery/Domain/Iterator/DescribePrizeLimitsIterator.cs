@@ -98,9 +98,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._prizeTableName != null ? this._prizeTableName.ToString() : null,
+            var parentKey = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._prizeTableName?.ToString() ?? null,
                 "PrizeLimit"
             );
             string listParentKey = parentKey;

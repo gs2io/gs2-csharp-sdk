@@ -98,9 +98,9 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._questGroupName != null ? this._questGroupName.ToString() : null,
+            var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._questGroupName?.ToString() ?? null,
                 "QuestModelMaster"
             );
             string listParentKey = parentKey;

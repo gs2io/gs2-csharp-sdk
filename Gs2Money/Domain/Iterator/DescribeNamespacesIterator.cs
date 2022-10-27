@@ -92,7 +92,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "money:Namespace";
+            var parentKey = "money:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Money.Model.Namespace>
             (

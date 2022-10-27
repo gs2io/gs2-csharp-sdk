@@ -89,7 +89,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "Lottery"
             );

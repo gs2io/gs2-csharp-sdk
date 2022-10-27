@@ -95,8 +95,8 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                this._stackName != null ? this._stackName.ToString() : null,
+            var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
+                this._stackName?.ToString() ?? null,
                 "Event"
             );
             string listParentKey = parentKey;

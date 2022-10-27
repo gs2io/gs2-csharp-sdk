@@ -88,7 +88,7 @@ namespace Gs2.Gs2Money.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Money.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -123,39 +123,20 @@ namespace Gs2.Gs2Money.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Receipt"
-                );
-                var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
-                    resultModel.Item.TransactionId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.RecordReceiptAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Receipt"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Receipt"
                 );
                 var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
                     resultModel.Item.TransactionId.ToString()
@@ -167,8 +148,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Money.Domain.Model.ReceiptDomain domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
+            var domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

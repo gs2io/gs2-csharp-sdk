@@ -86,7 +86,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             this._namespaceName = namespaceName;
             this._globalMessageName = globalMessageName;
             this._parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "GlobalMessage"
             );
         }
@@ -121,37 +121,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "GlobalMessage"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetGlobalMessageAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "GlobalMessage"
+                    this._namespaceName?.ToString() ?? null,
+                    "GlobalMessage"
                 );
                 var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -163,7 +145,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else

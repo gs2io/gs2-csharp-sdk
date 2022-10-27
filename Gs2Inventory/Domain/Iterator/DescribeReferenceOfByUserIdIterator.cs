@@ -105,7 +105,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "inventory:String";
+            var parentKey = "inventory:String";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<string>
             (

@@ -96,9 +96,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._inventoryName != null ? this._inventoryName.ToString() : null,
+            var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._inventoryName?.ToString() ?? null,
                 "ItemModel"
             );
             string listParentKey = parentKey;

@@ -90,8 +90,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._userId = userId;
             this._withProfile = withProfile;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "Friend"
             );
         }

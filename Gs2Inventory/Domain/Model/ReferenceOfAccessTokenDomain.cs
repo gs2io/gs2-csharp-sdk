@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -430,7 +432,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     request.InventoryName,
                     request.ItemName,
                     request.ItemSetName,
-                    request.ReferenceOf
+                    result?.Item[i]
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -578,7 +580,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     request.InventoryName,
                     request.ItemName,
                     request.ItemSetName,
-                    request.ReferenceOf
+                    result?.Item[i]
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -638,23 +640,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<string> self)
             {
-                var value = _cache.Get<string>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                        this.ReferenceOf?.ToString()
-                    )
-                );
-                self.OnComplete(value);
+                self.OnComplete(this.ReferenceOf?.ToString());
                 yield return null;
             }
             return new Gs2InlineFuture<string>(Impl);
         #else
-            return _cache.Get<string>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                    this.ReferenceOf?.ToString()
-                )
-            );
+            return this.ReferenceOf;
         #endif
         }
 

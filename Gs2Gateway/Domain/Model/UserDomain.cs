@@ -95,7 +95,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Gateway.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -130,19 +130,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.SendNotificationAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
             this.Protocol = domain.Protocol = result?.Protocol;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -187,38 +183,19 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        item.NamespaceName.ToString(),
-                        item.UserId.ToString(),
-                        "WebSocketSession"
-                    );
-                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
             #else
             var result = await this._client.DisconnectByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              {
+            {
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        item.NamespaceName.ToString(),
-                        item.UserId.ToString(),
+                        this._namespaceName?.ToString() ?? null,
+                        this._userId?.ToString() ?? null,
                         "WebSocketSession"
                     );
                     var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
@@ -231,8 +208,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     );
                 }
             }
-            #endif
-            Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[] domain = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[result?.Items.Length ?? 0];
+            var domain = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain(
@@ -243,6 +219,19 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     this._wssession,
                     result.Items[i]?.NamespaceName,
                     result.Items[i]?.UserId
+                );
+                var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
+                "WebSocketSession"
+            );
+                var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -286,19 +275,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.DisconnectAllAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

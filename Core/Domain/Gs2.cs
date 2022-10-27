@@ -32,6 +32,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Auth.Domain.Gs2Auth Auth;
         public readonly Gs2Chat.Domain.Gs2Chat Chat;
         public readonly Gs2Datastore.Domain.Gs2Datastore Datastore;
+        public readonly Gs2Deploy.Domain.Gs2Deploy Deploy;
         public readonly Gs2Dictionary.Domain.Gs2Dictionary Dictionary;
         public readonly Gs2Distributor.Domain.Gs2Distributor Distributor;
         public readonly Gs2Enhance.Domain.Gs2Enhance Enhance;
@@ -99,6 +100,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Datastore":
                                 Gs2Datastore.Domain.Gs2Datastore.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Deploy":
+                                Gs2Deploy.Domain.Gs2Deploy.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Dictionary":
                                 Gs2Dictionary.Domain.Gs2Dictionary.HandleNotification(_cache, method, message.payload);
@@ -202,6 +206,7 @@ namespace Gs2.Core.Domain
             Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Chat = new Gs2Chat.Domain.Gs2Chat(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Datastore = new Gs2Datastore.Domain.Gs2Datastore(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Deploy = new Gs2Deploy.Domain.Gs2Deploy(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Dictionary =
                 new Gs2Dictionary.Domain.Gs2Dictionary(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Distributor =
@@ -427,6 +432,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Datastore":
                         Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2Deploy":
+                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Dictionary":
                         Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -559,6 +567,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Datastore":
                         Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2Deploy":
+                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Dictionary":
                         Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampTask(cache, method, request, result);
@@ -694,6 +705,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "datastore":
                                 Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "deploy":
+                                Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "dictionary":
                                 Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromJobResult(cache, method, job, result);

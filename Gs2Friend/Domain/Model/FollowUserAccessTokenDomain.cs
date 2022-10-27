@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -96,7 +94,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._targetUserId = targetUserId;
             this._withProfile = withProfile;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "FollowUser:" + (_withProfile == true)
             );
@@ -134,39 +132,20 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "FollowUser:" + (_withProfile == true)
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetFollowAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this.UserId,
-                        "FollowUser:" + (_withProfile == true)
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FollowUser:" + (_withProfile == true)
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
                     resultModel.Item.UserId.ToString()
@@ -178,7 +157,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -221,39 +199,20 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this._accessToken?.UserId.ToString(),
-                        "FollowUser:" + (_withProfile == true)
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.FollowAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this._accessToken?.UserId.ToString(),
-                        "FollowUser:" + (_withProfile == true)
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FollowUser:" + (_withProfile == true)
                 );
                 var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
                     resultModel.Item.UserId.ToString()
@@ -265,7 +224,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -311,55 +269,57 @@ namespace Gs2.Gs2Friend.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this._accessToken?.UserId.ToString(),
-                        "FollowUser:" + (_withProfile == true)
-                );
-                var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
-            }
             #else
             UnfollowResult result = null;
             try {
                 result = await this._client.UnfollowAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "followUser")
                 {
                     var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        this._accessToken?.UserId.ToString(),
-                        "FollowUser:" + (_withProfile == true)
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FollowUser:" + (_withProfile == true)
+                );
                     var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        request.TargetUserId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
                 }
+                else
                 {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        this._accessToken?.UserId.ToString(),
-                        "FollowUser:" + !_withProfile
-                    );
-                    var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
+                    throw e;
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FollowUser:" + (_withProfile == true)
+                );
+                var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
+                    resultModel.Item.UserId.ToString()
+                );
+                cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
+            }
+            {
+                var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "FollowUser:" + (_withProfile != true)
+                );
+                var key = Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
+                    resultModel.Item.UserId.ToString()
+                );
+                cache.Delete<Gs2.Gs2Friend.Model.FollowUser>(parentKey, key);
+            }
             Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -428,6 +388,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     await this.GetAsync(
         #endif
                         new GetFollowRequest()
+                                    .WithWithProfile(this._withProfile)
                     );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;

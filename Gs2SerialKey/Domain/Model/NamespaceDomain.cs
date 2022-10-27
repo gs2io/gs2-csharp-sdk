@@ -116,19 +116,15 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.GetNamespaceStatusAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -172,34 +168,15 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "serialKey",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetNamespaceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -216,7 +193,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -257,34 +233,15 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "serialKey",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateNamespaceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -301,7 +258,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -345,10 +301,31 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            #else
+            DeleteNamespaceResult result = null;
+            try {
+                result = await this._client.DeleteNamespaceAsync(
+                    request
+                );
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "namespace")
+                {
+                    var parentKey = "serialKey:Namespace";
+                    var key = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        request.NamespaceName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2SerialKey.Model.Namespace>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -360,29 +337,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2SerialKey.Model.Namespace>(parentKey, key);
             }
-            #else
-            DeleteNamespaceResult result = null;
-            try {
-                result = await this._client.DeleteNamespaceAsync(
-                    request
-                );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "serialKey",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2SerialKey.Model.Namespace>(parentKey, key);
-                }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -426,19 +380,15 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.DownloadSerialCodesAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain domain = this;
             this.Url = domain.Url = result?.Url;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -450,119 +400,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKeyAsync(
-            #else
-        public IFuture<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKey(
-            #endif
-        #else
-        public async Task<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKeyAsync(
-        #endif
-            GetSerialKeyRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.SerialKey> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this._namespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetSerialKeyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "SerialKey"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    resultModel.Item.Code.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModel"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
-                    resultModel.CampaignModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.CampaignModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            #else
-            var result = await this._client.GetSerialKeyAsync(
-                request
-            );
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "SerialKey"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    resultModel.Item.Code.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModel"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
-                    resultModel.CampaignModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.CampaignModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.SerialKey>(Impl);
         #endif
         }
 
@@ -595,37 +432,19 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreateCampaignModelMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CampaignModelMaster"
                 );
                 var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -637,8 +456,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain domain = new Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain(
+            var domain = new Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -762,7 +580,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
 
         public Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain SerialKey(
-            string serialKeyCode
+            string code
         ) {
             return new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
                 this._cache,
@@ -770,7 +588,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._namespaceName,
-                serialKeyCode
+                code
             );
         }
         #if UNITY_2017_1_OR_NEWER

@@ -92,7 +92,7 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "distributor:Namespace";
+            var parentKey = "distributor:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Distributor.Model.Namespace>
             (

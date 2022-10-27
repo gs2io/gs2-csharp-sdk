@@ -497,15 +497,6 @@ namespace Gs2.Gs2Inventory.Domain
                                         key
                                     );
                                 }
-                                else
-                                {
-                                    cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
-                                        parentKey,
-                                        key,
-                                        item,
-                                        item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                    );
-                                }
                             }
                             var key2 = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                                 requestModel.ItemName.ToString(),

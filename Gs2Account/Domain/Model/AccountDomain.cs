@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -91,7 +89,7 @@ namespace Gs2.Gs2Account.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "Account"
             );
         }
@@ -126,36 +124,18 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateTimeOffsetAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Account"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
@@ -168,7 +148,6 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Account.Domain.Model.AccountDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -213,36 +192,18 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateBannedAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Account"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
@@ -255,7 +216,6 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Account.Domain.Model.AccountDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -300,36 +260,18 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetAccountAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Account"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
@@ -342,7 +284,6 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -384,13 +325,37 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            #else
+            DeleteAccountResult result = null;
+            try {
+                result = await this._client.DeleteAccountAsync(
+                    request
+                );
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "account")
+                {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    "Account"
+                );
+                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        request.UserId.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Account"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
@@ -398,28 +363,6 @@ namespace Gs2.Gs2Account.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
             }
-            #else
-            DeleteAccountResult result = null;
-            try {
-                result = await this._client.DeleteAccountAsync(
-                    request
-                );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
-                {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        "Account"
-                    );
-                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
-                }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             Gs2.Gs2Account.Domain.Model.AccountDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -464,36 +407,18 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.AuthenticationAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Account"
                 );
                 var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
@@ -506,7 +431,6 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Account.Domain.Model.AccountDomain domain = this;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;
@@ -553,39 +477,23 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                    "DataOwner"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetDataOwnerByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
                     "DataOwner"
                 );
-                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
+                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
+                );
                 cache.Put(
                     parentKey,
                     key,
@@ -593,7 +501,6 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -635,41 +542,45 @@ namespace Gs2.Gs2Account.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                    "DataOwner"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
-                cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
-            }
             #else
             DeleteDataOwnerByUserIdResult result = null;
             try {
                 result = await this._client.DeleteDataOwnerByUserIdAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "dataOwner")
                 {
                     var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                        "DataOwner"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "DataOwner"
+                );
+                    var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     );
-                    var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey();
-                    cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
-            Gs2.Gs2Account.Domain.Model.DataOwnerDomain domain = new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "DataOwner"
+                );
+                var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
+            }
+            var domain = new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -742,7 +653,6 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         public Gs2.Gs2Account.Domain.Model.DataOwnerDomain DataOwner(
-            string dataOwnerName
         ) {
             return new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
                 this._cache,
@@ -837,7 +747,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "account")
                     {
-                    _cache.Delete<Gs2.Gs2Account.Model.Account>(
+                        _cache.Delete<Gs2.Gs2Account.Model.Account>(
                             _parentKey,
                             Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                                 this.UserId?.ToString()
@@ -851,11 +761,11 @@ namespace Gs2.Gs2Account.Domain.Model
                 }
         #endif
                 value = _cache.Get<Gs2.Gs2Account.Model.Account>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId?.ToString()
-                )
-            );
+                    _parentKey,
+                    Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        this.UserId?.ToString()
+                    )
+                );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);

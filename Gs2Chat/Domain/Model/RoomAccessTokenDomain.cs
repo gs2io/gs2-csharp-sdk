@@ -95,7 +95,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._roomName = roomName;
             this._password = password;
             this._parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "Singleton",
                 "Room"
             );
@@ -133,39 +133,20 @@ namespace Gs2.Gs2Chat.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Singleton",
-                        "Room"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateRoomAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Singleton",
-                        "Room"
+                    "Room"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -177,7 +158,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -223,44 +203,46 @@ namespace Gs2.Gs2Chat.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Singleton",
-                        "Room"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Chat.Model.Room>(parentKey, key);
-            }
             #else
             DeleteRoomResult result = null;
             try {
                 result = await this._client.DeleteRoomAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "room")
                 {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        "Singleton",
-                            "Room"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    "Singleton",
+                    "Room"
+                );
                     var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
+                        request.RoomName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Chat.Model.Room>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Chat.Model.Room>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    "Singleton",
+                    "Room"
+                );
+                var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Chat.Model.Room>(parentKey, key);
+            }
             Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -307,41 +289,21 @@ namespace Gs2.Gs2Chat.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    "Singleton",
-                    resultModel.Item.RoomName.ToString(),
-                        "Message"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.PostAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this._namespaceName?.ToString() ?? null,
                     "Singleton",
-                    resultModel.Item.RoomName.ToString(),
-                        "Message"
+                    this._roomName?.ToString() ?? null,
+                    "Message"
                 );
                 var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -353,8 +315,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain domain = new Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain(
+            var domain = new Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

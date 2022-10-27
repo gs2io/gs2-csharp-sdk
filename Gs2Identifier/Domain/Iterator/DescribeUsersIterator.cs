@@ -92,7 +92,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "identifier:User";
+            var parentKey = "identifier:User";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Identifier.Model.User>
             (

@@ -90,8 +90,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._questGroupName = questGroupName;
             this._questName = questName;
             this._parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._questGroupName != null ? this._questGroupName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._questGroupName?.ToString() ?? null,
                 "QuestModelMaster"
             );
         }
@@ -127,39 +127,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.QuestGroupName.ToString(),
-                        "QuestModelMaster"
-                );
-                var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetQuestModelMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.QuestGroupName.ToString(),
-                        "QuestModelMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    this._questGroupName?.ToString() ?? null,
+                    "QuestModelMaster"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -171,7 +152,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -214,39 +194,20 @@ namespace Gs2.Gs2Quest.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.QuestGroupName.ToString(),
-                        "QuestModelMaster"
-                );
-                var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateQuestModelMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.QuestGroupName.ToString(),
-                        "QuestModelMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    this._questGroupName?.ToString() ?? null,
+                    "QuestModelMaster"
                 );
                 var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -258,7 +219,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -304,44 +264,46 @@ namespace Gs2.Gs2Quest.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.QuestGroupName.ToString(),
-                        "QuestModelMaster"
-                );
-                var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Quest.Model.QuestModelMaster>(parentKey, key);
-            }
             #else
             DeleteQuestModelMasterResult result = null;
             try {
                 result = await this._client.DeleteQuestModelMasterAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "questModelMaster")
                 {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.QuestGroupName.ToString(),
-                            "QuestModelMaster"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._questGroupName?.ToString() ?? null,
+                    "QuestModelMaster"
+                );
                     var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
+                        request.QuestName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Quest.Model.QuestModelMaster>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Quest.Model.QuestModelMaster>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._questGroupName?.ToString() ?? null,
+                    "QuestModelMaster"
+                );
+                var key = Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2Quest.Model.QuestModelMaster>(parentKey, key);
+            }
             Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

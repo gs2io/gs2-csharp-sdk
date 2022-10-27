@@ -86,7 +86,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             this._stackName = stackName;
             this._eventName = eventName;
             this._parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                this._stackName != null ? this._stackName.ToString() : null,
+                this._stackName?.ToString() ?? null,
                 "Event"
             );
         }
@@ -127,8 +127,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    _stackName.ToString(),
-                        "Event"
+                    this._stackName?.ToString() ?? null,
+                    "Event"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.EventDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    _stackName.ToString(),
-                        "Event"
+                    this._stackName?.ToString() ?? null,
+                    "Event"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.EventDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()

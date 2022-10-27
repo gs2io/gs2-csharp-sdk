@@ -86,7 +86,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._namespaceName = namespaceName;
             this._campaignModelName = campaignModelName;
             this._parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "CampaignModelMaster"
             );
         }
@@ -121,37 +121,19 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetCampaignModelMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CampaignModelMaster"
                 );
                 var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -163,7 +145,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -205,37 +186,19 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateCampaignModelMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CampaignModelMaster"
                 );
                 var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -247,7 +210,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -292,42 +254,44 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CampaignModelMaster"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
-            }
             #else
             DeleteCampaignModelMasterResult result = null;
             try {
                 result = await this._client.DeleteCampaignModelMasterAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "campaignModelMaster")
                 {
                     var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                            "CampaignModelMaster"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    "CampaignModelMaster"
+                );
                     var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
+                        request.CampaignModelName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    "CampaignModelMaster"
+                );
+                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    resultModel.Item.Name.ToString()
+                );
+                cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
+            }
             Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

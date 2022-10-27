@@ -91,7 +91,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Datastore.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -126,39 +126,20 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
-                );
-                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.PrepareUploadAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "DataObject"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -170,8 +151,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
+            var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -224,39 +204,20 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
-                );
-                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.PrepareDownloadAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "DataObject"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -268,8 +229,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
+            var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -323,39 +283,20 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
-                );
-                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.PrepareDownloadByGenerationAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "DataObject"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "DataObject"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -367,8 +308,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
+            var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

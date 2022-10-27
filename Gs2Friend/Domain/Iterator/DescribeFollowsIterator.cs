@@ -101,8 +101,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "FollowUser:" + (_withProfile == true)
             );

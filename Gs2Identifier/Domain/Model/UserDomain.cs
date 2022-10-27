@@ -115,34 +115,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateUserAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -159,7 +140,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Identifier.Domain.Model.UserDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -203,34 +183,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetUserAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -247,7 +208,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -288,10 +248,31 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
+            #else
+            DeleteUserResult result = null;
+            try {
+                result = await this._client.DeleteUserAsync(
+                    request
+                );
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "user")
+                {
+                    var parentKey = "identifier:User";
+                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                        request.UserName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -303,29 +284,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 );
                 cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
             }
-            #else
-            DeleteUserResult result = null;
-            try {
-                result = await this._client.DeleteUserAsync(
-                    request
-                );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "User"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
-                }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
-            #endif
             Gs2.Gs2Identifier.Domain.Model.UserDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -369,37 +327,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    resultModel.Item.UserName.ToString(),
-                        "Identifier"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.ClientId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreateIdentifierAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    resultModel.Item.UserName.ToString(),
-                        "Identifier"
+                    this._userName?.ToString() ?? null,
+                    "Identifier"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                     resultModel.Item.ClientId.ToString()
@@ -411,8 +351,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Identifier.Domain.Model.IdentifierDomain domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+            var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -523,7 +462,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
-                this._session
+                this._session,
+                this._userName
             );
         }
 

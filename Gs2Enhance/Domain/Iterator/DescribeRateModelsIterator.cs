@@ -93,8 +93,8 @@ namespace Gs2.Gs2Enhance.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 "RateModel"
             );
             string listParentKey = parentKey;

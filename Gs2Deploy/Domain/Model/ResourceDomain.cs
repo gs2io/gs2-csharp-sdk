@@ -86,7 +86,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             this._stackName = stackName;
             this._resourceName = resourceName;
             this._parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                this._stackName != null ? this._stackName.ToString() : null,
+                this._stackName?.ToString() ?? null,
                 "Resource"
             );
         }
@@ -127,8 +127,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    _stackName.ToString(),
-                        "Resource"
+                    this._stackName?.ToString() ?? null,
+                    "Resource"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    _stackName.ToString(),
-                        "Resource"
+                    this._stackName?.ToString() ?? null,
+                    "Resource"
                 );
                 var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()

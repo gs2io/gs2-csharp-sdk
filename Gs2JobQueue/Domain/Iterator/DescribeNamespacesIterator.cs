@@ -92,7 +92,7 @@ namespace Gs2.Gs2JobQueue.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "jobQueue:Namespace";
+            var parentKey = "jobQueue:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2JobQueue.Model.Namespace>
             (

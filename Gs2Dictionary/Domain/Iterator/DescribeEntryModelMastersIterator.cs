@@ -95,8 +95,8 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 "EntryModelMaster"
             );
             string listParentKey = parentKey;

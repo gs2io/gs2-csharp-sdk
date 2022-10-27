@@ -468,7 +468,20 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "stack")
+                {
+                    var parentKey = "deploy:Stack";
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
 
@@ -637,7 +650,20 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "stack")
+                {
+                    var parentKey = "deploy:Stack";
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
 
@@ -718,7 +744,20 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "stack")
+                {
+                    var parentKey = "deploy:Stack";
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
 

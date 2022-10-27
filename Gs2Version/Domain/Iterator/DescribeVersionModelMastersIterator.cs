@@ -95,8 +95,8 @@ namespace Gs2.Gs2Version.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 "VersionModelMaster"
             );
             string listParentKey = parentKey;

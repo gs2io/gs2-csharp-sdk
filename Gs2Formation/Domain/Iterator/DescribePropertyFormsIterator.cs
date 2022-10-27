@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -103,8 +101,8 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "PropertyForm"
             );
@@ -240,6 +238,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 }
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    Current = null;
                     yield break;
         #else
                     break;

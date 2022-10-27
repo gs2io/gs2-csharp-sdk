@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -64,9 +62,12 @@ namespace Gs2.Gs2Lottery.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
@@ -89,7 +90,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -132,11 +133,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-          
+
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
                     "BoxItems"
                 );
                 var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
@@ -190,17 +191,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.ResetBoxAsync(
-                request
-            );
+            ResetBoxResult result = null;
+            try {
+                result = await this._client.ResetBoxAsync(
+                    request
+                );
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "box")
+                {
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-            
+
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this.NamespaceName?.ToString(),
                     this.UserId.ToString(),
                     "BoxItems"
                 );
@@ -216,7 +228,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
+                    this.NamespaceName?.ToString(),
                     this.UserId.ToString(),
                     "Box"
                 );
@@ -231,7 +243,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     parentKey
                 );
             }
-
             Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

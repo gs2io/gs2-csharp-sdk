@@ -92,7 +92,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "megaField:Namespace";
+            var parentKey = "megaField:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2MegaField.Model.Namespace>
             (

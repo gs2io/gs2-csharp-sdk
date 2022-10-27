@@ -84,7 +84,7 @@ namespace Gs2.Gs2News.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2News.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "CurrentNewsMaster"
             );
         }
@@ -118,19 +118,15 @@ namespace Gs2.Gs2News.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.PrepareUpdateCurrentNewsMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
@@ -175,19 +171,15 @@ namespace Gs2.Gs2News.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.UpdateCurrentNewsMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -230,19 +222,15 @@ namespace Gs2.Gs2News.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

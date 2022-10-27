@@ -87,7 +87,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "Distribute"
             );
         }

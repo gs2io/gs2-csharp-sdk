@@ -82,7 +82,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "CurrentEventMaster"
             );
         }
@@ -116,36 +116,19 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.ExportMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentEventMaster"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
                 );
@@ -156,7 +139,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -200,36 +182,19 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetCurrentEventMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentEventMaster"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
                 );
@@ -240,7 +205,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -281,36 +245,19 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateCurrentEventMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentEventMaster"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
                 );
@@ -321,7 +268,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -365,36 +311,19 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateCurrentEventMasterFromGitHubAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentEventMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentEventMaster"
                 );
                 var key = Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain.CreateCacheKey(
                 );
@@ -405,7 +334,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

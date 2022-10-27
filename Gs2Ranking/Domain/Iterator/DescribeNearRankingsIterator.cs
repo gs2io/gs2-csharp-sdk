@@ -101,9 +101,9 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+            var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._categoryName != null ? this._categoryName.ToString() : null,
+                "Singleton",
                 "NearRanking"
             );
             string listParentKey = parentKey;
@@ -115,6 +115,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 (
                         listParentKey
                 )
+                    .Where(item => this._categoryName == null || item.CategoryName == this._categoryName)
+                    .Where(item => this._score == null || item.Score == this._score)
                     .ToArray();
                 this._last = true;
             } else {
@@ -144,7 +146,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     this._cache.Put(
                             listParentKey,
                             Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                    this._categoryName != null ? this._categoryName.ToString() : null
+                                    item.CategoryName?.ToString()
                             ),
                             item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -232,6 +234,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 }
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    Current = null;
                     yield break;
         #else
                     break;

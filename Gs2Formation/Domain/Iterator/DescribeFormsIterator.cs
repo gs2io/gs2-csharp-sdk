@@ -101,10 +101,10 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
-                this._moldName != null ? this._moldName.ToString() : null,
+                this._moldName?.ToString() ?? null,
                 "Form"
             );
             string listParentKey = parentKey;

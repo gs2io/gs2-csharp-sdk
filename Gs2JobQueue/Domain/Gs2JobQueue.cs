@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -43,6 +41,8 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
+using Gs2.Gs2JobQueue.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -51,8 +51,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-using Gs2.Core.Exception;
-#endif
+    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,8 +61,8 @@ namespace Gs2.Gs2JobQueue.Domain
 {
 
     public class Gs2JobQueue {
-        private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
 
+        private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
@@ -115,34 +114,15 @@ namespace Gs2.Gs2JobQueue.Domain
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "jobQueue",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreateNamespaceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -159,8 +139,7 @@ namespace Gs2.Gs2JobQueue.Domain
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain domain = new Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain(
+            var domain = new Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -237,8 +216,8 @@ namespace Gs2.Gs2JobQueue.Domain
                         {
                             foreach (var item in resultModel.Items) {
                                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName.ToString(),
-                                    item.UserId.ToString(),
+                                    requestModel.NamespaceName?.ToString() ?? null,
+                                    requestModel.UserId?.ToString() ?? null,
                                     "Job"
                                 );
                                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
@@ -278,8 +257,8 @@ namespace Gs2.Gs2JobQueue.Domain
                     {
                             foreach (var item in resultModel.Items) {
                                 var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                                    requestModel.NamespaceName.ToString(),
-                                    item.UserId.ToString(),
+                                    requestModel.NamespaceName?.ToString() ?? null,
+                                    requestModel.UserId?.ToString() ?? null,
                                     "Job"
                                 );
                                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
@@ -297,8 +276,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
             }
         }
-
-#if UNITY_2017_1_OR_NEWER
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class PushNotificationEvent : UnityEvent<PushNotification>
         {
@@ -313,7 +291,8 @@ namespace Gs2.Gs2JobQueue.Domain
             add => onPushNotification.AddListener(value);
             remove => onPushNotification.RemoveListener(value);
         }
-
+    #endif
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class RunNotificationEvent : UnityEvent<RunNotification>
         {
@@ -328,12 +307,14 @@ namespace Gs2.Gs2JobQueue.Domain
             add => onRunNotification.AddListener(value);
             remove => onRunNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Push": {
                     onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
@@ -349,42 +330,33 @@ namespace Gs2.Gs2JobQueue.Domain
                     break;
                 }
             }
+    #endif
         }
-#else
-        public static void HandleNotification(
-            CacheDatabase cache,
-            string action,
-            string payload
-        )
-        {
-        }
-#endif
-
-#if UNITY_2017_1_OR_NEWER
-#if GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public static async UniTask Dispatch(
-#else
+    #else
         public static Gs2Future Dispatch(
-#endif
+    #endif
             CacheDatabase cache,
             Gs2RestSession session,
             AccessToken accessToken
         )
         {
             RunNotification[] copiedCompletedJobs;
-#if !GS2_ENABLE_UNITASK
+    #if !GS2_ENABLE_UNITASK
             IEnumerator Impl(Gs2Future self)
             {
-#endif
+    #endif
             lock (_completedJobs)
             {
                 if (_completedJobs.Count == 0)
                 {
-#if GS2_ENABLE_UNITASK
+    #if GS2_ENABLE_UNITASK
                     return;
-#else
+    #else
                     yield break;
-#endif
+    #endif
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
                 _completedJobs.CopyTo(copiedCompletedJobs);
@@ -395,7 +367,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 var client = new Gs2JobQueueRestClient(
                     session
                 );
-#if GS2_ENABLE_UNITASK
+    #if GS2_ENABLE_UNITASK
                 GetJobResultResult result = null;
                 try
                 {
@@ -409,7 +381,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 catch (NotFoundException)
                 {
                 }
-#else
+    #else
                 var future = client.GetJobResultFuture(
                     new GetJobResultRequest()
                         .WithNamespaceName(completedJob.NamespaceName)
@@ -423,7 +395,7 @@ namespace Gs2.Gs2JobQueue.Domain
                     yield break;
                 }
                 var result = future.Result;
-#endif
+    #endif
                 if (result != null)
                 {
                     Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
@@ -443,12 +415,12 @@ namespace Gs2.Gs2JobQueue.Domain
                     );
                 }
             }
-#if !GS2_ENABLE_UNITASK
+    #if !GS2_ENABLE_UNITASK
             }
 
             return new Gs2InlineFuture(Impl);
-#endif
+    #endif
         }
-#endif
+    #endif
     }
 }

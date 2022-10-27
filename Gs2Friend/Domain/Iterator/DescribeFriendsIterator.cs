@@ -101,10 +101,10 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+            var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
-                this._withProfile != null ? this._withProfile.ToString() : "False",
+                this._withProfile?.ToString() ?? "False",
                 "FriendUser"
             );
             string listParentKey = parentKey;

@@ -95,9 +95,9 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._dataObjectName = dataObjectName;
             this._generation = generation;
             this._parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
-                this._dataObjectName != null ? this._dataObjectName.ToString() : null,
+                this._dataObjectName?.ToString() ?? null,
                 "DataObjectHistory"
             );
         }
@@ -134,41 +134,21 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this._accessToken?.UserId.ToString(),
-                    resultModel.Item.DataObjectName.ToString(),
-                        "DataObjectHistory"
-                );
-                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    resultModel.Item.Generation.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetDataObjectHistoryAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    this._accessToken?.UserId.ToString(),
-                    resultModel.Item.DataObjectName.ToString(),
-                        "DataObjectHistory"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    this._dataObjectName?.ToString() ?? null,
+                    "DataObjectHistory"
                 );
                 var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                     resultModel.Item.Generation.ToString()
@@ -180,7 +160,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else

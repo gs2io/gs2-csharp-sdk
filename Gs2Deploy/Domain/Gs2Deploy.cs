@@ -40,6 +40,8 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
+using Gs2.Gs2Deploy.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -154,7 +156,7 @@ namespace Gs2.Gs2Deploy.Domain
                 );
             }
             #endif
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -245,7 +247,7 @@ namespace Gs2.Gs2Deploy.Domain
                 );
             }
             #endif
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -391,6 +393,8 @@ namespace Gs2.Gs2Deploy.Domain
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
+    #endif
         }
     }
 }

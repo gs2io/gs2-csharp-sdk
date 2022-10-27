@@ -125,7 +125,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             this._last = this._matchmakingContextToken == null;
             this._cache.ListCacheClear<Gs2.Gs2Matchmaking.Model.Gathering>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName != null ? this._namespaceName.ToString() : null,
+                    this._namespaceName?.ToString() ?? null,
                     "Singleton",
                     "Gathering"
                 )

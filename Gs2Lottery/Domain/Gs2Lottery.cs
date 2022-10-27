@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -42,6 +40,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Gs2Lottery.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
@@ -112,34 +111,15 @@ namespace Gs2.Gs2Lottery.Domain
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "lottery",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreateNamespaceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -156,8 +136,7 @@ namespace Gs2.Gs2Lottery.Domain
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Lottery.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Lottery.Domain.Model.NamespaceDomain(
+            var domain = new Gs2.Gs2Lottery.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -220,12 +199,11 @@ namespace Gs2.Gs2Lottery.Domain
                 namespaceName
             );
         }
-        
-#if UNITY_2017_1_OR_NEWER
+    #if UNITY_2017_1_OR_NEWER
         public static UnityAction<string, string, DrawnPrize[]> DrawnResult;
-#else
+    #else
         public static Action<string, string, DrawnPrize[]> DrawnResult;
-#endif
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
@@ -243,7 +221,6 @@ namespace Gs2.Gs2Lottery.Domain
                             requestModel.LotteryName,
                             resultModel.Items
                         );
-                        
                         break;
                     }
                 }
@@ -273,7 +250,6 @@ namespace Gs2.Gs2Lottery.Domain
                         requestModel.LotteryName,
                         resultModel.Items
                     );
-
                     break;
                 }
             }
@@ -284,6 +260,8 @@ namespace Gs2.Gs2Lottery.Domain
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
+    #endif
         }
     }
 }

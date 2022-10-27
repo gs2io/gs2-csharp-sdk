@@ -92,7 +92,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._accessToken = accessToken;
             this._staminaName = staminaName;
             this._parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "Stamina"
             );
@@ -129,54 +129,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    resultModel.Item.StaminaName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    resultModel.StaminaModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.StaminaModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetStaminaAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "Stamina"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     resultModel.Item.StaminaName.ToString()
@@ -190,8 +156,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
+                    this._namespaceName?.ToString() ?? null,
+                    "StaminaModel"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                     resultModel.StaminaModel.Name.ToString()
@@ -203,7 +169,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -246,54 +211,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    resultModel.Item.StaminaName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    resultModel.StaminaModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.StaminaModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.ConsumeStaminaAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "Stamina"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     resultModel.Item.StaminaName.ToString()
@@ -307,8 +238,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
+                    this._namespaceName?.ToString() ?? null,
+                    "StaminaModel"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                     resultModel.StaminaModel.Name.ToString()
@@ -320,7 +251,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -366,54 +296,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    resultModel.Item.StaminaName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    resultModel.StaminaModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.StaminaModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.SetMaxValueByStatusAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "Stamina"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     resultModel.Item.StaminaName.ToString()
@@ -427,8 +323,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
+                    this._namespaceName?.ToString() ?? null,
+                    "StaminaModel"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                     resultModel.StaminaModel.Name.ToString()
@@ -440,7 +336,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -486,54 +381,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    resultModel.Item.StaminaName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    resultModel.StaminaModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.StaminaModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.SetRecoverIntervalByStatusAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "Stamina"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     resultModel.Item.StaminaName.ToString()
@@ -547,8 +408,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
+                    this._namespaceName?.ToString() ?? null,
+                    "StaminaModel"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                     resultModel.StaminaModel.Name.ToString()
@@ -560,7 +421,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -606,54 +466,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    resultModel.Item.StaminaName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    resultModel.StaminaModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.StaminaModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.SetRecoverValueByStatusAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Stamina"
+                    this._namespaceName?.ToString() ?? null,
+                    this._accessToken?.UserId?.ToString(),
+                    "Stamina"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     resultModel.Item.StaminaName.ToString()
@@ -667,8 +493,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             {
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "StaminaModel"
+                    this._namespaceName?.ToString() ?? null,
+                    "StaminaModel"
                 );
                 var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                     resultModel.StaminaModel.Name.ToString()
@@ -680,7 +506,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -91,7 +91,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._accessToken = accessToken;
             this._deadLetterJobName = deadLetterJobName;
             this._parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "DeadLetterJob"
             );

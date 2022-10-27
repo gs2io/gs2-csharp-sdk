@@ -82,7 +82,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
             this._userName = userName;
             this._parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName != null ? this._userName.ToString() : null,
+                this._userName?.ToString() ?? null,
                 "AttachSecurityPolicy"
             );
         }
@@ -116,20 +116,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.GetHasSecurityPolicyAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
-            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
+
+            var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
@@ -138,6 +134,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     this._stampSheetConfiguration,
                     this._session,
                     result.Items[i]?.Name
+                );
+                var parentKey = "identifier:SecurityPolicy";
+                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    result.Items[i].Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -181,20 +187,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.AttachSecurityPolicyAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
-            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
+
+            var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
@@ -203,6 +205,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     this._stampSheetConfiguration,
                     this._session,
                     result.Items[i]?.Name
+                );
+                var parentKey = "identifier:SecurityPolicy";
+                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    result.Items[i].Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -246,20 +258,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.DetachSecurityPolicyAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
-            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[] domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
+
+            var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
@@ -268,6 +276,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     this._stampSheetConfiguration,
                     this._session,
                     result.Items[i]?.Name
+                );
+                var parentKey = "identifier:SecurityPolicy";
+                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    result.Items[i].Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

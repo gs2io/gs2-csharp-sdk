@@ -87,7 +87,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "User"
             );
         }
@@ -122,39 +122,19 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
-                        "Entry"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                        item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
             #else
             var result = await this._client.AddEntriesByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              {
+            {
                 foreach (var item in resultModel.Items) {
                     var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        item.UserId.ToString(),
+                        this._namespaceName?.ToString() ?? null,
+                        this._userId?.ToString() ?? null,
                         "Entry"
                     );
                     var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
@@ -168,8 +148,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     );
                 }
             }
-            #endif
-            Gs2.Gs2Dictionary.Domain.Model.EntryDomain[] domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
+            var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
                 domain[i] = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
@@ -180,6 +159,20 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     request.NamespaceName,
                     result.Items[i]?.UserId,
                     result.Items[i]?.Name
+                );
+                var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
+                "Entry"
+            );
+                var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                    result.Items[i].Name.ToString()
+                );
+                cache.Put(
+                    parentKey,
+                    key,
+                    result.Items[i],
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -224,33 +217,15 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-                var parentKey = CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        requestModel.UserId.ToString(),
-                        "Entry"
-                );
-                foreach (Gs2.Gs2Dictionary.Model.Entry item in cache.List<Gs2.Gs2Dictionary.Model.Entry>(
-                    parentKey
-                )) {
-                    cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                        parentKey,
-                        Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            item?.Name?.ToString()
-                        )
-                    );
-                }
             #else
             var result = await this._client.ResetByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
                 var parentKey = CreateCacheParentKey(
                         requestModel.NamespaceName.ToString(),
                         requestModel.UserId.ToString(),
@@ -266,7 +241,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         )
                     );
                 }
-            #endif
             Gs2.Gs2Dictionary.Domain.Model.UserDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

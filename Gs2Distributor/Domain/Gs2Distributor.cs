@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -43,6 +41,8 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
+using Gs2.Gs2Distributor.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -51,8 +51,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-using Gs2.Core.Exception;
-#endif
+    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,7 +63,6 @@ namespace Gs2.Gs2Distributor.Domain
     public class Gs2Distributor {
 
         private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
-        
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
@@ -116,34 +114,15 @@ namespace Gs2.Gs2Distributor.Domain
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "distributor",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreateNamespaceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = string.Join(
                     ":",
@@ -160,8 +139,7 @@ namespace Gs2.Gs2Distributor.Domain
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
-            Gs2.Gs2Distributor.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Distributor.Domain.Model.NamespaceDomain(
+            var domain = new Gs2.Gs2Distributor.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -248,7 +226,7 @@ namespace Gs2.Gs2Distributor.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
         }
-#if UNITY_2017_1_OR_NEWER
+    #if UNITY_2017_1_OR_NEWER
         [Serializable]
         private class AutoRunStampSheetNotificationEvent : UnityEvent<AutoRunStampSheetNotification>
         {
@@ -263,15 +241,16 @@ namespace Gs2.Gs2Distributor.Domain
             add => onAutoRunStampSheetNotification.AddListener(value);
             remove => onAutoRunStampSheetNotification.RemoveListener(value);
         }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
             switch (action) {
-                case "AutoRunStampSheetNotification":
-                {
+                case "AutoRunStampSheetNotification": {
                     lock (_completedStampSheets)
                     {
                         var notification = AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload));
@@ -281,23 +260,15 @@ namespace Gs2.Gs2Distributor.Domain
                     break;
                 }
             }
+    #endif
         }
-#else
-        public static void HandleNotification(
-            CacheDatabase cache,
-            string action,
-            string payload
-        )
-        {
-        }
-#endif
 
-#if UNITY_2017_1_OR_NEWER
-#if GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public static async UniTask Dispatch(
-#else
+    #else
         public static Gs2Future Dispatch(
-#endif
+    #endif
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
@@ -307,19 +278,19 @@ namespace Gs2.Gs2Distributor.Domain
         {
             AutoRunStampSheetNotification[] copiedCompletedStampSheets;
 
-#if !GS2_ENABLE_UNITASK
+    #if !GS2_ENABLE_UNITASK
             IEnumerator Impl(Gs2Future self)
             {
-#endif
+    #endif
                 lock (_completedStampSheets)
                 {
                     if (_completedStampSheets.Count == 0)
                     {
-#if GS2_ENABLE_UNITASK
+    #if GS2_ENABLE_UNITASK
                         return;
-#else
+    #else
                         yield break;
-#endif
+    #endif
                     }
 
                     copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
@@ -329,7 +300,7 @@ namespace Gs2.Gs2Distributor.Domain
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets)
                 {
-#if GS2_ENABLE_UNITASK
+    #if GS2_ENABLE_UNITASK
                     try
                     {
                         await new AutoStampSheetDomain(
@@ -346,7 +317,7 @@ namespace Gs2.Gs2Distributor.Domain
                     catch (NotFoundException)
                     {
                     }
-#else
+    #else
                     var future = new AutoStampSheetDomain(
                         cache,
                         jobQueueDomain,
@@ -366,14 +337,14 @@ namespace Gs2.Gs2Distributor.Domain
                         }
                         yield break;
                     }
-#endif
+    #endif
                 }
-#if !GS2_ENABLE_UNITASK
+    #if !GS2_ENABLE_UNITASK
             }
 
             return new Gs2InlineFuture(Impl);
-#endif
+    #endif
         }
-#endif
+    #endif
     }
 }

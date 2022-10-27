@@ -82,7 +82,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "CurrentRateMaster"
             );
         }
@@ -116,36 +116,19 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.ExportMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentRateMaster"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                 );
@@ -156,7 +139,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -200,36 +182,19 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetCurrentRateMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentRateMaster"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                 );
@@ -240,7 +205,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -281,36 +245,19 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateCurrentRateMasterAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentRateMaster"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                 );
@@ -321,7 +268,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -365,36 +311,19 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UpdateCurrentRateMasterFromGitHubAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "CurrentRateMaster"
+                    this._namespaceName?.ToString() ?? null,
+                    "CurrentRateMaster"
                 );
                 var key = Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                 );
@@ -405,7 +334,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -96,9 +96,9 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._missionGroupName != null ? this._missionGroupName.ToString() : null,
+            var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._missionGroupName?.ToString() ?? null,
                 "MissionTaskModel"
             );
             string listParentKey = parentKey;

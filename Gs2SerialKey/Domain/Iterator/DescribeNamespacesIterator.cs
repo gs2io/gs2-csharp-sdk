@@ -92,7 +92,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "serialKey:Namespace";
+            var parentKey = "serialKey:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2SerialKey.Model.Namespace>
             (

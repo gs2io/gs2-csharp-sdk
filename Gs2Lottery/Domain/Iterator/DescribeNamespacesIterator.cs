@@ -92,7 +92,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "lottery:Namespace";
+            var parentKey = "lottery:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Lottery.Model.Namespace>
             (

@@ -64,12 +64,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
         private readonly string _userName;
 
         private readonly String _parentKey;
+        public string UserName => _userName;
 
         public PasswordDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2RestSession session,
+            string userName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -78,8 +80,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._client = new Gs2IdentifierRestClient(
                 session
             );
+            this._userName = userName;
             this._parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                "Singleton",
+                this._userName?.ToString() ?? null,
                 "Password"
             );
         }
@@ -100,20 +103,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
             {
         #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future2 = Model();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
-            #else
-            var model = await Model();
-            #endif
             request
-                .WithUserName(model.UserName);
+                .WithUserName(this._userName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreatePasswordFuture(
                 request
@@ -125,36 +116,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    "Singleton",
-                        "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.CreatePasswordAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    "Singleton",
-                        "Password"
+                    this._userName?.ToString() ?? null,
+                    "Password"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                 );
@@ -165,7 +139,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Identifier.Domain.Model.PasswordDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -196,20 +169,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Password> self)
             {
         #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future2 = Model();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
-            #else
-            var model = await Model();
-            #endif
             request
-                .WithUserName(model.UserName);
+                .WithUserName(this._userName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetPasswordFuture(
                 request
@@ -221,36 +182,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    "Singleton",
-                        "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetPasswordAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    "Singleton",
-                        "Password"
+                    this._userName?.ToString() ?? null,
+                    "Password"
                 );
                 var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                 );
@@ -261,7 +205,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -289,20 +232,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
             {
         #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future2 = Model();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
-            #else
-            var model = await Model();
-            #endif
             request
-                .WithUserName(model.UserName);
+                .WithUserName(this._userName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeletePasswordFuture(
                 request
@@ -314,40 +245,42 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    "Singleton",
-                        "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
-            }
             #else
             DeletePasswordResult result = null;
             try {
                 result = await this._client.DeletePasswordAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "password")
                 {
                     var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                        "Singleton",
-                            "Password"
-                    );
+                    this._userName?.ToString() ?? null,
+                    "Password"
+                );
                     var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._userName?.ToString() ?? null,
+                    "Password"
+                );
+                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                );
+                cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
+            }
             Gs2.Gs2Identifier.Domain.Model.PasswordDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

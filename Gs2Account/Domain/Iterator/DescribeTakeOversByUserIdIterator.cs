@@ -98,9 +98,9 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+            var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "TakeOver"
             );
             string listParentKey = parentKey;

@@ -98,9 +98,9 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._areaModelName != null ? this._areaModelName.ToString() : null,
+            var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheParentKey(
+                this._namespaceName?.ToString() ?? null,
+                this._areaModelName?.ToString() ?? null,
                 "LayerModelMaster"
             );
             string listParentKey = parentKey;

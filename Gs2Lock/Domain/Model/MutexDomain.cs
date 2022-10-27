@@ -90,8 +90,8 @@ namespace Gs2.Gs2Lock.Domain.Model
             this._userId = userId;
             this._propertyId = propertyId;
             this._parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
+                this._userId?.ToString() ?? null,
                 "Mutex"
             );
         }
@@ -127,39 +127,20 @@ namespace Gs2.Gs2Lock.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
-                );
-                var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.LockByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Mutex"
                 );
                 var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
                     resultModel.Item.PropertyId.ToString()
@@ -171,7 +152,6 @@ namespace Gs2.Gs2Lock.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Lock.Domain.Model.MutexDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -217,39 +197,20 @@ namespace Gs2.Gs2Lock.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
-                );
-                var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.UnlockByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Mutex"
                 );
                 var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
                     resultModel.Item.PropertyId.ToString()
@@ -261,7 +222,6 @@ namespace Gs2.Gs2Lock.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
             Gs2.Gs2Lock.Domain.Model.MutexDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -307,39 +267,20 @@ namespace Gs2.Gs2Lock.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
-                );
-                var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetMutexByUserIdAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
+
             {
                 var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Mutex"
                 );
                 var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
                     resultModel.Item.PropertyId.ToString()
@@ -351,7 +292,6 @@ namespace Gs2.Gs2Lock.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -394,44 +334,46 @@ namespace Gs2.Gs2Lock.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                    resultModel.Item.UserId.ToString(),
-                        "Mutex"
-                );
-                var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Delete<Gs2.Gs2Lock.Model.Mutex>(parentKey, key);
-            }
             #else
             DeleteMutexByUserIdResult result = null;
             try {
                 result = await this._client.DeleteMutexByUserIdAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "mutex")
                 {
                     var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                            "Mutex"
-                    );
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Mutex"
+                );
                     var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                        resultModel.Item.PropertyId.ToString()
+                        request.PropertyId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Lock.Model.Mutex>(parentKey, key);
+                    _cache.Delete<Gs2.Gs2Lock.Model.Mutex>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+
+            {
+                var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    this._userId?.ToString() ?? null,
+                    "Mutex"
+                );
+                var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
+                    resultModel.Item.PropertyId.ToString()
+                );
+                cache.Delete<Gs2.Gs2Lock.Model.Mutex>(parentKey, key);
+            }
             Gs2.Gs2Lock.Domain.Model.MutexDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

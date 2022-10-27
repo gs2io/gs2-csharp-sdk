@@ -91,7 +91,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._accessToken = accessToken;
             this._withProfile = withProfile;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "Friend"
             );

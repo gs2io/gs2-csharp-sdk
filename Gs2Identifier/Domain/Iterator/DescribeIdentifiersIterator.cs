@@ -95,8 +95,8 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName != null ? this._userName.ToString() : null,
+            var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                this._userName?.ToString() ?? null,
                 "Identifier"
             );
             string listParentKey = parentKey;

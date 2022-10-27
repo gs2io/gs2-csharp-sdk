@@ -92,7 +92,7 @@ namespace Gs2.Gs2Version.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 this._accessToken?.UserId?.ToString(),
                 "Checker"
             );
@@ -128,19 +128,15 @@ namespace Gs2.Gs2Version.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
             #else
             var result = await this._client.CheckVersionAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            #endif
+
             Gs2.Gs2Version.Domain.Model.CheckerAccessTokenDomain domain = this;
             this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
             this.Warnings = domain.Warnings = result?.Warnings;

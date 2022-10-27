@@ -92,7 +92,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            string parentKey = "formation:Namespace";
+            var parentKey = "formation:Namespace";
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Formation.Model.Namespace>
             (
