@@ -92,8 +92,8 @@ namespace Gs2.Gs2Version.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Checker"
             );
         }
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CheckVersionFuture(
@@ -136,7 +136,9 @@ namespace Gs2.Gs2Version.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Version.Domain.Model.CheckerAccessTokenDomain domain = this;
             this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
             this.Warnings = domain.Warnings = result?.Warnings;

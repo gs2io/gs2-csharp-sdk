@@ -91,8 +91,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._accessToken = accessToken;
             this._ratingName = ratingName;
             this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Rating"
             );
         }
@@ -114,9 +114,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithRatingName(this._ratingName);
+                .WithRatingName(this.RatingName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetRatingFuture(
                 request
@@ -136,22 +136,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Rating"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Rating"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

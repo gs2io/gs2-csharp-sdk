@@ -86,7 +86,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             this._namespaceName = namespaceName;
             this._thresholdName = thresholdName;
             this._parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "ThresholdMaster"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithThresholdName(this._thresholdName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithThresholdName(this.ThresholdName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetThresholdMasterFuture(
                 request
@@ -129,21 +129,23 @@ namespace Gs2.Gs2Experience.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "ThresholdMaster"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "ThresholdMaster"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -173,8 +175,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithThresholdName(this._thresholdName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithThresholdName(this.ThresholdName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateThresholdMasterFuture(
                 request
@@ -194,21 +196,23 @@ namespace Gs2.Gs2Experience.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "ThresholdMaster"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "ThresholdMaster"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain domain = this;
 
@@ -241,8 +245,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithThresholdName(this._thresholdName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithThresholdName(this.ThresholdName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteThresholdMasterFuture(
                 request
@@ -264,7 +268,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 if (e.errors[0].component == "thresholdMaster")
                 {
                     var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
+                    this.NamespaceName,
                     "ThresholdMaster"
                 );
                     var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
@@ -281,16 +285,18 @@ namespace Gs2.Gs2Experience.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "ThresholdMaster"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Experience.Model.ThresholdMaster>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "ThresholdMaster"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Experience.Model.ThresholdMaster>(parentKey, key);
+                }
             }
             Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain domain = this;
 

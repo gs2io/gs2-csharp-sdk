@@ -86,7 +86,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -99,8 +99,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._userId,
+                this.NamespaceName,
+                this.UserId,
                 transactionId
             );
         }

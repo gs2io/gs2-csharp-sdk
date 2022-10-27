@@ -40,6 +40,8 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
+using Gs2.Gs2Log.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -154,7 +156,7 @@ namespace Gs2.Gs2Log.Domain
                 );
             }
             #endif
-            Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = new Gs2.Gs2Log.Domain.Model.NamespaceDomain(
+            var domain = new Gs2.Gs2Log.Domain.Model.NamespaceDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
@@ -247,6 +249,8 @@ namespace Gs2.Gs2Log.Domain
                 string action,
                 string payload
         ) {
+    #if UNITY_2017_1_OR_NEWER
+    #endif
         }
     }
 }

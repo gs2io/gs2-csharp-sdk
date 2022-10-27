@@ -91,8 +91,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._accessToken = accessToken;
             this._eventName = eventName;
             this._parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Event"
             );
         }
@@ -114,9 +114,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithEventName(this._eventName);
+                .WithEventName(this.EventName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetEventFuture(
                 request
@@ -136,22 +136,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Event"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Event"
+                    );
+                    var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

@@ -82,7 +82,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "CurrentFormMaster"
             );
         }
@@ -104,7 +104,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.ExportMasterFuture(
                 request
@@ -124,20 +124,22 @@ namespace Gs2.Gs2Formation.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "CurrentFormMaster"
-                );
-                var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFormMaster"
+                    );
+                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain domain = this;
 
@@ -170,7 +172,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCurrentFormMasterFuture(
                 request
@@ -190,20 +192,22 @@ namespace Gs2.Gs2Formation.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "CurrentFormMaster"
-                );
-                var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFormMaster"
+                    );
+                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -233,7 +237,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateCurrentFormMasterFuture(
                 request
@@ -253,20 +257,22 @@ namespace Gs2.Gs2Formation.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "CurrentFormMaster"
-                );
-                var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFormMaster"
+                    );
+                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain domain = this;
 
@@ -299,7 +305,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateCurrentFormMasterFromGitHubFuture(
                 request
@@ -319,20 +325,22 @@ namespace Gs2.Gs2Formation.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "CurrentFormMaster"
-                );
-                var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFormMaster"
+                    );
+                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain domain = this;
 

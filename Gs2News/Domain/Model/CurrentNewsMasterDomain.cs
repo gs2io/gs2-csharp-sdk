@@ -84,7 +84,7 @@ namespace Gs2.Gs2News.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2News.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "CurrentNewsMaster"
             );
         }
@@ -106,7 +106,7 @@ namespace Gs2.Gs2News.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.PrepareUpdateCurrentNewsMasterFuture(
                 request
@@ -126,7 +126,9 @@ namespace Gs2.Gs2News.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
@@ -159,7 +161,7 @@ namespace Gs2.Gs2News.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateCurrentNewsMasterFuture(
                 request
@@ -179,7 +181,9 @@ namespace Gs2.Gs2News.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -210,7 +214,7 @@ namespace Gs2.Gs2News.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(
                 request
@@ -230,7 +234,9 @@ namespace Gs2.Gs2News.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

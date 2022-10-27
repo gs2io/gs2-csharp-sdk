@@ -82,7 +82,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
             this._userName = userName;
             this._parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName?.ToString() ?? null,
+                this.UserName,
                 "Password"
             );
         }
@@ -104,7 +104,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreatePasswordFuture(
                 request
@@ -124,20 +124,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._userName?.ToString() ?? null,
-                    "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.UserName,
+                        "Password"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.PasswordDomain domain = this;
 
@@ -170,7 +172,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetPasswordFuture(
                 request
@@ -190,20 +192,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._userName?.ToString() ?? null,
-                    "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.UserName,
+                        "Password"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -233,7 +237,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeletePasswordFuture(
                 request
@@ -255,7 +259,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 if (e.errors[0].component == "password")
                 {
                     var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._userName?.ToString() ?? null,
+                    this.UserName,
                     "Password"
                 );
                     var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
@@ -271,15 +275,17 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._userName?.ToString() ?? null,
-                    "Password"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                );
-                cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.UserName,
+                        "Password"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.PasswordDomain domain = this;
 

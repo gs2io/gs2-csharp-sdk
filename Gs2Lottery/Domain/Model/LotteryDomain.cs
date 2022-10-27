@@ -88,8 +88,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Lottery"
             );
         }
@@ -111,8 +111,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DrawByUserIdFuture(
                 request
@@ -132,7 +132,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(

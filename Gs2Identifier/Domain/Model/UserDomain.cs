@@ -103,7 +103,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateUserFuture(
                 request
@@ -123,22 +123,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "User"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.UserDomain domain = this;
 
@@ -171,7 +173,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetUserFuture(
                 request
@@ -191,22 +193,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "User"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -236,7 +240,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteUserFuture(
                 request
@@ -272,17 +276,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "User"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.UserDomain domain = this;
 
@@ -315,7 +321,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateIdentifierFuture(
                 request
@@ -335,21 +341,23 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._userName?.ToString() ?? null,
-                    "Identifier"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                    resultModel.Item.ClientId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.UserName,
+                        "Identifier"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
+                        resultModel.Item.ClientId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
                 this._cache,
@@ -380,7 +388,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return new DescribeIdentifiersIterator(
                 this._cache,
                 this._client,
-                this._userName
+                this.UserName
             );
         }
 
@@ -396,7 +404,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return new DescribeIdentifiersIterator(
                 this._cache,
                 this._client,
-                this._userName
+                this.UserName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -416,7 +424,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._userName,
+                this.UserName,
                 clientId
             );
         }
@@ -428,7 +436,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return new DescribePasswordsIterator(
                 this._cache,
                 this._client,
-                this._userName
+                this.UserName
             );
         }
 
@@ -444,7 +452,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return new DescribePasswordsIterator(
                 this._cache,
                 this._client,
-                this._userName
+                this.UserName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -463,7 +471,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._userName
+                this.UserName
             );
         }
 
@@ -474,7 +482,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._userName
+                this.UserName
             );
         }
 

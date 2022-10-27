@@ -67,6 +67,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _inventoryName;
         private readonly string _userId;
+        public string NamespaceName => _namespaceName;
+        public string InventoryName => _inventoryName;
+        public string UserId => _userId;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Inventory.Model.ItemSet[] _result;
@@ -102,9 +105,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
-                this._inventoryName?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
+                this.InventoryName,
                 "ItemSet"
             );
             string listParentKey = parentKey;

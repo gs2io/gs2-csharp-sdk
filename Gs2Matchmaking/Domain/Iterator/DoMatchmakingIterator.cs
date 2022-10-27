@@ -67,6 +67,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
         private readonly Gs2.Gs2Matchmaking.Model.Player _player;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken?.UserId;
+        public Gs2.Gs2Matchmaking.Model.Player Player => _player;
         private string _matchmakingContextToken;
         private bool _last;
         private Gs2.Gs2Matchmaking.Model.Gathering[] _result;
@@ -129,7 +132,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             this._last = this._matchmakingContextToken == null;
             this._cache.ListCacheClear<Gs2.Gs2Matchmaking.Model.Gathering>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
+                    this.NamespaceName,
                     "Singleton",
                     "Gathering"
                 )

@@ -118,7 +118,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
@@ -170,21 +172,23 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "ProjectToken"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "ProjectToken"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
 

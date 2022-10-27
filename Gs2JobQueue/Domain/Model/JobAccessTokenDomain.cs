@@ -94,8 +94,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._accessToken = accessToken;
             this._jobName = jobName;
             this._parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Job"
             );
         }
@@ -108,9 +108,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
-                this._jobName,
+                this.JobName,
                 tryNumber
             );
         }

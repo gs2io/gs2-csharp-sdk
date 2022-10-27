@@ -89,7 +89,7 @@ namespace Gs2.Gs2Version.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Version.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CalculateSignatureFuture(
                 request
@@ -131,7 +131,9 @@ namespace Gs2.Gs2Version.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Version.Domain.Model.UserDomain domain = this;
             this.Body = domain.Body = result?.Body;
             this.Signature = domain.Signature = result?.Signature;
@@ -154,8 +156,8 @@ namespace Gs2.Gs2Version.Domain.Model
             return new DescribeAcceptVersionsByUserIdIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
             );
         }
 
@@ -171,8 +173,8 @@ namespace Gs2.Gs2Version.Domain.Model
             return new DescribeAcceptVersionsByUserIdIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -192,8 +194,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._userId,
+                this.NamespaceName,
+                this.UserId,
                 versionName
             );
         }
@@ -205,8 +207,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
             );
         }
 

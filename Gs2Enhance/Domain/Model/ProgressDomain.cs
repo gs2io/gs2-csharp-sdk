@@ -98,8 +98,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             this._rateName = rateName;
             this._progressName = progressName;
             this._parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Progress"
             );
         }
@@ -121,10 +121,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRateName(this._rateName)
-                .WithProgressName(this._progressName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRateName(this.RateName)
+                .WithProgressName(this.ProgressName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetProgressByUserIdFuture(
                 request
@@ -144,38 +144,40 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Progress"
-                );
-                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    resultModel.Item.RateName.ToString(),
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
-            {
-                var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "RateModel"
-                );
-                var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
-                    resultModel.RateModel.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.RateModel,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                        resultModel.Item.RateName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "RateModel"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                        resultModel.RateModel.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.RateModel,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -205,10 +207,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRateName(this._rateName)
-                .WithProgressName(this._progressName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRateName(this.RateName)
+                .WithProgressName(this.ProgressName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.EndByUserIdFuture(
                 request
@@ -228,23 +230,25 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Progress"
-                );
-                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    resultModel.Item.RateName.ToString(),
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                        resultModel.Item.RateName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             if (result?.StampSheet != null)
             {
@@ -296,10 +300,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRateName(this._rateName)
-                .WithProgressName(this._progressName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRateName(this.RateName)
+                .WithProgressName(this.ProgressName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteProgressByUserIdFuture(
                 request
@@ -321,8 +325,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 if (e.errors[0].component == "progress")
                 {
                     var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
+                    this.NamespaceName,
+                    this.UserId,
                     "Progress"
                 );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
@@ -340,18 +344,20 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Progress"
-                );
-                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    resultModel.Item.RateName.ToString(),
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                        resultModel.Item.RateName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+                }
             }
             Gs2.Gs2Enhance.Domain.Model.ProgressDomain domain = this;
 

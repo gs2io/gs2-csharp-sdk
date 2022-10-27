@@ -103,7 +103,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetNamespaceStatusFuture(
                 request
@@ -123,7 +123,9 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Account.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -155,7 +157,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetNamespaceFuture(
                 request
@@ -175,22 +177,24 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "account",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "account",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -220,7 +224,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateNamespaceFuture(
                 request
@@ -240,22 +244,24 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "account",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "account",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Account.Domain.Model.NamespaceDomain domain = this;
 
@@ -288,7 +294,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteNamespaceFuture(
                 request
@@ -324,17 +330,19 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "account",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Account.Model.Namespace>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "account",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Account.Model.Namespace>(parentKey, key);
+                }
             }
             Gs2.Gs2Account.Domain.Model.NamespaceDomain domain = this;
 
@@ -367,7 +375,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateAccountFuture(
                 request
@@ -387,21 +395,23 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Account"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        resultModel.Item.UserId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Account.Domain.Model.AccountDomain(
                 this._cache,
@@ -441,7 +451,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteTakeOverByUserIdentifierFuture(
                 request
@@ -472,17 +482,19 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    resultModel.Item.UserId?.ToString() ?? null,
-                    "TakeOver"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    resultModel.Item.Type.ToString()
-                );
-                cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        resultModel.Item.UserId,
+                        "TakeOver"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                        resultModel.Item.Type.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                }
             }
             var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
                 this._cache,
@@ -523,7 +535,7 @@ namespace Gs2.Gs2Account.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DoTakeOverFuture(
                 request
@@ -543,21 +555,23 @@ namespace Gs2.Gs2Account.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Account"
-                );
-                var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    resultModel.Item.UserId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Account"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        resultModel.Item.UserId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Account.Domain.Model.AccountDomain(
                 this._cache,
@@ -587,7 +601,7 @@ namespace Gs2.Gs2Account.Domain.Model
             return new DescribeAccountsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
             );
         }
 
@@ -603,7 +617,7 @@ namespace Gs2.Gs2Account.Domain.Model
             return new DescribeAccountsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -623,7 +637,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 userId
             );
         }
@@ -636,7 +650,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 accessToken
             );
         }

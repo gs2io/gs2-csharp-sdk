@@ -67,6 +67,9 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _categoryName;
         private readonly string _userId;
+        public string NamespaceName => _namespaceName;
+        public string CategoryName => _categoryName;
+        public string UserId => _userId;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Ranking.Model.Ranking[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Ranking"
             );
             string listParentKey = parentKey;

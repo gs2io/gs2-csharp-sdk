@@ -66,6 +66,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
         private readonly string _inventoryName;
+        public string NamespaceName => _namespaceName;
+        public string InventoryName => _inventoryName;
         private bool _last;
         private Gs2.Gs2Inventory.Model.ItemModel[] _result;
 
@@ -97,8 +99,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._inventoryName?.ToString() ?? null,
+                this.NamespaceName,
+                this.InventoryName,
                 "ItemModel"
             );
             string listParentKey = parentKey;

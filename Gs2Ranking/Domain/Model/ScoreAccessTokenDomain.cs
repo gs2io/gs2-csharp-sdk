@@ -99,8 +99,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._scorerUserId = scorerUserId;
             this._uniqueId = uniqueId;
             this._parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Score"
             );
         }
@@ -122,11 +122,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithCategoryName(this._categoryName)
-                .WithScorerUserId(this._scorerUserId)
-                .WithUniqueId(this._uniqueId);
+                .WithCategoryName(this.CategoryName)
+                .WithScorerUserId(this.ScorerUserId)
+                .WithUniqueId(this.UniqueId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetScoreFuture(
                 request
@@ -146,24 +146,26 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Score"
-                );
-                var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
-                    resultModel.Item.CategoryName.ToString(),
-                    resultModel.Item.ScorerUserId.ToString(),
-                    resultModel.Item.UniqueId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Score"
+                    );
+                    var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                        resultModel.Item.CategoryName.ToString(),
+                        resultModel.Item.ScorerUserId.ToString(),
+                        resultModel.Item.UniqueId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

@@ -88,8 +88,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "News"
             );
         }
@@ -111,8 +111,8 @@ namespace Gs2.Gs2News.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.WantGrantByUserIdFuture(
                 request
@@ -132,23 +132,25 @@ namespace Gs2.Gs2News.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-            {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this._namespaceName?.ToString() ?? null,
-                        this._userId?.ToString() ?? null,
-                        "SetCookieRequestEntry"
-                    );
-                    var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
-                        item.Key.ToString(),
-                        item.Value.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+            if (resultModel != null) {
+                {
+                    foreach (var item in resultModel.Items) {
+                        var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "SetCookieRequestEntry"
+                        );
+                        var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                            item.Key.ToString(),
+                            item.Value.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
             }
             var domain = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain[result?.Items.Length ?? 0];
@@ -165,8 +167,8 @@ namespace Gs2.Gs2News.Domain.Model
                     result.Items[i]?.Value
                 );
                 var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "SetCookieRequestEntry"
             );
                 var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(

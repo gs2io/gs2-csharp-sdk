@@ -67,6 +67,9 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
         private readonly string _formModelName;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken?.UserId;
+        public string FormModelName => _formModelName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Formation.Model.PropertyForm[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "PropertyForm"
             );
             string listParentKey = parentKey;

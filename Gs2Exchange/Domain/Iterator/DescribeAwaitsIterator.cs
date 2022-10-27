@@ -67,6 +67,9 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
         private readonly string _rateName;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken?.UserId;
+        public string RateName => _rateName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Exchange.Model.Await[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Await"
             );
             string listParentKey = parentKey;

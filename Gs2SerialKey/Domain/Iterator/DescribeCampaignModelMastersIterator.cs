@@ -65,6 +65,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2SerialKeyRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2SerialKey.Model.CampaignModelMaster[] _result;
@@ -96,7 +97,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "CampaignModelMaster"
             );
             string listParentKey = parentKey;

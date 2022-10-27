@@ -68,7 +68,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
         public bool? WithProfile => _withProfile;
 
         public FriendAccessTokenDomain(
@@ -91,8 +91,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._accessToken = accessToken;
             this._withProfile = withProfile;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Friend"
             );
         }
@@ -105,9 +105,9 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
-                this._withProfile,
+                this.WithProfile,
                 targetUserId
             );
         }

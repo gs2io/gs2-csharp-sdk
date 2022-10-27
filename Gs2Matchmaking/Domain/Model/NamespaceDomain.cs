@@ -103,7 +103,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetNamespaceStatusFuture(
                 request
@@ -123,7 +123,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
             this.Status = domain.Status = result?.Status;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -155,7 +157,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetNamespaceFuture(
                 request
@@ -175,22 +177,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "matchmaking",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "matchmaking",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -220,7 +224,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateNamespaceFuture(
                 request
@@ -240,22 +244,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "matchmaking",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "matchmaking",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
 
@@ -288,7 +294,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteNamespaceFuture(
                 request
@@ -324,17 +330,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "matchmaking",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "matchmaking",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Matchmaking.Model.Namespace>(parentKey, key);
+                }
             }
             Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain domain = this;
 
@@ -367,7 +375,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.VoteFuture(
                 request
@@ -387,25 +395,27 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    resultModel.Item.UserId?.ToString() ?? null,
-                    "Ballot"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    resultModel.Item.RatingName.ToString(),
-                    resultModel.Item.GatheringName.ToString(),
-                    resultModel.Item.NumberOfPlayer.ToString(),
-                    requestModel.KeyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        resultModel.Item.UserId,
+                        "Ballot"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                        resultModel.Item.RatingName.ToString(),
+                        resultModel.Item.GatheringName.ToString(),
+                        resultModel.Item.NumberOfPlayer.ToString(),
+                        requestModel.KeyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
                 this._cache,
@@ -449,7 +459,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.VoteMultipleFuture(
                 request
@@ -469,25 +479,27 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    resultModel.Item.UserId?.ToString() ?? null,
-                    "Ballot"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    resultModel.Item.RatingName.ToString(),
-                    resultModel.Item.GatheringName.ToString(),
-                    resultModel.Item.NumberOfPlayer.ToString(),
-                    requestModel.KeyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        resultModel.Item.UserId,
+                        "Ballot"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                        resultModel.Item.RatingName.ToString(),
+                        resultModel.Item.GatheringName.ToString(),
+                        resultModel.Item.NumberOfPlayer.ToString(),
+                        requestModel.KeyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
                 this._cache,
@@ -531,7 +543,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateRatingModelMasterFuture(
                 request
@@ -551,21 +563,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "RatingModelMaster"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "RatingModelMaster"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
                 this._cache,
@@ -596,7 +610,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 userId
             );
         }
@@ -609,7 +623,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 accessToken
             );
         }
@@ -621,7 +635,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName
+                this.NamespaceName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -632,7 +646,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingModelsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
             );
         }
 
@@ -648,7 +662,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingModelsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -668,7 +682,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 ratingName
             );
         }
@@ -682,7 +696,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 ratingName,
                 gatheringName
             );
@@ -695,7 +709,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingModelMastersIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
             );
         }
 
@@ -711,7 +725,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingModelMastersIterator(
                 this._cache,
                 this._client,
-                this._namespaceName
+                this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -731,7 +745,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 ratingName
             );
         }

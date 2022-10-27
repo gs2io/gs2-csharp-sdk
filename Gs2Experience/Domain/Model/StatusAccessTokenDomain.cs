@@ -97,8 +97,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             this._experienceName = experienceName;
             this._propertyId = propertyId;
             this._parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Status"
             );
         }
@@ -120,10 +120,10 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithExperienceName(this._experienceName)
-                .WithPropertyId(this._propertyId);
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetStatusFuture(
                 request
@@ -143,23 +143,25 @@ namespace Gs2.Gs2Experience.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Status"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                    resultModel.Item.ExperienceName.ToString(),
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Item.ExperienceName.ToString(),
+                        resultModel.Item.PropertyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -189,10 +191,10 @@ namespace Gs2.Gs2Experience.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithExperienceName(this._experienceName)
-                .WithPropertyId(this._propertyId);
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetStatusWithSignatureFuture(
                 request
@@ -212,23 +214,25 @@ namespace Gs2.Gs2Experience.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Status"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                    resultModel.Item.ExperienceName.ToString(),
-                    resultModel.Item.PropertyId.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Item.ExperienceName.ToString(),
+                        resultModel.Item.PropertyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain domain = this;
             domain.Body = result?.Body;

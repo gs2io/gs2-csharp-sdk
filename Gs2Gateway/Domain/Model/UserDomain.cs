@@ -95,7 +95,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._namespaceName = namespaceName;
             this._userId = userId;
             this._parentKey = Gs2.Gs2Gateway.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -117,8 +117,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.SendNotificationFuture(
                 request
@@ -138,7 +138,9 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
             this.Protocol = domain.Protocol = result?.Protocol;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -170,8 +172,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DisconnectByUserIdFuture(
                 request
@@ -191,21 +193,23 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-            {
-                foreach (var item in resultModel.Items) {
-                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this._namespaceName?.ToString() ?? null,
-                        this._userId?.ToString() ?? null,
-                        "WebSocketSession"
-                    );
-                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+            if (resultModel != null) {
+                {
+                    foreach (var item in resultModel.Items) {
+                        var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "WebSocketSession"
+                        );
+                        var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
             }
             var domain = new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain[result?.Items.Length ?? 0];
@@ -221,8 +225,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     result.Items[i]?.UserId
                 );
                 var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "WebSocketSession"
             );
                 var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
@@ -263,7 +267,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName);
+                .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DisconnectAllFuture(
                 request
@@ -283,7 +287,9 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Gateway.Domain.Model.UserDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);
@@ -304,8 +310,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return new DescribeWebSocketSessionsByUserIdIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
             );
         }
 
@@ -321,8 +327,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return new DescribeWebSocketSessionsByUserIdIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -342,8 +348,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._wssession,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
             );
         }
 
@@ -355,8 +361,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._wssession,
-                this._namespaceName,
-                this._userId
+                this.NamespaceName,
+                this.UserId
             );
         }
 

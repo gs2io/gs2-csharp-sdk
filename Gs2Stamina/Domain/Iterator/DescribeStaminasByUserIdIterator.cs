@@ -66,6 +66,8 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         private readonly Gs2StaminaRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _userId;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Stamina.Model.Stamina[] _result;
@@ -99,8 +101,8 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Stamina"
             );
             string listParentKey = parentKey;

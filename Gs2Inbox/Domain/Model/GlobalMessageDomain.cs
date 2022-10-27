@@ -86,7 +86,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             this._namespaceName = namespaceName;
             this._globalMessageName = globalMessageName;
             this._parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "GlobalMessage"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithGlobalMessageName(this._globalMessageName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithGlobalMessageName(this.GlobalMessageName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetGlobalMessageFuture(
                 request
@@ -129,21 +129,23 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "GlobalMessage"
-                );
-                var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "GlobalMessage"
+                    );
+                    var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

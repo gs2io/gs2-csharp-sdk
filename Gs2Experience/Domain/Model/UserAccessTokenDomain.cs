@@ -88,7 +88,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -101,9 +101,9 @@ namespace Gs2.Gs2Experience.Domain.Model
             return new DescribeStatusesIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
+                this.NamespaceName,
                 experienceName,
-                this._accessToken
+                this.AccessToken
             );
         }
 
@@ -120,9 +120,9 @@ namespace Gs2.Gs2Experience.Domain.Model
             return new DescribeStatusesIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
+                this.NamespaceName,
                 experienceName,
-                this._accessToken
+                this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 experienceName,
                 propertyId

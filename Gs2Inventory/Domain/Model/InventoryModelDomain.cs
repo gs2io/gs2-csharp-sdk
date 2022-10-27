@@ -62,11 +62,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private readonly string _inventoryName;
+        public string InventoryName => _inventoryName;
 
         private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string InventoryName => _inventoryName;
 
         public InventoryModelDomain(
             CacheDatabase cache,
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._namespaceName = namespaceName;
             this._inventoryName = inventoryName;
             this._parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "InventoryModel"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithInventoryName(this._inventoryName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithInventoryName(this.InventoryName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetInventoryModelFuture(
                 request
@@ -129,21 +129,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "InventoryModel"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "InventoryModel"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -163,8 +165,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return new DescribeItemModelsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._inventoryName
+                this.NamespaceName,
+                this.InventoryName
             );
         }
 
@@ -180,8 +182,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return new DescribeItemModelsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._inventoryName
+                this.NamespaceName,
+                this.InventoryName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -201,8 +203,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._inventoryName,
+                this.NamespaceName,
+                this.InventoryName,
                 itemName
             );
         }

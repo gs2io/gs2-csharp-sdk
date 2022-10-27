@@ -67,6 +67,9 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
         private readonly string _status;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken?.UserId;
+        public string Status => _status;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Datastore.Model.DataObject[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "DataObject"
             );
             string listParentKey = parentKey;

@@ -117,7 +117,9 @@ namespace Gs2.Gs2Auth.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
             this._cache.Put(
                 this._parentKey,
@@ -178,7 +180,9 @@ namespace Gs2.Gs2Auth.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
             this._cache.Put(
                 this._parentKey,

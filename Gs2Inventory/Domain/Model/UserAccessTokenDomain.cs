@@ -62,13 +62,13 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
+        public string UserId => _accessToken.UserId;
 
         private readonly String _parentKey;
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
 
         public UserAccessTokenDomain(
             CacheDatabase cache,
@@ -88,7 +88,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -100,8 +100,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return new DescribeInventoriesIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
             );
         }
 
@@ -117,8 +117,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return new DescribeInventoriesIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 inventoryName
             );

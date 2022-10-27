@@ -86,7 +86,7 @@ namespace Gs2.Gs2Log.Domain.Model
             this._namespaceName = namespaceName;
             this._insightName = insightName;
             this._parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._namespaceName?.ToString() ?? null,
                 "Insight"
             );
         }
@@ -127,8 +127,8 @@ namespace Gs2.Gs2Log.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "Insight"
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
                 );
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Log.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "Insight"
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
                 );
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -211,8 +211,8 @@ namespace Gs2.Gs2Log.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "Insight"
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
                 );
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -231,15 +231,31 @@ namespace Gs2.Gs2Log.Domain.Model
               
                 {
                     var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        _namespaceName.ToString(),
-                            "Insight"
+                        this._namespaceName?.ToString() ?? null,
+                        "Insight"
                     );
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
                     cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "insight")
+                {
+                    var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
+                );
+                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                        request.InsightName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             Gs2.Gs2Log.Domain.Model.InsightDomain domain = this;
 

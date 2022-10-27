@@ -66,6 +66,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
         private readonly string _prizeTableName;
+        public string NamespaceName => _namespaceName;
+        public string PrizeTableName => _prizeTableName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Lottery.Model.PrizeLimit[] _result;
@@ -99,8 +101,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._prizeTableName?.ToString() ?? null,
+                this.NamespaceName,
+                this.PrizeTableName,
                 "PrizeLimit"
             );
             string listParentKey = parentKey;

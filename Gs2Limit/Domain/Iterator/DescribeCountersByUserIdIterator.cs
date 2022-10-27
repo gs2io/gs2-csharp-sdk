@@ -67,6 +67,9 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _userId;
         private readonly string _limitName;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _userId;
+        public string LimitName => _limitName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Limit.Model.Counter[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Counter"
             );
             string listParentKey = parentKey;

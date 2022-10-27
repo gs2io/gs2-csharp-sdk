@@ -90,8 +90,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._areaModelName = areaModelName;
             this._layerModelName = layerModelName;
             this._parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._areaModelName?.ToString() ?? null,
+                this.NamespaceName,
+                this.AreaModelName,
                 "LayerModel"
             );
         }
@@ -113,9 +113,9 @@ namespace Gs2.Gs2MegaField.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithAreaModelName(this._areaModelName)
-                .WithLayerModelName(this._layerModelName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithAreaModelName(this.AreaModelName)
+                .WithLayerModelName(this.LayerModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetLayerModelFuture(
                 request
@@ -135,22 +135,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._areaModelName?.ToString() ?? null,
-                    "LayerModel"
-                );
-                var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.AreaModelName,
+                        "LayerModel"
+                    );
+                    var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

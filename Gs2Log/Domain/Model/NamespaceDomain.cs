@@ -382,7 +382,20 @@ namespace Gs2.Gs2Log.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Log.Model.Namespace>(parentKey, key);
                 }
-            } catch(Gs2.Core.Exception.NotFoundException) {}
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "namespace")
+                {
+                    var parentKey = "log:Namespace";
+                    var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        request.NamespaceName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Log.Model.Namespace>(parentKey, key);
+                }
+                else
+                {
+                    throw e;
+                }
+            }
             #endif
             Gs2.Gs2Log.Domain.Model.NamespaceDomain domain = this;
 
@@ -486,8 +499,8 @@ namespace Gs2.Gs2Log.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "Insight"
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
                 );
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -509,8 +522,8 @@ namespace Gs2.Gs2Log.Domain.Model
               
             {
                 var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    _namespaceName.ToString(),
-                        "Insight"
+                    this._namespaceName?.ToString() ?? null,
+                    "Insight"
                 );
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     resultModel.Item.Name.ToString()
@@ -523,7 +536,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 );
             }
             #endif
-            Gs2.Gs2Log.Domain.Model.InsightDomain domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
+            var domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,

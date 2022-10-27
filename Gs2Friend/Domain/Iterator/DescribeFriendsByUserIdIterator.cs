@@ -67,6 +67,9 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _userId;
         private readonly bool? _withProfile;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _userId;
+        public bool? WithProfile => _withProfile;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Friend.Model.FriendUser[] _result;
@@ -102,9 +105,9 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
-                this._withProfile?.ToString() ?? "False",
+                this.NamespaceName,
+                this.UserId,
+                this.WithProfile?.ToString() ?? "False",
                 "FriendUser"
             );
             string listParentKey = parentKey;

@@ -68,6 +68,10 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private readonly string _roomName;
         private readonly string _password;
         private readonly AccessToken _accessToken;
+        public string NamespaceName => _namespaceName;
+        public string RoomName => _roomName;
+        public string Password => _password;
+        public string UserId => _accessToken?.UserId;
         private long? _startAt;
         private bool _last;
         private Gs2.Gs2Chat.Model.Message[] _result;
@@ -105,9 +109,9 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "Singleton",
-                this._roomName?.ToString() ?? null,
+                this.RoomName,
                 "Message"
             );
             string listParentKey = parentKey;

@@ -67,6 +67,9 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _experienceName;
         private readonly AccessToken _accessToken;
+        public string NamespaceName => _namespaceName;
+        public string ExperienceName => _experienceName;
+        public string UserId => _accessToken?.UserId;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Experience.Model.Status[] _result;
@@ -102,8 +105,8 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Status"
             );
             string listParentKey = parentKey;

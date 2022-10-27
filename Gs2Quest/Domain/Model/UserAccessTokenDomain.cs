@@ -90,7 +90,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -112,7 +112,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.StartFuture(
@@ -133,7 +133,9 @@ namespace Gs2.Gs2Quest.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -184,7 +186,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteProgressFuture(
@@ -207,8 +209,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                 if (e.errors[0].component == "progress")
                 {
                     var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
+                    this.NamespaceName,
+                    this.UserId,
                     "Progress"
                 );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
@@ -224,16 +226,18 @@ namespace Gs2.Gs2Quest.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Progress"
-                );
-                var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
-                );
-                cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                }
             }
             var domain = new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
                 this._cache,
@@ -263,7 +267,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken
             );
         }
@@ -275,8 +279,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return new DescribeCompletedQuestListsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
             );
         }
 
@@ -292,8 +296,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return new DescribeCompletedQuestListsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -313,7 +317,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 questGroupName
             );

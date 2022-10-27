@@ -65,6 +65,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2IdentifierRestClient _client;
         private readonly string _userName;
+        public string UserName => _userName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Identifier.Model.Password[] _result;
@@ -96,7 +97,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName?.ToString() ?? null,
+                this.UserName,
                 "Password"
             );
             string listParentKey = parentKey;

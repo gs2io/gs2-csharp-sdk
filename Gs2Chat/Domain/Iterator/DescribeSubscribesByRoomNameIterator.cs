@@ -66,6 +66,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private readonly Gs2ChatRestClient _client;
         private readonly string _namespaceName;
         private readonly string _roomName;
+        public string NamespaceName => _namespaceName;
+        public string RoomName => _roomName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Chat.Model.Subscribe[] _result;

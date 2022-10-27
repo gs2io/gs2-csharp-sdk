@@ -119,22 +119,24 @@ namespace Gs2.Gs2Exchange.Domain
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "exchange",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "exchange",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Exchange.Domain.Model.NamespaceDomain(
                 this._cache,
@@ -213,7 +215,7 @@ namespace Gs2.Gs2Exchange.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "RateModel"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
@@ -234,8 +236,8 @@ namespace Gs2.Gs2Exchange.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
@@ -267,8 +269,8 @@ namespace Gs2.Gs2Exchange.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
@@ -295,7 +297,7 @@ namespace Gs2.Gs2Exchange.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "RateModel"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
@@ -316,8 +318,8 @@ namespace Gs2.Gs2Exchange.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(

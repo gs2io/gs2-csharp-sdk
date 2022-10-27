@@ -91,7 +91,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken
             );
         }
@@ -116,8 +116,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return new DescribeAwaitsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken,
+                this.NamespaceName,
+                this.AccessToken,
                 rateName
             );
         }
@@ -135,8 +135,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return new DescribeAwaitsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken,
+                this.NamespaceName,
+                this.AccessToken,
                 rateName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -158,7 +158,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 awaitName,
                 rateName

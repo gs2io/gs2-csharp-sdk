@@ -65,6 +65,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2MatchmakingRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private bool _last;
         private Gs2.Gs2Matchmaking.Model.RatingModel[] _result;
 
@@ -94,7 +95,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "RatingModel"
             );
             string listParentKey = parentKey;

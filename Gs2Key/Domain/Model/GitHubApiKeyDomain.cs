@@ -87,7 +87,7 @@ namespace Gs2.Gs2Key.Domain.Model
             this._namespaceName = namespaceName;
             this._apiKeyName = apiKeyName;
             this._parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "GitHubApiKey"
             );
         }
@@ -109,8 +109,8 @@ namespace Gs2.Gs2Key.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithApiKeyName(this._apiKeyName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithApiKeyName(this.ApiKeyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateGitHubApiKeyFuture(
                 request
@@ -130,21 +130,23 @@ namespace Gs2.Gs2Key.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "GitHubApiKey"
-                );
-                var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "GitHubApiKey"
+                    );
+                    var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain domain = this;
 
@@ -177,8 +179,8 @@ namespace Gs2.Gs2Key.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithApiKeyName(this._apiKeyName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithApiKeyName(this.ApiKeyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetGitHubApiKeyFuture(
                 request
@@ -198,21 +200,23 @@ namespace Gs2.Gs2Key.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "GitHubApiKey"
-                );
-                var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "GitHubApiKey"
+                    );
+                    var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -242,8 +246,8 @@ namespace Gs2.Gs2Key.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithApiKeyName(this._apiKeyName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithApiKeyName(this.ApiKeyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteGitHubApiKeyFuture(
                 request
@@ -265,7 +269,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 if (e.errors[0].component == "gitHubApiKey")
                 {
                     var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
+                    this.NamespaceName,
                     "GitHubApiKey"
                 );
                     var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
@@ -282,16 +286,18 @@ namespace Gs2.Gs2Key.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "GitHubApiKey"
-                );
-                var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Key.Model.GitHubApiKey>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "GitHubApiKey"
+                    );
+                    var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Key.Model.GitHubApiKey>(parentKey, key);
+                }
             }
             Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain domain = this;
 

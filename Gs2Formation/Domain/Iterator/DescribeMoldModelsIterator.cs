@@ -65,6 +65,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private bool _last;
         private Gs2.Gs2Formation.Model.MoldModel[] _result;
 
@@ -94,7 +95,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "MoldModel"
             );
             string listParentKey = parentKey;

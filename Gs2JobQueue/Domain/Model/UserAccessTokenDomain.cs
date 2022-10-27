@@ -90,7 +90,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -112,7 +112,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.RunFuture(
@@ -144,17 +144,19 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Job"
-                );
-                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Job"
+                    );
+                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                }
             }
             if (result?.Item != null) {
                 Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
@@ -194,7 +196,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 jobName
             );
@@ -208,7 +210,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 deadLetterJobName
             );

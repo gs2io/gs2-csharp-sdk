@@ -87,7 +87,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._namespaceName = namespaceName;
             this._campaignModelName = campaignModelName;
             this._parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "CampaignModel"
             );
         }
@@ -109,8 +109,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithCampaignModelName(this._campaignModelName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCampaignModelFuture(
                 request
@@ -130,21 +130,23 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "CampaignModel"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CampaignModel"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -174,8 +176,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithCampaignModelName(this._campaignModelName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.IssueFuture(
                 request
@@ -195,22 +197,24 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._campaignModelName?.ToString() ?? null,
-                    "IssueJob"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.CampaignModelName,
+                        "IssueJob"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain(
                 this._cache,
@@ -241,8 +245,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return new DescribeIssueJobsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._campaignModelName
+                this.NamespaceName,
+                this.CampaignModelName
             );
         }
 
@@ -258,8 +262,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return new DescribeIssueJobsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._campaignModelName
+                this.NamespaceName,
+                this.CampaignModelName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -279,8 +283,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._campaignModelName,
+                this.NamespaceName,
+                this.CampaignModelName,
                 issueJobName
             );
         }

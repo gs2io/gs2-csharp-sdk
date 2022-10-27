@@ -95,8 +95,8 @@ namespace Gs2.Gs2Limit.Domain.Model
             this._limitName = limitName;
             this._counterName = counterName;
             this._parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Counter"
             );
         }
@@ -118,10 +118,10 @@ namespace Gs2.Gs2Limit.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithLimitName(this._limitName)
-                .WithCounterName(this._counterName);
+                .WithLimitName(this.LimitName)
+                .WithCounterName(this.CounterName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCounterFuture(
                 request
@@ -141,23 +141,25 @@ namespace Gs2.Gs2Limit.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Counter"
-                );
-                var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
-                    resultModel.Item.LimitName.ToString(),
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Counter"
+                    );
+                    var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                        resultModel.Item.LimitName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -187,10 +189,10 @@ namespace Gs2.Gs2Limit.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithLimitName(this._limitName)
-                .WithCounterName(this._counterName);
+                .WithLimitName(this.LimitName)
+                .WithCounterName(this.CounterName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CountUpFuture(
                 request
@@ -210,23 +212,25 @@ namespace Gs2.Gs2Limit.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Counter"
-                );
-                var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
-                    resultModel.Item.LimitName.ToString(),
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Counter"
+                    );
+                    var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                        resultModel.Item.LimitName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain domain = this;
 

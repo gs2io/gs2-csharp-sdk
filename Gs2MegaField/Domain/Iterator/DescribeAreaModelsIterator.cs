@@ -65,6 +65,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2MegaFieldRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private bool _last;
         private Gs2.Gs2MegaField.Model.AreaModel[] _result;
 
@@ -94,7 +95,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "AreaModel"
             );
             string listParentKey = parentKey;

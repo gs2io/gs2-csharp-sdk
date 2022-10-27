@@ -69,6 +69,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private readonly string _userId;
         private readonly string _itemName;
         private readonly string _itemSetName;
+        public string NamespaceName => _namespaceName;
+        public string InventoryName => _inventoryName;
+        public string UserId => _userId;
+        public string ItemName => _itemName;
+        public string ItemSetName => _itemSetName;
         private bool _last;
         private string[] _result;
 

@@ -98,8 +98,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._awaitName = awaitName;
             this._rateName = rateName;
             this._parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Await"
             );
         }
@@ -121,10 +121,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this._awaitName)
-                .WithRateName(this._rateName);
+                .WithAwaitName(this.AwaitName)
+                .WithRateName(this.RateName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetAwaitFuture(
                 request
@@ -144,23 +144,25 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Await"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString(),
-                    resultModel.Item.RateName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Await"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString(),
+                        resultModel.Item.RateName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -190,10 +192,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this._awaitName)
-                .WithRateName(this._rateName);
+                .WithAwaitName(this.AwaitName)
+                .WithRateName(this.RateName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.AcquireFuture(
                 request
@@ -213,23 +215,25 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Await"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString(),
-                    resultModel.Item.RateName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Await"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString(),
+                        resultModel.Item.RateName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             if (result?.StampSheet != null)
             {
@@ -281,10 +285,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this._awaitName)
-                .WithRateName(this._rateName);
+                .WithAwaitName(this.AwaitName)
+                .WithRateName(this.RateName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.SkipFuture(
                 request
@@ -304,23 +308,25 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Await"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString(),
-                    resultModel.Item.RateName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Await"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString(),
+                        resultModel.Item.RateName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             if (result?.StampSheet != null)
             {
@@ -372,10 +378,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this._awaitName)
-                .WithRateName(this._rateName);
+                .WithAwaitName(this.AwaitName)
+                .WithRateName(this.RateName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteAwaitFuture(
                 request
@@ -397,8 +403,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 if (e.errors[0].component == "await")
                 {
                     var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
+                    this.NamespaceName,
+                    this.UserId,
                     "Await"
                 );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
@@ -416,18 +422,20 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._accessToken?.UserId?.ToString(),
-                    "Await"
-                );
-                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString(),
-                    resultModel.Item.RateName.ToString()
-                );
-                cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Await"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString(),
+                        resultModel.Item.RateName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
+                }
             }
             Gs2.Gs2Exchange.Domain.Model.AwaitAccessTokenDomain domain = this;
 

@@ -67,6 +67,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _lotteryName;
         private readonly AccessToken _accessToken;
+        public string NamespaceName => _namespaceName;
+        public string LotteryName => _lotteryName;
+        public string UserId => _accessToken?.UserId;
         private bool _last;
         private Gs2.Gs2Lottery.Model.Probability[] _result;
 
@@ -100,8 +103,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "Probability"
             );
             string listParentKey = parentKey;

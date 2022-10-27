@@ -89,7 +89,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
+                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateGatheringFuture(
@@ -132,22 +132,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Singleton",
-                    "Gathering"
-                );
-                var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Singleton",
+                        "Gathering"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
                 this._cache,
@@ -179,8 +181,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DoMatchmakingIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken,
+                this.NamespaceName,
+                this.AccessToken,
                 player
             );
         }
@@ -198,8 +200,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DoMatchmakingIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken,
+                this.NamespaceName,
+                this.AccessToken,
                 player
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -220,7 +222,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 gatheringName
             );
@@ -237,7 +239,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 ratingName,
                 gatheringName,
@@ -253,8 +255,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
             );
         }
 
@@ -270,8 +272,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return new DescribeRatingsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -291,7 +293,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken,
                 ratingName
             );

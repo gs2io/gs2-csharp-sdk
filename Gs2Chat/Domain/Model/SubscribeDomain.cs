@@ -90,8 +90,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._userId = userId;
             this._roomName = roomName;
             this._parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Subscribe"
             );
         }
@@ -113,9 +113,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRoomName(this._roomName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.SubscribeByUserIdFuture(
                 request
@@ -135,22 +135,24 @@ namespace Gs2.Gs2Chat.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Subscribe"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    resultModel.Item.RoomName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
 
@@ -183,9 +185,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRoomName(this._roomName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetSubscribeByUserIdFuture(
                 request
@@ -205,22 +207,24 @@ namespace Gs2.Gs2Chat.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Subscribe"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    resultModel.Item.RoomName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -250,9 +254,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRoomName(this._roomName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateNotificationTypeByUserIdFuture(
                 request
@@ -272,22 +276,24 @@ namespace Gs2.Gs2Chat.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Subscribe"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    resultModel.Item.RoomName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
 
@@ -320,9 +326,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithRoomName(this._roomName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UnsubscribeByUserIdFuture(
                 request
@@ -344,8 +350,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 if (e.errors[0].component == "subscribe")
                 {
                     var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
+                    this.NamespaceName,
+                    this.UserId,
                     "Subscribe"
                 );
                     var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
@@ -362,17 +368,19 @@ namespace Gs2.Gs2Chat.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Subscribe"
-                );
-                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    resultModel.Item.RoomName.ToString()
-                );
-                cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(parentKey, key);
+                }
             }
             Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
 

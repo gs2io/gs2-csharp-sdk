@@ -66,6 +66,8 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         private readonly Gs2MissionRestClient _client;
         private readonly string _namespaceName;
         private readonly string _missionGroupName;
+        public string NamespaceName => _namespaceName;
+        public string MissionGroupName => _missionGroupName;
         private bool _last;
         private Gs2.Gs2Mission.Model.MissionTaskModel[] _result;
 
@@ -97,8 +99,8 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._missionGroupName?.ToString() ?? null,
+                this.NamespaceName,
+                this.MissionGroupName,
                 "MissionTaskModel"
             );
             string listParentKey = parentKey;

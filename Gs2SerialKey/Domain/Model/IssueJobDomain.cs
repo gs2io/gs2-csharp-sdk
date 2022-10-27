@@ -91,8 +91,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._campaignModelName = campaignModelName;
             this._issueJobName = issueJobName;
             this._parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._campaignModelName?.ToString() ?? null,
+                this.NamespaceName,
+                this.CampaignModelName,
                 "IssueJob"
             );
         }
@@ -114,9 +114,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithCampaignModelName(this._campaignModelName)
-                .WithIssueJobName(this._issueJobName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName)
+                .WithIssueJobName(this.IssueJobName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetIssueJobFuture(
                 request
@@ -136,22 +136,24 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._campaignModelName?.ToString() ?? null,
-                    "IssueJob"
-                );
-                var key = Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.CampaignModelName,
+                        "IssueJob"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);

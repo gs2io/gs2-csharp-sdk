@@ -90,8 +90,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._userId = userId;
             this._withProfile = withProfile;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Friend"
             );
         }
@@ -104,9 +104,9 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
-                this._namespaceName,
-                this._userId,
-                this._withProfile,
+                this.NamespaceName,
+                this.UserId,
+                this.WithProfile,
                 targetUserId
             );
         }

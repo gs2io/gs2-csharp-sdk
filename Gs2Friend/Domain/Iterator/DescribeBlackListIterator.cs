@@ -66,6 +66,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private readonly Gs2FriendRestClient _client;
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
+        public string NamespaceName => _namespaceName;
+        public string UserId => _accessToken?.UserId;
         private string _pageToken;
         private bool _last;
         private string[] _result;

@@ -92,8 +92,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._userId = userId;
             this._missionGroupName = missionGroupName;
             this._parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "Complete"
             );
         }
@@ -115,9 +115,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithMissionGroupName(this._missionGroupName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithMissionGroupName(this.MissionGroupName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CompleteByUserIdFuture(
                 request
@@ -137,7 +137,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             if (result?.StampSheet != null)
             {
                 Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
@@ -188,9 +190,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithMissionGroupName(this._missionGroupName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithMissionGroupName(this.MissionGroupName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.ReceiveByUserIdFuture(
                 request
@@ -210,22 +212,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Complete"
-                );
-                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    resultModel.Item.MissionGroupName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Complete"
+                    );
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        resultModel.Item.MissionGroupName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Mission.Domain.Model.CompleteDomain domain = this;
 
@@ -258,9 +262,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithMissionGroupName(this._missionGroupName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithMissionGroupName(this.MissionGroupName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCompleteByUserIdFuture(
                 request
@@ -280,22 +284,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Complete"
-                );
-                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    resultModel.Item.MissionGroupName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Complete"
+                    );
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        resultModel.Item.MissionGroupName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -325,9 +331,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithMissionGroupName(this._missionGroupName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithMissionGroupName(this.MissionGroupName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteCompleteByUserIdFuture(
                 request
@@ -349,8 +355,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 if (e.errors[0].component == "complete")
                 {
                     var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
+                    this.NamespaceName,
+                    this.UserId,
                     "Complete"
                 );
                     var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
@@ -367,17 +373,19 @@ namespace Gs2.Gs2Mission.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "Complete"
-                );
-                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    resultModel.Item.MissionGroupName.ToString()
-                );
-                cache.Delete<Gs2.Gs2Mission.Model.Complete>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Complete"
+                    );
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        resultModel.Item.MissionGroupName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Mission.Model.Complete>(parentKey, key);
+                }
             }
             Gs2.Gs2Mission.Domain.Model.CompleteDomain domain = this;
 

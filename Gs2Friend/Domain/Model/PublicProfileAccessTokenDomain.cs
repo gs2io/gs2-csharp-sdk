@@ -67,7 +67,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
 
         public PublicProfileAccessTokenDomain(
             CacheDatabase cache,
@@ -87,8 +87,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "PublicProfile"
             );
         }

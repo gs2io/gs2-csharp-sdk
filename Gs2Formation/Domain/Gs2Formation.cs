@@ -119,22 +119,24 @@ namespace Gs2.Gs2Formation.Domain
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "formation",
-                    "Namespace"
-                );
-                var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "formation",
+                        "Namespace"
+                    );
+                    var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var domain = new Gs2.Gs2Formation.Domain.Model.NamespaceDomain(
                 this._cache,
@@ -213,8 +215,8 @@ namespace Gs2.Gs2Formation.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -229,7 +231,7 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "MoldModel"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
@@ -250,8 +252,8 @@ namespace Gs2.Gs2Formation.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -266,7 +268,7 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "MoldModel"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
@@ -287,9 +289,9 @@ namespace Gs2.Gs2Formation.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
-                                requestModel.MoldName?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.MoldName,
                                 "Form"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -304,8 +306,8 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -326,8 +328,8 @@ namespace Gs2.Gs2Formation.Domain
                         
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "PropertyForm"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
@@ -367,8 +369,8 @@ namespace Gs2.Gs2Formation.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -383,7 +385,7 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "MoldModel"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
@@ -404,8 +406,8 @@ namespace Gs2.Gs2Formation.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -420,7 +422,7 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
+                                requestModel.NamespaceName,
                                 "MoldModel"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
@@ -441,9 +443,9 @@ namespace Gs2.Gs2Formation.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
-                                requestModel.MoldName?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.MoldName,
                                 "Form"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -458,8 +460,8 @@ namespace Gs2.Gs2Formation.Domain
                         }
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "Mold"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -480,8 +482,8 @@ namespace Gs2.Gs2Formation.Domain
                     
                         {
                             var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName?.ToString() ?? null,
-                                requestModel.UserId?.ToString() ?? null,
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "PropertyForm"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(

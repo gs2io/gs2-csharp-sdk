@@ -101,7 +101,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithSecurityPolicyName(this._securityPolicyName);
+                .WithSecurityPolicyName(this.SecurityPolicyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateSecurityPolicyFuture(
                 request
@@ -121,22 +121,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "SecurityPolicy"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain domain = this;
 
@@ -169,7 +171,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithSecurityPolicyName(this._securityPolicyName);
+                .WithSecurityPolicyName(this.SecurityPolicyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetSecurityPolicyFuture(
                 request
@@ -189,22 +191,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "SecurityPolicy"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -234,7 +238,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithSecurityPolicyName(this._securityPolicyName);
+                .WithSecurityPolicyName(this.SecurityPolicyName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteSecurityPolicyFuture(
                 request
@@ -270,17 +274,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "SecurityPolicy"
-                );
-                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
+                }
             }
             Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain domain = this;
 

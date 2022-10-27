@@ -90,8 +90,8 @@ namespace Gs2.Gs2Version.Domain.Model
             this._userId = userId;
             this._versionName = versionName;
             this._parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
-                this._userId?.ToString() ?? null,
+                this.NamespaceName,
+                this.UserId,
                 "AcceptVersion"
             );
         }
@@ -113,9 +113,9 @@ namespace Gs2.Gs2Version.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithVersionName(this._versionName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.AcceptByUserIdFuture(
                 request
@@ -135,22 +135,24 @@ namespace Gs2.Gs2Version.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "AcceptVersion"
-                );
-                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                    resultModel.Item.VersionName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Version.Domain.Model.AcceptVersionDomain domain = this;
 
@@ -183,9 +185,9 @@ namespace Gs2.Gs2Version.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithVersionName(this._versionName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetAcceptVersionByUserIdFuture(
                 request
@@ -205,22 +207,24 @@ namespace Gs2.Gs2Version.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "AcceptVersion"
-                );
-                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                    resultModel.Item.VersionName.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -250,9 +254,9 @@ namespace Gs2.Gs2Version.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithUserId(this._userId)
-                .WithVersionName(this._versionName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteAcceptVersionByUserIdFuture(
                 request
@@ -274,8 +278,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 if (e.errors[0].component == "acceptVersion")
                 {
                     var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
+                    this.NamespaceName,
+                    this.UserId,
                     "AcceptVersion"
                 );
                     var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
@@ -292,17 +296,19 @@ namespace Gs2.Gs2Version.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    this._userId?.ToString() ?? null,
-                    "AcceptVersion"
-                );
-                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                    resultModel.Item.VersionName.ToString()
-                );
-                cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                }
             }
             Gs2.Gs2Version.Domain.Model.AcceptVersionDomain domain = this;
 

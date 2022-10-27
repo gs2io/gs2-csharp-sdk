@@ -82,7 +82,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
             this._userName = userName;
             this._parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._userName?.ToString() ?? null,
+                this.UserName,
                 "AttachSecurityPolicy"
             );
         }
@@ -104,7 +104,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetHasSecurityPolicyFuture(
                 request
@@ -124,7 +124,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
@@ -175,7 +177,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.AttachSecurityPolicyFuture(
                 request
@@ -195,7 +197,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {
@@ -246,7 +250,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
         #endif
             request
-                .WithUserName(this._userName);
+                .WithUserName(this.UserName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DetachSecurityPolicyFuture(
                 request
@@ -266,7 +270,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[result?.Items.Length ?? 0];
             for (int i=0; i<result?.Items.Length; i++)
             {

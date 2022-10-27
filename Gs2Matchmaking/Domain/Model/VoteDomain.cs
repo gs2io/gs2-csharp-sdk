@@ -90,7 +90,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._ratingName = ratingName;
             this._gatheringName = gatheringName;
             this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "Vote"
             );
         }
@@ -112,9 +112,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithRatingName(this._ratingName)
-                .WithGatheringName(this._gatheringName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithRatingName(this.RatingName)
+                .WithGatheringName(this.GatheringName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CommitVoteFuture(
                 request
@@ -134,7 +134,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
+            if (resultModel != null) {
+                
+            }
             Gs2.Gs2Matchmaking.Domain.Model.VoteDomain domain = this;
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(domain);

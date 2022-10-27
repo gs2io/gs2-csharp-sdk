@@ -86,7 +86,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._namespaceName = namespaceName;
             this._eventName = eventName;
             this._parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "EventMaster"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithEventName(this._eventName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithEventName(this.EventName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetEventMasterFuture(
                 request
@@ -129,21 +129,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "EventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "EventMaster"
+                    );
+                    var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
@@ -173,8 +175,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithEventName(this._eventName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithEventName(this.EventName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateEventMasterFuture(
                 request
@@ -194,21 +196,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "EventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "EventMaster"
+                    );
+                    var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             Gs2.Gs2Schedule.Domain.Model.EventMasterDomain domain = this;
 
@@ -241,8 +245,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithEventName(this._eventName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithEventName(this.EventName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteEventMasterFuture(
                 request
@@ -264,7 +268,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 if (e.errors[0].component == "eventMaster")
                 {
                     var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
+                    this.NamespaceName,
                     "EventMaster"
                 );
                     var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
@@ -281,16 +285,18 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-
-            {
-                var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "EventMaster"
-                );
-                var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Schedule.Model.EventMaster>(parentKey, key);
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "EventMaster"
+                    );
+                    var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Schedule.Model.EventMaster>(parentKey, key);
+                }
             }
             Gs2.Gs2Schedule.Domain.Model.EventMasterDomain domain = this;
 

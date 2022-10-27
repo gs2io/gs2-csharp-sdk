@@ -65,6 +65,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2QuestRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private bool _last;
         private Gs2.Gs2Quest.Model.QuestGroupModel[] _result;
 
@@ -94,7 +95,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "QuestGroupModel"
             );
             string listParentKey = parentKey;

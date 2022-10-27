@@ -96,7 +96,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parentKey = Gs2.Gs2Gateway.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "User"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return new DescribeWebSocketSessionsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
             );
         }
 
@@ -125,8 +125,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return new DescribeWebSocketSessionsIterator(
                 this._cache,
                 this._client,
-                this._namespaceName,
-                this._accessToken
+                this.NamespaceName,
+                this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -146,7 +146,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._wssession,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken
             );
         }
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this._wssession,
-                this._namespaceName,
+                this.NamespaceName,
                 this._accessToken
             );
         }
