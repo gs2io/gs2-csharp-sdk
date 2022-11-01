@@ -65,6 +65,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2LogRestClient _client;
         private readonly string _namespaceName;
+        public string NamespaceName => _namespaceName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Log.Model.Insight[] _result;
@@ -96,7 +97,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "Insight"
             );
             string listParentKey = parentKey;

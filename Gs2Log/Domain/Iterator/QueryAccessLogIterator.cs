@@ -71,6 +71,13 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private readonly long? _begin;
         private readonly long? _end;
         private readonly bool? _longTerm;
+        public string NamespaceName => _namespaceName;
+        public string Service => _service;
+        public string Method => _method;
+        public string UserId => _userId;
+        public long? Begin => _begin;
+        public long? End => _end;
+        public bool? LongTerm => _longTerm;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Log.Model.AccessLog[] _result;
@@ -114,7 +121,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "AccessLog"
             );
             string listParentKey = parentKey;

@@ -86,7 +86,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             this._stackName = stackName;
             this._resourceName = resourceName;
             this._parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                this._stackName?.ToString() ?? null,
+                this.StackName,
                 "Resource"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
             {
         #endif
             request
-                .WithStackName(this._stackName)
-                .WithResourceName(this._resourceName);
+                .WithStackName(this.StackName)
+                .WithResourceName(this.ResourceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetResourceFuture(
                 request
@@ -121,49 +121,32 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    this._stackName?.ToString() ?? null,
-                    "Resource"
-                );
-                var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetResourceAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                    this._stackName?.ToString() ?? null,
-                    "Resource"
-                );
-                var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
+                        this.StackName,
+                        "Resource"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else

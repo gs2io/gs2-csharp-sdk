@@ -86,7 +86,7 @@ namespace Gs2.Gs2Log.Domain.Model
             this._namespaceName = namespaceName;
             this._insightName = insightName;
             this._parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName?.ToString() ?? null,
+                this.NamespaceName,
                 "Insight"
             );
         }
@@ -108,8 +108,8 @@ namespace Gs2.Gs2Log.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithInsightName(this._insightName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithInsightName(this.InsightName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetInsightFuture(
                 request
@@ -121,49 +121,32 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Insight"
-                );
-                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
             #else
             var result = await this._client.GetInsightAsync(
                 request
             );
+            #endif
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Insight"
-                );
-                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    resultModel.Item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Insight"
+                    );
+                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
-            #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(result?.Item);
         #else
@@ -192,8 +175,8 @@ namespace Gs2.Gs2Log.Domain.Model
             {
         #endif
             request
-                .WithNamespaceName(this._namespaceName)
-                .WithInsightName(this._insightName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithInsightName(this.InsightName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteInsightFuture(
                 request
@@ -205,45 +188,17 @@ namespace Gs2.Gs2Log.Domain.Model
                 yield break;
             }
             var result = future.Result;
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-              
-            {
-                var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
-                    "Insight"
-                );
-                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                    resultModel.Item.Name.ToString()
-                );
-                cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
-            }
             #else
             DeleteInsightResult result = null;
             try {
                 result = await this._client.DeleteInsightAsync(
                     request
                 );
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _cache;
-              
-                {
-                    var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this._namespaceName?.ToString() ?? null,
-                        "Insight"
-                    );
-                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
-                }
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "insight")
                 {
                     var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this._namespaceName?.ToString() ?? null,
+                    this.NamespaceName,
                     "Insight"
                 );
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
@@ -257,6 +212,22 @@ namespace Gs2.Gs2Log.Domain.Model
                 }
             }
             #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Insight"
+                    );
+                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
+                }
+            }
             Gs2.Gs2Log.Domain.Model.InsightDomain domain = this;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -65,6 +65,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2DeployRestClient _client;
         private readonly string _stackName;
+        public string StackName => _stackName;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Deploy.Model.Event[] _result;
@@ -96,7 +97,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                this._stackName?.ToString() ?? null,
+                this.StackName,
                 "Event"
             );
             string listParentKey = parentKey;

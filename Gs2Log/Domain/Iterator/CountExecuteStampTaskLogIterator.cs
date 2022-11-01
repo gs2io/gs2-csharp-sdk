@@ -72,6 +72,14 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private readonly long? _begin;
         private readonly long? _end;
         private readonly bool? _longTerm;
+        public string NamespaceName => _namespaceName;
+        public bool? Service => _service;
+        public bool? Method => _method;
+        public bool? UserId => _userId;
+        public bool? Action => _action;
+        public long? Begin => _begin;
+        public long? End => _end;
+        public bool? LongTerm => _longTerm;
         private string _pageToken;
         private bool _last;
         private Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[] _result;

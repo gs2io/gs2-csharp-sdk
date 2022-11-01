@@ -273,7 +273,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]>(Impl);
         #endif
         }
 
@@ -442,7 +442,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]>(Impl);
         #endif
         }
 
