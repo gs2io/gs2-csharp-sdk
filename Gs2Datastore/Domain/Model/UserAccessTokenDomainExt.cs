@@ -79,6 +79,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		    {
 			    _domain = domain;
 			    _scope = scope;
+			    _allowUserIds = allowUserIds;
 			    _data = data;
 			    _name = name;
 			    _updateIfExists = updateIfExists;
@@ -135,7 +136,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 						    yield break;
 					    }
 						var task2 = task.Result.Model();
-						yield return task;
+						yield return task2;
 					    OnComplete(task2.Result);
 				    }
 			    }
