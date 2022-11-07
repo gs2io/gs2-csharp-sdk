@@ -65,13 +65,13 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
         private readonly string _jobName;
-        private readonly string _tryNumber;
+        private readonly int? _tryNumber;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
         public string JobName => _jobName;
-        public string TryNumber => _tryNumber;
+        public int? TryNumber => _tryNumber;
 
         public JobResultAccessTokenDomain(
             CacheDatabase cache,
@@ -81,7 +81,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             string namespaceName,
             AccessToken accessToken,
             string jobName,
-            string tryNumber
+            int? tryNumber
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;

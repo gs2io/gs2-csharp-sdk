@@ -33,10 +33,10 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DescribeBoxesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.Box[] Items { set; get; }
+        public Gs2.Gs2Lottery.Model.BoxItems[] Items { set; get; }
         public string NextPageToken { set; get; }
 
-        public DescribeBoxesByUserIdResult WithItems(Gs2.Gs2Lottery.Model.Box[] items) {
+        public DescribeBoxesByUserIdResult WithItems(Gs2.Gs2Lottery.Model.BoxItems[] items) {
             this.Items = items;
             return this;
         }
@@ -55,8 +55,8 @@ namespace Gs2.Gs2Lottery.Result
                 return null;
             }
             return new DescribeBoxesByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.Box[]{} : data["items"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Lottery.Model.Box.FromJson(v);
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.BoxItems[]{} : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Lottery.Model.BoxItems.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
         }

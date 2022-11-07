@@ -58,9 +58,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeBoxesIterator : Gs2Iterator<Gs2.Gs2Lottery.Model.Box> {
+    public class DescribeBoxesIterator : Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> {
     #else
-    public class DescribeBoxesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.Box> {
+    public class DescribeBoxesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.BoxItems> {
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2LotteryRestClient _client;
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
         private bool _last;
-        private Gs2.Gs2Lottery.Model.Box[] _result;
+        private Gs2.Gs2Lottery.Model.BoxItems[] _result;
 
         int? fetchSize;
 
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
             this._accessToken = accessToken;
             this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Lottery.Model.Box[]{};
+            this._result = new Gs2.Gs2Lottery.Model.BoxItems[]{};
 
             this.fetchSize = null;
         }
@@ -103,14 +103,14 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
             var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
-                "Box"
+                "BoxItems"
             );
             string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Lottery.Model.Box>
+            if (this._cache.IsListCached<Gs2.Gs2Lottery.Model.BoxItems>
             (
                     listParentKey
             )) {
-                this._result = this._cache.List<Gs2.Gs2Lottery.Model.Box>
+                this._result = this._cache.List<Gs2.Gs2Lottery.Model.BoxItems>
                 (
                         parentKey
                 )
@@ -145,7 +145,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 foreach (var item in this._result) {
                     this._cache.Put(
                             parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
+                            Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
                                     item.PrizeTableName?.ToString()
                             ),
                             item,
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Lottery.Model.Box>(
+                    this._cache.ListCached<Gs2.Gs2Lottery.Model.BoxItems>(
                             listParentKey
                     );
                 }
@@ -177,7 +177,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<Gs2.Gs2Lottery.Model.Box> callback
+            Action<Gs2.Gs2Lottery.Model.BoxItems> callback
         )
         {
             yield return UniTask.ToCoroutine(
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                         Current = null;
                         return;
                     }
-                    Gs2.Gs2Lottery.Model.Box ret = this._result[0];
+                    Gs2.Gs2Lottery.Model.BoxItems ret = this._result[0];
                     this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                     if (this._result.Length == 0 && !this._last) {
                         await this._load();
@@ -203,22 +203,22 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Box> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.BoxItems> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<Gs2.Gs2Lottery.Model.Box> callback
+            Action<Gs2.Gs2Lottery.Model.BoxItems> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Lottery.Model.Box> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Lottery.Model.BoxItems> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Lottery.Model.Box>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Lottery.Model.BoxItems>(async (writer, token) =>
             {
             #endif
         #endif
@@ -240,7 +240,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Lottery.Model.Box ret = this._result[0];
+                Gs2.Gs2Lottery.Model.BoxItems ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

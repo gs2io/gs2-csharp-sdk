@@ -55,29 +55,20 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Lottery.Domain.Model
 {
 
-    public partial class BoxItemsDomain {
+    public partial class BoxItemDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _prizeTableName;
 
         private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string PrizeTableName => _prizeTableName;
 
-        public BoxItemsDomain(
+        public BoxItemDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
-            string namespaceName,
-            string userId,
-            string prizeTableName
+            Gs2RestSession session
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -86,60 +77,42 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._client = new Gs2LotteryRestClient(
                 session
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._prizeTableName = prizeTableName;
-            this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "BoxItems"
-            );
+            this._parentKey = "lottery:BoxItem";
         }
 
         public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string prizeTableName,
             string childType
         )
         {
             return string.Join(
                 ":",
                 "lottery",
-                namespaceName ?? "null",
-                userId ?? "null",
-                prizeTableName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string prizeTableName
         )
         {
-            return string.Join(
-                ":",
-                prizeTableName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.BoxItems> Model() {
+        public async UniTask<Gs2.Gs2Lottery.Model.BoxItem> Model() {
             #else
-        public IFuture<Gs2.Gs2Lottery.Model.BoxItems> Model() {
+        public IFuture<Gs2.Gs2Lottery.Model.BoxItem> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Lottery.Model.BoxItems> Model() {
+        public async Task<Gs2.Gs2Lottery.Model.BoxItem> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItem> self)
             {
         #endif
-            Gs2.Gs2Lottery.Model.BoxItems value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(
+            Gs2.Gs2Lottery.Model.BoxItem value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItem>(
                 _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                    this.PrizeTableName?.ToString()
+                Gs2.Gs2Lottery.Domain.Model.BoxItemDomain.CreateCacheKey(
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -150,7 +123,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.BoxItems>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.BoxItem>(Impl);
         #endif
         }
 

@@ -62,11 +62,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
+        private AccessToken _accessToken;
+        public AccessToken AccessToken => _accessToken;
+        private readonly string _prizeTableName;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
+        public string PrizeTableName => _prizeTableName;
 
         public BoxItemsAccessTokenDomain(
             CacheDatabase cache,
@@ -74,7 +77,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string prizeTableName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -85,9 +89,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
+            this._prizeTableName = prizeTableName;
             this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
+                this.NamespaceName,
+                this.UserId,
                 "BoxItems"
             );
         }
@@ -95,6 +100,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
+            string prizeTableName,
             string childType
         )
         {
@@ -103,14 +109,19 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 "lottery",
                 namespaceName ?? "null",
                 userId ?? "null",
+                prizeTableName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
+            string prizeTableName
         )
         {
-            return "Singleton";
+            return string.Join(
+                ":",
+                prizeTableName ?? "null"
+            );
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -129,6 +140,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             Gs2.Gs2Lottery.Model.BoxItems value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                    this.PrizeTableName?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

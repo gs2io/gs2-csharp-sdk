@@ -142,6 +142,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         "BoxItems"
                     );
                     var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                        resultModel.Item.PrizeTableName.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -220,29 +221,13 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         "BoxItems"
                     );
                     var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                        requestModel.PrizeTableName
                     );
                     this._cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
                         parentKey,
                         key
                     );
                     this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.BoxItems>(
-                        parentKey
-                    );
-                }
-                {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName?.ToString(),
-                        this.UserId.ToString(),
-                        "Box"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
-                        request.PrizeTableName
-                    );
-                    this._cache.Delete<Gs2.Gs2Lottery.Model.Box>(
-                        parentKey,
-                        key
-                    );
-                    this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.Box>(
                         parentKey
                     );
                 }
@@ -326,7 +311,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.Box> Boxes(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
         )
         {
             return new DescribeBoxesIterator(
@@ -337,9 +322,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Box> BoxesAsync(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.BoxItems> BoxesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.Box> Boxes(
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
             #endif
         #else
         public DescribeBoxesIterator Boxes(

@@ -101,7 +101,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain JobResult(
-            string tryNumber = "0"
+            int? tryNumber = 0
         ) {
             return new Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain(
                 this._cache,
