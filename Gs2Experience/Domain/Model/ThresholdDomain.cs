@@ -30,9 +30,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Gs2Friend.Domain.Iterator;
-using Gs2.Gs2Friend.Request;
-using Gs2.Gs2Friend.Result;
+using Gs2.Gs2Experience.Domain.Iterator;
+using Gs2.Gs2Experience.Request;
+using Gs2.Gs2Experience.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -52,95 +52,67 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Friend.Domain.Model
+namespace Gs2.Gs2Experience.Domain.Model
 {
 
-    public partial class FollowAccessTokenDomain {
+    public partial class ThresholdDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
-        private readonly Gs2FriendRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly bool? _withProfile;
+        private readonly Gs2ExperienceRestClient _client;
 
         private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public bool? WithProfile => _withProfile;
 
-        public FollowAccessTokenDomain(
+        public ThresholdDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
-            string namespaceName,
-            AccessToken accessToken,
-            bool? withProfile
+            Gs2RestSession session
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
             this._stampSheetConfiguration = stampSheetConfiguration;
             this._session = session;
-            this._client = new Gs2FriendRestClient(
+            this._client = new Gs2ExperienceRestClient(
                 session
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._withProfile = withProfile;
-            this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Follow"
-            );
+            this._parentKey = "experience:Threshold";
         }
 
         public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string withProfile,
             string childType
         )
         {
             return string.Join(
                 ":",
-                "friend",
-                namespaceName ?? "null",
-                userId ?? "null",
-                withProfile ?? "null",
+                "experience",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string withProfile
         )
         {
-            return string.Join(
-                ":",
-                withProfile ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Model.Follow> Model() {
+        public async UniTask<Gs2.Gs2Experience.Model.Threshold> Model() {
             #else
-        public IFuture<Gs2.Gs2Friend.Model.Follow> Model() {
+        public IFuture<Gs2.Gs2Experience.Model.Threshold> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Friend.Model.Follow> Model() {
+        public async Task<Gs2.Gs2Experience.Model.Threshold> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Follow> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.Threshold> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.Follow value = _cache.Get<Gs2.Gs2Friend.Model.Follow>(
+            Gs2.Gs2Experience.Model.Threshold value = _cache.Get<Gs2.Gs2Experience.Model.Threshold>(
                 _parentKey,
-                Gs2.Gs2Friend.Domain.Model.FollowDomain.CreateCacheKey(
-                    this.WithProfile?.ToString()
+                Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -151,7 +123,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.Follow>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Model.Threshold>(Impl);
         #endif
         }
 

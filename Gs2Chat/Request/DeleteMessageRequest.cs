@@ -37,6 +37,7 @@ namespace Gs2.Gs2Chat.Request
         public string RoomName { set; get; }
         public string UserId { set; get; }
         public string MessageName { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Chat.Request
         }
         public DeleteMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
+            return this;
+        }
+
+        public DeleteMessageRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

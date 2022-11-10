@@ -30,9 +30,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Gs2Friend.Domain.Iterator;
-using Gs2.Gs2Friend.Request;
-using Gs2.Gs2Friend.Result;
+using Gs2.Gs2Script.Domain.Iterator;
+using Gs2.Gs2Script.Request;
+using Gs2.Gs2Script.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -52,107 +52,68 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Friend.Domain.Model
+namespace Gs2.Gs2Script.Domain.Model
 {
 
-    public partial class FollowAccessTokenDomain {
+    public partial class UserDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
-        private readonly Gs2FriendRestClient _client;
+        private readonly Gs2ScriptRestClient _client;
         private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly bool? _withProfile;
+        private readonly string _userId;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public bool? WithProfile => _withProfile;
+        public string UserId => _userId;
 
-        public FollowAccessTokenDomain(
+        public UserDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            AccessToken accessToken,
-            bool? withProfile
+            string userId
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
             this._stampSheetConfiguration = stampSheetConfiguration;
             this._session = session;
-            this._client = new Gs2FriendRestClient(
+            this._client = new Gs2ScriptRestClient(
                 session
             );
             this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._withProfile = withProfile;
-            this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+            this._userId = userId;
+            this._parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
-                this.UserId,
-                "Follow"
+                "User"
             );
         }
 
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string withProfile,
             string childType
         )
         {
             return string.Join(
                 ":",
-                "friend",
+                "script",
                 namespaceName ?? "null",
                 userId ?? "null",
-                withProfile ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string withProfile
+            string userId
         )
         {
             return string.Join(
                 ":",
-                withProfile ?? "null"
+                userId ?? "null"
             );
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Model.Follow> Model() {
-            #else
-        public IFuture<Gs2.Gs2Friend.Model.Follow> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Model.Follow> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Follow> self)
-            {
-        #endif
-            Gs2.Gs2Friend.Model.Follow value = _cache.Get<Gs2.Gs2Friend.Model.Follow>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.FollowDomain.CreateCacheKey(
-                    this.WithProfile?.ToString()
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.Follow>(Impl);
-        #endif
         }
 
     }

@@ -42,6 +42,7 @@ namespace Gs2.Gs2Log.Request
         public bool? LongTerm { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+        public string DuplicationAvoider { set; get; }
         public QueryAccessLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -76,6 +77,11 @@ namespace Gs2.Gs2Log.Request
         }
         public QueryAccessLogRequest WithLimit(int? limit) {
             this.Limit = limit;
+            return this;
+        }
+
+        public QueryAccessLogRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
