@@ -34,9 +34,14 @@ namespace Gs2.Gs2Script.Request
 	public class InvokeScriptRequest : Gs2Request<InvokeScriptRequest>
 	{
         public string ScriptId { set; get; }
+        public string UserId { set; get; }
         public string Args { set; get; }
         public InvokeScriptRequest WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
+            return this;
+        }
+        public InvokeScriptRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public InvokeScriptRequest WithArgs(string args) {
@@ -54,6 +59,7 @@ namespace Gs2.Gs2Script.Request
             }
             return new InvokeScriptRequest()
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
         }
 
@@ -61,6 +67,7 @@ namespace Gs2.Gs2Script.Request
         {
             return new JsonData {
                 ["scriptId"] = ScriptId,
+                ["userId"] = UserId,
                 ["args"] = Args,
             };
         }
@@ -71,6 +78,10 @@ namespace Gs2.Gs2Script.Request
             if (ScriptId != null) {
                 writer.WritePropertyName("scriptId");
                 writer.Write(ScriptId.ToString());
+            }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             if (Args != null) {
                 writer.WritePropertyName("args");

@@ -30,9 +30,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Gs2Friend.Domain.Iterator;
-using Gs2.Gs2Friend.Request;
-using Gs2.Gs2Friend.Result;
+using Gs2.Gs2MegaField.Domain.Iterator;
+using Gs2.Gs2MegaField.Request;
+using Gs2.Gs2MegaField.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -52,95 +52,96 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Friend.Domain.Model
+namespace Gs2.Gs2MegaField.Domain.Model
 {
 
-    public partial class FollowAccessTokenDomain {
+    public partial class LayerDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
-        private readonly Gs2FriendRestClient _client;
+        private readonly Gs2MegaFieldRestClient _client;
         private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly bool? _withProfile;
+        private readonly string _areaModelName;
+        private readonly string _layerModelName;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public bool? WithProfile => _withProfile;
+        public string AreaModelName => _areaModelName;
+        public string LayerModelName => _layerModelName;
 
-        public FollowAccessTokenDomain(
+        public LayerDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            AccessToken accessToken,
-            bool? withProfile
+            string areaModelName,
+            string layerModelName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
             this._stampSheetConfiguration = stampSheetConfiguration;
             this._session = session;
-            this._client = new Gs2FriendRestClient(
+            this._client = new Gs2MegaFieldRestClient(
                 session
             );
             this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._withProfile = withProfile;
-            this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+            this._areaModelName = areaModelName;
+            this._layerModelName = layerModelName;
+            this._parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
-                this.UserId,
-                "Follow"
+                "Layer"
             );
         }
 
         public static string CreateCacheParentKey(
             string namespaceName,
-            string userId,
-            string withProfile,
+            string areaModelName,
+            string layerModelName,
             string childType
         )
         {
             return string.Join(
                 ":",
-                "friend",
+                "megaField",
                 namespaceName ?? "null",
-                userId ?? "null",
-                withProfile ?? "null",
+                areaModelName ?? "null",
+                layerModelName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string withProfile
+            string areaModelName,
+            string layerModelName
         )
         {
             return string.Join(
                 ":",
-                withProfile ?? "null"
+                areaModelName ?? "null",
+                layerModelName ?? "null"
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Model.Follow> Model() {
+        public async UniTask<Gs2.Gs2MegaField.Model.Layer> Model() {
             #else
-        public IFuture<Gs2.Gs2Friend.Model.Follow> Model() {
+        public IFuture<Gs2.Gs2MegaField.Model.Layer> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Friend.Model.Follow> Model() {
+        public async Task<Gs2.Gs2MegaField.Model.Layer> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Follow> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Layer> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.Follow value = _cache.Get<Gs2.Gs2Friend.Model.Follow>(
+            Gs2.Gs2MegaField.Model.Layer value = _cache.Get<Gs2.Gs2MegaField.Model.Layer>(
                 _parentKey,
-                Gs2.Gs2Friend.Domain.Model.FollowDomain.CreateCacheKey(
-                    this.WithProfile?.ToString()
+                Gs2.Gs2MegaField.Domain.Model.LayerDomain.CreateCacheKey(
+                    this.AreaModelName?.ToString(),
+                    this.LayerModelName?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -151,7 +152,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.Follow>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.Layer>(Impl);
         #endif
         }
 

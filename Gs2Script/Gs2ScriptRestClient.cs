@@ -1602,6 +1602,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("scriptId");
                     jsonWriter.Write(request.ScriptId);
                 }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
                 if (request.Args != null)
                 {
                     jsonWriter.WritePropertyName("args");

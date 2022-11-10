@@ -39,6 +39,7 @@ namespace Gs2.Gs2Chat.Request
         public string Password { set; get; }
         public string[] WhiteListUserIds { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
         public UpdateRoomFromBackendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Chat.Request
         }
         public UpdateRoomFromBackendRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public UpdateRoomFromBackendRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -77,8 +77,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             string userId,
-            string targetUserId,
-            string type
+            string targetUserId
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -91,9 +90,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._userId = userId;
             this._targetUserId = targetUserId;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                type
+                this.NamespaceName,
+                this.UserId,
+                "FriendRequest"
             );
         }
 
