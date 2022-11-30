@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public string ItemSetName { set; get; }
         public string ReferenceOf { set; get; }
+        public string DuplicationAvoider { set; get; }
         public AddReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Inventory.Request
         }
         public AddReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
+            return this;
+        }
+
+        public AddReferenceOfRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

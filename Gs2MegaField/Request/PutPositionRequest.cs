@@ -40,6 +40,7 @@ namespace Gs2.Gs2MegaField.Request
         public Gs2.Gs2MegaField.Model.Position Position { set; get; }
         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
         public float? R { set; get; }
+        public string DuplicationAvoider { set; get; }
         public PutPositionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -66,6 +67,11 @@ namespace Gs2.Gs2MegaField.Request
         }
         public PutPositionRequest WithR(float? r) {
             this.R = r;
+            return this;
+        }
+
+        public PutPositionRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -36,6 +36,7 @@ namespace Gs2.Gs2Version.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string VersionName { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteAcceptVersionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Version.Request
         }
         public DeleteAcceptVersionRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
+            return this;
+        }
+
+        public DeleteAcceptVersionRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

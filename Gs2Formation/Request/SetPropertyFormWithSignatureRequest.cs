@@ -39,6 +39,7 @@ namespace Gs2.Gs2Formation.Request
         public string PropertyId { set; get; }
         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
         public string KeyId { set; get; }
+        public string DuplicationAvoider { set; get; }
         public SetPropertyFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Formation.Request
         }
         public SetPropertyFormWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
+            return this;
+        }
+
+        public SetPropertyFormWithSignatureRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

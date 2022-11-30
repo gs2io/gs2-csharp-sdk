@@ -93,7 +93,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
-                "FriendRequest"
+                "ReceiveFriendRequest"
             );
         }
 
@@ -242,14 +242,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.FromUserId?.ToString(),
-                        "FriendRequest"
+                        "SendFriendRequest"
                     )
                 );
                 cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
-                        "FriendRequest"
+                        "ReceiveFriendRequest"
                     )
                 );
                 cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
@@ -276,7 +276,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 this._accessToken,
-                this._fromUserId
+                this._fromUserId,
+                "ReceiveFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -367,14 +368,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.FromUserId?.ToString(),
-                        "FriendRequest"
+                        "SendFriendRequest"
                     )
                 );
                 cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
-                        "FriendRequest"
+                        "ReceiveFriendRequest"
                     )
                 );
                 cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
@@ -401,7 +402,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 this._accessToken,
-                this._fromUserId
+                this._fromUserId,
+                "ReceiveFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

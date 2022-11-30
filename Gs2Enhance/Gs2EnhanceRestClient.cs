@@ -1726,6 +1726,10 @@ namespace Gs2.Gs2Enhance
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -2078,119 +2082,6 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
-        public class DescribeProgressesByUserIdTask : Gs2RestSessionTask<DescribeProgressesByUserIdRequest, DescribeProgressesByUserIdResult>
-        {
-            public DescribeProgressesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProgressesByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeProgressesByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "enhance")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/progress";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.UserId != null) {
-                    sessionRequest.AddQueryString("userId", $"{request.UserId}");
-                }
-                if (request.PageToken != null) {
-                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
-                }
-                if (request.Limit != null) {
-                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeProgressesByUserId(
-                Request.DescribeProgressesByUserIdRequest request,
-                UnityAction<AsyncResult<Result.DescribeProgressesByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeProgressesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeProgressesByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdFuture(
-                Request.DescribeProgressesByUserIdRequest request
-        )
-		{
-			return new DescribeProgressesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdAsync(
-                Request.DescribeProgressesByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeProgressesByUserIdResult> result = null;
-			await DescribeProgressesByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeProgressesByUserIdTask DescribeProgressesByUserIdAsync(
-                Request.DescribeProgressesByUserIdRequest request
-        )
-		{
-			return new DescribeProgressesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeProgressesByUserIdResult> DescribeProgressesByUserIdAsync(
-                Request.DescribeProgressesByUserIdRequest request
-        )
-		{
-			var task = new DescribeProgressesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class CreateProgressByUserIdTask : Gs2RestSessionTask<CreateProgressByUserIdRequest, CreateProgressByUserIdResult>
         {
             public CreateProgressByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreateProgressByUserIdRequest request) : base(session, factory, request)
@@ -2349,11 +2240,9 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress/{rateName}/progress/{progressName}";
+                    + "/{namespaceName}/user/me/progress";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -2459,12 +2348,10 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress/{rateName}/progress/{progressName}";
+                    + "/{namespaceName}/user/{userId}/progress";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -2627,6 +2514,10 @@ namespace Gs2.Gs2Enhance
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -2871,11 +2762,9 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress/rate/{rateName}/progress/{progressName}/end";
+                    + "/{namespaceName}/user/me/progress/end";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2913,6 +2802,10 @@ namespace Gs2.Gs2Enhance
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -3004,12 +2897,10 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress/rate/{rateName}/progress/{progressName}/end";
+                    + "/{namespaceName}/user/{userId}/progress/end";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -3138,11 +3029,9 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/progress/rate/{rateName}/progress/{progressName}";
+                    + "/{namespaceName}/user/me/progress";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
                 if (request.ContextStack != null)
@@ -3157,6 +3046,10 @@ namespace Gs2.Gs2Enhance
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -3248,12 +3141,10 @@ namespace Gs2.Gs2Enhance
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enhance")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/progress/rate/{rateName}/progress/{progressName}";
+                    + "/{namespaceName}/user/{userId}/progress";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
-                url = url.Replace("{progressName}", !string.IsNullOrEmpty(request.ProgressName) ? request.ProgressName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
                 if (request.ContextStack != null)

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Request
         public string AccessToken { set; get; }
         public int? Type { set; get; }
         public string UserIdentifier { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Account.Request
         }
         public DeleteTakeOverRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
+            return this;
+        }
+
+        public DeleteTakeOverRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -34,15 +34,9 @@ namespace Gs2.Gs2Enhance.Result
 	public class GetProgressByUserIdResult : IResult
 	{
         public Gs2.Gs2Enhance.Model.Progress Item { set; get; }
-        public Gs2.Gs2Enhance.Model.RateModel RateModel { set; get; }
 
         public GetProgressByUserIdResult WithItem(Gs2.Gs2Enhance.Model.Progress item) {
             this.Item = item;
-            return this;
-        }
-
-        public GetProgressByUserIdResult WithRateModel(Gs2.Gs2Enhance.Model.RateModel rateModel) {
-            this.RateModel = rateModel;
             return this;
         }
 
@@ -55,15 +49,13 @@ namespace Gs2.Gs2Enhance.Result
                 return null;
             }
             return new GetProgressByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enhance.Model.Progress.FromJson(data["item"]))
-                .WithRateModel(!data.Keys.Contains("rateModel") || data["rateModel"] == null ? null : Gs2.Gs2Enhance.Model.RateModel.FromJson(data["rateModel"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enhance.Model.Progress.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
-                ["rateModel"] = RateModel?.ToJson(),
             };
         }
 
@@ -72,9 +64,6 @@ namespace Gs2.Gs2Enhance.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
-            }
-            if (RateModel != null) {
-                RateModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -115,6 +115,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
+                .WithScorerUserId(this.UserId)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithCategoryName(this.CategoryName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

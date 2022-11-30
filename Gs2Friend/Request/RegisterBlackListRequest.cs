@@ -36,6 +36,7 @@ namespace Gs2.Gs2Friend.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string TargetUserId { set; get; }
+        public string DuplicationAvoider { set; get; }
         public RegisterBlackListRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Friend.Request
         }
         public RegisterBlackListRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
+            return this;
+        }
+
+        public RegisterBlackListRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

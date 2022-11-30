@@ -37,6 +37,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public string AccessToken { set; get; }
         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
         public string MatchmakingContextToken { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DoMatchmakingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public DoMatchmakingRequest WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
+            return this;
+        }
+
+        public DoMatchmakingRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

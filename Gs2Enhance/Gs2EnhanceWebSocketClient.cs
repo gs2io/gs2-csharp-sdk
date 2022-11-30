@@ -1332,16 +1332,6 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
-                if (request.ProgressName != null)
-                {
-                    jsonWriter.WritePropertyName("progressName");
-                    jsonWriter.Write(request.ProgressName.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1455,16 +1445,6 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
-                if (request.ProgressName != null)
-                {
-                    jsonWriter.WritePropertyName("progressName");
-                    jsonWriter.Write(request.ProgressName.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1573,16 +1553,6 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
-                if (request.ProgressName != null)
-                {
-                    jsonWriter.WritePropertyName("progressName");
-                    jsonWriter.Write(request.ProgressName.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1597,6 +1567,11 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("xGs2AccessToken");
                     jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -1695,16 +1670,6 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
-                if (request.ProgressName != null)
-                {
-                    jsonWriter.WritePropertyName("progressName");
-                    jsonWriter.Write(request.ProgressName.ToString());
                 }
                 if (request.ContextStack != null)
                 {

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Showcase.Request
         public string AccessToken { set; get; }
         public int? Quantity { set; get; }
         public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
         public BuyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Showcase.Request
         }
         public BuyRequest WithConfig(Gs2.Gs2Showcase.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public BuyRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

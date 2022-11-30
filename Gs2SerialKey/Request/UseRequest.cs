@@ -36,6 +36,7 @@ namespace Gs2.Gs2SerialKey.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string Code { set; get; }
+        public string DuplicationAvoider { set; get; }
         public UseRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2SerialKey.Request
         }
         public UseRequest WithCode(string code) {
             this.Code = code;
+            return this;
+        }
+
+        public UseRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

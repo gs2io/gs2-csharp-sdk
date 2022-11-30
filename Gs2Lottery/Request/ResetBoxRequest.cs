@@ -36,6 +36,7 @@ namespace Gs2.Gs2Lottery.Request
         public string NamespaceName { set; get; }
         public string PrizeTableName { set; get; }
         public string AccessToken { set; get; }
+        public string DuplicationAvoider { set; get; }
         public ResetBoxRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Lottery.Request
         }
         public ResetBoxRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
+            return this;
+        }
+
+        public ResetBoxRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

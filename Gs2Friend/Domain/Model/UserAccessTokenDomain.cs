@@ -137,7 +137,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        "FriendRequest"
+                        "SendFriendRequest"
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
@@ -157,7 +157,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._session,
                 request.NamespaceName,
                 this._accessToken,
-                result?.Item?.TargetUserId
+                result?.Item?.TargetUserId,
+                "SendFriendRequest"
             );
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

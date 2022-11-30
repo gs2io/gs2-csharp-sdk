@@ -214,7 +214,7 @@ namespace Gs2.Core.Domain
                     resultJson = JsonMapper.ToObject(result.Result.Length != 0 ? result.Result : "{}");
                 }
 
-                if (resultJson.ContainsKey("stampSheet") && resultJson["stampSheet"].IsString && !string.IsNullOrEmpty(resultJson["stampSheet"].ToString()))
+                if (resultJson.ContainsKey("stampSheet") && resultJson.ContainsKey("stampSheetEncryptionKeyId") && resultJson.ContainsKey("autoRunStampSheet") && !bool.Parse(resultJson["autoRunStampSheet"].ToString()))
                 {
                     var newStampSheet = new StampSheetDomain(
                         _cache,

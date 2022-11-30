@@ -38,6 +38,7 @@ namespace Gs2.Gs2Datastore.Request
         public string AccessToken { set; get; }
         public string Scope { set; get; }
         public string[] AllowUserIds { set; get; }
+        public string DuplicationAvoider { set; get; }
         public UpdateDataObjectRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -56,6 +57,11 @@ namespace Gs2.Gs2Datastore.Request
         }
         public UpdateDataObjectRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
+            return this;
+        }
+
+        public UpdateDataObjectRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

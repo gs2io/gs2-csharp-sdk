@@ -37,6 +37,7 @@ namespace Gs2.Gs2Stamina.Request
         public string StaminaName { set; get; }
         public string AccessToken { set; get; }
         public int? ConsumeValue { set; get; }
+        public string DuplicationAvoider { set; get; }
         public ConsumeStaminaRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Stamina.Request
         }
         public ConsumeStaminaRequest WithConsumeValue(int? consumeValue) {
             this.ConsumeValue = consumeValue;
+            return this;
+        }
+
+        public ConsumeStaminaRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

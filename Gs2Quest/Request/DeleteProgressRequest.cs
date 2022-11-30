@@ -35,12 +35,18 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteProgressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public DeleteProgressRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
+            return this;
+        }
+
+        public DeleteProgressRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

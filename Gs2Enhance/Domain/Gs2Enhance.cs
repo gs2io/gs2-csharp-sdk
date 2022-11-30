@@ -241,8 +241,6 @@ namespace Gs2.Gs2Enhance.Domain
                                 "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                resultModel.Item.RateName.ToString(),
-                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
@@ -274,8 +272,6 @@ namespace Gs2.Gs2Enhance.Domain
                                 "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                resultModel.Item.RateName.ToString(),
-                                resultModel.Item.Name.ToString()
                             );
                             cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
                         }
@@ -323,8 +319,6 @@ namespace Gs2.Gs2Enhance.Domain
                                 "Progress"
                             );
                             var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                resultModel.Item.RateName.ToString(),
-                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,

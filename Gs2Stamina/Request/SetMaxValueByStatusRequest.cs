@@ -39,6 +39,7 @@ namespace Gs2.Gs2Stamina.Request
         public string KeyId { set; get; }
         public string SignedStatusBody { set; get; }
         public string SignedStatusSignature { set; get; }
+        public string DuplicationAvoider { set; get; }
         public SetMaxValueByStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Stamina.Request
         }
         public SetMaxValueByStatusRequest WithSignedStatusSignature(string signedStatusSignature) {
             this.SignedStatusSignature = signedStatusSignature;
+            return this;
+        }
+
+        public SetMaxValueByStatusRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

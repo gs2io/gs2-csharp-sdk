@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -201,29 +203,9 @@ namespace Gs2.Gs2Lock.Domain.Model
             }
             var result = future.Result;
             #else
-            UnlockResult result = null;
-            try {
-                result = await this._client.UnlockAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "mutex")
-                {
-                    var parentKey = Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Mutex"
-                );
-                    var key = Gs2.Gs2Lock.Domain.Model.MutexDomain.CreateCacheKey(
-                        request.PropertyId.ToString()
-                    );
-                    _cache.Delete<Gs2.Gs2Lock.Model.Mutex>(parentKey, key);
-                }
-                else
-                {
-                    throw e;
-                }
-            }
+            var result = await this._client.UnlockAsync(
+                request
+            );
             #endif
             var requestModel = request;
             var resultModel = result;

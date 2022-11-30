@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public long? ConsumeCount { set; get; }
         public string ItemSetName { set; get; }
+        public string DuplicationAvoider { set; get; }
         public ConsumeItemSetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Inventory.Request
         }
         public ConsumeItemSetRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
+            return this;
+        }
+
+        public ConsumeItemSetRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

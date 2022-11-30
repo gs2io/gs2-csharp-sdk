@@ -38,6 +38,7 @@ namespace Gs2.Gs2Exchange.Request
         public string RateName { set; get; }
         public string AwaitName { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
         public SkipRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -56,6 +57,11 @@ namespace Gs2.Gs2Exchange.Request
         }
         public SkipRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public SkipRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

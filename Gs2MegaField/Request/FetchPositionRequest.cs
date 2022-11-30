@@ -38,6 +38,7 @@ namespace Gs2.Gs2MegaField.Request
         public string AreaModelName { set; get; }
         public string LayerModelName { set; get; }
         public string[] UserIds { set; get; }
+        public string DuplicationAvoider { set; get; }
         public FetchPositionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -56,6 +57,11 @@ namespace Gs2.Gs2MegaField.Request
         }
         public FetchPositionRequest WithUserIds(string[] userIds) {
             this.UserIds = userIds;
+            return this;
+        }
+
+        public FetchPositionRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

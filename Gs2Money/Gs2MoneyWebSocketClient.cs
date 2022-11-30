@@ -973,6 +973,11 @@ namespace Gs2.Gs2Money
                     jsonWriter.WritePropertyName("xGs2AccessToken");
                     jsonWriter.Write(request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,

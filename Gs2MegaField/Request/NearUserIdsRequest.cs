@@ -40,6 +40,7 @@ namespace Gs2.Gs2MegaField.Request
         public Gs2.Gs2MegaField.Model.Position Point { set; get; }
         public float? R { set; get; }
         public int? Limit { set; get; }
+        public string DuplicationAvoider { set; get; }
         public NearUserIdsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -66,6 +67,11 @@ namespace Gs2.Gs2MegaField.Request
         }
         public NearUserIdsRequest WithLimit(int? limit) {
             this.Limit = limit;
+            return this;
+        }
+
+        public NearUserIdsRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

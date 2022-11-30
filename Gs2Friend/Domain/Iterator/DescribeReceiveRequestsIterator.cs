@@ -103,7 +103,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
-                "FriendRequest"
+                "ReceiveFriendRequest"
             );
             string listParentKey = parentKey;
             if (this._cache.IsListCached<Gs2.Gs2Friend.Model.FriendRequest>

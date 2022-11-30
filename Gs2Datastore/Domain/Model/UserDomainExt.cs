@@ -56,6 +56,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 				    (int) request.responseCode,
 				    request.responseCode == 200 ? "{}" : string.IsNullOrEmpty(request.error) ? "{}" : request.error
 			    ));
+		        request.Dispose();
 		    }
 	    }
 
@@ -175,8 +176,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        await request.SendWebRequest().ToUniTask();
 		        if (request.responseCode != 200)
 		        {
+			        request.Dispose();
 			        throw new UnknownException(Array.Empty<RequestError>());
 		        }
+		        request.Dispose();
 	        }
 	        {
 		        var result = await this.DataObject(

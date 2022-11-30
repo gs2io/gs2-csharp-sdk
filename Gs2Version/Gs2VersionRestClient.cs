@@ -1892,6 +1892,10 @@ namespace Gs2.Gs2Version
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -2343,6 +2347,10 @@ namespace Gs2.Gs2Version
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -2587,6 +2595,10 @@ namespace Gs2.Gs2Version
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(

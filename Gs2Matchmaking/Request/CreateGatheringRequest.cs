@@ -41,6 +41,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public string[] AllowUserIds { set; get; }
         public long? ExpiresAt { set; get; }
         public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
+        public string DuplicationAvoider { set; get; }
         public CreateGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -71,6 +72,11 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public CreateGatheringRequest WithExpiresAtTimeSpan(Gs2.Gs2Matchmaking.Model.TimeSpan_ expiresAtTimeSpan) {
             this.ExpiresAtTimeSpan = expiresAtTimeSpan;
+            return this;
+        }
+
+        public CreateGatheringRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

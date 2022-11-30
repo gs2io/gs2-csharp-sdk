@@ -39,6 +39,7 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
         public bool? IsComplete { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
         public EndRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2Quest.Request
         }
         public EndRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public EndRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -40,6 +40,7 @@ namespace Gs2.Gs2Enhance.Request
         public string AccessToken { set; get; }
         public bool? Force { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+        public string DuplicationAvoider { set; get; }
         public StartRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -66,6 +67,11 @@ namespace Gs2.Gs2Enhance.Request
         }
         public StartRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public StartRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

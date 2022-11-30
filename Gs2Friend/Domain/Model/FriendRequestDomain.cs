@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -77,7 +79,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             string userId,
-            string targetUserId
+            string targetUserId,
+            string type
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -90,9 +93,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._userId = userId;
             this._targetUserId = targetUserId;
             this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "FriendRequest"
+                this._namespaceName != null ? this._namespaceName.ToString() : null,
+                this._userId != null ? this._userId.ToString() : null,
+                type
             );
         }
 

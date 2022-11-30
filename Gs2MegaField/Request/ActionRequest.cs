@@ -39,6 +39,7 @@ namespace Gs2.Gs2MegaField.Request
         public string LayerModelName { set; get; }
         public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
         public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
+        public string DuplicationAvoider { set; get; }
         public ActionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -61,6 +62,11 @@ namespace Gs2.Gs2MegaField.Request
         }
         public ActionRequest WithScopes(Gs2.Gs2MegaField.Model.Scope[] scopes) {
             this.Scopes = scopes;
+            return this;
+        }
+
+        public ActionRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

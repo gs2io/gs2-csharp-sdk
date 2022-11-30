@@ -35,22 +35,12 @@ namespace Gs2.Gs2Enhance.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-        public string RateName { set; get; }
-        public string ProgressName { set; get; }
         public GetProgressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public GetProgressRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
-            return this;
-        }
-        public GetProgressRequest WithRateName(string rateName) {
-            this.RateName = rateName;
-            return this;
-        }
-        public GetProgressRequest WithProgressName(string progressName) {
-            this.ProgressName = progressName;
             return this;
         }
 
@@ -64,9 +54,7 @@ namespace Gs2.Gs2Enhance.Request
             }
             return new GetProgressRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
-                .WithProgressName(!data.Keys.Contains("progressName") || data["progressName"] == null ? null : data["progressName"].ToString());
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
         }
 
         public JsonData ToJson()
@@ -74,8 +62,6 @@ namespace Gs2.Gs2Enhance.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["rateName"] = RateName,
-                ["progressName"] = ProgressName,
             };
         }
 
@@ -89,14 +75,6 @@ namespace Gs2.Gs2Enhance.Request
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
-            }
-            if (RateName != null) {
-                writer.WritePropertyName("rateName");
-                writer.Write(RateName.ToString());
-            }
-            if (ProgressName != null) {
-                writer.WritePropertyName("progressName");
-                writer.Write(ProgressName.ToString());
             }
             writer.WriteObjectEnd();
         }

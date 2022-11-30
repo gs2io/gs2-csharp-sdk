@@ -37,6 +37,7 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string FormModelName { set; get; }
         public string PropertyId { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeletePropertyFormRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Formation.Request
         }
         public DeletePropertyFormRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
+            return this;
+        }
+
+        public DeletePropertyFormRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

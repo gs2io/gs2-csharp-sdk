@@ -78,7 +78,7 @@ namespace Gs2.Gs2Enhance.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):progress",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Enhance.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):progress",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -112,7 +112,7 @@ namespace Gs2.Gs2Enhance.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):progress",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -129,7 +129,7 @@ namespace Gs2.Gs2Enhance.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):progress",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -143,40 +143,6 @@ namespace Gs2.Gs2Enhance.Model
                 return null;
             }
             return match.Groups["userId"].Value;
-        }
-
-        private static System.Text.RegularExpressions.Regex _rateNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetRateNameFromGrn(
-            string grn
-        )
-        {
-            var match = _rateNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["rateName"].Success)
-            {
-                return null;
-            }
-            return match.Groups["rateName"].Value;
-        }
-
-        private static System.Text.RegularExpressions.Regex _progressNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):enhance:(?<namespaceName>.+):user:(?<userId>.+):rate:(?<rateName>.+):progress:(?<progressName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetProgressNameFromGrn(
-            string grn
-        )
-        {
-            var match = _progressNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["progressName"].Success)
-            {
-                return null;
-            }
-            return match.Groups["progressName"].Value;
         }
 
 #if UNITY_2017_1_OR_NEWER

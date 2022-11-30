@@ -1445,6 +1445,10 @@ namespace Gs2.Gs2Money
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,

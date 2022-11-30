@@ -36,6 +36,7 @@ namespace Gs2.Gs2Datastore.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string DataObjectName { set; get; }
+        public string DuplicationAvoider { set; get; }
         public PrepareDownloadOwnDataRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Datastore.Request
         }
         public PrepareDownloadOwnDataRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
+            return this;
+        }
+
+        public PrepareDownloadOwnDataRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

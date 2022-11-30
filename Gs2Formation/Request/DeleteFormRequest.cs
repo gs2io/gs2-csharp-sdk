@@ -37,6 +37,7 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string MoldName { set; get; }
         public int? Index { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteFormRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Formation.Request
         }
         public DeleteFormRequest WithIndex(int? index) {
             this.Index = index;
+            return this;
+        }
+
+        public DeleteFormRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

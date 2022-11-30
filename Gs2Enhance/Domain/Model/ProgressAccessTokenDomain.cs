@@ -64,8 +64,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private readonly string _namespaceName;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
-        private readonly string _rateName;
-        private readonly string _progressName;
 
         private readonly String _parentKey;
         public string TransactionId { get; set; }
@@ -74,8 +72,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public float? BonusRate { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
-        public string RateName => _rateName;
-        public string ProgressName => _progressName;
 
         public ProgressAccessTokenDomain(
             CacheDatabase cache,
@@ -83,9 +79,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            AccessToken accessToken,
-            string rateName,
-            string progressName
+            AccessToken accessToken
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -96,8 +90,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._rateName = rateName;
-            this._progressName = progressName;
             this._parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
@@ -123,9 +115,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithRateName(this.RateName)
-                .WithProgressName(this.ProgressName);
+                .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetProgressFuture(
                 request
@@ -154,28 +144,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         "Progress"
                     );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        resultModel.Item.RateName.ToString(),
-                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.RateModel != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RateModel"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
-                        resultModel.RateModel.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.RateModel,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
@@ -188,6 +161,80 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
             return new Gs2InlineFuture<Gs2.Gs2Enhance.Model.Progress>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> StartAsync(
+            #else
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> Start(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> StartAsync(
+        #endif
+            StartRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.StartFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.StartAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain>(Impl);
         #endif
         }
 
@@ -209,9 +256,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithRateName(this.RateName)
-                .WithProgressName(this.ProgressName);
+                .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.EndFuture(
                 request
@@ -240,8 +285,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         "Progress"
                     );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        resultModel.Item.RateName.ToString(),
-                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -302,9 +345,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithRateName(this.RateName)
-                .WithProgressName(this.ProgressName);
+                .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteProgressFuture(
                 request
@@ -331,8 +372,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     "Progress"
                 );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        request.RateName.ToString(),
-                        request.ProgressName.ToString()
                     );
                     _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
                 }
@@ -354,8 +393,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         "Progress"
                     );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        resultModel.Item.RateName.ToString(),
-                        resultModel.Item.Name.ToString()
                     );
                     cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
                 }
@@ -377,8 +414,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string rateName,
-            string progressName,
             string childType
         )
         {
@@ -387,22 +422,14 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 "enhance",
                 namespaceName ?? "null",
                 userId ?? "null",
-                rateName ?? "null",
-                progressName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string rateName,
-            string progressName
         )
         {
-            return string.Join(
-                ":",
-                rateName ?? "null",
-                progressName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -421,8 +448,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
             Gs2.Gs2Enhance.Model.Progress value = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
                 _parentKey,
                 Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    this.RateName?.ToString(),
-                    this.ProgressName?.ToString()
                 )
             );
             if (value == null) {
@@ -445,8 +470,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                                 _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
                                     _parentKey,
                                     Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                        this.RateName?.ToString(),
-                                        this.ProgressName?.ToString()
                                     )
                                 );
                             }
@@ -468,8 +491,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
                             _parentKey,
                             Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                this.RateName?.ToString(),
-                                this.ProgressName?.ToString()
                             )
                         );
                     }
@@ -482,8 +503,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 value = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
                     _parentKey,
                     Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        this.RateName?.ToString(),
-                        this.ProgressName?.ToString()
                     )
                 );
             }
