@@ -192,14 +192,14 @@ namespace Gs2.Gs2Distributor.Model
                 ["stampSheetResultId"] = StampSheetResultId,
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
-                ["taskRequests"] = new JsonData(TaskRequests == null ? new JsonData[]{} :
+                ["taskRequests"] = TaskRequests == null ? null : new JsonData(
                         TaskRequests.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
                 ["sheetRequest"] = SheetRequest?.ToJson(),
-                ["taskResults"] = new JsonData(TaskResults == null ? new JsonData[]{} :
+                ["taskResults"] = TaskResults == null ? null : new JsonData(
                         TaskResults.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

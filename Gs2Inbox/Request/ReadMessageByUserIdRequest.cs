@@ -83,7 +83,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["messageName"] = MessageName,
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

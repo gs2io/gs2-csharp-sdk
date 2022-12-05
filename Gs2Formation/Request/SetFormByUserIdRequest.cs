@@ -90,7 +90,7 @@ namespace Gs2.Gs2Formation.Request
                 ["userId"] = UserId,
                 ["moldName"] = MoldName,
                 ["index"] = Index,
-                ["slots"] = new JsonData(Slots == null ? new JsonData[]{} :
+                ["slots"] = Slots == null ? null : new JsonData(
                         Slots.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

@@ -117,7 +117,7 @@ namespace Gs2.Gs2Mission.Request
                 ["description"] = Description,
                 ["counterName"] = CounterName,
                 ["targetValue"] = TargetValue,
-                ["completeAcquireActions"] = new JsonData(CompleteAcquireActions == null ? new JsonData[]{} :
+                ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
                         CompleteAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

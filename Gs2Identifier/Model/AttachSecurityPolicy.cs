@@ -101,7 +101,7 @@ namespace Gs2.Gs2Identifier.Model
         {
             return new JsonData {
                 ["userId"] = UserId,
-                ["securityPolicyIds"] = new JsonData(SecurityPolicyIds == null ? new JsonData[]{} :
+                ["securityPolicyIds"] = SecurityPolicyIds == null ? null : new JsonData(
                         SecurityPolicyIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

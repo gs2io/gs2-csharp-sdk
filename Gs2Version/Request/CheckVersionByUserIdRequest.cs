@@ -76,7 +76,7 @@ namespace Gs2.Gs2Version.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["targetVersions"] = new JsonData(TargetVersions == null ? new JsonData[]{} :
+                ["targetVersions"] = TargetVersions == null ? null : new JsonData(
                         TargetVersions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

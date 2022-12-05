@@ -143,7 +143,7 @@ namespace Gs2.Gs2Formation.Model
                 ["formModelId"] = FormModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["slots"] = new JsonData(Slots == null ? new JsonData[]{} :
+                ["slots"] = Slots == null ? null : new JsonData(
                         Slots.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

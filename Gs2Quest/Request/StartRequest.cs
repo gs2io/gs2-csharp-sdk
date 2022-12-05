@@ -97,7 +97,7 @@ namespace Gs2.Gs2Quest.Request
                 ["questName"] = QuestName,
                 ["accessToken"] = AccessToken,
                 ["force"] = Force,
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

@@ -103,7 +103,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["namespaceName"] = NamespaceName,
                 ["rateName"] = RateName,
                 ["targetItemSetId"] = TargetItemSetId,
-                ["materials"] = new JsonData(Materials == null ? new JsonData[]{} :
+                ["materials"] = Materials == null ? null : new JsonData(
                         Materials.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Enhance.Request
                     ),
                 ["accessToken"] = AccessToken,
                 ["force"] = Force,
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

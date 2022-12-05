@@ -91,7 +91,7 @@ namespace Gs2.Gs2Distributor.Request
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["inboxNamespaceId"] = InboxNamespaceId,
-                ["whiteListTargetIds"] = new JsonData(WhiteListTargetIds == null ? new JsonData[]{} :
+                ["whiteListTargetIds"] = WhiteListTargetIds == null ? null : new JsonData(
                         WhiteListTargetIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

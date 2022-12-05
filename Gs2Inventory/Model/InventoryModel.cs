@@ -164,7 +164,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["initialCapacity"] = InitialCapacity,
                 ["maxCapacity"] = MaxCapacity,
                 ["protectReferencedItem"] = ProtectReferencedItem,
-                ["itemModels"] = new JsonData(ItemModels == null ? new JsonData[]{} :
+                ["itemModels"] = ItemModels == null ? null : new JsonData(
                         ItemModels.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

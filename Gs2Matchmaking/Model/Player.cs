@@ -75,14 +75,14 @@ namespace Gs2.Gs2Matchmaking.Model
         {
             return new JsonData {
                 ["userId"] = UserId,
-                ["attributes"] = new JsonData(Attributes == null ? new JsonData[]{} :
+                ["attributes"] = Attributes == null ? null : new JsonData(
                         Attributes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
                 ["roleName"] = RoleName,
-                ["denyUserIds"] = new JsonData(DenyUserIds == null ? new JsonData[]{} :
+                ["denyUserIds"] = DenyUserIds == null ? null : new JsonData(
                         DenyUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

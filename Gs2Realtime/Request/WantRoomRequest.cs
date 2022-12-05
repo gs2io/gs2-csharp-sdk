@@ -70,7 +70,7 @@ namespace Gs2.Gs2Realtime.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
-                ["notificationUserIds"] = new JsonData(NotificationUserIds == null ? new JsonData[]{} :
+                ["notificationUserIds"] = NotificationUserIds == null ? null : new JsonData(
                         NotificationUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

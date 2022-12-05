@@ -90,7 +90,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["displayItems"] = new JsonData(DisplayItems == null ? new JsonData[]{} :
+                ["displayItems"] = DisplayItems == null ? null : new JsonData(
                         DisplayItems.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

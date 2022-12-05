@@ -129,32 +129,32 @@ namespace Gs2.Gs2Quest.Request
                 ["questName"] = QuestName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["contents"] = new JsonData(Contents == null ? new JsonData[]{} :
+                ["contents"] = Contents == null ? null : new JsonData(
                         Contents.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
-                ["firstCompleteAcquireActions"] = new JsonData(FirstCompleteAcquireActions == null ? new JsonData[]{} :
+                ["firstCompleteAcquireActions"] = FirstCompleteAcquireActions == null ? null : new JsonData(
                         FirstCompleteAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
                         ConsumeActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["failedAcquireActions"] = new JsonData(FailedAcquireActions == null ? new JsonData[]{} :
+                ["failedAcquireActions"] = FailedAcquireActions == null ? null : new JsonData(
                         FailedAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["premiseQuestNames"] = new JsonData(PremiseQuestNames == null ? new JsonData[]{} :
+                ["premiseQuestNames"] = PremiseQuestNames == null ? null : new JsonData(
                         PremiseQuestNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

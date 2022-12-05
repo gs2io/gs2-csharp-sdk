@@ -76,7 +76,7 @@ namespace Gs2.Gs2Inbox.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["receivedGlobalMessageNames"] = new JsonData(ReceivedGlobalMessageNames == null ? new JsonData[]{} :
+                ["receivedGlobalMessageNames"] = ReceivedGlobalMessageNames == null ? null : new JsonData(
                         ReceivedGlobalMessageNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

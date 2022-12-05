@@ -148,7 +148,7 @@ namespace Gs2.Gs2Inbox.Model
             return new JsonData {
                 ["receivedId"] = ReceivedId,
                 ["userId"] = UserId,
-                ["receivedGlobalMessageNames"] = new JsonData(ReceivedGlobalMessageNames == null ? new JsonData[]{} :
+                ["receivedGlobalMessageNames"] = ReceivedGlobalMessageNames == null ? null : new JsonData(
                         ReceivedGlobalMessageNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

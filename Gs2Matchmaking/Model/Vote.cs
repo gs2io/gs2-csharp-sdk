@@ -172,7 +172,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["voteId"] = VoteId,
                 ["ratingName"] = RatingName,
                 ["gatheringName"] = GatheringName,
-                ["writtenBallots"] = new JsonData(WrittenBallots == null ? new JsonData[]{} :
+                ["writtenBallots"] = WrittenBallots == null ? null : new JsonData(
                         WrittenBallots.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

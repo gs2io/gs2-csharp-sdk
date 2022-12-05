@@ -77,13 +77,13 @@ namespace Gs2.Gs2Matchmaking.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["signedBallots"] = new JsonData(SignedBallots == null ? new JsonData[]{} :
+                ["signedBallots"] = SignedBallots == null ? null : new JsonData(
                         SignedBallots.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["gameResults"] = new JsonData(GameResults == null ? new JsonData[]{} :
+                ["gameResults"] = GameResults == null ? null : new JsonData(
                         GameResults.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

@@ -148,7 +148,7 @@ namespace Gs2.Gs2Friend.Model
             return new JsonData {
                 ["blackListId"] = BlackListId,
                 ["userId"] = UserId,
-                ["targetUserIds"] = new JsonData(TargetUserIds == null ? new JsonData[]{} :
+                ["targetUserIds"] = TargetUserIds == null ? null : new JsonData(
                         TargetUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

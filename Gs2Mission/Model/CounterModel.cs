@@ -149,7 +149,7 @@ namespace Gs2.Gs2Mission.Model
                 ["counterId"] = CounterId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                ["scopes"] = Scopes == null ? null : new JsonData(
                         Scopes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

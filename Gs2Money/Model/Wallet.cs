@@ -186,7 +186,7 @@ namespace Gs2.Gs2Money.Model
                 ["slot"] = Slot,
                 ["paid"] = Paid,
                 ["free"] = Free,
-                ["detail"] = new JsonData(Detail == null ? new JsonData[]{} :
+                ["detail"] = Detail == null ? null : new JsonData(
                         Detail.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

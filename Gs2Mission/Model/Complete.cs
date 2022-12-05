@@ -186,12 +186,12 @@ namespace Gs2.Gs2Mission.Model
                 ["completeId"] = CompleteId,
                 ["userId"] = UserId,
                 ["missionGroupName"] = MissionGroupName,
-                ["completedMissionTaskNames"] = new JsonData(CompletedMissionTaskNames == null ? new JsonData[]{} :
+                ["completedMissionTaskNames"] = CompletedMissionTaskNames == null ? null : new JsonData(
                         CompletedMissionTaskNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
-                ["receivedMissionTaskNames"] = new JsonData(ReceivedMissionTaskNames == null ? new JsonData[]{} :
+                ["receivedMissionTaskNames"] = ReceivedMissionTaskNames == null ? null : new JsonData(
                         ReceivedMissionTaskNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

@@ -98,13 +98,13 @@ namespace Gs2.Gs2Enhance.Request
                 ["rateName"] = RateName,
                 ["accessToken"] = AccessToken,
                 ["targetItemSetId"] = TargetItemSetId,
-                ["materials"] = new JsonData(Materials == null ? new JsonData[]{} :
+                ["materials"] = Materials == null ? null : new JsonData(
                         Materials.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

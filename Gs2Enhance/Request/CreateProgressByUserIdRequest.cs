@@ -96,7 +96,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["userId"] = UserId,
                 ["rateName"] = RateName,
                 ["targetItemSetId"] = TargetItemSetId,
-                ["materials"] = new JsonData(Materials == null ? new JsonData[]{} :
+                ["materials"] = Materials == null ? null : new JsonData(
                         Materials.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

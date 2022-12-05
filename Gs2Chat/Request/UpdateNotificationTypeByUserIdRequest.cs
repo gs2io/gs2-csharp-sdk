@@ -83,7 +83,7 @@ namespace Gs2.Gs2Chat.Request
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
                 ["userId"] = UserId,
-                ["notificationTypes"] = new JsonData(NotificationTypes == null ? new JsonData[]{} :
+                ["notificationTypes"] = NotificationTypes == null ? null : new JsonData(
                         NotificationTypes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

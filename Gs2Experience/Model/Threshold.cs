@@ -61,7 +61,7 @@ namespace Gs2.Gs2Experience.Model
         {
             return new JsonData {
                 ["metadata"] = Metadata,
-                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                ["values"] = Values == null ? null : new JsonData(
                         Values.Select(v => {
                             return new JsonData((long?)long.Parse(v.ToString()));
                         }).ToArray()

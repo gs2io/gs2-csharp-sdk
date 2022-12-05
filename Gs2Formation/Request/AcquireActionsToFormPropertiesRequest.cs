@@ -97,7 +97,7 @@ namespace Gs2.Gs2Formation.Request
                 ["moldName"] = MoldName,
                 ["index"] = Index,
                 ["acquireAction"] = AcquireAction?.ToJson(),
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

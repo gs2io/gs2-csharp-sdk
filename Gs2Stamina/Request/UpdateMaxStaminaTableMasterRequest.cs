@@ -91,7 +91,7 @@ namespace Gs2.Gs2Stamina.Request
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["experienceModelId"] = ExperienceModelId,
-                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                ["values"] = Values == null ? null : new JsonData(
                         Values.Select(v => {
                             return new JsonData((int?)int.Parse(v.ToString()));
                         }).ToArray()

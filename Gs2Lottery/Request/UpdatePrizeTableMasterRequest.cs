@@ -84,7 +84,7 @@ namespace Gs2.Gs2Lottery.Request
                 ["prizeTableName"] = PrizeTableName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["prizes"] = new JsonData(Prizes == null ? new JsonData[]{} :
+                ["prizes"] = Prizes == null ? null : new JsonData(
                         Prizes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

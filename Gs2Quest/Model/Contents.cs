@@ -67,7 +67,7 @@ namespace Gs2.Gs2Quest.Model
         {
             return new JsonData {
                 ["metadata"] = Metadata,
-                ["completeAcquireActions"] = new JsonData(CompleteAcquireActions == null ? new JsonData[]{} :
+                ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
                         CompleteAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

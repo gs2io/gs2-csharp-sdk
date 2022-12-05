@@ -76,7 +76,7 @@ namespace Gs2.Gs2JobQueue.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["jobs"] = new JsonData(Jobs == null ? new JsonData[]{} :
+                ["jobs"] = Jobs == null ? null : new JsonData(
                         Jobs.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

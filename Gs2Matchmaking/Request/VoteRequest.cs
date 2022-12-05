@@ -83,7 +83,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["namespaceName"] = NamespaceName,
                 ["ballotBody"] = BallotBody,
                 ["ballotSignature"] = BallotSignature,
-                ["gameResults"] = new JsonData(GameResults == null ? new JsonData[]{} :
+                ["gameResults"] = GameResults == null ? null : new JsonData(
                         GameResults.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

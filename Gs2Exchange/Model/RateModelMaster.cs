@@ -196,7 +196,7 @@ namespace Gs2.Gs2Exchange.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
                         ConsumeActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
@@ -205,13 +205,13 @@ namespace Gs2.Gs2Exchange.Model
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
                 ["enableSkip"] = EnableSkip,
-                ["skipConsumeActions"] = new JsonData(SkipConsumeActions == null ? new JsonData[]{} :
+                ["skipConsumeActions"] = SkipConsumeActions == null ? null : new JsonData(
                         SkipConsumeActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
                         AcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

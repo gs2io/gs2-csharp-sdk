@@ -66,7 +66,7 @@ namespace Gs2.Gs2Lottery.Model
         public JsonData ToJson()
         {
             return new JsonData {
-                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
                         AcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

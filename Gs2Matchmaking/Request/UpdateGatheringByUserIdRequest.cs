@@ -83,7 +83,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["namespaceName"] = NamespaceName,
                 ["gatheringName"] = GatheringName,
                 ["userId"] = UserId,
-                ["attributeRanges"] = new JsonData(AttributeRanges == null ? new JsonData[]{} :
+                ["attributeRanges"] = AttributeRanges == null ? null : new JsonData(
                         AttributeRanges.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

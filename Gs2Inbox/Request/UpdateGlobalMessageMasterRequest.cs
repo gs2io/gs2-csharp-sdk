@@ -89,7 +89,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["namespaceName"] = NamespaceName,
                 ["globalMessageName"] = GlobalMessageName,
                 ["metadata"] = Metadata,
-                ["readAcquireActions"] = new JsonData(ReadAcquireActions == null ? new JsonData[]{} :
+                ["readAcquireActions"] = ReadAcquireActions == null ? null : new JsonData(
                         ReadAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

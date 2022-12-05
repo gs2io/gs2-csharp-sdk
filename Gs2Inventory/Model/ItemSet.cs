@@ -239,7 +239,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["userId"] = UserId,
                 ["itemName"] = ItemName,
                 ["count"] = Count,
-                ["referenceOf"] = new JsonData(ReferenceOf == null ? new JsonData[]{} :
+                ["referenceOf"] = ReferenceOf == null ? null : new JsonData(
                         ReferenceOf.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

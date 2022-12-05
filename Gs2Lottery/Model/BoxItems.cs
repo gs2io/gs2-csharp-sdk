@@ -75,7 +75,7 @@ namespace Gs2.Gs2Lottery.Model
                 ["boxId"] = BoxId,
                 ["prizeTableName"] = PrizeTableName,
                 ["userId"] = UserId,
-                ["items"] = new JsonData(Items == null ? new JsonData[]{} :
+                ["items"] = Items == null ? null : new JsonData(
                         Items.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

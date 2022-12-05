@@ -174,12 +174,12 @@ namespace Gs2.Gs2Ranking.Model
                 ["subscribeId"] = SubscribeId,
                 ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
-                ["targetUserIds"] = new JsonData(TargetUserIds == null ? new JsonData[]{} :
+                ["targetUserIds"] = TargetUserIds == null ? null : new JsonData(
                         TargetUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
-                ["subscribedUserIds"] = new JsonData(SubscribedUserIds == null ? new JsonData[]{} :
+                ["subscribedUserIds"] = SubscribedUserIds == null ? null : new JsonData(
                         SubscribedUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

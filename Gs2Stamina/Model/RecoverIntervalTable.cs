@@ -150,7 +150,7 @@ namespace Gs2.Gs2Stamina.Model
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["experienceModelId"] = ExperienceModelId,
-                ["values"] = new JsonData(Values == null ? new JsonData[]{} :
+                ["values"] = Values == null ? null : new JsonData(
                         Values.Select(v => {
                             return new JsonData((int?)int.Parse(v.ToString()));
                         }).ToArray()

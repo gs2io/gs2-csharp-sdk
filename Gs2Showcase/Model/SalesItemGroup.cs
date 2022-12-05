@@ -68,7 +68,7 @@ namespace Gs2.Gs2Showcase.Model
             return new JsonData {
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["salesItems"] = new JsonData(SalesItems == null ? new JsonData[]{} :
+                ["salesItems"] = SalesItems == null ? null : new JsonData(
                         SalesItems.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

@@ -192,7 +192,7 @@ namespace Gs2.Gs2Inbox.Model
                 ["userId"] = UserId,
                 ["metadata"] = Metadata,
                 ["isRead"] = IsRead,
-                ["readAcquireActions"] = new JsonData(ReadAcquireActions == null ? new JsonData[]{} :
+                ["readAcquireActions"] = ReadAcquireActions == null ? null : new JsonData(
                         ReadAcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

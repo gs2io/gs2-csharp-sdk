@@ -83,7 +83,7 @@ namespace Gs2.Gs2MegaField.Request
                 ["namespaceName"] = NamespaceName,
                 ["areaModelName"] = AreaModelName,
                 ["layerModelName"] = LayerModelName,
-                ["userIds"] = new JsonData(UserIds == null ? new JsonData[]{} :
+                ["userIds"] = UserIds == null ? null : new JsonData(
                         UserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

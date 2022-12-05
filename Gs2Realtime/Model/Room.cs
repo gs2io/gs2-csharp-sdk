@@ -169,7 +169,7 @@ namespace Gs2.Gs2Realtime.Model
                 ["ipAddress"] = IpAddress,
                 ["port"] = Port,
                 ["encryptionKey"] = EncryptionKey,
-                ["notificationUserIds"] = new JsonData(NotificationUserIds == null ? new JsonData[]{} :
+                ["notificationUserIds"] = NotificationUserIds == null ? null : new JsonData(
                         NotificationUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

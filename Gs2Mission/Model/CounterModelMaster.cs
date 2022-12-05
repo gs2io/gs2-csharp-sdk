@@ -168,7 +168,7 @@ namespace Gs2.Gs2Mission.Model
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["description"] = Description,
-                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                ["scopes"] = Scopes == null ? null : new JsonData(
                         Scopes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

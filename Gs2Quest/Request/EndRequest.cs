@@ -97,14 +97,14 @@ namespace Gs2.Gs2Quest.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["transactionId"] = TransactionId,
-                ["rewards"] = new JsonData(Rewards == null ? new JsonData[]{} :
+                ["rewards"] = Rewards == null ? null : new JsonData(
                         Rewards.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
                 ["isComplete"] = IsComplete,
-                ["config"] = new JsonData(Config == null ? new JsonData[]{} :
+                ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

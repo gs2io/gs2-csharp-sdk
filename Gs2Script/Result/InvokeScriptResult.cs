@@ -89,7 +89,7 @@ namespace Gs2.Gs2Script.Result
                 ["result"] = Result,
                 ["executeTime"] = ExecuteTime,
                 ["charged"] = Charged,
-                ["output"] = new JsonData(Output == null ? new JsonData[]{} :
+                ["output"] = Output == null ? null : new JsonData(
                         Output.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

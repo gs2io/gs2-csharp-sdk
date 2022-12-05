@@ -119,13 +119,13 @@ namespace Gs2.Gs2Enhance.Request
                 ["targetInventoryModelId"] = TargetInventoryModelId,
                 ["acquireExperienceSuffix"] = AcquireExperienceSuffix,
                 ["materialInventoryModelId"] = MaterialInventoryModelId,
-                ["acquireExperienceHierarchy"] = new JsonData(AcquireExperienceHierarchy == null ? new JsonData[]{} :
+                ["acquireExperienceHierarchy"] = AcquireExperienceHierarchy == null ? null : new JsonData(
                         AcquireExperienceHierarchy.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
                 ["experienceModelId"] = ExperienceModelId,
-                ["bonusRates"] = new JsonData(BonusRates == null ? new JsonData[]{} :
+                ["bonusRates"] = BonusRates == null ? null : new JsonData(
                         BonusRates.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

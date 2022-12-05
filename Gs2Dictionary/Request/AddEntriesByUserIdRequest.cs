@@ -76,7 +76,7 @@ namespace Gs2.Gs2Dictionary.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["entryModelNames"] = new JsonData(EntryModelNames == null ? new JsonData[]{} :
+                ["entryModelNames"] = EntryModelNames == null ? null : new JsonData(
                         EntryModelNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

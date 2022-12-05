@@ -186,7 +186,7 @@ namespace Gs2.Gs2JobQueue.Model
                 ["userId"] = UserId,
                 ["scriptId"] = ScriptId,
                 ["args"] = Args,
-                ["result"] = new JsonData(Result == null ? new JsonData[]{} :
+                ["result"] = Result == null ? null : new JsonData(
                         Result.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

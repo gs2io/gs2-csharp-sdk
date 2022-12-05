@@ -92,13 +92,13 @@ namespace Gs2.Gs2Showcase.Request
                 ["salesItemName"] = SalesItemName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["consumeActions"] = new JsonData(ConsumeActions == null ? new JsonData[]{} :
+                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
                         ConsumeActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["acquireActions"] = new JsonData(AcquireActions == null ? new JsonData[]{} :
+                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
                         AcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

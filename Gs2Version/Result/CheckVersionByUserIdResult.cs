@@ -74,13 +74,13 @@ namespace Gs2.Gs2Version.Result
         {
             return new JsonData {
                 ["projectToken"] = ProjectToken,
-                ["warnings"] = new JsonData(Warnings == null ? new JsonData[]{} :
+                ["warnings"] = Warnings == null ? null : new JsonData(
                         Warnings.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["errors"] = new JsonData(Errors == null ? new JsonData[]{} :
+                ["errors"] = Errors == null ? null : new JsonData(
                         Errors.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

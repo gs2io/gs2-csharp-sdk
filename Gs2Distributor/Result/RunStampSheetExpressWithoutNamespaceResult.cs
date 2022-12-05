@@ -64,7 +64,7 @@ namespace Gs2.Gs2Distributor.Result
         public JsonData ToJson()
         {
             return new JsonData {
-                ["taskResults"] = new JsonData(TaskResults == null ? new JsonData[]{} :
+                ["taskResults"] = TaskResults == null ? null : new JsonData(
                         TaskResults.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

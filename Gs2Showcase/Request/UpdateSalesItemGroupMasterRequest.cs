@@ -84,7 +84,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["salesItemGroupName"] = SalesItemGroupName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["salesItemNames"] = new JsonData(SalesItemNames == null ? new JsonData[]{} :
+                ["salesItemNames"] = SalesItemNames == null ? null : new JsonData(
                         SalesItemNames.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

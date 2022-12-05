@@ -97,7 +97,7 @@ namespace Gs2.Gs2MegaField.Request
                 ["areaModelName"] = AreaModelName,
                 ["layerModelName"] = LayerModelName,
                 ["position"] = Position?.ToJson(),
-                ["scopes"] = new JsonData(Scopes == null ? new JsonData[]{} :
+                ["scopes"] = Scopes == null ? null : new JsonData(
                         Scopes.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

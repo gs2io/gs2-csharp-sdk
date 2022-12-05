@@ -103,7 +103,7 @@ namespace Gs2.Gs2Datastore.Request
                 ["name"] = Name,
                 ["contentType"] = ContentType,
                 ["scope"] = Scope,
-                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                ["allowUserIds"] = AllowUserIds == null ? null : new JsonData(
                         AllowUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

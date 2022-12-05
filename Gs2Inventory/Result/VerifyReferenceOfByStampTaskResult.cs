@@ -85,7 +85,7 @@ namespace Gs2.Gs2Inventory.Result
         public JsonData ToJson()
         {
             return new JsonData {
-                ["item"] = new JsonData(Item == null ? new JsonData[]{} :
+                ["item"] = Item == null ? null : new JsonData(
                         Item.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

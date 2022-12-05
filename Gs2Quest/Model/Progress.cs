@@ -175,7 +175,7 @@ namespace Gs2.Gs2Quest.Model
                 ["transactionId"] = TransactionId,
                 ["questModelId"] = QuestModelId,
                 ["randomSeed"] = RandomSeed,
-                ["rewards"] = new JsonData(Rewards == null ? new JsonData[]{} :
+                ["rewards"] = Rewards == null ? null : new JsonData(
                         Rewards.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

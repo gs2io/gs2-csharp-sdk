@@ -169,7 +169,7 @@ namespace Gs2.Gs2Showcase.Model
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["salesPeriodEventId"] = SalesPeriodEventId,
-                ["displayItems"] = new JsonData(DisplayItems == null ? new JsonData[]{} :
+                ["displayItems"] = DisplayItems == null ? null : new JsonData(
                         DisplayItems.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

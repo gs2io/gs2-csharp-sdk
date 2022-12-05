@@ -149,7 +149,7 @@ namespace Gs2.Gs2Quest.Model
                 ["questGroupModelId"] = QuestGroupModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["quests"] = new JsonData(Quests == null ? new JsonData[]{} :
+                ["quests"] = Quests == null ? null : new JsonData(
                         Quests.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

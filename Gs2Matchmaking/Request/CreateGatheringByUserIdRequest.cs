@@ -111,19 +111,19 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["player"] = Player?.ToJson(),
-                ["attributeRanges"] = new JsonData(AttributeRanges == null ? new JsonData[]{} :
+                ["attributeRanges"] = AttributeRanges == null ? null : new JsonData(
                         AttributeRanges.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["capacityOfRoles"] = new JsonData(CapacityOfRoles == null ? new JsonData[]{} :
+                ["capacityOfRoles"] = CapacityOfRoles == null ? null : new JsonData(
                         CapacityOfRoles.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();
                         }).ToArray()
                     ),
-                ["allowUserIds"] = new JsonData(AllowUserIds == null ? new JsonData[]{} :
+                ["allowUserIds"] = AllowUserIds == null ? null : new JsonData(
                         AllowUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()

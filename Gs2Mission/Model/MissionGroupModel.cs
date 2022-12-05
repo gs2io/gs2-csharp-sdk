@@ -173,7 +173,7 @@ namespace Gs2.Gs2Mission.Model
                 ["missionGroupId"] = MissionGroupId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["tasks"] = new JsonData(Tasks == null ? new JsonData[]{} :
+                ["tasks"] = Tasks == null ? null : new JsonData(
                         Tasks.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

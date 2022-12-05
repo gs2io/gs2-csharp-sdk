@@ -75,13 +75,13 @@ namespace Gs2.Gs2Matchmaking.Model
         {
             return new JsonData {
                 ["roleName"] = RoleName,
-                ["roleAliases"] = new JsonData(RoleAliases == null ? new JsonData[]{} :
+                ["roleAliases"] = RoleAliases == null ? null : new JsonData(
                         RoleAliases.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
                 ["capacity"] = Capacity,
-                ["participants"] = new JsonData(Participants == null ? new JsonData[]{} :
+                ["participants"] = Participants == null ? null : new JsonData(
                         Participants.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

@@ -97,7 +97,7 @@ namespace Gs2.Gs2Chat.Request
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["password"] = Password,
-                ["whiteListUserIds"] = new JsonData(WhiteListUserIds == null ? new JsonData[]{} :
+                ["whiteListUserIds"] = WhiteListUserIds == null ? null : new JsonData(
                         WhiteListUserIds.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
