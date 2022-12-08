@@ -29,6 +29,8 @@ namespace Gs2.Core.Model
 		public string component;
 		// ReSharper disable once InconsistentNaming
 		public string message;
+		// ReSharper disable once InconsistentNaming
+		public string code;
 
 		public RequestError()
 		{
@@ -44,27 +46,31 @@ namespace Gs2.Core.Model
 			this.message = message;
 		}
 
+		public RequestError(
+			string component,
+			string message,
+			string code
+		)
+		{
+			this.component = component;
+			this.message = message;
+			this.code = code;
+		}
+
 		public string Component
 		{
-			set
-			{
-				component = value;
-			}
-			get
-			{
-				return component;
-			}
+			set => component = value;
+			get => component;
 		}
 		public string Message
 		{
-			set
-			{
-				message = value;
-			}
-			get
-			{
-				return message;
-			}
+			set => message = value;
+			get => message;
+		}
+		public string Code
+		{
+			set => code = value;
+			get => code;
 		}
 	}
 }
