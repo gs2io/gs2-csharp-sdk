@@ -88,7 +88,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+):resource:(?<resourceName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+):resource:(?<resourceName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+):resource:(?<resourceName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+):resource:(?<resourceName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _stackNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+):resource:(?<resourceName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+):resource:(?<resourceName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -139,7 +139,7 @@ namespace Gs2.Gs2Deploy.Model
         }
 
         private static System.Text.RegularExpressions.Regex _resourceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stack:(?<stackName>.+):resource:(?<resourceName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):deploy:(?<stackName>.+):resource:(?<resourceName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -191,12 +191,12 @@ namespace Gs2.Gs2Deploy.Model
                 ["response"] = Response,
                 ["rollbackContext"] = RollbackContext,
                 ["rollbackRequest"] = RollbackRequest,
-                ["rollbackAfter"] = new JsonData(RollbackAfter == null ? new JsonData[]{} :
+                ["rollbackAfter"] = RollbackAfter == null ? null : new JsonData(
                         RollbackAfter.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
                     ),
-                ["outputFields"] = new JsonData(OutputFields == null ? new JsonData[]{} :
+                ["outputFields"] = OutputFields == null ? null : new JsonData(
                         OutputFields.Select(v => {
                             //noinspection Convert2MethodRef
                             return v.ToJson();

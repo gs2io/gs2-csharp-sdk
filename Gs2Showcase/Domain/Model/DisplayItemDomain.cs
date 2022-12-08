@@ -62,16 +62,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _displayItemId;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
+        public string DisplayItemId => _displayItemId;
 
         public DisplayItemDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
-            string namespaceName
+            string namespaceName,
+            string displayItemId
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -81,6 +84,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
+            this._displayItemId = displayItemId;
             this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "DisplayItem"
@@ -89,6 +93,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public static string CreateCacheParentKey(
             string namespaceName,
+            string displayItemId,
             string childType
         )
         {
@@ -96,14 +101,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 ":",
                 "showcase",
                 namespaceName ?? "null",
+                displayItemId ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
+            string displayItemId
         )
         {
-            return "Singleton";
+            return string.Join(
+                ":",
+                displayItemId ?? "null"
+            );
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -122,6 +132,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             Gs2.Gs2Showcase.Model.DisplayItem value = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
+                    this.DisplayItemId?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

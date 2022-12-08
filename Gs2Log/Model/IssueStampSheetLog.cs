@@ -103,7 +103,7 @@ namespace Gs2.Gs2Log.Model
                 ["userId"] = UserId,
                 ["action"] = Action,
                 ["args"] = Args,
-                ["tasks"] = new JsonData(Tasks == null ? new JsonData[]{} :
+                ["tasks"] = Tasks == null ? null : new JsonData(
                         Tasks.Select(v => {
                             return new JsonData(v.ToString());
                         }).ToArray()
