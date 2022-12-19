@@ -71,7 +71,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public string Protocol { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
-        public string ConnectionId => _connectionId;
 
         public WebSocketSessionDomain(
             CacheDatabase cache,

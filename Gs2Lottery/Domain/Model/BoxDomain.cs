@@ -143,6 +143,20 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            if (value == null)
+            {
+                var future = this._client.GetBoxByUserIdFuture(
+                    new GetBoxByUserIdRequest()
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithPrizeTableName(this.PrizeTableName)
+                        .WithUserId(this.UserId)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                }
+                value = future.Result.Item;
+            }
             self.OnComplete(value);
             yield return null;
         #else

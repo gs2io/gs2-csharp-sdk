@@ -283,7 +283,7 @@ namespace Gs2.Gs2Money.Domain.Model
             Gs2.Gs2Money.Model.Wallet value = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
                 _parentKey,
                 Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                          "null"
+                    "null"
                 )
             );
             if (value == null) {
@@ -306,7 +306,7 @@ namespace Gs2.Gs2Money.Domain.Model
                                 _cache.Delete<Gs2.Gs2Money.Model.Wallet>(
                                     _parentKey,
                                     Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                              "null"
+                                        "null"
                                     )
                                 );
                             }
@@ -328,7 +328,7 @@ namespace Gs2.Gs2Money.Domain.Model
                         _cache.Delete<Gs2.Gs2Money.Model.Wallet>(
                             _parentKey,
                             Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                      "null"
+                                "null"
                             )
                         );
                     }
@@ -341,7 +341,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 value = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
                     _parentKey,
                     Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                              "null"
+                        "null"
                     )
                 );
             }

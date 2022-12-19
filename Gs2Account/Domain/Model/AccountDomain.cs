@@ -142,7 +142,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        this.UserId
                     );
                     cache.Put(
                         parentKey,
@@ -212,7 +212,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        this.UserId
                     );
                     cache.Put(
                         parentKey,
@@ -282,7 +282,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        this.UserId
                     );
                     cache.Put(
                         parentKey,
@@ -368,7 +368,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        this.UserId
                     );
                     cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
                 }
@@ -433,7 +433,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        resultModel.Item.UserId.ToString()
+                        this.UserId
                     );
                     cache.Put(
                         parentKey,

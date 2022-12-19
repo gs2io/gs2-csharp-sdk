@@ -201,6 +201,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "box")
                 {
+                    var parentKey = "lottery";
+                    var key = Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
+                        request.PrizeTableName.ToString()
+                    );
+                    _cache.Delete<Gs2.Gs2Lottery.Model.Box>(parentKey, key);
                 }
                 else
                 {

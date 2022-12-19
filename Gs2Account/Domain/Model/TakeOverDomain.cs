@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -66,6 +64,7 @@ namespace Gs2.Gs2Account.Domain.Model
         private readonly string _namespaceName;
         private readonly string _userId;
         private readonly int? _type;
+        private readonly string _userIdentifier;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
