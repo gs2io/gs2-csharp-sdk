@@ -78,7 +78,7 @@ namespace Gs2.Gs2SerialKey.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<serialKeyCode>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<code>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -95,7 +95,7 @@ namespace Gs2.Gs2SerialKey.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<serialKeyCode>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<code>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -112,7 +112,7 @@ namespace Gs2.Gs2SerialKey.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<serialKeyCode>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<code>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -128,21 +128,21 @@ namespace Gs2.Gs2SerialKey.Model
             return match.Groups["namespaceName"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _serialKeyCodeRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<serialKeyCode>.+)",
+        private static System.Text.RegularExpressions.Regex _codeRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):serialKey:(?<namespaceName>.+):serialKey:(?<code>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetSerialKeyCodeFromGrn(
+        public static string GetCodeFromGrn(
             string grn
         )
         {
-            var match = _serialKeyCodeRegex.Match(grn);
-            if (!match.Success || !match.Groups["serialKeyCode"].Success)
+            var match = _codeRegex.Match(grn);
+            if (!match.Success || !match.Groups["code"].Success)
             {
                 return null;
             }
-            return match.Groups["serialKeyCode"].Value;
+            return match.Groups["code"].Value;
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -210,8 +210,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        requestModel.DisplayItemId,
                         "SalesItem"
                     );
                     var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(

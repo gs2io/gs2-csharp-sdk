@@ -62,16 +62,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _displayItemId;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
+        public string DisplayItemId => _displayItemId;
 
         public SalesItemDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
-            string namespaceName
+            string namespaceName,
+            string displayItemId
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -81,14 +84,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+            this._displayItemId = displayItemId;
+            this._parentKey = Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheParentKey(
                 this.NamespaceName,
+                this.DisplayItemId,
                 "SalesItem"
             );
         }
 
         public static string CreateCacheParentKey(
             string namespaceName,
+            string displayItemId,
             string childType
         )
         {
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 ":",
                 "showcase",
                 namespaceName ?? "null",
+                displayItemId ?? "null",
                 childType
             );
         }

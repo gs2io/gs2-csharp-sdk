@@ -31,9 +31,14 @@ namespace Gs2.Gs2Identifier.Model
 #endif
 	public class Password : IComparable
 	{
+        public string PasswordId { set; get; }
         public string UserId { set; get; }
         public string UserName { set; get; }
         public long? CreatedAt { set; get; }
+        public Password WithPasswordId(string passwordId) {
+            this.PasswordId = passwordId;
+            return this;
+        }
         public Password WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -90,6 +95,7 @@ namespace Gs2.Gs2Identifier.Model
                 return null;
             }
             return new Password()
+                .WithPasswordId(!data.Keys.Contains("passwordId") || data["passwordId"] == null ? null : data["passwordId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
@@ -98,6 +104,7 @@ namespace Gs2.Gs2Identifier.Model
         public JsonData ToJson()
         {
             return new JsonData {
+                ["passwordId"] = PasswordId,
                 ["userId"] = UserId,
                 ["userName"] = UserName,
                 ["createdAt"] = CreatedAt,
@@ -107,6 +114,10 @@ namespace Gs2.Gs2Identifier.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (PasswordId != null) {
+                writer.WritePropertyName("passwordId");
+                writer.Write(PasswordId.ToString());
+            }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
@@ -126,6 +137,14 @@ namespace Gs2.Gs2Identifier.Model
         {
             var other = obj as Password;
             var diff = 0;
+            if (PasswordId == null && PasswordId == other.PasswordId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PasswordId.CompareTo(other.PasswordId);
+            }
             if (UserId == null && UserId == other.UserId)
             {
                 // null and null

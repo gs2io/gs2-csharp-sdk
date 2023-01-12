@@ -34,6 +34,7 @@ namespace Gs2.Gs2MegaField.Model
         public string AreaModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+        public Gs2.Gs2MegaField.Model.LayerModel[] LayerModels { set; get; }
         public AreaModel WithAreaModelId(string areaModelId) {
             this.AreaModelId = areaModelId;
             return this;
@@ -44,6 +45,10 @@ namespace Gs2.Gs2MegaField.Model
         }
         public AreaModel WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public AreaModel WithLayerModels(Gs2.Gs2MegaField.Model.LayerModel[] layerModels) {
+            this.LayerModels = layerModels;
             return this;
         }
 
@@ -126,7 +131,10 @@ namespace Gs2.Gs2MegaField.Model
             return new AreaModel()
                 .WithAreaModelId(!data.Keys.Contains("areaModelId") || data["areaModelId"] == null ? null : data["areaModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithLayerModels(!data.Keys.Contains("layerModels") || data["layerModels"] == null ? new Gs2.Gs2MegaField.Model.LayerModel[]{} : data["layerModels"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2MegaField.Model.LayerModel.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
@@ -135,6 +143,12 @@ namespace Gs2.Gs2MegaField.Model
                 ["areaModelId"] = AreaModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
+                ["layerModels"] = LayerModels == null ? null : new JsonData(
+                        LayerModels.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
@@ -152,6 +166,17 @@ namespace Gs2.Gs2MegaField.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (LayerModels != null) {
+                writer.WritePropertyName("layerModels");
+                writer.WriteArrayStart();
+                foreach (var layerModel in LayerModels)
+                {
+                    if (layerModel != null) {
+                        layerModel.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -183,6 +208,18 @@ namespace Gs2.Gs2MegaField.Model
             else
             {
                 diff += Metadata.CompareTo(other.Metadata);
+            }
+            if (LayerModels == null && LayerModels == other.LayerModels)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += LayerModels.Length - other.LayerModels.Length;
+                for (var i = 0; i < LayerModels.Length; i++)
+                {
+                    diff += LayerModels[i].CompareTo(other.LayerModels[i]);
+                }
             }
             return diff;
         }
