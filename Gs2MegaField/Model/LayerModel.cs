@@ -32,15 +32,10 @@ namespace Gs2.Gs2MegaField.Model
 	public class LayerModel : IComparable
 	{
         public string LayerModelId { set; get; }
-        public string AreaModelName { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
         public LayerModel WithLayerModelId(string layerModelId) {
             this.LayerModelId = layerModelId;
-            return this;
-        }
-        public LayerModel WithAreaModelName(string areaModelName) {
-            this.AreaModelName = areaModelName;
             return this;
         }
         public LayerModel WithName(string name) {
@@ -147,7 +142,6 @@ namespace Gs2.Gs2MegaField.Model
             }
             return new LayerModel()
                 .WithLayerModelId(!data.Keys.Contains("layerModelId") || data["layerModelId"] == null ? null : data["layerModelId"].ToString())
-                .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
         }
@@ -156,7 +150,6 @@ namespace Gs2.Gs2MegaField.Model
         {
             return new JsonData {
                 ["layerModelId"] = LayerModelId,
-                ["areaModelName"] = AreaModelName,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
             };
@@ -168,10 +161,6 @@ namespace Gs2.Gs2MegaField.Model
             if (LayerModelId != null) {
                 writer.WritePropertyName("layerModelId");
                 writer.Write(LayerModelId.ToString());
-            }
-            if (AreaModelName != null) {
-                writer.WritePropertyName("areaModelName");
-                writer.Write(AreaModelName.ToString());
             }
             if (Name != null) {
                 writer.WritePropertyName("name");
@@ -195,14 +184,6 @@ namespace Gs2.Gs2MegaField.Model
             else
             {
                 diff += LayerModelId.CompareTo(other.LayerModelId);
-            }
-            if (AreaModelName == null && AreaModelName == other.AreaModelName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AreaModelName.CompareTo(other.AreaModelName);
             }
             if (Name == null && Name == other.Name)
             {
