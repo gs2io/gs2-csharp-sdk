@@ -66,6 +66,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
+        public string Url { get; set; }
+        public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
 
@@ -89,6 +91,20 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "User"
+            );
+        }
+
+        public Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain SerialKey(
+            string code
+        ) {
+            return new Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this._accessToken,
+                code
             );
         }
 

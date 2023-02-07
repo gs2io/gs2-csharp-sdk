@@ -95,161 +95,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.BoxItems> GetBoxAsync(
-            #else
-        public IFuture<Gs2.Gs2Lottery.Model.BoxItems> GetBox(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Lottery.Model.BoxItems> GetBoxAsync(
-        #endif
-            GetBoxRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetBoxFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetBoxAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "BoxItems"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                        resultModel.Item.PrizeTableName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.BoxItems>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain> ResetBoxAsync(
-            #else
-        public IFuture<Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain> ResetBox(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain> ResetBoxAsync(
-        #endif
-            ResetBoxRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.ResetBoxFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            ResetBoxResult result = null;
-            try {
-                result = await this._client.ResetBoxAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "box")
-                {
-                    var parentKey = "lottery";
-                    var key = Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
-                        request.PrizeTableName.ToString()
-                    );
-                    _cache.Delete<Gs2.Gs2Lottery.Model.Box>(parentKey, key);
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName?.ToString(),
-                        this.UserId.ToString(),
-                        "BoxItems"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                        requestModel.PrizeTableName
-                    );
-                    this._cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
-                        parentKey,
-                        key
-                    );
-                    this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.BoxItems>(
-                        parentKey
-                    );
-                }
-            }
-            Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain domain = this;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Domain.Model.UserAccessTokenDomain>(Impl);
-        #endif
-        }
-
         public Gs2.Gs2Lottery.Domain.Model.LotteryAccessTokenDomain Lottery(
         ) {
             return new Gs2.Gs2Lottery.Domain.Model.LotteryAccessTokenDomain(
@@ -259,6 +104,57 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
+        )
+        {
+            return new DescribeBoxesIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.BoxItems> BoxesAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
+            #endif
+        #else
+        public DescribeBoxesIterator Boxes(
+        #endif
+        )
+        {
+            return new DescribeBoxesIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Lottery.Domain.Model.BoxItemsAccessTokenDomain BoxItems(
+            string prizeTableName
+        ) {
+            return new Gs2.Gs2Lottery.Domain.Model.BoxItemsAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this._accessToken,
+                prizeTableName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -312,57 +208,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
-        )
-        {
-            return new DescribeBoxesIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken
-            );
-        }
-
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.BoxItems> BoxesAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
-            #endif
-        #else
-        public DescribeBoxesIterator Boxes(
-        #endif
-        )
-        {
-            return new DescribeBoxesIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public Gs2.Gs2Lottery.Domain.Model.BoxAccessTokenDomain Box(
-            string prizeTableName
-        ) {
-            return new Gs2.Gs2Lottery.Domain.Model.BoxAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this.NamespaceName,
-                this._accessToken,
-                prizeTableName
             );
         }
 

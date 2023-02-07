@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Threading.Tasks;
+using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Core.Result;
 
@@ -31,6 +31,8 @@ namespace Gs2.Core.Net
         IEnumerator Open(Action<AsyncResult<OpenResult>> callback);
         IEnumerator Close(Action callback);
 #endif
+        Gs2Future<OpenResult> OpenFuture();
+        Gs2Future CloseFuture();
         IEnumerator Send(IGs2SessionRequest request);
 
         bool Ping();

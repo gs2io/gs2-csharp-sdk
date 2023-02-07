@@ -1023,247 +1023,6 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        public class ResetBoxTask : Gs2WebSocketSessionTask<Request.ResetBoxRequest, Result.ResetBoxResult>
-        {
-	        public ResetBoxTask(IGs2Session session, Request.ResetBoxRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.ResetBoxRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.PrizeTableName != null)
-                {
-                    jsonWriter.WritePropertyName("prizeTableName");
-                    jsonWriter.Write(request.PrizeTableName.ToString());
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("accessToken");
-                    jsonWriter.Write(request.AccessToken.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(request.AccessToken);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "lottery",
-                    "box",
-                    "resetBox",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator ResetBox(
-                Request.ResetBoxRequest request,
-                UnityAction<AsyncResult<Result.ResetBoxResult>> callback
-        )
-		{
-			var task = new ResetBoxTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetBoxResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.ResetBoxResult> ResetBoxFuture(
-                Request.ResetBoxRequest request
-        )
-		{
-			return new ResetBoxTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetBoxResult> ResetBoxAsync(
-            Request.ResetBoxRequest request
-        )
-		{
-		    var task = new ResetBoxTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-    #else
-		public ResetBoxTask ResetBoxAsync(
-                Request.ResetBoxRequest request
-        )
-		{
-			return new ResetBoxTask(
-                Gs2WebSocketSession,
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.ResetBoxResult> ResetBoxAsync(
-            Request.ResetBoxRequest request
-        )
-		{
-		    var task = new ResetBoxTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class ResetBoxByUserIdTask : Gs2WebSocketSessionTask<Request.ResetBoxByUserIdRequest, Result.ResetBoxByUserIdResult>
-        {
-	        public ResetBoxByUserIdTask(IGs2Session session, Request.ResetBoxByUserIdRequest request) : base(session, request)
-	        {
-	        }
-
-            protected override IGs2SessionRequest CreateRequest(Request.ResetBoxByUserIdRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.PrizeTableName != null)
-                {
-                    jsonWriter.WritePropertyName("prizeTableName");
-                    jsonWriter.Write(request.PrizeTableName.ToString());
-                }
-                if (request.UserId != null)
-                {
-                    jsonWriter.WritePropertyName("userId");
-                    jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "lottery",
-                    "box",
-                    "resetBoxByUserId",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator ResetBoxByUserId(
-                Request.ResetBoxByUserIdRequest request,
-                UnityAction<AsyncResult<Result.ResetBoxByUserIdResult>> callback
-        )
-		{
-			var task = new ResetBoxByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetBoxByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.ResetBoxByUserIdResult> ResetBoxByUserIdFuture(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-			return new ResetBoxByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
-            Request.ResetBoxByUserIdRequest request
-        )
-		{
-		    var task = new ResetBoxByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-    #else
-		public ResetBoxByUserIdTask ResetBoxByUserIdAsync(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-			return new ResetBoxByUserIdTask(
-                Gs2WebSocketSession,
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
-            Request.ResetBoxByUserIdRequest request
-        )
-		{
-		    var task = new ResetBoxByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class GetLotteryModelTask : Gs2WebSocketSessionTask<Request.GetLotteryModelRequest, Result.GetLotteryModelResult>
         {
 	        public GetLotteryModelTask(IGs2Session session, Request.GetLotteryModelRequest request) : base(session, request)
@@ -1590,6 +1349,247 @@ namespace Gs2.Gs2Lottery
         )
 		{
 		    var task = new ResetPrizeLimitTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetBoxTask : Gs2WebSocketSessionTask<Request.ResetBoxRequest, Result.ResetBoxResult>
+        {
+	        public ResetBoxTask(IGs2Session session, Request.ResetBoxRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetBoxRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PrizeTableName != null)
+                {
+                    jsonWriter.WritePropertyName("prizeTableName");
+                    jsonWriter.Write(request.PrizeTableName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "lottery",
+                    "boxItems",
+                    "resetBox",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetBox(
+                Request.ResetBoxRequest request,
+                UnityAction<AsyncResult<Result.ResetBoxResult>> callback
+        )
+		{
+			var task = new ResetBoxTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetBoxResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetBoxResult> ResetBoxFuture(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxResult> ResetBoxAsync(
+            Request.ResetBoxRequest request
+        )
+		{
+		    var task = new ResetBoxTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetBoxTask ResetBoxAsync(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetBoxResult> ResetBoxAsync(
+            Request.ResetBoxRequest request
+        )
+		{
+		    var task = new ResetBoxTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetBoxByUserIdTask : Gs2WebSocketSessionTask<Request.ResetBoxByUserIdRequest, Result.ResetBoxByUserIdResult>
+        {
+	        public ResetBoxByUserIdTask(IGs2Session session, Request.ResetBoxByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetBoxByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PrizeTableName != null)
+                {
+                    jsonWriter.WritePropertyName("prizeTableName");
+                    jsonWriter.Write(request.PrizeTableName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "lottery",
+                    "boxItems",
+                    "resetBoxByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetBoxByUserId(
+                Request.ResetBoxByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetBoxByUserIdResult>> callback
+        )
+		{
+			var task = new ResetBoxByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetBoxByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetBoxByUserIdResult> ResetBoxByUserIdFuture(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
+            Request.ResetBoxByUserIdRequest request
+        )
+		{
+		    var task = new ResetBoxByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetBoxByUserIdTask ResetBoxByUserIdAsync(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
+            Request.ResetBoxByUserIdRequest request
+        )
+		{
+		    var task = new ResetBoxByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

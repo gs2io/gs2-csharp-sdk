@@ -222,8 +222,9 @@ namespace Gs2.Gs2SerialKey.Domain
                         var resultModel = UseByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
                         if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
+                                requestModel.UserId,
                                 "SerialKey"
                             );
                             var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(

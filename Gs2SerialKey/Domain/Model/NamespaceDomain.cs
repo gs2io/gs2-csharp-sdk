@@ -65,7 +65,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         private readonly String _parentKey;
         public string Status { get; set; }
-        public string Url { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
 
@@ -361,60 +360,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain> DownloadSerialCodesAsync(
-            #else
-        public IFuture<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain> DownloadSerialCodes(
-            #endif
-        #else
-        public async Task<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain> DownloadSerialCodesAsync(
-        #endif
-            DownloadSerialCodesRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DownloadSerialCodesFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.DownloadSerialCodesAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain domain = this;
-            this.Url = domain.Url = result?.Url;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> CreateCampaignModelMasterAsync(
             #else
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> CreateCampaignModelMaster(
@@ -547,60 +492,30 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 campaignModelName
             );
         }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2SerialKey.Model.SerialKey> SerialKeys(
-            string campaignModelName,
-            string issueJobName
-        )
-        {
-            return new DescribeSerialKeysIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                campaignModelName,
-                issueJobName
-            );
-        }
 
-        public IUniTaskAsyncEnumerable<Gs2.Gs2SerialKey.Model.SerialKey> SerialKeysAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2SerialKey.Model.SerialKey> SerialKeys(
-            #endif
-        #else
-        public DescribeSerialKeysIterator SerialKeys(
-        #endif
-            string campaignModelName,
-            string issueJobName
-        )
-        {
-            return new DescribeSerialKeysIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                campaignModelName,
-                issueJobName
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain SerialKey(
-            string code
+        public Gs2.Gs2SerialKey.Domain.Model.UserDomain User(
+            string userId
         ) {
-            return new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
+            return new Gs2.Gs2SerialKey.Domain.Model.UserDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
                 this.NamespaceName,
-                code
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                accessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER

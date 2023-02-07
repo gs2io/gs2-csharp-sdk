@@ -1,6 +1,4 @@
-﻿using Gs2.Core.Exception;
-
-namespace Gs2.Core.Net
+﻿namespace Gs2.Core.Net
 {
     public class WebSocketSessionRequest : IGs2SessionRequest
     {

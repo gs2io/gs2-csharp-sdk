@@ -2009,669 +2009,6 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
-        public class DescribeBoxesTask : Gs2RestSessionTask<DescribeBoxesRequest, DescribeBoxesResult>
-        {
-            public DescribeBoxesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBoxesRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeBoxesRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/box";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.PageToken != null) {
-                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
-                }
-                if (request.Limit != null) {
-                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeBoxes(
-                Request.DescribeBoxesRequest request,
-                UnityAction<AsyncResult<Result.DescribeBoxesResult>> callback
-        )
-		{
-			var task = new DescribeBoxesTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBoxesResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeBoxesResult> DescribeBoxesFuture(
-                Request.DescribeBoxesRequest request
-        )
-		{
-			return new DescribeBoxesTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBoxesResult> DescribeBoxesAsync(
-                Request.DescribeBoxesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBoxesResult> result = null;
-			await DescribeBoxes(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeBoxesTask DescribeBoxesAsync(
-                Request.DescribeBoxesRequest request
-        )
-		{
-			return new DescribeBoxesTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeBoxesResult> DescribeBoxesAsync(
-                Request.DescribeBoxesRequest request
-        )
-		{
-			var task = new DescribeBoxesTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class DescribeBoxesByUserIdTask : Gs2RestSessionTask<DescribeBoxesByUserIdRequest, DescribeBoxesByUserIdResult>
-        {
-            public DescribeBoxesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBoxesByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeBoxesByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/box";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.PageToken != null) {
-                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
-                }
-                if (request.Limit != null) {
-                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeBoxesByUserId(
-                Request.DescribeBoxesByUserIdRequest request,
-                UnityAction<AsyncResult<Result.DescribeBoxesByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeBoxesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBoxesByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdFuture(
-                Request.DescribeBoxesByUserIdRequest request
-        )
-		{
-			return new DescribeBoxesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdAsync(
-                Request.DescribeBoxesByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBoxesByUserIdResult> result = null;
-			await DescribeBoxesByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeBoxesByUserIdTask DescribeBoxesByUserIdAsync(
-                Request.DescribeBoxesByUserIdRequest request
-        )
-		{
-			return new DescribeBoxesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdAsync(
-                Request.DescribeBoxesByUserIdRequest request
-        )
-		{
-			var task = new DescribeBoxesByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class GetBoxTask : Gs2RestSessionTask<GetBoxRequest, GetBoxResult>
-        {
-            public GetBoxTask(IGs2Session session, RestSessionRequestFactory factory, GetBoxRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetBoxRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/box/{prizeTableName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBox(
-                Request.GetBoxRequest request,
-                UnityAction<AsyncResult<Result.GetBoxResult>> callback
-        )
-		{
-			var task = new GetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBoxResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetBoxResult> GetBoxFuture(
-                Request.GetBoxRequest request
-        )
-		{
-			return new GetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBoxResult> GetBoxAsync(
-                Request.GetBoxRequest request
-        )
-		{
-            AsyncResult<Result.GetBoxResult> result = null;
-			await GetBox(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetBoxTask GetBoxAsync(
-                Request.GetBoxRequest request
-        )
-		{
-			return new GetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetBoxResult> GetBoxAsync(
-                Request.GetBoxRequest request
-        )
-		{
-			var task = new GetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class GetBoxByUserIdTask : Gs2RestSessionTask<GetBoxByUserIdRequest, GetBoxByUserIdResult>
-        {
-            public GetBoxByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetBoxByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetBoxByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/box/{prizeTableName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBoxByUserId(
-                Request.GetBoxByUserIdRequest request,
-                UnityAction<AsyncResult<Result.GetBoxByUserIdResult>> callback
-        )
-		{
-			var task = new GetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBoxByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetBoxByUserIdResult> GetBoxByUserIdFuture(
-                Request.GetBoxByUserIdRequest request
-        )
-		{
-			return new GetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBoxByUserIdResult> GetBoxByUserIdAsync(
-                Request.GetBoxByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetBoxByUserIdResult> result = null;
-			await GetBoxByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetBoxByUserIdTask GetBoxByUserIdAsync(
-                Request.GetBoxByUserIdRequest request
-        )
-		{
-			return new GetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetBoxByUserIdResult> GetBoxByUserIdAsync(
-                Request.GetBoxByUserIdRequest request
-        )
-		{
-			var task = new GetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class ResetBoxTask : Gs2RestSessionTask<ResetBoxRequest, ResetBoxResult>
-        {
-            public ResetBoxTask(IGs2Session session, RestSessionRequestFactory factory, ResetBoxRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(ResetBoxRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/box/{prizeTableName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
-
-                var sessionRequest = Factory.Delete(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator ResetBox(
-                Request.ResetBoxRequest request,
-                UnityAction<AsyncResult<Result.ResetBoxResult>> callback
-        )
-		{
-			var task = new ResetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetBoxResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.ResetBoxResult> ResetBoxFuture(
-                Request.ResetBoxRequest request
-        )
-		{
-			return new ResetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetBoxResult> ResetBoxAsync(
-                Request.ResetBoxRequest request
-        )
-		{
-            AsyncResult<Result.ResetBoxResult> result = null;
-			await ResetBox(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public ResetBoxTask ResetBoxAsync(
-                Request.ResetBoxRequest request
-        )
-		{
-			return new ResetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.ResetBoxResult> ResetBoxAsync(
-                Request.ResetBoxRequest request
-        )
-		{
-			var task = new ResetBoxTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class ResetBoxByUserIdTask : Gs2RestSessionTask<ResetBoxByUserIdRequest, ResetBoxByUserIdResult>
-        {
-            public ResetBoxByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ResetBoxByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(ResetBoxByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "lottery")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/box/{prizeTableName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Delete(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator ResetBoxByUserId(
-                Request.ResetBoxByUserIdRequest request,
-                UnityAction<AsyncResult<Result.ResetBoxByUserIdResult>> callback
-        )
-		{
-			var task = new ResetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetBoxByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.ResetBoxByUserIdResult> ResetBoxByUserIdFuture(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-			return new ResetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ResetBoxByUserIdResult> result = null;
-			await ResetBoxByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public ResetBoxByUserIdTask ResetBoxByUserIdAsync(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-			return new ResetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
-                Request.ResetBoxByUserIdRequest request
-        )
-		{
-			var task = new ResetBoxByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class DescribeLotteryModelsTask : Gs2RestSessionTask<DescribeLotteryModelsRequest, DescribeLotteryModelsResult>
         {
             public DescribeLotteryModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLotteryModelsRequest request) : base(session, factory, request)
@@ -4334,6 +3671,669 @@ namespace Gs2.Gs2Lottery
         )
 		{
 			var task = new ResetPrizeLimitTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBoxesTask : Gs2RestSessionTask<DescribeBoxesRequest, DescribeBoxesResult>
+        {
+            public DescribeBoxesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBoxesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBoxesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/box";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBoxes(
+                Request.DescribeBoxesRequest request,
+                UnityAction<AsyncResult<Result.DescribeBoxesResult>> callback
+        )
+		{
+			var task = new DescribeBoxesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBoxesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBoxesResult> DescribeBoxesFuture(
+                Request.DescribeBoxesRequest request
+        )
+		{
+			return new DescribeBoxesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBoxesResult> DescribeBoxesAsync(
+                Request.DescribeBoxesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBoxesResult> result = null;
+			await DescribeBoxes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBoxesTask DescribeBoxesAsync(
+                Request.DescribeBoxesRequest request
+        )
+		{
+			return new DescribeBoxesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBoxesResult> DescribeBoxesAsync(
+                Request.DescribeBoxesRequest request
+        )
+		{
+			var task = new DescribeBoxesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBoxesByUserIdTask : Gs2RestSessionTask<DescribeBoxesByUserIdRequest, DescribeBoxesByUserIdResult>
+        {
+            public DescribeBoxesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBoxesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBoxesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/box";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBoxesByUserId(
+                Request.DescribeBoxesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeBoxesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeBoxesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBoxesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdFuture(
+                Request.DescribeBoxesByUserIdRequest request
+        )
+		{
+			return new DescribeBoxesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdAsync(
+                Request.DescribeBoxesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBoxesByUserIdResult> result = null;
+			await DescribeBoxesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBoxesByUserIdTask DescribeBoxesByUserIdAsync(
+                Request.DescribeBoxesByUserIdRequest request
+        )
+		{
+			return new DescribeBoxesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBoxesByUserIdResult> DescribeBoxesByUserIdAsync(
+                Request.DescribeBoxesByUserIdRequest request
+        )
+		{
+			var task = new DescribeBoxesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBoxTask : Gs2RestSessionTask<GetBoxRequest, GetBoxResult>
+        {
+            public GetBoxTask(IGs2Session session, RestSessionRequestFactory factory, GetBoxRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBoxRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/box/{prizeTableName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBox(
+                Request.GetBoxRequest request,
+                UnityAction<AsyncResult<Result.GetBoxResult>> callback
+        )
+		{
+			var task = new GetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBoxResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBoxResult> GetBoxFuture(
+                Request.GetBoxRequest request
+        )
+		{
+			return new GetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBoxResult> GetBoxAsync(
+                Request.GetBoxRequest request
+        )
+		{
+            AsyncResult<Result.GetBoxResult> result = null;
+			await GetBox(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBoxTask GetBoxAsync(
+                Request.GetBoxRequest request
+        )
+		{
+			return new GetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBoxResult> GetBoxAsync(
+                Request.GetBoxRequest request
+        )
+		{
+			var task = new GetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBoxByUserIdTask : Gs2RestSessionTask<GetBoxByUserIdRequest, GetBoxByUserIdResult>
+        {
+            public GetBoxByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetBoxByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBoxByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/box/{prizeTableName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBoxByUserId(
+                Request.GetBoxByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetBoxByUserIdResult>> callback
+        )
+		{
+			var task = new GetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBoxByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBoxByUserIdResult> GetBoxByUserIdFuture(
+                Request.GetBoxByUserIdRequest request
+        )
+		{
+			return new GetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBoxByUserIdResult> GetBoxByUserIdAsync(
+                Request.GetBoxByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetBoxByUserIdResult> result = null;
+			await GetBoxByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBoxByUserIdTask GetBoxByUserIdAsync(
+                Request.GetBoxByUserIdRequest request
+        )
+		{
+			return new GetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBoxByUserIdResult> GetBoxByUserIdAsync(
+                Request.GetBoxByUserIdRequest request
+        )
+		{
+			var task = new GetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetBoxTask : Gs2RestSessionTask<ResetBoxRequest, ResetBoxResult>
+        {
+            public ResetBoxTask(IGs2Session session, RestSessionRequestFactory factory, ResetBoxRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetBoxRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/box/{prizeTableName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetBox(
+                Request.ResetBoxRequest request,
+                UnityAction<AsyncResult<Result.ResetBoxResult>> callback
+        )
+		{
+			var task = new ResetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetBoxResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetBoxResult> ResetBoxFuture(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxResult> ResetBoxAsync(
+                Request.ResetBoxRequest request
+        )
+		{
+            AsyncResult<Result.ResetBoxResult> result = null;
+			await ResetBox(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetBoxTask ResetBoxAsync(
+                Request.ResetBoxRequest request
+        )
+		{
+			return new ResetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetBoxResult> ResetBoxAsync(
+                Request.ResetBoxRequest request
+        )
+		{
+			var task = new ResetBoxTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetBoxByUserIdTask : Gs2RestSessionTask<ResetBoxByUserIdRequest, ResetBoxByUserIdResult>
+        {
+            public ResetBoxByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ResetBoxByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetBoxByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/box/{prizeTableName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{prizeTableName}", !string.IsNullOrEmpty(request.PrizeTableName) ? request.PrizeTableName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetBoxByUserId(
+                Request.ResetBoxByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetBoxByUserIdResult>> callback
+        )
+		{
+			var task = new ResetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetBoxByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetBoxByUserIdResult> ResetBoxByUserIdFuture(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ResetBoxByUserIdResult> result = null;
+			await ResetBoxByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetBoxByUserIdTask ResetBoxByUserIdAsync(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			return new ResetBoxByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetBoxByUserIdResult> ResetBoxByUserIdAsync(
+                Request.ResetBoxByUserIdRequest request
+        )
+		{
+			var task = new ResetBoxByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

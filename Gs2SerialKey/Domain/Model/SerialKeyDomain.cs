@@ -62,11 +62,13 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2SerialKeyRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _userId;
         private readonly string _code;
 
         private readonly String _parentKey;
         public string Url { get; set; }
         public string NamespaceName => _namespaceName;
+        public string UserId => _userId;
         public string Code => _code;
 
         public SerialKeyDomain(
@@ -75,6 +77,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
+            string userId,
             string code
         ) {
             this._cache = cache;
@@ -85,9 +88,11 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
+            this._userId = userId;
             this._code = code;
-            this._parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+            this._parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
+                this.UserId,
                 "SerialKey"
             );
         }
@@ -133,8 +138,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.UserId,
                         "SerialKey"
                     );
                     var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
@@ -192,6 +198,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
                 .WithCode(this.Code);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UseByUserIdFuture(
@@ -215,8 +222,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.UserId,
                         "SerialKey"
                     );
                     var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
@@ -261,6 +269,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         public static string CreateCacheParentKey(
             string namespaceName,
+            string userId,
             string code,
             string childType
         )
@@ -269,6 +278,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 ":",
                 "serialKey",
                 namespaceName ?? "null",
+                userId ?? "null",
                 code ?? "null",
                 childType
             );
