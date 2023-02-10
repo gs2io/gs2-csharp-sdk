@@ -687,11 +687,6 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
                 if (request.AwaitName != null)
                 {
                     jsonWriter.WritePropertyName("awaitName");
@@ -810,11 +805,6 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
-                }
                 if (request.AwaitName != null)
                 {
                     jsonWriter.WritePropertyName("awaitName");
@@ -927,11 +917,6 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
-                }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
                 }
                 if (request.AwaitName != null)
                 {
@@ -1055,11 +1040,6 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
-                }
-                if (request.RateName != null)
-                {
-                    jsonWriter.WritePropertyName("rateName");
-                    jsonWriter.Write(request.RateName.ToString());
                 }
                 if (request.AwaitName != null)
                 {

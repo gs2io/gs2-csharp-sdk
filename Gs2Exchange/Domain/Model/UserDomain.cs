@@ -142,8 +142,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        resultModel.Item.RateName.ToString()
+                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -160,8 +159,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._session,
                 request.NamespaceName,
                 result?.Item?.UserId,
-                result?.Item?.Name,
-                result?.Item?.RateName
+                result?.Item?.Name
             );
             domain.UnlockAt = result?.UnlockAt;
 
@@ -231,8 +229,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
 
         public Gs2.Gs2Exchange.Domain.Model.AwaitDomain Await(
-            string awaitName,
-            string rateName
+            string awaitName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.AwaitDomain(
                 this._cache,
@@ -241,8 +238,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this.UserId,
-                awaitName,
-                rateName
+                awaitName
             );
         }
 

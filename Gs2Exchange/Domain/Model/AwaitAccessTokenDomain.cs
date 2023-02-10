@@ -65,7 +65,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
         private readonly string _awaitName;
-        private readonly string _rateName;
 
         private readonly String _parentKey;
         public long? UnlockAt { get; set; }
@@ -74,7 +73,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
         public string AwaitName => _awaitName;
-        public string RateName => _rateName;
 
         public AwaitAccessTokenDomain(
             CacheDatabase cache,
@@ -83,8 +81,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             AccessToken accessToken,
-            string awaitName,
-            string rateName
+            string awaitName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -96,7 +93,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._awaitName = awaitName;
-            this._rateName = rateName;
             this._parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
@@ -123,8 +119,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this.AwaitName)
-                .WithRateName(this.RateName);
+                .WithAwaitName(this.AwaitName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetAwaitFuture(
                 request
@@ -153,8 +148,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        resultModel.Item.RateName.ToString()
+                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -194,8 +188,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this.AwaitName)
-                .WithRateName(this.RateName);
+                .WithAwaitName(this.AwaitName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.AcquireFuture(
                 request
@@ -224,8 +217,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        resultModel.Item.RateName.ToString()
+                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -287,8 +279,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this.AwaitName)
-                .WithRateName(this.RateName);
+                .WithAwaitName(this.AwaitName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.SkipFuture(
                 request
@@ -317,8 +308,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        resultModel.Item.RateName.ToString()
+                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -380,8 +370,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithAwaitName(this.AwaitName)
-                .WithRateName(this.RateName);
+                .WithAwaitName(this.AwaitName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteAwaitFuture(
                 request
@@ -408,8 +397,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     "Await"
                 );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        request.AwaitName.ToString(),
-                        request.RateName.ToString()
+                        request.AwaitName.ToString()
                     );
                     _cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
                 }
@@ -431,8 +419,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         "Await"
                     );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        resultModel.Item.RateName.ToString()
+                        resultModel.Item.Name.ToString()
                     );
                     cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
                 }
@@ -455,7 +442,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string namespaceName,
             string userId,
             string awaitName,
-            string rateName,
             string childType
         )
         {
@@ -465,20 +451,17 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 namespaceName ?? "null",
                 userId ?? "null",
                 awaitName ?? "null",
-                rateName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string awaitName,
-            string rateName
+            string awaitName
         )
         {
             return string.Join(
                 ":",
-                awaitName ?? "null",
-                rateName ?? "null"
+                awaitName ?? "null"
             );
         }
 
@@ -498,8 +481,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             Gs2.Gs2Exchange.Model.Await value = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                    this.AwaitName?.ToString(),
-                    this.RateName?.ToString()
+                    this.AwaitName?.ToString()
                 )
             );
             if (value == null) {
@@ -522,8 +504,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                                 _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
                                     _parentKey,
                                     Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                        this.AwaitName?.ToString(),
-                                        this.RateName?.ToString()
+                                        this.AwaitName?.ToString()
                                     )
                                 );
                             }
@@ -545,8 +526,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
                             _parentKey,
                             Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                this.AwaitName?.ToString(),
-                                this.RateName?.ToString()
+                                this.AwaitName?.ToString()
                             )
                         );
                     }
@@ -559,8 +539,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 value = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        this.AwaitName?.ToString(),
-                        this.RateName?.ToString()
+                        this.AwaitName?.ToString()
                     )
                 );
             }

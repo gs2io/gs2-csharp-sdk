@@ -241,8 +241,7 @@ namespace Gs2.Gs2Exchange.Domain
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString(),
-                                resultModel.Item.RateName.ToString()
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,
@@ -274,8 +273,7 @@ namespace Gs2.Gs2Exchange.Domain
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString(),
-                                resultModel.Item.RateName.ToString()
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
                         }
@@ -323,8 +321,7 @@ namespace Gs2.Gs2Exchange.Domain
                                 "Await"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString(),
-                                resultModel.Item.RateName.ToString()
+                                resultModel.Item.Name.ToString()
                             );
                             cache.Put(
                                 parentKey,

@@ -35,7 +35,6 @@ namespace Gs2.Gs2Exchange.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-        public string RateName { set; get; }
         public string AwaitName { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
@@ -45,10 +44,6 @@ namespace Gs2.Gs2Exchange.Request
         }
         public AcquireRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
-            return this;
-        }
-        public AcquireRequest WithRateName(string rateName) {
-            this.RateName = rateName;
             return this;
         }
         public AcquireRequest WithAwaitName(string awaitName) {
@@ -76,7 +71,6 @@ namespace Gs2.Gs2Exchange.Request
             return new AcquireRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Config.FromJson(v);
@@ -88,7 +82,6 @@ namespace Gs2.Gs2Exchange.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["rateName"] = RateName,
                 ["awaitName"] = AwaitName,
                 ["config"] = Config == null ? null : new JsonData(
                         Config.Select(v => {
@@ -109,10 +102,6 @@ namespace Gs2.Gs2Exchange.Request
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
-            }
-            if (RateName != null) {
-                writer.WritePropertyName("rateName");
-                writer.Write(RateName.ToString());
             }
             if (AwaitName != null) {
                 writer.WritePropertyName("awaitName");

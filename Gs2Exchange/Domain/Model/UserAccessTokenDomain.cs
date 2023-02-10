@@ -150,8 +150,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
 
         public Gs2.Gs2Exchange.Domain.Model.AwaitAccessTokenDomain Await(
-            string awaitName,
-            string rateName
+            string awaitName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.AwaitAccessTokenDomain(
                 this._cache,
@@ -160,8 +159,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken,
-                awaitName,
-                rateName
+                awaitName
             );
         }
 

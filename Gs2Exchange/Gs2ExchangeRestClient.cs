@@ -2907,7 +2907,6 @@ namespace Gs2.Gs2Exchange
                     + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
@@ -3018,7 +3017,6 @@ namespace Gs2.Gs2Exchange
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
@@ -3124,7 +3122,6 @@ namespace Gs2.Gs2Exchange
                     + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3262,7 +3259,6 @@ namespace Gs2.Gs2Exchange
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3396,7 +3392,6 @@ namespace Gs2.Gs2Exchange
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3529,7 +3524,6 @@ namespace Gs2.Gs2Exchange
                     + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}/skip";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3667,7 +3661,6 @@ namespace Gs2.Gs2Exchange
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3800,7 +3793,6 @@ namespace Gs2.Gs2Exchange
                     + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
@@ -3915,7 +3907,6 @@ namespace Gs2.Gs2Exchange
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);

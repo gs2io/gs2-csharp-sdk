@@ -35,7 +35,6 @@ namespace Gs2.Gs2Exchange.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string RateName { set; get; }
         public string AwaitName { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -44,10 +43,6 @@ namespace Gs2.Gs2Exchange.Request
         }
         public DeleteAwaitByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
-            return this;
-        }
-        public DeleteAwaitByUserIdRequest WithRateName(string rateName) {
-            this.RateName = rateName;
             return this;
         }
         public DeleteAwaitByUserIdRequest WithAwaitName(string awaitName) {
@@ -71,7 +66,6 @@ namespace Gs2.Gs2Exchange.Request
             return new DeleteAwaitByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString());
         }
 
@@ -80,7 +74,6 @@ namespace Gs2.Gs2Exchange.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["rateName"] = RateName,
                 ["awaitName"] = AwaitName,
             };
         }
@@ -95,10 +88,6 @@ namespace Gs2.Gs2Exchange.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
-            }
-            if (RateName != null) {
-                writer.WritePropertyName("rateName");
-                writer.Write(RateName.ToString());
             }
             if (AwaitName != null) {
                 writer.WritePropertyName("awaitName");
