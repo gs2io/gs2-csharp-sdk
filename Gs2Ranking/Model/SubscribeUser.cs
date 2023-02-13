@@ -31,9 +31,14 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class SubscribeUser : IComparable
 	{
+        public string SubscribeUserId { set; get; }
         public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
+        public SubscribeUser WithSubscribeUserId(string subscribeUserId) {
+            this.SubscribeUserId = subscribeUserId;
+            return this;
+        }
         public SubscribeUser WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
@@ -47,6 +52,108 @@ namespace Gs2.Gs2Ranking.Model
             return this;
         }
 
+        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetRegionFromGrn(
+            string grn
+        )
+        {
+            var match = _regionRegex.Match(grn);
+            if (!match.Success || !match.Groups["region"].Success)
+            {
+                return null;
+            }
+            return match.Groups["region"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetOwnerIdFromGrn(
+            string grn
+        )
+        {
+            var match = _ownerIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["ownerId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["ownerId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetNamespaceNameFromGrn(
+            string grn
+        )
+        {
+            var match = _namespaceNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["namespaceName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["namespaceName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetUserIdFromGrn(
+            string grn
+        )
+        {
+            var match = _userIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["userId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["userId"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _categoryNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetCategoryNameFromGrn(
+            string grn
+        )
+        {
+            var match = _categoryNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["categoryName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["categoryName"].Value;
+        }
+
+        private static System.Text.RegularExpressions.Regex _targetUserIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking:(?<namespaceName>.+):user:(?<userId>.+):subscribe:category:(?<categoryName>.+):(?<targetUserId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetTargetUserIdFromGrn(
+            string grn
+        )
+        {
+            var match = _targetUserIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["targetUserId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["targetUserId"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -56,6 +163,7 @@ namespace Gs2.Gs2Ranking.Model
                 return null;
             }
             return new SubscribeUser()
+                .WithSubscribeUserId(!data.Keys.Contains("subscribeUserId") || data["subscribeUserId"] == null ? null : data["subscribeUserId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
@@ -64,6 +172,7 @@ namespace Gs2.Gs2Ranking.Model
         public JsonData ToJson()
         {
             return new JsonData {
+                ["subscribeUserId"] = SubscribeUserId,
                 ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
                 ["targetUserId"] = TargetUserId,
@@ -73,6 +182,10 @@ namespace Gs2.Gs2Ranking.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (SubscribeUserId != null) {
+                writer.WritePropertyName("subscribeUserId");
+                writer.Write(SubscribeUserId.ToString());
+            }
             if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
                 writer.Write(CategoryName.ToString());
@@ -92,6 +205,14 @@ namespace Gs2.Gs2Ranking.Model
         {
             var other = obj as SubscribeUser;
             var diff = 0;
+            if (SubscribeUserId == null && SubscribeUserId == other.SubscribeUserId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SubscribeUserId.CompareTo(other.SubscribeUserId);
+            }
             if (CategoryName == null && CategoryName == other.CategoryName)
             {
                 // null and null

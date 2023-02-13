@@ -2904,7 +2904,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/me/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
@@ -3013,7 +3013,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/{userId}/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
@@ -3119,7 +3119,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/me/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
@@ -3255,7 +3255,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/{userId}/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
@@ -3388,7 +3388,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/exchange/{rateName}/await/{awaitName}/force";
+                    + "/{namespaceName}/user/{userId}/exchange/await/{awaitName}/force";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
@@ -3521,7 +3521,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}/skip";
+                    + "/{namespaceName}/user/me/exchange/await/{awaitName}/skip";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
@@ -3657,7 +3657,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/exchange/{rateName}/await/{awaitName}/skip";
+                    + "/{namespaceName}/user/{userId}/exchange/await/{awaitName}/skip";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
@@ -3790,7 +3790,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/me/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
@@ -3903,7 +3903,7 @@ namespace Gs2.Gs2Exchange
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "exchange")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/exchange/{rateName}/await/{awaitName}";
+                    + "/{namespaceName}/user/{userId}/exchange/await/{awaitName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
