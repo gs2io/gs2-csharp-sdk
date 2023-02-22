@@ -208,15 +208,15 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "job")
                 {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Job"
-                );
                     var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                         request.JobName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                    _cache.Put<Gs2.Gs2JobQueue.Model.Job>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -310,13 +310,13 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
             {
         #endif
-            Gs2.Gs2JobQueue.Model.Job value = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
+            var (value, find) = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
                 _parentKey,
                 Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                     this.JobName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -333,11 +333,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         {
                             if (e.errors[0].component == "job")
                             {
-                                _cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
+                                var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                                    this.JobName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2JobQueue.Model.Job>(
                                     _parentKey,
-                                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                                        this.JobName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -355,11 +358,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "job")
                     {
-                        _cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
+                        var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                            this.JobName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2JobQueue.Model.Job>(
                             _parentKey,
-                            Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                                this.JobName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -368,7 +374,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
+                (value, find) = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
                     _parentKey,
                     Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                         this.JobName?.ToString()

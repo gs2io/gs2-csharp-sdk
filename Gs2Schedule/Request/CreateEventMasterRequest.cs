@@ -141,7 +141,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithRelativeDuration(!data.Keys.Contains("relativeDuration") || data["relativeDuration"] == null ? null : (int?)int.Parse(data["relativeDuration"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -231,6 +231,39 @@ namespace Gs2.Gs2Schedule.Request
                 writer.Write(int.Parse(RelativeDuration.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += ScheduleType + ":";
+            key += AbsoluteBegin + ":";
+            key += AbsoluteEnd + ":";
+            key += RepeatType + ":";
+            key += RepeatBeginDayOfMonth + ":";
+            key += RepeatEndDayOfMonth + ":";
+            key += RepeatBeginDayOfWeek + ":";
+            key += RepeatEndDayOfWeek + ":";
+            key += RepeatBeginHour + ":";
+            key += RepeatEndHour + ":";
+            key += RelativeTriggerName + ":";
+            key += RelativeDuration + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateEventMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateEventMasterRequest)x;
+            return this;
         }
     }
 }

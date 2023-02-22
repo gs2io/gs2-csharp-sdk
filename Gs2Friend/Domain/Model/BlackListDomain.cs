@@ -280,7 +280,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.BlackList> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.BlackList value = _cache.Get<Gs2.Gs2Friend.Model.BlackList>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.BlackList>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                 )

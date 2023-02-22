@@ -267,14 +267,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "globalMessageMaster")
                 {
-                    var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "GlobalMessageMaster"
-                );
                     var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
                         request.GlobalMessageName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.GlobalMessageMaster> self)
             {
         #endif
-            Gs2.Gs2Inbox.Model.GlobalMessageMaster value = _cache.Get<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                 _parentKey,
                 Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
                     this.GlobalMessageName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         {
                             if (e.errors[0].component == "globalMessageMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                                var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
+                                    this.GlobalMessageName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
-                                        this.GlobalMessageName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "globalMessageMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                        var key = Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
+                            this.GlobalMessageName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                             _parentKey,
-                            Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
-                                this.GlobalMessageName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                     _parentKey,
                     Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain.CreateCacheKey(
                         this.GlobalMessageName?.ToString()

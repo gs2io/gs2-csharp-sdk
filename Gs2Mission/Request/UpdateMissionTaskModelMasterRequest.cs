@@ -40,7 +40,7 @@ namespace Gs2.Gs2Mission.Request
         public string Description { set; get; }
         public string CounterName { set; get; }
         public long? TargetValue { set; get; }
-        public Gs2.Gs2Mission.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
         public string PremiseMissionTaskName { set; get; }
         public UpdateMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
@@ -71,7 +71,7 @@ namespace Gs2.Gs2Mission.Request
             this.TargetValue = targetValue;
             return this;
         }
-        public UpdateMissionTaskModelMasterRequest WithCompleteAcquireActions(Gs2.Gs2Mission.Model.AcquireAction[] completeAcquireActions) {
+        public UpdateMissionTaskModelMasterRequest WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
@@ -100,14 +100,14 @@ namespace Gs2.Gs2Mission.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)long.Parse(data["targetValue"].ToString()))
-                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Gs2Mission.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Mission.Model.AcquireAction.FromJson(v);
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
                 .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -176,6 +176,33 @@ namespace Gs2.Gs2Mission.Request
                 writer.Write(PremiseMissionTaskName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += MissionGroupName + ":";
+            key += MissionTaskName + ":";
+            key += Metadata + ":";
+            key += Description + ":";
+            key += CounterName + ":";
+            key += TargetValue + ":";
+            key += CompleteAcquireActions + ":";
+            key += ChallengePeriodEventId + ":";
+            key += PremiseMissionTaskName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateMissionTaskModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateMissionTaskModelMasterRequest)x;
+            return this;
         }
     }
 }

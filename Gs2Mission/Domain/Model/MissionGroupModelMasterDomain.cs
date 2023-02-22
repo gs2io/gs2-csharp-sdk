@@ -268,14 +268,15 @@ namespace Gs2.Gs2Mission.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "missionGroupModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "MissionGroupModelMaster"
-                );
                     var key = Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
                         request.MissionGroupName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -481,13 +482,13 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> self)
             {
         #endif
-            Gs2.Gs2Mission.Model.MissionGroupModelMaster value = _cache.Get<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                 _parentKey,
                 Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
                     this.MissionGroupName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -504,11 +505,14 @@ namespace Gs2.Gs2Mission.Domain.Model
                         {
                             if (e.errors[0].component == "missionGroupModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                                var key = Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
+                                    this.MissionGroupName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
-                                        this.MissionGroupName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -526,11 +530,14 @@ namespace Gs2.Gs2Mission.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "missionGroupModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                        var key = Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
+                            this.MissionGroupName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
-                                this.MissionGroupName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -539,7 +546,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                     _parentKey,
                     Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
                         this.MissionGroupName?.ToString()

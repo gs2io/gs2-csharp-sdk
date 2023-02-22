@@ -87,12 +87,14 @@ namespace Gs2.Core.Domain
                 for (var i = 0; i < result.Item.TaskRequests.Length; i++)
                 {
                     var stampTask = result.Item.TaskRequests[i];
-                    _stampTaskEvent.Invoke(
-                        _cache,
-                        stampTask.Action,
-                        stampTask.Request,
-                        result.Item.TaskResults[i]
-                    );
+                    if (i < result.Item.TaskResults.Length) {
+                        _stampTaskEvent.Invoke(
+                            _cache,
+                            stampTask.Action,
+                            stampTask.Request,
+                            result.Item.TaskResults[i]
+                        );
+                    }
                 }
 
                 string action = null;

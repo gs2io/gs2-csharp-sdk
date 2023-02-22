@@ -136,7 +136,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Follow> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.Follow value = _cache.Get<Gs2.Gs2Friend.Model.Follow>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.Follow>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.FollowDomain.CreateCacheKey(
                     this.WithProfile?.ToString()

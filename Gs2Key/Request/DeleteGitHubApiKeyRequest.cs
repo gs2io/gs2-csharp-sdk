@@ -57,7 +57,7 @@ namespace Gs2.Gs2Key.Request
                 .WithApiKeyName(!data.Keys.Contains("apiKeyName") || data["apiKeyName"] == null ? null : data["apiKeyName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Key.Request
                 writer.Write(ApiKeyName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += ApiKeyName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DeleteGitHubApiKeyRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DeleteGitHubApiKeyRequest)x;
+            return this;
         }
     }
 }

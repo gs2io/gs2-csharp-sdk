@@ -31,10 +31,10 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class BoxItem : IComparable
 	{
-        public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public int? Remaining { set; get; }
         public int? Initial { set; get; }
-        public BoxItem WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
+        public BoxItem WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
@@ -56,8 +56,8 @@ namespace Gs2.Gs2Lottery.Model
                 return null;
             }
             return new BoxItem()
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)int.Parse(data["remaining"].ToString()))
                 .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : (int?)int.Parse(data["initial"].ToString()));

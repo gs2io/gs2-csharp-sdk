@@ -243,7 +243,7 @@ namespace Gs2.Gs2Auth.Domain.Model
                 "auth",
                 "AccessToken"
             );
-            Gs2.Gs2Auth.Model.AccessToken value = _cache.Get<Gs2.Gs2Auth.Model.AccessToken>(
+            var (value, find) = _cache.Get<Gs2.Gs2Auth.Model.AccessToken>(
                 parentKey,
                 Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
                 )

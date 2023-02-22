@@ -63,7 +63,7 @@ namespace Gs2.Gs2Money.Request
                 .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Money.Request
                 writer.Write(int.Parse(Slot.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += AccessToken + ":";
+            key += Slot + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply GetWalletRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (GetWalletRequest)x;
+            return this;
         }
     }
 }

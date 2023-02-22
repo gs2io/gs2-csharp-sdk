@@ -127,7 +127,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.Probability> self)
             {
         #endif
-            Gs2.Gs2Lottery.Model.Probability value = _cache.Get<Gs2.Gs2Lottery.Model.Probability>(
+            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.Probability>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
                 )

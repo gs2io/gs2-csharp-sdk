@@ -87,7 +87,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -127,6 +127,54 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(ItemSetName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += UserId + ":";
+            key += ItemName + ":";
+            key += ItemSetName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new ConsumeItemSetByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                ItemName = ItemName,
+                ConsumeCount = ConsumeCount * x,
+                ItemSetName = ItemSetName,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (ConsumeItemSetByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::namespaceName");
+            }
+            if (InventoryName != y.InventoryName) {
+                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::inventoryName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::userId");
+            }
+            if (ItemName != y.ItemName) {
+                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::itemName");
+            }
+            if (ItemSetName != y.ItemSetName) {
+                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::itemSetName");
+            }
+            return new ConsumeItemSetByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                ItemName = ItemName,
+                ConsumeCount = ConsumeCount + y.ConsumeCount,
+                ItemSetName = ItemSetName,
+            };
         }
     }
 }

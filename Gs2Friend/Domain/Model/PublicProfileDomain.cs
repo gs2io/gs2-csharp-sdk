@@ -193,12 +193,12 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.PublicProfile> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.PublicProfile value = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -215,10 +215,13 @@ namespace Gs2.Gs2Friend.Domain.Model
                         {
                             if (e.errors[0].component == "publicProfile")
                             {
-                                _cache.Delete<Gs2.Gs2Friend.Model.PublicProfile>(
+                                var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                                );
+                                _cache.Put<Gs2.Gs2Friend.Model.PublicProfile>(
                                     _parentKey,
-                                    Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -236,10 +239,13 @@ namespace Gs2.Gs2Friend.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "publicProfile")
                     {
-                        _cache.Delete<Gs2.Gs2Friend.Model.PublicProfile>(
+                        var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Friend.Model.PublicProfile>(
                             _parentKey,
-                            Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -248,7 +254,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+                (value, find) = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                     )

@@ -36,7 +36,7 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
-        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public long? ExpiresAt { set; get; }
         public CreateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
@@ -51,7 +51,7 @@ namespace Gs2.Gs2Inbox.Request
             this.Metadata = metadata;
             return this;
         }
-        public CreateGlobalMessageMasterRequest WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+        public CreateGlobalMessageMasterRequest WithReadAcquireActions(Gs2.Core.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
@@ -76,14 +76,14 @@ namespace Gs2.Gs2Inbox.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -131,6 +131,29 @@ namespace Gs2.Gs2Inbox.Request
                 writer.Write(long.Parse(ExpiresAt.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Metadata + ":";
+            key += ReadAcquireActions + ":";
+            key += ExpiresTimeSpan + ":";
+            key += ExpiresAt + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateGlobalMessageMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateGlobalMessageMasterRequest)x;
+            return this;
         }
     }
 }

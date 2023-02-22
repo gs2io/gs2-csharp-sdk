@@ -224,7 +224,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -253,7 +253,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -341,7 +341,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -520,7 +520,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -599,7 +599,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -628,7 +628,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Item.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );
@@ -716,7 +716,7 @@ namespace Gs2.Gs2Inventory.Domain
                             var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                                 resultModel.Inventory.InventoryName.ToString()
                             );
-                            var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                                 parentKey,
                                 key
                             );

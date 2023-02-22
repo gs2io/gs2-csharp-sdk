@@ -225,7 +225,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.SerialKey> self)
             {
         #endif
-            Gs2.Gs2SerialKey.Model.SerialKey value = _cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
+            var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
                 _parentKey,
                 Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
                     this.Code?.ToString()

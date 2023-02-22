@@ -239,7 +239,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 "identifier",
                 "ProjectToken"
             );
-            Gs2.Gs2Identifier.Model.ProjectToken value = _cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
                 parentKey,
                 Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
                 )

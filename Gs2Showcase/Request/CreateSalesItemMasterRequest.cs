@@ -37,8 +37,8 @@ namespace Gs2.Gs2Showcase.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
-        public Gs2.Gs2Showcase.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public CreateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -55,11 +55,11 @@ namespace Gs2.Gs2Showcase.Request
             this.Metadata = metadata;
             return this;
         }
-        public CreateSalesItemMasterRequest WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
+        public CreateSalesItemMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-        public CreateSalesItemMasterRequest WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
+        public CreateSalesItemMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
@@ -77,15 +77,15 @@ namespace Gs2.Gs2Showcase.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Showcase.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Showcase.Model.ConsumeAction.FromJson(v);
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Showcase.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Showcase.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -143,6 +143,29 @@ namespace Gs2.Gs2Showcase.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += ConsumeActions + ":";
+            key += AcquireActions + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateSalesItemMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateSalesItemMasterRequest)x;
+            return this;
         }
     }
 }

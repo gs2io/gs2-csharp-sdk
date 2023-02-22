@@ -32,12 +32,12 @@ namespace Gs2.Gs2Lottery.Model
 	public class DrawnPrize : IComparable
 	{
         public string PrizeId { set; get; }
-        public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public DrawnPrize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;
         }
-        public DrawnPrize WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
+        public DrawnPrize WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
@@ -52,8 +52,8 @@ namespace Gs2.Gs2Lottery.Model
             }
             return new DrawnPrize()
                 .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray());
         }
 

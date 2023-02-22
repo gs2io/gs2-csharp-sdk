@@ -81,7 +81,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)long.Parse(data["rankCapValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -116,6 +116,52 @@ namespace Gs2.Gs2Experience.Request
                 writer.Write(long.Parse(RankCapValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += ExperienceName + ":";
+            key += PropertyId + ":";
+            key += RankCapValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetRankCapByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                ExperienceName = ExperienceName,
+                PropertyId = PropertyId,
+                RankCapValue = RankCapValue,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetRankCapByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetRankCapByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetRankCapByUserIdRequest::userId");
+            }
+            if (ExperienceName != y.ExperienceName) {
+                throw new ArithmeticException("mismatch parameter values SetRankCapByUserIdRequest::experienceName");
+            }
+            if (PropertyId != y.PropertyId) {
+                throw new ArithmeticException("mismatch parameter values SetRankCapByUserIdRequest::propertyId");
+            }
+            if (RankCapValue != y.RankCapValue) {
+                throw new ArithmeticException("mismatch parameter values SetRankCapByUserIdRequest::rankCapValue");
+            }
+            return new SetRankCapByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                ExperienceName = ExperienceName,
+                PropertyId = PropertyId,
+                RankCapValue = RankCapValue,
+            };
         }
     }
 }

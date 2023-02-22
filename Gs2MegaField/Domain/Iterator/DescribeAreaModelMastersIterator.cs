@@ -29,12 +29,15 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using System.Threading;
@@ -171,27 +174,37 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<Gs2.Gs2MegaField.Model.AreaModelMaster> callback
+            Action<AsyncResult<Gs2.Gs2MegaField.Model.AreaModelMaster>> callback
         )
         {
+            Gs2Exception error = null;
             yield return UniTask.ToCoroutine(
                 async () => {
-                    if (this._result.Length == 0 && !this._last) {
-                        await this._load();
+                    try {
+                        if (this._result.Length == 0 && !this._last) {
+                            await this._load();
+                        }
+                        if (this._result.Length == 0) {
+                            Current = null;
+                            return;
+                        }
+                        Gs2.Gs2MegaField.Model.AreaModelMaster ret = this._result[0];
+                        this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                        if (this._result.Length == 0 && !this._last) {
+                            await this._load();
+                        }
+                        Current = ret;
                     }
-                    if (this._result.Length == 0) {
+                    catch (Gs2Exception e) {
                         Current = null;
-                        return;
+                        error = e;
                     }
-                    Gs2.Gs2MegaField.Model.AreaModelMaster ret = this._result[0];
-                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                    if (this._result.Length == 0 && !this._last) {
-                        await this._load();
-                    }
-                    Current = ret;
                 }
             );
-            callback.Invoke(Current);
+            callback.Invoke(new AsyncResult<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                Current,
+                error
+            ));
         }
         #endif
 
@@ -202,7 +215,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
             #else
 
         protected override IEnumerator Next(
-            Action<Gs2.Gs2MegaField.Model.AreaModelMaster> callback
+            Action<AsyncResult<Gs2.Gs2MegaField.Model.AreaModelMaster>> callback
             #endif
         #else
         public async IAsyncEnumerator<Gs2.Gs2MegaField.Model.AreaModelMaster> GetAsyncEnumerator(
@@ -229,6 +242,10 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     Current = null;
+                    callback.Invoke(new AsyncResult<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                        Current,
+                        Error
+                    ));
                     yield break;
         #else
                     break;
@@ -248,6 +265,10 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 await writer.YieldAsync(ret);
             #else
                 Current = ret;
+                callback.Invoke(new AsyncResult<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                    Current,
+                    Error
+                ));
             #endif
         #else
                 yield return ret;

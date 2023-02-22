@@ -93,7 +93,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -143,6 +143,31 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(int.Parse(SortValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += StackingLimit + ":";
+            key += AllowMultipleStacks + ":";
+            key += SortValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateItemModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateItemModelMasterRequest)x;
+            return this;
         }
     }
 }

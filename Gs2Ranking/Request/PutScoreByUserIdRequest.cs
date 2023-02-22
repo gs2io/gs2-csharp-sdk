@@ -81,7 +81,7 @@ namespace Gs2.Gs2Ranking.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -116,6 +116,28 @@ namespace Gs2.Gs2Ranking.Request
                 writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CategoryName + ":";
+            key += UserId + ":";
+            key += Score + ":";
+            key += Metadata + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply PutScoreByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (PutScoreByUserIdRequest)x;
+            return this;
         }
     }
 }

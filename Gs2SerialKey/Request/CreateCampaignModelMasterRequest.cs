@@ -75,7 +75,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithEnableCampaignCode(!data.Keys.Contains("enableCampaignCode") || data["enableCampaignCode"] == null ? null : (bool?)bool.Parse(data["enableCampaignCode"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -110,6 +110,28 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.Write(bool.Parse(EnableCampaignCode.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += EnableCampaignCode + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateCampaignModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateCampaignModelMasterRequest)x;
+            return this;
         }
     }
 }

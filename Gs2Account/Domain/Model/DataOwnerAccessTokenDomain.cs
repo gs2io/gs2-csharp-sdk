@@ -128,7 +128,7 @@ namespace Gs2.Gs2Account.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.DataOwner> self)
             {
         #endif
-            Gs2.Gs2Account.Model.DataOwner value = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
+            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                 )

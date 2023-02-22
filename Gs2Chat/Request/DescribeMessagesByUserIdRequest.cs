@@ -81,7 +81,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -121,6 +121,29 @@ namespace Gs2.Gs2Chat.Request
                 writer.Write(int.Parse(Limit.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += RoomName + ":";
+            key += Password + ":";
+            key += UserId + ":";
+            key += StartAt + ":";
+            key += Limit + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DescribeMessagesByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DescribeMessagesByUserIdRequest)x;
+            return this;
         }
     }
 }

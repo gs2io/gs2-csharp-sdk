@@ -218,7 +218,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> self)
             {
         #endif
-            Gs2.Gs2Gateway.Model.WebSocketSession value = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
+            var (value, find) = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 _parentKey,
                 Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
                 )

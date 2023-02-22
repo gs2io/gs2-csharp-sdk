@@ -129,7 +129,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.RecoverValueTable> self)
             {
         #endif
-            Gs2.Gs2Stamina.Model.RecoverValueTable value = _cache.Get<Gs2.Gs2Stamina.Model.RecoverValueTable>(
+            var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.RecoverValueTable>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.RecoverValueTableDomain.CreateCacheKey(
                     this.RecoverValueTableName?.ToString()

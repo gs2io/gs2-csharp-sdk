@@ -36,7 +36,7 @@ namespace Gs2.Gs2Inbox.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string Metadata { set; get; }
-        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public long? ExpiresAt { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public string DuplicationAvoider { set; get; }
@@ -52,7 +52,7 @@ namespace Gs2.Gs2Inbox.Request
             this.Metadata = metadata;
             return this;
         }
-        public SendMessageByUserIdRequest WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+        public SendMessageByUserIdRequest WithReadAcquireActions(Gs2.Core.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
@@ -82,14 +82,14 @@ namespace Gs2.Gs2Inbox.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -137,6 +137,58 @@ namespace Gs2.Gs2Inbox.Request
                 ExpiresTimeSpan.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += Metadata + ":";
+            key += ReadAcquireActions + ":";
+            key += ExpiresAt + ":";
+            key += ExpiresTimeSpan + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SendMessageByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                Metadata = Metadata,
+                ReadAcquireActions = ReadAcquireActions,
+                ExpiresAt = ExpiresAt,
+                ExpiresTimeSpan = ExpiresTimeSpan,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SendMessageByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::userId");
+            }
+            if (Metadata != y.Metadata) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::metadata");
+            }
+            if (ReadAcquireActions != y.ReadAcquireActions) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::readAcquireActions");
+            }
+            if (ExpiresAt != y.ExpiresAt) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::expiresAt");
+            }
+            if (ExpiresTimeSpan != y.ExpiresTimeSpan) {
+                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::expiresTimeSpan");
+            }
+            return new SendMessageByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                Metadata = Metadata,
+                ReadAcquireActions = ReadAcquireActions,
+                ExpiresAt = ExpiresAt,
+                ExpiresTimeSpan = ExpiresTimeSpan,
+            };
         }
     }
 }

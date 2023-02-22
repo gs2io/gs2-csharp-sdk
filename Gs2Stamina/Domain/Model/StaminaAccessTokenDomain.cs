@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -570,7 +572,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.Stamina> self)
             {
         #endif
-            Gs2.Gs2Stamina.Model.Stamina value = _cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
+            var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     this.StaminaName?.ToString()
@@ -628,13 +630,26 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
+                (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
                     _parentKey,
                     Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         this.StaminaName?.ToString()
                     )
                 );
             }
+            
+            if (value != null && value.NextRecoverAt.HasValue && value.NextRecoverAt.Value > 0) {
+                if (value.NextRecoverAt < UnixTime.ToUnixTime(DateTime.Now)) {
+                    if (value.Value < value.MaxValue) {
+                        value.Value += value.RecoverValue;
+                        value.NextRecoverAt += value.RecoverIntervalMinutes * 60 * 1000;
+                    }
+                    else {
+                        value.NextRecoverAt = 0;
+                    }
+                }
+            }
+
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);
             yield return null;

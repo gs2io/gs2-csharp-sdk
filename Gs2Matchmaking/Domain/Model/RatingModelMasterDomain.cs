@@ -267,14 +267,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "ratingModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "RatingModelMaster"
-                );
                     var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
                         request.RatingName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.RatingModelMaster> self)
             {
         #endif
-            Gs2.Gs2Matchmaking.Model.RatingModelMaster value = _cache.Get<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                 _parentKey,
                 Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
                     this.RatingName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         {
                             if (e.errors[0].component == "ratingModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
+                                    this.RatingName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
-                                        this.RatingName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "ratingModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                        var key = Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
+                            this.RatingName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
-                                this.RatingName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                     _parentKey,
                     Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain.CreateCacheKey(
                         this.RatingName?.ToString()

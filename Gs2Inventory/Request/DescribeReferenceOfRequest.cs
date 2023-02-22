@@ -75,7 +75,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -110,6 +110,28 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(ItemSetName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += AccessToken + ":";
+            key += ItemName + ":";
+            key += ItemSetName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DescribeReferenceOfRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DescribeReferenceOfRequest)x;
+            return this;
         }
     }
 }

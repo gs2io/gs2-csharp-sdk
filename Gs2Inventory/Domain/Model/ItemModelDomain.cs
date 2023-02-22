@@ -205,13 +205,13 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemModel> self)
             {
         #endif
-            Gs2.Gs2Inventory.Model.ItemModel value = _cache.Get<Gs2.Gs2Inventory.Model.ItemModel>(
+            var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.ItemModel>(
                 _parentKey,
                 Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                     this.ItemName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -228,11 +228,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         {
                             if (e.errors[0].component == "itemModel")
                             {
-                                _cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                                    this.ItemName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Inventory.Model.ItemModel>(
                                     _parentKey,
-                                    Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
-                                        this.ItemName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -250,11 +253,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "itemModel")
                     {
-                        _cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(
+                        var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                            this.ItemName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Inventory.Model.ItemModel>(
                             _parentKey,
-                            Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
-                                this.ItemName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -263,7 +269,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Inventory.Model.ItemModel>(
+                (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.ItemModel>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                         this.ItemName?.ToString()

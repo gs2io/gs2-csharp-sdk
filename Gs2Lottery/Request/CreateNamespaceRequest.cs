@@ -97,7 +97,7 @@ namespace Gs2.Gs2Lottery.Request
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["name"] = Name,
@@ -145,6 +145,31 @@ namespace Gs2.Gs2Lottery.Request
                 writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += Name + ":";
+            key += Description + ":";
+            key += TransactionSetting + ":";
+            key += LotteryTriggerScriptId + ":";
+            key += ChoicePrizeTableScriptId + ":";
+            key += LogSetting + ":";
+            key += QueueNamespaceId + ":";
+            key += KeyId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateNamespaceRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateNamespaceRequest)x;
+            return this;
         }
     }
 }

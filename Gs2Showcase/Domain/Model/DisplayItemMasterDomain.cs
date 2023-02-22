@@ -119,7 +119,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItemMaster> self)
             {
         #endif
-            Gs2.Gs2Showcase.Model.DisplayItemMaster value = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItemMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItemMaster>(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.DisplayItemMasterDomain.CreateCacheKey(
                 )

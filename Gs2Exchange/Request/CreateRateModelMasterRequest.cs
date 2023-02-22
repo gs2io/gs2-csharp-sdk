@@ -40,9 +40,9 @@ namespace Gs2.Gs2Exchange.Request
         public string TimingType { set; get; }
         public int? LockTime { set; get; }
         public bool? EnableSkip { set; get; }
-        public Gs2.Gs2Exchange.Model.ConsumeAction[] SkipConsumeActions { set; get; }
-        public Gs2.Gs2Exchange.Model.AcquireAction[] AcquireActions { set; get; }
-        public Gs2.Gs2Exchange.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] SkipConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public CreateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -71,15 +71,15 @@ namespace Gs2.Gs2Exchange.Request
             this.EnableSkip = enableSkip;
             return this;
         }
-        public CreateRateModelMasterRequest WithSkipConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] skipConsumeActions) {
+        public CreateRateModelMasterRequest WithSkipConsumeActions(Gs2.Core.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-        public CreateRateModelMasterRequest WithAcquireActions(Gs2.Gs2Exchange.Model.AcquireAction[] acquireActions) {
+        public CreateRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-        public CreateRateModelMasterRequest WithConsumeActions(Gs2.Gs2Exchange.Model.ConsumeAction[] consumeActions) {
+        public CreateRateModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
@@ -100,18 +100,18 @@ namespace Gs2.Gs2Exchange.Request
                 .WithTimingType(!data.Keys.Contains("timingType") || data["timingType"] == null ? null : data["timingType"].ToString())
                 .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : (int?)int.Parse(data["lockTime"].ToString()))
                 .WithEnableSkip(!data.Keys.Contains("enableSkip") || data["enableSkip"] == null ? null : (bool?)bool.Parse(data["enableSkip"].ToString()))
-                .WithSkipConsumeActions(!data.Keys.Contains("skipConsumeActions") || data["skipConsumeActions"] == null ? new Gs2.Gs2Exchange.Model.ConsumeAction[]{} : data["skipConsumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Exchange.Model.ConsumeAction.FromJson(v);
+                .WithSkipConsumeActions(!data.Keys.Contains("skipConsumeActions") || data["skipConsumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["skipConsumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Exchange.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Exchange.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Exchange.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Exchange.Model.ConsumeAction.FromJson(v);
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -198,6 +198,33 @@ namespace Gs2.Gs2Exchange.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += TimingType + ":";
+            key += LockTime + ":";
+            key += EnableSkip + ":";
+            key += SkipConsumeActions + ":";
+            key += AcquireActions + ":";
+            key += ConsumeActions + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateRateModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateRateModelMasterRequest)x;
+            return this;
         }
     }
 }

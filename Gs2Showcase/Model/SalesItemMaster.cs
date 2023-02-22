@@ -35,8 +35,8 @@ namespace Gs2.Gs2Showcase.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
-        public Gs2.Gs2Showcase.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Gs2Showcase.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public SalesItemMaster WithSalesItemId(string salesItemId) {
@@ -55,11 +55,11 @@ namespace Gs2.Gs2Showcase.Model
             this.Metadata = metadata;
             return this;
         }
-        public SalesItemMaster WithConsumeActions(Gs2.Gs2Showcase.Model.ConsumeAction[] consumeActions) {
+        public SalesItemMaster WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-        public SalesItemMaster WithAcquireActions(Gs2.Gs2Showcase.Model.AcquireAction[] acquireActions) {
+        public SalesItemMaster WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
@@ -153,11 +153,11 @@ namespace Gs2.Gs2Showcase.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Showcase.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Showcase.Model.ConsumeAction.FromJson(v);
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Showcase.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Showcase.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));

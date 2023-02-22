@@ -40,9 +40,9 @@ namespace Gs2.Gs2Quest.Request
         public string Metadata { set; get; }
         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
         public string ChallengePeriodEventId { set; get; }
-        public Gs2.Gs2Quest.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
-        public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
         public UpdateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -72,15 +72,15 @@ namespace Gs2.Gs2Quest.Request
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-        public UpdateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] firstCompleteAcquireActions) {
+        public UpdateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
-        public UpdateQuestModelMasterRequest WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
+        public UpdateQuestModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-        public UpdateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
+        public UpdateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Core.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
@@ -107,21 +107,21 @@ namespace Gs2.Gs2Quest.Request
                     return Gs2.Gs2Quest.Model.Contents.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
-                .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Quest.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.ConsumeAction.FromJson(v);
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithPremiseQuestNames(!data.Keys.Contains("premiseQuestNames") || data["premiseQuestNames"] == null ? new string[]{} : data["premiseQuestNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -228,6 +228,34 @@ namespace Gs2.Gs2Quest.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += QuestGroupName + ":";
+            key += QuestName + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += Contents + ":";
+            key += ChallengePeriodEventId + ":";
+            key += FirstCompleteAcquireActions + ":";
+            key += ConsumeActions + ":";
+            key += FailedAcquireActions + ":";
+            key += PremiseQuestNames + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateQuestModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateQuestModelMasterRequest)x;
+            return this;
         }
     }
 }

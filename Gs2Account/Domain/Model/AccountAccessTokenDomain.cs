@@ -196,7 +196,7 @@ namespace Gs2.Gs2Account.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.Account> self)
             {
         #endif
-            Gs2.Gs2Account.Model.Account value = _cache.Get<Gs2.Gs2Account.Model.Account>(
+            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.Account>(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                     this.UserId?.ToString()

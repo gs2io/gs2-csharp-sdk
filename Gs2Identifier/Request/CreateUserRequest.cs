@@ -57,7 +57,7 @@ namespace Gs2.Gs2Identifier.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["name"] = Name,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Identifier.Request
                 writer.Write(Description.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += Name + ":";
+            key += Description + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateUserRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateUserRequest)x;
+            return this;
         }
     }
 }

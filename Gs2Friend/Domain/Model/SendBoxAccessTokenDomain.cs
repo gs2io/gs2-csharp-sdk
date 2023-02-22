@@ -127,7 +127,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.SendBox> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.SendBox value = _cache.Get<Gs2.Gs2Friend.Model.SendBox>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.SendBox>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.SendBoxDomain.CreateCacheKey(
                 )

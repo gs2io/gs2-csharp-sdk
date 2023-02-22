@@ -267,14 +267,15 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "entryModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "EntryModelMaster"
-                );
                     var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
                         request.EntryName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
             {
         #endif
-            Gs2.Gs2Dictionary.Model.EntryModelMaster value = _cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                 _parentKey,
                 Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
                     this.EntryName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         {
                             if (e.errors[0].component == "entryModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                                var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
+                                    this.EntryName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                                        this.EntryName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "entryModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
+                            this.EntryName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                                this.EntryName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                     _parentKey,
                     Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
                         this.EntryName?.ToString()

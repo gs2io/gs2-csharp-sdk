@@ -95,7 +95,7 @@ namespace Gs2.Gs2Datastore.Request
                 .WithUpdateIfExists(!data.Keys.Contains("updateIfExists") || data["updateIfExists"] == null ? null : (bool?)bool.Parse(data["updateIfExists"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -146,6 +146,30 @@ namespace Gs2.Gs2Datastore.Request
                 writer.Write(bool.Parse(UpdateIfExists.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += Name + ":";
+            key += ContentType + ":";
+            key += Scope + ":";
+            key += AllowUserIds + ":";
+            key += UpdateIfExists + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply PrepareUploadByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (PrepareUploadByUserIdRequest)x;
+            return this;
         }
     }
 }

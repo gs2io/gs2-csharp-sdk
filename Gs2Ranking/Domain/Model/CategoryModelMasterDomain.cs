@@ -267,14 +267,15 @@ namespace Gs2.Gs2Ranking.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "categoryModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "CategoryModelMaster"
-                );
                     var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                         request.CategoryName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Ranking.Model.CategoryModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.CategoryModelMaster> self)
             {
         #endif
-            Gs2.Gs2Ranking.Model.CategoryModelMaster value = _cache.Get<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                 _parentKey,
                 Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                     this.CategoryName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         {
                             if (e.errors[0].component == "categoryModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                                var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
+                                    this.CategoryName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
-                                        this.CategoryName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "categoryModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                        var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
+                            this.CategoryName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
-                                this.CategoryName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                     _parentKey,
                     Gs2.Gs2Ranking.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
                         this.CategoryName?.ToString()

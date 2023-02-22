@@ -136,7 +136,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Subscribe> self)
             {
         #endif
-            Gs2.Gs2Ranking.Model.Subscribe value = _cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
+            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
                 _parentKey,
                 Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
                     this.CategoryName?.ToString()

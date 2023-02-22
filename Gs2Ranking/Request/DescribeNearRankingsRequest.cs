@@ -63,7 +63,7 @@ namespace Gs2.Gs2Ranking.Request
                 .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Ranking.Request
                 writer.Write(long.Parse(Score.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CategoryName + ":";
+            key += Score + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DescribeNearRankingsRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DescribeNearRankingsRequest)x;
+            return this;
         }
     }
 }

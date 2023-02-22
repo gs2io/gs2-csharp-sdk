@@ -230,7 +230,7 @@ namespace Gs2.Gs2News.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.News> self)
             {
         #endif
-            Gs2.Gs2News.Model.News value = _cache.Get<Gs2.Gs2News.Model.News>(
+            var (value, find) = _cache.Get<Gs2.Gs2News.Model.News>(
                 _parentKey,
                 Gs2.Gs2News.Domain.Model.NewsDomain.CreateCacheKey(
                 )

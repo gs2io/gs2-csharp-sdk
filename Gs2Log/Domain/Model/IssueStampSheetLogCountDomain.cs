@@ -119,7 +119,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.IssueStampSheetLogCount> self)
             {
         #endif
-            Gs2.Gs2Log.Model.IssueStampSheetLogCount value = _cache.Get<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+            var (value, find) = _cache.Get<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.IssueStampSheetLogCountDomain.CreateCacheKey(
                 )

@@ -69,7 +69,7 @@ namespace Gs2.Gs2Distributor.Request
                 .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -98,6 +98,27 @@ namespace Gs2.Gs2Distributor.Request
                 DistributeResource.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += DistributorName + ":";
+            key += UserId + ":";
+            key += DistributeResource + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DistributeRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DistributeRequest)x;
+            return this;
         }
     }
 }

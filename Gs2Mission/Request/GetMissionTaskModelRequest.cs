@@ -63,7 +63,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithMissionTaskName(!data.Keys.Contains("missionTaskName") || data["missionTaskName"] == null ? null : data["missionTaskName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Mission.Request
                 writer.Write(MissionTaskName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += MissionGroupName + ":";
+            key += MissionTaskName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply GetMissionTaskModelRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (GetMissionTaskModelRequest)x;
+            return this;
         }
     }
 }

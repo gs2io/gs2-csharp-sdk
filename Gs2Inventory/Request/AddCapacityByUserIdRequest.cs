@@ -75,7 +75,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithAddCapacityValue(!data.Keys.Contains("addCapacityValue") || data["addCapacityValue"] == null ? null : (int?)int.Parse(data["addCapacityValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,42 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(int.Parse(AddCapacityValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += UserId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new AddCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                AddCapacityValue = AddCapacityValue * x,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (AddCapacityByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::namespaceName");
+            }
+            if (InventoryName != y.InventoryName) {
+                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::inventoryName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::userId");
+            }
+            return new AddCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                AddCapacityValue = AddCapacityValue + y.AddCapacityValue,
+            };
         }
     }
 }

@@ -105,7 +105,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithExpiresAtTimeSpan(!data.Keys.Contains("expiresAtTimeSpan") || data["expiresAtTimeSpan"] == null ? null : Gs2.Gs2Matchmaking.Model.TimeSpan_.FromJson(data["expiresAtTimeSpan"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -177,6 +177,31 @@ namespace Gs2.Gs2Matchmaking.Request
                 ExpiresAtTimeSpan.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += Player + ":";
+            key += AttributeRanges + ":";
+            key += CapacityOfRoles + ":";
+            key += AllowUserIds + ":";
+            key += ExpiresAt + ":";
+            key += ExpiresAtTimeSpan + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateGatheringByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateGatheringByUserIdRequest)x;
+            return this;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Gs2.Gs2Key.Request
                 .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Key.Request
                 writer.Write(Data.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += KeyName + ":";
+            key += Data + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DecryptRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DecryptRequest)x;
+            return this;
         }
     }
 }

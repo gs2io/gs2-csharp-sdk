@@ -91,7 +91,7 @@ namespace Gs2.Gs2Enhance.Request
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -149,6 +149,58 @@ namespace Gs2.Gs2Enhance.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += RateName + ":";
+            key += UserId + ":";
+            key += TargetItemSetId + ":";
+            key += Materials + ":";
+            key += Config + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new DirectEnhanceByUserIdRequest {
+                NamespaceName = NamespaceName,
+                RateName = RateName,
+                UserId = UserId,
+                TargetItemSetId = TargetItemSetId,
+                Materials = Materials,
+                Config = Config,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DirectEnhanceByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::namespaceName");
+            }
+            if (RateName != y.RateName) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::rateName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::userId");
+            }
+            if (TargetItemSetId != y.TargetItemSetId) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::targetItemSetId");
+            }
+            if (Materials != y.Materials) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::materials");
+            }
+            if (Config != y.Config) {
+                throw new ArithmeticException("mismatch parameter values DirectEnhanceByUserIdRequest::config");
+            }
+            return new DirectEnhanceByUserIdRequest {
+                NamespaceName = NamespaceName,
+                RateName = RateName,
+                UserId = UserId,
+                TargetItemSetId = TargetItemSetId,
+                Materials = Materials,
+                Config = Config,
+            };
         }
     }
 }

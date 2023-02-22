@@ -37,7 +37,7 @@ namespace Gs2.Gs2Mission.Model
         public string Description { set; get; }
         public string CounterName { set; get; }
         public long? TargetValue { set; get; }
-        public Gs2.Gs2Mission.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
         public string PremiseMissionTaskName { set; get; }
         public long? CreatedAt { set; get; }
@@ -66,7 +66,7 @@ namespace Gs2.Gs2Mission.Model
             this.TargetValue = targetValue;
             return this;
         }
-        public MissionTaskModelMaster WithCompleteAcquireActions(Gs2.Gs2Mission.Model.AcquireAction[] completeAcquireActions) {
+        public MissionTaskModelMaster WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
@@ -187,8 +187,8 @@ namespace Gs2.Gs2Mission.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)long.Parse(data["targetValue"].ToString()))
-                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Gs2Mission.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Mission.Model.AcquireAction.FromJson(v);
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
                 .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString())

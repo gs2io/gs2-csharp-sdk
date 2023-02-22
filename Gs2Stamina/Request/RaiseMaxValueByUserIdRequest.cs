@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithRaiseValue(!data.Keys.Contains("raiseValue") || data["raiseValue"] == null ? null : (int?)int.Parse(data["raiseValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,42 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(int.Parse(RaiseValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += StaminaName + ":";
+            key += UserId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new RaiseMaxValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RaiseValue = RaiseValue * x,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (RaiseMaxValueByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::namespaceName");
+            }
+            if (StaminaName != y.StaminaName) {
+                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::staminaName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::userId");
+            }
+            return new RaiseMaxValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RaiseValue = RaiseValue + y.RaiseValue,
+            };
         }
     }
 }

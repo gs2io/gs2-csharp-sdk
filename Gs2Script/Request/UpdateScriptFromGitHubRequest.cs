@@ -69,7 +69,7 @@ namespace Gs2.Gs2Script.Request
                 .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Script.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -98,6 +98,27 @@ namespace Gs2.Gs2Script.Request
                 CheckoutSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += ScriptName + ":";
+            key += Description + ":";
+            key += CheckoutSetting + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateScriptFromGitHubRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateScriptFromGitHubRequest)x;
+            return this;
         }
     }
 }

@@ -259,11 +259,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "securityPolicy")
                 {
-                    var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         request.SecurityPolicyName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -343,13 +347,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 "identifier",
                 "SecurityPolicy"
             );
-            Gs2.Gs2Identifier.Model.SecurityPolicy value = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 parentKey,
                 Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                     this.SecurityPolicyName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -366,11 +370,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         {
                             if (e.errors[0].component == "securityPolicy")
                             {
-                                _cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                                    _parentKey,
-                                    Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                                        this.SecurityPolicyName?.ToString()
-                                    )
+                                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                                    this.SecurityPolicyName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                                    parentKey,
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -388,11 +395,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "securityPolicy")
                     {
-                        _cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                            _parentKey,
-                            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                                this.SecurityPolicyName?.ToString()
-                            )
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            this.SecurityPolicyName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                            parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -401,7 +411,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                     parentKey,
                     Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         this.SecurityPolicyName?.ToString()

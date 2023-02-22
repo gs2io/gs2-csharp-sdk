@@ -62,10 +62,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _userId;
+        private readonly string _showcaseName;
         private readonly string _displayItemId;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
+        public string UserId => _userId;
+        public string ShowcaseName => _showcaseName;
         public string DisplayItemId => _displayItemId;
 
         public DisplayItemDomain(
@@ -74,6 +78,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
+            string userId,
+            string showcaseName,
             string displayItemId
         ) {
             this._cache = cache;
@@ -84,15 +90,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
+            this._userId = userId;
+            this._showcaseName = showcaseName;
             this._displayItemId = displayItemId;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+            this._parentKey = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
                 this.NamespaceName,
+                this.UserId,
+                this.ShowcaseName,
                 "DisplayItem"
             );
         }
 
         public static string CreateCacheParentKey(
             string namespaceName,
+            string userId,
+            string showcaseName,
             string displayItemId,
             string childType
         )
@@ -101,6 +113,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 ":",
                 "showcase",
                 namespaceName ?? "null",
+                userId ?? "null",
+                showcaseName ?? "null",
                 displayItemId ?? "null",
                 childType
             );
@@ -129,7 +143,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItem> self)
             {
         #endif
-            Gs2.Gs2Showcase.Model.DisplayItem value = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
+            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
                     this.DisplayItemId?.ToString()

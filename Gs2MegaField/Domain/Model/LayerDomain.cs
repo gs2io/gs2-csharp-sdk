@@ -137,7 +137,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Layer> self)
             {
         #endif
-            Gs2.Gs2MegaField.Model.Layer value = _cache.Get<Gs2.Gs2MegaField.Model.Layer>(
+            var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.Layer>(
                 _parentKey,
                 Gs2.Gs2MegaField.Domain.Model.LayerDomain.CreateCacheKey(
                     this.AreaModelName?.ToString(),

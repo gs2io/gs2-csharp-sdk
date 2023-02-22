@@ -51,7 +51,7 @@ namespace Gs2.Gs2Identifier.Request
                 .WithSecurityPolicyName(!data.Keys.Contains("securityPolicyName") || data["securityPolicyName"] == null ? null : data["securityPolicyName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["securityPolicyName"] = SecurityPolicyName,
@@ -66,6 +66,24 @@ namespace Gs2.Gs2Identifier.Request
                 writer.Write(SecurityPolicyName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += SecurityPolicyName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DeleteSecurityPolicyRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DeleteSecurityPolicyRequest)x;
+            return this;
         }
     }
 }

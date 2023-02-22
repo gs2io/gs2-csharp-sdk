@@ -75,7 +75,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,42 @@ namespace Gs2.Gs2Exchange.Request
                 writer.Write(int.Parse(Count.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += RateName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new CreateAwaitByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                RateName = RateName,
+                Count = Count * x,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateAwaitByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::userId");
+            }
+            if (RateName != y.RateName) {
+                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::rateName");
+            }
+            return new CreateAwaitByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                RateName = RateName,
+                Count = Count + y.Count,
+            };
         }
     }
 }

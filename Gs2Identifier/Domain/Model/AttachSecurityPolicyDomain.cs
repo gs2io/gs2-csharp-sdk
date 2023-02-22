@@ -338,7 +338,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> self)
             {
         #endif
-            Gs2.Gs2Identifier.Model.AttachSecurityPolicy value = _cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                 )

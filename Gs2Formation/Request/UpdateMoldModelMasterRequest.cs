@@ -87,7 +87,7 @@ namespace Gs2.Gs2Formation.Request
                 .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -132,6 +132,30 @@ namespace Gs2.Gs2Formation.Request
                 writer.Write(int.Parse(MaxCapacity.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += MoldName + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += FormModelName + ":";
+            key += InitialMaxCapacity + ":";
+            key += MaxCapacity + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateMoldModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateMoldModelMasterRequest)x;
+            return this;
         }
     }
 }

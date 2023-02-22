@@ -224,15 +224,15 @@ namespace Gs2.Gs2Formation.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "mold")
                 {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Mold"
-                );
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         request.MoldName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Formation.Model.Mold>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -365,13 +365,13 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
             {
         #endif
-            Gs2.Gs2Formation.Model.Mold value = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
+            var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                     this.MoldName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -388,11 +388,14 @@ namespace Gs2.Gs2Formation.Domain.Model
                         {
                             if (e.errors[0].component == "mold")
                             {
-                                _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
+                                var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                    this.MoldName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                                     _parentKey,
-                                    Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                                        this.MoldName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -410,11 +413,14 @@ namespace Gs2.Gs2Formation.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "mold")
                     {
-                        _cache.Delete<Gs2.Gs2Formation.Model.Mold>(
+                        var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                            this.MoldName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                             _parentKey,
-                            Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                                this.MoldName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -423,7 +429,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
+                (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         this.MoldName?.ToString()

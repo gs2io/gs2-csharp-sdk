@@ -284,14 +284,14 @@ namespace Gs2.Gs2Quest.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "progress")
                 {
-                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Progress"
-                );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                     );
-                    _cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Quest.Model.Progress>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {

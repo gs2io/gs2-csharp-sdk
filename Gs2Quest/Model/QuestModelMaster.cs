@@ -38,9 +38,9 @@ namespace Gs2.Gs2Quest.Model
         public string Metadata { set; get; }
         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
         public string ChallengePeriodEventId { set; get; }
-        public Gs2.Gs2Quest.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
-        public Gs2.Gs2Quest.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Gs2Quest.Model.AcquireAction[] FailedAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -72,15 +72,15 @@ namespace Gs2.Gs2Quest.Model
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-        public QuestModelMaster WithFirstCompleteAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] firstCompleteAcquireActions) {
+        public QuestModelMaster WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
-        public QuestModelMaster WithConsumeActions(Gs2.Gs2Quest.Model.ConsumeAction[] consumeActions) {
+        public QuestModelMaster WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-        public QuestModelMaster WithFailedAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] failedAcquireActions) {
+        public QuestModelMaster WithFailedAcquireActions(Gs2.Core.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
@@ -200,14 +200,14 @@ namespace Gs2.Gs2Quest.Model
                     return Gs2.Gs2Quest.Model.Contents.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
-                .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Gs2Quest.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.ConsumeAction.FromJson(v);
+                .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                .WithFailedAcquireActions(!data.Keys.Contains("failedAcquireActions") || data["failedAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["failedAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithPremiseQuestNames(!data.Keys.Contains("premiseQuestNames") || data["premiseQuestNames"] == null ? new string[]{} : data["premiseQuestNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();

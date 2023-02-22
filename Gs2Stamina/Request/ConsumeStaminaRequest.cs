@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithConsumeValue(!data.Keys.Contains("consumeValue") || data["consumeValue"] == null ? null : (int?)int.Parse(data["consumeValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,27 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(int.Parse(ConsumeValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += StaminaName + ":";
+            key += AccessToken + ":";
+            key += ConsumeValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply ConsumeStaminaRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (ConsumeStaminaRequest)x;
+            return this;
         }
     }
 }

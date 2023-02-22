@@ -75,7 +75,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Mission.Request
                 writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += MissionGroupName + ":";
+            key += MissionTaskName + ":";
+            key += UserId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new ReceiveByUserIdRequest {
+                NamespaceName = NamespaceName,
+                MissionGroupName = MissionGroupName,
+                MissionTaskName = MissionTaskName,
+                UserId = UserId,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (ReceiveByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values ReceiveByUserIdRequest::namespaceName");
+            }
+            if (MissionGroupName != y.MissionGroupName) {
+                throw new ArithmeticException("mismatch parameter values ReceiveByUserIdRequest::missionGroupName");
+            }
+            if (MissionTaskName != y.MissionTaskName) {
+                throw new ArithmeticException("mismatch parameter values ReceiveByUserIdRequest::missionTaskName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values ReceiveByUserIdRequest::userId");
+            }
+            return new ReceiveByUserIdRequest {
+                NamespaceName = NamespaceName,
+                MissionGroupName = MissionGroupName,
+                MissionTaskName = MissionTaskName,
+                UserId = UserId,
+            };
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Gs2.Gs2Datastore.Request
                 .WithContentType(!data.Keys.Contains("contentType") || data["contentType"] == null ? null : data["contentType"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,27 @@ namespace Gs2.Gs2Datastore.Request
                 writer.Write(ContentType.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += DataObjectName + ":";
+            key += AccessToken + ":";
+            key += ContentType + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply PrepareReUploadRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (PrepareReUploadRequest)x;
+            return this;
         }
     }
 }

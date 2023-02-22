@@ -155,7 +155,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
             {
         #endif
-            Gs2.Gs2JobQueue.Model.Job value = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
+            var (value, find) = _cache.Get<Gs2.Gs2JobQueue.Model.Job>(
                 _parentKey,
                 Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                     this.JobName?.ToString()

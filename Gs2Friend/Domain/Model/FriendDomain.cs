@@ -151,7 +151,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Friend> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.Friend value = _cache.Get<Gs2.Gs2Friend.Model.Friend>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.Friend>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheKey(
                     this.WithProfile?.ToString()

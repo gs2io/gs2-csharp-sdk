@@ -75,7 +75,7 @@ namespace Gs2.Gs2Limit.Request
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Limit.Request
                 writer.Write(CounterName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += LimitName + ":";
+            key += UserId + ":";
+            key += CounterName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new DeleteCounterByUserIdRequest {
+                NamespaceName = NamespaceName,
+                LimitName = LimitName,
+                UserId = UserId,
+                CounterName = CounterName,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DeleteCounterByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::namespaceName");
+            }
+            if (LimitName != y.LimitName) {
+                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::limitName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::userId");
+            }
+            if (CounterName != y.CounterName) {
+                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::counterName");
+            }
+            return new DeleteCounterByUserIdRequest {
+                NamespaceName = NamespaceName,
+                LimitName = LimitName,
+                UserId = UserId,
+                CounterName = CounterName,
+            };
         }
     }
 }

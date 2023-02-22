@@ -110,7 +110,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItem> self)
             {
         #endif
-            Gs2.Gs2Lottery.Model.BoxItem value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItem>(
+            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.BoxItem>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.BoxItemDomain.CreateCacheKey(
                 )

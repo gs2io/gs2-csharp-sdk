@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += StaminaName + ":";
+            key += UserId + ":";
+            key += RecoverIntervalMinutes + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetRecoverIntervalByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RecoverIntervalMinutes = RecoverIntervalMinutes,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetRecoverIntervalByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::namespaceName");
+            }
+            if (StaminaName != y.StaminaName) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::staminaName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::userId");
+            }
+            if (RecoverIntervalMinutes != y.RecoverIntervalMinutes) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::recoverIntervalMinutes");
+            }
+            return new SetRecoverIntervalByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RecoverIntervalMinutes = RecoverIntervalMinutes,
+            };
         }
     }
 }

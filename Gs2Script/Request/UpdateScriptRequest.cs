@@ -69,7 +69,7 @@ namespace Gs2.Gs2Script.Request
                 .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -99,6 +99,27 @@ namespace Gs2.Gs2Script.Request
                 writer.Write(Script.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += ScriptName + ":";
+            key += Description + ":";
+            key += Script + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateScriptRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateScriptRequest)x;
+            return this;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Gs2.Gs2Formation.Request
                 .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Formation.Request
                 writer.Write(int.Parse(Capacity.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += MoldName + ":";
+            key += Capacity + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetMoldCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                MoldName = MoldName,
+                Capacity = Capacity,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetMoldCapacityByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetMoldCapacityByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetMoldCapacityByUserIdRequest::userId");
+            }
+            if (MoldName != y.MoldName) {
+                throw new ArithmeticException("mismatch parameter values SetMoldCapacityByUserIdRequest::moldName");
+            }
+            if (Capacity != y.Capacity) {
+                throw new ArithmeticException("mismatch parameter values SetMoldCapacityByUserIdRequest::capacity");
+            }
+            return new SetMoldCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                MoldName = MoldName,
+                Capacity = Capacity,
+            };
         }
     }
 }

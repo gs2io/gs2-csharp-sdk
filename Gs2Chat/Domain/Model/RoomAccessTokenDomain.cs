@@ -214,15 +214,15 @@ namespace Gs2.Gs2Chat.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "room")
                 {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "Singleton",
-                    "Room"
-                );
                     var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
                         request.RoomName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Chat.Model.Room>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Chat.Model.Room>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -442,7 +442,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Room> self)
             {
         #endif
-            Gs2.Gs2Chat.Model.Room value = _cache.Get<Gs2.Gs2Chat.Model.Room>(
+            var (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Room>(
                 _parentKey,
                 Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
                     this.RoomName?.ToString()

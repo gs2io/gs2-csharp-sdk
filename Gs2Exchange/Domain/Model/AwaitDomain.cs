@@ -481,15 +481,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "await")
                 {
-                    var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Await"
-                );
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                         request.AwaitName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -568,13 +568,13 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
             {
         #endif
-            Gs2.Gs2Exchange.Model.Await value = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+            var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     this.AwaitName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -591,11 +591,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         {
                             if (e.errors[0].component == "await")
                             {
-                                _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
+                                var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                                    this.AwaitName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Exchange.Model.Await>(
                                     _parentKey,
-                                    Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                        this.AwaitName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -613,11 +616,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "await")
                     {
-                        _cache.Delete<Gs2.Gs2Exchange.Model.Await>(
+                        var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                            this.AwaitName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Exchange.Model.Await>(
                             _parentKey,
-                            Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                this.AwaitName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -626,7 +632,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+                (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                         this.AwaitName?.ToString()

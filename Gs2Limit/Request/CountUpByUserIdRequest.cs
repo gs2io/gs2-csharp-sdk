@@ -87,7 +87,7 @@ namespace Gs2.Gs2Limit.Request
                 .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -127,6 +127,54 @@ namespace Gs2.Gs2Limit.Request
                 writer.Write(int.Parse(MaxValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += LimitName + ":";
+            key += CounterName + ":";
+            key += UserId + ":";
+            key += MaxValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new CountUpByUserIdRequest {
+                NamespaceName = NamespaceName,
+                LimitName = LimitName,
+                CounterName = CounterName,
+                UserId = UserId,
+                CountUpValue = CountUpValue * x,
+                MaxValue = MaxValue,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CountUpByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::namespaceName");
+            }
+            if (LimitName != y.LimitName) {
+                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::limitName");
+            }
+            if (CounterName != y.CounterName) {
+                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::counterName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::userId");
+            }
+            if (MaxValue != y.MaxValue) {
+                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::maxValue");
+            }
+            return new CountUpByUserIdRequest {
+                NamespaceName = NamespaceName,
+                LimitName = LimitName,
+                CounterName = CounterName,
+                UserId = UserId,
+                CountUpValue = CountUpValue + y.CountUpValue,
+                MaxValue = MaxValue,
+            };
         }
     }
 }

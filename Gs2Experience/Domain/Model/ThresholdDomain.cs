@@ -110,7 +110,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.Threshold> self)
             {
         #endif
-            Gs2.Gs2Experience.Model.Threshold value = _cache.Get<Gs2.Gs2Experience.Model.Threshold>(
+            var (value, find) = _cache.Get<Gs2.Gs2Experience.Model.Threshold>(
                 _parentKey,
                 Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                 )

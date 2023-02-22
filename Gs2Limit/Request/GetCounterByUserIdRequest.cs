@@ -69,7 +69,7 @@ namespace Gs2.Gs2Limit.Request
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -99,6 +99,27 @@ namespace Gs2.Gs2Limit.Request
                 writer.Write(CounterName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += LimitName + ":";
+            key += UserId + ":";
+            key += CounterName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply GetCounterByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (GetCounterByUserIdRequest)x;
+            return this;
         }
     }
 }

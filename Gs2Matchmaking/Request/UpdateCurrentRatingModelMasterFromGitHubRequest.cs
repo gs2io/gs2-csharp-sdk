@@ -57,7 +57,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -76,6 +76,25 @@ namespace Gs2.Gs2Matchmaking.Request
                 CheckoutSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CheckoutSetting + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateCurrentRatingModelMasterFromGitHubRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateCurrentRatingModelMasterFromGitHubRequest)x;
+            return this;
         }
     }
 }

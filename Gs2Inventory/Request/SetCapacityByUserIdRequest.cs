@@ -75,7 +75,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNewCapacityValue(!data.Keys.Contains("newCapacityValue") || data["newCapacityValue"] == null ? null : (int?)int.Parse(data["newCapacityValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(int.Parse(NewCapacityValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += UserId + ":";
+            key += NewCapacityValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                NewCapacityValue = NewCapacityValue,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetCapacityByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetCapacityByUserIdRequest::namespaceName");
+            }
+            if (InventoryName != y.InventoryName) {
+                throw new ArithmeticException("mismatch parameter values SetCapacityByUserIdRequest::inventoryName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetCapacityByUserIdRequest::userId");
+            }
+            if (NewCapacityValue != y.NewCapacityValue) {
+                throw new ArithmeticException("mismatch parameter values SetCapacityByUserIdRequest::newCapacityValue");
+            }
+            return new SetCapacityByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                NewCapacityValue = NewCapacityValue,
+            };
         }
     }
 }

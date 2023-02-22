@@ -277,15 +277,15 @@ namespace Gs2.Gs2Version.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "acceptVersion")
                 {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "AcceptVersion"
-                );
                     var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                         request.VersionName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -364,13 +364,13 @@ namespace Gs2.Gs2Version.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
             {
         #endif
-            Gs2.Gs2Version.Model.AcceptVersion value = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+            var (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
                 _parentKey,
                 Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                     this.VersionName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -387,11 +387,14 @@ namespace Gs2.Gs2Version.Domain.Model
                         {
                             if (e.errors[0].component == "acceptVersion")
                             {
-                                _cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(
+                                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                                    this.VersionName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
                                     _parentKey,
-                                    Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                                        this.VersionName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -409,11 +412,14 @@ namespace Gs2.Gs2Version.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "acceptVersion")
                     {
-                        _cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            this.VersionName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
                             _parentKey,
-                            Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                                this.VersionName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -422,7 +428,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+                (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
                     _parentKey,
                     Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                         this.VersionName?.ToString()

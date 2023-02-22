@@ -267,14 +267,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "rateModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "RateModelMaster"
-                );
                     var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                         request.RateName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Exchange.Model.RateModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.RateModelMaster> self)
             {
         #endif
-            Gs2.Gs2Exchange.Model.RateModelMaster value = _cache.Get<Gs2.Gs2Exchange.Model.RateModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.RateModelMaster>(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                     this.RateName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         {
                             if (e.errors[0].component == "rateModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                                var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                                    this.RateName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Exchange.Model.RateModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                                        this.RateName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "rateModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                        var key = Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                            this.RateName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Exchange.Model.RateModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                                this.RateName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.RateModelMaster>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                         this.RateName?.ToString()

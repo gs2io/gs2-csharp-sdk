@@ -63,7 +63,7 @@ namespace Gs2.Gs2Deploy.Request
                 .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["stackName"] = StackName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Deploy.Request
                 writer.Write(Template.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += StackName + ":";
+            key += Description + ":";
+            key += Template + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateStackRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateStackRequest)x;
+            return this;
         }
     }
 }

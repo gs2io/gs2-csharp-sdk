@@ -80,7 +80,7 @@ namespace Gs2.Core.Domain
             _cache[typeof(TKind)][parentKey].Remove(key);
         }
 
-        public TKind Get<TKind>(string parentKey, string key)
+        public Tuple<TKind, bool> Get<TKind>(string parentKey, string key)
         {
             if (!_cache.ContainsKey(typeof(TKind)))
             {
@@ -95,20 +95,20 @@ namespace Gs2.Core.Domain
                 var pair = _cache[typeof(TKind)][parentKey][key];
                 var obj = pair.Item1;
                 var ttl = pair.Item2;
-                if (ttl < UnixTime.ToUnixTime(DateTime.Now))
-                {
+                if (ttl < UnixTime.ToUnixTime(DateTime.Now)) {
+                    ListCacheClear<TKind>(parentKey);
                     Delete<TKind>(
                         parentKey,
                         key
                     );
-                    return default;
+                    return new Tuple<TKind, bool>(default, false);
                 }
 
-                return (TKind) obj;
+                return new Tuple<TKind, bool>((TKind) obj, true);
             }
             else
             {
-                return default;
+                return new Tuple<TKind, bool>(default, false);
             }
         }
 
@@ -122,10 +122,16 @@ namespace Gs2.Core.Domain
             {
                 _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
             }
+            if (_cache[typeof(TKind)][parentKey].Values.Count(pair =>
+                {
+                    return pair.Item2 < UnixTime.ToUnixTime(DateTime.Now);
+                }) > 0) {
+                ListCacheClear<TKind>(parentKey);
+            }
             return _cache[typeof(TKind)][parentKey].Values.Where(pair =>
             {
                 return pair.Item2 >= UnixTime.ToUnixTime(DateTime.Now);
-            }).Select(pair => (TKind)pair.Item1).ToArray();
+            }).Select(pair => (TKind)pair.Item1).Where(v => v != null).ToArray();
         }
     }
 }

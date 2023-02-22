@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(int.Parse(MaxValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += StaminaName + ":";
+            key += UserId + ":";
+            key += MaxValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetMaxValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                MaxValue = MaxValue,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetMaxValueByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetMaxValueByUserIdRequest::namespaceName");
+            }
+            if (StaminaName != y.StaminaName) {
+                throw new ArithmeticException("mismatch parameter values SetMaxValueByUserIdRequest::staminaName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetMaxValueByUserIdRequest::userId");
+            }
+            if (MaxValue != y.MaxValue) {
+                throw new ArithmeticException("mismatch parameter values SetMaxValueByUserIdRequest::maxValue");
+            }
+            return new SetMaxValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                MaxValue = MaxValue,
+            };
         }
     }
 }

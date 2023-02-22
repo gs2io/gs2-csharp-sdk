@@ -222,7 +222,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                         resultModel.Inventory.InventoryName.ToString()
                     );
-                    var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                    var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                         parentKey,
                         key
                     );
@@ -359,7 +359,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                         resultModel.Inventory.InventoryName.ToString()
                     );
-                    var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                    var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                         parentKey,
                         key
                     );
@@ -520,7 +520,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                         resultModel.Inventory.InventoryName.ToString()
                     );
-                    var item = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                    var (item, find) = cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
                         parentKey,
                         key
                     );
@@ -781,8 +781,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
             {
         #endif
             Gs2.Gs2Inventory.Model.ItemSet[] value;
+            bool find = false;
             if (this.ItemSetName != null) {
-                var v = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet>(
+                var (v, _) = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                         this.ItemName?.ToString(),
@@ -794,11 +795,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
                 else {
                     value = new[] {v};
+                    find = true;
                 }
             }
             else 
             {
-                value = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet[]>(
+                (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet[]>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                         this.ItemName?.ToString(),
@@ -806,7 +808,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     )
                 );
             }
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -861,7 +863,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
         #endif
                 if (this.ItemSetName != null) {
-                    var v = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet>(
+                    var (v, _) = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet>(
                         _parentKey,
                         Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                             this.ItemName?.ToString(),
@@ -877,7 +879,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
                 else 
                 {
-                    value = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet[]>(
+                    (value, _) = _cache.Get<Gs2.Gs2Inventory.Model.ItemSet[]>(
                         _parentKey,
                         Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
                             this.ItemName?.ToString(),

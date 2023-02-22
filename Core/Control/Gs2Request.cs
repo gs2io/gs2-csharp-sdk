@@ -15,10 +15,11 @@
  */
 
 using Gs2.Core.Model;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Core.Control
 {
-	public class Gs2Request<T> : IRequest where T : class
+	public abstract class Gs2Request<T> : Gs2Request, IRequest where T : class
 	{
 	    /** GS2リクエストID */
 	    public string RequestId { set; get; }
@@ -37,5 +38,33 @@ namespace Gs2.Core.Control
 		    this.ContextStack = contextStack;
 		    return this as T;
 	    }
-    }
+
+	    public static Gs2Request<T> operator *(Gs2Request<T> x, int y) {
+		    return (Gs2Request<T>) x.DoMultiple(y);
+	    }
+
+	    public static Gs2Request<T> operator +(Gs2Request<T> x, Gs2Request<T> y) {
+		    return (Gs2Request<T>) x.DoAdd(y);
+	    }
+	}
+	
+	public abstract class Gs2Request
+	{
+		internal Gs2Request() { }
+		
+		public abstract JsonData ToJson();
+	    
+		public abstract string UniqueKey();
+
+		protected abstract Gs2Request DoMultiple(int x);
+		protected abstract Gs2Request DoAdd(Gs2Request x);
+	    
+		public static Gs2Request operator *(Gs2Request x, int y) {
+			return x.DoMultiple(y);
+		}
+
+		public static Gs2Request operator +(Gs2Request x, Gs2Request y) {
+			return x.DoAdd(y);
+		}
+	}
 }

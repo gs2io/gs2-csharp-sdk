@@ -144,7 +144,7 @@ namespace Gs2.Gs2News.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.SetCookieRequestEntry> self)
             {
         #endif
-            Gs2.Gs2News.Model.SetCookieRequestEntry value = _cache.Get<Gs2.Gs2News.Model.SetCookieRequestEntry>(
+            var (value, find) = _cache.Get<Gs2.Gs2News.Model.SetCookieRequestEntry>(
                 _parentKey,
                 Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
                     this.Key?.ToString(),

@@ -69,7 +69,7 @@ namespace Gs2.Gs2Dictionary.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -99,6 +99,27 @@ namespace Gs2.Gs2Dictionary.Request
                 writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += EntryName + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateEntryModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateEntryModelMasterRequest)x;
+            return this;
         }
     }
 }

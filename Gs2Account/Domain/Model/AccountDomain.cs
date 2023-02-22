@@ -342,14 +342,15 @@ namespace Gs2.Gs2Account.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "account")
                 {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "Account"
-                );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         request.UserId.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Account.Model.Account>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -498,14 +499,14 @@ namespace Gs2.Gs2Account.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "dataOwner")
                 {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "DataOwner"
-                );
                     var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     );
-                    _cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -651,13 +652,13 @@ namespace Gs2.Gs2Account.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.Account> self)
             {
         #endif
-            Gs2.Gs2Account.Model.Account value = _cache.Get<Gs2.Gs2Account.Model.Account>(
+            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.Account>(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                     this.UserId?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -709,7 +710,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Account.Model.Account>(
+                (value, find) = _cache.Get<Gs2.Gs2Account.Model.Account>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId?.ToString()

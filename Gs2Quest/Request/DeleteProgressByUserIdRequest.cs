@@ -63,7 +63,7 @@ namespace Gs2.Gs2Quest.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -83,6 +83,34 @@ namespace Gs2.Gs2Quest.Request
                 writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new DeleteProgressByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DeleteProgressByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values DeleteProgressByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values DeleteProgressByUserIdRequest::userId");
+            }
+            return new DeleteProgressByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+            };
         }
     }
 }

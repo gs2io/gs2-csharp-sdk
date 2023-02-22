@@ -215,13 +215,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.DataObjectHistory> self)
             {
         #endif
-            Gs2.Gs2Datastore.Model.DataObjectHistory value = _cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+            var (value, find) = _cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                 _parentKey,
                 Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                     this.Generation?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -238,11 +238,14 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         {
                             if (e.errors[0].component == "dataObjectHistory")
                             {
-                                _cache.Delete<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
+                                    this.Generation?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                                     _parentKey,
-                                    Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                                        this.Generation?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -260,11 +263,14 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "dataObjectHistory")
                     {
-                        _cache.Delete<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                        var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
+                            this.Generation?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                             _parentKey,
-                            Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                                this.Generation?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -273,7 +279,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                (value, find) = _cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                     _parentKey,
                     Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
                         this.Generation?.ToString()

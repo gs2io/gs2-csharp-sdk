@@ -75,7 +75,7 @@ namespace Gs2.Gs2Money.Request
                 .WithReceipt(!data.Keys.Contains("receipt") || data["receipt"] == null ? null : data["receipt"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Money.Request
                 writer.Write(Receipt.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += ContentsId + ":";
+            key += Receipt + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new RecordReceiptRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                ContentsId = ContentsId,
+                Receipt = Receipt,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (RecordReceiptRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::userId");
+            }
+            if (ContentsId != y.ContentsId) {
+                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::contentsId");
+            }
+            if (Receipt != y.Receipt) {
+                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::receipt");
+            }
+            return new RecordReceiptRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                ContentsId = ContentsId,
+                Receipt = Receipt,
+            };
         }
     }
 }

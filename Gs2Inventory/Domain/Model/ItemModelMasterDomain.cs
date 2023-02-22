@@ -277,15 +277,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "itemModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.InventoryName,
-                    "ItemModelMaster"
-                );
                     var key = Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
                         request.ItemName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Inventory.Model.ItemModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -364,13 +364,13 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemModelMaster> self)
             {
         #endif
-            Gs2.Gs2Inventory.Model.ItemModelMaster value = _cache.Get<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.ItemModelMaster>(
                 _parentKey,
                 Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
                     this.ItemName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -387,11 +387,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         {
                             if (e.errors[0].component == "itemModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
+                                    this.ItemName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Inventory.Model.ItemModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
-                                        this.ItemName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -409,11 +412,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "itemModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                        var key = Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
+                            this.ItemName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Inventory.Model.ItemModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
-                                this.ItemName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -422,7 +428,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.ItemModelMaster>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.ItemModelMasterDomain.CreateCacheKey(
                         this.ItemName?.ToString()

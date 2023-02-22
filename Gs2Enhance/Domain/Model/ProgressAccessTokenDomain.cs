@@ -366,14 +366,14 @@ namespace Gs2.Gs2Enhance.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "progress")
                 {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Progress"
-                );
                     var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
                     );
-                    _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Enhance.Model.Progress>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -445,12 +445,12 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.Progress> self)
             {
         #endif
-            Gs2.Gs2Enhance.Model.Progress value = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
+            var (value, find) = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
                 _parentKey,
                 Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -467,10 +467,13 @@ namespace Gs2.Gs2Enhance.Domain.Model
                         {
                             if (e.errors[0].component == "progress")
                             {
-                                _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
+                                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                                );
+                                _cache.Put<Gs2.Gs2Enhance.Model.Progress>(
                                     _parentKey,
-                                    Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -488,10 +491,13 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "progress")
                     {
-                        _cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
+                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Enhance.Model.Progress>(
                             _parentKey,
-                            Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -500,7 +506,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
+                (value, find) = _cache.Get<Gs2.Gs2Enhance.Model.Progress>(
                     _parentKey,
                     Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
                     )

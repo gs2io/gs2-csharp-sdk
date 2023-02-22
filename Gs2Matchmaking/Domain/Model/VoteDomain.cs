@@ -192,7 +192,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Vote> self)
             {
         #endif
-            Gs2.Gs2Matchmaking.Model.Vote value = _cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
+            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
                 _parentKey,
                 Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
                     this.RatingName?.ToString(),

@@ -315,11 +315,15 @@ namespace Gs2.Gs2Account.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "namespace")
                 {
-                    var parentKey = "account:Namespace";
                     var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Account.Model.Namespace>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Account.Model.Namespace>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -696,13 +700,13 @@ namespace Gs2.Gs2Account.Domain.Model
                 "account",
                 "Namespace"
             );
-            Gs2.Gs2Account.Model.Namespace value = _cache.Get<Gs2.Gs2Account.Model.Namespace>(
+            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.Namespace>(
                 parentKey,
                 Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -719,11 +723,14 @@ namespace Gs2.Gs2Account.Domain.Model
                         {
                             if (e.errors[0].component == "namespace")
                             {
-                                _cache.Delete<Gs2.Gs2Account.Model.Namespace>(
-                                    _parentKey,
-                                    Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                        this.NamespaceName?.ToString()
-                                    )
+                                var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                                    this.NamespaceName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Account.Model.Namespace>(
+                                    parentKey,
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -741,11 +748,14 @@ namespace Gs2.Gs2Account.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "namespace")
                     {
-                        _cache.Delete<Gs2.Gs2Account.Model.Namespace>(
-                            _parentKey,
-                            Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                this.NamespaceName?.ToString()
-                            )
+                        var key = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                            this.NamespaceName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Account.Model.Namespace>(
+                            parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -754,7 +764,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Account.Model.Namespace>(
+                (value, find) = _cache.Get<Gs2.Gs2Account.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()

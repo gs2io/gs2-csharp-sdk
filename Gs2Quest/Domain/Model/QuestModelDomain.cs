@@ -205,13 +205,13 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestModel> self)
             {
         #endif
-            Gs2.Gs2Quest.Model.QuestModel value = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+            var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
                 _parentKey,
                 Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                     this.QuestName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -228,11 +228,14 @@ namespace Gs2.Gs2Quest.Domain.Model
                         {
                             if (e.errors[0].component == "questModel")
                             {
-                                _cache.Delete<Gs2.Gs2Quest.Model.QuestModel>(
+                                var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                                    this.QuestName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
                                     _parentKey,
-                                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                                        this.QuestName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -250,11 +253,14 @@ namespace Gs2.Gs2Quest.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "questModel")
                     {
-                        _cache.Delete<Gs2.Gs2Quest.Model.QuestModel>(
+                        var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                            this.QuestName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
                             _parentKey,
-                            Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                                this.QuestName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -263,7 +269,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+                (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
                     _parentKey,
                     Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                         this.QuestName?.ToString()

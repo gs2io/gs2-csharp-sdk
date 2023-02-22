@@ -57,7 +57,7 @@ namespace Gs2.Gs2Identifier.Request
                 .WithClientId(!data.Keys.Contains("clientId") || data["clientId"] == null ? null : data["clientId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["userName"] = UserName,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Identifier.Request
                 writer.Write(ClientId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += UserName + ":";
+            key += ClientId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply GetIdentifierRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (GetIdentifierRequest)x;
+            return this;
         }
     }
 }

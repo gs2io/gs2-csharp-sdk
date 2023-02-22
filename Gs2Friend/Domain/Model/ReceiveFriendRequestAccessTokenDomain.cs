@@ -207,15 +207,15 @@ namespace Gs2.Gs2Friend.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "receiveFriendRequest")
                 {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
-                );
                     var key = Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
                         request.FromUserId.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -333,15 +333,15 @@ namespace Gs2.Gs2Friend.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "receiveFriendRequest")
                 {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
-                );
                     var key = Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
                         request.FromUserId.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -459,13 +459,13 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendRequest> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.FriendRequest value = _cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
                     this.FromUserId?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -482,11 +482,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                         {
                             if (e.errors[0].component == "friendRequest")
                             {
-                                _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                                var key = Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
+                                    this.FromUserId?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Friend.Model.FriendRequest>(
                                     _parentKey,
-                                    Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
-                                        this.FromUserId?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -504,11 +507,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "friendRequest")
                     {
-                        _cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                        var key = Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
+                            this.FromUserId?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Friend.Model.FriendRequest>(
                             _parentKey,
-                            Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
-                                this.FromUserId?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -517,7 +523,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain.CreateCacheKey(
                         this.FromUserId?.ToString()

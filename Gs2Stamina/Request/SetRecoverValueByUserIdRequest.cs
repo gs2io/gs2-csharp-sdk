@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)int.Parse(data["recoverValue"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,46 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(int.Parse(RecoverValue.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += StaminaName + ":";
+            key += UserId + ":";
+            key += RecoverValue + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new SetRecoverValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RecoverValue = RecoverValue,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SetRecoverValueByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverValueByUserIdRequest::namespaceName");
+            }
+            if (StaminaName != y.StaminaName) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverValueByUserIdRequest::staminaName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverValueByUserIdRequest::userId");
+            }
+            if (RecoverValue != y.RecoverValue) {
+                throw new ArithmeticException("mismatch parameter values SetRecoverValueByUserIdRequest::recoverValue");
+            }
+            return new SetRecoverValueByUserIdRequest {
+                NamespaceName = NamespaceName,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                RecoverValue = RecoverValue,
+            };
         }
     }
 }

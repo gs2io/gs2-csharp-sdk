@@ -69,7 +69,7 @@ namespace Gs2.Gs2Datastore.Request
                 .WithDoneUploadScript(!data.Keys.Contains("doneUploadScript") || data["doneUploadScript"] == null ? null : Gs2.Gs2Datastore.Model.ScriptSetting.FromJson(data["doneUploadScript"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["name"] = Name,
@@ -97,6 +97,27 @@ namespace Gs2.Gs2Datastore.Request
                 DoneUploadScript.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += Name + ":";
+            key += Description + ":";
+            key += LogSetting + ":";
+            key += DoneUploadScript + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateNamespaceRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateNamespaceRequest)x;
+            return this;
         }
     }
 }

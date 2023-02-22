@@ -57,7 +57,7 @@ namespace Gs2.Gs2Auth.Request
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["userId"] = UserId,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Auth.Request
                 writer.Write(int.Parse(TimeOffset.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += UserId + ":";
+            key += TimeOffset + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply LoginRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (LoginRequest)x;
+            return this;
         }
     }
 }

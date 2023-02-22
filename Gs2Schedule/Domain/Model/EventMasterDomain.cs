@@ -267,14 +267,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "eventMaster")
                 {
-                    var parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "EventMaster"
-                );
                     var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                         request.EventName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Schedule.Model.EventMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Schedule.Model.EventMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Schedule.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.EventMaster> self)
             {
         #endif
-            Gs2.Gs2Schedule.Model.EventMaster value = _cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
                 _parentKey,
                 Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                     this.EventName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         {
                             if (e.errors[0].component == "eventMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Schedule.Model.EventMaster>(
+                                var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                                    this.EventName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Schedule.Model.EventMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
-                                        this.EventName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "eventMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Schedule.Model.EventMaster>(
+                        var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                            this.EventName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Schedule.Model.EventMaster>(
                             _parentKey,
-                            Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
-                                this.EventName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
                     _parentKey,
                     Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                         this.EventName?.ToString()

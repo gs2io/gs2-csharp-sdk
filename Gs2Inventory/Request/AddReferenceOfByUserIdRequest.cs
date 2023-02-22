@@ -87,7 +87,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? null : data["referenceOf"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -127,6 +127,58 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(ReferenceOf.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += InventoryName + ":";
+            key += UserId + ":";
+            key += ItemName + ":";
+            key += ItemSetName + ":";
+            key += ReferenceOf + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new AddReferenceOfByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                ItemName = ItemName,
+                ItemSetName = ItemSetName,
+                ReferenceOf = ReferenceOf,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (AddReferenceOfByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::namespaceName");
+            }
+            if (InventoryName != y.InventoryName) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::inventoryName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::userId");
+            }
+            if (ItemName != y.ItemName) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::itemName");
+            }
+            if (ItemSetName != y.ItemSetName) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::itemSetName");
+            }
+            if (ReferenceOf != y.ReferenceOf) {
+                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::referenceOf");
+            }
+            return new AddReferenceOfByUserIdRequest {
+                NamespaceName = NamespaceName,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                ItemName = ItemName,
+                ItemSetName = ItemSetName,
+                ReferenceOf = ReferenceOf,
+            };
         }
     }
 }

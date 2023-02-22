@@ -303,13 +303,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 scorerUserId,
                 "Ranking"
             );
-            var value = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                 parentKey,
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                     this.CategoryName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -362,7 +362,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+                (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         this.CategoryName?.ToString()

@@ -267,14 +267,15 @@ namespace Gs2.Gs2Mission.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "counterModelMaster")
                 {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "CounterModelMaster"
-                );
                     var key = Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
                         request.CounterName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Mission.Model.CounterModelMaster>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -350,13 +351,13 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.CounterModelMaster> self)
             {
         #endif
-            Gs2.Gs2Mission.Model.CounterModelMaster value = _cache.Get<Gs2.Gs2Mission.Model.CounterModelMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.CounterModelMaster>(
                 _parentKey,
                 Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
                     this.CounterName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -373,11 +374,14 @@ namespace Gs2.Gs2Mission.Domain.Model
                         {
                             if (e.errors[0].component == "counterModelMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                                var key = Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
+                                    this.CounterName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Mission.Model.CounterModelMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
-                                        this.CounterName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -395,11 +399,14 @@ namespace Gs2.Gs2Mission.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "counterModelMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                        var key = Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
+                            this.CounterName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Mission.Model.CounterModelMaster>(
                             _parentKey,
-                            Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
-                                this.CounterName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -408,7 +415,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Mission.Model.CounterModelMaster>(
                     _parentKey,
                     Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
                         this.CounterName?.ToString()

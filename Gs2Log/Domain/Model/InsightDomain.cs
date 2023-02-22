@@ -197,14 +197,15 @@ namespace Gs2.Gs2Log.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "insight")
                 {
-                    var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "Insight"
-                );
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         request.InsightName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Log.Model.Insight>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -280,13 +281,13 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Insight> self)
             {
         #endif
-            Gs2.Gs2Log.Model.Insight value = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+            var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     this.InsightName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -303,11 +304,14 @@ namespace Gs2.Gs2Log.Domain.Model
                         {
                             if (e.errors[0].component == "insight")
                             {
-                                _cache.Delete<Gs2.Gs2Log.Model.Insight>(
+                                var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                                    this.InsightName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Log.Model.Insight>(
                                     _parentKey,
-                                    Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                                        this.InsightName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -325,11 +329,14 @@ namespace Gs2.Gs2Log.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "insight")
                     {
-                        _cache.Delete<Gs2.Gs2Log.Model.Insight>(
+                        var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                            this.InsightName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Log.Model.Insight>(
                             _parentKey,
-                            Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                                this.InsightName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -338,7 +345,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+                (value, find) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
                     Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         this.InsightName?.ToString()

@@ -261,11 +261,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "user")
                 {
-                    var parentKey = "identifier:User";
                     var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                         request.UserName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Identifier.Model.User>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -527,13 +531,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 "identifier",
                 "User"
             );
-            Gs2.Gs2Identifier.Model.User value = _cache.Get<Gs2.Gs2Identifier.Model.User>(
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.User>(
                 parentKey,
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                     this.UserName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -550,11 +554,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         {
                             if (e.errors[0].component == "user")
                             {
-                                _cache.Delete<Gs2.Gs2Identifier.Model.User>(
-                                    _parentKey,
-                                    Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                                        this.UserName?.ToString()
-                                    )
+                                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                                    this.UserName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Identifier.Model.User>(
+                                    parentKey,
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -572,11 +579,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "user")
                     {
-                        _cache.Delete<Gs2.Gs2Identifier.Model.User>(
-                            _parentKey,
-                            Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                                this.UserName?.ToString()
-                            )
+                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                            this.UserName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Identifier.Model.User>(
+                            parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -585,7 +595,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Identifier.Model.User>(
+                (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.User>(
                     parentKey,
                     Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                         this.UserName?.ToString()

@@ -57,7 +57,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["stampSheet"] = StampSheet,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Experience.Request
                 writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += StampSheet + ":";
+            key += KeyId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply AddRankCapByStampSheetRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (AddRankCapByStampSheetRequest)x;
+            return this;
         }
     }
 }

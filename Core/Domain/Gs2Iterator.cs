@@ -10,17 +10,30 @@ namespace Gs2.Core.Domain
         public Gs2Exception Error;
 
         public abstract bool HasNext();
-        protected abstract IEnumerator Next(Action<TResult> callback);
+        protected abstract IEnumerator Next(Action<AsyncResult<TResult>> callback);
         
         public IEnumerator Next()
         {
-            if (HasNext())
-            {
-                yield return Next(r => Current = r);
+            if (HasNext()) {
+                AsyncResult<TResult> result = null;
+                yield return Next(r => result = r);
+                if (result == null) {
+                    Current = default;
+                    Error = default;
+                    yield break;
+                }
+                if (result.Error != null) {
+                    Current = default;
+                    Error = result.Error;
+                    yield break;
+                }
+                Current = result.Result;
+                Error = default;
             }
             else
             {
                 Current = default;
+                Error = default;
             }
         }
     }

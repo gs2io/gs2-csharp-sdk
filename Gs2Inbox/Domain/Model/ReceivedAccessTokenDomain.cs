@@ -127,7 +127,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.Received> self)
             {
         #endif
-            Gs2.Gs2Inbox.Model.Received value = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
                 _parentKey,
                 Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
                 )

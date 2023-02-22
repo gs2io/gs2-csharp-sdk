@@ -71,7 +71,7 @@ namespace Gs2.Gs2Dictionary.Request
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -102,6 +102,40 @@ namespace Gs2.Gs2Dictionary.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += EntryModelNames + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new AddEntriesByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                EntryModelNames = EntryModelNames,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (AddEntriesByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values AddEntriesByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values AddEntriesByUserIdRequest::userId");
+            }
+            if (EntryModelNames != y.EntryModelNames) {
+                throw new ArithmeticException("mismatch parameter values AddEntriesByUserIdRequest::entryModelNames");
+            }
+            return new AddEntriesByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                EntryModelNames = EntryModelNames,
+            };
         }
     }
 }

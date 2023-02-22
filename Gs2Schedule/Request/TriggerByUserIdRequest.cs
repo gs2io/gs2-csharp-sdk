@@ -81,7 +81,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)int.Parse(data["ttl"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -116,6 +116,28 @@ namespace Gs2.Gs2Schedule.Request
                 writer.Write(int.Parse(Ttl.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += TriggerName + ":";
+            key += UserId + ":";
+            key += TriggerStrategy + ":";
+            key += Ttl + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply TriggerByUserIdRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (TriggerByUserIdRequest)x;
+            return this;
         }
     }
 }

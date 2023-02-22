@@ -119,7 +119,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.AccessLog> self)
             {
         #endif
-            Gs2.Gs2Log.Model.AccessLog value = _cache.Get<Gs2.Gs2Log.Model.AccessLog>(
+            var (value, find) = _cache.Get<Gs2.Gs2Log.Model.AccessLog>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.AccessLogDomain.CreateCacheKey(
                 )

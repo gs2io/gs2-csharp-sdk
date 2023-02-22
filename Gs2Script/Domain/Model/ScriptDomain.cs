@@ -342,14 +342,15 @@ namespace Gs2.Gs2Script.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "script")
                 {
-                    var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "Script"
-                );
                     var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         request.ScriptName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Script.Model.Script>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Script.Model.Script>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -425,13 +426,13 @@ namespace Gs2.Gs2Script.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
         #endif
-            Gs2.Gs2Script.Model.Script value = _cache.Get<Gs2.Gs2Script.Model.Script>(
+            var (value, find) = _cache.Get<Gs2.Gs2Script.Model.Script>(
                 _parentKey,
                 Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     this.ScriptName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -448,11 +449,14 @@ namespace Gs2.Gs2Script.Domain.Model
                         {
                             if (e.errors[0].component == "script")
                             {
-                                _cache.Delete<Gs2.Gs2Script.Model.Script>(
+                                var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                                    this.ScriptName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Script.Model.Script>(
                                     _parentKey,
-                                    Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                                        this.ScriptName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -470,11 +474,14 @@ namespace Gs2.Gs2Script.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "script")
                     {
-                        _cache.Delete<Gs2.Gs2Script.Model.Script>(
+                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                            this.ScriptName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Script.Model.Script>(
                             _parentKey,
-                            Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                                this.ScriptName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -483,7 +490,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Script.Model.Script>(
+                (value, find) = _cache.Get<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         this.ScriptName?.ToString()

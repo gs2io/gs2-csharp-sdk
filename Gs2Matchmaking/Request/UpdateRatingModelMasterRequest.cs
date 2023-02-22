@@ -75,7 +75,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -110,6 +110,28 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.Write(int.Parse(Volatility.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += RatingName + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += Volatility + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateRatingModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateRatingModelMasterRequest)x;
+            return this;
         }
     }
 }

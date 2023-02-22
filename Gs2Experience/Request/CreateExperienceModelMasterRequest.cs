@@ -93,7 +93,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -143,6 +143,31 @@ namespace Gs2.Gs2Experience.Request
                 writer.Write(RankThresholdName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += DefaultExperience + ":";
+            key += DefaultRankCap + ":";
+            key += MaxRankCap + ":";
+            key += RankThresholdName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateExperienceModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateExperienceModelMasterRequest)x;
+            return this;
         }
     }
 }

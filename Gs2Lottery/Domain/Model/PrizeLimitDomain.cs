@@ -205,11 +205,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "prizeLimit")
                 {
-                    var parentKey = "lottery";
                     var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                         request.PrizeId.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Lottery.Model.PrizeLimit>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -276,13 +280,13 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeLimit> self)
             {
         #endif
-            Gs2.Gs2Lottery.Model.PrizeLimit value = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                     this.PrizeId?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -299,11 +303,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         {
                             if (e.errors[0].component == "prizeLimit")
                             {
-                                _cache.Delete<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                                var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
+                                    this.PrizeId?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                                     _parentKey,
-                                    Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                                        this.PrizeId?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -321,11 +328,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "prizeLimit")
                     {
-                        _cache.Delete<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                        var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
+                            this.PrizeId?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                             _parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                                this.PrizeId?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -334,7 +344,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                     _parentKey,
                     Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                         this.PrizeId?.ToString()

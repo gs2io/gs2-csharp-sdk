@@ -32,13 +32,13 @@ namespace Gs2.Gs2Quest.Model
 	public class Contents : IComparable
 	{
         public string Metadata { set; get; }
-        public Gs2.Gs2Quest.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public int? Weight { set; get; }
         public Contents WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-        public Contents WithCompleteAcquireActions(Gs2.Gs2Quest.Model.AcquireAction[] completeAcquireActions) {
+        public Contents WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
@@ -57,8 +57,8 @@ namespace Gs2.Gs2Quest.Model
             }
             return new Contents()
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Gs2Quest.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.AcquireAction.FromJson(v);
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
         }

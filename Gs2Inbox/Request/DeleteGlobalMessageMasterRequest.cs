@@ -57,7 +57,7 @@ namespace Gs2.Gs2Inbox.Request
                 .WithGlobalMessageName(!data.Keys.Contains("globalMessageName") || data["globalMessageName"] == null ? null : data["globalMessageName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Inbox.Request
                 writer.Write(GlobalMessageName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += GlobalMessageName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DeleteGlobalMessageMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DeleteGlobalMessageMasterRequest)x;
+            return this;
         }
     }
 }

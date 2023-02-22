@@ -493,7 +493,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Spatial> self)
             {
         #endif
-            Gs2.Gs2MegaField.Model.Spatial value = _cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
+            var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
                 _parentKey,
                 Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                     this.AreaModelName?.ToString(),

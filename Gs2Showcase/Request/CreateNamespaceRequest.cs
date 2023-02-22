@@ -91,7 +91,7 @@ namespace Gs2.Gs2Showcase.Request
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["name"] = Name,
@@ -133,6 +133,30 @@ namespace Gs2.Gs2Showcase.Request
                 LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += Name + ":";
+            key += Description + ":";
+            key += TransactionSetting + ":";
+            key += BuyScript + ":";
+            key += QueueNamespaceId + ":";
+            key += KeyId + ":";
+            key += LogSetting + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateNamespaceRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateNamespaceRequest)x;
+            return this;
         }
     }
 }

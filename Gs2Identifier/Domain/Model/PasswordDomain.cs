@@ -258,13 +258,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "password")
                 {
-                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.UserName,
-                    "Password"
-                );
                     var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                     );
-                    _cache.Delete<Gs2.Gs2Identifier.Model.Password>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Identifier.Model.Password>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -333,12 +334,12 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Password> self)
             {
         #endif
-            Gs2.Gs2Identifier.Model.Password value = _cache.Get<Gs2.Gs2Identifier.Model.Password>(
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.Password>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -355,10 +356,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         {
                             if (e.errors[0].component == "password")
                             {
-                                _cache.Delete<Gs2.Gs2Identifier.Model.Password>(
+                                var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                                );
+                                _cache.Put<Gs2.Gs2Identifier.Model.Password>(
                                     _parentKey,
-                                    Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -376,10 +380,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "password")
                     {
-                        _cache.Delete<Gs2.Gs2Identifier.Model.Password>(
+                        var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Identifier.Model.Password>(
                             _parentKey,
-                            Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -388,7 +395,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Identifier.Model.Password>(
+                (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.Password>(
                     _parentKey,
                     Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
                     )

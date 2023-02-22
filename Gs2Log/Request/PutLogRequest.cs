@@ -63,7 +63,7 @@ namespace Gs2.Gs2Log.Request
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["loggingNamespaceId"] = LoggingNamespaceId,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Log.Request
                 writer.Write(Payload.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += LoggingNamespaceId + ":";
+            key += LogCategory + ":";
+            key += Payload + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply PutLogRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (PutLogRequest)x;
+            return this;
         }
     }
 }

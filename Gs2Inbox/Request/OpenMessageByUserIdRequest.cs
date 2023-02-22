@@ -69,7 +69,7 @@ namespace Gs2.Gs2Inbox.Request
                 .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -94,6 +94,40 @@ namespace Gs2.Gs2Inbox.Request
                 writer.Write(MessageName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += MessageName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new OpenMessageByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                MessageName = MessageName,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (OpenMessageByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values OpenMessageByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values OpenMessageByUserIdRequest::userId");
+            }
+            if (MessageName != y.MessageName) {
+                throw new ArithmeticException("mismatch parameter values OpenMessageByUserIdRequest::messageName");
+            }
+            return new OpenMessageByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                MessageName = MessageName,
+            };
         }
     }
 }

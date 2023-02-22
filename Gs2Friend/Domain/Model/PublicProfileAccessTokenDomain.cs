@@ -127,7 +127,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.PublicProfile> self)
             {
         #endif
-            Gs2.Gs2Friend.Model.PublicProfile value = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                 )

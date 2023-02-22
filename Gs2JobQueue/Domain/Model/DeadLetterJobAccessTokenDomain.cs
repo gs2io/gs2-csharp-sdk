@@ -137,7 +137,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
             {
         #endif
-            Gs2.Gs2JobQueue.Model.DeadLetterJob value = _cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
+            var (value, find) = _cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
                 _parentKey,
                 Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
                     this.DeadLetterJobName?.ToString()

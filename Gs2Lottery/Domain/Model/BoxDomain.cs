@@ -136,7 +136,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
             {
         #endif
-            Gs2.Gs2Lottery.Model.BoxItems value = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(
+            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.BoxItems>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.BoxDomain.CreateCacheKey(
                     this.PrizeTableName?.ToString()

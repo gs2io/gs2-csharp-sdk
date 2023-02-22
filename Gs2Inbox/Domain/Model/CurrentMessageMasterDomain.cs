@@ -388,12 +388,12 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.CurrentMessageMaster> self)
             {
         #endif
-            Gs2.Gs2Inbox.Model.CurrentMessageMaster value = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                 _parentKey,
                 Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -410,10 +410,13 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         {
                             if (e.errors[0].component == "currentMessageMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
+                                var key = Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
+                                );
+                                _cache.Put<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -431,10 +434,13 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "currentMessageMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
+                        var key = Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                             _parentKey,
-                            Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -443,7 +449,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
                     _parentKey,
                     Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
                     )

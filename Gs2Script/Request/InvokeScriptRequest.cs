@@ -63,7 +63,7 @@ namespace Gs2.Gs2Script.Request
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["scriptId"] = ScriptId,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2Script.Request
                 writer.Write(Args.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += ScriptId + ":";
+            key += UserId + ":";
+            key += Args + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply InvokeScriptRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (InvokeScriptRequest)x;
+            return this;
         }
     }
 }

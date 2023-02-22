@@ -639,7 +639,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.DataObject> self)
             {
         #endif
-            Gs2.Gs2Datastore.Model.DataObject value = _cache.Get<Gs2.Gs2Datastore.Model.DataObject>(
+            var (value, find) = _cache.Get<Gs2.Gs2Datastore.Model.DataObject>(
                 _parentKey,
                 Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                     this.DataObjectName?.ToString()

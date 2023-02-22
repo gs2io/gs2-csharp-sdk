@@ -129,7 +129,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.MaxStaminaTable> self)
             {
         #endif
-            Gs2.Gs2Stamina.Model.MaxStaminaTable value = _cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTable>(
+            var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTable>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableDomain.CreateCacheKey(
                     this.MaxStaminaTableName?.ToString()

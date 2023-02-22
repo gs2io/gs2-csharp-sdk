@@ -51,7 +51,7 @@ namespace Gs2.Gs2Identifier.Request
                 .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["userName"] = UserName,
@@ -66,6 +66,24 @@ namespace Gs2.Gs2Identifier.Request
                 writer.Write(UserName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += UserName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateIdentifierRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateIdentifierRequest)x;
+            return this;
         }
     }
 }

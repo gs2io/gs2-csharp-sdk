@@ -71,7 +71,7 @@ namespace Gs2.Gs2JobQueue.Request
                 }).ToArray());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,40 @@ namespace Gs2.Gs2JobQueue.Request
             }
             writer.WriteArrayEnd();
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += Jobs + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new PushByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                Jobs = Jobs,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (PushByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values PushByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values PushByUserIdRequest::userId");
+            }
+            if (Jobs != y.Jobs) {
+                throw new ArithmeticException("mismatch parameter values PushByUserIdRequest::jobs");
+            }
+            return new PushByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                Jobs = Jobs,
+            };
         }
     }
 }

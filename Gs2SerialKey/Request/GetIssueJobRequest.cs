@@ -63,7 +63,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithIssueJobName(!data.Keys.Contains("issueJobName") || data["issueJobName"] == null ? null : data["issueJobName"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -88,6 +88,26 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.Write(IssueJobName.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CampaignModelName + ":";
+            key += IssueJobName + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply GetIssueJobRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (GetIssueJobRequest)x;
+            return this;
         }
     }
 }

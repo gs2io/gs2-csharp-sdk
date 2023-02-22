@@ -87,7 +87,7 @@ namespace Gs2.Gs2Gateway.Request
                 .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -127,6 +127,29 @@ namespace Gs2.Gs2Gateway.Request
                 writer.Write(Sound.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += UserId + ":";
+            key += Subject + ":";
+            key += Payload + ":";
+            key += EnableTransferMobileNotification + ":";
+            key += Sound + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply SendNotificationRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (SendNotificationRequest)x;
+            return this;
         }
     }
 }

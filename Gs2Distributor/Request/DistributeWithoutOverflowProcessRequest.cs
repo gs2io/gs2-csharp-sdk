@@ -57,7 +57,7 @@ namespace Gs2.Gs2Distributor.Request
                 .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["userId"] = UserId,
@@ -76,6 +76,25 @@ namespace Gs2.Gs2Distributor.Request
                 DistributeResource.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += UserId + ":";
+            key += DistributeResource + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DistributeWithoutOverflowProcessRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DistributeWithoutOverflowProcessRequest)x;
+            return this;
         }
     }
 }

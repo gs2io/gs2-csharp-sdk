@@ -75,7 +75,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -105,6 +105,42 @@ namespace Gs2.Gs2Mission.Request
                 writer.Write(long.Parse(Value.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CounterName + ":";
+            key += UserId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            return new IncreaseCounterByUserIdRequest {
+                NamespaceName = NamespaceName,
+                CounterName = CounterName,
+                UserId = UserId,
+                Value = Value * x,
+            };
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (IncreaseCounterByUserIdRequest)x;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::namespaceName");
+            }
+            if (CounterName != y.CounterName) {
+                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::counterName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::userId");
+            }
+            return new IncreaseCounterByUserIdRequest {
+                NamespaceName = NamespaceName,
+                CounterName = CounterName,
+                UserId = UserId,
+                Value = Value + y.Value,
+            };
         }
     }
 }

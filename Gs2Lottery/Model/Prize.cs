@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Model
 	{
         public string PrizeId { set; get; }
         public string Type { set; get; }
-        public Gs2.Gs2Lottery.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public int? DrawnLimit { set; get; }
         public string LimitFailOverPrizeId { set; get; }
         public string PrizeTableName { set; get; }
@@ -46,7 +46,7 @@ namespace Gs2.Gs2Lottery.Model
             this.Type = type;
             return this;
         }
-        public Prize WithAcquireActions(Gs2.Gs2Lottery.Model.AcquireAction[] acquireActions) {
+        public Prize WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
@@ -78,8 +78,8 @@ namespace Gs2.Gs2Lottery.Model
             return new Prize()
                 .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Lottery.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Lottery.Model.AcquireAction.FromJson(v);
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithDrawnLimit(!data.Keys.Contains("drawnLimit") || data["drawnLimit"] == null ? null : (int?)int.Parse(data["drawnLimit"].ToString()))
                 .WithLimitFailOverPrizeId(!data.Keys.Contains("limitFailOverPrizeId") || data["limitFailOverPrizeId"] == null ? null : data["limitFailOverPrizeId"].ToString())

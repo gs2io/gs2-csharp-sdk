@@ -137,7 +137,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Receipt> self)
             {
         #endif
-            Gs2.Gs2Money.Model.Receipt value = _cache.Get<Gs2.Gs2Money.Model.Receipt>(
+            var (value, find) = _cache.Get<Gs2.Gs2Money.Model.Receipt>(
                 _parentKey,
                 Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
                     this.TransactionId?.ToString()

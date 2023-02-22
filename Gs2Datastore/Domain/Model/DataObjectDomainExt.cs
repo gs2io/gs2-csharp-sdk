@@ -41,7 +41,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
 		    public override IEnumerator Action()
 		    {
-			    var request = UnityWebRequest.Get(_fileUrl);
+			    using var request = UnityWebRequest.Get(_fileUrl);
 			    request.downloadHandler = new DownloadHandlerBuffer();
 			    yield return request.SendWebRequest();
 			    if (request.responseCode != 200)
@@ -49,7 +49,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 				    OnError(new UnknownException(Array.Empty<RequestError>()));
 			    }
 			    OnComplete(request.downloadHandler.data);
-		        request.Dispose();
 		    }
 	    }
 	    
@@ -110,18 +109,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	        var result = await this.PrepareDownloadByUserIdAndNameAsync(
 		        new PrepareDownloadByUserIdAndDataObjectNameRequest()
 	        );
-	        var request = UnityWebRequest.Get(result.FileUrl);
+	        using var request = UnityWebRequest.Get(result.FileUrl);
 	        request.downloadHandler = new DownloadHandlerBuffer();
 	        await request.SendWebRequest().ToUniTask();
-	        if (request.responseCode != 200)
-	        {
+	        if (request.responseCode != 200) {
 		        request.Dispose();
 		        throw new UnknownException(Array.Empty<RequestError>());
 	        }
 	        var data = request.downloadHandler.data;
-	        request.Dispose();
 	        return data;
-	#else
+#else
 	        return new DownloadFuture(
 		        this
 	        );
@@ -162,14 +159,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
 		    public override IEnumerator Action()
 		    {
-			    var request = UnityWebRequest.Put(_uploadUrl, _data);
+			    using var request = UnityWebRequest.Put(_uploadUrl, _data);
 			    request.downloadHandler = new DownloadHandlerBuffer();
 			    yield return request.SendWebRequest();
 			    OnComplete(new RestResult(
 				    (int) request.responseCode,
 				    request.responseCode == 200 ? "{}" : string.IsNullOrEmpty(request.error) ? "{}" : request.error
 			    ));
-		        request.Dispose();
 		    }
 	    }
 
@@ -253,16 +249,14 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        var result = await this.PrepareReUploadAsync(
 			        new PrepareReUploadByUserIdRequest()
 		        );
-		        
-		        var request = UnityWebRequest.Put(result.UploadUrl, data);
+
+		        using var request = UnityWebRequest.Put(result.UploadUrl, data);
 		        request.downloadHandler = new DownloadHandlerBuffer();
 		        await request.SendWebRequest().ToUniTask();
-		        if (request.responseCode != 200)
-		        {
+		        if (request.responseCode != 200) {
 			        request.Dispose();
 			        throw new UnknownException(Array.Empty<RequestError>());
 		        }
-		        request.Dispose();
 	        }
 	        {
 		        var result = await (await this.DoneUploadAsync(

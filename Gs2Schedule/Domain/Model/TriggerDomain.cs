@@ -280,15 +280,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "trigger")
                 {
-                    var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "Trigger"
-                );
                     var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                         request.TriggerName.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(parentKey, key);
+                    _cache.Put<Gs2.Gs2Schedule.Model.Trigger>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -367,13 +367,13 @@ namespace Gs2.Gs2Schedule.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Trigger> self)
             {
         #endif
-            Gs2.Gs2Schedule.Model.Trigger value = _cache.Get<Gs2.Gs2Schedule.Model.Trigger>(
+            var (value, find) = _cache.Get<Gs2.Gs2Schedule.Model.Trigger>(
                 _parentKey,
                 Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                     this.TriggerName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -390,11 +390,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         {
                             if (e.errors[0].component == "trigger")
                             {
-                                _cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(
+                                var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                                    this.TriggerName?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Schedule.Model.Trigger>(
                                     _parentKey,
-                                    Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
-                                        this.TriggerName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -412,11 +415,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "trigger")
                     {
-                        _cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(
+                        var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                            this.TriggerName?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Schedule.Model.Trigger>(
                             _parentKey,
-                            Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
-                                this.TriggerName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -425,7 +431,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Schedule.Model.Trigger>(
+                (value, find) = _cache.Get<Gs2.Gs2Schedule.Model.Trigger>(
                     _parentKey,
                     Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                         this.TriggerName?.ToString()

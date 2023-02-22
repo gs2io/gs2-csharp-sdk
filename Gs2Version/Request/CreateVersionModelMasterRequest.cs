@@ -105,7 +105,7 @@ namespace Gs2.Gs2Version.Request
                 .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -162,6 +162,33 @@ namespace Gs2.Gs2Version.Request
                 writer.Write(SignatureKeyId.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Name + ":";
+            key += Description + ":";
+            key += Metadata + ":";
+            key += WarningVersion + ":";
+            key += ErrorVersion + ":";
+            key += Scope + ":";
+            key += CurrentVersion + ":";
+            key += NeedSignature + ":";
+            key += SignatureKeyId + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply CreateVersionModelMasterRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (CreateVersionModelMasterRequest)x;
+            return this;
         }
     }
 }

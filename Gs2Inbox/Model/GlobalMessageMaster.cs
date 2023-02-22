@@ -34,7 +34,7 @@ namespace Gs2.Gs2Inbox.Model
         public string GlobalMessageId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
-        public Gs2.Gs2Inbox.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
@@ -50,7 +50,7 @@ namespace Gs2.Gs2Inbox.Model
             this.Metadata = metadata;
             return this;
         }
-        public GlobalMessageMaster WithReadAcquireActions(Gs2.Gs2Inbox.Model.AcquireAction[] readAcquireActions) {
+        public GlobalMessageMaster WithReadAcquireActions(Gs2.Core.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
@@ -147,8 +147,8 @@ namespace Gs2.Gs2Inbox.Model
                 .WithGlobalMessageId(!data.Keys.Contains("globalMessageId") || data["globalMessageId"] == null ? null : data["globalMessageId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Gs2Inbox.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Inbox.Model.AcquireAction.FromJson(v);
+                .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

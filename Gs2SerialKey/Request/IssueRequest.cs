@@ -69,7 +69,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)int.Parse(data["issueRequestCount"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -99,6 +99,27 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.Write(int.Parse(IssueRequestCount.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += CampaignModelName + ":";
+            key += Metadata + ":";
+            key += IssueRequestCount + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply IssueRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (IssueRequest)x;
+            return this;
         }
     }
 }

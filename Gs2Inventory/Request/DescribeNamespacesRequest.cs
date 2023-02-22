@@ -57,7 +57,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["pageToken"] = PageToken,
@@ -77,6 +77,25 @@ namespace Gs2.Gs2Inventory.Request
                 writer.Write(int.Parse(Limit.ToString()));
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += PageToken + ":";
+            key += Limit + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply DescribeNamespacesRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (DescribeNamespacesRequest)x;
+            return this;
         }
     }
 }

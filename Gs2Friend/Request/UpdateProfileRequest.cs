@@ -81,7 +81,7 @@ namespace Gs2.Gs2Friend.Request
                 .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString());
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -116,6 +116,28 @@ namespace Gs2.Gs2Friend.Request
                 writer.Write(FriendProfile.ToString());
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += AccessToken + ":";
+            key += PublicProfile + ":";
+            key += FollowerProfile + ":";
+            key += FriendProfile + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateProfileRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateProfileRequest)x;
+            return this;
         }
     }
 }

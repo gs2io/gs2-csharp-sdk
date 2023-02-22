@@ -388,12 +388,12 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.CurrentExperienceMaster> self)
             {
         #endif
-            Gs2.Gs2Experience.Model.CurrentExperienceMaster value = _cache.Get<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
+            var (value, find) = _cache.Get<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
                 _parentKey,
                 Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -410,10 +410,13 @@ namespace Gs2.Gs2Experience.Domain.Model
                         {
                             if (e.errors[0].component == "currentExperienceMaster")
                             {
-                                _cache.Delete<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
+                                var key = Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
+                                );
+                                _cache.Put<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
                                     _parentKey,
-                                    Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -431,10 +434,13 @@ namespace Gs2.Gs2Experience.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "currentExperienceMaster")
                     {
-                        _cache.Delete<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
+                        var key = Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
                             _parentKey,
-                            Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -443,7 +449,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
+                (value, find) = _cache.Get<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
                     _parentKey,
                     Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
                     )

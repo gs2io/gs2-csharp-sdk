@@ -280,13 +280,13 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
             {
         #endif
-            Gs2.Gs2Money.Model.Wallet value = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+            var (value, find) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
                 _parentKey,
                 Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                     "null"
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -303,11 +303,14 @@ namespace Gs2.Gs2Money.Domain.Model
                         {
                             if (e.errors[0].component == "wallet")
                             {
-                                _cache.Delete<Gs2.Gs2Money.Model.Wallet>(
+                                var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                                    "null"
+                                );
+                                _cache.Put<Gs2.Gs2Money.Model.Wallet>(
                                     _parentKey,
-                                    Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                        "null"
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -325,11 +328,14 @@ namespace Gs2.Gs2Money.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "wallet")
                     {
-                        _cache.Delete<Gs2.Gs2Money.Model.Wallet>(
+                        var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                            "null"
+                        );
+                        _cache.Put<Gs2.Gs2Money.Model.Wallet>(
                             _parentKey,
-                            Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                "null"
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -338,7 +344,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     }
                 }
         #endif
-                value = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+                (value, find) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
                     _parentKey,
                     Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                         "null"

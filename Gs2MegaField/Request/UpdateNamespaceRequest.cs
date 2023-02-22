@@ -63,7 +63,7 @@ namespace Gs2.Gs2MegaField.Request
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2MegaField.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
-        public JsonData ToJson()
+        public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
@@ -87,6 +87,26 @@ namespace Gs2.Gs2MegaField.Request
                 LogSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
+        }
+
+        public override string UniqueKey() {
+            var key = "";
+            key += NamespaceName + ":";
+            key += Description + ":";
+            key += LogSetting + ":";
+            return key;
+        }
+
+        protected override Gs2Request DoMultiple(int x) {
+            if (x != 1) {
+                throw new ArithmeticException("Unsupported multiply UpdateNamespaceRequest");
+            }
+            return this;
+        }
+
+        protected override Gs2Request DoAdd(Gs2Request x) {
+            var y = (UpdateNamespaceRequest)x;
+            return this;
         }
     }
 }

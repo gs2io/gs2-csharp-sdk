@@ -353,11 +353,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "referenceOf")
                 {
-                    var parentKey = "inventory:Array";
                     var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
                         request.ReferenceOf.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Inventory.Model.ReferenceOf>(parentKey, key);
+                    _cache.Put<string>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -479,7 +483,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<string> self)
             {
-                var value = _cache.Get<string>(
+                var (value, find) = _cache.Get<string>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
                         this.ReferenceOf?.ToString()
@@ -490,12 +494,13 @@ namespace Gs2.Gs2Inventory.Domain.Model
             }
             return new Gs2InlineFuture<string>(Impl);
         #else
-            return _cache.Get<string>(
+            var (value, find) = _cache.Get<string>(
                 _parentKey,
                 Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
                     this.ReferenceOf?.ToString()
                 )
             );
+            return value;
         #endif
         }
 
