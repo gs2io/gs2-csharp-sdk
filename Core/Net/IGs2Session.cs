@@ -5,9 +5,9 @@ using Gs2.Core.Result;
 
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Events;
-#if GS2_ENABLE_UNITASK
-using Cysharp.Threading.Tasks;
 #endif
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
 #else
 using System;
 using System.Threading.Tasks;
