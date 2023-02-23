@@ -53,14 +53,7 @@ namespace Gs2.Core.Net
         public Gs2WebSocketSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
         {
             Credential = basicGs2Credential;
-            if (Enum.TryParse<Region>(region, out Region result))
-            {
-                Region = result;
-            }
-            else
-            {
-                Region = Region.ApNortheast1;
-            }
+            Region = RegionExt.ValueOf(region);
 
             _checkCertificateRevocation = checkCertificateRevocation;
             State = State.Idle;
