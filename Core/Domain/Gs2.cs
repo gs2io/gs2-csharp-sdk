@@ -269,13 +269,19 @@ namespace Gs2.Core.Domain
                     }
                     
                     {
-                        Gs2Distributor.Domain.Gs2Distributor.Dispatch(
+                        var future = Gs2Distributor.Domain.Gs2Distributor.Dispatch(
                             _cache,
                             _jobQueueDomain,
                             _sheetConfiguration,
                             _restSession,
                             accessToken
                         );
+                        yield return future;
+                        if (future != null)
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
                     }
                     {
                         var future = Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
@@ -289,7 +295,6 @@ namespace Gs2.Core.Domain
                             self.OnError(future.Error);
                             yield break;
                         }
-                        
                     }
                     {
                         Gs2Future<bool> future = _jobQueueDomain.Run(
