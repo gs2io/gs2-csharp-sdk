@@ -28,8 +28,14 @@ namespace Gs2.Core.Model
 #endif
 	public enum Region
 	{
-		/** アジアパシフィック北東1(東京) */
-		ApNortheast1
+		/** Tokyo */
+		ApNortheast1,
+		/** United States */
+		UsEast1,
+		/** Europe */
+		EuWest1,
+		/** Singapore */
+		ApSouthEast1,
 	}
 
 	public static class RegionExt
@@ -37,7 +43,10 @@ namespace Gs2.Core.Model
 		public static string DisplayName(this Region region)
 		{
 			string[] names = { 
-				"ap-northeast-1"
+				"ap-northeast-1",
+				"us-east-1",
+				"eu-west-1",
+				"ap-southeast-1",
 			};
 			return names[(int)region];
 		}
