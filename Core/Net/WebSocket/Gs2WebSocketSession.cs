@@ -438,6 +438,10 @@ namespace Gs2.Core.Net
                 }
                 
                 result.OnComplete(null);
+
+#if !UNITY_2017_1_OR_NEWER
+                yield break;
+#endif
             }
 
             return new Gs2InlineFuture(Impl);

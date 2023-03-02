@@ -63,12 +63,22 @@ namespace Gs2.Core.Net
                 request.Content = new StringContent(Body, Encoding.UTF8, contentType);
             }
 
-            var result = await new HttpClient().SendAsync(request);
+            var response = await new HttpClient().SendAsync(request);
 
-            return new RestResult(
-                (int) result.StatusCode,
-                await result.Content.ReadAsStringAsync()
+            if ((int) response.StatusCode == 500)
+            {
+                return await Invoke();
+            }
+
+            var result = new RestResult(
+                (int) response.StatusCode,
+                await response.Content.ReadAsStringAsync()
             );
+            OnComplete(result);
+
+            request.Dispose();
+
+            return Result;
         }
 
         public override IEnumerator Action()

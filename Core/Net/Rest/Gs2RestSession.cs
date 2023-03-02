@@ -98,6 +98,9 @@ namespace Gs2.Core.Net
                 this.State = State.Available;
 
                 result.OnComplete(new OpenResult());
+#if !UNITY_2017_1_OR_NEWER
+                yield break;
+#endif
             }
 
             return new Gs2InlineFuture<OpenResult>(Impl);
@@ -185,6 +188,10 @@ namespace Gs2.Core.Net
                     yield break;
                 }
                 future.OnComplete(future.Result);
+                
+#if !UNITY_2017_1_OR_NEWER
+                yield break;
+#endif
             }
 
             return new Gs2InlineFuture<OpenResult>(Impl);
@@ -252,6 +259,10 @@ namespace Gs2.Core.Net
                     this.State = State.Closed;
                 }
                 result.OnComplete(null);
+
+#if !UNITY_2017_1_OR_NEWER
+                yield break;
+#endif
             }
 
             return new Gs2InlineFuture(Impl);
