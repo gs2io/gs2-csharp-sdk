@@ -36,6 +36,7 @@ using Gs2.Gs2Inbox.Domain.Iterator;
 using Gs2.Gs2Inbox.Domain.Model;
 using Gs2.Gs2Inbox.Request;
 using Gs2.Gs2Inbox.Result;
+using Gs2.Gs2Inbox.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -295,6 +296,22 @@ namespace Gs2.Gs2Inbox.Domain
                 }
             }
         }
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class ReceiveNotificationEvent : UnityEvent<ReceiveNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static ReceiveNotificationEvent onReceiveNotification = new ReceiveNotificationEvent();
+
+        public event UnityAction<ReceiveNotification> OnReceiveNotification
+        {
+            add => onReceiveNotification.AddListener(value);
+            remove => onReceiveNotification.RemoveListener(value);
+        }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
@@ -302,6 +319,12 @@ namespace Gs2.Gs2Inbox.Domain
                 string payload
         ) {
     #if UNITY_2017_1_OR_NEWER
+            switch (action) {
+                case "Receive": {
+                    onReceiveNotification.Invoke(ReceiveNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+            }
     #endif
         }
     }

@@ -7,8 +7,8 @@ namespace Gs2.Core.Domain
 {
     public class CacheDatabase
     {
-        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
-        private readonly Dictionary<Type, Dictionary<string, bool>> _listCached = new Dictionary<Type, Dictionary<string, bool>>();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new ();
+        private readonly Dictionary<Type, HashSet<string>> _listCached = new ();
 
         public void Clear()
         {
@@ -17,121 +17,84 @@ namespace Gs2.Core.Domain
         }
         
         public bool IsListCached<TKind>(string parentKey) {
-            if (!_listCached.ContainsKey(typeof(TKind)))
-            {
-                _listCached[typeof(TKind)] = new Dictionary<string, bool>();
-            }
-            return _listCached[typeof(TKind)].ContainsKey(parentKey);
+            return _listCached.Get(typeof(TKind))?.Contains(parentKey) == true;
         }
 
         public void ListCached<TKind>(string parentKey) {
-            if (!_listCached.ContainsKey(typeof(TKind)))
-            {
-                _listCached[typeof(TKind)] = new Dictionary<string, bool>();
-            }
-            _listCached[typeof(TKind)][parentKey] = true;
+            _listCached.Ensure(typeof(TKind)).Add(parentKey);
         }
 
         public void ListCacheClear<TKind>(string parentKey) {
-            if (!_cache.ContainsKey(typeof(TKind)))
-            {
-                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
-            }
-            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
-            {
-                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
-            }
-            _cache[typeof(TKind)][parentKey].Clear();
-            if (!_listCached.ContainsKey(typeof(TKind)))
-            {
-                _listCached[typeof(TKind)] = new Dictionary<string, bool>();
-            }
-            _listCached[typeof(TKind)].Remove(parentKey);
+            _cache.Get(typeof(TKind))?.Get(parentKey)?.Clear();
+            _listCached.Get(typeof(TKind))?.Remove(parentKey);
         }
 
         public void Put<TKind>(string parentKey, string key, TKind obj, long ttl)
         {
-            if (!_cache.ContainsKey(typeof(TKind)))
-            {
-                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
-            }
-            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
-            {
-                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
-            }
-
             if (ttl == 0)
             {
                 ttl = UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.DefaultCacheMinutes;
             }
-            _cache[typeof(TKind)][parentKey][key] = new Tuple<object, long>(obj, ttl);
+            _cache.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new Tuple<object, long>(obj, ttl);
         }
 
         public void Delete<TKind>(string parentKey, string key)
         {
-            if (!_cache.ContainsKey(typeof(TKind)))
-            {
-                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
-            }
-            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
-            {
-                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
-            }
-            _cache[typeof(TKind)][parentKey].Remove(key);
+            _cache.Get(typeof(TKind))?.Get(parentKey)?.Remove(key);
         }
 
         public Tuple<TKind, bool> Get<TKind>(string parentKey, string key)
         {
-            if (!_cache.ContainsKey(typeof(TKind)))
+            var cache = _cache.Get(typeof(TKind))?.Get(parentKey);
+            if (cache != null && cache.TryGetValue(key, out var cachedValue))
             {
-                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
-            }
-            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
-            {
-                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
-            }
-            if (_cache[typeof(TKind)][parentKey].ContainsKey(key))
-            {
-                var pair = _cache[typeof(TKind)][parentKey][key];
-                var obj = pair.Item1;
-                var ttl = pair.Item2;
-                if (ttl < UnixTime.ToUnixTime(DateTime.Now)) {
+                var obj = cachedValue.Item1;
+                var ttl = cachedValue.Item2;
+                if (ttl >= UnixTime.ToUnixTime(DateTime.Now))
+                {
+                    return new Tuple<TKind, bool>((TKind) obj, true);;
+                }
+                else
+                {
                     ListCacheClear<TKind>(parentKey);
                     Delete<TKind>(
                         parentKey,
                         key
                     );
-                    return new Tuple<TKind, bool>(default, false);
                 }
+            }
 
-                return new Tuple<TKind, bool>((TKind) obj, true);
-            }
-            else
-            {
-                return new Tuple<TKind, bool>(default, false);
-            }
+            return new Tuple<TKind, bool>(default, false);
         }
 
         public TKind[] List<TKind>(string parentKey)
         {
-            if (!_cache.ContainsKey(typeof(TKind)))
+            var values = _cache.Ensure(typeof(TKind)).Ensure(parentKey).Values;
+            if (values.Count(pair => pair.Item2 < UnixTime.ToUnixTime(DateTime.Now)) > 0)
             {
-                _cache[typeof(TKind)] = new Dictionary<string, Dictionary<string, Tuple<object, long>>>();
-            }
-            if (!_cache[typeof(TKind)].ContainsKey(parentKey))
-            {
-                _cache[typeof(TKind)][parentKey] = new Dictionary<string, Tuple<object, long>>();
-            }
-            if (_cache[typeof(TKind)][parentKey].Values.Count(pair =>
-                {
-                    return pair.Item2 < UnixTime.ToUnixTime(DateTime.Now);
-                }) > 0) {
                 ListCacheClear<TKind>(parentKey);
             }
-            return _cache[typeof(TKind)][parentKey].Values.Where(pair =>
+            return values
+                .Where(pair => pair.Item2 >= UnixTime.ToUnixTime(DateTime.Now))
+                .Select(pair => (TKind)pair.Item1).Where(v => v != null)
+                .ToArray();
+        }
+    }
+
+    static class ExtensionMethods
+    {
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)
+        {
+            return dictionary != null && dictionary.TryGetValue(key, out var value) ? value : defaultValue;
+        }
+
+        public static TValue Ensure<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
+        {
+            if (!dictionary.TryGetValue(key, out var value))
             {
-                return pair.Item2 >= UnixTime.ToUnixTime(DateTime.Now);
-            }).Select(pair => (TKind)pair.Item1).Where(v => v != null).ToArray();
+                value = dictionary[key] = new TValue();
+            }
+            return value;
         }
     }
 }
