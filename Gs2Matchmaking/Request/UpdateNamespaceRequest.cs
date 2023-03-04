@@ -46,6 +46,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
+        public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -99,6 +100,10 @@ namespace Gs2.Gs2Matchmaking.Request
             this.CompleteNotification = completeNotification;
             return this;
         }
+        public UpdateNamespaceRequest WithChangeRatingNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting changeRatingNotification) {
+            this.ChangeRatingNotification = changeRatingNotification;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -126,6 +131,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["completeNotification"]))
+                .WithChangeRatingNotification(!data.Keys.Contains("changeRatingNotification") || data["changeRatingNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["changeRatingNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -145,6 +151,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["completeNotification"] = CompleteNotification?.ToJson(),
+                ["changeRatingNotification"] = ChangeRatingNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -200,6 +207,9 @@ namespace Gs2.Gs2Matchmaking.Request
             if (CompleteNotification != null) {
                 CompleteNotification.WriteJson(writer);
             }
+            if (ChangeRatingNotification != null) {
+                ChangeRatingNotification.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -221,6 +231,7 @@ namespace Gs2.Gs2Matchmaking.Request
             key += JoinNotification + ":";
             key += LeaveNotification + ":";
             key += CompleteNotification + ":";
+            key += ChangeRatingNotification + ":";
             key += LogSetting + ":";
             return key;
         }

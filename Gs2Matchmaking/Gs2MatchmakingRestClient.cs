@@ -253,6 +253,11 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("completeNotification");
                     request.CompleteNotification.WriteJson(jsonWriter);
                 }
+                if (request.ChangeRatingNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeRatingNotification");
+                    request.ChangeRatingNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -642,6 +647,11 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("completeNotification");
                     request.CompleteNotification.WriteJson(jsonWriter);
+                }
+                if (request.ChangeRatingNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeRatingNotification");
+                    request.ChangeRatingNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

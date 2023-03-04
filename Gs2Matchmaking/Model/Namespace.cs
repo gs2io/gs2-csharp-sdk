@@ -45,6 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
+        public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; }
         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -102,6 +103,10 @@ namespace Gs2.Gs2Matchmaking.Model
         }
         public Namespace WithCompleteNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
+            return this;
+        }
+        public Namespace WithChangeRatingNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting changeRatingNotification) {
+            this.ChangeRatingNotification = changeRatingNotification;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
@@ -191,6 +196,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["completeNotification"]))
+                .WithChangeRatingNotification(!data.Keys.Contains("changeRatingNotification") || data["changeRatingNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["changeRatingNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -213,6 +219,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["completeNotification"] = CompleteNotification?.ToJson(),
+                ["changeRatingNotification"] = ChangeRatingNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -277,6 +284,10 @@ namespace Gs2.Gs2Matchmaking.Model
             if (CompleteNotification != null) {
                 writer.WritePropertyName("completeNotification");
                 CompleteNotification.WriteJson(writer);
+            }
+            if (ChangeRatingNotification != null) {
+                writer.WritePropertyName("changeRatingNotification");
+                ChangeRatingNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -408,6 +419,14 @@ namespace Gs2.Gs2Matchmaking.Model
             else
             {
                 diff += CompleteNotification.CompareTo(other.CompleteNotification);
+            }
+            if (ChangeRatingNotification == null && ChangeRatingNotification == other.ChangeRatingNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChangeRatingNotification.CompareTo(other.ChangeRatingNotification);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {

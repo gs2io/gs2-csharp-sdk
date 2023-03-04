@@ -274,6 +274,22 @@ namespace Gs2.Gs2Matchmaking.Domain
             remove => onCompleteNotification.RemoveListener(value);
         }
     #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class ChangeRatingNotificationEvent : UnityEvent<ChangeRatingNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private static ChangeRatingNotificationEvent onChangeRatingNotification = new ChangeRatingNotificationEvent();
+
+        public event UnityAction<ChangeRatingNotification> OnChangeRatingNotification
+        {
+            add => onChangeRatingNotification.AddListener(value);
+            remove => onChangeRatingNotification.RemoveListener(value);
+        }
+    #endif
 
         public static void HandleNotification(
                 CacheDatabase cache,
@@ -292,6 +308,10 @@ namespace Gs2.Gs2Matchmaking.Domain
                 }
                 case "Complete": {
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
+                    break;
+                }
+                case "ChangeRating": {
+                    onChangeRatingNotification.Invoke(ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
             }
