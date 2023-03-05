@@ -7,8 +7,8 @@ namespace Gs2.Core.Domain
 {
     public class CacheDatabase
     {
-        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new ();
-        private readonly Dictionary<Type, HashSet<string>> _listCached = new ();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
+        private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
 
         public void Clear()
         {
@@ -90,11 +90,7 @@ namespace Gs2.Core.Domain
 
         public static TValue Ensure<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
         {
-            if (!dictionary.TryGetValue(key, out var value))
-            {
-                value = dictionary[key] = new TValue();
-            }
-            return value;
+            return dictionary.TryGetValue(key, out var value) ? value : dictionary[key] = new TValue();
         }
     }
 }
