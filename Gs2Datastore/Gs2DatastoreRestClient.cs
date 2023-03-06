@@ -1880,6 +1880,19 @@ namespace Gs2.Gs2Datastore
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
+                    base.OnError(new Exception.InvalidStatusException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "dataObject.file.notUploaded") > 0) {
+                    base.OnError(new Exception.NotUploadedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -2003,6 +2016,19 @@ namespace Gs2.Gs2Datastore
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
+                    base.OnError(new Exception.InvalidStatusException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "dataObject.file.notUploaded") > 0) {
+                    base.OnError(new Exception.NotUploadedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -2116,6 +2142,16 @@ namespace Gs2.Gs2Datastore
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
+                    base.OnError(new Exception.InvalidStatusException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -2225,6 +2261,16 @@ namespace Gs2.Gs2Datastore
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
+                    base.OnError(new Exception.InvalidStatusException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 
@@ -3350,6 +3396,16 @@ namespace Gs2.Gs2Datastore
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
+                    base.OnError(new Exception.InvalidStatusException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

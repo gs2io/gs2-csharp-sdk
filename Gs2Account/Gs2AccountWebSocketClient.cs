@@ -1659,6 +1659,16 @@ namespace Gs2.Gs2Account
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "account.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -1786,6 +1796,16 @@ namespace Gs2.Gs2Account
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "account.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 
@@ -2150,6 +2170,16 @@ namespace Gs2.Gs2Account
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "account.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

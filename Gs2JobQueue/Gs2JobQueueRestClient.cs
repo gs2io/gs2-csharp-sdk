@@ -1172,6 +1172,16 @@ namespace Gs2.Gs2JobQueue
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "jobQueue.execution.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -1293,6 +1303,16 @@ namespace Gs2.Gs2JobQueue
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "jobQueue.execution.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

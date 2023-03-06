@@ -627,6 +627,22 @@ namespace Gs2.Gs2Chat
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -760,6 +776,22 @@ namespace Gs2.Gs2Chat
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -888,6 +920,22 @@ namespace Gs2.Gs2Chat
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -1010,6 +1058,22 @@ namespace Gs2.Gs2Chat
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

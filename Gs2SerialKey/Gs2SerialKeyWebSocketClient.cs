@@ -994,6 +994,19 @@ namespace Gs2.Gs2SerialKey
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "code.status.invalid") > 0) {
+                    base.OnError(new Exception.AlreadyUsedException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "code.code.notFound") > 0) {
+                    base.OnError(new Exception.CodeNotFoundException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

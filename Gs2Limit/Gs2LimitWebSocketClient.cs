@@ -798,6 +798,16 @@ namespace Gs2.Gs2Limit
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "limit.counter.overflow") > 0) {
+                    base.OnError(new Exception.OverflowException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -930,6 +940,16 @@ namespace Gs2.Gs2Limit
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "limit.counter.overflow") > 0) {
+                    base.OnError(new Exception.OverflowException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

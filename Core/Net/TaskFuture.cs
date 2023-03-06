@@ -44,12 +44,12 @@ namespace Gs2.Core.Net
             return Result != null || Error != null;
         }
 
-        public void OnError(Gs2Exception error)
+        public virtual void OnError(Gs2Exception error)
         {
             Error = error;
         }
 
-        public void OnComplete(TResult result)
+        public virtual void OnComplete(TResult result)
         {
             Result = result;
         }
