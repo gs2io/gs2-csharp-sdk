@@ -103,15 +103,12 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
                 this.StackName,
                 "Output"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Deploy.Model.Output>
+            if (this._cache.TryGetList<Gs2.Gs2Deploy.Model.Output>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Deploy.Model.Output>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Deploy.Model.Output>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

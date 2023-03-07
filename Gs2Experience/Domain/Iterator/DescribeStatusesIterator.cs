@@ -112,15 +112,12 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                 this.UserId,
                 "Status"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Experience.Model.Status>
+            if (this._cache.TryGetList<Gs2.Gs2Experience.Model.Status>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Experience.Model.Status>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._experienceName == null || item.ExperienceName == this._experienceName)
                     .ToArray();
                 this._pageToken = null;
@@ -165,7 +162,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Experience.Model.Status>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

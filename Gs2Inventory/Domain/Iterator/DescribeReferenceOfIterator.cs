@@ -114,15 +114,12 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = "inventory:String";
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<string>
+            if (this._cache.TryGetList<string>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<string>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -161,7 +158,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<string>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

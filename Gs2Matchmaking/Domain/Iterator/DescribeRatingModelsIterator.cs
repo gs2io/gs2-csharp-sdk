@@ -101,15 +101,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                 this.NamespaceName,
                 "RatingModel"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Matchmaking.Model.RatingModel>
+            if (this._cache.TryGetList<Gs2.Gs2Matchmaking.Model.RatingModel>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Matchmaking.Model.RatingModel>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -146,7 +143,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Matchmaking.Model.RatingModel>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

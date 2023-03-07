@@ -112,15 +112,12 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.UserId,
                 "Ranking"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Ranking.Model.Ranking>
+            if (this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Ranking.Model.Ranking>
-                (
-                        listParentKey
-                )
+                this._result = list
                     .Where(item => this._categoryName == null || item.CategoryName == this._categoryName)
                     .ToArray();
                 this._pageToken = null;
@@ -153,7 +150,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in this._result) {
                     this._cache.Put(
-                            listParentKey,
+                            parentKey,
                             Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                                     item.CategoryName?.ToString()
                             ),
@@ -164,7 +161,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Ranking.Model.Ranking>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

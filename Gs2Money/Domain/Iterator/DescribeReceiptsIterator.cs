@@ -120,15 +120,12 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 this.UserId,
                 "Receipt"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Money.Model.Receipt>
+            if (this._cache.TryGetList<Gs2.Gs2Money.Model.Receipt>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Money.Model.Receipt>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._slot == null || item.Slot == this._slot)
                     .Where(item => this._begin == null || item.CreatedAt >= this._begin)
                     .Where(item => this._end == null || item.CreatedAt <= this._end)
@@ -176,7 +173,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Money.Model.Receipt>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

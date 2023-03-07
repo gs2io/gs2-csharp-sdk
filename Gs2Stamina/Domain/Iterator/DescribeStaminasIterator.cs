@@ -108,15 +108,12 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
                 this.UserId,
                 "Stamina"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Stamina.Model.Stamina>
+            if (this._cache.TryGetList<Gs2.Gs2Stamina.Model.Stamina>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Stamina.Model.Stamina>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,7 +155,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Stamina.Model.Stamina>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

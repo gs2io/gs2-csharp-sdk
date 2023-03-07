@@ -103,15 +103,12 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 this.NamespaceName,
                 "CampaignModelMaster"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2SerialKey.Model.CampaignModelMaster>
+            if (this._cache.TryGetList<Gs2.Gs2SerialKey.Model.CampaignModelMaster>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2SerialKey.Model.CampaignModelMaster>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -152,7 +149,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

@@ -108,15 +108,12 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this.UserId,
                 "ReceiveFriendRequest"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Friend.Model.FriendRequest>
+            if (this._cache.TryGetList<Gs2.Gs2Friend.Model.FriendRequest>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Friend.Model.FriendRequest>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this.UserId == null || item.TargetUserId == this.UserId)
                     .ToArray();
                 this._pageToken = null;
@@ -159,7 +156,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Friend.Model.FriendRequest>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

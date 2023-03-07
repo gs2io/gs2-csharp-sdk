@@ -103,15 +103,12 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this.NamespaceName,
                 "InventoryModelMaster"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Inventory.Model.InventoryModelMaster>
+            if (this._cache.TryGetList<Gs2.Gs2Inventory.Model.InventoryModelMaster>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Inventory.Model.InventoryModelMaster>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

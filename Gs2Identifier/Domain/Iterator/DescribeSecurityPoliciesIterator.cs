@@ -96,15 +96,12 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = "identifier:SecurityPolicy";
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Identifier.Model.SecurityPolicy>
+            if (this._cache.TryGetList<Gs2.Gs2Identifier.Model.SecurityPolicy>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Identifier.Model.SecurityPolicy>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -144,7 +141,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

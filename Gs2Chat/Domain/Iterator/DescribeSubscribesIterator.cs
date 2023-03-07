@@ -108,15 +108,12 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 this.UserId,
                 "Subscribe"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Chat.Model.Subscribe>
+            if (this._cache.TryGetList<Gs2.Gs2Chat.Model.Subscribe>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Chat.Model.Subscribe>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,7 +155,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Chat.Model.Subscribe>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

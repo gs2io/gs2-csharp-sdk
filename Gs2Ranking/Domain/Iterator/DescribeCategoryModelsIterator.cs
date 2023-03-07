@@ -101,15 +101,12 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.NamespaceName,
                 "CategoryModel"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Ranking.Model.CategoryModel>
+            if (this._cache.TryGetList<Gs2.Gs2Ranking.Model.CategoryModel>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Ranking.Model.CategoryModel>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -146,7 +143,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Ranking.Model.CategoryModel>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

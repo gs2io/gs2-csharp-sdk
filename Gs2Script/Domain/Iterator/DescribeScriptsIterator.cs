@@ -103,15 +103,12 @@ namespace Gs2.Gs2Script.Domain.Iterator
                 this.NamespaceName,
                 "Script"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Script.Model.Script>
+            if (this._cache.TryGetList<Gs2.Gs2Script.Model.Script>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Script.Model.Script>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Script.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Script.Model.Script>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

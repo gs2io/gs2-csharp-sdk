@@ -116,15 +116,12 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.UserId,
                 "Score"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Ranking.Model.Score>
+            if (this._cache.TryGetList<Gs2.Gs2Ranking.Model.Score>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Ranking.Model.Score>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._categoryName == null || item.CategoryName == this._categoryName)
                     .Where(item => this._scorerUserId == null || item.ScorerUserId == this._scorerUserId)
                     .ToArray();
@@ -172,7 +169,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Ranking.Model.Score>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

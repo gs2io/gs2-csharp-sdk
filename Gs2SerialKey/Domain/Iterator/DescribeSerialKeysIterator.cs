@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -114,15 +112,12 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 "Singleton",
                 "SerialKey"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2SerialKey.Model.SerialKey>
+            if (this._cache.TryGetList<Gs2.Gs2SerialKey.Model.SerialKey>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2SerialKey.Model.SerialKey>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._campaignModelName == null || item.CampaignModelName == this._campaignModelName)
                     .ToArray();
                 this._pageToken = null;
@@ -166,7 +161,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

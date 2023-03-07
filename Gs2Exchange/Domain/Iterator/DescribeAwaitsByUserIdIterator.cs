@@ -112,15 +112,12 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
                 this.UserId,
                 "Await"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Exchange.Model.Await>
+            if (this._cache.TryGetList<Gs2.Gs2Exchange.Model.Await>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Exchange.Model.Await>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._rateName == null || item.RateName == this._rateName)
                     .ToArray();
                 this._pageToken = null;
@@ -164,7 +161,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Exchange.Model.Await>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

@@ -110,15 +110,12 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 this.UserId,
                 "Probability"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Lottery.Model.Probability>
+            if (this._cache.TryGetList<Gs2.Gs2Lottery.Model.Probability>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Lottery.Model.Probability>
-                (
-                        listParentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -146,7 +143,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 this._last = true;
                 foreach (var item in this._result) {
                     this._cache.Put(
-                            listParentKey,
+                            parentKey,
                             Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
                             ),
                             item,
@@ -156,7 +153,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Lottery.Model.Probability>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

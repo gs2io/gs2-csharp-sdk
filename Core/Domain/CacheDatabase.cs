@@ -15,10 +15,6 @@ namespace Gs2.Core.Domain
             _cache.Clear();
             _listCached.Clear();
         }
-        
-        public bool IsListCached<TKind>(string parentKey) {
-            return _listCached.Get(typeof(TKind))?.Contains(parentKey) == true;
-        }
 
         public void ListCached<TKind>(string parentKey) {
             _listCached.Ensure(typeof(TKind)).Add(parentKey);
@@ -69,15 +65,31 @@ namespace Gs2.Core.Domain
 
         public TKind[] List<TKind>(string parentKey)
         {
+            return TryGetList<TKind>(parentKey, out var list) ? list : Array.Empty<TKind>();
+        }
+
+        public bool TryGetList<TKind>(string parentKey, out TKind[] list)
+        {
+            if (_listCached.Get(typeof(TKind))?.Contains(parentKey) != true)
+            {
+                list = null;
+                return false;
+            }
+
+            var now = UnixTime.ToUnixTime(DateTime.Now);
             var values = _cache.Ensure(typeof(TKind)).Ensure(parentKey).Values;
-            if (values.Count(pair => pair.Item2 < UnixTime.ToUnixTime(DateTime.Now)) > 0)
+            if (values.Any(value => value.Item2 < now))
             {
                 ListCacheClear<TKind>(parentKey);
+                list = null;
+                return false;
             }
-            return values
-                .Where(pair => pair.Item2 >= UnixTime.ToUnixTime(DateTime.Now))
+
+            list = values
+                .Where(pair => pair.Item2 >= now)
                 .Select(pair => (TKind)pair.Item1).Where(v => v != null)
                 .ToArray();
+            return true;
         }
     }
 

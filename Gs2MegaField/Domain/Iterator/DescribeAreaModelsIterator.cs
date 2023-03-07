@@ -101,15 +101,12 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 this.NamespaceName,
                 "AreaModel"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2MegaField.Model.AreaModel>
+            if (this._cache.TryGetList<Gs2.Gs2MegaField.Model.AreaModel>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2MegaField.Model.AreaModel>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -146,7 +143,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2MegaField.Model.AreaModel>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

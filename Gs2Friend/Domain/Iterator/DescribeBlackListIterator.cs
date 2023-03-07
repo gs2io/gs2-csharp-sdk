@@ -108,15 +108,12 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this._accessToken?.UserId?.ToString(),
                 "BlackList"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<string>
+            if (this._cache.TryGetList<string>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<string>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -156,7 +153,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<string>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

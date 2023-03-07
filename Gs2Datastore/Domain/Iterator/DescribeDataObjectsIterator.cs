@@ -112,15 +112,12 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
                 this.UserId,
                 "DataObject"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Datastore.Model.DataObject>
+            if (this._cache.TryGetList<Gs2.Gs2Datastore.Model.DataObject>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Datastore.Model.DataObject>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._status == null || item.Status == this._status)
                     .ToArray();
                 this._pageToken = null;
@@ -164,7 +161,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Datastore.Model.DataObject>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

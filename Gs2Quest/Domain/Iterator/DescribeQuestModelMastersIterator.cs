@@ -108,15 +108,12 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 this.QuestGroupName,
                 "QuestModelMaster"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Quest.Model.QuestModelMaster>
+            if (this._cache.TryGetList<Gs2.Gs2Quest.Model.QuestModelMaster>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Quest.Model.QuestModelMaster>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,7 +155,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Quest.Model.QuestModelMaster>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

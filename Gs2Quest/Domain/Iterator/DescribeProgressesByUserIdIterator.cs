@@ -108,15 +108,12 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 this.UserId,
                 "Progress"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Quest.Model.Progress>
+            if (this._cache.TryGetList<Gs2.Gs2Quest.Model.Progress>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Quest.Model.Progress>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -157,7 +154,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Quest.Model.Progress>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

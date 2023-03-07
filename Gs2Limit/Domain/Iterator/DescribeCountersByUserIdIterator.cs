@@ -112,15 +112,12 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 this.UserId,
                 "Counter"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Limit.Model.Counter>
+            if (this._cache.TryGetList<Gs2.Gs2Limit.Model.Counter>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Limit.Model.Counter>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._limitName == null || item.LimitName == this._limitName)
                     .ToArray();
                 this._pageToken = null;
@@ -165,7 +162,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Limit.Model.Counter>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

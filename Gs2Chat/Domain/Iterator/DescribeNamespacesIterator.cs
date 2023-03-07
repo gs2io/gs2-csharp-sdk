@@ -96,15 +96,12 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = "chat:Namespace";
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Chat.Model.Namespace>
+            if (this._cache.TryGetList<Gs2.Gs2Chat.Model.Namespace>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Chat.Model.Namespace>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -144,7 +141,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Chat.Model.Namespace>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

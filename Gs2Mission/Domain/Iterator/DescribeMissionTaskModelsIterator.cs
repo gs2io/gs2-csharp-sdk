@@ -106,15 +106,12 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 this.MissionGroupName,
                 "MissionTaskModel"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Mission.Model.MissionTaskModel>
+            if (this._cache.TryGetList<Gs2.Gs2Mission.Model.MissionTaskModel>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Mission.Model.MissionTaskModel>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

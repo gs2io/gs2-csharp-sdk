@@ -103,15 +103,12 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 this.NamespaceName,
                 "Insight"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Log.Model.Insight>
+            if (this._cache.TryGetList<Gs2.Gs2Log.Model.Insight>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Log.Model.Insight>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Log.Model.Insight>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

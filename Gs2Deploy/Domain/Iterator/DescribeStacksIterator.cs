@@ -96,15 +96,12 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         private async Task _load() {
         #endif
             var parentKey = "deploy:Stack";
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Deploy.Model.Stack>
+            if (this._cache.TryGetList<Gs2.Gs2Deploy.Model.Stack>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Deploy.Model.Stack>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -144,7 +141,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Deploy.Model.Stack>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

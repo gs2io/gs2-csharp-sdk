@@ -113,15 +113,12 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this.WithProfile?.ToString() ?? "False",
                 "FriendUser"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Friend.Model.FriendUser>
+            if (this._cache.TryGetList<Gs2.Gs2Friend.Model.FriendUser>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Friend.Model.FriendUser>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -164,7 +161,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Friend.Model.FriendUser>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

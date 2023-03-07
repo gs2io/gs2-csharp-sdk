@@ -106,15 +106,12 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                 this.UserId,
                 "Showcase"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Showcase.Model.Showcase>
+            if (this._cache.TryGetList<Gs2.Gs2Showcase.Model.Showcase>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Showcase.Model.Showcase>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -152,7 +149,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Showcase.Model.Showcase>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

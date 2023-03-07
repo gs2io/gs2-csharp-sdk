@@ -101,15 +101,12 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 this.NamespaceName,
                 "VersionModel"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Version.Model.VersionModel>
+            if (this._cache.TryGetList<Gs2.Gs2Version.Model.VersionModel>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Version.Model.VersionModel>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._last = true;
             } else {
@@ -146,7 +143,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Version.Model.VersionModel>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

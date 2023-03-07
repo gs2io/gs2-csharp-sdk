@@ -108,15 +108,12 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 this.PrizeTableName,
                 "PrizeLimit"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Lottery.Model.PrizeLimit>
+            if (this._cache.TryGetList<Gs2.Gs2Lottery.Model.PrizeLimit>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Lottery.Model.PrizeLimit>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,7 +155,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Lottery.Model.PrizeLimit>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

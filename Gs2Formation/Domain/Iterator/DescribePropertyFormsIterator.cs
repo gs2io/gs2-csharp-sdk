@@ -112,15 +112,12 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 this.UserId,
                 "PropertyForm"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Formation.Model.PropertyForm>
+            if (this._cache.TryGetList<Gs2.Gs2Formation.Model.PropertyForm>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Formation.Model.PropertyForm>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._formModelName == null || item.Name == this._formModelName)
                     .ToArray();
                 this._pageToken = null;
@@ -165,7 +162,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Formation.Model.PropertyForm>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

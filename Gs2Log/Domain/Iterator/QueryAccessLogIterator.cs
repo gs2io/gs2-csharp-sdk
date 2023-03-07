@@ -127,15 +127,12 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 this.NamespaceName,
                 "AccessLog"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Log.Model.AccessLog>
+            if (this._cache.TryGetList<Gs2.Gs2Log.Model.AccessLog>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Log.Model.AccessLog>
-                (
-                        parentKey
-                )
+                this._result = list
                     .Where(item => this._service == null || item.Service == this._service)
                     .Where(item => this._method == null || item.Method == this._method)
                     .Where(item => this._userId == null || item.UserId == this._userId)
@@ -186,7 +183,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Log.Model.AccessLog>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }

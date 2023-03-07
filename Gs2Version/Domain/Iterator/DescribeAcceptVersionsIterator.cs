@@ -108,15 +108,12 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 this.UserId,
                 "AcceptVersion"
             );
-            string listParentKey = parentKey;
-            if (this._cache.IsListCached<Gs2.Gs2Version.Model.AcceptVersion>
+            if (this._cache.TryGetList<Gs2.Gs2Version.Model.AcceptVersion>
             (
-                    listParentKey
+                    parentKey,
+                    out var list
             )) {
-                this._result = this._cache.List<Gs2.Gs2Version.Model.AcceptVersion>
-                (
-                        parentKey
-                )
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,7 +155,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
 
                 if (this._last) {
                     this._cache.ListCached<Gs2.Gs2Version.Model.AcceptVersion>(
-                            listParentKey
+                            parentKey
                     );
                 }
             }
