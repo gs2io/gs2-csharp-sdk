@@ -739,6 +739,438 @@ namespace Gs2.Gs2News
 #endif
 
 
+        public class DescribeProgressesTask : Gs2RestSessionTask<DescribeProgressesRequest, DescribeProgressesResult>
+        {
+            public DescribeProgressesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProgressesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeProgressesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "news")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/progress";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeProgresses(
+                Request.DescribeProgressesRequest request,
+                UnityAction<AsyncResult<Result.DescribeProgressesResult>> callback
+        )
+		{
+			var task = new DescribeProgressesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeProgressesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeProgressesResult> DescribeProgressesFuture(
+                Request.DescribeProgressesRequest request
+        )
+		{
+			return new DescribeProgressesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeProgressesResult> DescribeProgressesAsync(
+                Request.DescribeProgressesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeProgressesResult> result = null;
+			await DescribeProgresses(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeProgressesTask DescribeProgressesAsync(
+                Request.DescribeProgressesRequest request
+        )
+		{
+			return new DescribeProgressesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeProgressesResult> DescribeProgressesAsync(
+                Request.DescribeProgressesRequest request
+        )
+		{
+			var task = new DescribeProgressesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetProgressTask : Gs2RestSessionTask<GetProgressRequest, GetProgressResult>
+        {
+            public GetProgressTask(IGs2Session session, RestSessionRequestFactory factory, GetProgressRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetProgressRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "news")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/progress/{uploadToken}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{uploadToken}", !string.IsNullOrEmpty(request.UploadToken) ? request.UploadToken.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetProgress(
+                Request.GetProgressRequest request,
+                UnityAction<AsyncResult<Result.GetProgressResult>> callback
+        )
+		{
+			var task = new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProgressResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetProgressResult> GetProgressFuture(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressResult> GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+            AsyncResult<Result.GetProgressResult> result = null;
+			await GetProgress(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetProgressTask GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetProgressResult> GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			var task = new GetProgressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeOutputsTask : Gs2RestSessionTask<DescribeOutputsRequest, DescribeOutputsResult>
+        {
+            public DescribeOutputsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeOutputsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeOutputsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "news")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/progress/{uploadToken}/output";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{uploadToken}", !string.IsNullOrEmpty(request.UploadToken) ? request.UploadToken.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeOutputs(
+                Request.DescribeOutputsRequest request,
+                UnityAction<AsyncResult<Result.DescribeOutputsResult>> callback
+        )
+		{
+			var task = new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeOutputsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeOutputsResult> DescribeOutputsFuture(
+                Request.DescribeOutputsRequest request
+        )
+		{
+			return new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeOutputsResult> DescribeOutputsAsync(
+                Request.DescribeOutputsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeOutputsResult> result = null;
+			await DescribeOutputs(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeOutputsTask DescribeOutputsAsync(
+                Request.DescribeOutputsRequest request
+        )
+		{
+			return new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeOutputsResult> DescribeOutputsAsync(
+                Request.DescribeOutputsRequest request
+        )
+		{
+			var task = new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetOutputTask : Gs2RestSessionTask<GetOutputRequest, GetOutputResult>
+        {
+            public GetOutputTask(IGs2Session session, RestSessionRequestFactory factory, GetOutputRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetOutputRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "news")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/progress/{uploadToken}/output/{outputName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{uploadToken}", !string.IsNullOrEmpty(request.UploadToken) ? request.UploadToken.ToString() : "null");
+                url = url.Replace("{outputName}", !string.IsNullOrEmpty(request.OutputName) ? request.OutputName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetOutput(
+                Request.GetOutputRequest request,
+                UnityAction<AsyncResult<Result.GetOutputResult>> callback
+        )
+		{
+			var task = new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetOutputResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetOutputResult> GetOutputFuture(
+                Request.GetOutputRequest request
+        )
+		{
+			return new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetOutputResult> GetOutputAsync(
+                Request.GetOutputRequest request
+        )
+		{
+            AsyncResult<Result.GetOutputResult> result = null;
+			await GetOutput(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetOutputTask GetOutputAsync(
+                Request.GetOutputRequest request
+        )
+		{
+			return new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetOutputResult> GetOutputAsync(
+                Request.GetOutputRequest request
+        )
+		{
+			var task = new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class PrepareUpdateCurrentNewsMasterTask : Gs2RestSessionTask<PrepareUpdateCurrentNewsMasterRequest, PrepareUpdateCurrentNewsMasterResult>
         {
             public PrepareUpdateCurrentNewsMasterTask(IGs2Session session, RestSessionRequestFactory factory, PrepareUpdateCurrentNewsMasterRequest request) : base(session, factory, request)

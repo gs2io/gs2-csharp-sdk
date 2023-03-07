@@ -481,6 +481,114 @@ namespace Gs2.Gs2News
 #endif
 
 
+        public class GetProgressTask : Gs2WebSocketSessionTask<Request.GetProgressRequest, Result.GetProgressResult>
+        {
+	        public GetProgressTask(IGs2Session session, Request.GetProgressRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetProgressRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "news",
+                    "progress",
+                    "getProgress",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetProgress(
+                Request.GetProgressRequest request,
+                UnityAction<AsyncResult<Result.GetProgressResult>> callback
+        )
+		{
+			var task = new GetProgressTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetProgressResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetProgressResult> GetProgressFuture(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetProgressResult> GetProgressAsync(
+            Request.GetProgressRequest request
+        )
+		{
+		    var task = new GetProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetProgressTask GetProgressAsync(
+                Request.GetProgressRequest request
+        )
+		{
+			return new GetProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetProgressResult> GetProgressAsync(
+            Request.GetProgressRequest request
+        )
+		{
+		    var task = new GetProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateCurrentNewsMasterTask : Gs2WebSocketSessionTask<Request.UpdateCurrentNewsMasterRequest, Result.UpdateCurrentNewsMasterResult>
         {
 	        public UpdateCurrentNewsMasterTask(IGs2Session session, Request.UpdateCurrentNewsMasterRequest request) : base(session, request)

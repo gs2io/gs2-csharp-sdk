@@ -151,7 +151,9 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 #endif
                 this._result = r.Items;
                 if (this._result.Length > 0) {
-                    this._startAt = this._result[this._result.Length-1].CreatedAt + 1;
+                    this._startAt = this._result[^1].CreatedAt + 1;
+                } else {
+                    this._last = true;
                 }
                 foreach (var item in this._result) {
                     this._cache.Put(

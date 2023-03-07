@@ -65,6 +65,7 @@ namespace Gs2.Gs2News.Domain.Model
 
         private readonly String _parentKey;
         public string Status { get; set; }
+        public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
@@ -369,6 +370,54 @@ namespace Gs2.Gs2News.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this.NamespaceName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2News.Model.Progress> Progresses(
+        )
+        {
+            return new DescribeProgressesIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2News.Model.Progress> ProgressesAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2News.Model.Progress> Progresses(
+            #endif
+        #else
+        public DescribeProgressesIterator Progresses(
+        #endif
+        )
+        {
+            return new DescribeProgressesIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2News.Domain.Model.ProgressDomain Progress(
+            string uploadToken
+        ) {
+            return new Gs2.Gs2News.Domain.Model.ProgressDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                uploadToken
             );
         }
 
