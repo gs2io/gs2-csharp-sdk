@@ -42,6 +42,7 @@ namespace Gs2.Gs2Ranking.Request
         public string OrderDirection { set; get; }
         public string Scope { set; get; }
         public bool? UniqueByUserId { set; get; }
+        public bool? Sum { set; get; }
         public int? CalculateFixedTimingHour { set; get; }
         public int? CalculateFixedTimingMinute { set; get; }
         public int? CalculateIntervalMinutes { set; get; }
@@ -82,6 +83,10 @@ namespace Gs2.Gs2Ranking.Request
         }
         public UpdateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
+            return this;
+        }
+        public UpdateCategoryModelMasterRequest WithSum(bool? sum) {
+            this.Sum = sum;
             return this;
         }
         public UpdateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
@@ -127,6 +132,7 @@ namespace Gs2.Gs2Ranking.Request
                 .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
                 .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
+                .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : (bool?)bool.Parse(data["sum"].ToString()))
                 .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)int.Parse(data["calculateFixedTimingHour"].ToString()))
                 .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()))
                 .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
@@ -147,6 +153,7 @@ namespace Gs2.Gs2Ranking.Request
                 ["orderDirection"] = OrderDirection,
                 ["scope"] = Scope,
                 ["uniqueByUserId"] = UniqueByUserId,
+                ["sum"] = Sum,
                 ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
                 ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
                 ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
@@ -195,6 +202,10 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("uniqueByUserId");
                 writer.Write(bool.Parse(UniqueByUserId.ToString()));
             }
+            if (Sum != null) {
+                writer.WritePropertyName("sum");
+                writer.Write(bool.Parse(Sum.ToString()));
+            }
             if (CalculateFixedTimingHour != null) {
                 writer.WritePropertyName("calculateFixedTimingHour");
                 writer.Write(int.Parse(CalculateFixedTimingHour.ToString()));
@@ -233,6 +244,7 @@ namespace Gs2.Gs2Ranking.Request
             key += OrderDirection + ":";
             key += Scope + ":";
             key += UniqueByUserId + ":";
+            key += Sum + ":";
             key += CalculateFixedTimingHour + ":";
             key += CalculateFixedTimingMinute + ":";
             key += CalculateIntervalMinutes + ":";

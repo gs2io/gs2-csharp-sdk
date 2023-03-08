@@ -215,6 +215,11 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("uniqueByUserId");
                     jsonWriter.Write(request.UniqueByUserId.ToString());
                 }
+                if (request.Sum != null)
+                {
+                    jsonWriter.WritePropertyName("sum");
+                    jsonWriter.Write(request.Sum.ToString());
+                }
                 if (request.CalculateFixedTimingHour != null)
                 {
                     jsonWriter.WritePropertyName("calculateFixedTimingHour");
@@ -495,6 +500,11 @@ namespace Gs2.Gs2Ranking
                 {
                     jsonWriter.WritePropertyName("uniqueByUserId");
                     jsonWriter.Write(request.UniqueByUserId.ToString());
+                }
+                if (request.Sum != null)
+                {
+                    jsonWriter.WritePropertyName("sum");
+                    jsonWriter.Write(request.Sum.ToString());
                 }
                 if (request.CalculateFixedTimingHour != null)
                 {
