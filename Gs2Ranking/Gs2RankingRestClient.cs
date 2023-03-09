@@ -1148,6 +1148,16 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("accessPeriodEventId");
                     jsonWriter.Write(request.AccessPeriodEventId);
                 }
+                if (request.IgnoreUserIds != null)
+                {
+                    jsonWriter.WritePropertyName("ignoreUserIds");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.IgnoreUserIds)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.Generation != null)
                 {
                     jsonWriter.WritePropertyName("generation");
@@ -1440,6 +1450,16 @@ namespace Gs2.Gs2Ranking
                 {
                     jsonWriter.WritePropertyName("accessPeriodEventId");
                     jsonWriter.Write(request.AccessPeriodEventId);
+                }
+                if (request.IgnoreUserIds != null)
+                {
+                    jsonWriter.WritePropertyName("ignoreUserIds");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.IgnoreUserIds)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.Generation != null)
                 {

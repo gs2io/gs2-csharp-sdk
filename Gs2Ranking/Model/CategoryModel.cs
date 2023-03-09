@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking.Model
         public int? CalculateIntervalMinutes { set; get; }
         public string EntryPeriodEventId { set; get; }
         public string AccessPeriodEventId { set; get; }
+        public string[] IgnoreUserIds { set; get; }
         public string Generation { set; get; }
         public CategoryModel WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
@@ -100,6 +101,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public CategoryModel WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
+            return this;
+        }
+        public CategoryModel WithIgnoreUserIds(string[] ignoreUserIds) {
+            this.IgnoreUserIds = ignoreUserIds;
             return this;
         }
         public CategoryModel WithGeneration(string generation) {
@@ -198,6 +203,9 @@ namespace Gs2.Gs2Ranking.Model
                 .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
+                .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null ? new string[]{} : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());
         }
 
@@ -218,6 +226,11 @@ namespace Gs2.Gs2Ranking.Model
                 ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
+                ["ignoreUserIds"] = IgnoreUserIds == null ? null : new JsonData(
+                        IgnoreUserIds.Select(v => {
+                            return new JsonData(v.ToString());
+                        }).ToArray()
+                    ),
                 ["generation"] = Generation,
             };
         }
@@ -280,6 +293,17 @@ namespace Gs2.Gs2Ranking.Model
             if (AccessPeriodEventId != null) {
                 writer.WritePropertyName("accessPeriodEventId");
                 writer.Write(AccessPeriodEventId.ToString());
+            }
+            if (IgnoreUserIds != null) {
+                writer.WritePropertyName("ignoreUserIds");
+                writer.WriteArrayStart();
+                foreach (var ignoreUserId in IgnoreUserIds)
+                {
+                    if (ignoreUserId != null) {
+                        writer.Write(ignoreUserId.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (Generation != null) {
                 writer.WritePropertyName("generation");
@@ -403,6 +427,18 @@ namespace Gs2.Gs2Ranking.Model
             else
             {
                 diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
+            }
+            if (IgnoreUserIds == null && IgnoreUserIds == other.IgnoreUserIds)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += IgnoreUserIds.Length - other.IgnoreUserIds.Length;
+                for (var i = 0; i < IgnoreUserIds.Length; i++)
+                {
+                    diff += IgnoreUserIds[i].CompareTo(other.IgnoreUserIds[i]);
+                }
             }
             if (Generation == null && Generation == other.Generation)
             {
