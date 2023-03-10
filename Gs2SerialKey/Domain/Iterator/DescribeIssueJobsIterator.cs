@@ -72,6 +72,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string CampaignModelName => _campaignModelName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2SerialKey.Model.IssueJob[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.CampaignModelName,
                 "IssueJob"
             );
-            if (this._cache.TryGetList<Gs2.Gs2SerialKey.Model.IssueJob>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2SerialKey.Model.IssueJob>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2SerialKey.Model.IssueJob>(
+                    this._cache.SetListCached<Gs2.Gs2SerialKey.Model.IssueJob>(
                             parentKey
                     );
                 }

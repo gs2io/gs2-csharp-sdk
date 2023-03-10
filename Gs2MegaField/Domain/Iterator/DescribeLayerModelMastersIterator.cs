@@ -72,6 +72,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string AreaModelName => _areaModelName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2MegaField.Model.LayerModelMaster[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.AreaModelName,
                 "LayerModelMaster"
             );
-            if (this._cache.TryGetList<Gs2.Gs2MegaField.Model.LayerModelMaster>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2MegaField.Model.LayerModelMaster>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2MegaField.Model.LayerModelMaster>(
+                    this._cache.SetListCached<Gs2.Gs2MegaField.Model.LayerModelMaster>(
                             parentKey
                     );
                 }

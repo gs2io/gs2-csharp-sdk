@@ -74,6 +74,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         public string CategoryName => _categoryName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Ranking.Model.Ranking[] _result;
 
@@ -107,12 +108,14 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Ranking"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
             (
                     parentKey,
                     out var list
@@ -160,7 +163,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Ranking.Model.Ranking>(
+                    this._cache.SetListCached<Gs2.Gs2Ranking.Model.Ranking>(
                             parentKey
                     );
                 }

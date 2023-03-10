@@ -84,6 +84,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         public long? End => _end;
         public bool? LongTerm => _longTerm;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[] _result;
 
@@ -127,6 +128,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
 
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CountExecuteStampTaskLogFuture(

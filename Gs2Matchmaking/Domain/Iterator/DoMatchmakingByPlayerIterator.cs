@@ -72,6 +72,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public Gs2.Gs2Matchmaking.Model.Player Player => _player;
         private string _matchmakingContextToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Matchmaking.Model.Gathering[] _result;
 
@@ -103,6 +104,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
 
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DoMatchmakingByPlayerFuture(
@@ -128,7 +131,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             };
             this._matchmakingContextToken = r.MatchmakingContextToken;
             this._last = this._matchmakingContextToken == null;
-            this._cache.ListCacheClear<Gs2.Gs2Matchmaking.Model.Gathering>(
+            this._cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Singleton",

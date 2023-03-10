@@ -69,6 +69,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
         private readonly Gs2VersionRestClient _client;
         private readonly string _namespaceName;
         public string NamespaceName => _namespaceName;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Version.Model.VersionModel[] _result;
 
@@ -97,11 +98,13 @@ namespace Gs2.Gs2Version.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "VersionModel"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Version.Model.VersionModel>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Version.Model.VersionModel>
             (
                     parentKey,
                     out var list
@@ -142,7 +145,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Version.Model.VersionModel>(
+                    this._cache.SetListCached<Gs2.Gs2Version.Model.VersionModel>(
                             parentKey
                     );
                 }

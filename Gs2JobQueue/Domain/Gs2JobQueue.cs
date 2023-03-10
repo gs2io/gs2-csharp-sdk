@@ -286,7 +286,7 @@ namespace Gs2.Gs2JobQueue.Domain
         }
 
         [SerializeField]
-        private static PushNotificationEvent onPushNotification = new PushNotificationEvent();
+        private PushNotificationEvent onPushNotification = new PushNotificationEvent();
 
         public event UnityAction<PushNotification> OnPushNotification
         {
@@ -302,7 +302,7 @@ namespace Gs2.Gs2JobQueue.Domain
         }
 
         [SerializeField]
-        private static RunNotificationEvent onRunNotification = new RunNotificationEvent();
+        private RunNotificationEvent onRunNotification = new RunNotificationEvent();
 
         public event UnityAction<RunNotification> OnRunNotification
         {
@@ -311,7 +311,7 @@ namespace Gs2.Gs2JobQueue.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

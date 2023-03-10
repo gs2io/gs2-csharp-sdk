@@ -74,6 +74,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         public string UserId => _accessToken?.UserId;
         public string Status => _status;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Datastore.Model.DataObject[] _result;
 
@@ -107,12 +108,14 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "DataObject"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Datastore.Model.DataObject>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Datastore.Model.DataObject>
             (
                     parentKey,
                     out var list
@@ -160,7 +163,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Datastore.Model.DataObject>(
+                    this._cache.SetListCached<Gs2.Gs2Datastore.Model.DataObject>(
                             parentKey
                     );
                 }

@@ -68,6 +68,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2FormationRestClient _client;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Formation.Model.Namespace[] _result;
 
@@ -95,8 +96,10 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = "formation:Namespace";
-            if (this._cache.TryGetList<Gs2.Gs2Formation.Model.Namespace>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Formation.Model.Namespace>
             (
                     parentKey,
                     out var list
@@ -140,7 +143,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Formation.Model.Namespace>(
+                    this._cache.SetListCached<Gs2.Gs2Formation.Model.Namespace>(
                             parentKey
                     );
                 }

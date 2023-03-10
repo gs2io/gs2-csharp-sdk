@@ -236,7 +236,7 @@ namespace Gs2.Gs2Distributor.Domain
         }
 
         [SerializeField]
-        private static AutoRunStampSheetNotificationEvent onAutoRunStampSheetNotification = new AutoRunStampSheetNotificationEvent();
+        private AutoRunStampSheetNotificationEvent onAutoRunStampSheetNotification = new AutoRunStampSheetNotificationEvent();
 
         public event UnityAction<AutoRunStampSheetNotification> OnAutoRunStampSheetNotification
         {
@@ -245,7 +245,7 @@ namespace Gs2.Gs2Distributor.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

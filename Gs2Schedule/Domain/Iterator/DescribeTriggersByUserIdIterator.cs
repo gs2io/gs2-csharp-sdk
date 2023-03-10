@@ -72,6 +72,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Schedule.Model.Trigger[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Trigger"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Schedule.Model.Trigger>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Schedule.Model.Trigger>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Schedule.Model.Trigger>(
+                    this._cache.SetListCached<Gs2.Gs2Schedule.Model.Trigger>(
                             parentKey
                     );
                 }

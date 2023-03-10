@@ -76,6 +76,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public string Password => _password;
         public string UserId => _accessToken?.UserId;
         private long? _startAt;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Chat.Model.Message[] _result;
 
@@ -111,20 +112,32 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "Singleton",
                 this.RoomName,
                 "Message"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Chat.Model.Message>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Chat.Model.Message>
             (
                     parentKey,
-                    out var list
+                    out var list,
+                    out var listCacheContext
             )) {
-                this._result = list
-                    .ToArray();
-                this._last = true;
+                if (listCacheContext == null)
+                {
+                    this._result = list;
+                    this._last = true;
+                }
+                else
+                {
+                    this._startAt = (long)listCacheContext;
+                    this._result = list.Where(message => message.CreatedAt < this._startAt).ToArray();
+                    this._last = false;
+                    this._cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(parentKey);
+                }
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -167,8 +180,9 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Chat.Model.Message>(
-                            parentKey
+                    this._cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
+                            parentKey,
+                            this._startAt
                     );
                 }
             }

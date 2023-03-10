@@ -70,6 +70,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private readonly string _namespaceName;
         public string NamespaceName => _namespaceName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Lottery.Model.LotteryModelMaster[] _result;
 
@@ -99,11 +100,13 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "LotteryModelMaster"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Lottery.Model.LotteryModelMaster>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.LotteryModelMaster>
             (
                     parentKey,
                     out var list
@@ -148,7 +151,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
+                    this._cache.SetListCached<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
                             parentKey
                     );
                 }

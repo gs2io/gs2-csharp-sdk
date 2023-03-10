@@ -219,7 +219,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         parentKey,
                         key
                     );
-                    this._cache.ListCacheClear<Gs2.Gs2Lottery.Model.BoxItems>(
+                    this._cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
                         parentKey
                     );
                 }

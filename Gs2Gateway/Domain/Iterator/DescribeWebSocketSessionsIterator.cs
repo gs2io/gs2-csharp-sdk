@@ -72,6 +72,7 @@ namespace Gs2.Gs2Gateway.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Gateway.Model.WebSocketSession[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Gateway.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "WebSocketSession"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Gateway.Model.WebSocketSession>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Gateway.Model.WebSocketSession>
             (
                     parentKey,
                     out var list
@@ -153,7 +156,7 @@ namespace Gs2.Gs2Gateway.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                    this._cache.SetListCached<Gs2.Gs2Gateway.Model.WebSocketSession>(
                             parentKey
                     );
                 }

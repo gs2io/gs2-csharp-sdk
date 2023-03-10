@@ -502,7 +502,7 @@ namespace Gs2.Gs2Formation.Domain
             }
         }
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

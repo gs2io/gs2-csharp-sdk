@@ -84,6 +84,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         public long? End => _end;
         public bool? LongTerm => _longTerm;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Log.Model.IssueStampSheetLog[] _result;
 
@@ -127,11 +128,13 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "IssueStampSheetLog"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Log.Model.IssueStampSheetLog>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Log.Model.IssueStampSheetLog>
             (
                     parentKey,
                     out var list
@@ -188,7 +191,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                    this._cache.SetListCached<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                             parentKey
                     );
                 }

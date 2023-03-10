@@ -72,6 +72,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string QuestGroupName => _questGroupName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Quest.Model.QuestModelMaster[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.QuestGroupName,
                 "QuestModelMaster"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Quest.Model.QuestModelMaster>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Quest.Model.QuestModelMaster>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Quest.Model.QuestModelMaster>(
+                    this._cache.SetListCached<Gs2.Gs2Quest.Model.QuestModelMaster>(
                             parentKey
                     );
                 }

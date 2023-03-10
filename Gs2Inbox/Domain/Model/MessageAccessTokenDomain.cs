@@ -239,7 +239,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         resultModel.Item.Name.ToString()
                     );
                     cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
-                    cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
+                    cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
                         parentKey
                     );
                 }

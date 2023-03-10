@@ -72,6 +72,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Dictionary.Model.Entry[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Entry"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Dictionary.Model.Entry>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Dictionary.Model.Entry>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Dictionary.Model.Entry>(
+                    this._cache.SetListCached<Gs2.Gs2Dictionary.Model.Entry>(
                             parentKey
                     );
                 }

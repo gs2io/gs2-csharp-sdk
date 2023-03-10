@@ -72,6 +72,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Money.Model.Wallet[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Wallet"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Money.Model.Wallet>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Money.Model.Wallet>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Money.Model.Wallet>(
+                    this._cache.SetListCached<Gs2.Gs2Money.Model.Wallet>(
                             parentKey
                     );
                 }

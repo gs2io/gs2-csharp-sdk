@@ -238,21 +238,21 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
                 }
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.FromUserId?.ToString(),
                         "SendFriendRequest"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
                         "ReceiveFriendRequest"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
@@ -260,7 +260,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         "FriendUser"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
@@ -364,21 +364,21 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
                 }
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.FromUserId?.ToString(),
                         "SendFriendRequest"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendRequest>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
                         "ReceiveFriendRequest"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
@@ -386,7 +386,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         "FriendUser"
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Friend.Model.FriendUser>(
+                cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),

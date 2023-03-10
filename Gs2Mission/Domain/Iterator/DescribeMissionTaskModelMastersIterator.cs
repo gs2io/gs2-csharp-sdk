@@ -72,6 +72,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string MissionGroupName => _missionGroupName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Mission.Model.MissionTaskModelMaster[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.MissionGroupName,
                 "MissionTaskModelMaster"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Mission.Model.MissionTaskModelMaster>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Mission.Model.MissionTaskModelMaster>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Mission.Model.MissionTaskModelMaster>(
+                    this._cache.SetListCached<Gs2.Gs2Mission.Model.MissionTaskModelMaster>(
                             parentKey
                     );
                 }

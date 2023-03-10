@@ -74,6 +74,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         public string UserId => _userId;
         public bool? WithProfile => _withProfile;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Friend.Model.FriendUser[] _result;
 
@@ -107,13 +108,15 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 this.WithProfile?.ToString() ?? "False",
                 "FriendUser"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Friend.Model.FriendUser>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Friend.Model.FriendUser>
             (
                     parentKey,
                     out var list
@@ -160,7 +163,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Friend.Model.FriendUser>(
+                    this._cache.SetListCached<Gs2.Gs2Friend.Model.FriendUser>(
                             parentKey
                     );
                 }

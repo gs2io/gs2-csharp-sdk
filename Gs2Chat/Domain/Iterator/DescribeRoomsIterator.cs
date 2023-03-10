@@ -70,6 +70,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private readonly string _namespaceName;
         public string NamespaceName => _namespaceName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Chat.Model.Room[] _result;
 
@@ -99,12 +100,14 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "Singleton",
                 "Room"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Chat.Model.Room>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Chat.Model.Room>
             (
                     parentKey,
                     out var list
@@ -149,7 +152,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Chat.Model.Room>(
+                    this._cache.SetListCached<Gs2.Gs2Chat.Model.Room>(
                             parentKey
                     );
                 }
