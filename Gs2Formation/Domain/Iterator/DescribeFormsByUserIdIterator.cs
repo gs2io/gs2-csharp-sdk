@@ -74,6 +74,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         public string MoldName => _moldName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Formation.Model.Form[] _result;
 
@@ -107,13 +108,15 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 this.MoldName,
                 "Form"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Formation.Model.Form>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Formation.Model.Form>
             (
                     parentKey,
                     out var list
@@ -160,7 +163,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Formation.Model.Form>(
+                    this._cache.SetListCached<Gs2.Gs2Formation.Model.Form>(
                             parentKey
                     );
                 }

@@ -72,6 +72,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Account.Model.TakeOver[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "TakeOver"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Account.Model.TakeOver>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Account.Model.TakeOver>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Account.Model.TakeOver>(
+                    this._cache.SetListCached<Gs2.Gs2Account.Model.TakeOver>(
                             parentKey
                     );
                 }

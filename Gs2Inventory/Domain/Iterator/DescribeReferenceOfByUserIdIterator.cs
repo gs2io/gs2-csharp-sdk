@@ -77,6 +77,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         public string UserId => _userId;
         public string ItemName => _itemName;
         public string ItemSetName => _itemSetName;
+        private bool _isCacheChecked;
         private bool _last;
         private string[] _result;
 
@@ -113,8 +114,10 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = "inventory:String";
-            if (this._cache.TryGetList<string>
+            if (!isCacheChecked && this._cache.TryGetList<string>
             (
                     parentKey,
                     out var list
@@ -157,7 +160,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<string>(
+                    this._cache.SetListCached<string>(
                             parentKey
                     );
                 }

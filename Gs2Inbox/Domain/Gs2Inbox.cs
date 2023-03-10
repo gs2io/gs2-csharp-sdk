@@ -256,7 +256,7 @@ namespace Gs2.Gs2Inbox.Domain
                                 resultModel.Item.Name.ToString()
                             );
                             cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
-                            cache.ListCacheClear<Gs2.Gs2Inbox.Model.Message>(
+                            cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
                                 parentKey
                             );
                         }
@@ -304,7 +304,7 @@ namespace Gs2.Gs2Inbox.Domain
         }
 
         [SerializeField]
-        private static ReceiveNotificationEvent onReceiveNotification = new ReceiveNotificationEvent();
+        private ReceiveNotificationEvent onReceiveNotification = new ReceiveNotificationEvent();
 
         public event UnityAction<ReceiveNotification> OnReceiveNotification
         {
@@ -313,7 +313,7 @@ namespace Gs2.Gs2Inbox.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

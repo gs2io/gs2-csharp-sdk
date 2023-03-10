@@ -234,7 +234,7 @@ namespace Gs2.Gs2Chat.Domain
         }
 
         [SerializeField]
-        private static PostNotificationEvent onPostNotification = new PostNotificationEvent();
+        private PostNotificationEvent onPostNotification = new PostNotificationEvent();
 
         public event UnityAction<PostNotification> OnPostNotification
         {
@@ -243,7 +243,7 @@ namespace Gs2.Gs2Chat.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
@@ -251,7 +251,16 @@ namespace Gs2.Gs2Chat.Domain
     #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Post": {
-                    onPostNotification.Invoke(PostNotification.FromJson(JsonMapper.ToObject(payload)));
+                    var postNotification = PostNotification.FromJson(JsonMapper.ToObject(payload));
+                    _cache.RequireListCacheUpdate<Message>(
+                        Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
+                            postNotification.NamespaceName,
+                            "Singleton",
+                            postNotification.RoomName,
+                            "Message"
+                        )
+                    );
+                    onPostNotification.Invoke(postNotification);
                     break;
                 }
             }

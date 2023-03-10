@@ -74,6 +74,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         public string ExperienceName => _experienceName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Experience.Model.Status[] _result;
 
@@ -107,12 +108,14 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Status"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Experience.Model.Status>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Experience.Model.Status>
             (
                     parentKey,
                     out var list
@@ -161,7 +164,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Experience.Model.Status>(
+                    this._cache.SetListCached<Gs2.Gs2Experience.Model.Status>(
                             parentKey
                     );
                 }

@@ -234,7 +234,7 @@ namespace Gs2.Gs2Friend.Domain
         }
 
         [SerializeField]
-        private static FollowNotificationEvent onFollowNotification = new FollowNotificationEvent();
+        private FollowNotificationEvent onFollowNotification = new FollowNotificationEvent();
 
         public event UnityAction<FollowNotification> OnFollowNotification
         {
@@ -250,7 +250,7 @@ namespace Gs2.Gs2Friend.Domain
         }
 
         [SerializeField]
-        private static AcceptRequestNotificationEvent onAcceptRequestNotification = new AcceptRequestNotificationEvent();
+        private AcceptRequestNotificationEvent onAcceptRequestNotification = new AcceptRequestNotificationEvent();
 
         public event UnityAction<AcceptRequestNotification> OnAcceptRequestNotification
         {
@@ -266,7 +266,7 @@ namespace Gs2.Gs2Friend.Domain
         }
 
         [SerializeField]
-        private static ReceiveRequestNotificationEvent onReceiveRequestNotification = new ReceiveRequestNotificationEvent();
+        private ReceiveRequestNotificationEvent onReceiveRequestNotification = new ReceiveRequestNotificationEvent();
 
         public event UnityAction<ReceiveRequestNotification> OnReceiveRequestNotification
         {
@@ -275,7 +275,7 @@ namespace Gs2.Gs2Friend.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

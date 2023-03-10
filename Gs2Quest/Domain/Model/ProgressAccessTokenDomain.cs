@@ -286,7 +286,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         Gs2.Gs2Quest.Model.QuestModel.GetQuestGroupNameFromGrn(result.Item?.QuestModelId)
                     )
                 );
-                cache.ListCacheClear<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
                     Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),

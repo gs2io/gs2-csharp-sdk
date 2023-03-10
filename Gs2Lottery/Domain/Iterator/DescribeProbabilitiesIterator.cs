@@ -73,6 +73,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string LotteryName => _lotteryName;
         public string UserId => _accessToken?.UserId;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Lottery.Model.Probability[] _result;
 
@@ -105,12 +106,14 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Probability"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Lottery.Model.Probability>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.Probability>
             (
                     parentKey,
                     out var list
@@ -152,7 +155,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Lottery.Model.Probability>(
+                    this._cache.SetListCached<Gs2.Gs2Lottery.Model.Probability>(
                             parentKey
                     );
                 }

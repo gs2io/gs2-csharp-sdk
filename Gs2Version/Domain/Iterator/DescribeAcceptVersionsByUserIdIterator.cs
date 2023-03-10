@@ -72,6 +72,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Version.Model.AcceptVersion[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Version.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "AcceptVersion"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Version.Model.AcceptVersion>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Version.Model.AcceptVersion>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Version.Model.AcceptVersion>(
+                    this._cache.SetListCached<Gs2.Gs2Version.Model.AcceptVersion>(
                             parentKey
                     );
                 }

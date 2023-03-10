@@ -70,6 +70,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         private readonly string _stackName;
         public string StackName => _stackName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Deploy.Model.Event[] _result;
 
@@ -99,11 +100,13 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
                 this.StackName,
                 "Event"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Deploy.Model.Event>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Deploy.Model.Event>
             (
                     parentKey,
                     out var list
@@ -148,7 +151,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Deploy.Model.Event>(
+                    this._cache.SetListCached<Gs2.Gs2Deploy.Model.Event>(
                             parentKey
                     );
                 }

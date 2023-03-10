@@ -221,7 +221,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
-                    cache.ListCacheClear<Gs2.Gs2Schedule.Model.Event>(
+                    cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                         parentKey.Replace("Trigger", "Event")
                     );
                 }

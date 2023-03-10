@@ -229,7 +229,7 @@ namespace Gs2.Gs2Mission.Domain
                                 resultModel.Item,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
-                            cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
+                            cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
                                 parentKey.Replace("Counter", "Complete")
                             );
                         }
@@ -296,7 +296,7 @@ namespace Gs2.Gs2Mission.Domain
                                 resultModel.Item,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
-                            cache.ListCacheClear<Gs2.Gs2Mission.Model.Complete>(
+                            cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
                                 parentKey.Replace("Counter", "Complete")
                             );
                         }
@@ -312,7 +312,7 @@ namespace Gs2.Gs2Mission.Domain
         }
 
         [SerializeField]
-        private static CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
+        private CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
 
         public event UnityAction<CompleteNotification> OnCompleteNotification
         {
@@ -321,7 +321,7 @@ namespace Gs2.Gs2Mission.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

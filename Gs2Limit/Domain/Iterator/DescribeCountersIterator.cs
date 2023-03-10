@@ -74,6 +74,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         public string UserId => _accessToken?.UserId;
         public string LimitName => _limitName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Limit.Model.Counter[] _result;
 
@@ -107,12 +108,14 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Counter"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Limit.Model.Counter>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Limit.Model.Counter>
             (
                     parentKey,
                     out var list
@@ -161,7 +164,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Limit.Model.Counter>(
+                    this._cache.SetListCached<Gs2.Gs2Limit.Model.Counter>(
                             parentKey
                     );
                 }

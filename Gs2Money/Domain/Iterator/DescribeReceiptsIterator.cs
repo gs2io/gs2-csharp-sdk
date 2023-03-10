@@ -78,6 +78,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         public long? Begin => _begin;
         public long? End => _end;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Money.Model.Receipt[] _result;
 
@@ -115,12 +116,14 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
                 "Receipt"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Money.Model.Receipt>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Money.Model.Receipt>
             (
                     parentKey,
                     out var list
@@ -172,7 +175,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Money.Model.Receipt>(
+                    this._cache.SetListCached<Gs2.Gs2Money.Model.Receipt>(
                             parentKey
                     );
                 }

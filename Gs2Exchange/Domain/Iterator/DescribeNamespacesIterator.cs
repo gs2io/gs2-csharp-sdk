@@ -68,6 +68,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2ExchangeRestClient _client;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Exchange.Model.Namespace[] _result;
 
@@ -95,8 +96,10 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = "exchange:Namespace";
-            if (this._cache.TryGetList<Gs2.Gs2Exchange.Model.Namespace>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Exchange.Model.Namespace>
             (
                     parentKey,
                     out var list
@@ -140,7 +143,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Exchange.Model.Namespace>(
+                    this._cache.SetListCached<Gs2.Gs2Exchange.Model.Namespace>(
                             parentKey
                     );
                 }

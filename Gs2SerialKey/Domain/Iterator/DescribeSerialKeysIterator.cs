@@ -74,6 +74,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         public string CampaignModelName => _campaignModelName;
         public string IssueJobName => _issueJobName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2SerialKey.Model.SerialKey[] _result;
 
@@ -107,12 +108,14 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "Singleton",
                 "SerialKey"
             );
-            if (this._cache.TryGetList<Gs2.Gs2SerialKey.Model.SerialKey>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2SerialKey.Model.SerialKey>
             (
                     parentKey,
                     out var list
@@ -160,7 +163,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
+                    this._cache.SetListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
                             parentKey
                     );
                 }

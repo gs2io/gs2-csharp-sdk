@@ -70,6 +70,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         private readonly string _userName;
         public string UserName => _userName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Identifier.Model.Identifier[] _result;
 
@@ -99,11 +100,13 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.UserName,
                 "Identifier"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Identifier.Model.Identifier>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Identifier.Model.Identifier>
             (
                     parentKey,
                     out var list
@@ -148,7 +151,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._cache.SetListCached<Gs2.Gs2Identifier.Model.Identifier>(
                             parentKey
                     );
                 }

@@ -235,7 +235,7 @@ namespace Gs2.Gs2Realtime.Domain
         }
 
         [SerializeField]
-        private static CreateNotificationEvent onCreateNotification = new CreateNotificationEvent();
+        private CreateNotificationEvent onCreateNotification = new CreateNotificationEvent();
 
         public event UnityAction<CreateNotification> OnCreateNotification
         {
@@ -244,7 +244,7 @@ namespace Gs2.Gs2Realtime.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

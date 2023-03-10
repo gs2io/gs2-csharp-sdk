@@ -69,6 +69,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         private readonly Gs2InboxRestClient _client;
         private readonly string _namespaceName;
         public string NamespaceName => _namespaceName;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Inbox.Model.GlobalMessage[] _result;
 
@@ -97,11 +98,13 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 "GlobalMessage"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Inbox.Model.GlobalMessage>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inbox.Model.GlobalMessage>
             (
                     parentKey,
                     out var list
@@ -142,7 +145,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                    this._cache.SetListCached<Gs2.Gs2Inbox.Model.GlobalMessage>(
                             parentKey
                     );
                 }

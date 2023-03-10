@@ -72,6 +72,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private string[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             string parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
                 this._userId != null ? this._userId.ToString() : null,
                 "BlackList"
             );
-            if (this._cache.TryGetList<string>
+            if (!isCacheChecked && this._cache.TryGetList<string>
             (
                     parentKey,
                     out var list
@@ -152,7 +155,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<string>(
+                    this._cache.SetListCached<string>(
                             parentKey
                     );
                 }

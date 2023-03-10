@@ -72,6 +72,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string InventoryName => _inventoryName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Inventory.Model.ItemModelMaster[] _result;
 
@@ -103,12 +104,14 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.InventoryName,
                 "ItemModelMaster"
             );
-            if (this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemModelMaster>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemModelMaster>
             (
                     parentKey,
                     out var list
@@ -154,7 +157,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.ListCached<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.ItemModelMaster>(
                             parentKey
                     );
                 }

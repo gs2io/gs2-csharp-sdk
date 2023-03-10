@@ -291,7 +291,7 @@ namespace Gs2.Gs2Limit.Domain
             }
         }
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

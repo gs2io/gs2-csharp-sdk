@@ -9,20 +9,43 @@ namespace Gs2.Core.Domain
     {
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
+        private readonly Dictionary<Type, HashSet<string>> _listCacheUpdateRequired = new Dictionary<Type, HashSet<string>>();
+        private readonly Dictionary<Type, Dictionary<string, object>> _listCacheContexts = new Dictionary<Type, Dictionary<string, object>>();
 
         public void Clear()
         {
             _cache.Clear();
             _listCached.Clear();
+            _listCacheContexts.Clear();
+            _listCacheUpdateRequired.Clear();
         }
 
-        public void ListCached<TKind>(string parentKey) {
+        public void SetListCached<TKind>(string parentKey, object listCacheContext = null)
+        {
             _listCached.Ensure(typeof(TKind)).Add(parentKey);
+            _listCacheUpdateRequired.Get(typeof(TKind))?.Remove(parentKey);
+            if (listCacheContext != null)
+            {
+                _listCacheContexts.Ensure(typeof(TKind))[parentKey] = listCacheContext;
+            }
         }
 
-        public void ListCacheClear<TKind>(string parentKey) {
+        public void ClearListCache<TKind>(string parentKey)
+        {
             _cache.Get(typeof(TKind))?.Get(parentKey)?.Clear();
             _listCached.Get(typeof(TKind))?.Remove(parentKey);
+            _listCacheUpdateRequired.Get(typeof(TKind))?.Remove(parentKey);
+            _listCacheContexts.Get(typeof(TKind))?.Remove(parentKey);
+        }
+
+        public void RequireListCacheUpdate<TKind>(string parentKey)
+        {
+            _listCacheUpdateRequired.Ensure(typeof(TKind)).Add(parentKey);
+        }
+
+        private bool IsListCacheUpdateRequired<TKind>(string parentKey)
+        {
+            return _listCacheUpdateRequired.Get(typeof(TKind))?.Contains(parentKey) == true;
         }
 
         public void Put<TKind>(string parentKey, string key, TKind obj, long ttl)
@@ -52,7 +75,7 @@ namespace Gs2.Core.Domain
                 }
                 else
                 {
-                    ListCacheClear<TKind>(parentKey);
+                    ClearListCache<TKind>(parentKey);
                     Delete<TKind>(
                         parentKey,
                         key
@@ -65,7 +88,7 @@ namespace Gs2.Core.Domain
 
         public TKind[] List<TKind>(string parentKey)
         {
-            return TryGetList<TKind>(parentKey, out var list) ? list : Array.Empty<TKind>();
+            return TryGetList<TKind>(parentKey, out var list, out var listCacheContext) ? list : Array.Empty<TKind>();
         }
 
         public bool TryGetList<TKind>(string parentKey, out TKind[] list)
@@ -80,7 +103,7 @@ namespace Gs2.Core.Domain
             var values = _cache.Ensure(typeof(TKind)).Ensure(parentKey).Values;
             if (values.Any(value => value.Item2 < now))
             {
-                ListCacheClear<TKind>(parentKey);
+                ClearListCache<TKind>(parentKey);
                 list = null;
                 return false;
             }
@@ -91,8 +114,25 @@ namespace Gs2.Core.Domain
                 .ToArray();
             return true;
         }
-    }
 
+        // listCacheContext は RequireListCacheUpdate() が呼ばれたあとのみ値が代入されます
+        public bool TryGetList<TKind>(string parentKey, out TKind[] list, out object listCacheContext)
+        {
+            if (TryGetList(parentKey, out list))
+            {
+                listCacheContext = IsListCacheUpdateRequired<TKind>(parentKey)
+                    ? _listCacheContexts.Get(typeof(TKind))?.Get(parentKey)
+                    : null;
+                return true;
+            }
+            else
+            {
+                listCacheContext = null;
+                return false;
+            }
+        }
+    }
+    
     static class ExtensionMethods
     {
         public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)

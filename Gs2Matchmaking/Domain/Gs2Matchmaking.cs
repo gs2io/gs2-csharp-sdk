@@ -234,7 +234,7 @@ namespace Gs2.Gs2Matchmaking.Domain
         }
 
         [SerializeField]
-        private static JoinNotificationEvent onJoinNotification = new JoinNotificationEvent();
+        private JoinNotificationEvent onJoinNotification = new JoinNotificationEvent();
 
         public event UnityAction<JoinNotification> OnJoinNotification
         {
@@ -250,7 +250,7 @@ namespace Gs2.Gs2Matchmaking.Domain
         }
 
         [SerializeField]
-        private static LeaveNotificationEvent onLeaveNotification = new LeaveNotificationEvent();
+        private LeaveNotificationEvent onLeaveNotification = new LeaveNotificationEvent();
 
         public event UnityAction<LeaveNotification> OnLeaveNotification
         {
@@ -266,7 +266,7 @@ namespace Gs2.Gs2Matchmaking.Domain
         }
 
         [SerializeField]
-        private static CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
+        private CompleteNotificationEvent onCompleteNotification = new CompleteNotificationEvent();
 
         public event UnityAction<CompleteNotification> OnCompleteNotification
         {
@@ -282,7 +282,7 @@ namespace Gs2.Gs2Matchmaking.Domain
         }
 
         [SerializeField]
-        private static ChangeRatingNotificationEvent onChangeRatingNotification = new ChangeRatingNotificationEvent();
+        private ChangeRatingNotificationEvent onChangeRatingNotification = new ChangeRatingNotificationEvent();
 
         public event UnityAction<ChangeRatingNotification> OnChangeRatingNotification
         {
@@ -291,7 +291,7 @@ namespace Gs2.Gs2Matchmaking.Domain
         }
     #endif
 
-        public static void HandleNotification(
+        public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload

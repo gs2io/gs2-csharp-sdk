@@ -72,6 +72,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public string NamespaceName => _namespaceName;
         public string RoomName => _roomName;
         private string _pageToken;
+        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Chat.Model.Subscribe[] _result;
 
@@ -103,6 +104,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
+            var isCacheChecked = this._isCacheChecked;
+            this._isCacheChecked = true;
 
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DescribeSubscribesByRoomNameFuture(
