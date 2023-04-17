@@ -35,7 +35,6 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string TransactionId { set; get; }
         public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
         public bool? IsComplete { set; get; }
         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
@@ -46,10 +45,6 @@ namespace Gs2.Gs2Quest.Request
         }
         public EndByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
-            return this;
-        }
-        public EndByUserIdRequest WithTransactionId(string transactionId) {
-            this.TransactionId = transactionId;
             return this;
         }
         public EndByUserIdRequest WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
@@ -81,7 +76,6 @@ namespace Gs2.Gs2Quest.Request
             return new EndByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null ? new Gs2.Gs2Quest.Model.Reward[]{} : data["rewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Reward.FromJson(v);
                 }).ToArray())
@@ -96,7 +90,6 @@ namespace Gs2.Gs2Quest.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["transactionId"] = TransactionId,
                 ["rewards"] = Rewards == null ? null : new JsonData(
                         Rewards.Select(v => {
                             //noinspection Convert2MethodRef
@@ -123,10 +116,6 @@ namespace Gs2.Gs2Quest.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
-            }
-            if (TransactionId != null) {
-                writer.WritePropertyName("transactionId");
-                writer.Write(TransactionId.ToString());
             }
             writer.WriteArrayStart();
             foreach (var reward in Rewards)
@@ -155,7 +144,6 @@ namespace Gs2.Gs2Quest.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += TransactionId + ":";
             key += Rewards + ":";
             key += IsComplete + ":";
             key += Config + ":";

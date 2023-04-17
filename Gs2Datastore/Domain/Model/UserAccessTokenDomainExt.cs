@@ -170,7 +170,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        
 		        using var request = UnityWebRequest.Put(result.UploadUrl, data);
 		        request.downloadHandler = new DownloadHandlerBuffer();
-		        await request.SendWebRequest().ToUniTask();
+		        await request.SendWebRequest();
 		        if (request.responseCode != 200)
 		        {
 			        throw new UnknownException(Array.Empty<RequestError>());

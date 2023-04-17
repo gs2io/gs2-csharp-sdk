@@ -93,7 +93,7 @@ namespace Gs2.Core.Net
                 else if (!_checkCertificateRevocation)
                     request.certificateHandler = new DisabledCertificateHandler();
 
-                await request.SendWebRequest().ToUniTask();
+                await request.SendWebRequest();
 
                 if (request.responseCode == 500)
                 {

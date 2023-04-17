@@ -3337,11 +3337,6 @@ namespace Gs2.Gs2Quest
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (request.TransactionId != null)
-                {
-                    jsonWriter.WritePropertyName("transactionId");
-                    jsonWriter.Write(request.TransactionId);
-                }
                 if (request.Rewards != null)
                 {
                     jsonWriter.WritePropertyName("rewards");
@@ -3497,11 +3492,6 @@ namespace Gs2.Gs2Quest
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (request.TransactionId != null)
-                {
-                    jsonWriter.WritePropertyName("transactionId");
-                    jsonWriter.Write(request.TransactionId);
-                }
                 if (request.Rewards != null)
                 {
                     jsonWriter.WritePropertyName("rewards");

@@ -95,7 +95,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
 
         public Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain SerialKey(
-            string code
+            string serialKeyCode
         ) {
             return new Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain(
                 this._cache,
@@ -104,7 +104,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken,
-                code
+                serialKeyCode
             );
         }
 

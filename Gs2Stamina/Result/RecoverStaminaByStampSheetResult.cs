@@ -35,7 +35,7 @@ namespace Gs2.Gs2Stamina.Result
 	{
         public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
         public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
-        public long? OverflowValue { set; get; }
+        public int? OverflowValue { set; get; }
 
         public RecoverStaminaByStampSheetResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;
@@ -47,7 +47,7 @@ namespace Gs2.Gs2Stamina.Result
             return this;
         }
 
-        public RecoverStaminaByStampSheetResult WithOverflowValue(long? overflowValue) {
+        public RecoverStaminaByStampSheetResult WithOverflowValue(int? overflowValue) {
             this.OverflowValue = overflowValue;
             return this;
         }
@@ -63,7 +63,7 @@ namespace Gs2.Gs2Stamina.Result
             return new RecoverStaminaByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
                 .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]))
-                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (long?)long.Parse(data["overflowValue"].ToString()));
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)int.Parse(data["overflowValue"].ToString()));
         }
 
         public JsonData ToJson()
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Stamina.Result
             }
             if (OverflowValue != null) {
                 writer.WritePropertyName("overflowValue");
-                writer.Write(long.Parse(OverflowValue.ToString()));
+                writer.Write(int.Parse(OverflowValue.ToString()));
             }
             writer.WriteObjectEnd();
         }

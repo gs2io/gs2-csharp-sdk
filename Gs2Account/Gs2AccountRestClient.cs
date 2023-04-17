@@ -568,11 +568,6 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("changePasswordIfTakeOver");
                     jsonWriter.Write(request.ChangePasswordIfTakeOver.ToString());
                 }
-                if (request.DifferentUserIdForLoginAndDataRetention != null)
-                {
-                    jsonWriter.WritePropertyName("differentUserIdForLoginAndDataRetention");
-                    jsonWriter.Write(request.DifferentUserIdForLoginAndDataRetention.ToString());
-                }
                 if (request.CreateAccountScript != null)
                 {
                     jsonWriter.WritePropertyName("createAccountScript");
@@ -1411,6 +1406,10 @@ namespace Gs2.Gs2Account
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -1538,6 +1537,10 @@ namespace Gs2.Gs2Account
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -3131,6 +3134,10 @@ namespace Gs2.Gs2Account
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
 
                 AddHeader(

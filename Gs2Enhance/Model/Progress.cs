@@ -36,7 +36,7 @@ namespace Gs2.Gs2Enhance.Model
         public string RateName { set; get; }
         public string Name { set; get; }
         public string PropertyId { set; get; }
-        public int? ExperienceValue { set; get; }
+        public long? ExperienceValue { set; get; }
         public float? Rate { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -60,7 +60,7 @@ namespace Gs2.Gs2Enhance.Model
             this.PropertyId = propertyId;
             return this;
         }
-        public Progress WithExperienceValue(int? experienceValue) {
+        public Progress WithExperienceValue(long? experienceValue) {
             this.ExperienceValue = experienceValue;
             return this;
         }
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Enhance.Model
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (int?)int.Parse(data["experienceValue"].ToString()))
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)long.Parse(data["experienceValue"].ToString()))
                 .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
@@ -205,7 +205,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             if (ExperienceValue != null) {
                 writer.WritePropertyName("experienceValue");
-                writer.Write(int.Parse(ExperienceValue.ToString()));
+                writer.Write(long.Parse(ExperienceValue.ToString()));
             }
             if (Rate != null) {
                 writer.WritePropertyName("rate");

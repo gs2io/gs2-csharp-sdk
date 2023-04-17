@@ -64,13 +64,13 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         private readonly string _namespaceName;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
-        private readonly string _code;
+        private readonly string _serialKeyCode;
 
         private readonly String _parentKey;
         public string Url { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
-        public string Code => _code;
+        public string SerialKeyCode => _serialKeyCode;
 
         public SerialKeyAccessTokenDomain(
             CacheDatabase cache,
@@ -79,7 +79,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             AccessToken accessToken,
-            string code
+            string serialKeyCode
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -90,7 +90,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._code = code;
+            this._serialKeyCode = serialKeyCode;
             this._parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
@@ -116,8 +116,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithCode(this.Code);
+                .WithAccessToken(this._accessToken?.Token);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UseFuture(
                 request
@@ -188,7 +187,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string code,
+            string serialKeyCode,
             string childType
         )
         {
@@ -197,18 +196,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 "serialKey",
                 namespaceName ?? "null",
                 userId ?? "null",
-                code ?? "null",
+                serialKeyCode ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string code
+            string serialKeyCode
         )
         {
             return string.Join(
                 ":",
-                code ?? "null"
+                serialKeyCode ?? "null"
             );
         }
 
@@ -228,7 +227,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
                 _parentKey,
                 Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    this.Code?.ToString()
+                    this.SerialKeyCode?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -673,6 +673,54 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Deploy.Model.Resource> Resources(
+        )
+        {
+            return new DescribeResourcesIterator(
+                this._cache,
+                this._client,
+                this.StackName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Resource> ResourcesAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Deploy.Model.Resource> Resources(
+            #endif
+        #else
+        public DescribeResourcesIterator Resources(
+        #endif
+        )
+        {
+            return new DescribeResourcesIterator(
+                this._cache,
+                this._client,
+                this.StackName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Deploy.Domain.Model.ResourceDomain Resource(
+            string resourceName
+        ) {
+            return new Gs2.Gs2Deploy.Domain.Model.ResourceDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.StackName,
+                resourceName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Deploy.Model.Event> Events(
         )
         {
@@ -765,54 +813,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this._session,
                 this.StackName,
                 outputName
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Deploy.Model.Resource> Resources(
-        )
-        {
-            return new DescribeResourcesIterator(
-                this._cache,
-                this._client,
-                this.StackName
-            );
-        }
-
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Resource> ResourcesAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Deploy.Model.Resource> Resources(
-            #endif
-        #else
-        public DescribeResourcesIterator Resources(
-        #endif
-        )
-        {
-            return new DescribeResourcesIterator(
-                this._cache,
-                this._client,
-                this.StackName
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public Gs2.Gs2Deploy.Domain.Model.ResourceDomain Resource(
-            string resourceName
-        ) {
-            return new Gs2.Gs2Deploy.Domain.Model.ResourceDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this.StackName,
-                resourceName
             );
         }
 

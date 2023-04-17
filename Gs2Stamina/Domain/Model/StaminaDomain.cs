@@ -66,7 +66,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private readonly string _staminaName;
 
         private readonly String _parentKey;
-        public long? OverflowValue { get; set; }
+        public int? OverflowValue { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string StaminaName => _staminaName;

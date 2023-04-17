@@ -35,12 +35,18 @@ namespace Gs2.Gs2Account.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string DuplicationAvoider { set; get; }
         public DeleteDataOwnerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public DeleteDataOwnerByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+
+        public DeleteDataOwnerByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -209,22 +209,9 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> self)
             {
         #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future2 = Model();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
-            #else
-            var model = await Model();
-            #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithTransactionId(model.TransactionId);
+                .WithUserId(this.UserId);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.EndByUserIdFuture(
                 request
@@ -319,6 +306,90 @@ namespace Gs2.Gs2Quest.Domain.Model
             self.OnComplete(this);
         #else
             return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Quest.Domain.Model.ProgressDomain> DeleteAsync(
+            #else
+        public IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> Delete(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Quest.Domain.Model.ProgressDomain> DeleteAsync(
+        #endif
+            DeleteProgressByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.DeleteProgressByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            DeleteProgressByUserIdResult result = null;
+            try {
+                result = await this._client.DeleteProgressByUserIdAsync(
+                    request
+                );
+            } catch(Gs2.Core.Exception.NotFoundException e) {
+                if (e.errors[0].component == "progress")
+                {
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.Progress>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Progress"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                }
+            }
+            Gs2.Gs2Quest.Domain.Model.ProgressDomain domain = this;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

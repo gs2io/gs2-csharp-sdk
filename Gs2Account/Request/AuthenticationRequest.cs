@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Request
         public string UserId { set; get; }
         public string KeyId { set; get; }
         public string Password { set; get; }
+        public string DuplicationAvoider { set; get; }
         public AuthenticationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -51,6 +52,11 @@ namespace Gs2.Gs2Account.Request
         }
         public AuthenticationRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+
+        public AuthenticationRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
