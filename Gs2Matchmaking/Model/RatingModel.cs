@@ -34,6 +34,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public string RatingModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+        public int? InitialValue { set; get; }
         public int? Volatility { set; get; }
         public RatingModel WithRatingModelId(string ratingModelId) {
             this.RatingModelId = ratingModelId;
@@ -45,6 +46,10 @@ namespace Gs2.Gs2Matchmaking.Model
         }
         public RatingModel WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public RatingModel WithInitialValue(int? initialValue) {
+            this.InitialValue = initialValue;
             return this;
         }
         public RatingModel WithVolatility(int? volatility) {
@@ -132,6 +137,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithRatingModelId(!data.Keys.Contains("ratingModelId") || data["ratingModelId"] == null ? null : data["ratingModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInitialValue(!data.Keys.Contains("initialValue") || data["initialValue"] == null ? null : (int?)int.Parse(data["initialValue"].ToString()))
                 .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
         }
 
@@ -141,6 +147,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["ratingModelId"] = RatingModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
+                ["initialValue"] = InitialValue,
                 ["volatility"] = Volatility,
             };
         }
@@ -159,6 +166,10 @@ namespace Gs2.Gs2Matchmaking.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (InitialValue != null) {
+                writer.WritePropertyName("initialValue");
+                writer.Write(int.Parse(InitialValue.ToString()));
             }
             if (Volatility != null) {
                 writer.WritePropertyName("volatility");
@@ -194,6 +205,14 @@ namespace Gs2.Gs2Matchmaking.Model
             else
             {
                 diff += Metadata.CompareTo(other.Metadata);
+            }
+            if (InitialValue == null && InitialValue == other.InitialValue)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(InitialValue - other.InitialValue);
             }
             if (Volatility == null && Volatility == other.Volatility)
             {

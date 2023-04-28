@@ -2547,6 +2547,11 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.InitialValue != null)
+                {
+                    jsonWriter.WritePropertyName("initialValue");
+                    jsonWriter.Write(request.InitialValue.ToString());
+                }
                 if (request.Volatility != null)
                 {
                     jsonWriter.WritePropertyName("volatility");
@@ -2784,6 +2789,11 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
+                }
+                if (request.InitialValue != null)
+                {
+                    jsonWriter.WritePropertyName("initialValue");
+                    jsonWriter.Write(request.InitialValue.ToString());
                 }
                 if (request.Volatility != null)
                 {

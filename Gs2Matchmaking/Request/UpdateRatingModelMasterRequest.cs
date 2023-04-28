@@ -37,6 +37,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public string RatingName { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
+        public int? InitialValue { set; get; }
         public int? Volatility { set; get; }
         public UpdateRatingModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public UpdateRatingModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public UpdateRatingModelMasterRequest WithInitialValue(int? initialValue) {
+            this.InitialValue = initialValue;
             return this;
         }
         public UpdateRatingModelMasterRequest WithVolatility(int? volatility) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInitialValue(!data.Keys.Contains("initialValue") || data["initialValue"] == null ? null : (int?)int.Parse(data["initialValue"].ToString()))
                 .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
         }
 
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["ratingName"] = RatingName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["initialValue"] = InitialValue,
                 ["volatility"] = Volatility,
             };
         }
@@ -105,6 +112,10 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
+            if (InitialValue != null) {
+                writer.WritePropertyName("initialValue");
+                writer.Write(int.Parse(InitialValue.ToString()));
+            }
             if (Volatility != null) {
                 writer.WritePropertyName("volatility");
                 writer.Write(int.Parse(Volatility.ToString()));
@@ -118,6 +129,7 @@ namespace Gs2.Gs2Matchmaking.Request
             key += RatingName + ":";
             key += Description + ":";
             key += Metadata + ":";
+            key += InitialValue + ":";
             key += Volatility + ":";
             return key;
         }

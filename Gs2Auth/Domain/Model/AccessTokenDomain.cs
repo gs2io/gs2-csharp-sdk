@@ -65,6 +65,7 @@ namespace Gs2.Gs2Auth.Domain.Model
         public string Token { get; set; }
         public string UserId { get; set; }
         public long? Expire { get; set; }
+        public string Status { get; set; }
 
         public AccessTokenDomain(
             CacheDatabase cache,

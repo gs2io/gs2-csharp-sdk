@@ -66,6 +66,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         private readonly String _parentKey;
         public string ClientSecret { get; set; }
+        public string Status { get; set; }
         public string UserName => _userName;
         public string ClientId => _clientId;
 
