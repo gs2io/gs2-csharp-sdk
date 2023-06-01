@@ -114,9 +114,11 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+            var parentKey = string.Join(
+                ":",
                 this.NamespaceName,
                 this.UserId,
+                this.CategoryName,
                 "Score"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Score>

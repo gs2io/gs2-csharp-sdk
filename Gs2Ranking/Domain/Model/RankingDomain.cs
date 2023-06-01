@@ -114,7 +114,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithScorerUserId(this.UserId)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -139,13 +138,15 @@ namespace Gs2.Gs2Ranking.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    var parentKey = string.Join(
+                        ":",
                         this.NamespaceName,
-                        resultModel.Item.UserId,
+                        this.UserId,
+                        this.CategoryName,
                         "Ranking"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        resultModel.Item.CategoryName.ToString()
+                        resultModel.Item.UserId.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -208,9 +209,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    var parentKey = string.Join(
+                        ":",
                         this.NamespaceName,
                         this.UserId,
+                        this.CategoryName,
                         "Score"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -276,7 +279,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 categoryName ?? "null"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking.Model.Ranking> Model(
@@ -296,15 +298,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Ranking> self)
             {
         #endif
-            var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+            var parentKey = string.Join(
+                ":",
                 this.NamespaceName,
-                scorerUserId,
+                this.UserId,
+                this.CategoryName,
                 "Ranking"
             );
             var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                 parentKey,
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
+                    scorerUserId?.ToString()
                 )
             );
             if (!find) {
@@ -326,7 +330,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             if (e.errors[0].component == "ranking")
                             {
                                 var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                    this.CategoryName?.ToString()
+                                    scorerUserId?.ToString()
                                 );
                                 _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                                     parentKey,
@@ -351,7 +355,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     if (e.errors[0].component == "ranking")
                     {
                         var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
+                            scorerUserId?.ToString()
                         );
                         _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                             parentKey,
@@ -369,7 +373,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
+                        scorerUserId?.ToString()
                     )
                 );
             }

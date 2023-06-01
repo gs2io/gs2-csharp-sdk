@@ -108,9 +108,11 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+            var parentKey = string.Join(
+                ":",
                 this.NamespaceName,
                 "Singleton",
+                this.CategoryName,
                 "NearRanking"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
@@ -150,7 +152,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                    item.CategoryName?.ToString()
+                                    item.UserId?.ToString()
                             ),
                             item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes

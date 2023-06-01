@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -141,13 +139,15 @@ namespace Gs2.Gs2Ranking.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    var parentKey = string.Join(
+                        ":",
                         this.NamespaceName,
-                        resultModel.Item.UserId,
+                        this.UserId,
+                        this.CategoryName,
                         "Ranking"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        resultModel.Item.CategoryName.ToString()
+                        resultModel.Item.UserId.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -210,9 +210,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    var parentKey = string.Join(
+                        ":",
                         this.NamespaceName,
                         this.UserId,
+                        this.CategoryName,
                         "Score"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -278,7 +280,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 categoryName ?? "null"
             );
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking.Model.Ranking> Model(
@@ -298,15 +299,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Ranking> self)
             {
         #endif
-            var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+            var parentKey = string.Join(
+                ":",
                 this.NamespaceName,
-                scorerUserId,
+                this.UserId,
+                this.CategoryName,
                 "Ranking"
             );
             var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                 parentKey,
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
+                    scorerUserId?.ToString()
                 )
             );
             if (!find) {
@@ -327,11 +330,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         {
                             if (e.errors[0].component == "ranking")
                             {
-                                _cache.Delete<Gs2.Gs2Ranking.Model.Ranking>(
+                                var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                                    scorerUserId?.ToString()
+                                );
+                                _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                                     parentKey,
-                                    Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                        this.CategoryName?.ToString()
-                                    )
+                                    key,
+                                    null,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
                             else
@@ -349,11 +355,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     if (e.errors[0].component == "ranking")
                     {
-                        _cache.Delete<Gs2.Gs2Ranking.Model.Ranking>(
+                        var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                            scorerUserId?.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                             parentKey,
-                            Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                this.CategoryName?.ToString()
-                            )
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                     else
@@ -365,7 +374,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
+                        scorerUserId?.ToString()
                     )
                 );
             }

@@ -149,9 +149,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    var parentKey = string.Join(
+                        ":",
                         this.NamespaceName,
                         this.UserId,
+                        this.CategoryName,
                         "Score"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -226,8 +228,15 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Score> self)
             {
         #endif
+            var parentKey = string.Join(
+                ":",
+                this.NamespaceName,
+                this.UserId,
+                this.CategoryName,
+                "Score"
+            );
             var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Score>(
-                _parentKey,
+                parentKey,
                 Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                     this.CategoryName?.ToString(),
                     this.ScorerUserId?.ToString(),
@@ -257,7 +266,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                                     this.UniqueId?.ToString() ?? "0"
                                 );
                                 _cache.Put<Gs2.Gs2Ranking.Model.Score>(
-                                    _parentKey,
+                                    parentKey,
                                     key,
                                     null,
                                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -284,7 +293,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             this.UniqueId?.ToString() ?? "0"
                         );
                         _cache.Put<Gs2.Gs2Ranking.Model.Score>(
-                            _parentKey,
+                            parentKey,
                             key,
                             null,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -297,7 +306,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 }
         #endif
                 (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Score>(
-                    _parentKey,
+                    parentKey,
                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                         this.CategoryName?.ToString(),
                         this.ScorerUserId?.ToString(),
