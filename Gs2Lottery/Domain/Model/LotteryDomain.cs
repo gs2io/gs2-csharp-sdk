@@ -168,6 +168,184 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+            #else
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+        #endif
+            PredictionRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.PredictionFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.PredictionAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(result?.Items);
+        #else
+            return result?.Items;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+            #else
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+        #endif
+            PredictionByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.PredictionByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.PredictionByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(result?.Items);
+        #else
+            return result?.Items;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Domain.Model.LotteryDomain> DrawWithRandomSeedAsync(
+            #else
+        public IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryDomain> DrawWithRandomSeed(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Lottery.Domain.Model.LotteryDomain> DrawWithRandomSeedAsync(
+        #endif
+            DrawWithRandomSeedByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.DrawWithRandomSeedByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.DrawWithRandomSeedByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Domain.Model.LotteryDomain>(Impl);
+        #endif
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

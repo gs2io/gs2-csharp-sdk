@@ -2575,6 +2575,415 @@ namespace Gs2.Gs2Lottery
 #endif
 
 
+        public class PredictionTask : Gs2RestSessionTask<PredictionRequest, PredictionResult>
+        {
+            public PredictionTask(IGs2Session session, RestSessionRequestFactory factory, PredictionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PredictionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/lottery/{lotteryName}/prediction";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{lotteryName}", !string.IsNullOrEmpty(request.LotteryName) ? request.LotteryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RandomSeed != null)
+                {
+                    jsonWriter.WritePropertyName("randomSeed");
+                    jsonWriter.Write(request.RandomSeed.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Prediction(
+                Request.PredictionRequest request,
+                UnityAction<AsyncResult<Result.PredictionResult>> callback
+        )
+		{
+			var task = new PredictionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PredictionResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PredictionResult> PredictionFuture(
+                Request.PredictionRequest request
+        )
+		{
+			return new PredictionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PredictionResult> PredictionAsync(
+                Request.PredictionRequest request
+        )
+		{
+            AsyncResult<Result.PredictionResult> result = null;
+			await Prediction(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PredictionTask PredictionAsync(
+                Request.PredictionRequest request
+        )
+		{
+			return new PredictionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PredictionResult> PredictionAsync(
+                Request.PredictionRequest request
+        )
+		{
+			var task = new PredictionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PredictionByUserIdTask : Gs2RestSessionTask<PredictionByUserIdRequest, PredictionByUserIdResult>
+        {
+            public PredictionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PredictionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PredictionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/lottery/{lotteryName}/prediction";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{lotteryName}", !string.IsNullOrEmpty(request.LotteryName) ? request.LotteryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RandomSeed != null)
+                {
+                    jsonWriter.WritePropertyName("randomSeed");
+                    jsonWriter.Write(request.RandomSeed.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PredictionByUserId(
+                Request.PredictionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.PredictionByUserIdResult>> callback
+        )
+		{
+			var task = new PredictionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PredictionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PredictionByUserIdResult> PredictionByUserIdFuture(
+                Request.PredictionByUserIdRequest request
+        )
+		{
+			return new PredictionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PredictionByUserIdResult> PredictionByUserIdAsync(
+                Request.PredictionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PredictionByUserIdResult> result = null;
+			await PredictionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PredictionByUserIdTask PredictionByUserIdAsync(
+                Request.PredictionByUserIdRequest request
+        )
+		{
+			return new PredictionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PredictionByUserIdResult> PredictionByUserIdAsync(
+                Request.PredictionByUserIdRequest request
+        )
+		{
+			var task = new PredictionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DrawWithRandomSeedByUserIdTask : Gs2RestSessionTask<DrawWithRandomSeedByUserIdRequest, DrawWithRandomSeedByUserIdResult>
+        {
+            public DrawWithRandomSeedByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DrawWithRandomSeedByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DrawWithRandomSeedByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "lottery")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/lottery/{lotteryName}/draw/withSeed";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{lotteryName}", !string.IsNullOrEmpty(request.LotteryName) ? request.LotteryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RandomSeed != null)
+                {
+                    jsonWriter.WritePropertyName("randomSeed");
+                    jsonWriter.Write(request.RandomSeed.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DrawWithRandomSeedByUserId(
+                Request.DrawWithRandomSeedByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DrawWithRandomSeedByUserIdResult>> callback
+        )
+		{
+			var task = new DrawWithRandomSeedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DrawWithRandomSeedByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DrawWithRandomSeedByUserIdResult> DrawWithRandomSeedByUserIdFuture(
+                Request.DrawWithRandomSeedByUserIdRequest request
+        )
+		{
+			return new DrawWithRandomSeedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DrawWithRandomSeedByUserIdResult> DrawWithRandomSeedByUserIdAsync(
+                Request.DrawWithRandomSeedByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DrawWithRandomSeedByUserIdResult> result = null;
+			await DrawWithRandomSeedByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DrawWithRandomSeedByUserIdTask DrawWithRandomSeedByUserIdAsync(
+                Request.DrawWithRandomSeedByUserIdRequest request
+        )
+		{
+			return new DrawWithRandomSeedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DrawWithRandomSeedByUserIdResult> DrawWithRandomSeedByUserIdAsync(
+                Request.DrawWithRandomSeedByUserIdRequest request
+        )
+		{
+			var task = new DrawWithRandomSeedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DrawByStampSheetTask : Gs2RestSessionTask<DrawByStampSheetRequest, DrawByStampSheetResult>
         {
             public DrawByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, DrawByStampSheetRequest request) : base(session, factory, request)
