@@ -34,9 +34,15 @@ namespace Gs2.Gs2Schedule.Result
 	public class GetEventByUserIdResult : IResult
 	{
         public Gs2.Gs2Schedule.Model.Event Item { set; get; }
+        public int? RepeatCount { set; get; }
 
         public GetEventByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Event item) {
             this.Item = item;
+            return this;
+        }
+
+        public GetEventByUserIdResult WithRepeatCount(int? repeatCount) {
+            this.RepeatCount = repeatCount;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Schedule.Result
                 return null;
             }
             return new GetEventByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]))
+                .WithRepeatCount(!data.Keys.Contains("repeatCount") || data["repeatCount"] == null ? null : (int?)int.Parse(data["repeatCount"].ToString()));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["repeatCount"] = RepeatCount,
             };
         }
 
@@ -64,6 +72,10 @@ namespace Gs2.Gs2Schedule.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (RepeatCount != null) {
+                writer.WritePropertyName("repeatCount");
+                writer.Write(int.Parse(RepeatCount.ToString()));
             }
             writer.WriteObjectEnd();
         }

@@ -66,6 +66,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         private readonly string _eventName;
 
         private readonly String _parentKey;
+        public int? RepeatCount { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string EventName => _eventName;
