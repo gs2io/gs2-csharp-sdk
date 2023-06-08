@@ -156,8 +156,10 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 foreach (var item in this._result) {
                     this._cache.Put(
                             parentKey,
-                            Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                                    item.UserId?.ToString()
+                            string.Join(
+                                ":",
+                                item.UserId?.ToString(),
+                                item.Index?.ToString()
                             ),
                             item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
