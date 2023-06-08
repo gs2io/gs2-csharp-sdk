@@ -269,19 +269,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "prizeTable")
-                            {
-                                var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                                     this.PrizeTableName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "prizeTable")
                             {
                                 self.OnError(future.Error);
                             }
@@ -294,19 +292,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "prizeTable")
-                    {
-                        var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                             this.PrizeTableName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "prizeTable")
                     {
                         throw e;
                     }

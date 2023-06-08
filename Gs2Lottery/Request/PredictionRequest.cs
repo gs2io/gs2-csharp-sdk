@@ -35,7 +35,7 @@ namespace Gs2.Gs2Lottery.Request
 	{
         public string NamespaceName { set; get; }
         public string LotteryName { set; get; }
-        public string UserId { set; get; }
+        public string AccessToken { set; get; }
         public long? RandomSeed { set; get; }
         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
@@ -47,8 +47,8 @@ namespace Gs2.Gs2Lottery.Request
             this.LotteryName = lotteryName;
             return this;
         }
-        public PredictionRequest WithUserId(string userId) {
-            this.UserId = userId;
+        public PredictionRequest WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
             return this;
         }
         public PredictionRequest WithRandomSeed(long? randomSeed) {
@@ -76,7 +76,7 @@ namespace Gs2.Gs2Lottery.Request
             return new PredictionRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithLotteryName(!data.Keys.Contains("lotteryName") || data["lotteryName"] == null ? null : data["lotteryName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)long.Parse(data["randomSeed"].ToString()))
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
         }
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Lottery.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["lotteryName"] = LotteryName,
-                ["userId"] = UserId,
+                ["accessToken"] = AccessToken,
                 ["randomSeed"] = RandomSeed,
                 ["count"] = Count,
             };
@@ -103,9 +103,9 @@ namespace Gs2.Gs2Lottery.Request
                 writer.WritePropertyName("lotteryName");
                 writer.Write(LotteryName.ToString());
             }
-            if (UserId != null) {
-                writer.WritePropertyName("userId");
-                writer.Write(UserId.ToString());
+            if (AccessToken != null) {
+                writer.WritePropertyName("accessToken");
+                writer.Write(AccessToken.ToString());
             }
             if (RandomSeed != null) {
                 writer.WritePropertyName("randomSeed");
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Lottery.Request
             var key = "";
             key += NamespaceName + ":";
             key += LotteryName + ":";
-            key += UserId + ":";
+            key += AccessToken + ":";
             key += RandomSeed + ":";
             key += Count + ":";
             return key;

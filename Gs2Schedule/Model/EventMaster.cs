@@ -46,7 +46,6 @@ namespace Gs2.Gs2Schedule.Model
         public int? RepeatBeginHour { set; get; }
         public int? RepeatEndHour { set; get; }
         public string RelativeTriggerName { set; get; }
-        public int? RelativeDuration { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public EventMaster WithEventId(string eventId) {
@@ -107,10 +106,6 @@ namespace Gs2.Gs2Schedule.Model
         }
         public EventMaster WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
-            return this;
-        }
-        public EventMaster WithRelativeDuration(int? relativeDuration) {
-            this.RelativeDuration = relativeDuration;
             return this;
         }
         public EventMaster WithCreatedAt(long? createdAt) {
@@ -214,7 +209,6 @@ namespace Gs2.Gs2Schedule.Model
                 .WithRepeatBeginHour(!data.Keys.Contains("repeatBeginHour") || data["repeatBeginHour"] == null ? null : (int?)int.Parse(data["repeatBeginHour"].ToString()))
                 .WithRepeatEndHour(!data.Keys.Contains("repeatEndHour") || data["repeatEndHour"] == null ? null : (int?)int.Parse(data["repeatEndHour"].ToString()))
                 .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString())
-                .WithRelativeDuration(!data.Keys.Contains("relativeDuration") || data["relativeDuration"] == null ? null : (int?)int.Parse(data["relativeDuration"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -237,7 +231,6 @@ namespace Gs2.Gs2Schedule.Model
                 ["repeatBeginHour"] = RepeatBeginHour,
                 ["repeatEndHour"] = RepeatEndHour,
                 ["relativeTriggerName"] = RelativeTriggerName,
-                ["relativeDuration"] = RelativeDuration,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -305,10 +298,6 @@ namespace Gs2.Gs2Schedule.Model
             if (RelativeTriggerName != null) {
                 writer.WritePropertyName("relativeTriggerName");
                 writer.Write(RelativeTriggerName.ToString());
-            }
-            if (RelativeDuration != null) {
-                writer.WritePropertyName("relativeDuration");
-                writer.Write(int.Parse(RelativeDuration.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -444,14 +433,6 @@ namespace Gs2.Gs2Schedule.Model
             else
             {
                 diff += RelativeTriggerName.CompareTo(other.RelativeTriggerName);
-            }
-            if (RelativeDuration == null && RelativeDuration == other.RelativeDuration)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RelativeDuration - other.RelativeDuration);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

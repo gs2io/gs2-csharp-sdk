@@ -408,18 +408,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "currentShowcaseMaster")
-                            {
-                                var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
                                 );
-                                _cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "currentShowcaseMaster")
                             {
                                 self.OnError(future.Error);
                             }
@@ -432,18 +430,15 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "currentShowcaseMaster")
-                    {
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
                         );
-                        _cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "currentShowcaseMaster")
                     {
                         throw e;
                     }

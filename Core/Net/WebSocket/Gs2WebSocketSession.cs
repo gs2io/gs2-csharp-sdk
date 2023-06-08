@@ -338,6 +338,7 @@ namespace Gs2.Core.Net
                     }
                 }
 
+                yield return CloseFuture();
                 var future = OpenFuture();
                 yield return future;
                 if (future.Error != null) {

@@ -268,19 +268,17 @@ namespace Gs2.Gs2Quest.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "questGroupModel")
-                            {
-                                var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                                     this.QuestGroupName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Quest.Model.QuestGroupModel>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "questGroupModel")
                             {
                                 self.OnError(future.Error);
                             }
@@ -293,19 +291,16 @@ namespace Gs2.Gs2Quest.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "questGroupModel")
-                    {
-                        var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                             this.QuestGroupName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Quest.Model.QuestGroupModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "questGroupModel")
                     {
                         throw e;
                     }

@@ -257,21 +257,19 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "score")
-                            {
-                                var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                     this.CategoryName?.ToString(),
                                     this.ScorerUserId?.ToString(),
                                     this.UniqueId?.ToString() ?? "0"
                                 );
-                                _cache.Put<Gs2.Gs2Ranking.Model.Score>(
-                                    parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Ranking.Model.Score>(
+                                parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "score")
                             {
                                 self.OnError(future.Error);
                             }
@@ -284,21 +282,18 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "score")
-                    {
-                        var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                             this.CategoryName?.ToString(),
                             this.ScorerUserId?.ToString(),
                             this.UniqueId?.ToString() ?? "0"
                         );
-                        _cache.Put<Gs2.Gs2Ranking.Model.Score>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Ranking.Model.Score>(
+                        parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "score")
                     {
                         throw e;
                     }

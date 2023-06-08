@@ -939,11 +939,6 @@ namespace Gs2.Gs2Schedule
                     jsonWriter.WritePropertyName("relativeTriggerName");
                     jsonWriter.Write(request.RelativeTriggerName);
                 }
-                if (request.RelativeDuration != null)
-                {
-                    jsonWriter.WritePropertyName("relativeDuration");
-                    jsonWriter.Write(request.RelativeDuration.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1231,11 +1226,6 @@ namespace Gs2.Gs2Schedule
                 {
                     jsonWriter.WritePropertyName("relativeTriggerName");
                     jsonWriter.Write(request.RelativeTriggerName);
-                }
-                if (request.RelativeDuration != null)
-                {
-                    jsonWriter.WritePropertyName("relativeDuration");
-                    jsonWriter.Write(request.RelativeDuration.ToString());
                 }
                 if (request.ContextStack != null)
                 {

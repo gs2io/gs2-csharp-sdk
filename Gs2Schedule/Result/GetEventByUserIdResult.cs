@@ -35,6 +35,8 @@ namespace Gs2.Gs2Schedule.Result
 	{
         public Gs2.Gs2Schedule.Model.Event Item { set; get; }
         public int? RepeatCount { set; get; }
+        public bool? InSchedule { set; get; }
+        public Gs2.Gs2Schedule.Model.RepeatSchedule RepeatSchedule { set; get; }
 
         public GetEventByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Event item) {
             this.Item = item;
@@ -43,6 +45,16 @@ namespace Gs2.Gs2Schedule.Result
 
         public GetEventByUserIdResult WithRepeatCount(int? repeatCount) {
             this.RepeatCount = repeatCount;
+            return this;
+        }
+
+        public GetEventByUserIdResult WithInSchedule(bool? inSchedule) {
+            this.InSchedule = inSchedule;
+            return this;
+        }
+
+        public GetEventByUserIdResult WithRepeatSchedule(Gs2.Gs2Schedule.Model.RepeatSchedule repeatSchedule) {
+            this.RepeatSchedule = repeatSchedule;
             return this;
         }
 
@@ -56,7 +68,9 @@ namespace Gs2.Gs2Schedule.Result
             }
             return new GetEventByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]))
-                .WithRepeatCount(!data.Keys.Contains("repeatCount") || data["repeatCount"] == null ? null : (int?)int.Parse(data["repeatCount"].ToString()));
+                .WithRepeatCount(!data.Keys.Contains("repeatCount") || data["repeatCount"] == null ? null : (int?)int.Parse(data["repeatCount"].ToString()))
+                .WithInSchedule(!data.Keys.Contains("inSchedule") || data["inSchedule"] == null ? null : (bool?)bool.Parse(data["inSchedule"].ToString()))
+                .WithRepeatSchedule(!data.Keys.Contains("repeatSchedule") || data["repeatSchedule"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSchedule.FromJson(data["repeatSchedule"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +78,8 @@ namespace Gs2.Gs2Schedule.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["repeatCount"] = RepeatCount,
+                ["inSchedule"] = InSchedule,
+                ["repeatSchedule"] = RepeatSchedule?.ToJson(),
             };
         }
 
@@ -76,6 +92,13 @@ namespace Gs2.Gs2Schedule.Result
             if (RepeatCount != null) {
                 writer.WritePropertyName("repeatCount");
                 writer.Write(int.Parse(RepeatCount.ToString()));
+            }
+            if (InSchedule != null) {
+                writer.WritePropertyName("inSchedule");
+                writer.Write(bool.Parse(InSchedule.ToString()));
+            }
+            if (RepeatSchedule != null) {
+                RepeatSchedule.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

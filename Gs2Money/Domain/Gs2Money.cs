@@ -220,7 +220,7 @@ namespace Gs2.Gs2Money.Domain
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    null
+                                requestModel.Slot?.ToString() ?? "0"
                             );
                             cache.Put(
                                 parentKey,
@@ -252,7 +252,7 @@ namespace Gs2.Gs2Money.Domain
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    null
+                                requestModel.Slot?.ToString() ?? "0"
                             );
                             cache.Put(
                                 parentKey,
@@ -306,7 +306,7 @@ namespace Gs2.Gs2Money.Domain
                                 "Wallet"
                             );
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                    null
+                                requestModel.Slot?.ToString() ?? "0"
                             );
                             cache.Put(
                                 parentKey,

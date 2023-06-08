@@ -177,58 +177,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #else
         public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
         #endif
-            PredictionRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.PredictionFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.PredictionAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Items);
-        #else
-            return result?.Items;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-            #else
-        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-        #endif
             PredictionByUserIdRequest request
         ) {
 

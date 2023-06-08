@@ -328,19 +328,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "ranking")
-                            {
-                                var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                                     scorerUserId?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
-                                    parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                                parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "ranking")
                             {
                                 self.OnError(future.Error);
                             }
@@ -353,19 +351,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "ranking")
-                    {
-                        var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                             scorerUserId?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                        parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "ranking")
                     {
                         throw e;
                     }

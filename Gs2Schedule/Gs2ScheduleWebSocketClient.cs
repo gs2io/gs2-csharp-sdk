@@ -569,11 +569,6 @@ namespace Gs2.Gs2Schedule
                     jsonWriter.WritePropertyName("relativeTriggerName");
                     jsonWriter.Write(request.RelativeTriggerName.ToString());
                 }
-                if (request.RelativeDuration != null)
-                {
-                    jsonWriter.WritePropertyName("relativeDuration");
-                    jsonWriter.Write(request.RelativeDuration.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -854,11 +849,6 @@ namespace Gs2.Gs2Schedule
                 {
                     jsonWriter.WritePropertyName("relativeTriggerName");
                     jsonWriter.Write(request.RelativeTriggerName.ToString());
-                }
-                if (request.RelativeDuration != null)
-                {
-                    jsonWriter.WritePropertyName("relativeDuration");
-                    jsonWriter.Write(request.RelativeDuration.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1681,6 +1671,11 @@ namespace Gs2.Gs2Schedule
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
+                if (request.IsInSchedule != null)
+                {
+                    jsonWriter.WritePropertyName("isInSchedule");
+                    jsonWriter.Write(request.IsInSchedule.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1798,6 +1793,11 @@ namespace Gs2.Gs2Schedule
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.IsInSchedule != null)
+                {
+                    jsonWriter.WritePropertyName("isInSchedule");
+                    jsonWriter.Write(request.IsInSchedule.ToString());
                 }
                 if (request.ContextStack != null)
                 {

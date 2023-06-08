@@ -67,6 +67,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
         private readonly String _parentKey;
         public int? RepeatCount { get; set; }
+        public bool? InSchedule { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string EventName => _eventName;
@@ -227,19 +228,17 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "event")
-                            {
-                                var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
                                     this.EventName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Schedule.Model.Event>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "event")
                             {
                                 self.OnError(future.Error);
                             }
@@ -252,19 +251,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "event")
-                    {
-                        var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
                             this.EventName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Schedule.Model.Event>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "event")
                     {
                         throw e;
                     }

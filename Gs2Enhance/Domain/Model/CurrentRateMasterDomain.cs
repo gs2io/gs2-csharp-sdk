@@ -408,18 +408,16 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "currentRateMaster")
-                            {
-                                var key = Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                                 );
-                                _cache.Put<Gs2.Gs2Enhance.Model.CurrentRateMaster>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Enhance.Model.CurrentRateMaster>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "currentRateMaster")
                             {
                                 self.OnError(future.Error);
                             }
@@ -432,18 +430,15 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "currentRateMaster")
-                    {
-                        var key = Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Enhance.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
                         );
-                        _cache.Put<Gs2.Gs2Enhance.Model.CurrentRateMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Enhance.Model.CurrentRateMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "currentRateMaster")
                     {
                         throw e;
                     }

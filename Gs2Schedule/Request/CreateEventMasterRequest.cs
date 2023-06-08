@@ -48,7 +48,6 @@ namespace Gs2.Gs2Schedule.Request
         public int? RepeatBeginHour { set; get; }
         public int? RepeatEndHour { set; get; }
         public string RelativeTriggerName { set; get; }
-        public int? RelativeDuration { set; get; }
         public CreateEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -109,10 +108,6 @@ namespace Gs2.Gs2Schedule.Request
             this.RelativeTriggerName = relativeTriggerName;
             return this;
         }
-        public CreateEventMasterRequest WithRelativeDuration(int? relativeDuration) {
-            this.RelativeDuration = relativeDuration;
-            return this;
-        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -137,8 +132,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithRepeatEndDayOfWeek(!data.Keys.Contains("repeatEndDayOfWeek") || data["repeatEndDayOfWeek"] == null ? null : data["repeatEndDayOfWeek"].ToString())
                 .WithRepeatBeginHour(!data.Keys.Contains("repeatBeginHour") || data["repeatBeginHour"] == null ? null : (int?)int.Parse(data["repeatBeginHour"].ToString()))
                 .WithRepeatEndHour(!data.Keys.Contains("repeatEndHour") || data["repeatEndHour"] == null ? null : (int?)int.Parse(data["repeatEndHour"].ToString()))
-                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString())
-                .WithRelativeDuration(!data.Keys.Contains("relativeDuration") || data["relativeDuration"] == null ? null : (int?)int.Parse(data["relativeDuration"].ToString()));
+                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString());
         }
 
         public override JsonData ToJson()
@@ -159,7 +153,6 @@ namespace Gs2.Gs2Schedule.Request
                 ["repeatBeginHour"] = RepeatBeginHour,
                 ["repeatEndHour"] = RepeatEndHour,
                 ["relativeTriggerName"] = RelativeTriggerName,
-                ["relativeDuration"] = RelativeDuration,
             };
         }
 
@@ -226,10 +219,6 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("relativeTriggerName");
                 writer.Write(RelativeTriggerName.ToString());
             }
-            if (RelativeDuration != null) {
-                writer.WritePropertyName("relativeDuration");
-                writer.Write(int.Parse(RelativeDuration.ToString()));
-            }
             writer.WriteObjectEnd();
         }
 
@@ -250,7 +239,6 @@ namespace Gs2.Gs2Schedule.Request
             key += RepeatBeginHour + ":";
             key += RepeatEndHour + ":";
             key += RelativeTriggerName + ":";
-            key += RelativeDuration + ":";
             return key;
         }
 

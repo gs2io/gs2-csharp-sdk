@@ -2590,7 +2590,6 @@ namespace Gs2.Gs2Lottery
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{lotteryName}", !string.IsNullOrEmpty(request.LotteryName) ? request.LotteryName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2624,6 +2623,10 @@ namespace Gs2.Gs2Lottery
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
                 if (request.DuplicationAvoider != null)
                 {

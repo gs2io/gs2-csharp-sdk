@@ -36,6 +36,7 @@ namespace Gs2.Gs2Schedule.Request
         public string NamespaceName { set; get; }
         public string EventName { set; get; }
         public string UserId { set; get; }
+        public bool? IsInSchedule { set; get; }
         public GetEventByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Schedule.Request
         }
         public GetEventByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public GetEventByUserIdRequest WithIsInSchedule(bool? isInSchedule) {
+            this.IsInSchedule = isInSchedule;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Schedule.Request
             return new GetEventByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithIsInSchedule(!data.Keys.Contains("isInSchedule") || data["isInSchedule"] == null ? null : (bool?)bool.Parse(data["isInSchedule"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Schedule.Request
                 ["namespaceName"] = NamespaceName,
                 ["eventName"] = EventName,
                 ["userId"] = UserId,
+                ["isInSchedule"] = IsInSchedule,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (IsInSchedule != null) {
+                writer.WritePropertyName("isInSchedule");
+                writer.Write(bool.Parse(IsInSchedule.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Schedule.Request
             key += NamespaceName + ":";
             key += EventName + ":";
             key += UserId + ":";
+            key += IsInSchedule + ":";
             return key;
         }
 

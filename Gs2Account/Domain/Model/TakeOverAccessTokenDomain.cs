@@ -450,19 +450,17 @@ namespace Gs2.Gs2Account.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "takeOver")
-                            {
-                                var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                                     this.Type?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Account.Model.TakeOver>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Account.Model.TakeOver>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "takeOver")
                             {
                                 self.OnError(future.Error);
                             }
@@ -475,19 +473,16 @@ namespace Gs2.Gs2Account.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "takeOver")
-                    {
-                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                             this.Type?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Account.Model.TakeOver>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Account.Model.TakeOver>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "takeOver")
                     {
                         throw e;
                     }
