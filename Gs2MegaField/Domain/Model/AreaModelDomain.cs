@@ -268,19 +268,17 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "areaModel")
-                            {
-                                var key = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheKey(
+                            var key = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheKey(
                                     this.AreaModelName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2MegaField.Model.AreaModel>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2MegaField.Model.AreaModel>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "areaModel")
                             {
                                 self.OnError(future.Error);
                             }
@@ -293,19 +291,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "areaModel")
-                    {
-                        var key = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheKey(
+                    var key = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheKey(
                             this.AreaModelName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2MegaField.Model.AreaModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2MegaField.Model.AreaModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "areaModel")
                     {
                         throw e;
                     }

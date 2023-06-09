@@ -552,19 +552,17 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "user")
-                            {
-                                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                                     this.UserName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Identifier.Model.User>(
-                                    parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Identifier.Model.User>(
+                                parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "user")
                             {
                                 self.OnError(future.Error);
                             }
@@ -577,19 +575,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "user")
-                    {
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
                             this.UserName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Identifier.Model.User>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Identifier.Model.User>(
+                        parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "user")
                     {
                         throw e;
                     }

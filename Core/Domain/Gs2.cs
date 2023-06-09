@@ -42,6 +42,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Friend.Domain.Gs2Friend Friend;
         public readonly Gs2Gateway.Domain.Gs2Gateway Gateway;
         public readonly Gs2Identifier.Domain.Gs2Identifier Identifier;
+        public readonly Gs2Idle.Domain.Gs2Idle Idle;
         public readonly Gs2Inbox.Domain.Gs2Inbox Inbox;
         public readonly Gs2Inventory.Domain.Gs2Inventory Inventory;
         public readonly Gs2JobQueue.Domain.Gs2JobQueue JobQueue;
@@ -98,6 +99,7 @@ namespace Gs2.Core.Domain
                 wssession);
             Identifier =
                 new Gs2Identifier.Domain.Gs2Identifier(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Idle = new Gs2Idle.Domain.Gs2Idle(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Inbox = new Gs2Inbox.Domain.Gs2Inbox(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Inventory = new Gs2Inventory.Domain.Gs2Inventory(_cache, _jobQueueDomain, _sheetConfiguration, session);
             JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -174,6 +176,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Identifier":
                                 Identifier.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Idle":
+                                Idle.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Inbox":
                                 Inbox.HandleNotification(_cache, method, message.payload);
@@ -467,6 +472,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Identifier":
                         Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2Idle":
+                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Inbox":
                         Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -602,6 +610,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Identifier":
                         Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2Idle":
+                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Inbox":
                         Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampTask(cache, method, request, result);
@@ -741,6 +752,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "identifier":
                                 Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "idle":
+                                Gs2Idle.Domain.Gs2Idle.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "inbox":
                                 Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromJobResult(cache, method, job, result);

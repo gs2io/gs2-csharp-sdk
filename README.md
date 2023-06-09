@@ -10,11 +10,13 @@ NET Coreランタイムと組み合わせて利用することができます。
 
 ## Game Server Services とは
 
-> Game Server Services(GS2) とはモバイルゲーム開発に特化したバックエンドサーバサービス(BaaS)です。
->
-> ゲーム開発に必要なネットワーク機能をコンポーネント化してサービスとして提供します。 ゲーム内から必要な一部のコンポーネント単位で利用することができるよう設計されており、手軽に・手頃な価格で・高性能なサーバ機能を利用できます。
+Game Server Services(GS2) とはゲーム開発に特化したバックエンドサーバサービス(BaaS)です。
 
-[GS2-Document](https://app.gs2.io/docs/index.html) より
+GS2は、ゲーム開発者の効率化を目指して生まれた汎用ゲームサーバーのソリューションであり、Games as a Service(GaaS) や Live Gaming などをサポートしています。
+
+このサービスでは、プレイヤーデータの柔軟な管理やデータ分析が可能であり、ゲーム内の資源の流通や消費量を適切に分析して健全な環境を維持することができます。
+さらに、ストーリー進行管理や所持品管理などの機能を提供し、ゲームの収益化やプレイヤーエンゲージメントの向上に貢献します。
+GS2は、オンライン機能をサポートし、ゲーム開発者がデータの分析や経済管理を容易に行えるようにすることで、ゲームの成功を支援します。
 
 ## Getting Started
 
@@ -23,7 +25,7 @@ NET Coreランタイムと組み合わせて利用することができます。
 `(Unityプロジェクト)/Assets/Scripts/Runtime/Sdk/Gs2`
 
 SDKを利用するには GS2 のクレデンシャルが必要です。
-[はじめかた](https://app.gs2.io/docs/index.html#get-start) の手順に従ってクレデンシャルを発行してください。
+[GS2のセットアップ](https://docs.gs2.io/ja/get_start/tutorial/setup_gs2/) の手順に従ってクレデンシャルを発行してください。
 
 ## NuGetによる取得
 
@@ -36,8 +38,10 @@ https://www.nuget.org/packages/GS2.CSharp.Sdk
 
 - C# 8.0 以上
 
+[⇒GS2の利用を開始 - SDK - 各種プログラミング言語](https://docs.gs2.io/ja/get_start/#%E5%90%84%E7%A8%AE%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E)
+
 ## SDK の詳細仕様
 
-https://app.gs2.io/docs/index.html?csharp#service
+https://docs.gs2.io/ja/
 
 *本プロジェクトのコードは Core 以外は全て自動生成されているため、個別に Pull-Request を頂いても対応できません。*

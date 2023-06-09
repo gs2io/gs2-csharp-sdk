@@ -226,19 +226,17 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "layerModel")
-                            {
-                                var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                            var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
                                     this.LayerModelName?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "layerModel")
                             {
                                 self.OnError(future.Error);
                             }
@@ -251,19 +249,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "layerModel")
-                    {
-                        var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                    var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
                             this.LayerModelName?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "layerModel")
                     {
                         throw e;
                     }

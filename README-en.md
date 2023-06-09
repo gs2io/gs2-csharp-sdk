@@ -10,20 +10,22 @@ It can be used in combination with the .NET Core runtime.
 
 ## What is Game Server Services?
 
-> Game Server Services(GS2) is a backend server service (BaaS) specialized for mobile game development.
->
-> GS2 provides the network functionality required for game development as a componentized service. GS2 is designed to be used from within the game in units of some of the necessary components, allowing for easy, affordable, and high-performance server functionality.
+Game Server Services(GS2) is a back-end server service (BaaS) specialized for game development.
 
-From [GS2-Document](https://app.gs2.io/docs/en/index.html)
+GS2 is a general-purpose game server solution created to improve efficiency for game developers and supports Games as a Service (GaaS) and Live Gaming.
+
+The service allows for flexible management of player data and data analysis, enabling proper analysis of in-game resource distribution and consumption to maintain a healthy environment.
+In addition, it provides story progression management and possession management, contributing to game monetization and player engagement.
+GS2 supports online functionality and makes it easy for game developers to analyze data and manage economics to help their games succeed.
 
 ## Getting Started
 
 Place the downloaded source code in the following folder in your Unity project.
 
-`(Unity Project)/Assets/Scripts/Runtime/Sdk/Gs2`.
+`(Unity Project)/Assets/Scripts/Runtime/Sdk/Gs2`
 
 GS2 credentials are required to use the SDK.
-Please issue the credentials according to the instructions in [Getting Started](https://app.gs2.io/docs/en/index.html#get-start).
+Follow the instructions in [GS2 Setup](https://docs.gs2.io/en/get_start/tutorial/setup_gs2/) to issue the credential.
 
 ## Retrieving with NuGet
 
@@ -36,8 +38,10 @@ https://www.nuget.org/packages/GS2.CSharp.Sdk
 
 - C# 8.0 or higher
 
-## Detailed SDK Specifications
+[⇒Start using GS2 - SDK - Various programming languages](https://docs.gs2.io/en/get_start/#various-programming-languages)
 
-https://app.gs2.io/docs/en/index.html?csharp#service
+## SDK detailed specifications
+
+https://docs.gs2.io/en/
 
 *All code in this project is auto-generated except for Core, so we cannot respond to individual Pull-Requests. *
