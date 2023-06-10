@@ -31,51 +31,37 @@ namespace Gs2.Gs2Idle.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class DescribeStatusesRequest : Gs2Request<DescribeStatusesRequest>
+	public class UpdateCurrentCategoryMasterFromGitHubRequest : Gs2Request<UpdateCurrentCategoryMasterFromGitHubRequest>
 	{
         public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-        public DescribeStatusesRequest WithNamespaceName(string namespaceName) {
+        public Gs2.Gs2Idle.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+        public UpdateCurrentCategoryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public DescribeStatusesRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
-            return this;
-        }
-        public DescribeStatusesRequest WithPageToken(string pageToken) {
-            this.PageToken = pageToken;
-            return this;
-        }
-        public DescribeStatusesRequest WithLimit(int? limit) {
-            this.Limit = limit;
+        public UpdateCurrentCategoryMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Idle.Model.GitHubCheckoutSetting checkoutSetting) {
+            this.CheckoutSetting = checkoutSetting;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static DescribeStatusesRequest FromJson(JsonData data)
+        public static UpdateCurrentCategoryMasterFromGitHubRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DescribeStatusesRequest()
+            return new UpdateCurrentCategoryMasterFromGitHubRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Idle.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["accessToken"] = AccessToken,
-                ["pageToken"] = PageToken,
-                ["limit"] = Limit,
+                ["checkoutSetting"] = CheckoutSetting?.ToJson(),
             };
         }
 
@@ -86,17 +72,8 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
-            }
-            if (PageToken != null) {
-                writer.WritePropertyName("pageToken");
-                writer.Write(PageToken.ToString());
-            }
-            if (Limit != null) {
-                writer.WritePropertyName("limit");
-                writer.Write(int.Parse(Limit.ToString()));
+            if (CheckoutSetting != null) {
+                CheckoutSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }
@@ -104,21 +81,19 @@ namespace Gs2.Gs2Idle.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += AccessToken + ":";
-            key += PageToken + ":";
-            key += Limit + ":";
+            key += CheckoutSetting + ":";
             return key;
         }
 
         protected override Gs2Request DoMultiple(int x) {
             if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DescribeStatusesRequest");
+                throw new ArithmeticException("Unsupported multiply UpdateCurrentCategoryMasterFromGitHubRequest");
             }
             return this;
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DescribeStatusesRequest)x;
+            var y = (UpdateCurrentCategoryMasterFromGitHubRequest)x;
             return this;
         }
     }

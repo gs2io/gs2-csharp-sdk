@@ -94,14 +94,12 @@ namespace Gs2.Gs2Idle.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Idle.Model.Status> Statuses(
-            string categoryName
         )
         {
             return new DescribeStatusesByUserIdIterator(
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                categoryName,
                 this.UserId
             );
         }
@@ -113,14 +111,12 @@ namespace Gs2.Gs2Idle.Domain.Model
         #else
         public DescribeStatusesByUserIdIterator Statuses(
         #endif
-            string categoryName
         )
         {
             return new DescribeStatusesByUserIdIterator(
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                categoryName,
                 this.UserId
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK

@@ -34,16 +34,11 @@ namespace Gs2.Gs2Idle.Request
 	public class DescribeStatusesByUserIdRequest : Gs2Request<DescribeStatusesByUserIdRequest>
 	{
         public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
         public DescribeStatusesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
-            return this;
-        }
-        public DescribeStatusesByUserIdRequest WithCategoryName(string categoryName) {
-            this.CategoryName = categoryName;
             return this;
         }
         public DescribeStatusesByUserIdRequest WithUserId(string userId) {
@@ -69,7 +64,6 @@ namespace Gs2.Gs2Idle.Request
             }
             return new DescribeStatusesByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
@@ -79,7 +73,6 @@ namespace Gs2.Gs2Idle.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
@@ -92,10 +85,6 @@ namespace Gs2.Gs2Idle.Request
             if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
-            }
-            if (CategoryName != null) {
-                writer.WritePropertyName("categoryName");
-                writer.Write(CategoryName.ToString());
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
@@ -115,7 +104,6 @@ namespace Gs2.Gs2Idle.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += CategoryName + ":";
             key += UserId + ":";
             key += PageToken + ":";
             key += Limit + ":";

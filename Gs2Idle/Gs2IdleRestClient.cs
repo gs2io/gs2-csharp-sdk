@@ -1636,9 +1636,6 @@ namespace Gs2.Gs2Idle
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (request.CategoryName != null) {
-                    sessionRequest.AddQueryString("categoryName", $"{request.CategoryName}");
-                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -1753,9 +1750,6 @@ namespace Gs2.Gs2Idle
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.CategoryName != null) {
-                    sessionRequest.AddQueryString("categoryName", $"{request.CategoryName}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
@@ -2945,13 +2939,13 @@ namespace Gs2.Gs2Idle
 #endif
 
 
-        public class GetCurrentIdleMasterTask : Gs2RestSessionTask<GetCurrentIdleMasterRequest, GetCurrentIdleMasterResult>
+        public class GetCurrentCategoryMasterTask : Gs2RestSessionTask<GetCurrentCategoryMasterRequest, GetCurrentCategoryMasterResult>
         {
-            public GetCurrentIdleMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentIdleMasterRequest request) : base(session, factory, request)
+            public GetCurrentCategoryMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentCategoryMasterRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(GetCurrentIdleMasterRequest request)
+            protected override IGs2SessionRequest CreateRequest(GetCurrentCategoryMasterRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "idle")
@@ -2981,25 +2975,25 @@ namespace Gs2.Gs2Idle
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetCurrentIdleMaster(
-                Request.GetCurrentIdleMasterRequest request,
-                UnityAction<AsyncResult<Result.GetCurrentIdleMasterResult>> callback
+		public IEnumerator GetCurrentCategoryMaster(
+                Request.GetCurrentCategoryMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCurrentCategoryMasterResult>> callback
         )
 		{
-			var task = new GetCurrentIdleMasterTask(
+			var task = new GetCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCurrentIdleMasterResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.GetCurrentCategoryMasterResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.GetCurrentIdleMasterResult> GetCurrentIdleMasterFuture(
-                Request.GetCurrentIdleMasterRequest request
+		public IFuture<Result.GetCurrentCategoryMasterResult> GetCurrentCategoryMasterFuture(
+                Request.GetCurrentCategoryMasterRequest request
         )
 		{
-			return new GetCurrentIdleMasterTask(
+			return new GetCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -3007,12 +3001,12 @@ namespace Gs2.Gs2Idle
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCurrentIdleMasterResult> GetCurrentIdleMasterAsync(
-                Request.GetCurrentIdleMasterRequest request
+		public async UniTask<Result.GetCurrentCategoryMasterResult> GetCurrentCategoryMasterAsync(
+                Request.GetCurrentCategoryMasterRequest request
         )
 		{
-            AsyncResult<Result.GetCurrentIdleMasterResult> result = null;
-			await GetCurrentIdleMaster(
+            AsyncResult<Result.GetCurrentCategoryMasterResult> result = null;
+			await GetCurrentCategoryMaster(
                 request,
                 r => result = r
             );
@@ -3023,11 +3017,11 @@ namespace Gs2.Gs2Idle
             return result.Result;
         }
     #else
-		public GetCurrentIdleMasterTask GetCurrentIdleMasterAsync(
-                Request.GetCurrentIdleMasterRequest request
+		public GetCurrentCategoryMasterTask GetCurrentCategoryMasterAsync(
+                Request.GetCurrentCategoryMasterRequest request
         )
 		{
-			return new GetCurrentIdleMasterTask(
+			return new GetCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -3035,11 +3029,11 @@ namespace Gs2.Gs2Idle
         }
     #endif
 #else
-		public async Task<Result.GetCurrentIdleMasterResult> GetCurrentIdleMasterAsync(
-                Request.GetCurrentIdleMasterRequest request
+		public async Task<Result.GetCurrentCategoryMasterResult> GetCurrentCategoryMasterAsync(
+                Request.GetCurrentCategoryMasterRequest request
         )
 		{
-			var task = new GetCurrentIdleMasterTask(
+			var task = new GetCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -3049,13 +3043,13 @@ namespace Gs2.Gs2Idle
 #endif
 
 
-        public class UpdateCurrentIdleMasterTask : Gs2RestSessionTask<UpdateCurrentIdleMasterRequest, UpdateCurrentIdleMasterResult>
+        public class UpdateCurrentCategoryMasterTask : Gs2RestSessionTask<UpdateCurrentCategoryMasterRequest, UpdateCurrentCategoryMasterResult>
         {
-            public UpdateCurrentIdleMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentIdleMasterRequest request) : base(session, factory, request)
+            public UpdateCurrentCategoryMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentCategoryMasterRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(UpdateCurrentIdleMasterRequest request)
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentCategoryMasterRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "idle")
@@ -3103,25 +3097,25 @@ namespace Gs2.Gs2Idle
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateCurrentIdleMaster(
-                Request.UpdateCurrentIdleMasterRequest request,
-                UnityAction<AsyncResult<Result.UpdateCurrentIdleMasterResult>> callback
+		public IEnumerator UpdateCurrentCategoryMaster(
+                Request.UpdateCurrentCategoryMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentCategoryMasterResult>> callback
         )
 		{
-			var task = new UpdateCurrentIdleMasterTask(
+			var task = new UpdateCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentIdleMasterResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentCategoryMasterResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.UpdateCurrentIdleMasterResult> UpdateCurrentIdleMasterFuture(
-                Request.UpdateCurrentIdleMasterRequest request
+		public IFuture<Result.UpdateCurrentCategoryMasterResult> UpdateCurrentCategoryMasterFuture(
+                Request.UpdateCurrentCategoryMasterRequest request
         )
 		{
-			return new UpdateCurrentIdleMasterTask(
+			return new UpdateCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -3129,12 +3123,12 @@ namespace Gs2.Gs2Idle
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentIdleMasterResult> UpdateCurrentIdleMasterAsync(
-                Request.UpdateCurrentIdleMasterRequest request
+		public async UniTask<Result.UpdateCurrentCategoryMasterResult> UpdateCurrentCategoryMasterAsync(
+                Request.UpdateCurrentCategoryMasterRequest request
         )
 		{
-            AsyncResult<Result.UpdateCurrentIdleMasterResult> result = null;
-			await UpdateCurrentIdleMaster(
+            AsyncResult<Result.UpdateCurrentCategoryMasterResult> result = null;
+			await UpdateCurrentCategoryMaster(
                 request,
                 r => result = r
             );
@@ -3145,11 +3139,11 @@ namespace Gs2.Gs2Idle
             return result.Result;
         }
     #else
-		public UpdateCurrentIdleMasterTask UpdateCurrentIdleMasterAsync(
-                Request.UpdateCurrentIdleMasterRequest request
+		public UpdateCurrentCategoryMasterTask UpdateCurrentCategoryMasterAsync(
+                Request.UpdateCurrentCategoryMasterRequest request
         )
 		{
-			return new UpdateCurrentIdleMasterTask(
+			return new UpdateCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -3157,11 +3151,11 @@ namespace Gs2.Gs2Idle
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentIdleMasterResult> UpdateCurrentIdleMasterAsync(
-                Request.UpdateCurrentIdleMasterRequest request
+		public async Task<Result.UpdateCurrentCategoryMasterResult> UpdateCurrentCategoryMasterAsync(
+                Request.UpdateCurrentCategoryMasterRequest request
         )
 		{
-			var task = new UpdateCurrentIdleMasterTask(
+			var task = new UpdateCurrentCategoryMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -3171,13 +3165,13 @@ namespace Gs2.Gs2Idle
 #endif
 
 
-        public class UpdateCurrentIdleMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentIdleMasterFromGitHubRequest, UpdateCurrentIdleMasterFromGitHubResult>
+        public class UpdateCurrentCategoryMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentCategoryMasterFromGitHubRequest, UpdateCurrentCategoryMasterFromGitHubResult>
         {
-            public UpdateCurrentIdleMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentIdleMasterFromGitHubRequest request) : base(session, factory, request)
+            public UpdateCurrentCategoryMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentCategoryMasterFromGitHubRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(UpdateCurrentIdleMasterFromGitHubRequest request)
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentCategoryMasterFromGitHubRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "idle")
@@ -3225,25 +3219,25 @@ namespace Gs2.Gs2Idle
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateCurrentIdleMasterFromGitHub(
-                Request.UpdateCurrentIdleMasterFromGitHubRequest request,
-                UnityAction<AsyncResult<Result.UpdateCurrentIdleMasterFromGitHubResult>> callback
+		public IEnumerator UpdateCurrentCategoryMasterFromGitHub(
+                Request.UpdateCurrentCategoryMasterFromGitHubRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentCategoryMasterFromGitHubResult>> callback
         )
 		{
-			var task = new UpdateCurrentIdleMasterFromGitHubTask(
+			var task = new UpdateCurrentCategoryMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentIdleMasterFromGitHubResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentCategoryMasterFromGitHubResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.UpdateCurrentIdleMasterFromGitHubResult> UpdateCurrentIdleMasterFromGitHubFuture(
-                Request.UpdateCurrentIdleMasterFromGitHubRequest request
+		public IFuture<Result.UpdateCurrentCategoryMasterFromGitHubResult> UpdateCurrentCategoryMasterFromGitHubFuture(
+                Request.UpdateCurrentCategoryMasterFromGitHubRequest request
         )
 		{
-			return new UpdateCurrentIdleMasterFromGitHubTask(
+			return new UpdateCurrentCategoryMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -3251,12 +3245,12 @@ namespace Gs2.Gs2Idle
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentIdleMasterFromGitHubResult> UpdateCurrentIdleMasterFromGitHubAsync(
-                Request.UpdateCurrentIdleMasterFromGitHubRequest request
+		public async UniTask<Result.UpdateCurrentCategoryMasterFromGitHubResult> UpdateCurrentCategoryMasterFromGitHubAsync(
+                Request.UpdateCurrentCategoryMasterFromGitHubRequest request
         )
 		{
-            AsyncResult<Result.UpdateCurrentIdleMasterFromGitHubResult> result = null;
-			await UpdateCurrentIdleMasterFromGitHub(
+            AsyncResult<Result.UpdateCurrentCategoryMasterFromGitHubResult> result = null;
+			await UpdateCurrentCategoryMasterFromGitHub(
                 request,
                 r => result = r
             );
@@ -3267,11 +3261,11 @@ namespace Gs2.Gs2Idle
             return result.Result;
         }
     #else
-		public UpdateCurrentIdleMasterFromGitHubTask UpdateCurrentIdleMasterFromGitHubAsync(
-                Request.UpdateCurrentIdleMasterFromGitHubRequest request
+		public UpdateCurrentCategoryMasterFromGitHubTask UpdateCurrentCategoryMasterFromGitHubAsync(
+                Request.UpdateCurrentCategoryMasterFromGitHubRequest request
         )
 		{
-			return new UpdateCurrentIdleMasterFromGitHubTask(
+			return new UpdateCurrentCategoryMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -3279,11 +3273,11 @@ namespace Gs2.Gs2Idle
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentIdleMasterFromGitHubResult> UpdateCurrentIdleMasterFromGitHubAsync(
-                Request.UpdateCurrentIdleMasterFromGitHubRequest request
+		public async Task<Result.UpdateCurrentCategoryMasterFromGitHubResult> UpdateCurrentCategoryMasterFromGitHubAsync(
+                Request.UpdateCurrentCategoryMasterFromGitHubRequest request
         )
 		{
-			var task = new UpdateCurrentIdleMasterFromGitHubTask(
+			var task = new UpdateCurrentCategoryMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

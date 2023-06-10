@@ -157,24 +157,24 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> GetCurrentIdleMasterAsync(
+        private async UniTask<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetAsync(
             #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> GetCurrentIdleMaster(
+        private IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Get(
             #endif
         #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> GetCurrentIdleMasterAsync(
+        private async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetAsync(
         #endif
-            GetCurrentIdleMasterRequest request
+            GetCurrentCategoryMasterRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> self)
             {
         #endif
             request
                 .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetCurrentIdleMasterFuture(
+            var future = this._client.GetCurrentCategoryMasterFuture(
                 request
             );
             yield return future;
@@ -185,7 +185,72 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetCurrentIdleMasterAsync(
+            var result = await this._client.GetCurrentCategoryMasterAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentCategoryMaster"
+                    );
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(result?.Item);
+        #else
+            return result?.Item;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
+            #else
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> Update(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
+        #endif
+            UpdateCurrentCategoryMasterRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.UpdateCurrentCategoryMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.UpdateCurrentCategoryMasterAsync(
                 request
             );
             #endif
@@ -225,14 +290,14 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMasterAsync(
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
             #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMaster(
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHub(
             #endif
         #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMasterAsync(
+        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
         #endif
-            UpdateCurrentIdleMasterRequest request
+            UpdateCurrentCategoryMasterFromGitHubRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -242,7 +307,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentIdleMasterFuture(
+            var future = this._client.UpdateCurrentCategoryMasterFromGitHubFuture(
                 request
             );
             yield return future;
@@ -253,75 +318,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.UpdateCurrentIdleMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentCategoryMaster"
-                    );
-                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMasterFromGitHubAsync(
-            #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMasterFromGitHub(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateCurrentIdleMasterFromGitHubAsync(
-        #endif
-            UpdateCurrentIdleMasterFromGitHubRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentIdleMasterFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCurrentIdleMasterFromGitHubAsync(
+            var result = await this._client.UpdateCurrentCategoryMasterFromGitHubAsync(
                 request
             );
             #endif
@@ -396,6 +393,63 @@ namespace Gs2.Gs2Idle.Domain.Model
                 Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
                 )
             );
+            if (!find) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    var future = this.Get(
+        #else
+                try {
+                    await this.GetAsync(
+        #endif
+                        new GetCurrentCategoryMasterRequest()
+                    );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
+                        {
+                            var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                                );
+                            _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "currentCategoryMaster")
+                            {
+                                self.OnError(future.Error);
+                            }
+                        }
+                        else
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+        #else
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                    _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "currentCategoryMaster")
+                    {
+                        throw e;
+                    }
+                }
+        #endif
+                (value, find) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                    _parentKey,
+                    Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    )
+                );
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);
             yield return null;

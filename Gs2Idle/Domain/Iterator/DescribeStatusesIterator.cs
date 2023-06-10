@@ -68,10 +68,8 @@ namespace Gs2.Gs2Idle.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2IdleRestClient _client;
         private readonly string _namespaceName;
-        private readonly string _categoryName;
         private readonly AccessToken _accessToken;
         public string NamespaceName => _namespaceName;
-        public string CategoryName => _categoryName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
         private bool _isCacheChecked;
@@ -84,13 +82,11 @@ namespace Gs2.Gs2Idle.Domain.Iterator
             CacheDatabase cache,
             Gs2IdleRestClient client,
             string namespaceName,
-            string categoryName,
             AccessToken accessToken
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
-            this._categoryName = categoryName;
             this._accessToken = accessToken;
             this._pageToken = null;
             this._last = false;
@@ -121,7 +117,6 @@ namespace Gs2.Gs2Idle.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._categoryName == null || item.CategoryName == this._categoryName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -134,7 +129,6 @@ namespace Gs2.Gs2Idle.Domain.Iterator
                 #endif
                     new Gs2.Gs2Idle.Request.DescribeStatusesRequest()
                         .WithNamespaceName(this._namespaceName)
-                        .WithCategoryName(this._categoryName)
                         .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
