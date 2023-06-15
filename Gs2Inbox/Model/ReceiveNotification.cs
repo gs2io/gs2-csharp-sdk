@@ -21,9 +21,14 @@ namespace Gs2.Gs2Inbox.Model
 	public class ReceiveNotification
 	{
         public string NamespaceName { set; get; }
+        public string UserId { set; get; }
         public string MessageName { set; get; }
         public ReceiveNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public ReceiveNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public ReceiveNotification WithMessageName(string messageName) {
@@ -41,6 +46,7 @@ namespace Gs2.Gs2Inbox.Model
             }
             return new ReceiveNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString());
         }
     }
