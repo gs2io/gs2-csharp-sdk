@@ -257,6 +257,12 @@ namespace Gs2.Core.Domain
             _cache.Clear();
         }
 
+        public void ClearCache<TKind>(
+            string parentKey,
+            string key
+        ) {
+            _cache.Delete<TKind>(parentKey, key);
+        }
 #if UNITY_2017_1_OR_NEWER
 #if !GS2_ENABLE_UNITASK
         public Gs2Future<bool> Dispatch(

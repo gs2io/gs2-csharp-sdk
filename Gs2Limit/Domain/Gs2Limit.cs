@@ -202,6 +202,13 @@ namespace Gs2.Gs2Limit.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+            public static UnityAction<string, string, Counter> ChangeCounter;
+    #else
+            public static Action<string, string, Counter> ChangeCounter;
+    #endif
+
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,
@@ -225,6 +232,11 @@ namespace Gs2.Gs2Limit.Domain
                             );
                             cache.Delete<Gs2.Gs2Limit.Model.Counter>(parentKey, key);
                         }
+                        ChangeCounter?.Invoke(
+                            requestModel.NamespaceName,
+                            requestModel.LimitName,
+                            resultModel.Item
+                        );
                         break;
                     }
                 }
@@ -258,6 +270,11 @@ namespace Gs2.Gs2Limit.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+                        ChangeCounter?.Invoke(
+                            requestModel.NamespaceName,
+                            requestModel.LimitName,
+                            resultModel.Item
+                        );
                         break;
                     }
                 }
@@ -286,6 +303,11 @@ namespace Gs2.Gs2Limit.Domain
                             );
                             cache.Delete<Gs2.Gs2Limit.Model.Counter>(parentKey, key);
                         }
+                    ChangeCounter?.Invoke(
+                        requestModel.NamespaceName,
+                        requestModel.LimitName,
+                        resultModel.Item
+                    );
                     break;
                 }
             }
