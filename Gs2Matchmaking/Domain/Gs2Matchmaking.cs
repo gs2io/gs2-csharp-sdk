@@ -203,6 +203,7 @@ namespace Gs2.Gs2Matchmaking.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,
@@ -310,7 +311,16 @@ namespace Gs2.Gs2Matchmaking.Domain
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
-                case "ChangeRating": {
+                case "ChangeRatingNotification": {
+                    var changeRatingNotification = ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload));
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        changeRatingNotification.NamespaceName,
+                        changeRatingNotification.UserId,
+                        "Rating"
+                    );
+                    cache.ClearListCache <Gs2.Gs2Matchmaking.Model.Rating>(
+                        parentKey
+                    );
                     onChangeRatingNotification.Invoke(ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
