@@ -203,6 +203,7 @@ namespace Gs2.Gs2Chat.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,

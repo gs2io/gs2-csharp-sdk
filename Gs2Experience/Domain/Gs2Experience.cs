@@ -202,6 +202,7 @@ namespace Gs2.Gs2Experience.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,

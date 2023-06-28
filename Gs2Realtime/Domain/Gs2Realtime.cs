@@ -204,6 +204,7 @@ namespace Gs2.Gs2Realtime.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,

@@ -353,6 +353,7 @@ namespace Gs2.Gs2Identifier.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,

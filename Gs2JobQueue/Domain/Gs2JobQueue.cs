@@ -205,6 +205,7 @@ namespace Gs2.Gs2JobQueue.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,

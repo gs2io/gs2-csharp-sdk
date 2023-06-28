@@ -201,11 +201,13 @@ namespace Gs2.Gs2Lottery.Domain
                 namespaceName
             );
         }
+
     #if UNITY_2017_1_OR_NEWER
         public static UnityAction<string, string, DrawnPrize[]> DrawnResult;
     #else
         public static Action<string, string, DrawnPrize[]> DrawnResult;
     #endif
+
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
