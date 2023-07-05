@@ -183,6 +183,172 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
         }
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.ExchangeDomain> IncrementalAsync(
+            #else
+        public IFuture<Gs2.Gs2Exchange.Domain.Model.ExchangeDomain> Incremental(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Exchange.Domain.Model.ExchangeDomain> IncrementalAsync(
+        #endif
+            IncrementalExchangeByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.ExchangeDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.IncrementalExchangeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.IncrementalExchangeByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "IncrementalRateModel"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.ExchangeDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
+            #else
+        public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncremental(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
+        #endif
+            UnlockIncrementalExchangeByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.UnlockIncrementalExchangeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.UnlockIncrementalExchangeByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "IncrementalRateModel"
+                    );
+                    var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                request.NamespaceName,
+                result?.Item?.Name
+            );
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain>(Impl);
+        #endif
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

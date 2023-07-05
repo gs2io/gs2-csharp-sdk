@@ -1678,6 +1678,875 @@ namespace Gs2.Gs2Exchange
 #endif
 
 
+        public class DescribeIncrementalRateModelsTask : Gs2RestSessionTask<DescribeIncrementalRateModelsRequest, DescribeIncrementalRateModelsResult>
+        {
+            public DescribeIncrementalRateModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeIncrementalRateModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeIncrementalRateModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeIncrementalRateModels(
+                Request.DescribeIncrementalRateModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeIncrementalRateModelsResult>> callback
+        )
+		{
+			var task = new DescribeIncrementalRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeIncrementalRateModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeIncrementalRateModelsResult> DescribeIncrementalRateModelsFuture(
+                Request.DescribeIncrementalRateModelsRequest request
+        )
+		{
+			return new DescribeIncrementalRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeIncrementalRateModelsResult> DescribeIncrementalRateModelsAsync(
+                Request.DescribeIncrementalRateModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeIncrementalRateModelsResult> result = null;
+			await DescribeIncrementalRateModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeIncrementalRateModelsTask DescribeIncrementalRateModelsAsync(
+                Request.DescribeIncrementalRateModelsRequest request
+        )
+		{
+			return new DescribeIncrementalRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeIncrementalRateModelsResult> DescribeIncrementalRateModelsAsync(
+                Request.DescribeIncrementalRateModelsRequest request
+        )
+		{
+			var task = new DescribeIncrementalRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIncrementalRateModelTask : Gs2RestSessionTask<GetIncrementalRateModelRequest, GetIncrementalRateModelResult>
+        {
+            public GetIncrementalRateModelTask(IGs2Session session, RestSessionRequestFactory factory, GetIncrementalRateModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetIncrementalRateModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIncrementalRateModel(
+                Request.GetIncrementalRateModelRequest request,
+                UnityAction<AsyncResult<Result.GetIncrementalRateModelResult>> callback
+        )
+		{
+			var task = new GetIncrementalRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIncrementalRateModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIncrementalRateModelResult> GetIncrementalRateModelFuture(
+                Request.GetIncrementalRateModelRequest request
+        )
+		{
+			return new GetIncrementalRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIncrementalRateModelResult> GetIncrementalRateModelAsync(
+                Request.GetIncrementalRateModelRequest request
+        )
+		{
+            AsyncResult<Result.GetIncrementalRateModelResult> result = null;
+			await GetIncrementalRateModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetIncrementalRateModelTask GetIncrementalRateModelAsync(
+                Request.GetIncrementalRateModelRequest request
+        )
+		{
+			return new GetIncrementalRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIncrementalRateModelResult> GetIncrementalRateModelAsync(
+                Request.GetIncrementalRateModelRequest request
+        )
+		{
+			var task = new GetIncrementalRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeIncrementalRateModelMastersTask : Gs2RestSessionTask<DescribeIncrementalRateModelMastersRequest, DescribeIncrementalRateModelMastersResult>
+        {
+            public DescribeIncrementalRateModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeIncrementalRateModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeIncrementalRateModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeIncrementalRateModelMasters(
+                Request.DescribeIncrementalRateModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeIncrementalRateModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeIncrementalRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeIncrementalRateModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeIncrementalRateModelMastersResult> DescribeIncrementalRateModelMastersFuture(
+                Request.DescribeIncrementalRateModelMastersRequest request
+        )
+		{
+			return new DescribeIncrementalRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeIncrementalRateModelMastersResult> DescribeIncrementalRateModelMastersAsync(
+                Request.DescribeIncrementalRateModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeIncrementalRateModelMastersResult> result = null;
+			await DescribeIncrementalRateModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeIncrementalRateModelMastersTask DescribeIncrementalRateModelMastersAsync(
+                Request.DescribeIncrementalRateModelMastersRequest request
+        )
+		{
+			return new DescribeIncrementalRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeIncrementalRateModelMastersResult> DescribeIncrementalRateModelMastersAsync(
+                Request.DescribeIncrementalRateModelMastersRequest request
+        )
+		{
+			var task = new DescribeIncrementalRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateIncrementalRateModelMasterTask : Gs2RestSessionTask<CreateIncrementalRateModelMasterRequest, CreateIncrementalRateModelMasterResult>
+        {
+            public CreateIncrementalRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateIncrementalRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateIncrementalRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ConsumeAction != null)
+                {
+                    jsonWriter.WritePropertyName("consumeAction");
+                    request.ConsumeAction.WriteJson(jsonWriter);
+                }
+                if (request.CalculateType != null)
+                {
+                    jsonWriter.WritePropertyName("calculateType");
+                    jsonWriter.Write(request.CalculateType);
+                }
+                if (request.BaseValue != null)
+                {
+                    jsonWriter.WritePropertyName("baseValue");
+                    jsonWriter.Write(request.BaseValue.ToString());
+                }
+                if (request.CoefficientValue != null)
+                {
+                    jsonWriter.WritePropertyName("coefficientValue");
+                    jsonWriter.Write(request.CoefficientValue.ToString());
+                }
+                if (request.CalculateScriptId != null)
+                {
+                    jsonWriter.WritePropertyName("calculateScriptId");
+                    jsonWriter.Write(request.CalculateScriptId);
+                }
+                if (request.ExchangeCountId != null)
+                {
+                    jsonWriter.WritePropertyName("exchangeCountId");
+                    jsonWriter.Write(request.ExchangeCountId);
+                }
+                if (request.AcquireActions != null)
+                {
+                    jsonWriter.WritePropertyName("acquireActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateIncrementalRateModelMaster(
+                Request.CreateIncrementalRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateIncrementalRateModelMasterResult>> callback
+        )
+		{
+			var task = new CreateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateIncrementalRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateIncrementalRateModelMasterResult> CreateIncrementalRateModelMasterFuture(
+                Request.CreateIncrementalRateModelMasterRequest request
+        )
+		{
+			return new CreateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateIncrementalRateModelMasterResult> CreateIncrementalRateModelMasterAsync(
+                Request.CreateIncrementalRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateIncrementalRateModelMasterResult> result = null;
+			await CreateIncrementalRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateIncrementalRateModelMasterTask CreateIncrementalRateModelMasterAsync(
+                Request.CreateIncrementalRateModelMasterRequest request
+        )
+		{
+			return new CreateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateIncrementalRateModelMasterResult> CreateIncrementalRateModelMasterAsync(
+                Request.CreateIncrementalRateModelMasterRequest request
+        )
+		{
+			var task = new CreateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIncrementalRateModelMasterTask : Gs2RestSessionTask<GetIncrementalRateModelMasterRequest, GetIncrementalRateModelMasterResult>
+        {
+            public GetIncrementalRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetIncrementalRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetIncrementalRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/master/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIncrementalRateModelMaster(
+                Request.GetIncrementalRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetIncrementalRateModelMasterResult>> callback
+        )
+		{
+			var task = new GetIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIncrementalRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIncrementalRateModelMasterResult> GetIncrementalRateModelMasterFuture(
+                Request.GetIncrementalRateModelMasterRequest request
+        )
+		{
+			return new GetIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIncrementalRateModelMasterResult> GetIncrementalRateModelMasterAsync(
+                Request.GetIncrementalRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetIncrementalRateModelMasterResult> result = null;
+			await GetIncrementalRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetIncrementalRateModelMasterTask GetIncrementalRateModelMasterAsync(
+                Request.GetIncrementalRateModelMasterRequest request
+        )
+		{
+			return new GetIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIncrementalRateModelMasterResult> GetIncrementalRateModelMasterAsync(
+                Request.GetIncrementalRateModelMasterRequest request
+        )
+		{
+			var task = new GetIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateIncrementalRateModelMasterTask : Gs2RestSessionTask<UpdateIncrementalRateModelMasterRequest, UpdateIncrementalRateModelMasterResult>
+        {
+            public UpdateIncrementalRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateIncrementalRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateIncrementalRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/master/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ConsumeAction != null)
+                {
+                    jsonWriter.WritePropertyName("consumeAction");
+                    request.ConsumeAction.WriteJson(jsonWriter);
+                }
+                if (request.CalculateType != null)
+                {
+                    jsonWriter.WritePropertyName("calculateType");
+                    jsonWriter.Write(request.CalculateType);
+                }
+                if (request.BaseValue != null)
+                {
+                    jsonWriter.WritePropertyName("baseValue");
+                    jsonWriter.Write(request.BaseValue.ToString());
+                }
+                if (request.CoefficientValue != null)
+                {
+                    jsonWriter.WritePropertyName("coefficientValue");
+                    jsonWriter.Write(request.CoefficientValue.ToString());
+                }
+                if (request.CalculateScriptId != null)
+                {
+                    jsonWriter.WritePropertyName("calculateScriptId");
+                    jsonWriter.Write(request.CalculateScriptId);
+                }
+                if (request.ExchangeCountId != null)
+                {
+                    jsonWriter.WritePropertyName("exchangeCountId");
+                    jsonWriter.Write(request.ExchangeCountId);
+                }
+                if (request.AcquireActions != null)
+                {
+                    jsonWriter.WritePropertyName("acquireActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateIncrementalRateModelMaster(
+                Request.UpdateIncrementalRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateIncrementalRateModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateIncrementalRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateIncrementalRateModelMasterResult> UpdateIncrementalRateModelMasterFuture(
+                Request.UpdateIncrementalRateModelMasterRequest request
+        )
+		{
+			return new UpdateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateIncrementalRateModelMasterResult> UpdateIncrementalRateModelMasterAsync(
+                Request.UpdateIncrementalRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateIncrementalRateModelMasterResult> result = null;
+			await UpdateIncrementalRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateIncrementalRateModelMasterTask UpdateIncrementalRateModelMasterAsync(
+                Request.UpdateIncrementalRateModelMasterRequest request
+        )
+		{
+			return new UpdateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateIncrementalRateModelMasterResult> UpdateIncrementalRateModelMasterAsync(
+                Request.UpdateIncrementalRateModelMasterRequest request
+        )
+		{
+			var task = new UpdateIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteIncrementalRateModelMasterTask : Gs2RestSessionTask<DeleteIncrementalRateModelMasterRequest, DeleteIncrementalRateModelMasterResult>
+        {
+            public DeleteIncrementalRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteIncrementalRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteIncrementalRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/incremental/master/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteIncrementalRateModelMaster(
+                Request.DeleteIncrementalRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteIncrementalRateModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteIncrementalRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteIncrementalRateModelMasterResult> DeleteIncrementalRateModelMasterFuture(
+                Request.DeleteIncrementalRateModelMasterRequest request
+        )
+		{
+			return new DeleteIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIncrementalRateModelMasterResult> DeleteIncrementalRateModelMasterAsync(
+                Request.DeleteIncrementalRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteIncrementalRateModelMasterResult> result = null;
+			await DeleteIncrementalRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteIncrementalRateModelMasterTask DeleteIncrementalRateModelMasterAsync(
+                Request.DeleteIncrementalRateModelMasterRequest request
+        )
+		{
+			return new DeleteIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteIncrementalRateModelMasterResult> DeleteIncrementalRateModelMasterAsync(
+                Request.DeleteIncrementalRateModelMasterRequest request
+        )
+		{
+			var task = new DeleteIncrementalRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ExchangeTask : Gs2RestSessionTask<ExchangeRequest, ExchangeResult>
         {
             public ExchangeTask(IGs2Session session, RestSessionRequestFactory factory, ExchangeRequest request) : base(session, factory, request)
@@ -2073,6 +2942,663 @@ namespace Gs2.Gs2Exchange
         )
 		{
 			var task = new ExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IncrementalExchangeTask : Gs2RestSessionTask<IncrementalExchangeRequest, IncrementalExchangeResult>
+        {
+            public IncrementalExchangeTask(IGs2Session session, RestSessionRequestFactory factory, IncrementalExchangeRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IncrementalExchangeRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/incremental/exchange/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IncrementalExchange(
+                Request.IncrementalExchangeRequest request,
+                UnityAction<AsyncResult<Result.IncrementalExchangeResult>> callback
+        )
+		{
+			var task = new IncrementalExchangeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IncrementalExchangeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IncrementalExchangeResult> IncrementalExchangeFuture(
+                Request.IncrementalExchangeRequest request
+        )
+		{
+			return new IncrementalExchangeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IncrementalExchangeResult> IncrementalExchangeAsync(
+                Request.IncrementalExchangeRequest request
+        )
+		{
+            AsyncResult<Result.IncrementalExchangeResult> result = null;
+			await IncrementalExchange(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IncrementalExchangeTask IncrementalExchangeAsync(
+                Request.IncrementalExchangeRequest request
+        )
+		{
+			return new IncrementalExchangeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IncrementalExchangeResult> IncrementalExchangeAsync(
+                Request.IncrementalExchangeRequest request
+        )
+		{
+			var task = new IncrementalExchangeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IncrementalExchangeByUserIdTask : Gs2RestSessionTask<IncrementalExchangeByUserIdRequest, IncrementalExchangeByUserIdResult>
+        {
+            public IncrementalExchangeByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IncrementalExchangeByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IncrementalExchangeByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/incremental/exchange/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IncrementalExchangeByUserId(
+                Request.IncrementalExchangeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IncrementalExchangeByUserIdResult>> callback
+        )
+		{
+			var task = new IncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IncrementalExchangeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IncrementalExchangeByUserIdResult> IncrementalExchangeByUserIdFuture(
+                Request.IncrementalExchangeByUserIdRequest request
+        )
+		{
+			return new IncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IncrementalExchangeByUserIdResult> IncrementalExchangeByUserIdAsync(
+                Request.IncrementalExchangeByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.IncrementalExchangeByUserIdResult> result = null;
+			await IncrementalExchangeByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IncrementalExchangeByUserIdTask IncrementalExchangeByUserIdAsync(
+                Request.IncrementalExchangeByUserIdRequest request
+        )
+		{
+			return new IncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IncrementalExchangeByUserIdResult> IncrementalExchangeByUserIdAsync(
+                Request.IncrementalExchangeByUserIdRequest request
+        )
+		{
+			var task = new IncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IncrementalExchangeByStampSheetTask : Gs2RestSessionTask<IncrementalExchangeByStampSheetRequest, IncrementalExchangeByStampSheetResult>
+        {
+            public IncrementalExchangeByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, IncrementalExchangeByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IncrementalExchangeByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/incremental/exchange";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IncrementalExchangeByStampSheet(
+                Request.IncrementalExchangeByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.IncrementalExchangeByStampSheetResult>> callback
+        )
+		{
+			var task = new IncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IncrementalExchangeByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IncrementalExchangeByStampSheetResult> IncrementalExchangeByStampSheetFuture(
+                Request.IncrementalExchangeByStampSheetRequest request
+        )
+		{
+			return new IncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IncrementalExchangeByStampSheetResult> IncrementalExchangeByStampSheetAsync(
+                Request.IncrementalExchangeByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.IncrementalExchangeByStampSheetResult> result = null;
+			await IncrementalExchangeByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IncrementalExchangeByStampSheetTask IncrementalExchangeByStampSheetAsync(
+                Request.IncrementalExchangeByStampSheetRequest request
+        )
+		{
+			return new IncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IncrementalExchangeByStampSheetResult> IncrementalExchangeByStampSheetAsync(
+                Request.IncrementalExchangeByStampSheetRequest request
+        )
+		{
+			var task = new IncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnlockIncrementalExchangeByUserIdTask : Gs2RestSessionTask<UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult>
+        {
+            public UnlockIncrementalExchangeByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UnlockIncrementalExchangeByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnlockIncrementalExchangeByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/incremental/exchange/{rateName}/unlock";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.LockTransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("lockTransactionId");
+                    jsonWriter.Write(request.LockTransactionId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnlockIncrementalExchangeByUserId(
+                Request.UnlockIncrementalExchangeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UnlockIncrementalExchangeByUserIdResult>> callback
+        )
+		{
+			var task = new UnlockIncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnlockIncrementalExchangeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdFuture(
+                Request.UnlockIncrementalExchangeByUserIdRequest request
+        )
+		{
+			return new UnlockIncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdAsync(
+                Request.UnlockIncrementalExchangeByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UnlockIncrementalExchangeByUserIdResult> result = null;
+			await UnlockIncrementalExchangeByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnlockIncrementalExchangeByUserIdTask UnlockIncrementalExchangeByUserIdAsync(
+                Request.UnlockIncrementalExchangeByUserIdRequest request
+        )
+		{
+			return new UnlockIncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdAsync(
+                Request.UnlockIncrementalExchangeByUserIdRequest request
+        )
+		{
+			var task = new UnlockIncrementalExchangeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnlockIncrementalExchangeByStampSheetTask : Gs2RestSessionTask<UnlockIncrementalExchangeByStampSheetRequest, UnlockIncrementalExchangeByStampSheetResult>
+        {
+            public UnlockIncrementalExchangeByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, UnlockIncrementalExchangeByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnlockIncrementalExchangeByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/incremental/exchange/unlock";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnlockIncrementalExchangeByStampSheet(
+                Request.UnlockIncrementalExchangeByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.UnlockIncrementalExchangeByStampSheetResult>> callback
+        )
+		{
+			var task = new UnlockIncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnlockIncrementalExchangeByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnlockIncrementalExchangeByStampSheetResult> UnlockIncrementalExchangeByStampSheetFuture(
+                Request.UnlockIncrementalExchangeByStampSheetRequest request
+        )
+		{
+			return new UnlockIncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnlockIncrementalExchangeByStampSheetResult> UnlockIncrementalExchangeByStampSheetAsync(
+                Request.UnlockIncrementalExchangeByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.UnlockIncrementalExchangeByStampSheetResult> result = null;
+			await UnlockIncrementalExchangeByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnlockIncrementalExchangeByStampSheetTask UnlockIncrementalExchangeByStampSheetAsync(
+                Request.UnlockIncrementalExchangeByStampSheetRequest request
+        )
+		{
+			return new UnlockIncrementalExchangeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnlockIncrementalExchangeByStampSheetResult> UnlockIncrementalExchangeByStampSheetAsync(
+                Request.UnlockIncrementalExchangeByStampSheetRequest request
+        )
+		{
+			var task = new UnlockIncrementalExchangeByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

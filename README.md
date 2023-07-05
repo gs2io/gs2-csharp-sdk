@@ -42,6 +42,14 @@ https://www.nuget.org/packages/GS2.CSharp.Sdk
 
 ## SDK の詳細仕様
 
-https://docs.gs2.io/ja/
+各種サービス・通信方式のAPIの詳細については
+
+ [⇒API リファレンス](https://docs.gs2.io/ja/api_reference/)
+
+初期化処理については
+
+ [⇒API リファレンス - 初期化処理](https://docs.gs2.io/ja/api_reference/initialize/)
+ 
+をご参照ください。
 
 *本プロジェクトのコードは Core 以外は全て自動生成されているため、個別に Pull-Request を頂いても対応できません。*

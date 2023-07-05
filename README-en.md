@@ -42,6 +42,12 @@ https://www.nuget.org/packages/GS2.CSharp.Sdk
 
 ## SDK detailed specifications
 
-https://docs.gs2.io/en/
+For details on the API for each service and communication method, please refer to the
+
+ [⇒API Reference](https://docs.gs2.io/en/api_reference/) page.
+
+For information on the initialization process, please refer to the
+
+ [⇒API Reference - Initialization process](https://docs.gs2.io/en/api_reference/initialize/) page.
 
 *All code in this project is auto-generated except for Core, so we cannot respond to individual Pull-Requests. *

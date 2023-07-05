@@ -36,6 +36,10 @@ namespace Gs2.Gs2Exchange.Model
             switch (action.Action) {
                 case "Gs2Exchange:ExchangeByUserId":
                     return ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Exchange:IncrementalExchangeByUserId":
+                    return IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Exchange:UnlockIncrementalExchangeByUserId":
+                    return UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Exchange:CreateAwaitByUserId":
                     return CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

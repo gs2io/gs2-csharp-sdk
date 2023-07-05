@@ -231,6 +231,48 @@ namespace Gs2.Gs2Exchange.Domain
                         }
                         break;
                     }
+                    case "IncrementalExchangeByUserId": {
+                        var requestModel = IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = IncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "IncrementalRateModel"
+                            );
+                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        break;
+                    }
+                    case "UnlockIncrementalExchangeByUserId": {
+                        var requestModel = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = UnlockIncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "IncrementalRateModel"
+                            );
+                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        break;
+                    }
                     case "CreateAwaitByUserId": {
                         var requestModel = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = CreateAwaitByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -300,6 +342,48 @@ namespace Gs2.Gs2Exchange.Domain
                                 "RateModel"
                             );
                             var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "incremental_exchange_by_user_id": {
+                    var requestModel = IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = IncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "IncrementalRateModel"
+                            );
+                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    break;
+                }
+                case "unlock_incremental_exchange_by_user_id": {
+                    var requestModel = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = UnlockIncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "IncrementalRateModel"
+                            );
+                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
                             );
                             cache.Put(
