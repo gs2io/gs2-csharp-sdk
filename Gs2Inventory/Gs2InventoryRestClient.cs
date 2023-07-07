@@ -2414,6 +2414,1591 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class DescribeSimpleInventoryModelMastersTask : Gs2RestSessionTask<DescribeSimpleInventoryModelMastersRequest, DescribeSimpleInventoryModelMastersResult>
+        {
+            public DescribeSimpleInventoryModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleInventoryModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleInventoryModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleInventoryModelMasters(
+                Request.DescribeSimpleInventoryModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleInventoryModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeSimpleInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleInventoryModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersFuture(
+                Request.DescribeSimpleInventoryModelMastersRequest request
+        )
+		{
+			return new DescribeSimpleInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
+                Request.DescribeSimpleInventoryModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleInventoryModelMastersResult> result = null;
+			await DescribeSimpleInventoryModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleInventoryModelMastersTask DescribeSimpleInventoryModelMastersAsync(
+                Request.DescribeSimpleInventoryModelMastersRequest request
+        )
+		{
+			return new DescribeSimpleInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
+                Request.DescribeSimpleInventoryModelMastersRequest request
+        )
+		{
+			var task = new DescribeSimpleInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateSimpleInventoryModelMasterTask : Gs2RestSessionTask<CreateSimpleInventoryModelMasterRequest, CreateSimpleInventoryModelMasterResult>
+        {
+            public CreateSimpleInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateSimpleInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateSimpleInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSimpleInventoryModelMaster(
+                Request.CreateSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterFuture(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new CreateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateSimpleInventoryModelMasterResult> result = null;
+			await CreateSimpleInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateSimpleInventoryModelMasterTask CreateSimpleInventoryModelMasterAsync(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new CreateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+			var task = new CreateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleInventoryModelMasterTask : Gs2RestSessionTask<GetSimpleInventoryModelMasterRequest, GetSimpleInventoryModelMasterResult>
+        {
+            public GetSimpleInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleInventoryModelMaster(
+                Request.GetSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterFuture(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new GetSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleInventoryModelMasterResult> result = null;
+			await GetSimpleInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleInventoryModelMasterTask GetSimpleInventoryModelMasterAsync(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new GetSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+			var task = new GetSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSimpleInventoryModelMasterTask : Gs2RestSessionTask<UpdateSimpleInventoryModelMasterRequest, UpdateSimpleInventoryModelMasterResult>
+        {
+            public UpdateSimpleInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateSimpleInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateSimpleInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSimpleInventoryModelMaster(
+                Request.UpdateSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterFuture(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateSimpleInventoryModelMasterResult> result = null;
+			await UpdateSimpleInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateSimpleInventoryModelMasterTask UpdateSimpleInventoryModelMasterAsync(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+			var task = new UpdateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleInventoryModelMasterTask : Gs2RestSessionTask<DeleteSimpleInventoryModelMasterRequest, DeleteSimpleInventoryModelMasterResult>
+        {
+            public DeleteSimpleInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSimpleInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteSimpleInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleInventoryModelMaster(
+                Request.DeleteSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterFuture(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSimpleInventoryModelMasterResult> result = null;
+			await DeleteSimpleInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSimpleInventoryModelMasterTask DeleteSimpleInventoryModelMasterAsync(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+			var task = new DeleteSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSimpleInventoryModelsTask : Gs2RestSessionTask<DescribeSimpleInventoryModelsRequest, DescribeSimpleInventoryModelsResult>
+        {
+            public DescribeSimpleInventoryModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleInventoryModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleInventoryModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/simple/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleInventoryModels(
+                Request.DescribeSimpleInventoryModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleInventoryModelsResult>> callback
+        )
+		{
+			var task = new DescribeSimpleInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleInventoryModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsFuture(
+                Request.DescribeSimpleInventoryModelsRequest request
+        )
+		{
+			return new DescribeSimpleInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
+                Request.DescribeSimpleInventoryModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleInventoryModelsResult> result = null;
+			await DescribeSimpleInventoryModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleInventoryModelsTask DescribeSimpleInventoryModelsAsync(
+                Request.DescribeSimpleInventoryModelsRequest request
+        )
+		{
+			return new DescribeSimpleInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
+                Request.DescribeSimpleInventoryModelsRequest request
+        )
+		{
+			var task = new DescribeSimpleInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleInventoryModelTask : Gs2RestSessionTask<GetSimpleInventoryModelRequest, GetSimpleInventoryModelResult>
+        {
+            public GetSimpleInventoryModelTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleInventoryModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleInventoryModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/simple/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleInventoryModel(
+                Request.GetSimpleInventoryModelRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleInventoryModelResult>> callback
+        )
+		{
+			var task = new GetSimpleInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleInventoryModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelFuture(
+                Request.GetSimpleInventoryModelRequest request
+        )
+		{
+			return new GetSimpleInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
+                Request.GetSimpleInventoryModelRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleInventoryModelResult> result = null;
+			await GetSimpleInventoryModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleInventoryModelTask GetSimpleInventoryModelAsync(
+                Request.GetSimpleInventoryModelRequest request
+        )
+		{
+			return new GetSimpleInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
+                Request.GetSimpleInventoryModelRequest request
+        )
+		{
+			var task = new GetSimpleInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSimpleItemModelMastersTask : Gs2RestSessionTask<DescribeSimpleItemModelMastersRequest, DescribeSimpleItemModelMastersResult>
+        {
+            public DescribeSimpleItemModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleItemModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleItemModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleItemModelMasters(
+                Request.DescribeSimpleItemModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleItemModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeSimpleItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersFuture(
+                Request.DescribeSimpleItemModelMastersRequest request
+        )
+		{
+			return new DescribeSimpleItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
+                Request.DescribeSimpleItemModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleItemModelMastersResult> result = null;
+			await DescribeSimpleItemModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleItemModelMastersTask DescribeSimpleItemModelMastersAsync(
+                Request.DescribeSimpleItemModelMastersRequest request
+        )
+		{
+			return new DescribeSimpleItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
+                Request.DescribeSimpleItemModelMastersRequest request
+        )
+		{
+			var task = new DescribeSimpleItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateSimpleItemModelMasterTask : Gs2RestSessionTask<CreateSimpleItemModelMasterRequest, CreateSimpleItemModelMasterResult>
+        {
+            public CreateSimpleItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateSimpleItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateSimpleItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSimpleItemModelMaster(
+                Request.CreateSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterFuture(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+			return new CreateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateSimpleItemModelMasterResult> result = null;
+			await CreateSimpleItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateSimpleItemModelMasterTask CreateSimpleItemModelMasterAsync(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+			return new CreateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+			var task = new CreateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemModelMasterTask : Gs2RestSessionTask<GetSimpleItemModelMasterRequest, GetSimpleItemModelMasterResult>
+        {
+            public GetSimpleItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemModelMaster(
+                Request.GetSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new GetSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterFuture(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+			return new GetSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemModelMasterResult> result = null;
+			await GetSimpleItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemModelMasterTask GetSimpleItemModelMasterAsync(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+			return new GetSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+			var task = new GetSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSimpleItemModelMasterTask : Gs2RestSessionTask<UpdateSimpleItemModelMasterRequest, UpdateSimpleItemModelMasterResult>
+        {
+            public UpdateSimpleItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateSimpleItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateSimpleItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSimpleItemModelMaster(
+                Request.UpdateSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterFuture(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateSimpleItemModelMasterResult> result = null;
+			await UpdateSimpleItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateSimpleItemModelMasterTask UpdateSimpleItemModelMasterAsync(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+			var task = new UpdateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleItemModelMasterTask : Gs2RestSessionTask<DeleteSimpleItemModelMasterRequest, DeleteSimpleItemModelMasterResult>
+        {
+            public DeleteSimpleItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSimpleItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteSimpleItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleItemModelMaster(
+                Request.DeleteSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterFuture(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSimpleItemModelMasterResult> result = null;
+			await DeleteSimpleItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSimpleItemModelMasterTask DeleteSimpleItemModelMasterAsync(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+			var task = new DeleteSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSimpleItemModelsTask : Gs2RestSessionTask<DescribeSimpleItemModelsRequest, DescribeSimpleItemModelsResult>
+        {
+            public DescribeSimpleItemModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleItemModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleItemModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/simple/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleItemModels(
+                Request.DescribeSimpleItemModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleItemModelsResult>> callback
+        )
+		{
+			var task = new DescribeSimpleItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsFuture(
+                Request.DescribeSimpleItemModelsRequest request
+        )
+		{
+			return new DescribeSimpleItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
+                Request.DescribeSimpleItemModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleItemModelsResult> result = null;
+			await DescribeSimpleItemModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleItemModelsTask DescribeSimpleItemModelsAsync(
+                Request.DescribeSimpleItemModelsRequest request
+        )
+		{
+			return new DescribeSimpleItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
+                Request.DescribeSimpleItemModelsRequest request
+        )
+		{
+			var task = new DescribeSimpleItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemModelTask : Gs2RestSessionTask<GetSimpleItemModelRequest, GetSimpleItemModelResult>
+        {
+            public GetSimpleItemModelTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemModel(
+                Request.GetSimpleItemModelRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemModelResult>> callback
+        )
+		{
+			var task = new GetSimpleItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemModelResult> GetSimpleItemModelFuture(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+			return new GetSimpleItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemModelResult> result = null;
+			await GetSimpleItemModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemModelTask GetSimpleItemModelAsync(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+			return new GetSimpleItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+			var task = new GetSimpleItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
@@ -6971,6 +8556,1471 @@ namespace Gs2.Gs2Inventory
         )
 		{
 			var task = new VerifyReferenceOfByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSimpleItemsTask : Gs2RestSessionTask<DescribeSimpleItemsRequest, DescribeSimpleItemsResult>
+        {
+            public DescribeSimpleItemsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleItemsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleItemsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/simple/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleItems(
+                Request.DescribeSimpleItemsRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleItemsResult>> callback
+        )
+		{
+			var task = new DescribeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleItemsResult> DescribeSimpleItemsFuture(
+                Request.DescribeSimpleItemsRequest request
+        )
+		{
+			return new DescribeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
+                Request.DescribeSimpleItemsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleItemsResult> result = null;
+			await DescribeSimpleItems(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleItemsTask DescribeSimpleItemsAsync(
+                Request.DescribeSimpleItemsRequest request
+        )
+		{
+			return new DescribeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
+                Request.DescribeSimpleItemsRequest request
+        )
+		{
+			var task = new DescribeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSimpleItemsByUserIdTask : Gs2RestSessionTask<DescribeSimpleItemsByUserIdRequest, DescribeSimpleItemsByUserIdResult>
+        {
+            public DescribeSimpleItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSimpleItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSimpleItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSimpleItemsByUserId(
+                Request.DescribeSimpleItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeSimpleItemsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdFuture(
+                Request.DescribeSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DescribeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
+                Request.DescribeSimpleItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSimpleItemsByUserIdResult> result = null;
+			await DescribeSimpleItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSimpleItemsByUserIdTask DescribeSimpleItemsByUserIdAsync(
+                Request.DescribeSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DescribeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
+                Request.DescribeSimpleItemsByUserIdRequest request
+        )
+		{
+			var task = new DescribeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemTask : Gs2RestSessionTask<GetSimpleItemRequest, GetSimpleItemResult>
+        {
+            public GetSimpleItemTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItem(
+                Request.GetSimpleItemRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemResult>> callback
+        )
+		{
+			var task = new GetSimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemResult> GetSimpleItemFuture(
+                Request.GetSimpleItemRequest request
+        )
+		{
+			return new GetSimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemResult> GetSimpleItemAsync(
+                Request.GetSimpleItemRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemResult> result = null;
+			await GetSimpleItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemTask GetSimpleItemAsync(
+                Request.GetSimpleItemRequest request
+        )
+		{
+			return new GetSimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemResult> GetSimpleItemAsync(
+                Request.GetSimpleItemRequest request
+        )
+		{
+			var task = new GetSimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemByUserIdTask : Gs2RestSessionTask<GetSimpleItemByUserIdRequest, GetSimpleItemByUserIdResult>
+        {
+            public GetSimpleItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemByUserId(
+                Request.GetSimpleItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemByUserIdResult>> callback
+        )
+		{
+			var task = new GetSimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdFuture(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemByUserIdResult> result = null;
+			await GetSimpleItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemByUserIdTask GetSimpleItemByUserIdAsync(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+			var task = new GetSimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemWithSignatureTask : Gs2RestSessionTask<GetSimpleItemWithSignatureRequest, GetSimpleItemWithSignatureResult>
+        {
+            public GetSimpleItemWithSignatureTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemWithSignatureRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemWithSignatureRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/simple/inventory/{inventoryName}/item/{itemName}/signature";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.KeyId != null) {
+                    sessionRequest.AddQueryString("keyId", $"{request.KeyId}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemWithSignature(
+                Request.GetSimpleItemWithSignatureRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemWithSignatureResult>> callback
+        )
+		{
+			var task = new GetSimpleItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemWithSignatureResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureFuture(
+                Request.GetSimpleItemWithSignatureRequest request
+        )
+		{
+			return new GetSimpleItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
+                Request.GetSimpleItemWithSignatureRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemWithSignatureResult> result = null;
+			await GetSimpleItemWithSignature(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemWithSignatureTask GetSimpleItemWithSignatureAsync(
+                Request.GetSimpleItemWithSignatureRequest request
+        )
+		{
+			return new GetSimpleItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
+                Request.GetSimpleItemWithSignatureRequest request
+        )
+		{
+			var task = new GetSimpleItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemWithSignatureByUserIdTask : Gs2RestSessionTask<GetSimpleItemWithSignatureByUserIdRequest, GetSimpleItemWithSignatureByUserIdResult>
+        {
+            public GetSimpleItemWithSignatureByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetSimpleItemWithSignatureByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSimpleItemWithSignatureByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/item/{itemName}/signature";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.KeyId != null) {
+                    sessionRequest.AddQueryString("keyId", $"{request.KeyId}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemWithSignatureByUserId(
+                Request.GetSimpleItemWithSignatureByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult>> callback
+        )
+		{
+			var task = new GetSimpleItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdFuture(
+                Request.GetSimpleItemWithSignatureByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
+                Request.GetSimpleItemWithSignatureByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult> result = null;
+			await GetSimpleItemWithSignatureByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSimpleItemWithSignatureByUserIdTask GetSimpleItemWithSignatureByUserIdAsync(
+                Request.GetSimpleItemWithSignatureByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
+                Request.GetSimpleItemWithSignatureByUserIdRequest request
+        )
+		{
+			var task = new GetSimpleItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireSimpleItemsByUserIdTask : Gs2RestSessionTask<AcquireSimpleItemsByUserIdRequest, AcquireSimpleItemsByUserIdResult>
+        {
+            public AcquireSimpleItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AcquireSimpleItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AcquireSimpleItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/acquire";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.AcquireCounts != null)
+                {
+                    jsonWriter.WritePropertyName("acquireCounts");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireCounts)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireSimpleItemsByUserId(
+                Request.AcquireSimpleItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AcquireSimpleItemsByUserIdResult>> callback
+        )
+		{
+			var task = new AcquireSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireSimpleItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdFuture(
+                Request.AcquireSimpleItemsByUserIdRequest request
+        )
+		{
+			return new AcquireSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
+                Request.AcquireSimpleItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AcquireSimpleItemsByUserIdResult> result = null;
+			await AcquireSimpleItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcquireSimpleItemsByUserIdTask AcquireSimpleItemsByUserIdAsync(
+                Request.AcquireSimpleItemsByUserIdRequest request
+        )
+		{
+			return new AcquireSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
+                Request.AcquireSimpleItemsByUserIdRequest request
+        )
+		{
+			var task = new AcquireSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeSimpleItemsTask : Gs2RestSessionTask<ConsumeSimpleItemsRequest, ConsumeSimpleItemsResult>
+        {
+            public ConsumeSimpleItemsTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeSimpleItemsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeSimpleItemsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/simple/inventory/{inventoryName}/consume";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ConsumeCounts != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCounts");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ConsumeCounts)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeSimpleItems(
+                Request.ConsumeSimpleItemsRequest request,
+                UnityAction<AsyncResult<Result.ConsumeSimpleItemsResult>> callback
+        )
+		{
+			var task = new ConsumeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsFuture(
+                Request.ConsumeSimpleItemsRequest request
+        )
+		{
+			return new ConsumeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
+                Request.ConsumeSimpleItemsRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeSimpleItemsResult> result = null;
+			await ConsumeSimpleItems(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeSimpleItemsTask ConsumeSimpleItemsAsync(
+                Request.ConsumeSimpleItemsRequest request
+        )
+		{
+			return new ConsumeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
+                Request.ConsumeSimpleItemsRequest request
+        )
+		{
+			var task = new ConsumeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeSimpleItemsByUserIdTask : Gs2RestSessionTask<ConsumeSimpleItemsByUserIdRequest, ConsumeSimpleItemsByUserIdResult>
+        {
+            public ConsumeSimpleItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeSimpleItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeSimpleItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/consume";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ConsumeCounts != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCounts");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ConsumeCounts)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeSimpleItemsByUserId(
+                Request.ConsumeSimpleItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ConsumeSimpleItemsByUserIdResult>> callback
+        )
+		{
+			var task = new ConsumeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdFuture(
+                Request.ConsumeSimpleItemsByUserIdRequest request
+        )
+		{
+			return new ConsumeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
+                Request.ConsumeSimpleItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeSimpleItemsByUserIdResult> result = null;
+			await ConsumeSimpleItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeSimpleItemsByUserIdTask ConsumeSimpleItemsByUserIdAsync(
+                Request.ConsumeSimpleItemsByUserIdRequest request
+        )
+		{
+			return new ConsumeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
+                Request.ConsumeSimpleItemsByUserIdRequest request
+        )
+		{
+			var task = new ConsumeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleItemsByUserIdTask : Gs2RestSessionTask<DeleteSimpleItemsByUserIdRequest, DeleteSimpleItemsByUserIdResult>
+        {
+            public DeleteSimpleItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSimpleItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteSimpleItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleItemsByUserId(
+                Request.DeleteSimpleItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleItemsByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdFuture(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DeleteSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSimpleItemsByUserIdResult> result = null;
+			await DeleteSimpleItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSimpleItemsByUserIdTask DeleteSimpleItemsByUserIdAsync(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DeleteSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+			var task = new DeleteSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireSimpleItemsByStampSheetTask : Gs2RestSessionTask<AcquireSimpleItemsByStampSheetRequest, AcquireSimpleItemsByStampSheetResult>
+        {
+            public AcquireSimpleItemsByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AcquireSimpleItemsByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AcquireSimpleItemsByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/simple/item/acquire";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireSimpleItemsByStampSheet(
+                Request.AcquireSimpleItemsByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.AcquireSimpleItemsByStampSheetResult>> callback
+        )
+		{
+			var task = new AcquireSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireSimpleItemsByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetFuture(
+                Request.AcquireSimpleItemsByStampSheetRequest request
+        )
+		{
+			return new AcquireSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
+                Request.AcquireSimpleItemsByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.AcquireSimpleItemsByStampSheetResult> result = null;
+			await AcquireSimpleItemsByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcquireSimpleItemsByStampSheetTask AcquireSimpleItemsByStampSheetAsync(
+                Request.AcquireSimpleItemsByStampSheetRequest request
+        )
+		{
+			return new AcquireSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
+                Request.AcquireSimpleItemsByStampSheetRequest request
+        )
+		{
+			var task = new AcquireSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeSimpleItemsByStampTaskTask : Gs2RestSessionTask<ConsumeSimpleItemsByStampTaskRequest, ConsumeSimpleItemsByStampTaskResult>
+        {
+            public ConsumeSimpleItemsByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeSimpleItemsByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeSimpleItemsByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/simple/item/consume";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeSimpleItemsByStampTask(
+                Request.ConsumeSimpleItemsByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult>> callback
+        )
+		{
+			var task = new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskFuture(
+                Request.ConsumeSimpleItemsByStampTaskRequest request
+        )
+		{
+			return new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
+                Request.ConsumeSimpleItemsByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult> result = null;
+			await ConsumeSimpleItemsByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeSimpleItemsByStampTaskTask ConsumeSimpleItemsByStampTaskAsync(
+                Request.ConsumeSimpleItemsByStampTaskRequest request
+        )
+		{
+			return new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
+                Request.ConsumeSimpleItemsByStampTaskRequest request
+        )
+		{
+			var task = new ConsumeSimpleItemsByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

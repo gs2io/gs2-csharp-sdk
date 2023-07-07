@@ -144,6 +144,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
+        public Gs2.Gs2Inventory.Domain.Model.SimpleInventoryAccessTokenDomain SimpleInventory(
+            string inventoryName
+        ) {
+            return new Gs2.Gs2Inventory.Domain.Model.SimpleInventoryAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this._accessToken,
+                inventoryName
+            );
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

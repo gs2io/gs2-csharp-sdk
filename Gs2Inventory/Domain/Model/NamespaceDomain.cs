@@ -364,6 +364,82 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain> CreateSimpleInventoryModelMasterAsync(
+            #else
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain> CreateSimpleInventoryModelMaster(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain> CreateSimpleInventoryModelMasterAsync(
+        #endif
+            CreateSimpleInventoryModelMasterRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.CreateSimpleInventoryModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.CreateSimpleInventoryModelMasterAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "SimpleInventoryModelMaster"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            var domain = new Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                request.NamespaceName,
+                result?.Item?.Name
+            );
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain> CreateInventoryModelMasterAsync(
             #else
         public IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain> CreateInventoryModelMaster(
@@ -520,6 +596,102 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._session,
                 this.NamespaceName,
                 accessToken
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster> SimpleInventoryModelMasters(
+        )
+        {
+            return new DescribeSimpleInventoryModelMastersIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster> SimpleInventoryModelMastersAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster> SimpleInventoryModelMasters(
+            #endif
+        #else
+        public DescribeSimpleInventoryModelMastersIterator SimpleInventoryModelMasters(
+        #endif
+        )
+        {
+            return new DescribeSimpleInventoryModelMastersIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain SimpleInventoryModelMaster(
+            string inventoryName
+        ) {
+            return new Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                inventoryName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleInventoryModel> SimpleInventoryModels(
+        )
+        {
+            return new DescribeSimpleInventoryModelsIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.SimpleInventoryModel> SimpleInventoryModelsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleInventoryModel> SimpleInventoryModels(
+            #endif
+        #else
+        public DescribeSimpleInventoryModelsIterator SimpleInventoryModels(
+        #endif
+        )
+        {
+            return new DescribeSimpleInventoryModelsIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain SimpleInventoryModel(
+            string inventoryName
+        ) {
+            return new Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                inventoryName
             );
         }
         #if UNITY_2017_1_OR_NEWER

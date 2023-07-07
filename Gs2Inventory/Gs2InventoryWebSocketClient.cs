@@ -1608,6 +1608,1043 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class CreateSimpleInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateSimpleInventoryModelMasterRequest, Result.CreateSimpleInventoryModelMasterResult>
+        {
+	        public CreateSimpleInventoryModelMasterTask(IGs2Session session, Request.CreateSimpleInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateSimpleInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleInventoryModelMaster",
+                    "createSimpleInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSimpleInventoryModelMaster(
+                Request.CreateSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterFuture(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new CreateSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+            Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateSimpleInventoryModelMasterTask CreateSimpleInventoryModelMasterAsync(
+                Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new CreateSimpleInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+            Request.CreateSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.GetSimpleInventoryModelMasterRequest, Result.GetSimpleInventoryModelMasterResult>
+        {
+	        public GetSimpleInventoryModelMasterTask(IGs2Session session, Request.GetSimpleInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSimpleInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleInventoryModelMaster",
+                    "getSimpleInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleInventoryModelMaster(
+                Request.GetSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterFuture(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new GetSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+            Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new GetSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSimpleInventoryModelMasterTask GetSimpleInventoryModelMasterAsync(
+                Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new GetSimpleInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+            Request.GetSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new GetSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSimpleInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateSimpleInventoryModelMasterRequest, Result.UpdateSimpleInventoryModelMasterResult>
+        {
+	        public UpdateSimpleInventoryModelMasterTask(IGs2Session session, Request.UpdateSimpleInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateSimpleInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleInventoryModelMaster",
+                    "updateSimpleInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSimpleInventoryModelMaster(
+                Request.UpdateSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterFuture(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+            Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateSimpleInventoryModelMasterTask UpdateSimpleInventoryModelMasterAsync(
+                Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+            Request.UpdateSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteSimpleInventoryModelMasterRequest, Result.DeleteSimpleInventoryModelMasterResult>
+        {
+	        public DeleteSimpleInventoryModelMasterTask(IGs2Session session, Request.DeleteSimpleInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteSimpleInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleInventoryModelMaster",
+                    "deleteSimpleInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleInventoryModelMaster(
+                Request.DeleteSimpleInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterFuture(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+            Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteSimpleInventoryModelMasterTask DeleteSimpleInventoryModelMasterAsync(
+                Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+            Request.DeleteSimpleInventoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSimpleInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateSimpleItemModelMasterTask : Gs2WebSocketSessionTask<Request.CreateSimpleItemModelMasterRequest, Result.CreateSimpleItemModelMasterResult>
+        {
+	        public CreateSimpleItemModelMasterTask(IGs2Session session, Request.CreateSimpleItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateSimpleItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItemModelMaster",
+                    "createSimpleItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSimpleItemModelMaster(
+                Request.CreateSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterFuture(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+			return new CreateSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+            Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new CreateSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateSimpleItemModelMasterTask CreateSimpleItemModelMasterAsync(
+                Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+			return new CreateSimpleItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+            Request.CreateSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new CreateSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemModelMasterTask : Gs2WebSocketSessionTask<Request.GetSimpleItemModelMasterRequest, Result.GetSimpleItemModelMasterResult>
+        {
+	        public GetSimpleItemModelMasterTask(IGs2Session session, Request.GetSimpleItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSimpleItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItemModelMaster",
+                    "getSimpleItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemModelMaster(
+                Request.GetSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new GetSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterFuture(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+			return new GetSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+            Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new GetSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSimpleItemModelMasterTask GetSimpleItemModelMasterAsync(
+                Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+			return new GetSimpleItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+            Request.GetSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new GetSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSimpleItemModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateSimpleItemModelMasterRequest, Result.UpdateSimpleItemModelMasterResult>
+        {
+	        public UpdateSimpleItemModelMasterTask(IGs2Session session, Request.UpdateSimpleItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateSimpleItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItemModelMaster",
+                    "updateSimpleItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSimpleItemModelMaster(
+                Request.UpdateSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterFuture(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+            Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateSimpleItemModelMasterTask UpdateSimpleItemModelMasterAsync(
+                Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+			return new UpdateSimpleItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+            Request.UpdateSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleItemModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteSimpleItemModelMasterRequest, Result.DeleteSimpleItemModelMasterResult>
+        {
+	        public DeleteSimpleItemModelMasterTask(IGs2Session session, Request.DeleteSimpleItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteSimpleItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItemModelMaster",
+                    "deleteSimpleItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleItemModelMaster(
+                Request.DeleteSimpleItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleItemModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterFuture(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+            Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteSimpleItemModelMasterTask DeleteSimpleItemModelMasterAsync(
+                Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+			return new DeleteSimpleItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+            Request.DeleteSimpleItemModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSimpleItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemModelTask : Gs2WebSocketSessionTask<Request.GetSimpleItemModelRequest, Result.GetSimpleItemModelResult>
+        {
+	        public GetSimpleItemModelTask(IGs2Session session, Request.GetSimpleItemModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSimpleItemModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItemModel",
+                    "getSimpleItemModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemModel(
+                Request.GetSimpleItemModelRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemModelResult>> callback
+        )
+		{
+			var task = new GetSimpleItemModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemModelResult> GetSimpleItemModelFuture(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+			return new GetSimpleItemModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+            Request.GetSimpleItemModelRequest request
+        )
+		{
+		    var task = new GetSimpleItemModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSimpleItemModelTask GetSimpleItemModelAsync(
+                Request.GetSimpleItemModelRequest request
+        )
+		{
+			return new GetSimpleItemModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+            Request.GetSimpleItemModelRequest request
+        )
+		{
+		    var task = new GetSimpleItemModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetInventoryTask : Gs2WebSocketSessionTask<Request.GetInventoryRequest, Result.GetInventoryResult>
         {
 	        public GetInventoryTask(IGs2Session session, Request.GetInventoryRequest request) : base(session, request)
@@ -2411,6 +3448,365 @@ namespace Gs2.Gs2Inventory
         )
 		{
 		    var task = new SetCapacityByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemTask : Gs2WebSocketSessionTask<Request.GetSimpleItemRequest, Result.GetSimpleItemResult>
+        {
+	        public GetSimpleItemTask(IGs2Session session, Request.GetSimpleItemRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSimpleItemRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItem",
+                    "getSimpleItem",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItem(
+                Request.GetSimpleItemRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemResult>> callback
+        )
+		{
+			var task = new GetSimpleItemTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemResult> GetSimpleItemFuture(
+                Request.GetSimpleItemRequest request
+        )
+		{
+			return new GetSimpleItemTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemResult> GetSimpleItemAsync(
+            Request.GetSimpleItemRequest request
+        )
+		{
+		    var task = new GetSimpleItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSimpleItemTask GetSimpleItemAsync(
+                Request.GetSimpleItemRequest request
+        )
+		{
+			return new GetSimpleItemTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemResult> GetSimpleItemAsync(
+            Request.GetSimpleItemRequest request
+        )
+		{
+		    var task = new GetSimpleItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSimpleItemByUserIdTask : Gs2WebSocketSessionTask<Request.GetSimpleItemByUserIdRequest, Result.GetSimpleItemByUserIdResult>
+        {
+	        public GetSimpleItemByUserIdTask(IGs2Session session, Request.GetSimpleItemByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSimpleItemByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItem",
+                    "getSimpleItemByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSimpleItemByUserId(
+                Request.GetSimpleItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetSimpleItemByUserIdResult>> callback
+        )
+		{
+			var task = new GetSimpleItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSimpleItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdFuture(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+            Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+		    var task = new GetSimpleItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSimpleItemByUserIdTask GetSimpleItemByUserIdAsync(
+                Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+			return new GetSimpleItemByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+            Request.GetSimpleItemByUserIdRequest request
+        )
+		{
+		    var task = new GetSimpleItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSimpleItemsByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteSimpleItemsByUserIdRequest, Result.DeleteSimpleItemsByUserIdResult>
+        {
+	        public DeleteSimpleItemsByUserIdTask(IGs2Session session, Request.DeleteSimpleItemsByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteSimpleItemsByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "simpleItem",
+                    "deleteSimpleItemsByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSimpleItemsByUserId(
+                Request.DeleteSimpleItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteSimpleItemsByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteSimpleItemsByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdFuture(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DeleteSimpleItemsByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+            Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+		    var task = new DeleteSimpleItemsByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteSimpleItemsByUserIdTask DeleteSimpleItemsByUserIdAsync(
+                Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+			return new DeleteSimpleItemsByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+            Request.DeleteSimpleItemsByUserIdRequest request
+        )
+		{
+		    var task = new DeleteSimpleItemsByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );
