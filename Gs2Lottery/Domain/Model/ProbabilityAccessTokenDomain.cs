@@ -62,11 +62,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _lotteryName;
+        private readonly string _prizeId;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
+        public string LotteryName => _lotteryName;
+        public string PrizeId => _prizeId;
         public string UserId => _accessToken?.UserId;
 
         public ProbabilityAccessTokenDomain(
@@ -75,7 +79,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string lotteryName,
+            string prizeId
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -86,9 +92,12 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+            this._lotteryName = lotteryName;
+            this._prizeId = prizeId;
+            this._parentKey = CreateCacheParentKey(
                 this._namespaceName != null ? this._namespaceName.ToString() : null,
                 this._accessToken?.UserId?.ToString(),
+                this._lotteryName?.ToString(),
                 "Probability"
             );
         }
@@ -96,6 +105,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
+            string lotteryName,
             string childType
         )
         {
@@ -104,14 +114,19 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 "lottery",
                 namespaceName ?? "null",
                 userId ?? "null",
+                lotteryName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
+            string prizeId
         )
         {
-            return "Singleton";
+            return string.Join(
+                ":",
+                prizeId ?? "null"
+            );
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -130,6 +145,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.Probability>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
+                    this._lotteryName
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
