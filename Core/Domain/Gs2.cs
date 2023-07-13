@@ -48,6 +48,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2JobQueue.Domain.Gs2JobQueue JobQueue;
         public readonly Gs2Key.Domain.Gs2Key Key;
         public readonly Gs2Limit.Domain.Gs2Limit Limit;
+        public readonly Gs2LoginReward.Domain.Gs2LoginReward LoginReward;
         public readonly Gs2Lock.Domain.Gs2Lock Lock;
         public readonly Gs2Log.Domain.Gs2Log Log;
         public readonly Gs2Lottery.Domain.Gs2Lottery Lottery;
@@ -105,6 +106,7 @@ namespace Gs2.Core.Domain
             JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Key = new Gs2Key.Domain.Gs2Key(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Limit = new Gs2Limit.Domain.Gs2Limit(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            LoginReward = new Gs2LoginReward.Domain.Gs2LoginReward(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Lock = new Gs2Lock.Domain.Gs2Lock(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Log = new Gs2Log.Domain.Gs2Log(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Lottery = new Gs2Lottery.Domain.Gs2Lottery(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -194,6 +196,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Limit":
                                 Limit.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2LoginReward":
+                                LoginReward.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Lock":
                                 Lock.HandleNotification(_cache, method, message.payload);
@@ -496,6 +501,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Limit":
                         Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2LoginReward":
+                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Lock":
                         Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -634,6 +642,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Limit":
                         Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2LoginReward":
+                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Lock":
                         Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampTask(cache, method, request, result);
@@ -776,6 +787,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "limit":
                                 Gs2Limit.Domain.Gs2Limit.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "login_reward":
+                                Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "lock":
                                 Gs2Lock.Domain.Gs2Lock.UpdateCacheFromJobResult(cache, method, job, result);
