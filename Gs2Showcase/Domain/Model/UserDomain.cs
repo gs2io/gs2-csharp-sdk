@@ -92,6 +92,75 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItems(
+            string showcaseName
+        )
+        {
+            return new DescribeRandomShowcaseSalesItemsByUserIdIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName,
+                showcaseName,
+                this.UserId
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItemsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItems(
+            #endif
+        #else
+        public DescribeRandomShowcaseSalesItemsByUserIdIterator RandomShowcaseSalesItems(
+        #endif
+            string showcaseName
+        )
+        {
+            return new DescribeRandomShowcaseSalesItemsByUserIdIterator(
+                this._cache,
+                this._client,
+                this.NamespaceName,
+                showcaseName,
+                this.UserId
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain RandomShowcase(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this.UserId,
+                showcaseName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain RandomShowcaseStatus(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this.UserId,
+                showcaseName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(
         )
         {

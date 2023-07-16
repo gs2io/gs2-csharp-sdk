@@ -209,6 +209,32 @@ namespace Gs2.Gs2Showcase.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "ForceReDrawByUserId": {
+                        var requestModel = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ForceReDrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.ShowcaseName,
+                                "RandomDisplayItem"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                    item.Name.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromStampTask(
@@ -217,6 +243,31 @@ namespace Gs2.Gs2Showcase.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "IncrementPurchaseCountByUserId": {
+                        var requestModel = IncrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = IncrementPurchaseCountByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.ShowcaseName,
+                                "RandomDisplayItem"
+                            );
+                            var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(
@@ -225,6 +276,32 @@ namespace Gs2.Gs2Showcase.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+            switch (method) {
+                case "force_re_draw_by_user_id": {
+                    var requestModel = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = ForceReDrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    {
+                            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.ShowcaseName,
+                                "RandomDisplayItem"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                    item.Name.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                    break;
+                }
+            }
         }
 
         public void HandleNotification(

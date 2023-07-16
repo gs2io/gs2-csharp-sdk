@@ -364,6 +364,82 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
+            #else
+        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMaster(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
+        #endif
+            CreateRandomShowcaseMasterRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.CreateRandomShowcaseMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.CreateRandomShowcaseMasterAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "RandomShowcaseMaster"
+                    );
+                    var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            var domain = new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                request.NamespaceName,
+                result?.Item?.Name
+            );
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> CreateSalesItemMasterAsync(
             #else
         public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> CreateSalesItemMaster(
@@ -589,41 +665,52 @@ namespace Gs2.Gs2Showcase.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain>(Impl);
         #endif
         }
-
-        public Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain CurrentShowcaseMaster(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain(
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMasters(
+        )
+        {
+            return new DescribeRandomShowcaseMastersIterator(
                 this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._client,
                 this.NamespaceName
             );
         }
 
-        public Gs2.Gs2Showcase.Domain.Model.UserDomain User(
-            string userId
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.UserDomain(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMastersAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMasters(
+            #endif
+        #else
+        public DescribeRandomShowcaseMastersIterator RandomShowcaseMasters(
+        #endif
+        )
+        {
+            return new DescribeRandomShowcaseMastersIterator(
                 this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this.NamespaceName,
-                userId
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
             );
+            #endif
+        #else
+            );
+        #endif
         }
 
-        public UserAccessTokenDomain AccessToken(
-            AccessToken accessToken
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain RandomShowcaseMaster(
+            string showcaseName
         ) {
-            return new UserAccessTokenDomain(
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
                 this._cache,
                 this._jobQueueDomain,
                 this._stampSheetConfiguration,
                 this._session,
                 this.NamespaceName,
-                accessToken
+                showcaseName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -720,6 +807,43 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._session,
                 this.NamespaceName,
                 salesItemGroupName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain CurrentShowcaseMaster(
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.UserDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                accessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER

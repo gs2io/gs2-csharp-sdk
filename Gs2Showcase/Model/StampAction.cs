@@ -26,12 +26,16 @@ namespace Gs2.Gs2Showcase.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Showcase:IncrementPurchaseCountByUserId":
+                    return IncrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
+                case "Gs2Showcase:ForceReDrawByUserId":
+                    return ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
