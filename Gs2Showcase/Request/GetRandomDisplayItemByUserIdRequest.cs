@@ -31,42 +31,42 @@ namespace Gs2.Gs2Showcase.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetRandomShowcaseSalesItemRequest : Gs2Request<GetRandomShowcaseSalesItemRequest>
+	public class GetRandomDisplayItemByUserIdRequest : Gs2Request<GetRandomDisplayItemByUserIdRequest>
 	{
         public string NamespaceName { set; get; }
         public string ShowcaseName { set; get; }
         public string DisplayItemName { set; get; }
-        public string AccessToken { set; get; }
-        public GetRandomShowcaseSalesItemRequest WithNamespaceName(string namespaceName) {
+        public string UserId { set; get; }
+        public GetRandomDisplayItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public GetRandomShowcaseSalesItemRequest WithShowcaseName(string showcaseName) {
+        public GetRandomDisplayItemByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-        public GetRandomShowcaseSalesItemRequest WithDisplayItemName(string displayItemName) {
+        public GetRandomDisplayItemByUserIdRequest WithDisplayItemName(string displayItemName) {
             this.DisplayItemName = displayItemName;
             return this;
         }
-        public GetRandomShowcaseSalesItemRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public GetRandomDisplayItemByUserIdRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetRandomShowcaseSalesItemRequest FromJson(JsonData data)
+        public static GetRandomDisplayItemByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetRandomShowcaseSalesItemRequest()
+            return new GetRandomDisplayItemByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
                 .WithDisplayItemName(!data.Keys.Contains("displayItemName") || data["displayItemName"] == null ? null : data["displayItemName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,7 +75,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["namespaceName"] = NamespaceName,
                 ["showcaseName"] = ShowcaseName,
                 ["displayItemName"] = DisplayItemName,
-                ["accessToken"] = AccessToken,
+                ["userId"] = UserId,
             };
         }
 
@@ -94,9 +94,9 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("displayItemName");
                 writer.Write(DisplayItemName.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -106,19 +106,19 @@ namespace Gs2.Gs2Showcase.Request
             key += NamespaceName + ":";
             key += ShowcaseName + ":";
             key += DisplayItemName + ":";
-            key += AccessToken + ":";
+            key += UserId + ":";
             return key;
         }
 
         protected override Gs2Request DoMultiple(int x) {
             if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetRandomShowcaseSalesItemRequest");
+                throw new ArithmeticException("Unsupported multiply GetRandomDisplayItemByUserIdRequest");
             }
             return this;
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetRandomShowcaseSalesItemRequest)x;
+            var y = (GetRandomDisplayItemByUserIdRequest)x;
             return this;
         }
     }

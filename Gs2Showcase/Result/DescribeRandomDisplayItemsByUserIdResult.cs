@@ -31,11 +31,11 @@ namespace Gs2.Gs2Showcase.Result
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class DescribeRandomShowcaseSalesItemsByUserIdResult : IResult
+	public class DescribeRandomDisplayItemsByUserIdResult : IResult
 	{
         public Gs2.Gs2Showcase.Model.RandomDisplayItem[] Items { set; get; }
 
-        public DescribeRandomShowcaseSalesItemsByUserIdResult WithItems(Gs2.Gs2Showcase.Model.RandomDisplayItem[] items) {
+        public DescribeRandomDisplayItemsByUserIdResult WithItems(Gs2.Gs2Showcase.Model.RandomDisplayItem[] items) {
             this.Items = items;
             return this;
         }
@@ -43,12 +43,12 @@ namespace Gs2.Gs2Showcase.Result
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static DescribeRandomShowcaseSalesItemsByUserIdResult FromJson(JsonData data)
+        public static DescribeRandomDisplayItemsByUserIdResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DescribeRandomShowcaseSalesItemsByUserIdResult()
+            return new DescribeRandomDisplayItemsByUserIdResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Showcase.Model.RandomDisplayItem[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.RandomDisplayItem.FromJson(v);
                 }).ToArray());

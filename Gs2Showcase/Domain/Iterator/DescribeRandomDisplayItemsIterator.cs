@@ -61,9 +61,9 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeRandomShowcaseSalesItemsIterator : Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> {
+    public class DescribeRandomDisplayItemsIterator : Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> {
     #else
-    public class DescribeRandomShowcaseSalesItemsIterator : IAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomDisplayItem> {
+    public class DescribeRandomDisplayItemsIterator : IAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomDisplayItem> {
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2ShowcaseRestClient _client;
@@ -79,7 +79,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
 
         int? fetchSize;
 
-        public DescribeRandomShowcaseSalesItemsIterator(
+        public DescribeRandomDisplayItemsIterator(
             CacheDatabase cache,
             Gs2ShowcaseRestClient client,
             string namespaceName,
@@ -120,17 +120,16 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._showcaseName == null || item.ShowcaseName == this._showcaseName)
                     .ToArray();
                 this._last = true;
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeRandomShowcaseSalesItemsFuture(
+                var future = this._client.DescribeRandomDisplayItemsFuture(
                 #else
-                var r = await this._client.DescribeRandomShowcaseSalesItemsAsync(
+                var r = await this._client.DescribeRandomDisplayItemsAsync(
                 #endif
-                    new Gs2.Gs2Showcase.Request.DescribeRandomShowcaseSalesItemsRequest()
+                    new Gs2.Gs2Showcase.Request.DescribeRandomDisplayItemsRequest()
                         .WithNamespaceName(this._namespaceName)
                         .WithShowcaseName(this._showcaseName)
                         .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)

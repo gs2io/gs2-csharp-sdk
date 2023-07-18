@@ -31,36 +31,36 @@ namespace Gs2.Gs2Showcase.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class DescribeRandomShowcaseSalesItemsRequest : Gs2Request<DescribeRandomShowcaseSalesItemsRequest>
+	public class DescribeRandomDisplayItemsByUserIdRequest : Gs2Request<DescribeRandomDisplayItemsByUserIdRequest>
 	{
         public string NamespaceName { set; get; }
         public string ShowcaseName { set; get; }
-        public string AccessToken { set; get; }
-        public DescribeRandomShowcaseSalesItemsRequest WithNamespaceName(string namespaceName) {
+        public string UserId { set; get; }
+        public DescribeRandomDisplayItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public DescribeRandomShowcaseSalesItemsRequest WithShowcaseName(string showcaseName) {
+        public DescribeRandomDisplayItemsByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-        public DescribeRandomShowcaseSalesItemsRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public DescribeRandomDisplayItemsByUserIdRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static DescribeRandomShowcaseSalesItemsRequest FromJson(JsonData data)
+        public static DescribeRandomDisplayItemsByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DescribeRandomShowcaseSalesItemsRequest()
+            return new DescribeRandomDisplayItemsByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithShowcaseName(!data.Keys.Contains("showcaseName") || data["showcaseName"] == null ? null : data["showcaseName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 
         public override JsonData ToJson()
@@ -68,7 +68,7 @@ namespace Gs2.Gs2Showcase.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["showcaseName"] = ShowcaseName,
-                ["accessToken"] = AccessToken,
+                ["userId"] = UserId,
             };
         }
 
@@ -83,9 +83,9 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("showcaseName");
                 writer.Write(ShowcaseName.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -94,19 +94,19 @@ namespace Gs2.Gs2Showcase.Request
             var key = "";
             key += NamespaceName + ":";
             key += ShowcaseName + ":";
-            key += AccessToken + ":";
+            key += UserId + ":";
             return key;
         }
 
         protected override Gs2Request DoMultiple(int x) {
             if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DescribeRandomShowcaseSalesItemsRequest");
+                throw new ArithmeticException("Unsupported multiply DescribeRandomDisplayItemsByUserIdRequest");
             }
             return this;
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DescribeRandomShowcaseSalesItemsRequest)x;
+            var y = (DescribeRandomDisplayItemsByUserIdRequest)x;
             return this;
         }
     }

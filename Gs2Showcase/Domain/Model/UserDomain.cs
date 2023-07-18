@@ -90,47 +90,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 "User"
             );
         }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItems(
-            string showcaseName
-        )
-        {
-            return new DescribeRandomShowcaseSalesItemsByUserIdIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                showcaseName,
-                this.UserId
-            );
-        }
-
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItemsAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomShowcaseSalesItems(
-            #endif
-        #else
-        public DescribeRandomShowcaseSalesItemsByUserIdIterator RandomShowcaseSalesItems(
-        #endif
-            string showcaseName
-        )
-        {
-            return new DescribeRandomShowcaseSalesItemsByUserIdIterator(
-                this._cache,
-                this._client,
-                this.NamespaceName,
-                showcaseName,
-                this.UserId
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
 
         public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain RandomShowcase(
             string showcaseName

@@ -4410,438 +4410,6 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
-        public class DescribeRandomShowcaseSalesItemsTask : Gs2RestSessionTask<DescribeRandomShowcaseSalesItemsRequest, DescribeRandomShowcaseSalesItemsResult>
-        {
-            public DescribeRandomShowcaseSalesItemsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRandomShowcaseSalesItemsRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeRandomShowcaseSalesItemsRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "showcase")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/random/showcase/{showcaseName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeRandomShowcaseSalesItems(
-                Request.DescribeRandomShowcaseSalesItemsRequest request,
-                UnityAction<AsyncResult<Result.DescribeRandomShowcaseSalesItemsResult>> callback
-        )
-		{
-			var task = new DescribeRandomShowcaseSalesItemsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeRandomShowcaseSalesItemsResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeRandomShowcaseSalesItemsResult> DescribeRandomShowcaseSalesItemsFuture(
-                Request.DescribeRandomShowcaseSalesItemsRequest request
-        )
-		{
-			return new DescribeRandomShowcaseSalesItemsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeRandomShowcaseSalesItemsResult> DescribeRandomShowcaseSalesItemsAsync(
-                Request.DescribeRandomShowcaseSalesItemsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeRandomShowcaseSalesItemsResult> result = null;
-			await DescribeRandomShowcaseSalesItems(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeRandomShowcaseSalesItemsTask DescribeRandomShowcaseSalesItemsAsync(
-                Request.DescribeRandomShowcaseSalesItemsRequest request
-        )
-		{
-			return new DescribeRandomShowcaseSalesItemsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeRandomShowcaseSalesItemsResult> DescribeRandomShowcaseSalesItemsAsync(
-                Request.DescribeRandomShowcaseSalesItemsRequest request
-        )
-		{
-			var task = new DescribeRandomShowcaseSalesItemsTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class DescribeRandomShowcaseSalesItemsByUserIdTask : Gs2RestSessionTask<DescribeRandomShowcaseSalesItemsByUserIdRequest, DescribeRandomShowcaseSalesItemsByUserIdResult>
-        {
-            public DescribeRandomShowcaseSalesItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRandomShowcaseSalesItemsByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(DescribeRandomShowcaseSalesItemsByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "showcase")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/random/showcase/{showcaseName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator DescribeRandomShowcaseSalesItemsByUserId(
-                Request.DescribeRandomShowcaseSalesItemsByUserIdRequest request,
-                UnityAction<AsyncResult<Result.DescribeRandomShowcaseSalesItemsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeRandomShowcaseSalesItemsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeRandomShowcaseSalesItemsByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.DescribeRandomShowcaseSalesItemsByUserIdResult> DescribeRandomShowcaseSalesItemsByUserIdFuture(
-                Request.DescribeRandomShowcaseSalesItemsByUserIdRequest request
-        )
-		{
-			return new DescribeRandomShowcaseSalesItemsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeRandomShowcaseSalesItemsByUserIdResult> DescribeRandomShowcaseSalesItemsByUserIdAsync(
-                Request.DescribeRandomShowcaseSalesItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeRandomShowcaseSalesItemsByUserIdResult> result = null;
-			await DescribeRandomShowcaseSalesItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public DescribeRandomShowcaseSalesItemsByUserIdTask DescribeRandomShowcaseSalesItemsByUserIdAsync(
-                Request.DescribeRandomShowcaseSalesItemsByUserIdRequest request
-        )
-		{
-			return new DescribeRandomShowcaseSalesItemsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.DescribeRandomShowcaseSalesItemsByUserIdResult> DescribeRandomShowcaseSalesItemsByUserIdAsync(
-                Request.DescribeRandomShowcaseSalesItemsByUserIdRequest request
-        )
-		{
-			var task = new DescribeRandomShowcaseSalesItemsByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class GetRandomShowcaseSalesItemTask : Gs2RestSessionTask<GetRandomShowcaseSalesItemRequest, GetRandomShowcaseSalesItemResult>
-        {
-            public GetRandomShowcaseSalesItemTask(IGs2Session session, RestSessionRequestFactory factory, GetRandomShowcaseSalesItemRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetRandomShowcaseSalesItemRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "showcase")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/random/showcase/{showcaseName}/displayItem/{displayItemName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
-                url = url.Replace("{displayItemName}", !string.IsNullOrEmpty(request.DisplayItemName) ? request.DisplayItemName.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetRandomShowcaseSalesItem(
-                Request.GetRandomShowcaseSalesItemRequest request,
-                UnityAction<AsyncResult<Result.GetRandomShowcaseSalesItemResult>> callback
-        )
-		{
-			var task = new GetRandomShowcaseSalesItemTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetRandomShowcaseSalesItemResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetRandomShowcaseSalesItemResult> GetRandomShowcaseSalesItemFuture(
-                Request.GetRandomShowcaseSalesItemRequest request
-        )
-		{
-			return new GetRandomShowcaseSalesItemTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetRandomShowcaseSalesItemResult> GetRandomShowcaseSalesItemAsync(
-                Request.GetRandomShowcaseSalesItemRequest request
-        )
-		{
-            AsyncResult<Result.GetRandomShowcaseSalesItemResult> result = null;
-			await GetRandomShowcaseSalesItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetRandomShowcaseSalesItemTask GetRandomShowcaseSalesItemAsync(
-                Request.GetRandomShowcaseSalesItemRequest request
-        )
-		{
-			return new GetRandomShowcaseSalesItemTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetRandomShowcaseSalesItemResult> GetRandomShowcaseSalesItemAsync(
-                Request.GetRandomShowcaseSalesItemRequest request
-        )
-		{
-			var task = new GetRandomShowcaseSalesItemTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class GetRandomShowcaseSalesItemByUserIdTask : Gs2RestSessionTask<GetRandomShowcaseSalesItemByUserIdRequest, GetRandomShowcaseSalesItemByUserIdResult>
-        {
-            public GetRandomShowcaseSalesItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetRandomShowcaseSalesItemByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(GetRandomShowcaseSalesItemByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "showcase")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/random/showcase/{showcaseName}/displayItem/{displayItemName}";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
-                url = url.Replace("{displayItemName}", !string.IsNullOrEmpty(request.DisplayItemName) ? request.DisplayItemName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Get(url);
-                if (request.ContextStack != null)
-                {
-                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetRandomShowcaseSalesItemByUserId(
-                Request.GetRandomShowcaseSalesItemByUserIdRequest request,
-                UnityAction<AsyncResult<Result.GetRandomShowcaseSalesItemByUserIdResult>> callback
-        )
-		{
-			var task = new GetRandomShowcaseSalesItemByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetRandomShowcaseSalesItemByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.GetRandomShowcaseSalesItemByUserIdResult> GetRandomShowcaseSalesItemByUserIdFuture(
-                Request.GetRandomShowcaseSalesItemByUserIdRequest request
-        )
-		{
-			return new GetRandomShowcaseSalesItemByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetRandomShowcaseSalesItemByUserIdResult> GetRandomShowcaseSalesItemByUserIdAsync(
-                Request.GetRandomShowcaseSalesItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetRandomShowcaseSalesItemByUserIdResult> result = null;
-			await GetRandomShowcaseSalesItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public GetRandomShowcaseSalesItemByUserIdTask GetRandomShowcaseSalesItemByUserIdAsync(
-                Request.GetRandomShowcaseSalesItemByUserIdRequest request
-        )
-		{
-			return new GetRandomShowcaseSalesItemByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.GetRandomShowcaseSalesItemByUserIdResult> GetRandomShowcaseSalesItemByUserIdAsync(
-                Request.GetRandomShowcaseSalesItemByUserIdRequest request
-        )
-		{
-			var task = new GetRandomShowcaseSalesItemByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class IncrementPurchaseCountByUserIdTask : Gs2RestSessionTask<IncrementPurchaseCountByUserIdRequest, IncrementPurchaseCountByUserIdResult>
         {
             public IncrementPurchaseCountByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IncrementPurchaseCountByUserIdRequest request) : base(session, factory, request)
@@ -5322,6 +4890,438 @@ namespace Gs2.Gs2Showcase
         )
 		{
 			var task = new ForceReDrawByUserIdByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeRandomDisplayItemsTask : Gs2RestSessionTask<DescribeRandomDisplayItemsRequest, DescribeRandomDisplayItemsResult>
+        {
+            public DescribeRandomDisplayItemsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRandomDisplayItemsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeRandomDisplayItemsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/random/showcase/{showcaseName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeRandomDisplayItems(
+                Request.DescribeRandomDisplayItemsRequest request,
+                UnityAction<AsyncResult<Result.DescribeRandomDisplayItemsResult>> callback
+        )
+		{
+			var task = new DescribeRandomDisplayItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeRandomDisplayItemsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeRandomDisplayItemsResult> DescribeRandomDisplayItemsFuture(
+                Request.DescribeRandomDisplayItemsRequest request
+        )
+		{
+			return new DescribeRandomDisplayItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeRandomDisplayItemsResult> DescribeRandomDisplayItemsAsync(
+                Request.DescribeRandomDisplayItemsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeRandomDisplayItemsResult> result = null;
+			await DescribeRandomDisplayItems(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeRandomDisplayItemsTask DescribeRandomDisplayItemsAsync(
+                Request.DescribeRandomDisplayItemsRequest request
+        )
+		{
+			return new DescribeRandomDisplayItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeRandomDisplayItemsResult> DescribeRandomDisplayItemsAsync(
+                Request.DescribeRandomDisplayItemsRequest request
+        )
+		{
+			var task = new DescribeRandomDisplayItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeRandomDisplayItemsByUserIdTask : Gs2RestSessionTask<DescribeRandomDisplayItemsByUserIdRequest, DescribeRandomDisplayItemsByUserIdResult>
+        {
+            public DescribeRandomDisplayItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRandomDisplayItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeRandomDisplayItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/random/showcase/{showcaseName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeRandomDisplayItemsByUserId(
+                Request.DescribeRandomDisplayItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeRandomDisplayItemsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeRandomDisplayItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeRandomDisplayItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeRandomDisplayItemsByUserIdResult> DescribeRandomDisplayItemsByUserIdFuture(
+                Request.DescribeRandomDisplayItemsByUserIdRequest request
+        )
+		{
+			return new DescribeRandomDisplayItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeRandomDisplayItemsByUserIdResult> DescribeRandomDisplayItemsByUserIdAsync(
+                Request.DescribeRandomDisplayItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeRandomDisplayItemsByUserIdResult> result = null;
+			await DescribeRandomDisplayItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeRandomDisplayItemsByUserIdTask DescribeRandomDisplayItemsByUserIdAsync(
+                Request.DescribeRandomDisplayItemsByUserIdRequest request
+        )
+		{
+			return new DescribeRandomDisplayItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeRandomDisplayItemsByUserIdResult> DescribeRandomDisplayItemsByUserIdAsync(
+                Request.DescribeRandomDisplayItemsByUserIdRequest request
+        )
+		{
+			var task = new DescribeRandomDisplayItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetRandomDisplayItemTask : Gs2RestSessionTask<GetRandomDisplayItemRequest, GetRandomDisplayItemResult>
+        {
+            public GetRandomDisplayItemTask(IGs2Session session, RestSessionRequestFactory factory, GetRandomDisplayItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetRandomDisplayItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/random/showcase/{showcaseName}/displayItem/{displayItemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
+                url = url.Replace("{displayItemName}", !string.IsNullOrEmpty(request.DisplayItemName) ? request.DisplayItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetRandomDisplayItem(
+                Request.GetRandomDisplayItemRequest request,
+                UnityAction<AsyncResult<Result.GetRandomDisplayItemResult>> callback
+        )
+		{
+			var task = new GetRandomDisplayItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetRandomDisplayItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetRandomDisplayItemResult> GetRandomDisplayItemFuture(
+                Request.GetRandomDisplayItemRequest request
+        )
+		{
+			return new GetRandomDisplayItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRandomDisplayItemResult> GetRandomDisplayItemAsync(
+                Request.GetRandomDisplayItemRequest request
+        )
+		{
+            AsyncResult<Result.GetRandomDisplayItemResult> result = null;
+			await GetRandomDisplayItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetRandomDisplayItemTask GetRandomDisplayItemAsync(
+                Request.GetRandomDisplayItemRequest request
+        )
+		{
+			return new GetRandomDisplayItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetRandomDisplayItemResult> GetRandomDisplayItemAsync(
+                Request.GetRandomDisplayItemRequest request
+        )
+		{
+			var task = new GetRandomDisplayItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetRandomDisplayItemByUserIdTask : Gs2RestSessionTask<GetRandomDisplayItemByUserIdRequest, GetRandomDisplayItemByUserIdResult>
+        {
+            public GetRandomDisplayItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetRandomDisplayItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetRandomDisplayItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/random/showcase/{showcaseName}/displayItem/{displayItemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
+                url = url.Replace("{displayItemName}", !string.IsNullOrEmpty(request.DisplayItemName) ? request.DisplayItemName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetRandomDisplayItemByUserId(
+                Request.GetRandomDisplayItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetRandomDisplayItemByUserIdResult>> callback
+        )
+		{
+			var task = new GetRandomDisplayItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetRandomDisplayItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetRandomDisplayItemByUserIdResult> GetRandomDisplayItemByUserIdFuture(
+                Request.GetRandomDisplayItemByUserIdRequest request
+        )
+		{
+			return new GetRandomDisplayItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRandomDisplayItemByUserIdResult> GetRandomDisplayItemByUserIdAsync(
+                Request.GetRandomDisplayItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetRandomDisplayItemByUserIdResult> result = null;
+			await GetRandomDisplayItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetRandomDisplayItemByUserIdTask GetRandomDisplayItemByUserIdAsync(
+                Request.GetRandomDisplayItemByUserIdRequest request
+        )
+		{
+			return new GetRandomDisplayItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetRandomDisplayItemByUserIdResult> GetRandomDisplayItemByUserIdAsync(
+                Request.GetRandomDisplayItemByUserIdRequest request
+        )
+		{
+			var task = new GetRandomDisplayItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

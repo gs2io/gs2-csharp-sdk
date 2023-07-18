@@ -106,6 +106,77 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        private async UniTask<Gs2.Gs2Showcase.Model.RandomDisplayItem> GetAsync(
+            #else
+        private IFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem> Get(
+            #endif
+        #else
+        private async Task<Gs2.Gs2Showcase.Model.RandomDisplayItem> GetAsync(
+        #endif
+            GetRandomDisplayItemRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithShowcaseName(this.ShowcaseName)
+                .WithDisplayItemName(this.DisplayItemName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.GetRandomDisplayItemFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.GetRandomDisplayItemAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.ShowcaseName,
+                        "RandomDisplayItem"
+                    );
+                    var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(result?.Item);
+        #else
+            return result?.Item;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> RandomShowcaseBuyAsync(
             #else
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> RandomShowcaseBuy(
@@ -245,6 +316,66 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.DisplayItemName?.ToString()
                 )
             );
+            if (!find) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    var future = this.Get(
+        #else
+                try {
+                    await this.GetAsync(
+        #endif
+                        new GetRandomDisplayItemRequest()
+                    );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
+                        {
+                            var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                    this.DisplayItemName?.ToString()
+                                );
+                            _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "randomDisplayItem")
+                            {
+                                self.OnError(future.Error);
+                            }
+                        }
+                        else
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+        #else
+                } catch(Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                            this.DisplayItemName?.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "randomDisplayItem")
+                    {
+                        throw e;
+                    }
+                }
+        #endif
+                (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                    _parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                        this.DisplayItemName?.ToString()
+                    )
+                );
+            }
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(value);
             yield return null;

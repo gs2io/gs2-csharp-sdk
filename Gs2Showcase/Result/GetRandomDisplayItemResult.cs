@@ -31,11 +31,11 @@ namespace Gs2.Gs2Showcase.Result
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetRandomShowcaseSalesItemByUserIdResult : IResult
+	public class GetRandomDisplayItemResult : IResult
 	{
         public Gs2.Gs2Showcase.Model.RandomDisplayItem Item { set; get; }
 
-        public GetRandomShowcaseSalesItemByUserIdResult WithItem(Gs2.Gs2Showcase.Model.RandomDisplayItem item) {
+        public GetRandomDisplayItemResult WithItem(Gs2.Gs2Showcase.Model.RandomDisplayItem item) {
             this.Item = item;
             return this;
         }
@@ -43,12 +43,12 @@ namespace Gs2.Gs2Showcase.Result
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetRandomShowcaseSalesItemByUserIdResult FromJson(JsonData data)
+        public static GetRandomDisplayItemResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetRandomShowcaseSalesItemByUserIdResult()
+            return new GetRandomDisplayItemResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.RandomDisplayItem.FromJson(data["item"]));
         }
 
