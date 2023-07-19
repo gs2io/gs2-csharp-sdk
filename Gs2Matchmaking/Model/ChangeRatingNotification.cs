@@ -21,10 +21,15 @@ namespace Gs2.Gs2Matchmaking.Model
 	public class ChangeRatingNotification
 	{
         public string NamespaceName { set; get; }
+        public string RatingName { set; get; }
         public string UserId { set; get; }
         public float? RateValue { set; get; }
         public ChangeRatingNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public ChangeRatingNotification WithRatingName(string ratingName) {
+            this.RatingName = ratingName;
             return this;
         }
         public ChangeRatingNotification WithUserId(string userId) {
@@ -46,6 +51,7 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new ChangeRatingNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRateValue(!data.Keys.Contains("rateValue") || data["rateValue"] == null ? null : (float?)float.Parse(data["rateValue"].ToString()));
         }
