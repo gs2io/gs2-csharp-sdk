@@ -35,6 +35,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Deploy.Domain.Gs2Deploy Deploy;
         public readonly Gs2Dictionary.Domain.Gs2Dictionary Dictionary;
         public readonly Gs2Distributor.Domain.Gs2Distributor Distributor;
+        public readonly Gs2Enchant.Domain.Gs2Enchant Enchant;
         public readonly Gs2Enhance.Domain.Gs2Enhance Enhance;
         public readonly Gs2Exchange.Domain.Gs2Exchange Exchange;
         public readonly Gs2Experience.Domain.Gs2Experience Experience;
@@ -90,6 +91,7 @@ namespace Gs2.Core.Domain
                 new Gs2Dictionary.Domain.Gs2Dictionary(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Distributor =
                 new Gs2Distributor.Domain.Gs2Distributor(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            Enchant = new Gs2Enchant.Domain.Gs2Enchant(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Enhance = new Gs2Enhance.Domain.Gs2Enhance(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Exchange = new Gs2Exchange.Domain.Gs2Exchange(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Experience =
@@ -157,6 +159,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Distributor":
                                 Distributor.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2Enchant":
+                                Enchant.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Enhance":
                                 Enhance.HandleNotification(_cache, method, message.payload);
@@ -462,6 +467,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Distributor":
                         Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2Enchant":
+                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Enhance":
                         Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -603,6 +611,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Distributor":
                         Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2Enchant":
+                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Enhance":
                         Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampTask(cache, method, request, result);
@@ -748,6 +759,9 @@ namespace Gs2.Core.Domain
                             case "distributor":
                                 Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromJobResult(cache, method, job,
                                     result);
+                                break;
+                            case "enchant":
+                                Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "enhance":
                                 Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromJobResult(cache, method, job, result);
