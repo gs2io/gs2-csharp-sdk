@@ -66,6 +66,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2SerialKey.Domain.Gs2SerialKey SerialKey;
         public readonly Gs2Showcase.Domain.Gs2Showcase Showcase;
         public readonly Gs2Stamina.Domain.Gs2Stamina Stamina;
+        public readonly Gs2StateMachine.Domain.Gs2StateMachine StateMachine;
         public readonly Gs2Version.Domain.Gs2Version Version;
 
         public Gs2(
@@ -127,6 +128,7 @@ namespace Gs2.Core.Domain
             SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            StateMachine = new Gs2StateMachine.Domain.Gs2StateMachine(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, _sheetConfiguration, session);
 
             if (wssession != null)
@@ -252,6 +254,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Stamina":
                                 Stamina.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2StateMachine":
+                                StateMachine.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Version":
                                 Version.HandleNotification(_cache, method, message.payload);
@@ -560,6 +565,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Stamina":
                         Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
+                    case "Gs2StateMachine":
+                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampSheet(cache, method, request, result);
+                        break;
                     case "Gs2Version":
                         Gs2Version.Domain.Gs2Version.UpdateCacheFromStampSheet(cache, method, request, result);
                         break;
@@ -704,6 +712,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Stamina":
                         Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampTask(cache, method, request, result);
+                        break;
+                    case "Gs2StateMachine":
+                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampTask(cache, method, request, result);
                         break;
                     case "Gs2Version":
                         Gs2Version.Domain.Gs2Version.UpdateCacheFromStampTask(cache, method, request, result);
@@ -854,6 +865,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "stamina":
                                 Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "state_machine":
+                                Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "version":
                                 Gs2Version.Domain.Gs2Version.UpdateCacheFromJobResult(cache, method, job, result);

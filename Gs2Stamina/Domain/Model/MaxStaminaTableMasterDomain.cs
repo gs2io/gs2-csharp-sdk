@@ -254,8 +254,21 @@ namespace Gs2.Gs2Stamina.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
+                        request.MaxStaminaTableName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else

@@ -173,6 +173,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
         #endif
             }
+            AutoRunStampSheet = result?.AutoRunStampSheet;
+            TransactionId = result?.TransactionId;
+
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -262,6 +265,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
         #endif
             }
+            AutoRunStampSheet = result?.AutoRunStampSheet;
+            TransactionId = result?.TransactionId;
+
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else

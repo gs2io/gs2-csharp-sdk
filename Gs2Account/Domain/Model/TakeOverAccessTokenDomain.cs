@@ -338,8 +338,12 @@ namespace Gs2.Gs2Account.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else

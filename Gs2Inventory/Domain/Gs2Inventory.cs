@@ -204,6 +204,7 @@ namespace Gs2.Gs2Inventory.Domain
             );
         }
 
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string method,
@@ -438,6 +439,30 @@ namespace Gs2.Gs2Inventory.Domain
                         }
                         break;
                     }
+                    case "AcquireSimpleItemsByUserId": {
+                        var requestModel = AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireSimpleItemsByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.InventoryName,
+                                "SimpleItem"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                                    item.ItemName.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        break;
+                    }
                 }
         }
 
@@ -576,6 +601,30 @@ namespace Gs2.Gs2Inventory.Domain
                         }
                         break;
                     }
+                    case "ConsumeSimpleItemsByUserId": {
+                        var requestModel = ConsumeSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ConsumeSimpleItemsByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.InventoryName,
+                                "SimpleItem"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                                    item.ItemName.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
+                        }
+                        break;
+                    }
                 }
         }
 
@@ -686,7 +735,7 @@ namespace Gs2.Gs2Inventory.Domain
                                     parentKey,
                                     key,
                                     items,
-                                    items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                                    items == null || items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
                                 );
                                 return items;
                             }).ToArray();
@@ -810,6 +859,30 @@ namespace Gs2.Gs2Inventory.Domain
                                 resultModel.Inventory.InventoryName.ToString()
                             );
                             cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
+                        }
+                    break;
+                }
+                case "acquire_simple_items_by_user_id": {
+                    var requestModel = AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireSimpleItemsByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.InventoryName,
+                                "SimpleItem"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                                    item.ItemName.ToString()
+                                );
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    item,
+                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                                );
+                            }
                         }
                     break;
                 }

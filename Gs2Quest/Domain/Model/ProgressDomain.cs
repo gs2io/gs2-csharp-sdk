@@ -219,8 +219,20 @@ namespace Gs2.Gs2Quest.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.Progress>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
@@ -302,6 +314,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
         #endif
             }
+            AutoRunStampSheet = result?.AutoRunStampSheet;
+            TransactionId = result?.TransactionId;
+
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -339,8 +354,20 @@ namespace Gs2.Gs2Quest.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.Progress>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else

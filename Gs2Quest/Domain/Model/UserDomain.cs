@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -236,6 +234,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
         #endif
             }
+            AutoRunStampSheet = result?.AutoRunStampSheet;
+            TransactionId = result?.TransactionId;
+
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             self.OnComplete(this);
         #else
@@ -246,7 +247,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.UserDomain>(Impl);
         #endif
         }
-
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Quest.Model.Progress> Progresses(
