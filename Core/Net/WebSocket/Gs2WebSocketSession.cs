@@ -238,7 +238,7 @@ namespace Gs2.Core.Net
                 {
                     var begin = DateTime.Now;
 #if UNITY_WEBGL && !UNITY_EDITOR
-                while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
 #else
                     while (this._session.ReadyState != WebSocketState.Open)
 #endif
@@ -338,16 +338,42 @@ namespace Gs2.Core.Net
                     }
                 }
 
-                yield return CloseFuture();
-                var future = OpenFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(
-                        future.Error
-                    );
-                    yield break;
-                }
+                OpenImpl();
+                {
+                    var begin = DateTime.Now;
+                    while (this.State == State.LoggingIn) {
+                        if ((DateTime.Now - begin).Seconds > 10) {
+                            result.OnError(
+                                new RequestTimeoutException(new RequestError[0])
+                            );
+                            yield break;
+                        }
 
+#if UNITY_2017_1_OR_NEWER
+                        yield return new WaitForSeconds(0.05f);
+#endif
+                    }
+                }
+                {
+                    var begin = DateTime.Now;
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+#else
+                    while (this._session.ReadyState != WebSocketState.Open)
+#endif
+                    {
+                        if ((DateTime.Now - begin).Seconds > 10) {
+                            result.OnError(
+                                new RequestTimeoutException(new RequestError[0])
+                            );
+                            yield break;
+                        }
+
+#if UNITY_2017_1_OR_NEWER
+                        yield return new WaitForSeconds(0.05f);
+#endif
+                    }
+                }
                 result.OnComplete(null);
             }
 

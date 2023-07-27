@@ -154,6 +154,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         this.NamespaceName,
                         this.UserId,
                         this.CategoryName,
+                        resultModel.Item.ScorerUserId,
                         "Score"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -233,6 +234,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.CategoryName,
+                this.ScorerUserId,
                 "Score"
             );
             var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Score>(

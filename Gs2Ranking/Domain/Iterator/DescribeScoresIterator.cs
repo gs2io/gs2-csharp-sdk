@@ -119,6 +119,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.NamespaceName,
                 this.UserId,
                 this.CategoryName,
+                this.ScorerUserId,
                 "Score"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Score>

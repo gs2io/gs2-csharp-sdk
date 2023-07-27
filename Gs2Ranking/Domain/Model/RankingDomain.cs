@@ -214,6 +214,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         this.NamespaceName,
                         this.UserId,
                         this.CategoryName,
+                        resultModel.Item.ScorerUserId,
                         "Score"
                     );
                     var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
