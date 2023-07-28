@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -169,6 +171,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     );
                 }
             }
+            var items = this._result.ToList();
+            items.Sort((v1, v2) => v1.SortValue.Value - v2.SortValue.Value);
+            this._result = items.ToArray();
         }
 
         private bool _hasNext()
