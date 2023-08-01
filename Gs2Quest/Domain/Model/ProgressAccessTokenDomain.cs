@@ -459,6 +459,13 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.Progress> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Quest.Model.Progress>(
+                       _parentKey,
+                       Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.Progress>(
                 _parentKey,
                 Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
@@ -526,6 +533,9 @@ namespace Gs2.Gs2Quest.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

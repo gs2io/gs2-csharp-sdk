@@ -224,6 +224,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.SerialKey> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2SerialKey.Model.SerialKey>(
+                       _parentKey,
+                       Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                            this.SerialKeyCode?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
                 _parentKey,
                 Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
@@ -235,6 +243,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

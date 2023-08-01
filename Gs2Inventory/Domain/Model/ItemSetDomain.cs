@@ -804,8 +804,22 @@ namespace Gs2.Gs2Inventory.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                        request.ItemName.ToString(),
+                        request.ItemSetName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
@@ -979,7 +993,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var resultModel = result;
             var cache = _cache;
             if (resultModel != null) {
-                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.InventoryName,
+                        this.ItemName,
+                        this.ItemSetName,
+                        "ReferenceOf"
+                    );
+                    foreach (var item in resultModel.Item) {
+                        this._cache.Put(
+                            parentKey,
+                            item,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
                 if (resultModel.ItemSet != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                         this.NamespaceName,
@@ -1149,6 +1180,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> self)
             {
         #endif
+#if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Inventory.Model.ItemSet>(
+                       _parentKey,
+                       Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                           this.ItemName?.ToString(),
+                           this.ItemSetName?.ToString()
+                       )).LockAsync())
+            {
+# endif
             Gs2.Gs2Inventory.Model.ItemSet[] value;
             bool find = false;
             if (!string.IsNullOrEmpty(this.ItemSetName)) {
@@ -1195,17 +1235,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "itemSet")
-                            {
-                                _cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(
-                                    _parentKey,
-                                    Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                        this.ItemName?.ToString(),
-                                        this.ItemSetName?.ToString()
-                                    )
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    this.ItemName?.ToString(),
+                                    this.ItemSetName?.ToString()
                                 );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "itemSet")
                             {
                                 self.OnError(future.Error);
                             }
@@ -1218,17 +1259,17 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "itemSet")
-                    {
-                        _cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(
-                            _parentKey,
-                            Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                                this.ItemName?.ToString(),
-                                this.ItemSetName?.ToString()
-                            )
+                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                            this.ItemName?.ToString(),
+                            this.ItemSetName?.ToString()
                         );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "itemSet")
                     {
                         throw e;
                     }
@@ -1265,6 +1306,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

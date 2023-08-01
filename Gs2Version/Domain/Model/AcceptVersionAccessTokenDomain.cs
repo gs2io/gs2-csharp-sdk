@@ -378,6 +378,14 @@ namespace Gs2.Gs2Version.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
+                       _parentKey,
+                       Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            this.VersionName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
                 _parentKey,
                 Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
@@ -449,6 +457,9 @@ namespace Gs2.Gs2Version.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

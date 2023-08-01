@@ -341,8 +341,21 @@ namespace Gs2.Gs2Inventory.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
+                        request.ReferenceOf.ToString()
+                    );
+                    _cache.Put<string>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
@@ -354,11 +367,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             } catch(Gs2.Core.Exception.NotFoundException e) {
                 if (e.errors[0].component == "referenceOf")
                 {
-                    var parentKey = "inventory:Array";
                     var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
                         request.ReferenceOf.ToString()
                     );
-                    _cache.Delete<Gs2.Gs2Inventory.Model.ReferenceOf>(parentKey, key);
+                    _cache.Put<string>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
                 }
                 else
                 {
@@ -480,12 +497,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<string> self)
             {
-                self.OnComplete(this.ReferenceOf?.ToString());
+                var (value, find) = _cache.Get<string>(
+                    _parentKey,
+                    Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
+                        this.ReferenceOf?.ToString()
+                    )
+                );
+                self.OnComplete(value);
                 yield return null;
             }
             return new Gs2InlineFuture<string>(Impl);
         #else
-            return this.ReferenceOf;
+            var (value, find) = _cache.Get<string>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
+                    this.ReferenceOf?.ToString()
+                )
+            );
+            return value;
         #endif
         }
 

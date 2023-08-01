@@ -218,6 +218,13 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                       _parentKey,
+                       Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 _parentKey,
                 Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
@@ -228,6 +235,9 @@ namespace Gs2.Gs2Gateway.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

@@ -127,6 +127,13 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.PublicProfile> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Friend.Model.PublicProfile>(
+                       _parentKey,
+                       Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
@@ -137,6 +144,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

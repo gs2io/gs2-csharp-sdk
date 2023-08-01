@@ -237,6 +237,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.ScorerUserId,
                 "Score"
             );
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Ranking.Model.Score>(
+                       _parentKey,
+                       Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                            this.CategoryName?.ToString(),
+                            this.ScorerUserId?.ToString(),
+                            this.UniqueId?.ToString() ?? "0"
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Score>(
                 parentKey,
                 Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
@@ -316,6 +326,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

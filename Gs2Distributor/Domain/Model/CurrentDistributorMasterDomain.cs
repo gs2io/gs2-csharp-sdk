@@ -388,6 +388,13 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.CurrentDistributorMaster> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Distributor.Model.CurrentDistributorMaster>(
+                       _parentKey,
+                       Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain.CreateCacheKey(
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Distributor.Model.CurrentDistributorMaster>(
                 _parentKey,
                 Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain.CreateCacheKey(
@@ -455,6 +462,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

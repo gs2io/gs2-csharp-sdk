@@ -551,6 +551,14 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Formation.Model.Mold>(
+                       _parentKey,
+                       Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                            this.MoldName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
@@ -622,6 +630,9 @@ namespace Gs2.Gs2Formation.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

@@ -449,6 +449,14 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Chat.Model.Subscribe>(
+                       _parentKey,
+                       Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            this.RoomName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
                 _parentKey,
                 Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
@@ -520,6 +528,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

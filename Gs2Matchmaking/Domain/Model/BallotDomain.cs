@@ -40,7 +40,6 @@ using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
-using Gs2.Gs2Matchmaking.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
 using System.Collections;
@@ -245,7 +244,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Ballot> self)
             {
         #endif
-            Ballot value = null;
+            Gs2.Gs2Matchmaking.Model.Ballot value = null;
             var find = false;
             if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -262,22 +261,20 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "ballot")
-                            {
-                                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                            var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                                     this.RatingName?.ToString(),
                                     this.GatheringName?.ToString(),
                                     this.NumberOfPlayer?.ToString(),
                                     this.KeyId?.ToString()
                                 );
-                                _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                                    _parentKey,
-                                    key,
-                                    null,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "ballot")
                             {
                                 self.OnError(future.Error);
                             }
@@ -290,22 +287,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "ballot")
-                    {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                             this.RatingName?.ToString(),
                             this.GatheringName?.ToString(),
                             this.NumberOfPlayer?.ToString(),
                             this.KeyId?.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "ballot")
                     {
                         throw e;
                     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Util;
 using Gs2.Core.Util;
 
 namespace Gs2.Core.Domain
@@ -11,6 +12,7 @@ namespace Gs2.Core.Domain
         private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
         private readonly Dictionary<Type, HashSet<string>> _listCacheUpdateRequired = new Dictionary<Type, HashSet<string>>();
         private readonly Dictionary<Type, Dictionary<string, object>> _listCacheContexts = new Dictionary<Type, Dictionary<string, object>>();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>> _lockObjects = new Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>>();
 
         public void Clear()
         {
@@ -84,6 +86,17 @@ namespace Gs2.Core.Domain
             }
 
             return new Tuple<TKind, bool>(default, false);
+        }
+
+        public AsyncLock GetLockObject<TKind>(string parentKey, string key)
+        {
+            var asyncLocks = this._lockObjects.Get(typeof(TKind))?.Get(parentKey);
+            if (asyncLocks != null && asyncLocks.TryGetValue(key, out var asyncLock))
+            {
+                return asyncLock;
+            }
+
+            return _lockObjects.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new AsyncLock();
         }
 
         public TKind[] List<TKind>(string parentKey)

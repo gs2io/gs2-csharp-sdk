@@ -572,13 +572,21 @@ namespace Gs2.Gs2Stamina.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.Stamina> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Stamina.Model.Stamina>(
+                       _parentKey,
+                       Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            this.StaminaName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     this.StaminaName?.ToString()
                 )
             );
-            if (value == null) {
+            if (!find) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     var future = this.Get(
         #else
@@ -593,16 +601,17 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     {
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
-                            if (e.errors[0].component == "stamina")
-                            {
-                                _cache.Delete<Gs2.Gs2Stamina.Model.Stamina>(
-                                    _parentKey,
-                                    Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                        this.StaminaName?.ToString()
-                                    )
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                    this.StaminaName?.ToString()
                                 );
-                            }
-                            else
+                            _cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "stamina")
                             {
                                 self.OnError(future.Error);
                             }
@@ -615,16 +624,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     }
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
-                    if (e.errors[0].component == "stamina")
-                    {
-                        _cache.Delete<Gs2.Gs2Stamina.Model.Stamina>(
-                            _parentKey,
-                            Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                this.StaminaName?.ToString()
-                            )
+                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            this.StaminaName?.ToString()
                         );
-                    }
-                    else
+                    _cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    if (e.errors[0].component != "stamina")
                     {
                         throw e;
                     }
@@ -655,6 +664,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
