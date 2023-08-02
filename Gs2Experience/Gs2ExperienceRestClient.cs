@@ -198,6 +198,11 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.ExperienceCapScriptId != null)
                 {
                     jsonWriter.WritePropertyName("experienceCapScriptId");
@@ -557,6 +562,11 @@ namespace Gs2.Gs2Experience
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.ExperienceCapScriptId != null)
                 {
@@ -954,6 +964,16 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("rankThresholdName");
                     jsonWriter.Write(request.RankThresholdName);
                 }
+                if (request.AcquireActionRates != null)
+                {
+                    jsonWriter.WritePropertyName("acquireActionRates");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireActionRates)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1206,6 +1226,16 @@ namespace Gs2.Gs2Experience
                 {
                     jsonWriter.WritePropertyName("rankThresholdName");
                     jsonWriter.Write(request.RankThresholdName);
+                }
+                if (request.AcquireActionRates != null)
+                {
+                    jsonWriter.WritePropertyName("acquireActionRates");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireActionRates)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ContextStack != null)
                 {
@@ -4334,6 +4364,266 @@ namespace Gs2.Gs2Experience
         )
 		{
 			var task = new SetRankCapByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class MultiplyAcquireActionsByUserIdTask : Gs2RestSessionTask<MultiplyAcquireActionsByUserIdRequest, MultiplyAcquireActionsByUserIdResult>
+        {
+            public MultiplyAcquireActionsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, MultiplyAcquireActionsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(MultiplyAcquireActionsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/model/{experienceName}/property/{propertyId}/acquire/rate/{rateName}/multiply";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.AcquireActions != null)
+                {
+                    jsonWriter.WritePropertyName("acquireActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator MultiplyAcquireActionsByUserId(
+                Request.MultiplyAcquireActionsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.MultiplyAcquireActionsByUserIdResult>> callback
+        )
+		{
+			var task = new MultiplyAcquireActionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.MultiplyAcquireActionsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.MultiplyAcquireActionsByUserIdResult> MultiplyAcquireActionsByUserIdFuture(
+                Request.MultiplyAcquireActionsByUserIdRequest request
+        )
+		{
+			return new MultiplyAcquireActionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.MultiplyAcquireActionsByUserIdResult> MultiplyAcquireActionsByUserIdAsync(
+                Request.MultiplyAcquireActionsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.MultiplyAcquireActionsByUserIdResult> result = null;
+			await MultiplyAcquireActionsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public MultiplyAcquireActionsByUserIdTask MultiplyAcquireActionsByUserIdAsync(
+                Request.MultiplyAcquireActionsByUserIdRequest request
+        )
+		{
+			return new MultiplyAcquireActionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.MultiplyAcquireActionsByUserIdResult> MultiplyAcquireActionsByUserIdAsync(
+                Request.MultiplyAcquireActionsByUserIdRequest request
+        )
+		{
+			var task = new MultiplyAcquireActionsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class MultiplyAcquireActionsByStampSheetTask : Gs2RestSessionTask<MultiplyAcquireActionsByStampSheetRequest, MultiplyAcquireActionsByStampSheetResult>
+        {
+            public MultiplyAcquireActionsByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, MultiplyAcquireActionsByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(MultiplyAcquireActionsByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/form/acquire";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator MultiplyAcquireActionsByStampSheet(
+                Request.MultiplyAcquireActionsByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.MultiplyAcquireActionsByStampSheetResult>> callback
+        )
+		{
+			var task = new MultiplyAcquireActionsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.MultiplyAcquireActionsByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.MultiplyAcquireActionsByStampSheetResult> MultiplyAcquireActionsByStampSheetFuture(
+                Request.MultiplyAcquireActionsByStampSheetRequest request
+        )
+		{
+			return new MultiplyAcquireActionsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.MultiplyAcquireActionsByStampSheetResult> MultiplyAcquireActionsByStampSheetAsync(
+                Request.MultiplyAcquireActionsByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.MultiplyAcquireActionsByStampSheetResult> result = null;
+			await MultiplyAcquireActionsByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public MultiplyAcquireActionsByStampSheetTask MultiplyAcquireActionsByStampSheetAsync(
+                Request.MultiplyAcquireActionsByStampSheetRequest request
+        )
+		{
+			return new MultiplyAcquireActionsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.MultiplyAcquireActionsByStampSheetResult> MultiplyAcquireActionsByStampSheetAsync(
+                Request.MultiplyAcquireActionsByStampSheetRequest request
+        )
+		{
+			var task = new MultiplyAcquireActionsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

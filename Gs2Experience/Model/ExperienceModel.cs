@@ -38,6 +38,7 @@ namespace Gs2.Gs2Experience.Model
         public long? DefaultRankCap { set; get; }
         public long? MaxRankCap { set; get; }
         public Gs2.Gs2Experience.Model.Threshold RankThreshold { set; get; }
+        public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; }
         public ExperienceModel WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Experience.Model
         }
         public ExperienceModel WithRankThreshold(Gs2.Gs2Experience.Model.Threshold rankThreshold) {
             this.RankThreshold = rankThreshold;
+            return this;
+        }
+        public ExperienceModel WithAcquireActionRates(Gs2.Gs2Experience.Model.AcquireActionRate[] acquireActionRates) {
+            this.AcquireActionRates = acquireActionRates;
             return this;
         }
 
@@ -150,7 +155,10 @@ namespace Gs2.Gs2Experience.Model
                 .WithDefaultExperience(!data.Keys.Contains("defaultExperience") || data["defaultExperience"] == null ? null : (long?)long.Parse(data["defaultExperience"].ToString()))
                 .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)long.Parse(data["defaultRankCap"].ToString()))
                 .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)long.Parse(data["maxRankCap"].ToString()))
-                .WithRankThreshold(!data.Keys.Contains("rankThreshold") || data["rankThreshold"] == null ? null : Gs2.Gs2Experience.Model.Threshold.FromJson(data["rankThreshold"]));
+                .WithRankThreshold(!data.Keys.Contains("rankThreshold") || data["rankThreshold"] == null ? null : Gs2.Gs2Experience.Model.Threshold.FromJson(data["rankThreshold"]))
+                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null ? new Gs2.Gs2Experience.Model.AcquireActionRate[]{} : data["acquireActionRates"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Experience.Model.AcquireActionRate.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
@@ -163,6 +171,12 @@ namespace Gs2.Gs2Experience.Model
                 ["defaultRankCap"] = DefaultRankCap,
                 ["maxRankCap"] = MaxRankCap,
                 ["rankThreshold"] = RankThreshold?.ToJson(),
+                ["acquireActionRates"] = AcquireActionRates == null ? null : new JsonData(
+                        AcquireActionRates.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
@@ -196,6 +210,17 @@ namespace Gs2.Gs2Experience.Model
             if (RankThreshold != null) {
                 writer.WritePropertyName("rankThreshold");
                 RankThreshold.WriteJson(writer);
+            }
+            if (AcquireActionRates != null) {
+                writer.WritePropertyName("acquireActionRates");
+                writer.WriteArrayStart();
+                foreach (var acquireActionRate in AcquireActionRates)
+                {
+                    if (acquireActionRate != null) {
+                        acquireActionRate.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -259,6 +284,18 @@ namespace Gs2.Gs2Experience.Model
             else
             {
                 diff += RankThreshold.CompareTo(other.RankThreshold);
+            }
+            if (AcquireActionRates == null && AcquireActionRates == other.AcquireActionRates)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AcquireActionRates.Length - other.AcquireActionRates.Length;
+                for (var i = 0; i < AcquireActionRates.Length; i++)
+                {
+                    diff += AcquireActionRates[i].CompareTo(other.AcquireActionRates[i]);
+                }
             }
             return diff;
         }

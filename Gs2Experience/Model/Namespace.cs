@@ -34,6 +34,7 @@ namespace Gs2.Gs2Experience.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; }
         public string ExperienceCapScriptId { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Experience.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Experience.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithExperienceCapScriptId(string experienceCapScriptId) {
@@ -150,6 +155,7 @@ namespace Gs2.Gs2Experience.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Experience.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExperienceCapScriptId(!data.Keys.Contains("experienceCapScriptId") || data["experienceCapScriptId"] == null ? null : data["experienceCapScriptId"].ToString())
                 .WithChangeExperienceScript(!data.Keys.Contains("changeExperienceScript") || data["changeExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeExperienceScript"]))
                 .WithChangeRankScript(!data.Keys.Contains("changeRankScript") || data["changeRankScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankScript"]))
@@ -166,6 +172,7 @@ namespace Gs2.Gs2Experience.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["experienceCapScriptId"] = ExperienceCapScriptId,
                 ["changeExperienceScript"] = ChangeExperienceScript?.ToJson(),
                 ["changeRankScript"] = ChangeRankScript?.ToJson(),
@@ -191,6 +198,10 @@ namespace Gs2.Gs2Experience.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (ExperienceCapScriptId != null) {
                 writer.WritePropertyName("experienceCapScriptId");
@@ -254,6 +265,14 @@ namespace Gs2.Gs2Experience.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (ExperienceCapScriptId == null && ExperienceCapScriptId == other.ExperienceCapScriptId)
             {

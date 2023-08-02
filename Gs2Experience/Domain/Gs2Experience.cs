@@ -279,6 +279,12 @@ namespace Gs2.Gs2Experience.Domain
                         }
                         break;
                     }
+                    case "MultiplyAcquireActionsByUserId": {
+                        var requestModel = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = MultiplyAcquireActionsByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        break;
+                    }
                 }
         }
 
@@ -364,6 +370,12 @@ namespace Gs2.Gs2Experience.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+                    break;
+                }
+                case "multiply_acquire_actions_by_user_id": {
+                    var requestModel = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = MultiplyAcquireActionsByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
                     break;
                 }
             }

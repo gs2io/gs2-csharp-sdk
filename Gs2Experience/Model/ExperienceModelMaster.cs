@@ -39,6 +39,7 @@ namespace Gs2.Gs2Experience.Model
         public long? DefaultRankCap { set; get; }
         public long? MaxRankCap { set; get; }
         public string RankThresholdName { set; get; }
+        public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public ExperienceModelMaster WithExperienceModelId(string experienceModelId) {
@@ -71,6 +72,10 @@ namespace Gs2.Gs2Experience.Model
         }
         public ExperienceModelMaster WithRankThresholdName(string rankThresholdName) {
             this.RankThresholdName = rankThresholdName;
+            return this;
+        }
+        public ExperienceModelMaster WithAcquireActionRates(Gs2.Gs2Experience.Model.AcquireActionRate[] acquireActionRates) {
+            this.AcquireActionRates = acquireActionRates;
             return this;
         }
         public ExperienceModelMaster WithCreatedAt(long? createdAt) {
@@ -167,6 +172,9 @@ namespace Gs2.Gs2Experience.Model
                 .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)long.Parse(data["defaultRankCap"].ToString()))
                 .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)long.Parse(data["maxRankCap"].ToString()))
                 .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString())
+                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null ? new Gs2.Gs2Experience.Model.AcquireActionRate[]{} : data["acquireActionRates"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Experience.Model.AcquireActionRate.FromJson(v);
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
@@ -182,6 +190,12 @@ namespace Gs2.Gs2Experience.Model
                 ["defaultRankCap"] = DefaultRankCap,
                 ["maxRankCap"] = MaxRankCap,
                 ["rankThresholdName"] = RankThresholdName,
+                ["acquireActionRates"] = AcquireActionRates == null ? null : new JsonData(
+                        AcquireActionRates.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -221,6 +235,17 @@ namespace Gs2.Gs2Experience.Model
             if (RankThresholdName != null) {
                 writer.WritePropertyName("rankThresholdName");
                 writer.Write(RankThresholdName.ToString());
+            }
+            if (AcquireActionRates != null) {
+                writer.WritePropertyName("acquireActionRates");
+                writer.WriteArrayStart();
+                foreach (var acquireActionRate in AcquireActionRates)
+                {
+                    if (acquireActionRate != null) {
+                        acquireActionRate.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -300,6 +325,18 @@ namespace Gs2.Gs2Experience.Model
             else
             {
                 diff += RankThresholdName.CompareTo(other.RankThresholdName);
+            }
+            if (AcquireActionRates == null && AcquireActionRates == other.AcquireActionRates)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AcquireActionRates.Length - other.AcquireActionRates.Length;
+                for (var i = 0; i < AcquireActionRates.Length; i++)
+                {
+                    diff += AcquireActionRates[i].CompareTo(other.AcquireActionRates[i]);
+                }
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {

@@ -41,6 +41,7 @@ namespace Gs2.Gs2Experience.Request
         public long? DefaultRankCap { set; get; }
         public long? MaxRankCap { set; get; }
         public string RankThresholdName { set; get; }
+        public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; }
         public UpdateExperienceModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -73,6 +74,10 @@ namespace Gs2.Gs2Experience.Request
             this.RankThresholdName = rankThresholdName;
             return this;
         }
+        public UpdateExperienceModelMasterRequest WithAcquireActionRates(Gs2.Gs2Experience.Model.AcquireActionRate[] acquireActionRates) {
+            this.AcquireActionRates = acquireActionRates;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -90,7 +95,10 @@ namespace Gs2.Gs2Experience.Request
                 .WithDefaultExperience(!data.Keys.Contains("defaultExperience") || data["defaultExperience"] == null ? null : (long?)long.Parse(data["defaultExperience"].ToString()))
                 .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)long.Parse(data["defaultRankCap"].ToString()))
                 .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)long.Parse(data["maxRankCap"].ToString()))
-                .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString());
+                .WithRankThresholdName(!data.Keys.Contains("rankThresholdName") || data["rankThresholdName"] == null ? null : data["rankThresholdName"].ToString())
+                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null ? new Gs2.Gs2Experience.Model.AcquireActionRate[]{} : data["acquireActionRates"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Experience.Model.AcquireActionRate.FromJson(v);
+                }).ToArray());
         }
 
         public override JsonData ToJson()
@@ -104,6 +112,12 @@ namespace Gs2.Gs2Experience.Request
                 ["defaultRankCap"] = DefaultRankCap,
                 ["maxRankCap"] = MaxRankCap,
                 ["rankThresholdName"] = RankThresholdName,
+                ["acquireActionRates"] = AcquireActionRates == null ? null : new JsonData(
+                        AcquireActionRates.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
             };
         }
 
@@ -142,6 +156,14 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("rankThresholdName");
                 writer.Write(RankThresholdName.ToString());
             }
+            writer.WriteArrayStart();
+            foreach (var acquireActionRate in AcquireActionRates)
+            {
+                if (acquireActionRate != null) {
+                    acquireActionRate.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 
@@ -155,6 +177,7 @@ namespace Gs2.Gs2Experience.Request
             key += DefaultRankCap + ":";
             key += MaxRankCap + ":";
             key += RankThresholdName + ":";
+            key += AcquireActionRates + ":";
             return key;
         }
 

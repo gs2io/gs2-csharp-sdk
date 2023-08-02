@@ -69,6 +69,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         private readonly String _parentKey;
         public string Body { get; set; }
         public string Signature { get; set; }
+        public string TransactionId { get; set; }
+        public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
         public string ExperienceName => _experienceName;
@@ -642,6 +644,85 @@ namespace Gs2.Gs2Experience.Domain.Model
             yield return null;
         #else
             return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> MultiplyAcquireActionsAsync(
+            #else
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> MultiplyAcquireActions(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusDomain> MultiplyAcquireActionsAsync(
+        #endif
+            MultiplyAcquireActionsByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.MultiplyAcquireActionsByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.MultiplyAcquireActionsByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+            if (result?.StampSheet != null)
+            {
+                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
+                        _cache,
+                        _jobQueueDomain,
+                        _session,
+                        result?.StampSheet,
+                        result?.StampSheetEncryptionKeyId,
+                        _stampSheetConfiguration.NamespaceName,
+                        _stampSheetConfiguration.StampTaskEventHandler,
+                        _stampSheetConfiguration.StampSheetEventHandler
+                );
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                yield return stampSheet.Run();
+        #else
+                try {
+                    await stampSheet.RunAsync();
+                } catch (Gs2.Core.Exception.Gs2Exception e) {
+                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                }
+        #endif
+            }
+            AutoRunStampSheet = result?.AutoRunStampSheet;
+            TransactionId = result?.TransactionId;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(this);
+        #else
+            return this;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
