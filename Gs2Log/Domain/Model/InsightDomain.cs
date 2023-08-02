@@ -294,6 +294,14 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Insight> self)
             {
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Log.Model.Insight>(
+                       _parentKey,
+                       Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
+                            this.InsightName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
@@ -365,6 +373,9 @@ namespace Gs2.Gs2Log.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

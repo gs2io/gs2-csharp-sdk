@@ -21,7 +21,7 @@ namespace Core.Util
                 this._releaser :
                 wait.ContinueWith(
                     (_, state) => (IDisposable)state,
-                    this._releaser.Status, 
+                    this._releaser.Result, 
                     System.Threading.CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously, 
                     TaskScheduler.Default

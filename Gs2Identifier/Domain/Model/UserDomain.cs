@@ -544,6 +544,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 "identifier",
                 "User"
             );
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Identifier.Model.User>(
+                       _parentKey,
+                       Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                            this.UserName?.ToString()
+                        )).LockAsync())
+            {
+        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.User>(
                 parentKey,
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
@@ -615,6 +623,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             yield return null;
         #else
             return value;
+        #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
