@@ -1138,6 +1138,16 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("calculateIntervalMinutes");
                     jsonWriter.Write(request.CalculateIntervalMinutes.ToString());
                 }
+                if (request.AdditionalScopes != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AdditionalScopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.EntryPeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("entryPeriodEventId");
@@ -1440,6 +1450,16 @@ namespace Gs2.Gs2Ranking
                 {
                     jsonWriter.WritePropertyName("calculateIntervalMinutes");
                     jsonWriter.Write(request.CalculateIntervalMinutes.ToString());
+                }
+                if (request.AdditionalScopes != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AdditionalScopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.EntryPeriodEventId != null)
                 {
@@ -2388,6 +2408,9 @@ namespace Gs2.Gs2Ranking
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.AdditionalScopeName != null) {
+                    sessionRequest.AddQueryString("additionalScopeName", $"{request.AdditionalScopeName}");
+                }
                 if (request.StartIndex != null) {
                     sessionRequest.AddQueryString("startIndex", $"{request.StartIndex}");
                 }
@@ -2507,6 +2530,9 @@ namespace Gs2.Gs2Ranking
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.AdditionalScopeName != null) {
+                    sessionRequest.AddQueryString("additionalScopeName", $"{request.AdditionalScopeName}");
+                }
                 if (request.StartIndex != null) {
                     sessionRequest.AddQueryString("startIndex", $"{request.StartIndex}");
                 }
@@ -2621,6 +2647,9 @@ namespace Gs2.Gs2Ranking
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.AdditionalScopeName != null) {
+                    sessionRequest.AddQueryString("additionalScopeName", $"{request.AdditionalScopeName}");
+                }
                 if (request.Score != null) {
                     sessionRequest.AddQueryString("score", $"{request.Score}");
                 }
@@ -2730,6 +2759,9 @@ namespace Gs2.Gs2Ranking
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AdditionalScopeName != null) {
+                    sessionRequest.AddQueryString("additionalScopeName", $"{request.AdditionalScopeName}");
                 }
 
                 if (request.RequestId != null)
@@ -2842,6 +2874,9 @@ namespace Gs2.Gs2Ranking
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AdditionalScopeName != null) {
+                    sessionRequest.AddQueryString("additionalScopeName", $"{request.AdditionalScopeName}");
                 }
 
                 if (request.RequestId != null)
@@ -3217,6 +3252,11 @@ namespace Gs2.Gs2Ranking
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.AdditionalScopeName != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopeName");
+                    jsonWriter.Write(request.AdditionalScopeName);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

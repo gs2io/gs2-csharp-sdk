@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -69,9 +71,11 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private readonly Gs2RankingRestClient _client;
         private readonly string _namespaceName;
         private readonly string _categoryName;
+        private readonly string _additionalScopeName;
         private readonly long? _score;
         public string NamespaceName => _namespaceName;
         public string CategoryName => _categoryName;
+        public string AdditionalScopeName => _additionalScopeName;
         public long? Score => _score;
         private bool _isCacheChecked;
         private bool _last;
@@ -84,12 +88,14 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
+            string additionalScopeName,
             long? score
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
             this._categoryName = categoryName;
+            this._additionalScopeName = additionalScopeName;
             this._score = score;
             this._last = false;
             this._result = new Gs2.Gs2Ranking.Model.Ranking[]{};
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.NamespaceName,
                 "Singleton",
                 this.CategoryName,
+                this.AdditionalScopeName,
                 "NearRanking"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
@@ -135,6 +142,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     new Gs2.Gs2Ranking.Request.DescribeNearRankingsRequest()
                         .WithNamespaceName(this._namespaceName)
                         .WithCategoryName(this._categoryName)
+                        .WithAdditionalScopeName(this._additionalScopeName)
                         .WithScore(this._score)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

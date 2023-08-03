@@ -36,6 +36,7 @@ namespace Gs2.Gs2Ranking.Request
         public string NamespaceName { set; get; }
         public string CategoryName { set; get; }
         public string UserId { set; get; }
+        public string AdditionalScopeName { set; get; }
         public long? StartIndex { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
@@ -49,6 +50,10 @@ namespace Gs2.Gs2Ranking.Request
         }
         public DescribeRankingssByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DescribeRankingssByUserIdRequest WithAdditionalScopeName(string additionalScopeName) {
+            this.AdditionalScopeName = additionalScopeName;
             return this;
         }
         public DescribeRankingssByUserIdRequest WithStartIndex(long? startIndex) {
@@ -76,6 +81,7 @@ namespace Gs2.Gs2Ranking.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithAdditionalScopeName(!data.Keys.Contains("additionalScopeName") || data["additionalScopeName"] == null ? null : data["additionalScopeName"].ToString())
                 .WithStartIndex(!data.Keys.Contains("startIndex") || data["startIndex"] == null ? null : (long?)long.Parse(data["startIndex"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
@@ -87,6 +93,7 @@ namespace Gs2.Gs2Ranking.Request
                 ["namespaceName"] = NamespaceName,
                 ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
+                ["additionalScopeName"] = AdditionalScopeName,
                 ["startIndex"] = StartIndex,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
@@ -108,6 +115,10 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (AdditionalScopeName != null) {
+                writer.WritePropertyName("additionalScopeName");
+                writer.Write(AdditionalScopeName.ToString());
+            }
             if (StartIndex != null) {
                 writer.WritePropertyName("startIndex");
                 writer.Write(long.Parse(StartIndex.ToString()));
@@ -128,6 +139,7 @@ namespace Gs2.Gs2Ranking.Request
             key += NamespaceName + ":";
             key += CategoryName + ":";
             key += UserId + ":";
+            key += AdditionalScopeName + ":";
             key += StartIndex + ":";
             key += PageToken + ":";
             key += Limit + ":";

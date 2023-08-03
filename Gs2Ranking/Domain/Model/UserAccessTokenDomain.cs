@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -248,7 +250,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> Rankings(
-            string categoryName
+            string categoryName,
+            string additionalScopeName
         )
         {
             return new DescribeRankingsIterator(
@@ -256,7 +259,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this._client,
                 this.NamespaceName,
                 categoryName,
-                this.AccessToken
+                this.AccessToken,
+                additionalScopeName
             );
         }
 
@@ -267,7 +271,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #else
         public DescribeRankingsIterator Rankings(
         #endif
-            string categoryName
+            string categoryName,
+            string additionalScopeName = null
         )
         {
             return new DescribeRankingsIterator(
@@ -275,7 +280,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this._client,
                 this.NamespaceName,
                 categoryName,
-                this.AccessToken
+                this.AccessToken,
+                additionalScopeName
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();

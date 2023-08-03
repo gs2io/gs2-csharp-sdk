@@ -46,6 +46,7 @@ namespace Gs2.Gs2Ranking.Request
         public int? CalculateFixedTimingHour { set; get; }
         public int? CalculateFixedTimingMinute { set; get; }
         public int? CalculateIntervalMinutes { set; get; }
+        public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
         public string EntryPeriodEventId { set; get; }
         public string AccessPeriodEventId { set; get; }
         public string[] IgnoreUserIds { set; get; }
@@ -102,6 +103,10 @@ namespace Gs2.Gs2Ranking.Request
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
+        public CreateCategoryModelMasterRequest WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
+            this.AdditionalScopes = additionalScopes;
+            return this;
+        }
         public CreateCategoryModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
@@ -141,6 +146,9 @@ namespace Gs2.Gs2Ranking.Request
                 .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)int.Parse(data["calculateFixedTimingHour"].ToString()))
                 .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()))
                 .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
+                .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null ? new Gs2.Gs2Ranking.Model.Scope[]{} : data["additionalScopes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Ranking.Model.Scope.FromJson(v);
+                }).ToArray())
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
                 .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null ? new string[]{} : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
@@ -165,6 +173,12 @@ namespace Gs2.Gs2Ranking.Request
                 ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
                 ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
                 ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
+                ["additionalScopes"] = AdditionalScopes == null ? null : new JsonData(
+                        AdditionalScopes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
                 ["ignoreUserIds"] = IgnoreUserIds == null ? null : new JsonData(
@@ -231,6 +245,14 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("calculateIntervalMinutes");
                 writer.Write(int.Parse(CalculateIntervalMinutes.ToString()));
             }
+            writer.WriteArrayStart();
+            foreach (var additionalScope in AdditionalScopes)
+            {
+                if (additionalScope != null) {
+                    additionalScope.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
             if (EntryPeriodEventId != null) {
                 writer.WritePropertyName("entryPeriodEventId");
                 writer.Write(EntryPeriodEventId.ToString());
@@ -267,6 +289,7 @@ namespace Gs2.Gs2Ranking.Request
             key += CalculateFixedTimingHour + ":";
             key += CalculateFixedTimingMinute + ":";
             key += CalculateIntervalMinutes + ":";
+            key += AdditionalScopes + ":";
             key += EntryPeriodEventId + ":";
             key += AccessPeriodEventId + ":";
             key += IgnoreUserIds + ":";

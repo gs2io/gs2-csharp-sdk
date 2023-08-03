@@ -589,6 +589,11 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("uniqueId");
                     jsonWriter.Write(request.UniqueId.ToString());
                 }
+                if (request.AdditionalScopeName != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopeName");
+                    jsonWriter.Write(request.AdditionalScopeName.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -716,6 +721,11 @@ namespace Gs2.Gs2Ranking
                 {
                     jsonWriter.WritePropertyName("uniqueId");
                     jsonWriter.Write(request.UniqueId.ToString());
+                }
+                if (request.AdditionalScopeName != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopeName");
+                    jsonWriter.Write(request.AdditionalScopeName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1085,6 +1095,11 @@ namespace Gs2.Gs2Ranking
                 {
                     jsonWriter.WritePropertyName("categoryName");
                     jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.AdditionalScopeName != null)
+                {
+                    jsonWriter.WritePropertyName("additionalScopeName");
+                    jsonWriter.Write(request.AdditionalScopeName.ToString());
                 }
                 if (request.ContextStack != null)
                 {

@@ -35,6 +35,7 @@ namespace Gs2.Gs2Ranking.Request
 	{
         public string NamespaceName { set; get; }
         public string CategoryName { set; get; }
+        public string AdditionalScopeName { set; get; }
         public long? Score { set; get; }
         public DescribeNearRankingsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -42,6 +43,10 @@ namespace Gs2.Gs2Ranking.Request
         }
         public DescribeNearRankingsRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
+            return this;
+        }
+        public DescribeNearRankingsRequest WithAdditionalScopeName(string additionalScopeName) {
+            this.AdditionalScopeName = additionalScopeName;
             return this;
         }
         public DescribeNearRankingsRequest WithScore(long? score) {
@@ -60,6 +65,7 @@ namespace Gs2.Gs2Ranking.Request
             return new DescribeNearRankingsRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithAdditionalScopeName(!data.Keys.Contains("additionalScopeName") || data["additionalScopeName"] == null ? null : data["additionalScopeName"].ToString())
                 .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()));
         }
 
@@ -68,6 +74,7 @@ namespace Gs2.Gs2Ranking.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["categoryName"] = CategoryName,
+                ["additionalScopeName"] = AdditionalScopeName,
                 ["score"] = Score,
             };
         }
@@ -83,6 +90,10 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("categoryName");
                 writer.Write(CategoryName.ToString());
             }
+            if (AdditionalScopeName != null) {
+                writer.WritePropertyName("additionalScopeName");
+                writer.Write(AdditionalScopeName.ToString());
+            }
             if (Score != null) {
                 writer.WritePropertyName("score");
                 writer.Write(long.Parse(Score.ToString()));
@@ -94,6 +105,7 @@ namespace Gs2.Gs2Ranking.Request
             var key = "";
             key += NamespaceName + ":";
             key += CategoryName + ":";
+            key += AdditionalScopeName + ":";
             key += Score + ":";
             return key;
         }

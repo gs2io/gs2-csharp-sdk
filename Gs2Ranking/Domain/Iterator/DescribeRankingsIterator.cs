@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -70,9 +72,11 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         private readonly string _namespaceName;
         private readonly string _categoryName;
         private readonly AccessToken _accessToken;
+        private readonly string _additionalScopeName;
         public string NamespaceName => _namespaceName;
         public string CategoryName => _categoryName;
         public string UserId => _accessToken?.UserId;
+        public string AdditionalScopeName => _additionalScopeName;
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -85,13 +89,15 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string additionalScopeName
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
             this._categoryName = categoryName;
             this._accessToken = accessToken;
+            this._additionalScopeName = additionalScopeName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Ranking.Model.Ranking[]{};
@@ -115,6 +121,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this.NamespaceName,
                 this.UserId,
                 this.CategoryName,
+                this.AdditionalScopeName,
                 "Ranking"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
@@ -138,6 +145,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                         .WithNamespaceName(this._namespaceName)
                         .WithCategoryName(this._categoryName)
                         .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
+                        .WithAdditionalScopeName(this._additionalScopeName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );

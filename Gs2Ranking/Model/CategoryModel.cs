@@ -43,6 +43,7 @@ namespace Gs2.Gs2Ranking.Model
         public int? CalculateFixedTimingHour { set; get; }
         public int? CalculateFixedTimingMinute { set; get; }
         public int? CalculateIntervalMinutes { set; get; }
+        public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
         public string EntryPeriodEventId { set; get; }
         public string AccessPeriodEventId { set; get; }
         public string[] IgnoreUserIds { set; get; }
@@ -93,6 +94,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public CategoryModel WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
+            return this;
+        }
+        public CategoryModel WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
+            this.AdditionalScopes = additionalScopes;
             return this;
         }
         public CategoryModel WithEntryPeriodEventId(string entryPeriodEventId) {
@@ -201,6 +206,9 @@ namespace Gs2.Gs2Ranking.Model
                 .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)int.Parse(data["calculateFixedTimingHour"].ToString()))
                 .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)int.Parse(data["calculateFixedTimingMinute"].ToString()))
                 .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)int.Parse(data["calculateIntervalMinutes"].ToString()))
+                .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null ? new Gs2.Gs2Ranking.Model.Scope[]{} : data["additionalScopes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Ranking.Model.Scope.FromJson(v);
+                }).ToArray())
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
                 .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null ? new string[]{} : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
@@ -224,6 +232,12 @@ namespace Gs2.Gs2Ranking.Model
                 ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
                 ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
                 ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
+                ["additionalScopes"] = AdditionalScopes == null ? null : new JsonData(
+                        AdditionalScopes.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
                 ["ignoreUserIds"] = IgnoreUserIds == null ? null : new JsonData(
@@ -285,6 +299,17 @@ namespace Gs2.Gs2Ranking.Model
             if (CalculateIntervalMinutes != null) {
                 writer.WritePropertyName("calculateIntervalMinutes");
                 writer.Write(int.Parse(CalculateIntervalMinutes.ToString()));
+            }
+            if (AdditionalScopes != null) {
+                writer.WritePropertyName("additionalScopes");
+                writer.WriteArrayStart();
+                foreach (var additionalScope in AdditionalScopes)
+                {
+                    if (additionalScope != null) {
+                        additionalScope.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (EntryPeriodEventId != null) {
                 writer.WritePropertyName("entryPeriodEventId");
@@ -411,6 +436,18 @@ namespace Gs2.Gs2Ranking.Model
             else
             {
                 diff += (int)(CalculateIntervalMinutes - other.CalculateIntervalMinutes);
+            }
+            if (AdditionalScopes == null && AdditionalScopes == other.AdditionalScopes)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AdditionalScopes.Length - other.AdditionalScopes.Length;
+                for (var i = 0; i < AdditionalScopes.Length; i++)
+                {
+                    diff += AdditionalScopes[i].CompareTo(other.AdditionalScopes[i]);
+                }
             }
             if (EntryPeriodEventId == null && EntryPeriodEventId == other.EntryPeriodEventId)
             {
