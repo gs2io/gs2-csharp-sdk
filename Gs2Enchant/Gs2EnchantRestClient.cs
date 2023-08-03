@@ -3687,6 +3687,265 @@ namespace Gs2.Gs2Enchant
 #endif
 
 
+        public class SetBalanceParameterStatusByUserIdTask : Gs2RestSessionTask<SetBalanceParameterStatusByUserIdRequest, SetBalanceParameterStatusByUserIdResult>
+        {
+            public SetBalanceParameterStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetBalanceParameterStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetBalanceParameterStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/balance/{parameterName}/{propertyId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{parameterName}", !string.IsNullOrEmpty(request.ParameterName) ? request.ParameterName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ParameterValues != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValues");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ParameterValues)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetBalanceParameterStatusByUserId(
+                Request.SetBalanceParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>> callback
+        )
+		{
+			var task = new SetBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdFuture(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetBalanceParameterStatusByUserIdResult> result = null;
+			await SetBalanceParameterStatusByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetBalanceParameterStatusByUserIdTask SetBalanceParameterStatusByUserIdAsync(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			var task = new SetBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetBalanceParameterStatusByStampSheetTask : Gs2RestSessionTask<SetBalanceParameterStatusByStampSheetRequest, SetBalanceParameterStatusByStampSheetResult>
+        {
+            public SetBalanceParameterStatusByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetBalanceParameterStatusByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetBalanceParameterStatusByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/balance/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetBalanceParameterStatusByStampSheet(
+                Request.SetBalanceParameterStatusByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>> callback
+        )
+		{
+			var task = new SetBalanceParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetFuture(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult> result = null;
+			await SetBalanceParameterStatusByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetBalanceParameterStatusByStampSheetTask SetBalanceParameterStatusByStampSheetAsync(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+			var task = new SetBalanceParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeRarityParameterStatusesTask : Gs2RestSessionTask<DescribeRarityParameterStatusesRequest, DescribeRarityParameterStatusesResult>
         {
             public DescribeRarityParameterStatusesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRarityParameterStatusesRequest request) : base(session, factory, request)
@@ -5148,6 +5407,265 @@ namespace Gs2.Gs2Enchant
         )
 		{
 			var task = new VerifyRarityParameterStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetRarityParameterStatusByUserIdTask : Gs2RestSessionTask<SetRarityParameterStatusByUserIdRequest, SetRarityParameterStatusByUserIdResult>
+        {
+            public SetRarityParameterStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetRarityParameterStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetRarityParameterStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/rarity/{parameterName}/{propertyId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{parameterName}", !string.IsNullOrEmpty(request.ParameterName) ? request.ParameterName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ParameterValues != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValues");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ParameterValues)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetRarityParameterStatusByUserId(
+                Request.SetRarityParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetRarityParameterStatusByUserIdResult>> callback
+        )
+		{
+			var task = new SetRarityParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdFuture(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetRarityParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetRarityParameterStatusByUserIdResult> result = null;
+			await SetRarityParameterStatusByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetRarityParameterStatusByUserIdTask SetRarityParameterStatusByUserIdAsync(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetRarityParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+			var task = new SetRarityParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetRarityParameterStatusByStampSheetTask : Gs2RestSessionTask<SetRarityParameterStatusByStampSheetRequest, SetRarityParameterStatusByStampSheetResult>
+        {
+            public SetRarityParameterStatusByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetRarityParameterStatusByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetRarityParameterStatusByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/rarity/parameter/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetRarityParameterStatusByStampSheet(
+                Request.SetRarityParameterStatusByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>> callback
+        )
+		{
+			var task = new SetRarityParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetFuture(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetRarityParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetRarityParameterStatusByStampSheetResult> result = null;
+			await SetRarityParameterStatusByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetRarityParameterStatusByStampSheetTask SetRarityParameterStatusByStampSheetAsync(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetRarityParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+			var task = new SetRarityParameterStatusByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -349,6 +349,80 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain> SetAsync(
+            #else
+        public IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain> Set(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain> SetAsync(
+        #endif
+            SetBalanceParameterStatusByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithParameterName(this.ParameterName)
+                .WithPropertyId(this.PropertyId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.SetBalanceParameterStatusByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.SetBalanceParameterStatusByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "BalanceParameterStatus"
+                    );
+                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
+                        resultModel.Item.ParameterName.ToString(),
+                        resultModel.Item.PropertyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain domain = this;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain>(Impl);
+        #endif
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

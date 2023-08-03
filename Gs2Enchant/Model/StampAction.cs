@@ -36,10 +36,14 @@ namespace Gs2.Gs2Enchant.Model
             switch (action.Action) {
                 case "Gs2Enchant:ReDrawBalanceParameterStatusByUserId":
                     return ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Enchant:SetBalanceParameterStatusByUserId":
+                    return SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Enchant:ReDrawRarityParameterStatusByUserId":
                     return ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Enchant:AddRarityParameterStatusByUserId":
                     return AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Enchant:SetRarityParameterStatusByUserId":
+                    return SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

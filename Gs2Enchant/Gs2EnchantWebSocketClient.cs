@@ -1804,6 +1804,247 @@ namespace Gs2.Gs2Enchant
 #endif
 
 
+        public class SetBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.SetBalanceParameterStatusByUserIdRequest, Result.SetBalanceParameterStatusByUserIdResult>
+        {
+	        public SetBalanceParameterStatusByUserIdTask(IGs2Session session, Request.SetBalanceParameterStatusByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SetBalanceParameterStatusByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ParameterName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterName");
+                    jsonWriter.Write(request.ParameterName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.ParameterValues != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValues");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ParameterValues)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "balanceParameterStatus",
+                    "setBalanceParameterStatusByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetBalanceParameterStatusByUserId(
+                Request.SetBalanceParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>> callback
+        )
+		{
+			var task = new SetBalanceParameterStatusByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdFuture(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+            Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+		    var task = new SetBalanceParameterStatusByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetBalanceParameterStatusByUserIdTask SetBalanceParameterStatusByUserIdAsync(
+                Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+            Request.SetBalanceParameterStatusByUserIdRequest request
+        )
+		{
+		    var task = new SetBalanceParameterStatusByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetBalanceParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.SetBalanceParameterStatusByStampSheetRequest, Result.SetBalanceParameterStatusByStampSheetResult>
+        {
+	        public SetBalanceParameterStatusByStampSheetTask(IGs2Session session, Request.SetBalanceParameterStatusByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SetBalanceParameterStatusByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "balanceParameterStatus",
+                    "setBalanceParameterStatusByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetBalanceParameterStatusByStampSheet(
+                Request.SetBalanceParameterStatusByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>> callback
+        )
+		{
+			var task = new SetBalanceParameterStatusByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetFuture(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+            Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+		    var task = new SetBalanceParameterStatusByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetBalanceParameterStatusByStampSheetTask SetBalanceParameterStatusByStampSheetAsync(
+                Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+            Request.SetBalanceParameterStatusByStampSheetRequest request
+        )
+		{
+		    var task = new SetBalanceParameterStatusByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetRarityParameterStatusTask : Gs2WebSocketSessionTask<Request.GetRarityParameterStatusRequest, Result.GetRarityParameterStatusResult>
         {
 	        public GetRarityParameterStatusTask(IGs2Session session, Request.GetRarityParameterStatusRequest request) : base(session, request)
@@ -2918,6 +3159,247 @@ namespace Gs2.Gs2Enchant
         )
 		{
 		    var task = new VerifyRarityParameterStatusByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.SetRarityParameterStatusByUserIdRequest, Result.SetRarityParameterStatusByUserIdResult>
+        {
+	        public SetRarityParameterStatusByUserIdTask(IGs2Session session, Request.SetRarityParameterStatusByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SetRarityParameterStatusByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ParameterName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterName");
+                    jsonWriter.Write(request.ParameterName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.ParameterValues != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValues");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ParameterValues)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "rarityParameterStatus",
+                    "setRarityParameterStatusByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetRarityParameterStatusByUserId(
+                Request.SetRarityParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetRarityParameterStatusByUserIdResult>> callback
+        )
+		{
+			var task = new SetRarityParameterStatusByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdFuture(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetRarityParameterStatusByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+            Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+		    var task = new SetRarityParameterStatusByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRarityParameterStatusByUserIdTask SetRarityParameterStatusByUserIdAsync(
+                Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+			return new SetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+            Request.SetRarityParameterStatusByUserIdRequest request
+        )
+		{
+		    var task = new SetRarityParameterStatusByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetRarityParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRarityParameterStatusByStampSheetRequest, Result.SetRarityParameterStatusByStampSheetResult>
+        {
+	        public SetRarityParameterStatusByStampSheetTask(IGs2Session session, Request.SetRarityParameterStatusByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SetRarityParameterStatusByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "rarityParameterStatus",
+                    "setRarityParameterStatusByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetRarityParameterStatusByStampSheet(
+                Request.SetRarityParameterStatusByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>> callback
+        )
+		{
+			var task = new SetRarityParameterStatusByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetFuture(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetRarityParameterStatusByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+            Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+		    var task = new SetRarityParameterStatusByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetRarityParameterStatusByStampSheetTask SetRarityParameterStatusByStampSheetAsync(
+                Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+			return new SetRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+            Request.SetRarityParameterStatusByStampSheetRequest request
+        )
+		{
+		    var task = new SetRarityParameterStatusByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );
