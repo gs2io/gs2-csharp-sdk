@@ -5173,6 +5173,11 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("counterName");
                     jsonWriter.Write(request.CounterName);
                 }
+                if (request.TargetResetType != null)
+                {
+                    jsonWriter.WritePropertyName("targetResetType");
+                    jsonWriter.Write(request.TargetResetType);
+                }
                 if (request.TargetValue != null)
                 {
                     jsonWriter.WritePropertyName("targetValue");
@@ -5437,6 +5442,11 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("counterName");
                     jsonWriter.Write(request.CounterName);
+                }
+                if (request.TargetResetType != null)
+                {
+                    jsonWriter.WritePropertyName("targetResetType");
+                    jsonWriter.Write(request.TargetResetType);
                 }
                 if (request.TargetValue != null)
                 {

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Mission.Request
         public string Metadata { set; get; }
         public string Description { set; get; }
         public string CounterName { set; get; }
+        public string TargetResetType { set; get; }
         public long? TargetValue { set; get; }
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
@@ -65,6 +66,10 @@ namespace Gs2.Gs2Mission.Request
         }
         public CreateMissionTaskModelMasterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
+            return this;
+        }
+        public CreateMissionTaskModelMasterRequest WithTargetResetType(string targetResetType) {
+            this.TargetResetType = targetResetType;
             return this;
         }
         public CreateMissionTaskModelMasterRequest WithTargetValue(long? targetValue) {
@@ -99,6 +104,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithTargetResetType(!data.Keys.Contains("targetResetType") || data["targetResetType"] == null ? null : data["targetResetType"].ToString())
                 .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)long.Parse(data["targetValue"].ToString()))
                 .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
@@ -116,6 +122,7 @@ namespace Gs2.Gs2Mission.Request
                 ["metadata"] = Metadata,
                 ["description"] = Description,
                 ["counterName"] = CounterName,
+                ["targetResetType"] = TargetResetType,
                 ["targetValue"] = TargetValue,
                 ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
                         CompleteAcquireActions.Select(v => {
@@ -155,6 +162,10 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("counterName");
                 writer.Write(CounterName.ToString());
             }
+            if (TargetResetType != null) {
+                writer.WritePropertyName("targetResetType");
+                writer.Write(TargetResetType.ToString());
+            }
             if (TargetValue != null) {
                 writer.WritePropertyName("targetValue");
                 writer.Write(long.Parse(TargetValue.ToString()));
@@ -186,6 +197,7 @@ namespace Gs2.Gs2Mission.Request
             key += Metadata + ":";
             key += Description + ":";
             key += CounterName + ":";
+            key += TargetResetType + ":";
             key += TargetValue + ":";
             key += CompleteAcquireActions + ":";
             key += ChallengePeriodEventId + ":";

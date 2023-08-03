@@ -36,6 +36,7 @@ namespace Gs2.Gs2Mission.Model
         public string Metadata { set; get; }
         public string Description { set; get; }
         public string CounterName { set; get; }
+        public string TargetResetType { set; get; }
         public long? TargetValue { set; get; }
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
@@ -60,6 +61,10 @@ namespace Gs2.Gs2Mission.Model
         }
         public MissionTaskModelMaster WithCounterName(string counterName) {
             this.CounterName = counterName;
+            return this;
+        }
+        public MissionTaskModelMaster WithTargetResetType(string targetResetType) {
+            this.TargetResetType = targetResetType;
             return this;
         }
         public MissionTaskModelMaster WithTargetValue(long? targetValue) {
@@ -186,6 +191,7 @@ namespace Gs2.Gs2Mission.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithTargetResetType(!data.Keys.Contains("targetResetType") || data["targetResetType"] == null ? null : data["targetResetType"].ToString())
                 .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)long.Parse(data["targetValue"].ToString()))
                 .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
@@ -204,6 +210,7 @@ namespace Gs2.Gs2Mission.Model
                 ["metadata"] = Metadata,
                 ["description"] = Description,
                 ["counterName"] = CounterName,
+                ["targetResetType"] = TargetResetType,
                 ["targetValue"] = TargetValue,
                 ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
                         CompleteAcquireActions.Select(v => {
@@ -240,6 +247,10 @@ namespace Gs2.Gs2Mission.Model
             if (CounterName != null) {
                 writer.WritePropertyName("counterName");
                 writer.Write(CounterName.ToString());
+            }
+            if (TargetResetType != null) {
+                writer.WritePropertyName("targetResetType");
+                writer.Write(TargetResetType.ToString());
             }
             if (TargetValue != null) {
                 writer.WritePropertyName("targetValue");
@@ -318,6 +329,14 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += CounterName.CompareTo(other.CounterName);
+            }
+            if (TargetResetType == null && TargetResetType == other.TargetResetType)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TargetResetType.CompareTo(other.TargetResetType);
             }
             if (TargetValue == null && TargetValue == other.TargetValue)
             {
