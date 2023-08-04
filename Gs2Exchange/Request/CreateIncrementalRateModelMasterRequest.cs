@@ -43,6 +43,7 @@ namespace Gs2.Gs2Exchange.Request
         public long? CoefficientValue { set; get; }
         public string CalculateScriptId { set; get; }
         public string ExchangeCountId { set; get; }
+        public int? MaximumExchangeCount { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public CreateIncrementalRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -84,6 +85,10 @@ namespace Gs2.Gs2Exchange.Request
             this.ExchangeCountId = exchangeCountId;
             return this;
         }
+        public CreateIncrementalRateModelMasterRequest WithMaximumExchangeCount(int? maximumExchangeCount) {
+            this.MaximumExchangeCount = maximumExchangeCount;
+            return this;
+        }
         public CreateIncrementalRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
@@ -108,6 +113,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithCoefficientValue(!data.Keys.Contains("coefficientValue") || data["coefficientValue"] == null ? null : (long?)long.Parse(data["coefficientValue"].ToString()))
                 .WithCalculateScriptId(!data.Keys.Contains("calculateScriptId") || data["calculateScriptId"] == null ? null : data["calculateScriptId"].ToString())
                 .WithExchangeCountId(!data.Keys.Contains("exchangeCountId") || data["exchangeCountId"] == null ? null : data["exchangeCountId"].ToString())
+                .WithMaximumExchangeCount(!data.Keys.Contains("maximumExchangeCount") || data["maximumExchangeCount"] == null ? null : (int?)int.Parse(data["maximumExchangeCount"].ToString()))
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray());
@@ -126,6 +132,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["coefficientValue"] = CoefficientValue,
                 ["calculateScriptId"] = CalculateScriptId,
                 ["exchangeCountId"] = ExchangeCountId,
+                ["maximumExchangeCount"] = MaximumExchangeCount,
                 ["acquireActions"] = AcquireActions == null ? null : new JsonData(
                         AcquireActions.Select(v => {
                             //noinspection Convert2MethodRef
@@ -177,6 +184,10 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("exchangeCountId");
                 writer.Write(ExchangeCountId.ToString());
             }
+            if (MaximumExchangeCount != null) {
+                writer.WritePropertyName("maximumExchangeCount");
+                writer.Write(int.Parse(MaximumExchangeCount.ToString()));
+            }
             writer.WriteArrayStart();
             foreach (var acquireAction in AcquireActions)
             {
@@ -200,6 +211,7 @@ namespace Gs2.Gs2Exchange.Request
             key += CoefficientValue + ":";
             key += CalculateScriptId + ":";
             key += ExchangeCountId + ":";
+            key += MaximumExchangeCount + ":";
             key += AcquireActions + ":";
             return key;
         }

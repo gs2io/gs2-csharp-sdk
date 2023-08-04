@@ -2062,6 +2062,11 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("exchangeCountId");
                     jsonWriter.Write(request.ExchangeCountId);
                 }
+                if (request.MaximumExchangeCount != null)
+                {
+                    jsonWriter.WritePropertyName("maximumExchangeCount");
+                    jsonWriter.Write(request.MaximumExchangeCount.ToString());
+                }
                 if (request.AcquireActions != null)
                 {
                     jsonWriter.WritePropertyName("acquireActions");
@@ -2334,6 +2339,11 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("exchangeCountId");
                     jsonWriter.Write(request.ExchangeCountId);
+                }
+                if (request.MaximumExchangeCount != null)
+                {
+                    jsonWriter.WritePropertyName("maximumExchangeCount");
+                    jsonWriter.Write(request.MaximumExchangeCount.ToString());
                 }
                 if (request.AcquireActions != null)
                 {
