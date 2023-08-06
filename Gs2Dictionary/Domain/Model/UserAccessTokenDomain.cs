@@ -131,7 +131,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         public Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain Entry(
-            string entryModelName
+            string entryName
         ) {
             return new Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain(
                 this._cache,
@@ -140,7 +140,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken,
-                entryModelName
+                entryName
             );
         }
 

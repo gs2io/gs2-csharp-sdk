@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -63,14 +65,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         private readonly Gs2DictionaryRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
-        private readonly string _entryModelName;
+        private readonly string _entryName;
 
         private readonly String _parentKey;
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
-        public string EntryModelName => _entryModelName;
+        public string EntryName => _entryName;
 
         public EntryDomain(
             CacheDatabase cache,
@@ -79,7 +81,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             string userId,
-            string entryModelName
+            string entryName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -90,7 +92,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
-            this._entryModelName = entryModelName;
+            this._entryName = entryName;
             this._parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
@@ -117,7 +119,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithEntryModelName(this.EntryModelName);
+                .WithEntryModelName(this.EntryName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetEntryByUserIdFuture(
                 request
@@ -186,7 +188,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithEntryModelName(this.EntryModelName);
+                .WithEntryModelName(this.EntryName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetEntryWithSignatureByUserIdFuture(
                 request
@@ -244,7 +246,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string entryModelName,
+            string entryName,
             string childType
         )
         {
@@ -253,18 +255,18 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 "dictionary",
                 namespaceName ?? "null",
                 userId ?? "null",
-                entryModelName ?? "null",
+                entryName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string entryModelName
+            string entryName
         )
         {
             return string.Join(
                 ":",
-                entryModelName ?? "null"
+                entryName ?? "null"
             );
         }
 
@@ -285,14 +287,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             using (await this._cache.GetLockObject<Gs2.Gs2Dictionary.Model.Entry>(
                        _parentKey,
                        Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            this.EntryModelName?.ToString()
+                            this.EntryName?.ToString()
                         )).LockAsync())
             {
         # endif
             var (value, find) = _cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
                 _parentKey,
                 Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                    this.EntryModelName?.ToString()
+                    this.EntryName?.ToString()
                 )
             );
             if (!find) {
@@ -311,7 +313,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
                             var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                    this.EntryModelName?.ToString()
+                                    this.EntryName?.ToString()
                                 );
                             _cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
                                 _parentKey,
@@ -334,7 +336,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            this.EntryModelName?.ToString()
+                            this.EntryName?.ToString()
                         );
                     _cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
                         _parentKey,
@@ -351,7 +353,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 (value, find) = _cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
                     _parentKey,
                     Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                        this.EntryModelName?.ToString()
+                        this.EntryName?.ToString()
                     )
                 );
             }

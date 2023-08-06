@@ -296,7 +296,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         public Gs2.Gs2Dictionary.Domain.Model.EntryDomain Entry(
-            string entryModelName
+            string entryName
         ) {
             return new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
                 this._cache,
@@ -305,7 +305,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this.UserId,
-                entryModelName
+                entryName
             );
         }
 
