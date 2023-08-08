@@ -61,20 +61,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
         private readonly Gs2StaminaRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _recoverIntervalTableName;
 
         private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string RecoverIntervalTableName => _recoverIntervalTableName;
 
         public RecoverIntervalTableDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
-            string namespaceName,
-            string recoverIntervalTableName
+            Gs2RestSession session
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -83,37 +77,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._client = new Gs2StaminaRestClient(
                 session
             );
-            this._namespaceName = namespaceName;
-            this._recoverIntervalTableName = recoverIntervalTableName;
-            this._parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "RecoverIntervalTable"
-            );
+            this._parentKey = "stamina:RecoverIntervalTable";
         }
 
         public static string CreateCacheParentKey(
-            string namespaceName,
-            string recoverIntervalTableName,
             string childType
         )
         {
             return string.Join(
                 ":",
                 "stamina",
-                namespaceName ?? "null",
-                recoverIntervalTableName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string recoverIntervalTableName
         )
         {
-            return string.Join(
-                ":",
-                recoverIntervalTableName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -133,14 +114,12 @@ namespace Gs2.Gs2Stamina.Domain.Model
             using (await this._cache.GetLockObject<Gs2.Gs2Stamina.Model.RecoverIntervalTable>(
                        _parentKey,
                        Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableDomain.CreateCacheKey(
-                            this.RecoverIntervalTableName?.ToString()
                         )).LockAsync())
             {
         # endif
             var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.RecoverIntervalTable>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableDomain.CreateCacheKey(
-                    this.RecoverIntervalTableName?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

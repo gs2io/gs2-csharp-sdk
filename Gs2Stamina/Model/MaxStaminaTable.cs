@@ -31,15 +31,10 @@ namespace Gs2.Gs2Stamina.Model
 #endif
 	public class MaxStaminaTable : IComparable
 	{
-        public string MaxStaminaTableId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
-        public MaxStaminaTable WithMaxStaminaTableId(string maxStaminaTableId) {
-            this.MaxStaminaTableId = maxStaminaTableId;
-            return this;
-        }
         public MaxStaminaTable WithName(string name) {
             this.Name = name;
             return this;
@@ -57,74 +52,6 @@ namespace Gs2.Gs2Stamina.Model
             return this;
         }
 
-        private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):maxStaminaTable:(?<maxStaminaTableName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetRegionFromGrn(
-            string grn
-        )
-        {
-            var match = _regionRegex.Match(grn);
-            if (!match.Success || !match.Groups["region"].Success)
-            {
-                return null;
-            }
-            return match.Groups["region"].Value;
-        }
-
-        private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):maxStaminaTable:(?<maxStaminaTableName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetOwnerIdFromGrn(
-            string grn
-        )
-        {
-            var match = _ownerIdRegex.Match(grn);
-            if (!match.Success || !match.Groups["ownerId"].Success)
-            {
-                return null;
-            }
-            return match.Groups["ownerId"].Value;
-        }
-
-        private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):maxStaminaTable:(?<maxStaminaTableName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetNamespaceNameFromGrn(
-            string grn
-        )
-        {
-            var match = _namespaceNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["namespaceName"].Success)
-            {
-                return null;
-            }
-            return match.Groups["namespaceName"].Value;
-        }
-
-        private static System.Text.RegularExpressions.Regex _maxStaminaTableNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):stamina:(?<namespaceName>.+):maxStaminaTable:(?<maxStaminaTableName>.+)",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase
-        );
-
-        public static string GetMaxStaminaTableNameFromGrn(
-            string grn
-        )
-        {
-            var match = _maxStaminaTableNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["maxStaminaTableName"].Success)
-            {
-                return null;
-            }
-            return match.Groups["maxStaminaTableName"].Value;
-        }
-
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -134,7 +61,6 @@ namespace Gs2.Gs2Stamina.Model
                 return null;
             }
             return new MaxStaminaTable()
-                .WithMaxStaminaTableId(!data.Keys.Contains("maxStaminaTableId") || data["maxStaminaTableId"] == null ? null : data["maxStaminaTableId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
@@ -146,7 +72,6 @@ namespace Gs2.Gs2Stamina.Model
         public JsonData ToJson()
         {
             return new JsonData {
-                ["maxStaminaTableId"] = MaxStaminaTableId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["experienceModelId"] = ExperienceModelId,
@@ -161,10 +86,6 @@ namespace Gs2.Gs2Stamina.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (MaxStaminaTableId != null) {
-                writer.WritePropertyName("maxStaminaTableId");
-                writer.Write(MaxStaminaTableId.ToString());
-            }
             if (Name != null) {
                 writer.WritePropertyName("name");
                 writer.Write(Name.ToString());
@@ -195,14 +116,6 @@ namespace Gs2.Gs2Stamina.Model
         {
             var other = obj as MaxStaminaTable;
             var diff = 0;
-            if (MaxStaminaTableId == null && MaxStaminaTableId == other.MaxStaminaTableId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MaxStaminaTableId.CompareTo(other.MaxStaminaTableId);
-            }
             if (Name == null && Name == other.Name)
             {
                 // null and null

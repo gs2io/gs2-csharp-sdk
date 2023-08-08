@@ -61,20 +61,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
         private readonly Gs2StaminaRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _maxStaminaTableName;
 
         private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string MaxStaminaTableName => _maxStaminaTableName;
 
         public MaxStaminaTableDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
-            string namespaceName,
-            string maxStaminaTableName
+            Gs2RestSession session
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -83,37 +77,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._client = new Gs2StaminaRestClient(
                 session
             );
-            this._namespaceName = namespaceName;
-            this._maxStaminaTableName = maxStaminaTableName;
-            this._parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "MaxStaminaTable"
-            );
+            this._parentKey = "stamina:MaxStaminaTable";
         }
 
         public static string CreateCacheParentKey(
-            string namespaceName,
-            string maxStaminaTableName,
             string childType
         )
         {
             return string.Join(
                 ":",
                 "stamina",
-                namespaceName ?? "null",
-                maxStaminaTableName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string maxStaminaTableName
         )
         {
-            return string.Join(
-                ":",
-                maxStaminaTableName ?? "null"
-            );
+            return "Singleton";
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -133,14 +114,12 @@ namespace Gs2.Gs2Stamina.Domain.Model
             using (await this._cache.GetLockObject<Gs2.Gs2Stamina.Model.MaxStaminaTable>(
                        _parentKey,
                        Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableDomain.CreateCacheKey(
-                            this.MaxStaminaTableName?.ToString()
                         )).LockAsync())
             {
         # endif
             var (value, find) = _cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTable>(
                 _parentKey,
                 Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableDomain.CreateCacheKey(
-                    this.MaxStaminaTableName?.ToString()
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
