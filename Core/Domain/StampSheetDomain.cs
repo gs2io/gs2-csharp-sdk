@@ -89,14 +89,14 @@ namespace Gs2.Core.Domain
                         }
                         var result = future.Result;
 #else
-                    var result = await client.RunStampTaskWithoutNamespaceAsync(
+                        var result = await client.RunStampTaskWithoutNamespaceAsync(
                             new RunStampTaskWithoutNamespaceRequest()
                                     .WithContextStack(contextStack)
                                     .WithStampTask(stampTasks[i].ToString())
                                     .WithKeyId(_stampSheetEncryptionKeyId)
-                    );
+                        );
 #endif
-                            contextStack = result.ContextStack;
+                        contextStack = result.ContextStack;
                         _stampTaskEvent.Invoke(
                             _cache,
                             stampTaskPayloadJson["action"].ToString(),

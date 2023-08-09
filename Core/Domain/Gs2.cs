@@ -303,7 +303,7 @@ namespace Gs2.Core.Domain
                             accessToken
                         );
                         yield return future;
-                        if (future != null)
+                        if (future.Error != null)
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -316,7 +316,7 @@ namespace Gs2.Core.Domain
                             accessToken
                         );
                         yield return future;
-                        if (future != null)
+                        if (future.Error != null)
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -327,7 +327,7 @@ namespace Gs2.Core.Domain
                             accessToken
                         );
                         yield return future;
-                        if (future != null)
+                        if (future.Error != null)
                         {
                             self.OnError(future.Error);
                             yield break;
