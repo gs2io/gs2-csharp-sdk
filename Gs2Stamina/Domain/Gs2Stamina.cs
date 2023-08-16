@@ -202,9 +202,39 @@ namespace Gs2.Gs2Stamina.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RecoverStaminaByUserIdRequest, RecoverStaminaByUserIdResult> RecoverStaminaByUserIdComplete = new UnityEvent<string, RecoverStaminaByUserIdRequest, RecoverStaminaByUserIdResult>();
+    #else
+        public static Action<string, RecoverStaminaByUserIdRequest, RecoverStaminaByUserIdResult> RecoverStaminaByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RaiseMaxValueByUserIdRequest, RaiseMaxValueByUserIdResult> RaiseMaxValueByUserIdComplete = new UnityEvent<string, RaiseMaxValueByUserIdRequest, RaiseMaxValueByUserIdResult>();
+    #else
+        public static Action<string, RaiseMaxValueByUserIdRequest, RaiseMaxValueByUserIdResult> RaiseMaxValueByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetMaxValueByUserIdRequest, SetMaxValueByUserIdResult> SetMaxValueByUserIdComplete = new UnityEvent<string, SetMaxValueByUserIdRequest, SetMaxValueByUserIdResult>();
+    #else
+        public static Action<string, SetMaxValueByUserIdRequest, SetMaxValueByUserIdResult> SetMaxValueByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetRecoverIntervalByUserIdRequest, SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserIdComplete = new UnityEvent<string, SetRecoverIntervalByUserIdRequest, SetRecoverIntervalByUserIdResult>();
+    #else
+        public static Action<string, SetRecoverIntervalByUserIdRequest, SetRecoverIntervalByUserIdResult> SetRecoverIntervalByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetRecoverValueByUserIdRequest, SetRecoverValueByUserIdResult> SetRecoverValueByUserIdComplete = new UnityEvent<string, SetRecoverValueByUserIdRequest, SetRecoverValueByUserIdResult>();
+    #else
+        public static Action<string, SetRecoverValueByUserIdRequest, SetRecoverValueByUserIdResult> SetRecoverValueByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -245,6 +275,12 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        RecoverStaminaByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "RaiseMaxValueByUserId": {
@@ -282,6 +318,12 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        RaiseMaxValueByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetMaxValueByUserId": {
@@ -319,6 +361,12 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetMaxValueByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetRecoverIntervalByUserId": {
@@ -356,6 +404,12 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetRecoverIntervalByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetRecoverValueByUserId": {
@@ -393,13 +447,26 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetRecoverValueByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdComplete = new UnityEvent<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult>();
+    #else
+        public static Action<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -440,6 +507,12 @@ namespace Gs2.Gs2Stamina.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        ConsumeStaminaByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -456,185 +529,215 @@ namespace Gs2.Gs2Stamina.Domain
                     var requestModel = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = RecoverStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Stamina"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                resultModel.Item.StaminaName.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        if (resultModel.StaminaModel != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "StaminaModel"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                resultModel.StaminaModel.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.StaminaModel,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Stamina"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            resultModel.Item.StaminaName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.StaminaModel != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "StaminaModel"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                            resultModel.StaminaModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.StaminaModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    RecoverStaminaByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "raise_max_value_by_user_id": {
                     var requestModel = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = RaiseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Stamina"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                resultModel.Item.StaminaName.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        if (resultModel.StaminaModel != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "StaminaModel"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                resultModel.StaminaModel.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.StaminaModel,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Stamina"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            resultModel.Item.StaminaName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.StaminaModel != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "StaminaModel"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                            resultModel.StaminaModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.StaminaModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    RaiseMaxValueByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_max_value_by_user_id": {
                     var requestModel = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Stamina"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                resultModel.Item.StaminaName.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        if (resultModel.StaminaModel != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "StaminaModel"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                resultModel.StaminaModel.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.StaminaModel,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Stamina"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            resultModel.Item.StaminaName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.StaminaModel != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "StaminaModel"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                            resultModel.StaminaModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.StaminaModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetMaxValueByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_recover_interval_by_user_id": {
                     var requestModel = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRecoverIntervalByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Stamina"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                resultModel.Item.StaminaName.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        if (resultModel.StaminaModel != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "StaminaModel"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                resultModel.StaminaModel.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.StaminaModel,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Stamina"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            resultModel.Item.StaminaName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.StaminaModel != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "StaminaModel"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                            resultModel.StaminaModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.StaminaModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetRecoverIntervalByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_recover_value_by_user_id": {
                     var requestModel = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Stamina"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                                resultModel.Item.StaminaName.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        if (resultModel.StaminaModel != null) {
-                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "StaminaModel"
-                            );
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                resultModel.StaminaModel.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.StaminaModel,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Stamina"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                            resultModel.Item.StaminaName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.StaminaModel != null) {
+                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "StaminaModel"
+                        );
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                            resultModel.StaminaModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.StaminaModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetRecoverValueByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

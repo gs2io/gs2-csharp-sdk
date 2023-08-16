@@ -372,18 +372,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> AcquireActionsToPropertiesAsync(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesAsync(
             #else
-        public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> AcquireActionsToProperties(
+        public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireActionsToProperties(
             #endif
         #else
-        public async Task<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> AcquireActionsToPropertiesAsync(
+        public async Task<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesAsync(
         #endif
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
         #endif
             request
@@ -430,39 +430,41 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 }
             }
+            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+
+            );
             if (result?.StampSheet != null)
             {
-                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
-                        _cache,
-                        _jobQueueDomain,
-                        _session,
-                        result?.StampSheet,
-                        result?.StampSheetEncryptionKeyId,
-                        _stampSheetConfiguration.NamespaceName,
-                        _stampSheetConfiguration.StampTaskEventHandler,
-                        _stampSheetConfiguration.StampSheetEventHandler
-                );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return stampSheet.Run();
-        #else
-                try {
-                    await stampSheet.RunAsync();
-                } catch (Gs2.Core.Exception.Gs2Exception e) {
-                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                var future2 = stampSheet.Wait();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
                 }
+        #else
+                await stampSheet.WaitAsync();
         #endif
             }
-            AutoRunStampSheet = result?.AutoRunStampSheet;
-            TransactionId = result?.TransactionId;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(this);
+            self.OnComplete(stampSheet);
         #else
-            return this;
+            return stampSheet;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         #endif
         }
 

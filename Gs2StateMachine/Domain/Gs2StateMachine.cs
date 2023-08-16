@@ -202,9 +202,15 @@ namespace Gs2.Gs2StateMachine.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, StartStateMachineByUserIdRequest, StartStateMachineByUserIdResult> StartStateMachineByUserIdComplete = new UnityEvent<string, StartStateMachineByUserIdRequest, StartStateMachineByUserIdResult>();
+    #else
+        public static Action<string, StartStateMachineByUserIdRequest, StartStateMachineByUserIdResult> StartStateMachineByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -230,6 +236,12 @@ namespace Gs2.Gs2StateMachine.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        StartStateMachineByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -237,6 +249,7 @@ namespace Gs2.Gs2StateMachine.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -254,22 +267,28 @@ namespace Gs2.Gs2StateMachine.Domain
                     var requestModel = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = StartStateMachineByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    StartStateMachineByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Net;
 using Gs2.Gs2Distributor;
+using Gs2.Gs2Distributor.Domain.Model;
 using Gs2.Gs2Distributor.Request;
 using Gs2.Gs2Distributor.Result;
 using Gs2.Gs2JobQueue.Result;
@@ -18,29 +19,26 @@ namespace Gs2.Core.Domain
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly Gs2RestSession _session;
-        private readonly string _namespaceName;
+        private readonly UserAccessTokenDomain _userAccessTokenDomain;
         private readonly string _transactionId;
-        private readonly string _accessToken;
-        private readonly Action<CacheDatabase, string, string, string> _stampTaskEvent;
-        private readonly Action<CacheDatabase, string, string, string> _stampSheetEvent;
+        private readonly Action<CacheDatabase, string, string, string, string> _stampTaskEvent;
+        private readonly Action<CacheDatabase, string, string, string, string> _stampSheetEvent;
 
         public AutoStampSheetDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
+            UserAccessTokenDomain userAccessTokenDomain,
             Gs2RestSession session,
-            string namespaceName,
             string transactionId,
-            string accessToken,
-            Action<CacheDatabase, string, string, string> stampTaskEvent,
-            Action<CacheDatabase, string, string, string> stampSheetEvent
+            Action<CacheDatabase, string, string, string, string> stampTaskEvent,
+            Action<CacheDatabase, string, string, string, string> stampSheetEvent
         )
         {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
             this._session = session;
-            this._namespaceName = namespaceName;
+            this._userAccessTokenDomain = userAccessTokenDomain;
             this._transactionId = transactionId;
-            this._accessToken = accessToken;
             this._stampTaskEvent = stampTaskEvent;
             this._stampSheetEvent = stampSheetEvent;
         }
@@ -59,16 +57,20 @@ namespace Gs2.Core.Domain
             IEnumerator Impl(Gs2Future self)
             {
 #endif
-                var client = new Gs2DistributorRestClient(
-                    _session
+                _cache.Delete<Gs2Distributor.Model.StampSheetResult>(
+                    Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
+                        _userAccessTokenDomain.NamespaceName,
+                        _userAccessTokenDomain.UserId,
+                        "StampSheetResult"
+                    ),
+                    Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                        _transactionId?.ToString()
+                    )
                 );
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = client.GetStampSheetResultFuture(
-                    new GetStampSheetResultRequest()
-                        .WithNamespaceName(_namespaceName)
-                        .WithTransactionId(_transactionId)
-                        .WithAccessToken(_accessToken)
-                );
+                var future = _userAccessTokenDomain.StampSheetResult(
+                    _transactionId
+                ).Model();
                 yield return future;
                 if (future.Error != null)
                 {
@@ -77,22 +79,20 @@ namespace Gs2.Core.Domain
                 }
                 var result = future.Result;
 #else
-                var result = await client.GetStampSheetResultAsync(
-                    new GetStampSheetResultRequest()
-                        .WithNamespaceName(_namespaceName)
-                        .WithTransactionId(_transactionId)
-                        .WithAccessToken(_accessToken)
-                );
+                var result = await _userAccessTokenDomain.StampSheetResult(
+                    _transactionId
+                ).Model();
 #endif
-                for (var i = 0; i < result.Item.TaskRequests.Length; i++)
+                for (var i = 0; i < result.TaskRequests.Length; i++)
                 {
-                    var stampTask = result.Item.TaskRequests[i];
-                    if (i < result.Item.TaskResults.Length) {
+                    var stampTask = result.TaskRequests[i];
+                    if (i < result.TaskResults.Length) {
                         _stampTaskEvent.Invoke(
                             _cache,
+                            _transactionId + "[" + i + "]",
                             stampTask.Action,
                             stampTask.Request,
-                            result.Item.TaskResults[i]
+                            result.TaskResults[i]
                         );
                     }
                 }
@@ -101,15 +101,16 @@ namespace Gs2.Core.Domain
                 JsonData requestJson = null;
                 _stampSheetEvent.Invoke(
                     _cache,
-                    result.Item.SheetRequest.Action,
-                    result.Item.SheetRequest.Request,
-                    result.Item.SheetResult
+                    _transactionId,
+                    result.SheetRequest.Action,
+                    result.SheetRequest.Request,
+                    result.SheetResult
                 );
-                requestJson = JsonMapper.ToObject(result.Item.SheetRequest.Request.ToString());
+                requestJson = JsonMapper.ToObject(result.SheetRequest.Request.ToString());
 
-                if (result.Item.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
+                if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
                 {
-                    var autoRun = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Item.SheetResult)).AutoRun;
+                    var autoRun = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult)).AutoRun;
                     if (autoRun != null && !autoRun.Value)
                     {
                         Gs2.PushJobQueue(

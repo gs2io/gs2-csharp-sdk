@@ -7,13 +7,13 @@ namespace Gs2.Core.Domain
     public class StampSheetConfiguration
     {
         public string NamespaceName { get; set; }
-        public Action<CacheDatabase, string, string, string> StampTaskEventHandler { get; set; }
-        public Action<CacheDatabase, string, string, string> StampSheetEventHandler { get; set; }
+        public Action<CacheDatabase, string, string, string, string> StampTaskEventHandler { get; set; }
+        public Action<CacheDatabase, string, string, string, string> StampSheetEventHandler { get; set; }
 
         private StampSheetConfiguration(
             string namespaceName,
-            Action<CacheDatabase, string, string, string> stampTaskEventHandler,
-            Action<CacheDatabase, string, string, string> stampSheetEventHandler
+            Action<CacheDatabase, string, string, string, string> stampTaskEventHandler,
+            Action<CacheDatabase, string, string, string, string> stampSheetEventHandler
         ) {
             this.NamespaceName = namespaceName;
             this.StampTaskEventHandler = stampTaskEventHandler;

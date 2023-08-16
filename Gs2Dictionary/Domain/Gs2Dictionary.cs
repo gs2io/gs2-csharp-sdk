@@ -202,9 +202,15 @@ namespace Gs2.Gs2Dictionary.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AddEntriesByUserIdRequest, AddEntriesByUserIdResult> AddEntriesByUserIdComplete = new UnityEvent<string, AddEntriesByUserIdRequest, AddEntriesByUserIdResult>();
+    #else
+        public static Action<string, AddEntriesByUserIdRequest, AddEntriesByUserIdResult> AddEntriesByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -231,6 +237,12 @@ namespace Gs2.Gs2Dictionary.Domain
                                 );
                             }
                         }
+
+                        AddEntriesByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -238,6 +250,7 @@ namespace Gs2.Gs2Dictionary.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -255,23 +268,29 @@ namespace Gs2.Gs2Dictionary.Domain
                     var requestModel = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddEntriesByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     {
-                            var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Entry"
+                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Entry"
+                        );
+                        foreach (var item in resultModel.Items) {
+                            var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                                item.Name.ToString()
                             );
-                            foreach (var item in resultModel.Items) {
-                                var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                    item.Name.ToString()
-                                );
-                                cache.Put(
-                                    parentKey,
-                                    key,
-                                    item,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
+                            cache.Put(
+                                parentKey,
+                                key,
+                                item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
                         }
+                    }
+
+                    AddEntriesByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

@@ -202,9 +202,15 @@ namespace Gs2.Gs2LoginReward.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteReceiveStatusByUserIdRequest, DeleteReceiveStatusByUserIdResult> DeleteReceiveStatusByUserIdComplete = new UnityEvent<string, DeleteReceiveStatusByUserIdRequest, DeleteReceiveStatusByUserIdResult>();
+    #else
+        public static Action<string, DeleteReceiveStatusByUserIdRequest, DeleteReceiveStatusByUserIdResult> DeleteReceiveStatusByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -235,13 +241,26 @@ namespace Gs2.Gs2LoginReward.Domain
                             );
                             cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
                         }
+
+                        DeleteReceiveStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, MarkReceivedByUserIdRequest, MarkReceivedByUserIdResult> MarkReceivedByUserIdComplete = new UnityEvent<string, MarkReceivedByUserIdRequest, MarkReceivedByUserIdResult>();
+    #else
+        public static Action<string, MarkReceivedByUserIdRequest, MarkReceivedByUserIdResult> MarkReceivedByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -282,6 +301,12 @@ namespace Gs2.Gs2LoginReward.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        MarkReceivedByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -298,27 +323,33 @@ namespace Gs2.Gs2LoginReward.Domain
                     var requestModel = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DeleteReceiveStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "ReceiveStatus"
-                            );
-                            var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
-                                resultModel.Item.BonusModelName.ToString()
-                            );
-                            cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
-                        }
-                        if (resultModel.BonusModel != null) {
-                            var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "BonusModel"
-                            );
-                            var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
-                                resultModel.BonusModel.Name.ToString()
-                            );
-                            cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "ReceiveStatus"
+                        );
+                        var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
+                            resultModel.Item.BonusModelName.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
+                    }
+                    if (resultModel.BonusModel != null) {
+                        var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "BonusModel"
+                        );
+                        var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
+                            resultModel.BonusModel.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
+                    }
+
+                    DeleteReceiveStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

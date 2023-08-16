@@ -203,14 +203,14 @@ namespace Gs2.Gs2Limit.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
-            public static UnityAction<string, string, Counter> ChangeCounter;
+        public static UnityEvent<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult> DeleteCounterByUserIdComplete = new UnityEvent<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>();
     #else
-            public static Action<string, string, Counter> ChangeCounter;
+        public static Action<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult> DeleteCounterByUserIdComplete;
     #endif
-
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -232,18 +232,26 @@ namespace Gs2.Gs2Limit.Domain
                             );
                             cache.Delete<Gs2.Gs2Limit.Model.Counter>(parentKey, key);
                         }
-                        ChangeCounter?.Invoke(
-                            requestModel.NamespaceName,
-                            requestModel.LimitName,
-                            resultModel.Item
+
+                        DeleteCounterByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
                         );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, CountUpByUserIdRequest, CountUpByUserIdResult> CountUpByUserIdComplete = new UnityEvent<string, CountUpByUserIdRequest, CountUpByUserIdResult>();
+    #else
+        public static Action<string, CountUpByUserIdRequest, CountUpByUserIdResult> CountUpByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -270,10 +278,11 @@ namespace Gs2.Gs2Limit.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        ChangeCounter?.Invoke(
-                            requestModel.NamespaceName,
-                            requestModel.LimitName,
-                            resultModel.Item
+
+                        CountUpByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
                         );
                         break;
                     }
@@ -291,22 +300,23 @@ namespace Gs2.Gs2Limit.Domain
                     var requestModel = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DeleteCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Counter"
-                            );
-                            var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
-                                resultModel.Item.LimitName.ToString(),
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Delete<Gs2.Gs2Limit.Model.Counter>(parentKey, key);
-                        }
-                    ChangeCounter?.Invoke(
-                        requestModel.NamespaceName,
-                        requestModel.LimitName,
-                        resultModel.Item
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Counter"
+                        );
+                        var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                            resultModel.Item.LimitName.ToString(),
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Limit.Model.Counter>(parentKey, key);
+                    }
+
+                    DeleteCounterByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
                     );
                     break;
                 }

@@ -202,9 +202,39 @@ namespace Gs2.Gs2Enchant.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ReDrawBalanceParameterStatusByUserIdRequest, ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdComplete = new UnityEvent<string, ReDrawBalanceParameterStatusByUserIdRequest, ReDrawBalanceParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, ReDrawBalanceParameterStatusByUserIdRequest, ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetBalanceParameterStatusByUserIdRequest, SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdComplete = new UnityEvent<string, SetBalanceParameterStatusByUserIdRequest, SetBalanceParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, SetBalanceParameterStatusByUserIdRequest, SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ReDrawRarityParameterStatusByUserIdRequest, ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdComplete = new UnityEvent<string, ReDrawRarityParameterStatusByUserIdRequest, ReDrawRarityParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, ReDrawRarityParameterStatusByUserIdRequest, ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AddRarityParameterStatusByUserIdRequest, AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdComplete = new UnityEvent<string, AddRarityParameterStatusByUserIdRequest, AddRarityParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, AddRarityParameterStatusByUserIdRequest, AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetRarityParameterStatusByUserIdRequest, SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdComplete = new UnityEvent<string, SetRarityParameterStatusByUserIdRequest, SetRarityParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, SetRarityParameterStatusByUserIdRequest, SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -231,6 +261,12 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        ReDrawBalanceParameterStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetBalanceParameterStatusByUserId": {
@@ -254,6 +290,12 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetBalanceParameterStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "ReDrawRarityParameterStatusByUserId": {
@@ -277,6 +319,12 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        ReDrawRarityParameterStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "AddRarityParameterStatusByUserId": {
@@ -300,6 +348,12 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        AddRarityParameterStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetRarityParameterStatusByUserId": {
@@ -323,13 +377,26 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetRarityParameterStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdComplete = new UnityEvent<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult>();
+    #else
+        public static Action<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -356,6 +423,12 @@ namespace Gs2.Gs2Enchant.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        VerifyRarityParameterStatusByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -372,115 +445,145 @@ namespace Gs2.Gs2Enchant.Domain
                     var requestModel = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ReDrawBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "BalanceParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "BalanceParameterStatus"
+                        );
+                        var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
+                            resultModel.Item.ParameterName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    ReDrawBalanceParameterStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_balance_parameter_status_by_user_id": {
                     var requestModel = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "BalanceParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "BalanceParameterStatus"
+                        );
+                        var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
+                            resultModel.Item.ParameterName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetBalanceParameterStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "re_draw_rarity_parameter_status_by_user_id": {
                     var requestModel = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ReDrawRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "RarityParameterStatus"
+                        );
+                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                            resultModel.Item.ParameterName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    ReDrawRarityParameterStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "add_rarity_parameter_status_by_user_id": {
                     var requestModel = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "RarityParameterStatus"
+                        );
+                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                            resultModel.Item.ParameterName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    AddRarityParameterStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_rarity_parameter_status_by_user_id": {
                     var requestModel = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "RarityParameterStatus"
+                        );
+                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                            resultModel.Item.ParameterName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetRarityParameterStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

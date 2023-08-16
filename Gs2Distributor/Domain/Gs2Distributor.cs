@@ -205,9 +205,9 @@ namespace Gs2.Gs2Distributor.Domain
             );
         }
 
-
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -216,6 +216,7 @@ namespace Gs2.Gs2Distributor.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -301,36 +302,35 @@ namespace Gs2.Gs2Distributor.Domain
                     _completedStampSheets.Clear();
                 }
 
-                foreach (var completedStampSheet in copiedCompletedStampSheets)
-                {
+                foreach (var completedStampSheet in copiedCompletedStampSheets) {
+                    var autoRun = new AutoStampSheetDomain(
+                        cache,
+                        jobQueueDomain,
+                        new Gs2Distributor(
+                            cache,
+                            jobQueueDomain,
+                            stampSheetConfiguration,
+                            session
+                        ).Namespace(
+                            stampSheetConfiguration.NamespaceName
+                        ).AccessToken(
+                            accessToken
+                        ),
+                        session,
+                        completedStampSheet.TransactionId,
+                        stampSheetConfiguration.StampTaskEventHandler,
+                        stampSheetConfiguration.StampSheetEventHandler
+                    );
     #if GS2_ENABLE_UNITASK
                     try
                     {
-                        await new AutoStampSheetDomain(
-                            cache,
-                            jobQueueDomain,
-                            session,
-                            stampSheetConfiguration.NamespaceName,
-                            completedStampSheet.TransactionId,
-                            accessToken.Token,
-                            stampSheetConfiguration.StampTaskEventHandler,
-                            stampSheetConfiguration.StampSheetEventHandler
-                        ).RunAsync();
+                        await autoRun.RunAsync();
                     }
                     catch (NotFoundException)
                     {
                     }
     #else
-                    var future = new AutoStampSheetDomain(
-                        cache,
-                        jobQueueDomain,
-                        session,
-                        stampSheetConfiguration.NamespaceName,
-                        completedStampSheet.TransactionId,
-                        accessToken.Token,
-                        stampSheetConfiguration.StampTaskEventHandler,
-                        stampSheetConfiguration.StampSheetEventHandler
-                    ).Run();
+                    var future = autoRun.Run();
                     yield return future;
                     if (future.Error != null)
                     {

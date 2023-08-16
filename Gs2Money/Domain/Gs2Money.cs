@@ -202,9 +202,15 @@ namespace Gs2.Gs2Money.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DepositByUserIdRequest, DepositByUserIdResult> DepositByUserIdComplete = new UnityEvent<string, DepositByUserIdRequest, DepositByUserIdResult>();
+    #else
+        public static Action<string, DepositByUserIdRequest, DepositByUserIdResult> DepositByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -230,13 +236,32 @@ namespace Gs2.Gs2Money.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        DepositByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, WithdrawByUserIdRequest, WithdrawByUserIdResult> WithdrawByUserIdComplete = new UnityEvent<string, WithdrawByUserIdRequest, WithdrawByUserIdResult>();
+    #else
+        public static Action<string, WithdrawByUserIdRequest, WithdrawByUserIdResult> WithdrawByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RecordReceiptRequest, RecordReceiptResult> RecordReceiptComplete = new UnityEvent<string, RecordReceiptRequest, RecordReceiptResult>();
+    #else
+        public static Action<string, RecordReceiptRequest, RecordReceiptResult> RecordReceiptComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -262,6 +287,12 @@ namespace Gs2.Gs2Money.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        WithdrawByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "RecordReceipt": {
@@ -284,6 +315,12 @@ namespace Gs2.Gs2Money.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        RecordReceiptComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -300,22 +337,28 @@ namespace Gs2.Gs2Money.Domain
                     var requestModel = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DepositByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Wallet"
-                            );
-                            var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                                requestModel.Slot?.ToString() ?? "0"
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Wallet"
+                        );
+                        var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                            requestModel.Slot?.ToString() ?? "0"
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    DepositByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

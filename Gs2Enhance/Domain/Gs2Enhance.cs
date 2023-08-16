@@ -202,9 +202,21 @@ namespace Gs2.Gs2Enhance.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DirectEnhanceByUserIdRequest, DirectEnhanceByUserIdResult> DirectEnhanceByUserIdComplete = new UnityEvent<string, DirectEnhanceByUserIdRequest, DirectEnhanceByUserIdResult>();
+    #else
+        public static Action<string, DirectEnhanceByUserIdRequest, DirectEnhanceByUserIdResult> DirectEnhanceByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult> CreateProgressByUserIdComplete = new UnityEvent<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult>();
+    #else
+        public static Action<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult> CreateProgressByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -229,6 +241,12 @@ namespace Gs2.Gs2Enhance.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        DirectEnhanceByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "CreateProgressByUserId": {
@@ -250,13 +268,26 @@ namespace Gs2.Gs2Enhance.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        CreateProgressByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult> DeleteProgressByUserIdComplete = new UnityEvent<string, DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult>();
+    #else
+        public static Action<string, DeleteProgressByUserIdRequest, DeleteProgressByUserIdResult> DeleteProgressByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -276,6 +307,12 @@ namespace Gs2.Gs2Enhance.Domain
                             );
                             cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
                         }
+
+                        DeleteProgressByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -292,42 +329,54 @@ namespace Gs2.Gs2Enhance.Domain
                     var requestModel = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DirectEnhanceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "RateModel"
-                            );
-                            var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "RateModel"
+                        );
+                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    DirectEnhanceByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "create_progress_by_user_id": {
                     var requestModel = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = CreateProgressByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Progress"
-                            );
-                            var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Progress"
+                        );
+                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    CreateProgressByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

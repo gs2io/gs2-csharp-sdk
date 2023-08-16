@@ -203,14 +203,14 @@ namespace Gs2.Gs2Lottery.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
-        public static UnityAction<string, string, DrawnPrize[]> DrawnResult;
+        public static UnityEvent<string, DrawByUserIdRequest, DrawByUserIdResult> DrawByUserIdComplete = new UnityEvent<string, DrawByUserIdRequest, DrawByUserIdResult>();
     #else
-        public static Action<string, string, DrawnPrize[]> DrawnResult;
+        public static Action<string, DrawByUserIdRequest, DrawByUserIdResult> DrawByUserIdComplete;
     #endif
-
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -220,10 +220,11 @@ namespace Gs2.Gs2Lottery.Domain
                         var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
-                        DrawnResult?.Invoke(
-                            requestModel.NamespaceName,
-                            requestModel.LotteryName,
-                            resultModel.Items
+
+                        DrawByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
                         );
                         break;
                     }
@@ -232,6 +233,7 @@ namespace Gs2.Gs2Lottery.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -249,10 +251,11 @@ namespace Gs2.Gs2Lottery.Domain
                     var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                    DrawnResult?.Invoke(
-                        requestModel.NamespaceName,
-                        requestModel.LotteryName,
-                        resultModel.Items
+
+                    DrawByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
                     );
                     break;
                 }

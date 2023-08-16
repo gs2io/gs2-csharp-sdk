@@ -202,9 +202,15 @@ namespace Gs2.Gs2Showcase.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult> ForceReDrawByUserIdComplete = new UnityEvent<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult>();
+    #else
+        public static Action<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult> ForceReDrawByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -232,13 +238,26 @@ namespace Gs2.Gs2Showcase.Domain
                                 );
                             }
                         }
+
+                        ForceReDrawByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, IncrementPurchaseCountByUserIdRequest, IncrementPurchaseCountByUserIdResult> IncrementPurchaseCountByUserIdComplete = new UnityEvent<string, IncrementPurchaseCountByUserIdRequest, IncrementPurchaseCountByUserIdResult>();
+    #else
+        public static Action<string, IncrementPurchaseCountByUserIdRequest, IncrementPurchaseCountByUserIdResult> IncrementPurchaseCountByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -265,6 +284,12 @@ namespace Gs2.Gs2Showcase.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        IncrementPurchaseCountByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -281,24 +306,30 @@ namespace Gs2.Gs2Showcase.Domain
                     var requestModel = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ForceReDrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     {
-                            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                requestModel.ShowcaseName,
-                                "RandomDisplayItem"
+                        var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            requestModel.ShowcaseName,
+                            "RandomDisplayItem"
+                        );
+                        foreach (var item in resultModel.Items) {
+                            var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                item.Name.ToString()
                             );
-                            foreach (var item in resultModel.Items) {
-                                var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
-                                    item.Name.ToString()
-                                );
-                                cache.Put(
-                                    parentKey,
-                                    key,
-                                    item,
-                                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                                );
-                            }
+                            cache.Put(
+                                parentKey,
+                                key,
+                                item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
                         }
+                    }
+
+                    ForceReDrawByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

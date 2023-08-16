@@ -425,6 +425,7 @@ namespace Gs2.Core.Domain
 
         public static void UpdateCacheFromStampSheet(
             CacheDatabase cache,
+            string transactionId,
             string action,
             string request,
             string result
@@ -452,124 +453,124 @@ namespace Gs2.Core.Domain
                 switch (service)
                 {
                     case "Gs2Account":
-                        Gs2Account.Domain.Gs2Account.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Account.Domain.Gs2Account.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Auth":
-                        Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Chat":
-                        Gs2Chat.Domain.Gs2Chat.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Chat.Domain.Gs2Chat.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Datastore":
-                        Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Deploy":
-                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Dictionary":
-                        Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Distributor":
-                        Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Enchant":
-                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Enhance":
-                        Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Exchange":
-                        Gs2Exchange.Domain.Gs2Exchange.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Exchange.Domain.Gs2Exchange.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Experience":
-                        Gs2Experience.Domain.Gs2Experience.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Experience.Domain.Gs2Experience.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Formation":
-                        Gs2Formation.Domain.Gs2Formation.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Formation.Domain.Gs2Formation.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Friend":
-                        Gs2Friend.Domain.Gs2Friend.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Friend.Domain.Gs2Friend.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Gateway":
-                        Gs2Gateway.Domain.Gs2Gateway.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Gateway.Domain.Gs2Gateway.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Identifier":
-                        Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Idle":
-                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Inbox":
-                        Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Inventory":
-                        Gs2Inventory.Domain.Gs2Inventory.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Inventory.Domain.Gs2Inventory.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2JobQueue":
-                        Gs2JobQueue.Domain.Gs2JobQueue.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2JobQueue.Domain.Gs2JobQueue.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Key":
-                        Gs2Key.Domain.Gs2Key.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Key.Domain.Gs2Key.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Limit":
-                        Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2LoginReward":
-                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Lock":
-                        Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Log":
-                        Gs2Log.Domain.Gs2Log.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Log.Domain.Gs2Log.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Lottery":
-                        Gs2Lottery.Domain.Gs2Lottery.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Lottery.Domain.Gs2Lottery.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Matchmaking":
-                        Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2MegaField":
-                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Mission":
-                        Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Money":
-                        Gs2Money.Domain.Gs2Money.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Money.Domain.Gs2Money.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2News":
-                        Gs2News.Domain.Gs2News.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2News.Domain.Gs2News.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Quest":
-                        Gs2Quest.Domain.Gs2Quest.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Quest.Domain.Gs2Quest.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Ranking":
-                        Gs2Ranking.Domain.Gs2Ranking.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Ranking.Domain.Gs2Ranking.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Realtime":
-                        Gs2Realtime.Domain.Gs2Realtime.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Realtime.Domain.Gs2Realtime.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Schedule":
-                        Gs2Schedule.Domain.Gs2Schedule.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Schedule.Domain.Gs2Schedule.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Script":
-                        Gs2Script.Domain.Gs2Script.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Script.Domain.Gs2Script.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2SerialKey":
-                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Showcase":
-                        Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Stamina":
-                        Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2StateMachine":
-                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                     case "Gs2Version":
-                        Gs2Version.Domain.Gs2Version.UpdateCacheFromStampSheet(cache, method, request, result);
+                        Gs2Version.Domain.Gs2Version.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
                 }
             }
@@ -577,6 +578,7 @@ namespace Gs2.Core.Domain
 
         public static void UpdateCacheFromStampTask(
             CacheDatabase cache,
+            string taskId,
             string action,
             string request,
             string result
@@ -600,124 +602,124 @@ namespace Gs2.Core.Domain
                 switch (service)
                 {
                     case "Gs2Account":
-                        Gs2Account.Domain.Gs2Account.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Account.Domain.Gs2Account.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Auth":
-                        Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Chat":
-                        Gs2Chat.Domain.Gs2Chat.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Chat.Domain.Gs2Chat.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Datastore":
-                        Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Datastore.Domain.Gs2Datastore.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Deploy":
-                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Deploy.Domain.Gs2Deploy.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Dictionary":
-                        Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Dictionary.Domain.Gs2Dictionary.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Distributor":
-                        Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Distributor.Domain.Gs2Distributor.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Enchant":
-                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Enchant.Domain.Gs2Enchant.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Enhance":
-                        Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Enhance.Domain.Gs2Enhance.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Exchange":
-                        Gs2Exchange.Domain.Gs2Exchange.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Exchange.Domain.Gs2Exchange.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Experience":
-                        Gs2Experience.Domain.Gs2Experience.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Experience.Domain.Gs2Experience.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Formation":
-                        Gs2Formation.Domain.Gs2Formation.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Formation.Domain.Gs2Formation.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Friend":
-                        Gs2Friend.Domain.Gs2Friend.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Friend.Domain.Gs2Friend.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Gateway":
-                        Gs2Gateway.Domain.Gs2Gateway.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Gateway.Domain.Gs2Gateway.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Identifier":
-                        Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Identifier.Domain.Gs2Identifier.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Idle":
-                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Idle.Domain.Gs2Idle.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Inbox":
-                        Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Inbox.Domain.Gs2Inbox.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Inventory":
-                        Gs2Inventory.Domain.Gs2Inventory.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Inventory.Domain.Gs2Inventory.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2JobQueue":
-                        Gs2JobQueue.Domain.Gs2JobQueue.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2JobQueue.Domain.Gs2JobQueue.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Key":
-                        Gs2Key.Domain.Gs2Key.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Key.Domain.Gs2Key.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Limit":
-                        Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Limit.Domain.Gs2Limit.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2LoginReward":
-                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2LoginReward.Domain.Gs2LoginReward.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Lock":
-                        Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Lock.Domain.Gs2Lock.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Log":
-                        Gs2Log.Domain.Gs2Log.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Log.Domain.Gs2Log.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Lottery":
-                        Gs2Lottery.Domain.Gs2Lottery.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Lottery.Domain.Gs2Lottery.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Matchmaking":
-                        Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Matchmaking.Domain.Gs2Matchmaking.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2MegaField":
-                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2MegaField.Domain.Gs2MegaField.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Mission":
-                        Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Mission.Domain.Gs2Mission.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Money":
-                        Gs2Money.Domain.Gs2Money.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Money.Domain.Gs2Money.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2News":
-                        Gs2News.Domain.Gs2News.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2News.Domain.Gs2News.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Quest":
-                        Gs2Quest.Domain.Gs2Quest.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Quest.Domain.Gs2Quest.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Ranking":
-                        Gs2Ranking.Domain.Gs2Ranking.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Ranking.Domain.Gs2Ranking.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Realtime":
-                        Gs2Realtime.Domain.Gs2Realtime.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Realtime.Domain.Gs2Realtime.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Schedule":
-                        Gs2Schedule.Domain.Gs2Schedule.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Schedule.Domain.Gs2Schedule.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Script":
-                        Gs2Script.Domain.Gs2Script.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Script.Domain.Gs2Script.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2SerialKey":
-                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2SerialKey.Domain.Gs2SerialKey.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Showcase":
-                        Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Stamina":
-                        Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2StateMachine":
-                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2StateMachine.Domain.Gs2StateMachine.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Version":
-                        Gs2Version.Domain.Gs2Version.UpdateCacheFromStampTask(cache, method, request, result);
+                        Gs2Version.Domain.Gs2Version.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                 }
             }

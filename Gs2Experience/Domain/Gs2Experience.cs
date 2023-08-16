@@ -202,9 +202,33 @@ namespace Gs2.Gs2Experience.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AddExperienceByUserIdRequest, AddExperienceByUserIdResult> AddExperienceByUserIdComplete = new UnityEvent<string, AddExperienceByUserIdRequest, AddExperienceByUserIdResult>();
+    #else
+        public static Action<string, AddExperienceByUserIdRequest, AddExperienceByUserIdResult> AddExperienceByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult> AddRankCapByUserIdComplete = new UnityEvent<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult>();
+    #else
+        public static Action<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult> AddRankCapByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetRankCapByUserIdRequest, SetRankCapByUserIdResult> SetRankCapByUserIdComplete = new UnityEvent<string, SetRankCapByUserIdRequest, SetRankCapByUserIdResult>();
+    #else
+        public static Action<string, SetRankCapByUserIdRequest, SetRankCapByUserIdResult> SetRankCapByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, MultiplyAcquireActionsByUserIdRequest, MultiplyAcquireActionsByUserIdResult> MultiplyAcquireActionsByUserIdComplete = new UnityEvent<string, MultiplyAcquireActionsByUserIdRequest, MultiplyAcquireActionsByUserIdResult>();
+    #else
+        public static Action<string, MultiplyAcquireActionsByUserIdRequest, MultiplyAcquireActionsByUserIdResult> MultiplyAcquireActionsByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -231,6 +255,12 @@ namespace Gs2.Gs2Experience.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        AddExperienceByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "AddRankCapByUserId": {
@@ -254,6 +284,12 @@ namespace Gs2.Gs2Experience.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        AddRankCapByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "SetRankCapByUserId": {
@@ -277,12 +313,24 @@ namespace Gs2.Gs2Experience.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        SetRankCapByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "MultiplyAcquireActionsByUserId": {
                         var requestModel = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = MultiplyAcquireActionsByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
+
+                        MultiplyAcquireActionsByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -290,6 +338,7 @@ namespace Gs2.Gs2Experience.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -307,75 +356,99 @@ namespace Gs2.Gs2Experience.Domain
                     var requestModel = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                                resultModel.Item.ExperienceName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.ExperienceName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    AddExperienceByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "add_rank_cap_by_user_id": {
                     var requestModel = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                                resultModel.Item.ExperienceName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.ExperienceName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    AddRankCapByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "set_rank_cap_by_user_id": {
                     var requestModel = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                                resultModel.Item.ExperienceName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.ExperienceName.ToString(),
+                            resultModel.Item.PropertyId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    SetRankCapByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "multiply_acquire_actions_by_user_id": {
                     var requestModel = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = MultiplyAcquireActionsByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
+
+                    MultiplyAcquireActionsByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }

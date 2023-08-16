@@ -203,9 +203,9 @@ namespace Gs2.Gs2Chat.Domain
             );
         }
 
-
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -214,6 +214,7 @@ namespace Gs2.Gs2Chat.Domain
 
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result

@@ -202,17 +202,24 @@ namespace Gs2.Gs2SerialKey.Domain
             );
         }
 
-
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
         ) {
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, UseByUserIdRequest, UseByUserIdResult> UseByUserIdComplete = new UnityEvent<string, UseByUserIdRequest, UseByUserIdResult>();
+    #else
+        public static Action<string, UseByUserIdRequest, UseByUserIdResult> UseByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -253,6 +260,12 @@ namespace Gs2.Gs2SerialKey.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        UseByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }

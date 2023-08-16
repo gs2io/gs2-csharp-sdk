@@ -20,8 +20,8 @@ namespace Gs2.Core.Domain
         private readonly string _stampSheet;
         private readonly string _stampSheetEncryptionKeyId;
         private readonly string _namespaceName;
-        private readonly Action<CacheDatabase, string, string, string> _stampTaskEvent;
-        private readonly Action<CacheDatabase, string, string, string> _stampSheetEvent;
+        private readonly Action<CacheDatabase, string, string, string, string> _stampTaskEvent;
+        private readonly Action<CacheDatabase, string, string, string, string> _stampSheetEvent;
 
         public StampSheetDomain(
             CacheDatabase cache,
@@ -30,8 +30,8 @@ namespace Gs2.Core.Domain
             string stampSheet,
             string stampSheetEncryptionKeyId,
             string namespaceName,
-            Action<CacheDatabase, string, string, string> stampTaskEvent,
-            Action<CacheDatabase, string, string, string> stampSheetEvent
+            Action<CacheDatabase, string, string, string, string> stampTaskEvent,
+            Action<CacheDatabase, string, string, string, string> stampSheetEvent
         )
         {
             this._cache = cache;
@@ -99,6 +99,7 @@ namespace Gs2.Core.Domain
                         contextStack = result.ContextStack;
                         _stampTaskEvent.Invoke(
                             _cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -133,6 +134,7 @@ namespace Gs2.Core.Domain
                         contextStack = result.ContextStack;
                         _stampTaskEvent.Invoke(
                             _cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -169,6 +171,7 @@ namespace Gs2.Core.Domain
 #endif
                     _stampSheetEvent.Invoke(
                         _cache,
+                        stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
                         stampSheetPayloadJson["args"].ToString(),
                         result.Result
@@ -205,6 +208,7 @@ namespace Gs2.Core.Domain
 #endif
                     _stampSheetEvent.Invoke(
                         _cache,
+                        stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
                         stampSheetPayloadJson["args"].ToString(),
                         result.Result

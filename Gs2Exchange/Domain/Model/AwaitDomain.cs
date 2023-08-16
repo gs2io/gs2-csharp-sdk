@@ -170,18 +170,18 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> AcquireAsync(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireAsync(
             #else
-        public IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> Acquire(
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Acquire(
             #endif
         #else
-        public async Task<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> AcquireAsync(
+        public async Task<Gs2.Core.Domain.TransactionDomain> AcquireAsync(
         #endif
             AcquireByUserIdRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
         #endif
             request
@@ -226,56 +226,58 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     );
                 }
             }
+            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+
+            );
             if (result?.StampSheet != null)
             {
-                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
-                        _cache,
-                        _jobQueueDomain,
-                        _session,
-                        result?.StampSheet,
-                        result?.StampSheetEncryptionKeyId,
-                        _stampSheetConfiguration.NamespaceName,
-                        _stampSheetConfiguration.StampTaskEventHandler,
-                        _stampSheetConfiguration.StampSheetEventHandler
-                );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return stampSheet.Run();
-        #else
-                try {
-                    await stampSheet.RunAsync();
-                } catch (Gs2.Core.Exception.Gs2Exception e) {
-                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                var future2 = stampSheet.Wait();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
                 }
+        #else
+                await stampSheet.WaitAsync();
         #endif
             }
-            AutoRunStampSheet = result?.AutoRunStampSheet;
-            TransactionId = result?.TransactionId;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(this);
+            self.OnComplete(stampSheet);
         #else
-            return this;
+            return stampSheet;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         #endif
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> AcquireForceAsync(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireForceAsync(
             #else
-        public IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> AcquireForce(
+        public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireForce(
             #endif
         #else
-        public async Task<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> AcquireForceAsync(
+        public async Task<Gs2.Core.Domain.TransactionDomain> AcquireForceAsync(
         #endif
             AcquireForceByUserIdRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
         #endif
             request
@@ -320,56 +322,58 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     );
                 }
             }
+            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+
+            );
             if (result?.StampSheet != null)
             {
-                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
-                        _cache,
-                        _jobQueueDomain,
-                        _session,
-                        result?.StampSheet,
-                        result?.StampSheetEncryptionKeyId,
-                        _stampSheetConfiguration.NamespaceName,
-                        _stampSheetConfiguration.StampTaskEventHandler,
-                        _stampSheetConfiguration.StampSheetEventHandler
-                );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return stampSheet.Run();
-        #else
-                try {
-                    await stampSheet.RunAsync();
-                } catch (Gs2.Core.Exception.Gs2Exception e) {
-                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                var future2 = stampSheet.Wait();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
                 }
+        #else
+                await stampSheet.WaitAsync();
         #endif
             }
-            AutoRunStampSheet = result?.AutoRunStampSheet;
-            TransactionId = result?.TransactionId;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(this);
+            self.OnComplete(stampSheet);
         #else
-            return this;
+            return stampSheet;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         #endif
         }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> SkipAsync(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> SkipAsync(
             #else
-        public IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> Skip(
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Skip(
             #endif
         #else
-        public async Task<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> SkipAsync(
+        public async Task<Gs2.Core.Domain.TransactionDomain> SkipAsync(
         #endif
             SkipByUserIdRequest request
         ) {
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
         #endif
             request
@@ -414,39 +418,41 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     );
                 }
             }
+            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+
+            );
             if (result?.StampSheet != null)
             {
-                Gs2.Core.Domain.StampSheetDomain stampSheet = new Gs2.Core.Domain.StampSheetDomain(
-                        _cache,
-                        _jobQueueDomain,
-                        _session,
-                        result?.StampSheet,
-                        result?.StampSheetEncryptionKeyId,
-                        _stampSheetConfiguration.NamespaceName,
-                        _stampSheetConfiguration.StampTaskEventHandler,
-                        _stampSheetConfiguration.StampSheetEventHandler
-                );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return stampSheet.Run();
-        #else
-                try {
-                    await stampSheet.RunAsync();
-                } catch (Gs2.Core.Exception.Gs2Exception e) {
-                    throw new Gs2.Core.Exception.TransactionException(stampSheet, e);
+                var future2 = stampSheet.Wait();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
                 }
+        #else
+                await stampSheet.WaitAsync();
         #endif
             }
-            AutoRunStampSheet = result?.AutoRunStampSheet;
-            TransactionId = result?.TransactionId;
 
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(this);
+            self.OnComplete(stampSheet);
         #else
-            return this;
+            return stampSheet;
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         #endif
         }
 

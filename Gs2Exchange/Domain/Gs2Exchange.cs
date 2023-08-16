@@ -202,9 +202,33 @@ namespace Gs2.Gs2Exchange.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ExchangeByUserIdRequest, ExchangeByUserIdResult> ExchangeByUserIdComplete = new UnityEvent<string, ExchangeByUserIdRequest, ExchangeByUserIdResult>();
+    #else
+        public static Action<string, ExchangeByUserIdRequest, ExchangeByUserIdResult> ExchangeByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, IncrementalExchangeByUserIdRequest, IncrementalExchangeByUserIdResult> IncrementalExchangeByUserIdComplete = new UnityEvent<string, IncrementalExchangeByUserIdRequest, IncrementalExchangeByUserIdResult>();
+    #else
+        public static Action<string, IncrementalExchangeByUserIdRequest, IncrementalExchangeByUserIdResult> IncrementalExchangeByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdComplete = new UnityEvent<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult>();
+    #else
+        public static Action<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult> CreateAwaitByUserIdComplete = new UnityEvent<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult>();
+    #else
+        public static Action<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult> CreateAwaitByUserIdComplete;
+    #endif
 
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
+                string transactionId,
                 string method,
                 string request,
                 string result
@@ -229,6 +253,12 @@ namespace Gs2.Gs2Exchange.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        ExchangeByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "IncrementalExchangeByUserId": {
@@ -250,6 +280,12 @@ namespace Gs2.Gs2Exchange.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        IncrementalExchangeByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "UnlockIncrementalExchangeByUserId": {
@@ -271,6 +307,12 @@ namespace Gs2.Gs2Exchange.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        UnlockIncrementalExchangeByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                     case "CreateAwaitByUserId": {
@@ -293,13 +335,26 @@ namespace Gs2.Gs2Exchange.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+
+                        CreateAwaitByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteAwaitByUserIdRequest, DeleteAwaitByUserIdResult> DeleteAwaitByUserIdComplete = new UnityEvent<string, DeleteAwaitByUserIdRequest, DeleteAwaitByUserIdResult>();
+    #else
+        public static Action<string, DeleteAwaitByUserIdRequest, DeleteAwaitByUserIdResult> DeleteAwaitByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
+                string taskId,
                 string method,
                 string request,
                 string result
@@ -320,6 +375,12 @@ namespace Gs2.Gs2Exchange.Domain
                             );
                             cache.Delete<Gs2.Gs2Exchange.Model.Await>(parentKey, key);
                         }
+
+                        DeleteAwaitByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
                         break;
                     }
                 }
@@ -336,85 +397,109 @@ namespace Gs2.Gs2Exchange.Domain
                     var requestModel = ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "RateModel"
-                            );
-                            var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "RateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    ExchangeByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "incremental_exchange_by_user_id": {
                     var requestModel = IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = IncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "IncrementalRateModel"
-                            );
-                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "IncrementalRateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    IncrementalExchangeByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "unlock_incremental_exchange_by_user_id": {
                     var requestModel = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = UnlockIncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                "IncrementalRateModel"
-                            );
-                            var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "IncrementalRateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    UnlockIncrementalExchangeByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
                 case "create_await_by_user_id": {
                     var requestModel = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = CreateAwaitByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
                     
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Await"
-                            );
-                            var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                                resultModel.Item.Name.ToString()
-                            );
-                            cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Await"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    CreateAwaitByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
                     break;
                 }
             }
